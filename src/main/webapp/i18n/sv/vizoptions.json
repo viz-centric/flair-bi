@@ -1,0 +1,61 @@
+{
+    "flairbiApp": {
+        "vizoptions" : {
+            "home": {
+                "title": "Vizoptions",
+                "createLabel": "Skapa en ny Vizoptions",
+                "createOrEditLabel": "Skapa eller ändra en Vizoptions",
+                "search": "Sök efter Vizoptions"
+            },
+            "created": "En ny Vizoptions är skapad med id {{ param }}",
+            "updated": "En Vizoptions är uppdaterad med id  {{ param }}",
+            "deleted": "En Vizoptions är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Vizoptions {{ id }}?"
+            },
+            "detail": {
+                "title": "Vizoptions"
+            },
+            "fieldname": "Fieldname",
+            "displayname": "Displayname",
+            "fontstyle": "Fontstyle",
+            "fontweight": "Fontweight",
+            "textcolor": "Textcolor",
+            "numberformat": "Numberformat",
+            "displaycolor": "Displaycolor",
+            "displaycolorexp": "Displaycolorexp",
+            "backgroundcolor": "Backgroundcolor",
+            "backgroundcolorexp": "Backgroundcolorexp",
+            "textcolorexp": "Textcolorexp",
+            "sort": "Sort",
+            "valueonpoints": "Valueonpoints",
+            "alignment": "Alignment",
+            "border": "Border",
+            "bordercolor": "Bordercolor",
+            "fontsize": "Fontsize",
+            "charttype": "Charttype",
+            "icon": "Icon",
+            "iconexp": "Iconexp",
+            "linefillarea": "Linefillarea",
+            "dimension": "Dimension",
+            "seqno": "Seqno",
+            "titletext": "Titletext",
+            "titleborderbottom": "Titleborderbottom",
+            "titlebackgroundcolor": "Titlebackgroundcolor",
+            "titletextcolor": "Titletextcolor",
+            "bodyborder": "Bodyborder",
+            "bodyopacity": "Bodyopacity",
+            "bodybackgroundcolor": "Bodybackgroundcolor",
+            "stackedvisual": "Stackedvisual",
+            "showxaxis": "Showxaxis",
+            "showyaxis": "Showyaxis",
+            "showlegend": "Showlegend",
+            "showlabels": "Showlabels",
+            "showgrid": "Showgrid",
+            "barcharttype": "Barcharttype",
+            "orderofdisplay": "Orderofdisplay",
+            "legendcolor": "Legendcolor",
+            "vizopt": "Vizopt"
+        }
+    }
+}

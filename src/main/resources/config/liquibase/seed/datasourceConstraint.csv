@@ -1,0 +1,3 @@
+id|user_id|datasource_id|constraint_definition
+1|4|502|{"featureConstraints":[{"@type":"Inclusion","featureName":"State","values":["Serbia","UK"]}]}
+

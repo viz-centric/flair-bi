@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "measures" : {
+            "home": {
+                "title": "Measures",
+                "createLabel": "Créer un nouveau Measures",
+                "createOrEditLabel": "Créer ou éditer un Measures",
+                "search": "Recherche pour Measures"
+            },
+            "created": "Un nouveau Measures a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Measures avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Measures avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Measures {{ id }} ?"
+            },
+            "detail": {
+                "title": "Measures"
+            },
+            "name": "Name",
+            "type": "Type",
+            "measureDatasource": "Measure Datasource"
+        }
+    }
+}

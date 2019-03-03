@@ -1,0 +1,22 @@
+version: '2'
+services:
+    flairbi-couchdb:
+        container_name: flairbi-couchdb
+        #        image: couchdb
+        build: ./fb-couchdb
+        environment:
+        - COUCHDB_USER=admin
+        - COUCHDB_PASSWORD=password
+        ports:
+        - 5984:5984
+        - 6984:6984
+
+    flairbi-couchdb-test:
+        container_name: flairbi-couchdb-test
+        image: couchdb
+        environment:
+        - COUCHDB_USER=admin
+        - COUCHDB_PASSWORD=password
+        ports:
+        - 9998:5984
+        - 6980:6984

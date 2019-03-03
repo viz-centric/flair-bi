@@ -1,0 +1,30 @@
+{
+    "flairbiApp": {
+        "service" : {
+            "home": {
+                "title": "Services",
+                "createLabel": "Créer un nouveau Service",
+                "createOrEditLabel": "Créer ou éditer un Service"
+            },
+            "created": "Un nouveau Service a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Service avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Service avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Service {{ id }} ?"
+            },
+            "detail": {
+                "title": "Service"
+            },
+            "serviceName": "Service Name",
+            "serverAddress": "Server Address",
+            "serverPort": "Server Port",
+            "appPrefix": "App Prefix",
+            "secure": "Secure",
+            "cacheServerAddress": "Cache Server Address",
+            "cacheServerPort": "Cache Server Port",
+            "cacheServerEndpoint": "Cache Server Endpoint",
+            "cacheSecure": "Cache Secure",
+            "datasources": "Datasources"
+        }
+    }
+}

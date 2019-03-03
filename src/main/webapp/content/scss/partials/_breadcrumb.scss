@@ -1,0 +1,13 @@
+ui-breadcrumbs{
+    .breadcrumb{
+        background-color: transparent;
+        color: $primary-color;
+        text-transform: capitalize;
+        margin-top: 5px;
+        li{
+            &.active{
+                color: $text-color;
+            }
+        }
+    }
+}

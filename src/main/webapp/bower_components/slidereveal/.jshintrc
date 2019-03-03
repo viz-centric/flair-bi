@@ -1,0 +1,25 @@
+{
+	"boss": true,
+	"browser": true,
+	"curly": true,
+	"devel": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"esversion": 5,
+	"expr": true,
+	"immed": true,
+	"newcap": false,
+	"noarg": true,
+	"onevar": true,
+	"quotmark": false,
+	"shadow": true,
+	"trailing": true,
+	"undef": true,
+	"unused": true,
+  "freeze": true,
+  "maxstatements": 30,
+	
+	"globals": {
+		"jQuery": false
+	}
+}

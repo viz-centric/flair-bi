@@ -1,0 +1,47 @@
+	<div class="dataSource-sidebar">
+		<div class="step">
+			<svg >
+				<use xlink:href="#checked-enabled"></use>
+			</svg>
+			<p>Connection Type</p>
+		</div>
+		<div class="step-line">
+			<svg >
+				<use xlink:href="#step-line-enabled" ng-if="vm.step>0"></use>
+				<use xlink:href="#step-line-disabled" ng-if="vm.step<=0" ></use>
+			</svg>
+		</div>
+		<div class="step">
+			<svg >
+				<use xlink:href="#checked-enabled" ng-if="vm.step>0"></use>
+				<use xlink:href="#checked-disabled" ng-if="vm.step<=0"></use>
+			</svg>
+			<p class="step-text-disabled">New Data Connection</p>
+		</div>
+		<div class="step-line">
+			<svg >
+				<use xlink:href="#step-line-enabled" ng-if="vm.step>1"></use>
+				<use xlink:href="#step-line-disabled" ng-if="vm.step<=1" ></use>
+			</svg>
+		</div>
+		<div class="step">
+			<svg >
+				<use xlink:href="#checked-enabled" ng-if="vm.step>1"></use>
+				<use xlink:href="#checked-disabled" ng-if="vm.step<=1"></use>
+			</svg>
+			<p class="step-text-disabled">Explore & Data Model</p>
+		</div>
+		<div class="step-line">
+			<svg >
+				<use xlink:href="#step-line-enabled" ng-if="vm.step>2"></use>
+				<use xlink:href="#step-line-disabled" ng-if="vm.step<=2" ></use>
+			</svg>
+		</div>
+		<div class="step">
+			<svg >
+				<use xlink:href="#checked-enabled" ng-if="vm.step>2"></use>
+				<use xlink:href="#checked-disabled" ng-if="vm.step<=2"></use>
+			</svg>
+			<p class="step-text-disabled">Dimentions Measures</p>
+		</div>
+	</div>

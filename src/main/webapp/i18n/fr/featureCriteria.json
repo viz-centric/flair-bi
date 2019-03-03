@@ -1,0 +1,23 @@
+{
+    "flairbiApp": {
+        "featureCriteria" : {
+            "home": {
+                "title": "FeatureCriteria",
+                "createLabel": "Créer un nouveau Feature Criteria",
+                "createOrEditLabel": "Créer ou éditer un Feature Criteria"
+            },
+            "created": "Un nouveau Feature Criteria a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Feature Criteria avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Feature Criteria avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Feature Criteria {{ id }} ?"
+            },
+            "detail": {
+                "title": "Feature Criteria"
+            },
+            "value": "Value",
+            "feature": "Feature",
+            "featureBookmark": "Feature Bookmark"
+        }
+    }
+}

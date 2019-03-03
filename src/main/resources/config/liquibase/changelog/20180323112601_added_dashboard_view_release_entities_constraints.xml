@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20180323112601-00" author="sbratic">
+        <!--dashboard_releases-->
+        <addForeignKeyConstraint baseTableName="dashboard_releases" baseColumnNames="processed_by_login"
+                                 constraintName="fk_processed_by"
+                                 referencedTableName="jhi_user"
+                                 referencedColumnNames="login"/>
+
+        <addForeignKeyConstraint baseTableName="dashboard_releases" baseColumnNames="requested_by_login"
+                                 constraintName="fk_requested_by"
+                                 referencedTableName="jhi_user"
+                                 referencedColumnNames="login"/>
+
+        <addForeignKeyConstraint baseTableName="dashboard_releases" baseColumnNames="dashboard_id"
+                                 constraintName="fk_dashboard_id"
+                                 referencedTableName="dashboards"
+                                 referencedColumnNames="id"/>
+        <!--dashboard_releases-->
+        <!--dashboards-->
+        <addForeignKeyConstraint baseTableName="dashboards" baseColumnNames="current_release_id"
+                                 constraintName="fk_dashboard_current_release_id"
+                                 referencedTableName="dashboard_releases"
+                                 referencedColumnNames="id"/>
+        <!--dashboards-->
+        <!--view_releases-->
+        <addForeignKeyConstraint baseTableName="view_releases" baseColumnNames="processed_by_login"
+                                 constraintName="fk_processed_by"
+                                 referencedTableName="jhi_user"
+                                 referencedColumnNames="login"/>
+
+        <addForeignKeyConstraint baseTableName="view_releases" baseColumnNames="requested_by_login"
+                                 constraintName="fk_requested_by"
+                                 referencedTableName="jhi_user"
+                                 referencedColumnNames="login"/>
+
+        <addForeignKeyConstraint baseTableName="view_releases" baseColumnNames="view_id" constraintName="fk_view_id"
+                                 referencedTableName="views"
+                                 referencedColumnNames="id"/>
+        <!--view_releases-->
+        <!--views-->
+        <addForeignKeyConstraint baseTableName="views" baseColumnNames="current_release_id"
+                                 constraintName="fk_current_release_id"
+                                 referencedTableName="view_releases"
+                                 referencedColumnNames="id"/>
+        <!--views-->
+        <!--release_requests-->
+        <addForeignKeyConstraint baseTableName="release_requests" baseColumnNames="requested_by_login"
+                                 constraintName="fk_requested_by_login"
+                                 referencedTableName="jhi_user"
+                                 referencedColumnNames="login"/>
+
+        <addForeignKeyConstraint baseTableName="release_requests" baseColumnNames="release_id"
+                                 constraintName="fk_release_id"
+                                 referencedTableName="dashboard_releases"
+                                 referencedColumnNames="id"/>
+        <!--release_requests-->
+        <!--dashboard_view_releases-->
+
+        <addForeignKeyConstraint baseTableName="dashboard_view_releases" baseColumnNames="dashboard_release_id"
+                                 constraintName="fk_dashboard_release_id"
+                                 referencedTableName="dashboard_releases"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="dashboard_view_releases" baseColumnNames="view_release_id"
+                                 constraintName="fk_view_release_id"
+                                 referencedTableName="view_releases"
+                                 referencedColumnNames="id"/>
+
+        <addPrimaryKey tableName="dashboard_view_releases" columnNames="dashboard_release_id, view_release_id"/>
+        <!--dashboard_view_releases-->
+
+
+    </changeSet>
+
+</databaseChangeLog>

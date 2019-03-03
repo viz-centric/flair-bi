@@ -1,0 +1,18 @@
+<div class="{{vm.formClass}}" ng-if="vm.property.type !== 'COLOR_PICKER'">
+    <label class="{{vm.labelClasses}}" for="propertyType_{{vm.property.propertyType.name}}">{{vm.property.propertyType.name}}</label>
+        <input ng-model="vm.property.value" ng-if="vm.property.type === 'TEXT'" type="text" class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}"
+            id="propertyType_{{vm.property.propertyType.name}}" />
+        <select ng-class="{'legend-position': vm.property.propertyType.name=='Legend position'}" ng-if="vm.property.type === 'SELECT'" ng-model="vm.property.value" ng-options="value.value for value in vm.property.propertyType.possibleValues track by value.id"
+            class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}">
+        </select>
+        <input ng-model="vm.property.value" ng-if="vm.property.type === 'NUMBER'" type="number" class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}"
+        />
+        <input ng-model="vm.property.value" ng-if="vm.property.type === 'CHECKBOX'" type="checkbox" class="{{vm.inputClasses}}">
+</div>
+
+<div ng-if="vm.property.type === 'COLOR_PICKER'" class="row">
+    <div class="control-label-color-picker flair-model-pad pull-left">{{vm.property.propertyType.name}}</div>
+    <div class="color-picker-container">
+        <div md-color-picker ng-model="vm.property.value"></div>
+    </div>
+</div>

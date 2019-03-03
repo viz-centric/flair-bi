@@ -1,0 +1,32 @@
+{
+  "name": "angular-cron-gen",
+  "main": [
+    "src/cron-gen.html",
+    "src/cron-gen.js",
+    "src/cron-gen.less"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "example"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0"
+  },
+  "devDependencies": {
+    "angular": "^1.5.0"
+  },
+  "homepage": "https://github.com/vincentjames501/angular-cron-gen",
+  "version": "0.0.26",
+  "_release": "0.0.26",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.26",
+    "commit": "65b1548f194b1893f74623ef5c5c299d396acf4f"
+  },
+  "_source": "https://github.com/vincentjames501/angular-cron-gen.git",
+  "_target": "^0.0.26",
+  "_originalSource": "angular-cron-gen"
+}

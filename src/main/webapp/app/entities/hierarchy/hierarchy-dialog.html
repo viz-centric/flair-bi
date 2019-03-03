@@ -1,0 +1,61 @@
+<div class="inmodal in modal-content">
+    <form name="editForm" role="form" novalidate ng-submit="vm.save()" class="form-horizontal">
+        <div class="modal-header">
+            <div class="header-text">
+                <span class="modal-title" id="myHierarchyLabel">Create or edit a Hierarchy</span>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-group" ng-show="vm.hierarchy.id">
+                <label for="id" class="control-label col-md-3" data-translate="global.field.id">ID</label>
+                <div class="col-md-7">
+                    <input type="text" class="form-control" id="id" name="id" ng-model="vm.hierarchy.id" readonly />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3" for="field_name">Hierarchy name</label>
+                <div class="col-md-7">
+                    <input required type="text" class="form-control" name="hierarchyName" id="field_name" ng-model="vm.hierarchy.name" />
+                    <div ng-show="editForm.hierarchyName.$invalid">
+                        <p class="help-block" ng-show="editForm.hierarchyName.$error.required" data-translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div ng-repeat="drilldown in vm.hierarchy.drilldown" class="form-group">
+                <label class="control-label col-md-3">Drilldown order: {{$index+1}} </label>
+                <div class="col-md-7">
+                    <ui-select ng-model="drilldown.feature" theme="bootstrap">
+                        <ui-select-match placeholder="Select Dimension" allow-clear="true">
+                            {{drilldown.feature.name}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="dimension as dimension in vm.dimensions | filter: vm.filterDimensions">
+                            {{dimension.name}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-md-2">
+                    <div ng-disabled="vm.hierarchy.drilldown.length === 5" ng-show="$index === 0" class="btn btn-primary" ng-click="vm.addDrilldown()">
+                        <i class="fa fa-plus" aria-hidden="true"></i> </div>
+                    <div ng-show="$index !== 0 && $index !== 1" class="btn btn-danger" ng-click="vm.removeDrilldown(drilldown)">
+                        <i class="fa fa-minus" aria-hidden="true"></i> </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                <span data-translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving || !vm.validation()" class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;
+                <span data-translate="entity.action.save">Save</span>
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,11 @@
+<div class="viz-properties">
+  <div class="property-header">
+      <div class="property-title">Chart properties</div>
+  </div>
+  <property-component alignment='horizontal'
+                      input-classes="form-control pull-left"
+                      form-class="form-inline"
+                      label-classes="control-label flair-model-pad pull-left"
+                      ng-repeat="property in vm.visual.properties | orderBy: 'order'"
+                      property="property" />
+</div>

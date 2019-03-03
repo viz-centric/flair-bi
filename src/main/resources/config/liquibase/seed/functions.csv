@@ -1,0 +1,4 @@
+id|name|description|value|dimension_use|measure_use
+1|Year|returns year|Year()|false|true
+2|month|returns month|month()|false|true
+3|Day|returns day|Day()|false|true

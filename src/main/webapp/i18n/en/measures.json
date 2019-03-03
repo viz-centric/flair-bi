@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "measures" : {
+            "home": {
+                "title": "Measures",
+                "createLabel": "Create a new Measures",
+                "createOrEditLabel": "Create or edit a Measures",
+                "search": "Search for Measures"
+            },
+            "created": "A new Measures is created with identifier {{ param }}",
+            "updated": "A Measures is updated with identifier {{ param }}",
+            "deleted": "A Measures is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Measures {{ id }}?"
+            },
+            "detail": {
+                "title": "Measures"
+            },
+            "name": "Name",
+            "type": "Type",
+            "measureDatasource": "Measure Datasource"
+        }
+    }
+}

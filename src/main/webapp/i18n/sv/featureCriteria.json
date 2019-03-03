@@ -1,0 +1,23 @@
+{
+    "flairbiApp": {
+        "featureCriteria" : {
+            "home": {
+                "title": "Feature Criteria",
+                "createLabel": "Skapa en ny Feature Criteria",
+                "createOrEditLabel": "Skapa eller ändra en Feature Criteria"
+            },
+            "created": "En ny Feature Criteria är skapad med id {{ param }}",
+            "updated": "En Feature Criteria är uppdaterad med id  {{ param }}",
+            "deleted": "En Feature Criteria är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Feature Criteria {{ id }}?"
+            },
+            "detail": {
+                "title": "Feature Criteria"
+            },
+            "value": "Value",
+            "feature": "Feature",
+            "featureBookmark": "Feature Bookmark"
+        }
+    }
+}

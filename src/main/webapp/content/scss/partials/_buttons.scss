@@ -1,0 +1,85 @@
+/* Buttons */
+.btn{
+    font-weight: 500;
+    &:focus,
+    &:focus:active{
+        outline: none;
+        border-color: transparent;
+        box-shadow: none;
+    }
+}
+.btn-primary {
+    background-color: $primary-color;
+    border-radius: 2px;
+    border-color: $primary-color;
+    transition: background-color 500ms linear;
+
+    &:hover,
+    &:active,
+    &:focus, 
+    &:focus:active{
+        background-color: darken($primary-color, 5%);
+        border-color: darken($primary-color, 5%)
+    }
+}
+
+.btn-default {
+    color: $text-color;
+    background-color: $btn-default-color;
+    border-color: $btn-default-color;
+    border-radius: 2px;
+    transition: background-color 500ms linear;
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus:active {
+        color: $text-color;
+        background-color: darken($btn-default-color, 5%);
+        border-color: darken($btn-default-color, 5%)
+    }
+}
+
+.btn-danger {
+    background-color: $btn-danger-color;
+    border-color: $btn-danger-color;
+    border-radius: 2px;
+    transition: background-color 500ms linear;
+    &:hover,
+    &:focus {
+        background-color: darken($btn-danger-color, 5%);
+        border-color: darken($btn-danger-color, 5%)
+    }
+}
+
+.btn-warning {
+    padding: 7px;
+    border: none;
+    border-radius: 2px;
+}
+
+.btn-xs { 
+    padding: 7px;
+}
+
+.btn-filters{
+    padding: 0 5px;
+    margin-left: 3px;
+}
+
+
+/* Lables */
+
+
+.label {
+    background-color: $light-gray;
+    color: $text-color;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    text-shadow: none;
+
+    &.label-success{
+        background-color: $primary-color;
+        color: white;
+    }
+}

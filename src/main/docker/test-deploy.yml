@@ -1,0 +1,72 @@
+version: '3'
+# deployment docker compose for flair-registry
+services:
+    flair-registry:
+        networks:
+        - flair-network
+        container_name: flair-registry
+        image: flair-registry
+        volumes:
+        - "E:/Projects/flair/flair-configuration/:/flair-configuration"
+        environment:
+        - SPRING_PROFILES_ACTIVE=prod
+        - BITBUCKET_URI=file://flair-configuration
+        ports:
+        - 8761:8761
+    reverse-proxy:
+        networks:
+        - flair-network
+        build: ./traefik # The official Traefik docker image
+        ports:
+        - "80:80"     # The HTTP port
+        - "8080:8080" # The Web UI (enabled by --api)
+        - "443:443"
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+
+    flair-bi:
+        image: flairbi
+        container_name: staging-flair-bi
+        networks:
+        - flair-network
+        labels:
+            traefik.frontend.rule: "PathPrefixStrip: /flairbi"
+            traefik.enable: true
+            traefik.backend: flair-bi
+        environment:
+        - CONFIG_URI=http://flair-registry:8761
+        - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+        - SPRING_PROFILES_ACTIVE=prod
+        - POSTGRES_URI=flair-bi-pgsql:5432
+        - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+        #        - SERVER_CONTEXT_PATH=/flairbi
+        ports:
+        - 10000:80
+        - 5005:5005
+
+    flair-bi-pgsql:
+        networks:
+        - flair-network
+        image: postgres:9.4-alpine
+        ports:
+        - 5432:5432
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=flairbi
+
+    flair-couchdb:
+        image: manoj10/couchdb
+        container_name: staging-couchdb
+        restart: always
+        networks:
+        - flair-network
+        environment:
+        - COUCHDB_USER=admin
+        - COUCHDB_PASSWORD=password
+        ports:
+        - 5984:5984
+        - 6984:6984
+networks:
+    flair-network:
+        driver: bridge

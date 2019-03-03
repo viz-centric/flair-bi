@@ -1,0 +1,43 @@
+{
+  "name": "jquery.sparkline.bower",
+  "main": "dist/jquery.sparkline.min.js",
+  "version": "v2.1.2",
+  "homepage": "https://github.com/lennonjesus/jquery.sparkline.bower",
+  "authors": [
+    "Lennon Jesus <lennon.jesus@gmail.com>"
+  ],
+  "description": "JQuery Sparkline for installation with Bower",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "sparklines",
+    "charts",
+    "svg",
+    "pie",
+    "bar",
+    "donut",
+    "inline",
+    "tristate",
+    "discrete",
+    "bullet",
+    "graph",
+    "canvas",
+    "graphics",
+    "graphing",
+    "graphs",
+    "ui",
+    "vml"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}

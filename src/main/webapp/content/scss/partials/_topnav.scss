@@ -1,0 +1,188 @@
+/* Topnav styles */
+
+nav.navbar {
+    margin-bottom: 0px;
+}
+
+
+/* Making Topnav as a flex */
+
+nav.navbar-static-top {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    /* Clean the below */
+    /*padding: 0px 40px 0px 40px;**/
+    background-color: #fafafa;
+    /* Clean the above */
+    border-bottom: 1px $border-color solid;
+    position: fixed;
+    top: 0px;
+    z-index: 30;
+    left: 0px;
+    right: 0px;
+    .navbar-header {
+        flex: 1;
+        .btn-default {
+            margin-right: 5px;
+            background-color: $gray;
+            color: $label-badget-color;
+            &:hover,
+            &.toggled {
+                color: $gray;
+                background-color: $label-badget-color;
+            }
+        }
+        input {
+            background: transparent;
+            padding: 6px;
+            width: 210px;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+        }
+        .search-site {
+            border: none;
+        }
+        .btn {
+            background-color: transparent;
+            padding: 0;
+            color: #999999;
+            .fa-search {
+                font-size: large;
+                margin-top: 5px;
+            }
+        }
+        svg.hamburger {
+            width: 25px;
+            height: 25px;
+            margin-right: 20px;
+        }
+        svg.topnav-flaticon-search {
+            vertical-align: bottom;
+            width: 25px;
+            height: 20px;
+            fill: $anchor-color;
+        }
+        .logo {
+            position: absolute;
+            top: 6px;
+            left: 0px;
+            border-right: 1px #ced0d1 solid;
+            img {
+                width: 48px;
+                height: 36px;
+                margin-right: 5px;
+            }
+        }
+        .home-row {
+            display: flex;
+            align-items: center;
+        }
+        .search-right-icon {
+            right: 62px;
+            position: absolute;
+            outline: none;
+            -webkit-transition: all 1s ease;
+            transition: all 1s ease;
+        }
+        .search-right-icon-active {
+            left: 62px;
+        }
+        // .home-header-search-box{
+        //     display: none;
+        // }
+        // .home-header-search-box-active{
+        //     display: block;
+        //     -webkit-transition: width 0.4s ease-in-out;
+        //     transition: width 0.4s ease-in-out;
+        // }
+    }
+    user-profile-component {
+        .dropdown-menu {
+            font-size: $font-regular;
+            a {
+                color: $anchor-color;
+            }
+        }
+    }
+    .home {
+        margin-right: -12px;
+        border-left: 1px #ced0d1 solid;
+        a {
+            svg {
+                width: 35px;
+                height: 32px;
+                fill: #676a6c;
+                margin-left: 7px;
+            }
+        }
+    }
+    .mobile-navigation {
+        svg {
+            width: 35px;
+            height: 35px;
+            fill: $icons-color;
+        }
+    }
+    .mobile-logo {
+        .logo-element {
+            width: 110px;
+        }
+    }
+    @media screen and (max-width: $break-small) {
+        padding: 0px 10px 0px 10px;
+    }
+}
+
+.navigation-slide {
+    background-color: #fff;
+    .menu-close {
+        position: absolute;
+        top: 28px;
+        left: 250px;
+        cursor: pointer;
+    }
+    .menu {
+        margin: 0;
+        list-style: none;
+        margin-top: 88px;
+        padding-left: 30px;
+        li {
+            margin-bottom: 30px;
+            &.active {
+                border-left: solid 3px $primary-color;
+            }
+        }
+        svg {
+            fill: $icons-color;
+            width: 24px;
+            height: 24px;
+            vertical-align: top;
+            margin: 0 20px;
+        }
+        a {
+            border-bottom: none;
+            font-weight: 500;
+            font-size: 16px;
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+        }
+    }
+}
+
+@media screen and (max-width: $break-medium) {
+    .search-right-icon {
+        display: none !important;
+    }
+    .home-header-search-box {
+        display: block !important;
+    }
+}
+
+@media screen and (max-width: $break-small) {
+    .home-header-search-box {
+        display: block !important;
+        left: 52px !important;
+    }
+}

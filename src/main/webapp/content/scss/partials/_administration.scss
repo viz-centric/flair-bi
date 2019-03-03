@@ -1,0 +1,49 @@
+$md-shadow-main: 0 2px 2px 0 rgba(0, 0, 0, .14),
+0 3px 1px -2px rgba(0, 0, 0, .2),
+0 1px 5px 0 rgba(0, 0, 0, .12);
+$card-width: 300px;
+$card-height: 300px;
+.admin-panel,
+.search-result-panel {
+    margin-top: 10px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-align-content: space-between;
+    align-content: space-between;
+    .menu-item {
+        margin: 0px 5px 0px 5px;
+        width: $card-width;
+        .admin-item,
+        .search-result-item {
+            &:hover {
+                box-shadow: $md-shadow-main;
+            }
+            transition: 500ms linear;
+            a {
+                color: $body-main;
+                transition: font-size 300ms linear;
+                width: auto;
+                display: block;
+                .admin-content {
+                    background-color: $ibox-content-bg;
+                    border-color: $border-color;
+                    .admin-image {
+                        img {
+                            width: $card-width;
+                            height: $card-height;
+                            padding: 30px;
+                        }
+                    }
+                    .admin-label {
+                        transition: background-color 300ms linear;
+                        font-size: 30px;
+                        color: $text-color;
+                        background-color: $ibox-content-bg;
+                    }
+                }
+            }
+        }
+    }
+}

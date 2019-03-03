@@ -1,0 +1,5 @@
+<ng-transclude></ng-transclude>
+<div class="progress progress-small">
+    <div style="width: {{vm.value * 100 / vm.max  | number:0}}%" class="progress-bar active" ng-class="{'progress-bar-warning': vm.type ==='warning', 'progress-bar-danger': vm.type==='danger', 'progress-bar-info': vm.type === 'info', 'progress-bar-success': vm.type==='success'}">
+    </div>
+</div>

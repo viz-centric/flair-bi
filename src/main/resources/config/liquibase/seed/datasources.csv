@@ -1,0 +1,6 @@
+id|name|query_path|last_updated|connection_name
+501|Transactions|/api/queries|2017-02-06 11:05:58.182|1715917d-fff8-44a1-af02-ee2cd41a3609
+502|Sales|/api/queries|2017-02-06 11:05:58.182|1715917d-fff8-44a1-af02-ee2cd41a3609
+503|Ecommerce|/api/queries|2017-02-06 11:05:58.182|1715917d-fff8-44a1-af02-ee2cd41a3609
+504|Transactions local|/api/queries|2017-02-06 11:05:58.182|1715917d-fff8-44a1-af02-ee2cd41a3609
+505|sales|/api/queries|2017-02-06 11:05:58.182|1715917d-fff8-44a1-af02-ee2cd41a3609

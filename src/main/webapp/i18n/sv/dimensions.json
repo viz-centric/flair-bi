@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "dimensions" : {
+            "home": {
+                "title": "Dimensions",
+                "createLabel": "Skapa en ny Dimensions",
+                "createOrEditLabel": "Skapa eller ändra en Dimensions",
+                "search": "Sök efter Dimensions"
+            },
+            "created": "En ny Dimensions är skapad med id {{ param }}",
+            "updated": "En Dimensions är uppdaterad med id  {{ param }}",
+            "deleted": "En Dimensions är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Dimensions {{ id }}?"
+            },
+            "detail": {
+                "title": "Dimensions"
+            },
+            "name": "Name",
+            "type": "Type",
+            "dimensionDatasource": "Dimension Datasource"
+        }
+    }
+}

@@ -1,0 +1,63 @@
+<div class="inmodal  connection-create-popup">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+    <div class="modal-header">
+        <svg class="dashboard-icon">
+            <use xlink:href="#edit-dashboard" />
+        </svg>
+        <div class="header-text">Edit Connection</div>
+         <svg class=" dashboard-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+           <use xlink:href="#cancle" />
+              </svg>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label class="control-label" for="field_connectionName">Connection Name</label>
+            <input type="text" class="form-control" name="connectionName" id="field_connectionName" ng-model="vm.connection.name" required
+                ng-minlength="1" ng-maxlength="200" />
+            <div ng-show="editForm.connectionName.$invalid">
+                <p class="help-block" ng-show="editForm.connectionName.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block" ng-show="editForm.connectionName.$error.minlength" data-translate="entity.validation.minlength" translate-value-min="1">
+                    This field is required to be at least 1 characters.
+                </p>
+                <p class="help-block" ng-show="editForm.connectionName.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="100">
+                    This field cannot be longer than 100 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group" ng-show="vm.connection.linkId">
+            <label class="control-label" for="field_connectionLinkId"> Link id</label>
+            <input type="text" class="form-control" name="connectionLinkId" id="field_connectionLinkId" ng-model="vm.connection.linkId"
+                readonly>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_connectionUsername"> Username</label>
+            <input type="text" class="form-control" name="connectionUsername" id="field_connectionUsername" ng-model="vm.connection.connectionUsername">
+            <div ng-show="editForm.connectionName.$invalid">
+                <p class="help-block" ng-show="editForm.connectionUsername.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_connectionPassword"> Password</label>
+            <input type="password" class="form-control" name="connectionPassword" id="field_connectionPassword" ng-model="vm.connection.connectionPassword">
+        </div>
+        <connection-property-component connection="vm.connection" form='connectionForm' c-property="cp" ng-repeat="cp in vm.connection.connectionType.connectionPropertiesSchema.connectionProperties | orderBy: 'order'"></connection-property-component>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>
+</div>  

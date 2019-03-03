@@ -1,0 +1,55 @@
+<div class="fbibox">
+    <div class="fbibox-content">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="image-container-right pull-right">
+            <div class="image-text">Image Preview</div>
+            <div ng-if="vm.dashboards.imageLocation" class="image-body">
+                <a ng-click="vm.openFile(vm.dashboards.imageContentType, vm.dashboards.image)">
+                    <img ng-src="{{vm.dashboards.imageLocation}}" style="max-width: 100%;"
+                        alt="dashboards image" />
+                </a>
+                {{vm.dashboards.imageContentType}}, {{vm.byteSize(vm.dashboards.imageLocation)}}
+            </div>
+        </div>
+        <div class="table-responsive flair-table-v2">
+            <table class="table property-information-table">
+                <tbody>
+                    <tr>
+                        <td class="data-label">Dashboard Name</td>
+                        <td>{{vm.dashboards.dashboardName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Category</td>
+                        <td>{{vm.dashboards.category}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Description</td>
+                        <td>{{vm.dashboards.description}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Published</td>
+                        <td>{{vm.dashboards.published}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Created by</td>
+                        <td>{{vm.dashboards.createdBy}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Last modified by</td>
+                        <td>{{vm.dashboards.lastModifiedBy}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Last modified on</td>
+                        <td ng-bind="vm.dashboards.lastModifiedDate | date:'dd/MM/yyyy hh:mm:ss'"></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <a ui-sref="dashboards" class="btn btn-info m-b-lg ng-scope">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+        <span data-translate="entity.action.back" class="ng-scope">Back</span>
+    </a>
+</div>

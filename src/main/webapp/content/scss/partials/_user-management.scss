@@ -1,0 +1,38 @@
+.user-information-container{
+    .properties-container{
+        .property-information-table{
+            td{
+                padding: 8px;
+            }
+        }
+    }
+    .dataconstraint-container{
+        .fbibox{
+            .fbibox-title{
+                h2{
+                    display: inline;
+                }
+            }
+        }
+    }
+}
+
+.constraint-field{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .user-data-constraint-operation-button{
+        outline: none;
+      
+        &.icon{
+          i{ 
+            color: $primary-color;
+            font-size: 16px;
+          }
+          
+        }
+    }
+    
+}

@@ -1,0 +1,45 @@
+tags-input{
+    .tags{
+        border: 1px solid $border-color;
+        padding: 3px;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -webkit-appearance: none;
+        &.focused{
+            border: 1px solid $primary-color;
+            box-shadow: none;
+            -webkit-box-shadow:none;    
+        }
+
+        .tag-item{
+            background: $primary-color;
+            border-radius: 13px;
+            border-color: transparent;
+            color: white;
+            a{
+                color: white !important;
+            }
+            &.selected{
+                background: $red;
+            }
+        }
+
+        .input{
+            font: 13px "open sans";
+        }
+
+        input{
+            width: auto !important;
+        }
+    }
+
+    .autocomplete{
+        border: none;
+        .suggestion-item{
+            padding : 8px 10px;
+            font-family: "open sans";
+            color: $text-color;
+            font-size: 13px;
+        }
+    }
+}

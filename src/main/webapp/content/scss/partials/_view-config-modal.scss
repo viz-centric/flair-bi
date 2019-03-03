@@ -1,0 +1,98 @@
+.viz-properties {
+    padding: 0;
+    border-top: none;
+    border-bottom: none;
+    .property-header {
+        border-bottom: 1px solid #e5e6e7;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+        text-align: center;
+        background: whitesmoke;
+        padding-left: 0px;
+        .property-title{
+            font-weight: 700;
+        }
+    }
+    h2 {
+        width: 100%;
+        margin: 0 0 50px 0;
+    }
+    .form-group {
+        margin-left: .5vw;
+        margin: .5vw;
+        height: 78px;
+        .control-label.flair-model-pad {
+            width: 170px;
+            margin: 0;
+            line-height: 30px;
+        }
+        .col-sm-7 {
+            padding: .5vw 0;
+            width: 100%;
+        }
+    }
+    .form-inline {
+        margin-left: .5vw;
+        height: 45px;
+        .control-label.flair-model-pad {
+            margin: 0;
+            line-height: 30px;
+            margin-right: .5vw;
+            .font-size{
+                font-size: 1.5em;
+            }
+        }
+        .tooltip-left{
+            .tooltip{
+                left:0px !important;
+            }
+        }
+        input{
+            width: 78%;
+        }
+        input[type=checkbox]{
+            width: 20px;
+            height: 20px;
+        }
+        select.legend-position{
+            width:39%;
+        }
+        .rzslider{
+            width: 67%;
+            margin-top: 18px;
+        }
+    }
+}
+
+.properties-sidebar {
+    button.btn {
+        margin: 1.5vw .5vw;
+    }
+}
+
+span.rz-pointer {
+    background-color: $primary-color !important;
+}
+
+.row {
+    .control-label-color-picker {
+        margin-top: 0.5vw;
+        font-weight: 600;
+        margin-left: 0.5vw;
+        margin-bottom: 1.5vw;
+        margin-right: .5vw;
+    }
+}
+
+.color-picker-container {
+    div {
+        div.md-color-picker-input-container {
+            md-input-container.md-input-has-value {
+                display: none;
+            }
+            .md-color-picker-clear {
+                display: none;
+            }
+        }
+    }
+}

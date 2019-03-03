@@ -1,0 +1,87 @@
+version: "2"
+
+services:
+    flair-bi:
+        image: ${DOCKER_REGISTRY_URL}/flair-bi:latest-${GIT_LOCAL_BRANCH}
+        labels:
+            purpose: Gateway
+            environment: staging
+            traefik.frontend.rule: "PathPrefixStrip: /flairbi-staging"
+            traefik.enable: true
+            traefik.backend: flair-bi-staging
+            traefik.docker.network: traefik
+        environment:
+            - CONFIG_URI=http://flair-registry:8761
+            - EUREKA_URL=http://${EUREKA_CRED}@flair-registry:8761/eureka
+            - JHIPSTER_SLEEP=100
+            - SPRING_PROFILES_ACTIVE=prod
+            - POSTGRES_URI=flair-bi-pgsql:5432
+            - POSTGRES_USER=${PGSQL_USER}
+            - POSTGRES_PASS=${PGSQL_PASS}
+            - COUCH_URI=http://flair-couchdb:5984
+            - COUCH_USER=${COUCH_USER}
+            - COUCH_PASS=${COUCH_PASS}
+        mem_limit: 1024m
+        # logging:
+        #     driver: "fluentd"
+        #     options:
+        #         fluentd-address: localhost:24224
+        #         tag: flair-bi-staging
+        networks:
+            - stag
+            - traefik
+
+    flair-bi-pgsql:
+        image: postgres:9.4-alpine
+        labels:
+            purpose: Metadata store
+            environment: staging
+        # volumes:
+        # - /home/vizcentric/Documents/data/postgres/flair-bi:/var/lib/postgresql/data
+        # ports:
+        #     - 5432:5432
+        environment:
+            - POSTGRES_USER=${PGSQL_USER}
+            - POSTGRES_PASSWORD=${PGSQL_PASS}
+            - POSTGRES_DB=flairbi
+        mem_limit: 1024m
+        # logging:
+        #     driver: "fluentd"
+        #     options:
+        #         fluentd-address: localhost:24224
+        #         tag: flair-bi-pgsql-staging
+        networks:
+            - stag
+
+    flair-couchdb:
+        image: manoj10/couchdb
+        container_name: staging-couchdb
+        restart: always
+        labels:
+            purpose: View store
+            environment: staging
+        environment:
+            - COUCHDB_USER=${COUCH_USER}
+            - COUCHDB_PASSWORD=${COUCH_PASS}
+        # volumes:
+        # - /home/vizcentric/Documents/data/couchdb/flair-bi:/opt/couchdb/data
+        # ports:
+        #     - 5984:5984
+        #     - 6984:6984
+        # logging:
+        #     driver: "fluentd"
+        #     options:
+        #         fluentd-address: localhost:24224
+        #         tag: flair-couchdb-staging
+        mem_limit: 1024m
+        networks:
+            - stag
+
+
+networks:
+    stag:
+        external:
+            name: staging
+    traefik:
+        external:
+            name: traefik

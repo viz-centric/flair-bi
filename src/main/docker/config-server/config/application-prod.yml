@@ -1,0 +1,12 @@
+spring:
+    cloud:
+        config:
+            server:
+                git:
+                    uri: ${BITBUCKET_URI}
+                    username: ${BITBUCKET_USER}
+                    password: ${BITBUCKET_PASS}
+                    searchPaths: '{application}'
+                    force-pull: true
+                    cloneOnStart: true
+

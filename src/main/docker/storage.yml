@@ -1,0 +1,11 @@
+version: '2'
+services:
+    flairbi-couchdb:
+            extends:
+                file: couchdb.yml
+                service: flairbi-couchdb
+    flairbi-postgresql:
+        extends:
+            file: postgresql.yml
+            service: flairbi-postgresql
+

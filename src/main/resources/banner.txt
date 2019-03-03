@@ -1,0 +1,9 @@
+  
+  
+  ${AnsiColor.BRIGHT_WHITE} ███████  ██        █████   ██  ██████      ${AnsiColor.CYAN} ██████   ██
+  ${AnsiColor.BRIGHT_WHITE} ██       ██       ██   ██  ██  ██   ██     ${AnsiColor.CYAN} ██   ██  ██
+  ${AnsiColor.BRIGHT_WHITE} █████    ██       ███████  ██  ██████      ${AnsiColor.CYAN} ██████   ██
+  ${AnsiColor.BRIGHT_WHITE} ██       ██       ██   ██  ██  ██   ██     ${AnsiColor.CYAN} ██   ██  ██
+  ${AnsiColor.BRIGHT_WHITE} ██       ███████  ██   ██  ██  ██   ██     ${AnsiColor.CYAN} ██████   ██
+  
+  Running Spring Boot ${spring-boot.version}

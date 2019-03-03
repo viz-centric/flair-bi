@@ -1,0 +1,158 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for unit/integration tests.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    profiles:
+        include:
+            - test
+            - dev
+    application:
+        name: flairbi
+    jackson:
+        serialization.write_dates_as_timestamps: false
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:postgresql://localhost:9999/flairbi?ssl=false
+        username: postgres
+        password: admin
+        hikari:
+            maximum-pool-size: 2
+    jpa:
+        database-platform: com.flair.bi.domain.util.FixedPostgreSQL82Dialect
+        database: POSTGRESQL
+        show-sql: true
+        properties:
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
+    mail:
+        host: localhost
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: XHTML
+
+liquibase:
+    contexts: test
+    drop-first: true
+
+security:
+    basic:
+        enabled: false
+
+server:
+    port: 10344
+    address: localhost
+
+couchdb:
+    password: password
+    username: admin
+    url: http://localhost:9998
+    test-connection-at-startup: false
+    database-name: flairbi-view
+    #    ssl-factory: com.flair.bi.ssl.FlairBIPgSqlSSLSocketFactory
+    #    ssl-factory-arg: src/main/resources/config/ssl/ssl-dev.properties
+    enable-s-s-l: false
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    security:
+        authentication:
+            jwt:
+                secret: my-secret-token-to-change-in-production
+                # Token is valid 24 hours
+                token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
+        rememberMe:
+            # security key (this key should be unique for your application, and kept secret)
+            key: 81703cb4a1c3099ecc374a94c5c4efe0717e078b
+    async:
+        corePoolSize: 2
+        maxPoolSize: 50
+        queueCapacity: 10000
+    cors: #By default CORS are not enabled. Uncomment to enable.
+        allowed-origins: "*"
+        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-headers: "*"
+        exposed-headers:
+        allow-credentials: true
+        max-age: 1800
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+    swagger:
+        title: flairbi API
+        description: flairbi API documentation
+        version: 0.0.1
+        termsOfServiceUrl:
+        contactName:
+        contactUrl:
+        contactEmail:
+        license:
+        licenseUrl:
+vizualization-service-mode: grpc
+
+
+
+image-location: ./images/
+image-max-size-mb: 10
+
+#websocket message size
+MAX_TEXT_MESSAGE_SIZE : 2048000
+
+# ===================================================================
+# Application scheduler configuration
+# ===================================================================    
+
+flair-ai-api:
+  username: admin
+  password: admin
+  auth-url : http://devsupport-vizcentric.com:9100/api-token-auth/
+  schedule-report-url : http://devsupport-vizcentric.com:9100/flairServiceApi/
+  mail_body : This is a test email to check api functionality
+  slack_API_Token : xoxp-338558815156-339648235094-401148640099-d844d7552f5b0081546729d997e92f52
+  channel_id : C9ZK2705U
+  stride_API_Token : uEkHqU5s2tsF6H13zK3p
+  stride_cloud_id : 13f8bfc9-8748-4008-8b11-71f22aa84126
+  stride_conversation_id : ff15d817-3ab3-417d-8ba6-2490b330a35f
+  
+# ===================================================================
+# files location
+# note : please append the slash('/') at the end of folder as below
+# for example : files then /
+# ===================================================================
+
+storage-data-files: storage/data/files/
+
+data-file-max-size-mb: 10
+
+
+---
+
+spring:
+    profiles: jenkins
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:postgresql://devsupport-vizcentric.com:9999/flairbi?ssl=false
+        username: postgres
+        password: admin
+
+couchdb:
+    password: password
+    username: admin
+    url: http://devsupport-vizcentric.com:9998/
+    test-connection-at-startup: false
+    database-name: flairbi-view
+    enable-s-s-l: false

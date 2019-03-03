@@ -1,0 +1,74 @@
+<form name="dataSourceForm" role="form" show-validation>
+    <p class="wizard-help-text"> Configure datasource information</p>
+    <div class="form-group">
+        <label class="control-label" data-translate="flairbiApp.datasources.name" for="field_name">Table Name</label>
+        <ui-select ng-keyup="vm.search($select.search)" id="field_name" name="name" ng-model="vm.datasource" required ng-change="vm.setDataSource($select.selected)">
+            <ui-select-match placeholder="{{ 'flairbiApp.datasources.selectDatasource' | translate }}">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="table in vm.tables">
+                <div ng-bind="table"></div>
+            </ui-select-choices>
+        </ui-select>
+        <div ng-show="dataSourceForm.name.$invalid ">
+            <p class="help-block " ng-show="dataSourceForm.name.$error.required " data-translate="entity.validation.required ">
+                This field is required.
+            </p>
+            <p class="help-block " ng-show="dataSourceForm.name.$error.maxlength " data-translate="entity.validation.maxlength " translate-value-max="60 ">
+                This field cannot be longer than 60 characters.
+            </p>
+        </div>
+    </div>
+    <div class="row m-t-md" ng-if="vm.datasources.name!=null">
+        <div class="col-md-12 test-connection-col">
+            <div class="test-connection-button">
+                <button ng-click="vm.testConnection()" class="btn btn-primary">Test connection
+                </button>
+            </div>
+            <div ng-show="vm.testResult === 'loading'" class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <div ng-show="vm.testResult === 'error'" class="test-connection-label alert-danger animate-show-hide">
+                <i class="fa fa-times"></i> Connection Error. Please check configurations </div>
+            <div ng-show="vm.testResult === 'success'" class="test-connection-label alert-success animate-show-hide">
+                <i class="fa fa-check"></i> Connection success </div>
+            <div class="show-sample-data">
+                <button ng-disabled="vm.showDataResult" ng-click="vm.showData()" class="btn btn-primary">Show Data
+                </button>
+            </div>        
+        </div>
+    </div>
+    <br/>
+    <div class="window-holder"  ng-if="vm.datasources.name!=null">
+        <header class="cf">
+            <div class="header-title-small">
+                <p>Sample Data</p>
+            </div>
+        </header>
+        <div class="window-body">
+            <div class="datasource-table-holder">
+                <table id="datasource-table" class="table table-striped table-bordered flair-table-v1">
+                    <thead>
+                        <tr id="datasource-table-col">
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div> <!-- end window body -->
+    </div> <!-- end popupholder -->
+
+    <div class="wizard-navigate-buttons ">
+        <button type="button " class="btn btn-default " ng-click="vm.resetTest() " wz-previous value="Back ">
+            <span class="glyphicon glyphicon-circle-arrow-left "></span>
+            Back
+        </button>
+        <button type="submit" ng-disabled="vm.testResult !== 'success'" class="btn btn-primary" wz-next value="Next" ng-click="vm.createDataSource()" >
+            <span class="glyphicon glyphicon-check"></span>
+            Create Datasource
+        </button>
+    </div>
+</form>

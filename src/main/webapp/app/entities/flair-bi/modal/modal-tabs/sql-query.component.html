@@ -1,0 +1,61 @@
+<div class="panel-body" style="height:485px;">
+    <div class="col-md-8">
+        <div class="row">
+            <form style="text-transform: uppercase;">
+                <textarea placeholder="/* Write your SQL code here */" id="code" style="text-transform: uppercase;" rows="5" cols="50" name="code"
+                    ng-model="vm.visual.query" />
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" style="overflow:auto;">
+        <div class="panel panel-default" style="margin-bottom:0px !important;" ng-if="vm.features.length > 0">
+            <div class="panel-heading" role="tab" id="headingFour">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseFour">
+                                                <strong>Dimensions</strong>
+                                                <i class="fa fa-tags" aria-hidden="true" style="color:black;float:right;margin-right:5px;"></i>
+                                            </a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body" style="padding:0px !important;margin:0px;width:100%;">
+                    <div class="list-group" style="margin-bottom:0px !important;">
+                        <div ng-repeat="feature in vm.features | filter : { featureType: 'DIMENSION'}">
+                            <a class="list-group-item flair-hover">
+                                                        <i class="fa fa-tag" aria-hidden="true" style="color:#a7b1c2;float:left;margin-right:5px;margin-left:5px;"></i>
+                                                        {{feature.name}}
+                                                    </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default" style="margin-bottom:0px !important;" ng-if="vm.features.length > 0">
+            <div class="panel-heading" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseFive">
+                                                <strong>Measures</strong>
+                                                <i class="fa fa-bars" aria-hidden="true" style="color:black;float:right;margin-right:5px;"></i>
+                                            </a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body" style="padding:0px !important;margin:0px;width:100%;">
+                    <div class="list-group" style="margin-bottom:0px !important;">
+                        <div ng-repeat="feature in vm.features | filter : { featureType: 'MEASURE'}">
+                            <a class="list-group-item flair-hover">
+                                                        <i class="fa fa-percent" aria-hidden="true" style="color:#a7b1c2;float:left;margin-right:5px;margin-left:5px"></i>
+                                                        {{feature.name}}
+                                                    </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

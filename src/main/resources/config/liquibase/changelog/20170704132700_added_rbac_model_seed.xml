@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!--
+        Load initial rbac data
+    -->
+    <changeSet id="20170704132700-1" author="cobrasin">
+        <!--insert permissions-->
+        <loadData
+            file="config/liquibase/seed/permissions.csv"
+            tableName="permission">
+            <column name="action" type="string"/>
+        </loadData>
+        <!--insert permissions-->
+
+        <!--insert user groups-->
+        <loadData
+            file="config/liquibase/seed/user_groups.csv"
+            tableName="user_group"/>
+        <!--insert user groups-->
+
+        <!--insert user group permissions-->
+        <loadData
+            file="config/liquibase/seed/user_group_permissions.csv"
+            tableName="user_group_permission"/>
+        <!--insert user group permissions-->
+
+        <!--insert user user groups-->
+        <loadData
+            file="config/liquibase/seed/user_user_groups.csv"
+            tableName="user_user_group"/>
+        <!--insert user user groups-->
+
+    </changeSet>
+</databaseChangeLog>

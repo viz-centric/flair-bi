@@ -1,0 +1,28 @@
+.content-header-container{
+    background-color: $content-header-color;
+    margin: 50px -15px;
+    padding: 10px;
+    margin-bottom: 0px;
+
+    .header-text{
+        h2{
+            margin: 0px;
+        }
+    }
+
+    .header-options{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        svg{
+            width: 38px;
+            height: 35px;
+            fill: #676a6c;
+            padding: 0 10px;
+            transition: background-color 0.5s ease;
+            border-radius: 2px;
+        }
+    }
+
+}

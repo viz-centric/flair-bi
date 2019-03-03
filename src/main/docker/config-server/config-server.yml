@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    config-server:
+        image: hyness/spring-cloud-config-server:1.4.3.RELEASE
+        container_name: config-server
+        labels:
+            environment: continuous_integration
+            purpose: Configuration Service
+        volumes:
+        - ./config:/config
+        - E:\Projects\flair\flair-configuration:/flair-configuration
+        ports:
+        - "8888:8888"
+        environment:
+        - SPRING_PROFILES_ACTIVE=dev,native
+#        - SPRING_PROFILES_ACTIVE=prod
+        - BITBUCKET_URI=${BITBUCKET_URI}
+        - BITBUCKET_USER=${BITBUCKET_USER}
+        - BITBUCKET_PASS=${BITBUCKET_PASS}
+        - ENCRYPT_KEY=my-super-secret-key

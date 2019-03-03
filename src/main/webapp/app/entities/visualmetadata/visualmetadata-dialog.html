@@ -1,0 +1,255 @@
+<div class="inmodal in modal-content">
+    <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+            <h4 class="modal-title" id="myVisualmetadataLabel" data-translate="flairbiApp.visualmetadata.home.createOrEditLabel">Create or edit a Visualmetadata</h4>
+        </div>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-group" ng-show="vm.visualmetadata.id">
+                <label for="id" data-translate="global.field.id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" ng-model="vm.visualmetadata.id" readonly />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.height" for="field_height">Height</label>
+                <input type="number" class="form-control" name="height" id="field_height" ng-model="vm.visualmetadata.height" required />
+                <div ng-show="editForm.height.$invalid">
+                    <p class="help-block" ng-show="editForm.height.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.height.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.width" for="field_width">Width</label>
+                <input type="number" class="form-control" name="width" id="field_width" ng-model="vm.visualmetadata.width" required />
+                <div ng-show="editForm.width.$invalid">
+                    <p class="help-block" ng-show="editForm.width.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.width.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.xposition" for="field_xposition">Xposition</label>
+                <input type="number" class="form-control" name="xposition" id="field_xposition" ng-model="vm.visualmetadata.xposition" required
+                />
+                <div ng-show="editForm.xposition.$invalid">
+                    <p class="help-block" ng-show="editForm.xposition.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.xposition.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.yposition" for="field_yposition">Yposition</label>
+                <input type="number" class="form-control" name="yposition" id="field_yposition" ng-model="vm.visualmetadata.yposition" required
+                />
+                <div ng-show="editForm.yposition.$invalid">
+                    <p class="help-block" ng-show="editForm.yposition.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.yposition.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.sequenceNo" for="field_sequenceNo">Sequence No</label>
+                <input type="number" class="form-control" name="sequenceNo" id="field_sequenceNo" ng-model="vm.visualmetadata.sequenceNo"
+                    required />
+                <div ng-show="editForm.sequenceNo.$invalid">
+                    <p class="help-block" ng-show="editForm.sequenceNo.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.sequenceNo.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.query" for="field_query">Query</label>
+                <input type="text" class="form-control" name="query" id="field_query" ng-model="vm.visualmetadata.query" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.background" for="field_background">Background</label>
+                <input type="text" class="form-control" name="background" id="field_background" ng-model="vm.visualmetadata.background" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.opacity" for="field_opacity">Opacity</label>
+                <input type="text" class="form-control" name="opacity" id="field_opacity" ng-model="vm.visualmetadata.opacity" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.showTitle" for="field_showTitle">Show Title</label>
+                <input type="text" class="form-control" name="showTitle" id="field_showTitle" ng-model="vm.visualmetadata.showTitle" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.titlebackgroundclr" for="field_titlebackgroundclr">Titlebackgroundclr</label>
+                <input type="text" class="form-control" name="titlebackgroundclr" id="field_titlebackgroundclr" ng-model="vm.visualmetadata.titlebackgroundclr"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.titletextclr" for="field_titletextclr">Titletextclr</label>
+                <input type="text" class="form-control" name="titletextclr" id="field_titletextclr" ng-model="vm.visualmetadata.titletextclr"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.sTitle" for="field_sTitle">S Title</label>
+                <input type="checkbox" class="form-control" name="sTitle" id="field_sTitle" ng-model="vm.visualmetadata.sTitle" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.datasource" for="field_datasource">Datasource</label>
+                <input type="number" class="form-control" name="datasource" id="field_datasource" ng-model="vm.visualmetadata.datasource"
+                    required />
+                <div ng-show="editForm.datasource.$invalid">
+                    <p class="help-block" ng-show="editForm.datasource.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.datasource.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.noOfDim" for="field_noOfDim">No Of Dim</label>
+                <input type="number" class="form-control" name="noOfDim" id="field_noOfDim" ng-model="vm.visualmetadata.noOfDim" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.sxaxis" for="field_sxaxis">Sxaxis</label>
+                <input type="checkbox" class="form-control" name="sxaxis" id="field_sxaxis" ng-model="vm.visualmetadata.sxaxis" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.syaxis" for="field_syaxis">Syaxis</label>
+                <input type="checkbox" class="form-control" name="syaxis" id="field_syaxis" ng-model="vm.visualmetadata.syaxis" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.slegend" for="field_slegend">Slegend</label>
+                <input type="checkbox" class="form-control" name="slegend" id="field_slegend" ng-model="vm.visualmetadata.slegend" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.legendPosition" for="field_legendPosition">Legend Position</label>
+                <input type="text" class="form-control" name="legendPosition" id="field_legendPosition" ng-model="vm.visualmetadata.legendPosition"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.clrscheme" for="field_clrscheme">Clrscheme</label>
+                <input type="number" class="form-control" name="clrscheme" id="field_clrscheme" ng-model="vm.visualmetadata.clrscheme" required
+                />
+                <div ng-show="editForm.clrscheme.$invalid">
+                    <p class="help-block" ng-show="editForm.clrscheme.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.clrscheme.$error.number" data-translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.vclr" for="field_vclr">Vclr</label>
+                <input type="text" class="form-control" name="vclr" id="field_vclr" ng-model="vm.visualmetadata.vclr" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.visualBuildId" for="field_visualBuildId">Visual Build Id</label>
+                <input type="text" class="form-control" name="visualBuildId" id="field_visualBuildId" ng-model="vm.visualmetadata.visualBuildId"
+                    required ng-maxlength="30" />
+                <div ng-show="editForm.visualBuildId.$invalid">
+                    <p class="help-block" ng-show="editForm.visualBuildId.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.visualBuildId.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="30">
+                        This field cannot be longer than 30 characters.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.bottomborder" for="field_bottomborder">Bottomborder</label>
+                <input type="text" class="form-control" name="bottomborder" id="field_bottomborder" ng-model="vm.visualmetadata.bottomborder"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.border" for="field_border">Border</label>
+                <input type="text" class="form-control" name="border" id="field_border" ng-model="vm.visualmetadata.border" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.titletext" for="field_titletext">Titletext</label>
+                <input type="text" class="form-control" name="titletext" id="field_titletext" ng-model="vm.visualmetadata.titletext" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.showlabels" for="field_showlabels">Showlabels</label>
+                <input type="checkbox" class="form-control" name="showlabels" id="field_showlabels" ng-model="vm.visualmetadata.showlabels"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.queryjson" for="field_queryjson">Queryjson</label>
+                <input type="text" class="form-control" name="queryjson" id="field_queryjson" ng-model="vm.visualmetadata.queryjson" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.orderOfDisplay" for="field_orderOfDisplay">Order Of Display</label>
+                <input type="text" class="form-control" name="orderOfDisplay" id="field_orderOfDisplay" ng-model="vm.visualmetadata.orderOfDisplay"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.stacked" for="field_stacked">Stacked</label>
+                <input type="checkbox" class="form-control" name="stacked" id="field_stacked" ng-model="vm.visualmetadata.stacked" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.axisLegendColor" for="field_axisLegendColor">Axis Legend Color</label>
+                <input type="text" class="form-control" name="axisLegendColor" id="field_axisLegendColor" ng-model="vm.visualmetadata.axisLegendColor"
+                />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.barChartType" for="field_barChartType">Bar Chart Type</label>
+                <select class="form-control" name="barChartType" ng-model="vm.visualmetadata.barChartType" id="field_barChartType">
+                <option value="bar" data-translate="flairbiApp.BarChartType.bar">bar</option>
+                <option value="horizontalBar" data-translate="flairbiApp.BarChartType.horizontalBar">horizontalBar</option>
+            </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualmetadata.showGrid" for="field_showGrid">Show Grid</label>
+                <input type="checkbox" class="form-control" name="showGrid" id="field_showGrid" ng-model="vm.visualmetadata.showGrid" />
+            </div>
+
+            <div class="form-group">
+                <label data-translate="flairbiApp.visualmetadata.metadataVisual" for="field_metadataVisual">Metadata Visual</label>
+                <select class="form-control" id="field_metadataVisual" name="metadataVisual" ng-model="vm.visualmetadata.metadataVisual"
+                    ng-options="visualization as visualization.name for visualization in vm.visualization track by visualization.id"
+                    required>
+                <option value=""></option>
+            </select>
+            </div>
+            <div ng-show="editForm.metadataVisual.$invalid">
+                <p class="help-block" ng-show="editForm.metadataVisual.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="field_view">View </label>
+                <select class="form-control" id="field_view" name="metadataView" ng-model="vm.visualmetadata.views" ng-options="views as views.viewName for views in vm.views track by views.id"
+                    required>
+                <option value=""></option>
+            </select>
+            </div>
+            <div ng-show="editForm.metadataView.$invalid">
+                <p class="help-block" ng-show="editForm.metadataView.$error.required" data-translate="entity.validation.required">
+                    This field is required
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+            <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+        </div>
+    </form>
+</div>

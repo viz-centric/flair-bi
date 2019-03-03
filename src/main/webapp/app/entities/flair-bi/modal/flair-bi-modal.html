@@ -1,0 +1,44 @@
+<div class="inmodal in modal-content view-config-modal">
+    <div class="modal-header">
+        <div class="header-text">
+            {{vm.visual.titleProperties.titleText}}
+        </div>
+        <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="vm.clear()" type="button">&times;
+        </button>
+    </div>
+    
+    <div class="modal-body" style="padding:0px;background:#ffffff;">
+        <div class="col-md-12" style="padding:0px;max-height:500px;overflow:auto;">
+            <div class="tabs-container">
+                <uib-tabset class="tabs-left">
+                    <uib-tab heading="Title Properties">
+                        <title-properties-component visual="vm.visual" />
+                    </uib-tab>
+                    <uib-tab heading="Body Properties">
+                        <body-properties-component visual="vm.visual" />
+                    </uib-tab>
+                    <uib-tab heading="Chart Properties">
+                        <chart-properties-component visual="vm.visual" />
+                    </uib-tab>
+                    <uib-tab heading="Data constraints">
+                        <condition-tab-component features="vm.features" condition-expression="vm.visual.conditionExpression" />
+                    </uib-tab>
+                    <uib-tab heading="Field Properties">
+                        <field-properties-component features="vm.features" view="vm.view" visual="vm.visual" />
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="vm.validate()" ng-if="validator" type="button">Validate</button>
+        <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="vm.isSaving" type="submit">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+        <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+    </div>
+</div>

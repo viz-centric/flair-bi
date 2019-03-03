@@ -1,0 +1,24 @@
+id|name|icon|custom_id|function_name
+531|Clustered Vertical Bar Chart|#ver-bar|22|GenerateClusteredverticalbarChart
+532|Clustered Horizontal Bar Chart|#horis-bar|23|GenerateClusteredhorizontalbarChart
+510|Stacked Vertical Bar Chart|#ver-stack-bar|1|GenerateStackedverticalbarChart
+530|Stacked Horizontal Bar Chart|#horis-stack-bar|21|GenerateStackedhorizontalbarChart
+511|Line Chart|#line|2|GenerateLineChart
+513|Combo Chart|#combo|3|GenerateComboChart
+516|Scatter plot|#scatter|7|GenerateScatterPlot
+512|Pie Chart|#pie|3|GeneratePieChart
+529|Doughnut Chart|#doughnut|20|GenerateDoughnutChart
+517|Gauge plot|#gauge|8|GenerateGaugePlot
+515|Table|#table|6|GenerateTable
+528|Pivot Table|#pivot-table|19|GeneratePivotTable
+518|KPI|#kpi|9|GenerateKPI
+519|Info graphic|#info|10|GenerateInfoGraphic
+523|Text Object|#textobject|14|GenerateTextObject
+514|Map|#map|5|GenerateMap
+520|Tree Map|#treemap|11|GenerateTreemap
+521|Heat Map|#heatmap|12|GenerateHeatmap
+522|Box Plot|#boxplot|13|GenerateBoxplot
+524|Bullet Chart|#bulletchart|15|GenerateBulletChart
+525|Chord Diagram|#sankey|16|GenerateChordDiagram
+526|Word Cloud|#wordcloud|17|GenerateWordCloud
+527|Sankey|#sankey|18|GenerateSankey

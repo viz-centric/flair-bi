@@ -1,0 +1,282 @@
+#grid-container {
+    padding: 0px !important;
+    .unselected-vizualization {
+        opacity: 0.6;
+    }
+    .selected-vizualization {
+        border: 1px dashed $border-color !important;
+    }
+    .jhi-alert {
+        margin: 0 10px 0 10px;
+    }
+    .grid-stack-item {
+        .visualization-card {
+            display: flex;
+            flex-flow: column;
+            height: 100%;
+            border: 1px dotted grey;
+            .header {
+                flex: 0 1 auto;
+            }
+            .content {
+                flex: 1 1 auto;
+            }
+            .footer {
+                flex: 0 1 1px;
+            }
+        }
+        .grid-stack-item-content {
+            /* This used to hide and show the  options for viz*/
+            .live-label,
+            .reload-button,
+            .viz-settings,
+            md-switch {
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            &:hover {
+                .live-label,
+                .reload-button,
+                .viz-settings,
+                md-switch {
+                    opacity: 1 !important;
+                    transition: opacity 0.5s ease;
+                }
+            }
+            /* closed */
+            overflow: visible !important;
+            .viz-header {
+                padding: 0px;
+                .viz-header-content {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    .viz-title {
+                        margin-right: auto;
+                        font-weight: 600;
+                        padding-left: 10px;
+                        .live-icon {
+                            font-size: 10px;
+                            margin-right: 5px;
+                            color: $primary-color;
+                            animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+                        }
+                        @keyframes blinker {
+                            from {
+                                opacity: .8;
+                            }
+                            to {
+                                opacity: 0;
+                            }
+                        }
+                    }
+                    .viz-settings {
+                        margin: 0 10px;
+                        &.btn-group {
+                            vertical-align: baseline;
+                            &.open {
+                                a {
+                                    box-shadow: none;
+                                }
+                            }
+                        }
+                        div {
+                            &.dropdown-menu {
+                                right: -415%;
+                                top: 181%;
+                                left: unset;
+                                border-radius: 0;
+                                border: 0;
+                                padding: 5px 0;
+                                z-index: 2000;
+                                .items {
+                                    .item {
+                                        width: 25%;
+                                        float: left;
+                                        margin: 5px;
+                                        a {
+                                            color: $icons-color;
+                                            line-height: 25px;
+                                            border-radius: 3px;
+                                            padding: 12px 10px 8px 10px;
+                                            &:hover {
+                                                background-color: $active-background-color;
+                                            }
+                                            span {
+                                                svg {
+                                                    fill: $icons-color;
+                                                    width: 16px;
+                                                    height: 16px;
+                                                }
+                                                .scheduler-icon {
+                                                    color: $icons-color;
+                                                    width: 16px;
+                                                    height: 16px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .live-label {
+                        margin-right: 10px;
+                    }
+                    .reload-button {
+                        margin: 5px 10px;
+                    }
+                    md-switch {
+                        margin: 0px;
+                        border-right: 1px solid $border-color;
+                        margin-right: 10px;
+                        padding-right: 5px;
+                        .md-container {
+                            margin-right: 0;
+                            margin-top: 5px;
+                            .md-bar {
+                                width: 26px;
+                                top: 4px;
+                                height: 11px;
+                            }
+                            .md-thumb-container {
+                                .md-thumb {
+                                    height: 15px;
+                                    width: 15px;
+                                }
+                            }
+                        }
+                    }
+                    svg,
+                    i {
+                        color: lighten($icons-color, 20%);
+                        fill: lighten($icons-color, 20%);
+                        &.reload,
+                        &.settings-button {
+                            width: 12px;
+                            height: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.worksheet {
+        margin: 43px 0 10px 0;
+    }
+    &.worksheet-fullscreen {
+        margin-top: -10px;
+    }
+}
+
+.grid-flipper {
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    -ms-perspective: 1000;
+    -o-perspective: 1000;
+    perspective: 1000;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -o-transition: 0.4s;
+    -ms-transition: 0.4s;
+    transition: 0.6s !important;
+}
+
+.grid-front {
+    z-index: 2;
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+}
+
+.grid-back {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    background-position: center;
+    background-repeat: repeat;
+    border: 1px solid #EBEBEB;
+    margin-left: .5vw;
+    margin-right: .5vw;
+    .grid-min-height {
+        height: 339px;
+    }
+    .grid-stack-item {
+        background-color: #FEFEFE;
+        overflow: auto;
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+            .feature-box {
+                flex-grow: 1;
+                .list-group {
+                    margin: 0 1.2vw 1.2vw 1.2vw;
+                    .list-group-item {
+                        &.active {
+                            color: $text-color;
+                            background-color: $active-background-color;
+                            border: 1px solid $border-color;
+                        }
+                        input {
+                            background-color: white;
+                            border: 1px dashed $border-color;
+                        }
+                        svg {
+                            fill: $icons-color;
+                            height: 21px;
+                            width: 21px;
+                            float: right;
+                        }
+                        .flaticon-close {
+                            height: 10px;
+                            width: 10px;
+                            margin-top: -22px;
+                            margin-right: 8px;
+                        }
+                        i {
+                            float: right
+                        }
+                    }
+                    .active {
+                        background-color: $primary-color
+                    }
+                }
+            }
+        }
+    }
+}
+
+.flip-container,
+.grid-front,
+.grid-back {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.flipToFront {
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+}
+
+.flipToBack {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}

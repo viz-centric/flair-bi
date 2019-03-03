@@ -1,0 +1,22 @@
+<div class="dropdown-options user-profile-container">
+    <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <div class="user-profile">
+            <svg class="icon">
+                <use xlink:href="#user-image" />
+            </svg>
+        </div>
+    </a>
+
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li>
+            <a ui-sref="account">
+                {{vm.account.firstName}}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="vm.logout()" id="logout" data-translate="global.menu.account.logout">
+                Sign out
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,11 @@
+version: "2"
+services:
+    flair-bi:
+        build: ./
+    flair-bi-version:
+        extends: flair-bi
+        image: ${DOCKER_REGISTRY_URL}/flair-bi:${POM_VERSION}
+    flair-bi-latest:
+        extends: flair-bi
+        image: ${DOCKER_REGISTRY_URL}/flair-bi:latest-${GIT_LOCAL_BRANCH}
+

@@ -1,0 +1,93 @@
+.recent-tabs {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+    .tab {
+        min-width: 206px;
+        max-width: 300px;
+        background-color: #fff;
+        padding: 0px 5px;
+        display: flex;
+        position: relative;
+        justify-content: space-between;
+        align-items: center;
+        outline: none;
+        border: 1px solid #EDEDED;
+        .icon-box {
+            margin-left: auto;
+        }
+        p {
+            font-size: 13px;
+            color: #676a6c;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+        svg {
+            width: 19px;
+            height: 19px;
+        }
+        img {
+            width: 19px;
+            height: 19px;
+        }
+    }
+    .tab:hover {
+        background: #EDEDED;
+    }
+    .tab:hover>.blue-line {
+        width: 100% !important;
+    }
+    .tab-active {
+        background: #EDEDED;
+    }
+    .tab-active>.blue-line {
+        width: 100% !important;
+    }
+    .blue-line {
+        height: 1px;
+        width: 0%;
+        background: #439DD2;
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        z-index: 999;
+        transition: 400ms all ease;
+    }
+}
+
+.recently-accessed-row {
+    margin-top: 30px;
+    display: flex;
+    position: relative;
+    // align-items: center;
+    // justify-content: center;
+    flex-flow: wrap;
+    .recently-accessed-row-header {
+        margin: 15px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+}
+
+@media screen and (max-width: $break-medium) {
+    .recently-accessed-row {
+        margin-top: 0px;
+        margin-right: -10px;
+        .recently-accessed-row-box {
+            padding-left: 0px;
+            padding-right: 0px;
+            flex: 1 0 auto;
+            margin-right: 10px;
+            width: 168px;
+        }
+        .info-card .info-card-content .card-image {
+            height: 140px;
+        }
+        .info-card .info-card-content .card-menu {
+            right: 1px;
+        }
+    }
+}

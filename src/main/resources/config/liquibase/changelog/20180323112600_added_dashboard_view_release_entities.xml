@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20180323112600-00" author="sbratic">
+
+        <createTable tableName="dashboard_releases">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="version_number" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="processed_by_login" type="varchar(50)">
+            </column>
+            <column name="requested_by_login" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_comment" type="text"/>
+            <column name="release_status" type="varchar(25)"/>
+
+            <column name="dashboard_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+			
+			<column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+			
+        </createTable>
+
+
+        <!--current dashboard release -->
+        <addColumn tableName="dashboards">
+            <column name="current_release_id" type="bigint"/>
+        </addColumn>
+
+        <createTable tableName="view_releases">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="version_number" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="processed_by_login" type="varchar(50)">
+            </column>
+            <column name="requested_by_login" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_comment" type="text"/>
+            <column name="release_status" type="varchar(25)"/>
+            <column name="view_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_state_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_state_read_only" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+			<column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+
+        </createTable>
+
+        <createTable tableName="dashboard_view_releases">
+            <column name="dashboard_release_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="view_release_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--current view release -->
+        <addColumn tableName="views">
+            <column name="current_release_id" type="bigint"/>
+        </addColumn>
+
+        <createTable tableName="release_requests">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="requested_by_login" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_id" type="bigint">
+            </column>
+            <column name="release_request_comment" type="text"/>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>

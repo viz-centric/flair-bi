@@ -1,0 +1,87 @@
+<div class="row">
+    <jhi-alert></jhi-alert>
+    <jhi-alert-error></jhi-alert-error>
+    <div class="col-md-4">
+        <h2><span data-translate="flairbiApp.fieldType.detail.title">Field type</span> {{vm.fieldType.id}}</h2>
+        <hr>
+
+        <dl class="dl-horizontal jh-entity-details">
+            <dt><span data-translate="flairbiApp.fieldType.constraint">Constraint</span></dt>
+            <dd>
+                <span>{{vm.fieldType.constraint}}</span>
+            </dd>
+            <dt><span data-translate="flairbiApp.fieldType.featureType">Feature type </span></dt>
+            <dd>
+                <span>{{vm.fieldType.featureType}}</span>
+            </dd>
+        </dl>
+
+        <button type="submit" ui-sref="{{vm.previousState}}" class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+    </div>
+    <div class="col-md-4">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4><span>Assigned Property Types</span></h4>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="jh-table table table-striped">
+                        <thead>
+                            <tr>
+                                <th><span data-translate="flairbiApp.propertyType.name">Name</span></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="propertyType in vm.fieldType.propertyTypes | orderBy: 'order'">
+                                <td><a ui-sref="property-type-detail({id:propertyType.propertyTypeId})">{{propertyType.propertyType.name}} </a></td>
+                                <td class="text-right">
+                                    <div class="btn-group flex-btn-group-container">
+                                        <button type="submit" ng-click="vm.remove(propertyType.propertyTypeId)" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                                <span class="hidden-xs hidden-sm" data-translate="entity.action.remove"></span>
+                                            </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4><span>Available Property Types</span></h4>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="jh-table table table-striped">
+                        <thead>
+                            <tr>
+                                <th><span data-translate="flairbiApp.propertyType.name">Name</span></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="propertyType in vm.propertyTypes | filter: vm.propertyTypeFilter">
+                                <td> <a ui-sref="property-type-detail({id:propertyType.id})"> {{propertyType.name}}</a></td>
+                                <td class="text-right">
+                                    <div class="btn-group flex-btn-group-container">
+                                        <button type="submit" ng-click="vm.assign(propertyType.id)" class="btn btn-info btn-sm">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                <span class="hidden-xs hidden-sm" data-translate="entity.action.assign"></span>
+                                            </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

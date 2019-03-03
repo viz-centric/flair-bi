@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "visualpropertycontrol" : {
+            "home": {
+                "title": "Visualpropertycontrols",
+                "createLabel": "Create a new Visualpropertycontrol",
+                "createOrEditLabel": "Create or edit a Visualpropertycontrol",
+                "search": "Search for Visualpropertycontrol"
+            },
+            "created": "A new Visualpropertycontrol is created with identifier {{ param }}",
+            "updated": "A Visualpropertycontrol is updated with identifier {{ param }}",
+            "deleted": "A Visualpropertycontrol is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Visualpropertycontrol {{ id }}?"
+            },
+            "detail": {
+                "title": "Visualpropertycontrol"
+            },
+            "chartType": "Chart Type",
+            "fontSize": "Font Size",
+            "propertiesLink": "Properties Link"
+        }
+    }
+}

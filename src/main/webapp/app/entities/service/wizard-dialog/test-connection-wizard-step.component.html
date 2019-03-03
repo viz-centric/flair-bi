@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-6 border-right">
+        <table class="table table-hover">
+            <caption><strong>Connection summary</strong></caption>
+            <tr>
+                <td>Connection name</td>
+                <td>{{vm.connection.name}}</td>
+            </tr>
+            <tr>
+                <td>Username</td>
+                <td>{{vm.connection.connectionUsername}}</td>
+            </tr>
+            <tr  ng-repeat="cp in vm.connectionType.connectionPropertiesSchema.connectionProperties | orderBy: 'order'">
+                <td>{{cp.displayName}}</td>
+                <td>{{vm.connection.details[cp.fieldName]}}</td>
+            </tr>
+            
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-hover">
+            <caption><strong>Datasource summary</strong></caption>
+            <tr>
+                <td>Name</td>
+                <td>{{vm.datasources.name}}</td>
+            </tr>
+            <tr>
+                <td>Query Path</td>
+                <td>{{vm.datasources.queryPath}}</td>
+            </tr>
+            <tr>
+                <td>Last Updated</td>
+                <td>{{vm.datasources.lastUpdated|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            </tr>
+            
+        </table>
+    </div>
+</div>
+<div class="row m-t-md">
+    <div class="col-md-12 test-connection-col">
+        <div class="test-connection-button"><button ng-click="vm.testConnection()" class="btn btn-primary">Test connection</button></div>
+        <div ng-show="vm.testResult === 'loading'" class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <div ng-show="vm.testResult === 'error'" class="test-connection-label alert-danger animate-show-hide">
+            <i class="fa fa-times"></i> Connection Error. Please check configurations </div>
+        <div ng-show="vm.testResult === 'success'" class="test-connection-label alert-success animate-show-hide">
+            <i class="fa fa-check"></i> Connection success </div>
+    </div>
+</div>
+<form name="testForm" role="form">
+    <div class="wizard-navigate-buttons">
+        <button type="button" class="btn btn-default" wz-previous ng-click="vm.resetTest()" value="Back">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Back
+        </button>
+        <button type="submit" ng-disabled="vm.testResult !== 'success'" class="btn btn-primary" wz-next value="Next" ng-click="vm.createDataSource()" >
+            <span class="glyphicon glyphicon-check"></span>
+            Create Datasource
+        </button>
+    </div>
+</form>

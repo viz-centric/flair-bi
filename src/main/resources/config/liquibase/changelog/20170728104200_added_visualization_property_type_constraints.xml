@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <property name="now" value="GETDATE()" dbms="mssql"/>
+
+    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle,mssql"/>
+
+    <changeSet id="20170728104200-1" author="cobrasin">
+
+        <addPrimaryKey tableName="visualizations_property_types"
+                       columnNames="visualization_id, property_type_id"/>
+
+        <addForeignKeyConstraint baseTableName="visualizations_property_types"
+                                 baseColumnNames="visualization_id"
+                                 constraintName="fk_visualization_id"
+                                 referencedTableName="visualizations"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="visualizations_property_types"
+                                 baseColumnNames="property_type_id"
+                                 constraintName="fk_property_type_id"
+                                 referencedTableName="property_types"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

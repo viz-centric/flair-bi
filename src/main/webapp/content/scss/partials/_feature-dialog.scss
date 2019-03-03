@@ -1,0 +1,45 @@
+.feature-dialog-modal{
+    .modal-body {
+        .feature-definition {
+            height: 100px;
+        }
+        .feature-detail {
+            border: 1px solid #e5e6e7;
+            border-radius: 30px; 
+        }
+        .form-group {
+            margin-top: 22px;
+        }
+        .feature-collapse {
+            text-align: center;
+            .heading-colour {
+                background-color: $primary-color;
+                color: #fff;
+            }
+        }
+        .search-box-feature {
+            .glyphicon {
+                position: absolute;
+                padding: 8px;
+                margin-top: 22px;
+            }
+            input {
+                padding-left: 30px;
+            }
+        }
+        .badge{
+            border: 1px solid #fff;
+            background-color: $primary-color;
+            padding: 2px 4px;
+            font-size: 10px;
+        }
+        .card-body{
+            word-break: break-all;
+            border: 2px dotted $border-color;
+            padding: 10px;
+            border-radius: 25px;
+            background: $data-constraint-background;
+            margin-bottom: 15px;
+        }   
+    }
+}

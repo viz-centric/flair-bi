@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity Views.
+    -->
+    <changeSet id="20170123190046-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="view_dashboard_id"
+                                 baseTableName="views"
+                                 constraintName="fk_views_view_dashboard_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dashboards"/>
+
+    </changeSet>
+</databaseChangeLog>

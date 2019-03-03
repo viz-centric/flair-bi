@@ -1,0 +1,231 @@
+/* Flair BI custom css*/
+
+body::-webkit-scrollbar {
+    width: 3px;
+}
+ 
+body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px slategrey;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: $scroll-bar-color;
+  outline: 1px solid slategrey;
+}
+
+.flair-scroll::-webkit-scrollbar {
+    width: 5px;
+    border-radius:5px;
+}
+ 
+ 
+.flair-scroll::-webkit-scrollbar-thumb {
+  background-color: $scroll-bar-color;
+  border-radius:2px;
+}
+
+ 
+.flair-scroll-gray::-webkit-scrollbar {
+    width: 5px;
+    border-radius:5px;
+}
+ 
+ 
+.flair-scroll-gray::-webkit-scrollbar-thumb {
+  background-color: $gray-scroll-bar;
+  border-radius:2px;
+}
+
+body .main-logo-element {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+body.mini-navbar .main-logo-element {
+    display: none;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.flair-hover:hover{
+    color:white !important;
+}
+
+.flair-hover{
+    color:#a7b1c2 !important;
+    background-color:#2f4050 !important;
+}
+
+.flair-input-title{
+    width:calc(100% - 50px);
+    height:100%;
+}
+
+.flair-title{
+    margin-left:5px;
+    margin-right:5px;
+    height:32px;
+    background:rgba(0,0,0,0.1);
+    color:black;
+}
+
+.flair-cog{
+    color:black;
+    margin-right:5px;
+    margin-top:2.5px;
+}
+
+.flair-h3{
+    margin-left:2px;
+}
+
+.flair-icons{
+    margin-left:5px !important;
+    margin-right:5px !important;
+}
+
+.flair-modal-span{
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.flair-row-height{
+    height:40px !important;
+}
+
+.flair-visual-div{
+    width:100%;
+    height:calc(100% - 52px);
+    margin-top:0px;
+}
+
+tbody .flair-right{
+    text-align: right;
+}
+
+tbody .flair-left{
+    text-align: left;
+}
+
+thead .flair-right, thead .flair-left{
+    text-align:center;
+}
+
+tbody .flair-format{
+    background-color:lightgreen;
+    font-weight:bold;
+}
+
+td .icon-center{
+    margin-left: 45%;
+    float: left;
+}
+
+#filterarea{
+    display: none;
+    /*border-bottom:2px solid #1ab394;*/
+    /*margin-bottom:15px;*/
+    padding:10px;
+    max-height:300px;
+}
+
+/* css for split and flip */
+.flip {
+    height: 100%;
+    width: 100%;
+}
+
+.flip .back {
+    background: #f3f3f4;
+}
+
+.split-pane-divider { background: #f3f3f4; }
+.split-pane-component { background: #fff; }
+
+.boxprop{
+    /*border: 1px solid #1ab394;*/
+    border-radius:5px;
+}
+
+.statdiv{
+    /*border: 1px solid #1ab394;*/
+    background-color:#f3f3f4;
+    border-radius:5px;
+}
+/* End */
+
+.flair-icon-right{
+    float:right;
+    margin:12px;
+    display:inline-block;
+}
+
+.click-cursor{
+    cursor: pointer;
+}
+
+.flair-input{
+    border-radius:2px;
+    margin:0px,10px,0px,10px;
+    width:100%;
+    text-align:center;
+}
+
+.flair-input input[type=text], textarea {
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  outline: none;
+  border: 1px solid #DDDDDD;
+}
+ 
+.flair-input input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 5px #1ab394;
+  border: 1px solid #1ab394;
+}
+
+.flair-tr{
+    border: 1px solid #dddddd;
+    padding: 10px;
+}
+.flair-td{
+    border: 1px solid #dddddd;
+    padding: 10px;
+    width:150px;
+}
+
+/*This wrapper is used to handle header size for grid stack component*/
+.chartjs-canvas-wrapper{
+    position: absolute;
+    top: 48px;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
+}
+/*Setting minimum width of a .grid-stack-item to avoid css breaks */
+.grid-stack > .grid-stack-item[data-gs-width='1'] {
+    width: 12%;
+}
+
+.search-flair {
+  margin:-1px 1px 0px 0px !important;
+  width:200px;
+  text-align: center;
+}
+ 
+.search-flair:focus {
+  box-shadow: 0 0 3px #1ab394 !important;
+  border: 1px solid #1ab394 !important;
+}
+
+.search-flair:hover {
+  box-shadow: 0 0 3px #1ab394 !important;
+  border: 1px solid #1ab394 !important;
+}

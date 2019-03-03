@@ -1,0 +1,25 @@
+{
+    "flairbiApp": {
+        "visualizations" : {
+            "home": {
+                "title": "Visualizations",
+                "createLabel": "Créer un nouveau Visualizations",
+                "createOrEditLabel": "Créer ou éditer un Visualizations",
+                "search": "Recherche pour Visualizations"
+            },
+            "created": "Un nouveau Visualizations a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Visualizations avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Visualizations avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Visualizations {{ id }} ?"
+            },
+            "detail": {
+                "title": "Visualizations"
+            },
+            "name": "Name",
+            "icon": "Icon",
+            "customId": "Custom Id",
+            "functionname": "Functionname"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+.admin-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-page{
+    margin-top: 50px;
+    justify-items: center;
+    display: grid;
+    grid-gap: 60px;
+    @media screen and (max-width:767px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (min-width:768px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (min-width:992px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .config-item{
+        text-align: center;
+        @media screen and (max-width: 720px) {
+            width: auto;
+            padding: 30px
+        }
+        svg.admin-page-flaticons{
+            width: 80px;
+            height: 60px;
+            fill: $icons-color;
+            transition: fill 0.5s ease;
+            &:hover {
+                fill: darken($anchor-color, 20%);
+            }
+        }
+
+        .admin-icon-label{
+            margin-top: 10px;
+        }
+ 
+        a{
+            transition: fill 0.5s ease;
+            &:hover {
+                color: darken($anchor-color, 10%);
+            }
+        }
+       
+    }
+}

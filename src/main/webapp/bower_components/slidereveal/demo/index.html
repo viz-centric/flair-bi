@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html lang="en" class="no-js">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>jQuery plugin</title>
+    <style type="text/css">
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+      body {
+        background-color: #f1f1f1;
+      }
+      body div{
+        padding: 10px;
+      }
+      .slider{
+        background-color: gray;
+        color: white;
+      }
+      #trigger{
+        width: 90%;
+        padding: 10px;
+        margin: 5px 5%;
+      }
+    </style>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../src/slidereveal.js"></script>
+  </head>
+  <body>
+    <div id="slider" class="slider">
+      Hello World!!
+      <!-- <button>&times;</button> -->
+    </div>
+    <div id="slider2" class="slider">
+      Hello World!!
+      <!-- <button>&times;</button> -->
+    </div>
+    <button id="trigger">Menu</button>
+    <button id="trigger2">Menu 2</button>
+    <textarea></textarea>
+    <input type="text"></input>
+    <div>
+      Adipiscing in turpis, adipiscing porta massa. Ridiculus urna diam. Ridiculus dignissim aliquet! Mid in lorem platea mus egestas lectus rhoncus odio phasellus, tristique, nisi ultricies aliquet, sit magna cursus dolor.
+
+      Velit! Odio? Aenean est ultricies. Tortor adipiscing urna ridiculus cras enim dignissim ac aliquam scelerisque quis sit a ac, eu turpis pid odio mattis. Odio in in tincidunt massa.
+
+      Integer? Enim augue et, ultricies? Integer nunc odio, elit pellentesque tincidunt? Quis amet augue ridiculus, natoque nec platea porttitor? Tempor aliquet non, dolor, sed ultrices dignissim duis, mauris, augue.
+
+      Adipiscing in turpis, adipiscing porta massa. Ridiculus urna diam. Ridiculus dignissim aliquet! Mid in lorem platea mus egestas lectus rhoncus odio phasellus, tristique, nisi ultricies aliquet, sit magna cursus dolor.
+
+      Velit! Odio? Aenean est ultricies. Tortor adipiscing urna ridiculus cras enim dignissim ac aliquam scelerisque quis sit a ac, eu turpis pid odio mattis. Odio in in tincidunt massa.
+
+      Integer? Enim augue et, ultricies? Integer nunc odio, elit pellentesque tincidunt? Quis amet augue ridiculus, natoque nec platea porttitor? Tempor aliquet non, dolor, sed ultrices dignissim duis, mauris, augue.
+
+      Adipiscing in turpis, adipiscing porta massa. Ridiculus urna diam. Ridiculus dignissim aliquet! Mid in lorem platea mus egestas lectus rhoncus odio phasellus, tristique, nisi ultricies aliquet, sit magna cursus dolor.
+
+      Velit! Odio? Aenean est ultricies. Tortor adipiscing urna ridiculus cras enim dignissim ac aliquam scelerisque quis sit a ac, eu turpis pid odio mattis. Odio in in tincidunt massa.
+
+      Integer? Enim augue et, ultricies? Integer nunc odio, elit pellentesque tincidunt? Quis amet augue ridiculus, natoque nec platea porttitor? Tempor aliquet non, dolor, sed ultrices dignissim duis, mauris, augue.
+
+      Adipiscing in turpis, adipiscing porta massa. Ridiculus urna diam. Ridiculus dignissim aliquet! Mid in lorem platea mus egestas lectus rhoncus odio phasellus, tristique, nisi ultricies aliquet, sit magna cursus dolor.
+
+      Velit! Odio? Aenean est ultricies. Tortor adipiscing urna ridiculus cras enim dignissim ac aliquam scelerisque quis sit a ac, eu turpis pid odio mattis. Odio in in tincidunt massa.
+
+      Integer? Enim augue et, ultricies? Integer nunc odio, elit pellentesque tincidunt? Quis amet augue ridiculus, natoque nec platea porttitor? Tempor aliquet non, dolor, sed ultrices dignissim duis, mauris, augue.
+
+      Adipiscing in turpis, adipiscing porta massa. Ridiculus urna diam. Ridiculus dignissim aliquet! Mid in lorem platea mus egestas lectus rhoncus odio phasellus, tristique, nisi ultricies aliquet, sit magna cursus dolor.
+
+      Velit! Odio? Aenean est ultricies. Tortor adipiscing urna ridiculus cras enim dignissim ac aliquam scelerisque quis sit a ac, eu turpis pid odio mattis. Odio in in tincidunt massa.
+
+      Integer? Enim augue et, ultricies? Integer nunc odio, elit pellentesque tincidunt? Quis amet augue ridiculus, natoque nec platea porttitor? Tempor aliquet non, dolor, sed ultrices dignissim duis, mauris, augue.
+    </div>
+    <script type="text/javascript">
+    	$(function(){
+        slider = $("#slider").slideReveal({
+          width: "50%",
+          // push: false,
+          position: "right",
+          speed: 600,
+          trigger: $("#trigger"),
+          // autoEscape: false,
+          show: function(obj){
+            console.log(obj);
+          },
+          shown: function(obj){
+            console.log(obj);
+          },
+          hide: function(obj){
+            console.log(obj);
+          },
+          hidden: function(obj){
+            console.log(obj);
+          },
+          overlay: true
+        });
+
+        slider2 = $("#slider2").slideReveal({
+          // width: "100px",
+          push: false,
+          position: "left",
+          speed: 600,
+          trigger: $("#trigger2"),
+          // autoEscape: false,
+          overlay: true,
+          top: 100,
+          overlayColor: 'rgba(255,255,255,0.5)'
+        });
+    	});
+
+      /*
+      Then you call:
+      $("#slider").slideReveal("show");
+      $("#slider").slideReveal("hide");
+      $("#slider").slideReveal("toggle");
+      */
+    </script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+{
+    "flairbiApp": {
+        "visualproperties" : {
+            "home": {
+                "title": "Visualproperties",
+                "createLabel": "Créer un nouveau Visualproperties",
+                "createOrEditLabel": "Créer ou éditer un Visualproperties",
+                "search": "Recherche pour Visualproperties"
+            },
+            "created": "Un nouveau Visualproperties a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Visualproperties avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Visualproperties avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Visualproperties {{ id }} ?"
+            },
+            "detail": {
+                "title": "Visualproperties"
+            },
+            "name": "Name",
+            "displayName": "Display Name",
+            "fontStyle": "Font Style",
+            "fontWeight": "Font Weight",
+            "textColor": "Text Color",
+            "numberFormat": "Number Format",
+            "displayColor": "Display Color",
+            "displayColorExpression": "Display Color Expression",
+            "backgroundColor": "Background Color",
+            "backgroundColorExpression": "Background Color Expression",
+            "textColorExpression": "Text Color Expression",
+            "sort": "Sort",
+            "valueOnLabels": "Value On Labels",
+            "alignment": "Alignment",
+            "border": "Border",
+            "fontSize": "Font Size",
+            "chartType": "Chart Type",
+            "dimension": "Dimension",
+            "sequenceNumber": "Sequence Number",
+            "icon": "Icon",
+            "iconExpression": "Icon Expression",
+            "borderColor": "Border Color",
+            "lineChartFillArea": "Line Chart Fill Area",
+            "metadataLink": "Metadata Link"
+        }
+    }
+}

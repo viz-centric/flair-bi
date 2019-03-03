@@ -1,0 +1,46 @@
+<div class="fbibox">
+    <div class="fbibox-title">Dashboards using this datasource</div>
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="jh-table table table-striped flair-table-v1">
+                <thead>
+                    <tr>
+                        <th>
+                            <span data-translate="global.field.id">ID</span>
+                        </th>
+                        <th>
+                            <span>Name</span>
+                        </th>
+                        <th>
+                            <span> Category</span>
+                        </th>
+                        <th>
+                            <span>Description</span>
+                        </th>
+                        <th>
+                            <span>Is published</span>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dashboard in vm.dashboards track by dashboard.id">
+                        <td>
+                            <a ui-sref="dashboards-detail({id: dashboard.id})">{{dashboard.id}}</a>
+                        </td>
+                        <td>{{dashboard.dashboardName}}</td>
+                        <td>{{dashboard.category}}</td>
+                        <td>{{dashboard.description}}</td>
+                        <td>{{dashboard.published}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<br/>
+<a ui-sref="connection-detail({id: vm.serviceId, connectionLinkId: vm.connectionId})" class="btn btn-info m-b-lg ng-scope">
+    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+    <span data-translate="entity.action.back" class="ng-scope">Back</span>
+</a>

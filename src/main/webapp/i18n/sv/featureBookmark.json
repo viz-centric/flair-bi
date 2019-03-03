@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "featureBookmark" : {
+            "home": {
+                "title": "Feature Bookmarks",
+                "createLabel": "Skapa en ny Feature Bookmark",
+                "createOrEditLabel": "Skapa eller ändra en Feature Bookmark"
+            },
+            "created": "En ny Feature Bookmark är skapad med id {{ param }}",
+            "updated": "En Feature Bookmark är uppdaterad med id  {{ param }}",
+            "deleted": "En Feature Bookmark är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Feature Bookmark {{ id }}?"
+            },
+            "detail": {
+                "title": "Feature Bookmark"
+            },
+            "name": "Name",
+            "featureCriteria": "Feature Criteria",
+            "user": "User",
+            "datasources": "Datasources"
+        }
+    }
+}

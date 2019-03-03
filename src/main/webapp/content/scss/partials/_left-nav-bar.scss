@@ -1,0 +1,60 @@
+nav{
+    .main-logo-element img{
+        height: 40px;
+    }
+    &.navbar-static-side{
+        width: 85px;
+        position: fixed;
+    }
+
+    .bottom-logo{
+        position: absolute;
+        top: 765px;
+        left: 53px;
+        text-align: center;
+        img{
+            height: 38px;
+        }
+        body.mini-navbar &{
+            display: none;
+        }
+    }
+
+    .nav {
+        > li{
+            margin-bottom: 15px;
+            &.active{
+                border-right: 3px solid $primary-color;
+                background: $active-background-color; 
+                color: $icons-color;
+            }
+            > a{
+                padding: 10px 0;
+                text-align: center;
+                font-size: 1.2rem;
+                color: $icons-color;
+                fill: $icons-color;
+                &:hover, &:focus{
+                    color: darken( $icons-color, 20% );
+                    fill : darken( $icons-color, 20% );
+                    background: none;
+                }
+            }
+        }
+        svg[class^="nav-flaticon-"] {
+            width: 50px;
+            height: 25px; 
+        }
+
+        .logo-element{
+            text-align: center;
+            padding: 8px 5px;
+            margin-right: 10px;
+
+            img{
+                height: 40px;
+            }
+        }
+    }
+    
+}

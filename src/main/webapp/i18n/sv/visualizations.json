@@ -1,0 +1,25 @@
+{
+    "flairbiApp": {
+        "visualizations" : {
+            "home": {
+                "title": "Visualizations",
+                "createLabel": "Skapa en ny Visualizations",
+                "createOrEditLabel": "Skapa eller ändra en Visualizations",
+                "search": "Sök efter Visualizations"
+            },
+            "created": "En ny Visualizations är skapad med id {{ param }}",
+            "updated": "En Visualizations är uppdaterad med id  {{ param }}",
+            "deleted": "En Visualizations är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Visualizations {{ id }}?"
+            },
+            "detail": {
+                "title": "Visualizations"
+            },
+            "name": "Name",
+            "icon": "Icon",
+            "customId": "Custom Id",
+            "functionname": "Functionname"
+        }
+    }
+}

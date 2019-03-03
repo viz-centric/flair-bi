@@ -1,0 +1,26 @@
+{
+    "flairbiApp": {
+        "fileUploaderStatus" : {
+            "home": {
+                "title": "File Uploader Statuses",
+                "createLabel": "Create a new File Uploader Status",
+                "createOrEditLabel": "Create or edit a File Uploader Status",
+                "search": "Search for File Uploader Status"
+            },
+            "created": "A new File Uploader Status is created with identifier {{ param }}",
+            "updated": "A File Uploader Status is updated with identifier {{ param }}",
+            "deleted": "A File Uploader Status is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete File Uploader Status {{ id }}?"
+            },
+            "detail": {
+                "title": "File Uploader Status"
+            },
+            "fileSystem": "File System",
+            "fileName": "File Name",
+            "contentType": "Content Type",
+            "isFileProcessed": "Is File Processed",
+            "fileLocation": "File Location"
+        }
+    }
+}

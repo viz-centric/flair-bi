@@ -1,0 +1,27 @@
+{
+    "flairbiApp": {
+        "drilldown" : {
+            "home": {
+                "title": "Drilldowns",
+                "createLabel": "Créer un nouveau Drilldown",
+                "createOrEditLabel": "Créer ou éditer un Drilldown",
+                "search": "Recherche pour Drilldown"
+            },
+            "created": "Un nouveau Drilldown a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Drilldown avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Drilldown avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Drilldown {{ id }} ?"
+            },
+            "detail": {
+                "title": "Drilldown"
+            },
+            "name": "Name",
+            "field": "Field",
+            "field_id": "Field Id",
+            "source_id": "Source Id",
+            "sequence": "Sequence",
+            "visualmetadata_id": "Visualmetadata Id"
+        }
+    }
+}

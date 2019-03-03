@@ -1,0 +1,94 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <span class="flair-modal-span">Create Hierarchy</span>
+        </h4>
+    </div>
+    <div class="modal-body" style="padding:0px;background:#ffffff;">
+        <div class="col-md-12" style="padding:0px;max-height:500px;overflow:auto;">
+            <div class="tabs-container">
+                <uib-tabset class="tabs-left">
+                    <uib-tab heading="Hierarchy" ng-click="updateValidator(2)">
+                        <div class="panel-body" style="height:485px;">
+                            <div class="row">
+                                <div class="col-md-4 flair-scroll" style="overflow-y:auto;height:450px;">
+                                    <div class="form-group">
+                                        <label class="control-label" for="field_name">Hierarchy Name</label>
+                                        <a style="float:right;margin-right:10px;" ng-click="deleteAllFields()">
+                                            <i class="fa fa-trash-o fa-2x"></i>
+                                        </a>
+                                        <input type="text" class="form-control" style="text-transform: uppercase;" name="name" id="field_name" ng-model="hierarchy.name"
+                                            ng-change="checkHierName()" ng-readonly="attachEdit" required />
+                                        <div ng-show="editForm.name.$invalid">
+                                            <p class="help-block" ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                                                This field is required.
+                                            </p>
+                                        </div>
+                                        <br ng-show="notFound2">
+                                        <div class="alert alert-danger" ng-show="notFound2">
+                                            <strong>A dimension/Hierarchy already exists with this name!</strong>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        <button ng-click="addField(1)" type="button" class="btn btn-primary btn-xs">
+                                            <i class="fa fa-plus" aria-hidden="true"></i> Add Fields</button>
+                                    </p>
+                                    <div class="dd" id="nestable2">
+                                        <ol class="dd-list" ng-repeat="field in currentHierarchy | orderBy:field.sequence" id="{{field.id}}_f" ng-click="displayRow(field.id,$index)">
+                                            <li id="field.id" class="dd-item" data-id="{{field.id}}">
+                                                <div class="dd-handle" style="text-transform: uppercase;">
+                                                    <span class="label label-info">
+                                                        <i class="fa fa-tag"></i>
+                                                    </span>{{field.field}}
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 flair-scroll" style="overflow-y:scroll;height:450px;">
+                                    <div class="modal-body" ng-if="showEditProperties">
+                                        <a style="float:right;margin-right:10px;" ng-click="deleteField(innerRecord.id)">
+                                            <i class="fa fa-trash-o fa-2x"></i>
+                                        </a>
+                                        <center>
+                                            <strong>
+                                                <h4>{{innerRecord.name}} Properties</h4>
+                                            </strong>
+                                        </center>
+                                        <div class="form-group">
+                                            <label for="id">ID</label>
+                                            <input type="text" class="form-control" id="id" name="id" ng-model="innerRecord.id" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id">Drill Sequence Number</label>
+                                            <input type="text" class="form-control" id="sqno" name="sqno" ng-model="innerRecord.sequence" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="field_name">Field Name</label>
+                                            <input type="text" class="form-control" style="text-transform: uppercase;" name="name" id="field_name" ng-model="innerRecord.field"
+                                                ng-change="checkDimension()" required />
+                                            <div ng-show="editForm.name.$invalid">
+                                                <p class="help-block" ng-show="editForm.name.$error.required">
+                                                    This field is required.
+                                                </p>
+                                            </div>
+                                            <br ng-show="notFound">
+                                            <div class="alert alert-danger" ng-show="notFound">
+                                                <strong>No Such Dimension Exists!</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" ng-show="!notFound && !notFound2" ng-click="ok()">Save changes</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
+    </div>
+
+</div>

@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-8">
+        <div ui-view></div>
+    </div>
+    <div class="col-md-4">
+        <div class="fbibox">
+            <div class="fbibox-title">
+                Connection details
+            </div>
+            <div class="fbibox-content child-m-b-sm">
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span>Connection Name</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.connection.name}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span>Connection username</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.connection.connectionUsername}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span>Link id</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.connection.linkId}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<a ui-sref="connection" class="btn btn-info m-b-lg ng-scope">
+    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+    <span data-translate="entity.action.back" class="ng-scope">Back</span>
+</a>

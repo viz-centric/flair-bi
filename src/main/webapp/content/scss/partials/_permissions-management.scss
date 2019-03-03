@@ -1,0 +1,197 @@
+.permission-header-controls {
+    float: right;
+    width: 12vw;
+    min-width: 100px;
+    display: flex;
+    justify-content: space-around;
+
+    top-nav-button-component {
+
+        #trigger {
+            display: inline-block;
+        }
+
+    }
+
+}
+
+.permission-dashboard-item{
+    height: 100%;
+    display: inline-block;
+}
+
+.permissions-fbibox {
+
+    .fbibox-title {
+        h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }    
+    }
+    
+    .btn-primary {
+        font-size: small;
+    }
+
+    input {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .user-segments {
+        margin-top: 20px;
+    }
+
+    .fbibox-content {
+
+        padding: 5px 15px 15px 15px;
+
+        .tree-handle {
+            cursor: default;
+            border-top: 1px solid #ededed;
+            border-bottom: 1px solid #ededed;
+            font-size: 1.5em;
+            padding: 10px 10px 6px 10px;
+            max-height: 200px;
+            svg {
+                fill: $icons-color;
+                height: 18px;
+                width: 16px;
+            }
+        
+            span {
+                font-size: small;
+                font-weight: normal;
+                vertical-align: top;
+                margin: 5px;
+        
+                &.user-tree-header {
+                    font-size: small;
+                    font-weight: 600;
+                }
+
+            }
+        
+            &.tree-handle-header {
+                min-height: 35px;
+                background: none !important;
+                border: none;
+            }
+        
+            &.user-tree {
+
+                border-top: none;
+
+                &.active {
+                    background-color: #f4f4f4;
+                }
+
+                button {
+                    background: none;
+                    border: none;
+                    float: right;
+                    padding: 0;
+                    margin-left: 10px;
+                    max-height: 22px;
+
+                    &:focus {
+                        outline: none;
+                    }
+
+                }
+
+            }
+        
+            i {
+                margin-right: 10px;
+                line-height: 32px;
+            }
+        
+            a {
+                float: right;
+                margin-top: -3px;
+            }
+        
+        }
+        .tree-handle:hover {
+            background-color:#f2fbfe;
+        }
+
+        .permission-tree {
+                	
+        	font-size: $font-regular;
+        	
+        	table.permission-table{
+				display: inline-table;
+                margin: 10px;
+                
+                .checkbox-padding{
+                    padding-bottom: 15px;
+                }
+                
+                .access-icon{
+                    font-size: 20px;
+                }
+                
+                
+
+			}
+        
+        	.content-header{
+	        	
+	        	.permission-icon{
+	                width: 36px;
+	    			height: 36px;
+	    			fill: #21668f;
+	            }
+	            
+	            .vertical-align{
+	            	vertical-align: 13px;
+	            	font-size: 14px;
+	            }
+            
+        	}
+
+
+            
+            .angular-ui-tree-nodes {
+
+                .angular-ui-tree-nodes {
+                    padding: 0;
+                }
+
+                &.first-level {
+                    >.angular-ui-tree-node {
+                        margin-bottom: 20px;
+
+                        >.tree-handle {
+                            background-color: #f4f4f4;
+                        }
+
+                    }
+
+                }
+
+                .angular-ui-tree-node {
+
+                    .tree-handle {
+                        border-top: none;
+                    }
+
+                }
+
+            }
+
+        } 
+
+    }
+
+}
+
+
+.angular-ui-tree-empty{
+    min-height: 0;
+    border: 1px solid $border-color;
+}
+
+

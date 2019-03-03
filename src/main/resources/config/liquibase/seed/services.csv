@@ -1,0 +1,4 @@
+id|service_name|server_address|server_port|app_prefix|secure|cache_server_address|cache_server_port|cache_server_endpoint|cache_secure
+1|Cloud FbiEngine instance|88.98.239.178|8080|fbi-engine-app|True|88.98.239.178|8080|api|False
+2|Local Fbengine instance|localhost|8080|local-fbi-engine-app|True|local|8080|api|False
+3|Local Fbengine instance https|localhost|8080|local-fbi-engine-app-https|True|local|8080|api|False

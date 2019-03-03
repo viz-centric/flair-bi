@@ -1,0 +1,7 @@
+version: '3'
+services:
+    flair-registry:
+        container_name: flair-registry
+        image: flair-registry
+        ports:
+        - 8761:8761

@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "measures" : {
+            "home": {
+                "title": "Measures",
+                "createLabel": "Skapa en ny Measures",
+                "createOrEditLabel": "Skapa eller ändra en Measures",
+                "search": "Sök efter Measures"
+            },
+            "created": "En ny Measures är skapad med id {{ param }}",
+            "updated": "En Measures är uppdaterad med id  {{ param }}",
+            "deleted": "En Measures är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Measures {{ id }}?"
+            },
+            "detail": {
+                "title": "Measures"
+            },
+            "name": "Name",
+            "type": "Type",
+            "measureDatasource": "Measure Datasource"
+        }
+    }
+}

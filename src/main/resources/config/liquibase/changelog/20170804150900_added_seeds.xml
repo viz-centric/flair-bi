@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <property name="now" value="GETDATE()" dbms="mssql"/>
+
+    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle,mssql"/>
+
+    <changeSet id="20170724161600-1" author="cobrasin">
+        <loadData tableName="property_types"
+                  file="config/liquibase/seed/propertytype.csv"
+                  separator="|"/>
+
+        <loadData tableName="features"
+                  file="config/liquibase/seed/features.csv"
+                  separator="|"/>
+
+        <loadData tableName="values"
+                  file="config/liquibase/seed/values.csv"
+                  separator="|"/>
+
+        <loadData tableName="field_types"
+                  file="config/liquibase/seed/fieldtypes.csv"
+                  separator="|"/>
+
+        <loadData tableName="visualizations_property_types"
+                  file="config/liquibase/seed/visualizations_property_types.csv"
+                  separator="|"/>
+
+        <loadData tableName="field_types_property_types"
+                  file="config/liquibase/seed/field_types_property_types.csv"
+                  separator="|"/>
+
+        <loadData tableName="information"
+                  file="config/liquibase/seed/information.csv"
+                  separator="|"/>
+				  
+        <loadData tableName="functions"
+                  file="config/liquibase/seed/functions.csv"
+                  separator="|"/>
+        <loadData tableName="visualization_colors"
+                  file="config/liquibase/seed/visualizationColors.csv"
+                  separator="|"/>
+    </changeSet>
+</databaseChangeLog>

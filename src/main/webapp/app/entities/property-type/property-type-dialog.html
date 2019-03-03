@@ -1,0 +1,85 @@
+<div class="inmodal in modal-content">
+    <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+            <h4 class="modal-title" id="myPropertyTypeLabel" data-translate="flairbiApp.propertyType.home.createOrEditLabel">Create or edit a Property type</h4>
+        </div>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-group" ng-show="vm.propertyType.id">
+                <label for="id" data-translate="global.field.id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" ng-model="vm.propertyType.id" readonly />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.propertyType.name" for="field_name">Name</label>
+                <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.propertyType.name" required ng-maxlength="50"
+                />
+                <div ng-show="editForm.name.$invalid">
+                    <p class="help-block" ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.name.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="50">
+                        This field cannot be longer than 50 characters.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.propertyType.type" for="field_input_type">Input type </label>
+                <select ng-disabled="vm.editMode" class="form-control" name="inputType" ng-options="inputType for inputType in vm.inputTypes"
+                    ng-model="vm.propertyType.type"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> Description </label>
+                <input name="description" class="form-control" type="text" ng-model="vm.propertyType.description" />
+            </div>
+            <div class="form-group" ng-show="vm.propertyType.type==='TEXT'">
+                <label class="control-label"> Default value </label>
+                <input name="defValue" class="form-control" type="text" ng-model="vm.propertyType.defaultValue" />
+            </div>
+            <div class="form-group" ng-show=" vm.propertyType.type==='COLOR_PICKER'">
+                <label class="control-label"> Default value </label>
+                <input name="colorDefValue" class="form-control" type="color" ng-model="vm.propertyType.defaultValue" />
+            </div>
+            <div class="form-group" ng-show="vm.propertyType.type==='CHECKBOX'">
+                <label class="control-label"> Default value </label>
+                <input name="cDefValue" class="form-control checkbox" type="checkbox" ng-model="vm.propertyType.defaultValue" />
+            </div>
+            <div class="form-group" ng-show="vm.propertyType.type==='NUMBER'">
+                <label class="control-label"> Default value </label>
+                <input name="nDefValue" class="form-control" type="number" />
+            </div>
+            <div class="form-group" ng-show="vm.propertyType.type==='SELECT'">
+                <label class="control-label">Data type </label>
+                <select ng-disabled="vm.editMode" name="dataType" class="form-control" ng-options="dataType for dataType in vm.dataTypes"
+                    ng-model="vm.propertyType.dataType" />
+            </div>
+            <div class="form-group" ng-show="vm.propertyType.type==='SELECT'">
+                <label class="control-label"> Possible values </label>
+                <div>
+                    <tags-input display-property="value" key-property="value" minTags="2" min-length="1" ng-show="vm.propertyType.dataType === 'STRING'"
+                        ng-model="vm.propertyType.values" placeholder="Add possible values (strings)" on-tag-added="vm.onTagAdded($tag)"
+                        on-tag-removed="vm.onTagRemoved($tag)"></tags-input>
+                </div>
+                <div ng-show="vm.propertyType.dataType === 'INTEGER'">
+                    <tags-input display-property="value" key-property="value" minTags="2" min-length="1" ng-model="vm.propertyType.values" placeholder="Add possible values (numbers)"
+                        on-tag-added="vm.onTagAdded($tag)" on-tag-removed="vm.onTagRemoved($tag)" allowed-tags-pattern="^-?[0-9]+$"></tags-input>
+                </div>
+            </div>
+            <div class="form-group" ng-show="vm.propertyType.type ==='SELECT'">
+                <label class="control-label"> Default value </label>
+                <select name="selectDefaultValue" class="form-control" ng-model="vm.propertyType.defaultValue" ng-options="value.value for value in vm.propertyType.possibleValues track by value.value"><option value=""></option></select>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+            <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+        </div>
+    </form>
+</div>

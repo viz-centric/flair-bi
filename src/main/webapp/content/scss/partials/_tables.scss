@@ -1,0 +1,117 @@
+/* TABLES */
+
+.table-bordered {
+    border: 1px solid #EBEBEB;
+}
+
+.table-bordered>thead>tr>th,
+.table-bordered>thead>tr>td {
+    background-color: #F5F5F6;
+    border-bottom-width: 1px;
+}
+
+.table-bordered>thead>tr>th,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>td,
+.table-bordered>tfoot>tr>td {
+    border: 1px solid #e7e7e7;
+}
+
+.table>thead>tr>th {
+    border-bottom: 1px solid #DDDDDD;
+    vertical-align: bottom;
+}
+
+.table>thead>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+    border-top: 1px solid $border-color;
+    line-height: 1.42857;
+    padding: 8px;
+    vertical-align: top;
+}
+
+table {
+    &.property-information-table {
+        tbody {
+            tr {
+                td {
+                    padding: 20px;
+                    text-align: center;
+                    &.data-label {
+                        border-right: 1px solid $border-color;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.flair-table-v2 {
+    background: $active-background-color;
+}
+
+.flair-table-v1 {
+    thead {
+        tr {
+            th {
+                background-color: $active-background-color;
+                text-align: center;
+            }
+        }
+    }
+    tbody {
+        tr {
+            background-color: $homepage-table-background;
+            td {
+                vertical-align: middle;
+                text-align: center;
+                .flex-btn-group-container {
+                    align-items: center;
+                    justify-content: center;
+                    .btn {
+                        .delete-icon {
+                            color: $delete-buttton-color;
+                        }
+                        .edit-icon {
+                            color: $primary-color;
+                        }
+                        .view-icon {
+                            color: $primary-color;
+                        }
+                        .fa-2x {
+                            font-size: 1.5em;
+                        }
+                        .build-icon {
+                            color: $primary-color;
+                            font-size: 17px;
+                        }
+                    }
+                }
+                .roles {
+                    .role-label {
+                        background-color: $active-background-color;
+                    }
+                }
+            }
+            .button-centered {
+                align-items: center;
+                justify-content: center;
+            }
+            button{
+                border:none;
+                background-color:initial;
+               
+            }
+        }
+        tr:hover{
+        background-color:#f2fbfe;
+        }
+    }
+}

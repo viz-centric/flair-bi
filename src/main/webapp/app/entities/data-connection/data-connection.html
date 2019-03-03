@@ -1,0 +1,31 @@
+<div id="dataSource-holder">		
+	<connection-steps-component step="vm.step"></connection-steps-component>
+	<div class="window-holder">
+		<header class="cf">
+			<div class="header-icon">
+				<svg >
+					<use xlink:href="#edit-dashboard" ></use>
+				</svg>
+			</div>
+			<div class="header-title">
+				<p>Create new data connection</p>
+			</div>
+		</header>
+		<div class="window-body">
+			<wizard indicators-position="top" on-finish="vm.finishedWizard()">
+	            <wz-step wz-title="Connection type" description="Choose the connection type">
+	                <connection-type-wizard-step connection-types="vm.connectionTypes" connection-type="vm.connectionType" connections="vm.connections"></connection-type-wizard-step>
+	            </wz-step>
+	            <wz-step wz-title="New Data Connection" description="Choose existing connections or create new one">
+	                <connection-wizard-step connection-type="vm.connectionType" selected-connection="vm.selectedConnection" connections="vm.connections" connection="vm.connection"></connection-wizard-step>
+	            </wz-step>
+	            <wz-step wz-title="Explore & Data Model">
+	                <datasource-wizard-step datasources="vm.datasources" connection="vm.connection" connection-type="vm.connectionType" selected-connection="vm.selectedConnection" features="vm.features"></datasource-wizard-step>
+	            </wz-step>
+	            <wz-step wz-title="Dimentions Measures">
+	                <dimentions-measures-wizard-step on-finish-handler="vm.handleFinish(result)" features="vm.features" datasources="vm.datasources"></dimentions-measures-wizard-step>
+	            </wz-step>
+        	</wizard>
+		</div>
+	</div>
+</div>

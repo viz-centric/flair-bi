@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "featureBookmark" : {
+            "home": {
+                "title": "Feature Bookmarks",
+                "createLabel": "Create a new Feature Bookmark",
+                "createOrEditLabel": "Create or edit a Feature Bookmark"
+            },
+            "created": "A new Feature Bookmark is created with identifier {{ param }}",
+            "updated": "A Feature Bookmark is updated with identifier {{ param }}",
+            "deleted": "A Feature Bookmark is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Feature Bookmark {{ id }}?"
+            },
+            "detail": {
+                "title": "Feature Bookmark"
+            },
+            "name": "Name",
+            "featureCriteria": "Feature Criteria",
+            "user": "User",
+            "datasources": "Datasources"
+        }
+    }
+}

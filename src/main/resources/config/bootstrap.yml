@@ -1,0 +1,13 @@
+spring:
+    application:
+        name: flairbi
+    cloud:
+        config:
+            uri: ${CONFIG_URI:http://localhost:8761}
+            username: ${CONFIG_USER:admin}
+            password: ${CONFIG_PASS:admin}
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_URL:http://admin:admin@localhost:8761/eureka/}
+

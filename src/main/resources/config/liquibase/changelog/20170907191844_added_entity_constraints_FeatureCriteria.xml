@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity FeatureCriteria.
+    -->
+    <changeSet id="20170907191844-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="feature_id"
+                                 baseTableName="feature_criteria"
+                                 constraintName="fk_feature_criteria_feature_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="features"/>
+
+        <addForeignKeyConstraint baseColumnNames="feature_bookmark_id"
+                                 baseTableName="feature_criteria"
+                                 constraintName="fk_feature_criteria_feature_bookmark_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="feature_bookmark"/>
+
+    </changeSet>
+</databaseChangeLog>

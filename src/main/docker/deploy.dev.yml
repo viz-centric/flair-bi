@@ -1,0 +1,63 @@
+version: "2"
+
+services:
+    flair-bi-dev:
+        image: ${DOCKER_REGISTRY_URL}/flair-bi:latest-${GIT_LOCAL_BRANCH}
+        labels:
+            purpose: Gateway
+            environment: development
+            traefik.frontend.rule: "PathPrefixStrip: /flairbi-dev"
+            traefik.enable: true
+            traefik.backend: flair-bi-dev
+            traefik.docker.network: traefik
+        environment:
+            - CONFIG_URI=http://flair-registry-dev:8761
+            - EUREKA_URL=http://${EUREKA_CRED}@flair-registry-dev:8761/eureka
+            - JHIPSTER_SLEEP=100
+            - SPRING_PROFILES_ACTIVE=prod
+            - POSTGRES_URI=flair-bi-pgsql-dev:5432
+            - POSTGRES_USER=${PGSQL_USER}
+            - POSTGRES_PASS=${PGSQL_PASS}
+            - COUCH_URI=http://flair-couchdb-dev:5984
+            - COUCH_USER=${COUCH_USER}
+            - COUCH_PASS=${COUCH_PASS}
+        mem_limit: 512m
+        networks:
+            - dev
+            - traefik
+
+    flair-bi-pgsql-dev:
+        container_name: development-flair-bi-pgsql
+        image: postgres:9.4-alpine
+        labels:
+            purpose: Metadata store
+            environment: development
+        environment:
+            - POSTGRES_USER=${PGSQL_USER}
+            - POSTGRES_PASSWORD=${PGSQL_PASS}
+            - POSTGRES_DB=flairbi
+        networks:
+            - dev
+        mem_limit: 512m
+
+    flair-couchdb-dev:
+        image: manoj10/couchdb
+        container_name: development-couchdb
+        restart: always
+        labels:
+            purpose: View store
+            environment: development
+        environment:
+            - COUCHDB_USER=${COUCH_USER}
+            - COUCHDB_PASSWORD=${COUCH_PASS}
+        networks:
+            - dev
+        mem_limit: 512m
+
+networks:
+    dev:
+        external:
+            name: development
+    traefik:
+        external:
+            name: traefik

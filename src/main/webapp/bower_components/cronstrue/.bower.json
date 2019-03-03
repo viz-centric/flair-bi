@@ -1,0 +1,15 @@
+{
+  "name": "cronstrue",
+  "homepage": "https://github.com/victorsoliveira/cRonstrue",
+  "version": "0.8.0",
+  "_release": "0.8.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.8.0",
+    "commit": "78bbde4e687c5b72cb32fae0996276be0b9d46cd"
+  },
+  "_source": "https://github.com/victorsoliveira/cRonstrue.git",
+  "_target": "^0.8.0",
+  "_originalSource": "cronstrue",
+  "_direct": true
+}

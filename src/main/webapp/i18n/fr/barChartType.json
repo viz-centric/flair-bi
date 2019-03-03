@@ -1,0 +1,9 @@
+{
+    "flairbiApp": {
+        "BarChartType" : {
+            "null": "",
+            "bar": "bar",
+            "horizontalBar": "horizontalBar"
+        }
+    }
+}

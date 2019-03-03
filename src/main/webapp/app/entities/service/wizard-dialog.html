@@ -1,0 +1,30 @@
+<div class="inmodal connection-create-popup">
+    <div class="modal-header">
+        <svg class="dashboard-icon">
+           <use xlink:href="#edit-dashboard" />
+        </svg>
+        <div class="header-text">Create new datasource</div>
+        <svg class=" dashboard-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+           <use xlink:href="#cancle" />
+        </svg>
+    </div>
+    <div class="modal-body">
+        <wizard indicators-position="top" on-finish="vm.finishedWizard()">
+            <wz-step wz-title="Connection type" description="Choose the connection type">
+                <connection-type-wizard-step connection-types="vm.connectionTypes" connection-type="vm.connectionType" connections="vm.connections"></connection-type-wizard-step>
+            </wz-step>
+            <wz-step wz-title="Connection" description="Choose existing connections or create new one">
+                <connection-wizard-step connection-type="vm.connectionType" selected-connection="vm.selectedConnection" connections="vm.connections" connection="vm.connection"></connection-wizard-step>
+            </wz-step>
+            <wz-step wz-title="Datasource">
+                <datasource-wizard-step datasources="vm.datasources" connection="vm.connection" connection-type="vm.connectionType" selected-connection="vm.selectedConnection"></datasource-wizard-step>
+            </wz-step>
+            <wz-step wz-title="Test connection">
+                <test-connection-wizard-step connection="vm.connection" connection-type="vm.connectionType" datasources="vm.datasources" selected-connection="vm.selectedConnection" features="vm.features"></test-connection-wizard-step>
+            </wz-step>
+            <wz-step wz-title="Dimentions Measures">
+                <dimentions-measures-wizard-step on-finish-handler="vm.handleFinish(result)" features="vm.features" datasources="vm.datasources"></dimentions-measures-wizard-step>
+            </wz-step>
+        </wizard>
+    </div>
+</div>

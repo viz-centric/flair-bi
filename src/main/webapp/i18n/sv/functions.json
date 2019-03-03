@@ -1,0 +1,26 @@
+{
+    "flairbiApp": {
+        "functions" : {
+            "home": {
+                "title": "Functions",
+                "createLabel": "Skapa en ny Functions",
+                "createOrEditLabel": "Skapa eller ändra en Functions",
+                "search": "Sök efter Functions"
+            },
+            "created": "En ny Functions är skapad med id {{ param }}",
+            "updated": "En Functions är uppdaterad med id  {{ param }}",
+            "deleted": "En Functions är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Functions {{ id }}?"
+            },
+            "detail": {
+                "title": "Functions"
+            },
+            "name": "Name",
+            "description": "Description",
+            "value": "Value",
+            "dimensionUse": "Dimension Use",
+            "measureUse": "Measure Use"
+        }
+    }
+}

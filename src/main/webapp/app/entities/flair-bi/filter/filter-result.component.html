@@ -1,0 +1,17 @@
+<div class="ibox">
+    <div class="ibox-title">
+        Selection
+    </div>
+    <div class="ibox-content">
+        <div class="row" ng-repeat="(key,value) in vm.selectedFilters">
+            <div class="col-md-4">
+                <label class="contol-label">{{key}}:</label>
+            </div>
+            <div class="col-md-8">
+                <div ng-repeat="item in value">
+                    {{item}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

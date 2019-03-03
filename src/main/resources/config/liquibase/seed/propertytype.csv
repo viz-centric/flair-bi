@@ -1,0 +1,77 @@
+id|property_type_name|property_type_description|d_type|checkbox_default_value|text_default_value|color_picker_default_value|number_default_value|created_by|select_data_type
+601|Show X Axis|Boolean that says if x axis should be shown|CHECKBOX|true|null|null|null|flairadmin|null
+602|Show Y Axis|Boolean that says if y axis should be shown|CHECKBOX|true|null|null|null|flairadmin|null
+603|X Axis Colour|Colour of X axis|COLOR_PICKER|null|null|#676a6c|null|flairadmin|null
+604|Y Axis Colour|Colour of Y axis|COLOR_PICKER|null|null|#676a6c|null|flairadmin|null
+605|Show X Axis Label|Boolean that says if x axis label should be shown|CHECKBOX|true|null|null|null|flairadmin|null
+606|Show Y Axis Label|Boolean that says if y axis label should be shown|CHECKBOX|true|null|null|null|flairadmin|null
+607|Show Legend|Boolean that says if legend should be shown|CHECKBOX|true|null|null|null|flairadmin|null
+608|Legend position|Legend position with sides|SELECT|null|null|null|null|flairadmin|STRING
+609|Pie Chart Type|Pie chart type is circular or donut|SELECT|null|null|null|null|flairadmin|STRING
+610|Show grid|Boolean to show grid or not|CHECKBOX|true|null|null|null|flairadmin|null
+611|Bar Type|Types of bar charts|SELECT|null|null|null|null|flairadmin|STRING
+612|Line Type|Types of line charts|SELECT|null|null|null|null|flairadmin|STRING
+613|Info graphic Type|Types of Info graphic charts|SELECT|null|null|null|null|flairadmin|STRING
+614|Map Type|Types of map charts|SELECT|null|null|null|null|flairadmin|STRING 
+615|Gauge Type|Type of gauges|SELECT|null|null|null|null|flairadmin|STRING
+616|Stacked|Boolean that says if chart is stacked|CHECKBOX|false|null|null|null|flairadmin|null
+617|Show Labels|Boolean to show labels|CHECKBOX|true|null|null|null|flairadmin|null
+618|Colour of labels|Label colours|COLOR_PICKER|null|null|#617c8c|null|flairadmin|null
+619|Field name|A field name|TEXT|null|Field name|null|null|flairadmin|null
+620|Display name|A display name|TEXT|null|Display name|null|null|flairadmin|null
+621|Font style|Style of fonts|SELECT|null|null|null|null|flairadmin|STRING
+622|Font weight|Weight of fonts|SELECT|null|null|null|null|flairadmin|STRING
+623|Value on Points|Show value on points|CHECKBOX|false|null|null|null|flairadmin|null
+624|Point type|Type of points|SELECT|null|null|null|null|flairadmin|STRING
+625|Icon name|An icon name|TEXT|null|null|null|null|flairadmin|null
+626|Alignment|an alignment|SELECT|null|null|null|null|flairadmin|STRING
+627|Display colour|An display colour|COLOR_PICKER|null|null|null|null|flairadmin|null
+628|Display colour expression|An display colour expressions|TEXT|null|null|null|null|flairadmin|null
+629|Icon Expression|An icon expression|TEXT|null|null|null|null|flairadmin|null
+630|Text alignment|Alignment of text|SELECT|null|null|null|null|flairadmin|STRING
+631|Icon position|An icon position|SELECT|null|null|null|null|flairadmin|STRING
+632|Text colour|The text colour|COLOR_PICKER|null|null|#617c8c|null|flairadmin|null
+633|Text colour expression|The text colour expression|TEXT|null|null|null|null|flairadmin|null
+634|Number format|Possible number formats|SELECT|null|null|null|null|flairadmin|STRING
+635|Number of partitions|A number of partitions|NUMBER|null|null|null|4|flairadmin|null
+636|Minimum value|A minimum value|NUMBER|null|null|null|1|flairadmin|null
+637|Maximum value|A maximum value|NUMBER|null|null|null|20|flairadmin|null
+638|Partition colours|A partition colours|TEXT|null|green,yellow,orange,red|null|null|flairadmin|null
+639|Aggregation type|Possible aggregation types|SELECT|null|null|null|null|flairadmin|STRING
+640|Table Aggregation type|Possible table aggregation types|SELECT|null|null|null|null|flairadmin|STRING
+641|Condition|TEXT|TEXT|null|null|null|null|flairadmin|null
+642|Limit|Number of data to be returned|NUMBER|null|null|null|20|flairadmin|null
+643|Type|types of dimension for map|SELECT|null|null|null|null|flairadmin|STRING
+644|Border colour|An border colour|COLOR_PICKER|null|null|null|null|flairadmin|null
+645|Line Chart Point type|Type of points|SELECT|null|null|null|null|flairadmin|STRING
+646|Combo chart type|line or bar|SELECT|null|null|null|null|flairadmin|STRING
+647|Show value as|show labels as option in piece lable|SELECT|null|null|null|null|flairadmin|STRING
+648|Value as Arc|Boolean that says value on the segment should be in arc or not|CHECKBOX|true|null|null|null|flairadmin|null
+649|Value position|Position of value outside or inside pie segment|SELECT|null|null|null|null|flairadmin|STRING
+650|Sort|Sorting of the data|SELECT|null|null|null|null|flairadmin|STRING
+651|Color Pattern|Color pattern to vizualizations|SELECT|null|null|null|null|flairadmin|STRING
+652|Show Icon|Boolean to show icons|CHECKBOX|true|null|null|null|flairadmin|null
+653|Icon Font weight|Weight of icon fonts|SELECT|null|null|null|null|flairadmin|STRING
+654|Color Coding|Conditional coloring |TEXT|null|null|null|null|flairadmin|null
+655|Axis Colour|Colour of axis|COLOR_PICKER|null|null|#676a6c|null|flairadmin|null
+656|Descriptive|text or html|TEXT|null|Descriptive|null|null|flairadmin|null
+657|Background Colour|Colour of Background|COLOR_PICKER|null|null|#FFFFFF|null|flairadmin|null
+658|Underline|Boolean for underlining value|CHECKBOX|false|null|null|null|flairadmin|null
+659|Orientation|Orientation of Bullet Chart|SELECT|null|null|null|null|flairadmin|STRING
+660|Target colour|Target colour|COLOR_PICKER|null|null|#676a6c|null|flairadmin|null
+661|Segments|No of Segments|SELECT|null|null|null|null|flairadmin|STRING
+662|Segment Color Coding|Segment Color Coding|TEXT|null|null|null|null|flairadmin|null
+663|Minimum Size|minimum size of word|TEXT|null|null|null|null|flairadmin|null
+664|Maximum Size|maximum size of word|TEXT|null|null|null|null|flairadmin|null
+665|Enable Caching|Boolean to enable caching or not|CHECKBOX|false|null|null|null|flairadmin|null
+666|Pivot|Pivot the dimension|CHECKBOX|false|null|null|null|flairadmin|null
+667|Enable Gradient Color|Boolean to enable gradient color or not|CHECKBOX|false|null|null|null|flairadmin|null
+668|Cell colour|Cell colour for table cells|COLOR_PICKER|null|null|rgba(255, 255, 255, 1)|null|flairadmin|null
+669|Cell colour expression|Expression to customize cell colour of table cells|TEXT|null|null|null|null|flairadmin|null
+670|Font size|Size of fonts|NUMBER|null|null|null|9|flairadmin|null
+671|Icon colour|An Icon colour|COLOR_PICKER|null|null|null|null|flairadmin|null
+672|Show Display Name|Boolean to Show Display Name or not|CHECKBOX|true|null|null|null|flairadmin|null
+673|Number Color|Number Color|COLOR_PICKER|null|null|null|null|flairadmin|null
+674|Number Font size|Number Size of fonts|NUMBER|null|null|null|9|flairadmin|null
+675|Icon Font size|Icon Size of fonts|NUMBER|null|null|null|9|flairadmin|null
+

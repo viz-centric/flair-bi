@@ -1,0 +1,20 @@
+<div class="container-margin-top" style="margin-top: 65px;">
+    <div class="search-result-area" ng-cloak="" ng-show="vm.searchMode">
+        <div ng-if="vm.searchedViews.length>0">
+            <h2 data-translate="flairbiApp.views.searchTitle" class="search-result-title">Search result for views</h2>
+            <div class="search-result-panel">
+                <div class="search-result-item col-md-3 col-sm-6" ng-repeat="view in vm.searchedViews">
+                    <view-component class="view" view="view"></view-component>
+                </div>
+            </div>
+        </div>
+        <div ng-if="vm.searchedDashboards.length>0">
+            <h2 class="search-result-title" data-translate="flairbiApp.dashboards.searchTitle">Search result for dashboards</h2>
+            <div class="search-result-panel">
+                <div class="search-result-item dashboard col-md-3 col-sm-6" ng-repeat="dashboard in vm.searchedDashboards">
+                    <dashboard-component dashboard="dashboard" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity DatasourceConstraint.
+    -->
+    <changeSet id="20170908202540-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="datasource_constraint"
+                                 constraintName="fk_datasource_constraint_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="datasource_id"
+                                 baseTableName="datasource_constraint"
+                                 constraintName="fk_datasource_constraint_datasources_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="datasources"/>
+
+    </changeSet>
+</databaseChangeLog>

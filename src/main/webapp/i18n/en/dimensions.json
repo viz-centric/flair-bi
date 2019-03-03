@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "dimensions" : {
+            "home": {
+                "title": "Dimensions",
+                "createLabel": "Create a new Dimensions",
+                "createOrEditLabel": "Create or edit a Dimensions",
+                "search": "Search for Dimensions"
+            },
+            "created": "A new Dimensions is created with identifier {{ param }}",
+            "updated": "A Dimensions is updated with identifier {{ param }}",
+            "deleted": "A Dimensions is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Dimensions {{ id }}?"
+            },
+            "detail": {
+                "title": "Dimensions"
+            },
+            "name": "Name",
+            "type": "Type",
+            "dimensionDatasource": "Dimension Datasource"
+        }
+    }
+}

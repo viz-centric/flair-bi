@@ -1,0 +1,10 @@
+version: '2'
+services:
+    flairbi-couchdb-test:
+        extends:
+            file: couchdb.yml
+            service: flairbi-couchdb-test
+    flairbi-postgresql-test:
+        extends:
+            file: postgresql.yml
+            service: flairbi-postgresql-test

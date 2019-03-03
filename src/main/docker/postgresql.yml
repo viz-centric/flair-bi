@@ -1,0 +1,23 @@
+version: '2'
+services:
+    flairbi-postgresql:
+        container_name: flairbi-postgresql
+        build: ./fb-psql
+        #        image: cobrijani/postgres:9.4.1
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=flairbi
+        ports:
+            - 5432:5430
+
+
+    flairbi-postgresql-test:
+        container_name: flairbi-postgresql-test
+        image: postgres:9.4-alpine
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=flairbi
+        ports:
+            - 9999:5432

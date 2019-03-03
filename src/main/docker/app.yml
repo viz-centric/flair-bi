@@ -1,0 +1,76 @@
+version: '2'
+services:
+    flair-bi-pgsql:
+        networks:
+        - flair-network
+        image: postgres:9.4-alpine
+        ports:
+        - 5432:5432
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=flairbi
+
+    flair-engine-pgsql:
+        networks:
+        - flair-network
+        image: postgres:9.4-alpine
+        ports:
+        - 5430:5432
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=fbiengine
+
+    flair-engine:
+        networks:
+        - flair-network
+        image: fbiengine
+        environment:
+        - CONFIG_URI=http://flair-registry:8761
+        - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+        - JHIPSTER_SLEEP=200
+        - SPRING_PROFILES_ACTIVE=prod
+        - POSTGRES_URI=flair-engine-pgsql:5432
+
+    flair-registry:
+        networks:
+        - flair-network
+        container_name: flair-registry
+        image: flair-registry
+        environment:
+        - JHIPSTER_SLEEP=0
+        - SPRING_PROFILES_ACTIVE=prod
+        - BITBUCKET_URI=${BITBUCKET_URI}
+        - BITBUCKET_USER=${BITBUCKET_USER}
+        - BITBUCKET_PASS=${BITBUCKET_PASS}
+        ports:
+        - 8761:8761
+
+    flair-couchdb:
+        networks:
+        - flair-network
+        container_name: flair-couchdb
+        extends:
+            file: couchdb.yml
+            service: flairbi-couchdb
+    flair-bi:
+        networks:
+        - flair-network
+        container_name: flairbi
+        image: flairbi:latest
+        environment:
+        - CONFIG_URI=http://flair-registry:8761
+        - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+        - JHIPSTER_SLEEP=200
+        - SPRING_PROFILES_ACTIVE=prod
+        - POSTGRES_URI=flair-bi-pgsql:5432
+        - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+        ports:
+        - 80:80
+        - 5005:5005
+
+networks:
+    flair-network:
+        driver: bridge
+

@@ -1,0 +1,9 @@
+info:
+    component: Flair Config Server
+spring:
+    application:
+        name: flair-config-server
+    jmx:
+        default_domain: cloud.config.server
+management:
+    context_path: /admin

@@ -1,0 +1,72 @@
+<jhi-alert></jhi-alert>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4 no-padding-left">
+            <button ng-show="vm.config.create.enabled" class="btn btn-primary" ui-sref="{{vm.config.create.route || feature-bookmark.new}}">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span data-translate="flairbiApp.featureBookmark.home.createLabel">
+                    Create new Feature Bookmark
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="fbibox">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="jh-table table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <span data-translate="global.field.id">ID</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.featureBookmark.name">Name</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.featureBookmark.user">User</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.featureBookmark.datasources">Datasources</span>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="featureBookmark in vm.featureBookmarks track by featureBookmark.id">
+                        <td>
+                            <a ui-sref="feature-bookmark-detail({id:featureBookmark.id})">{{featureBookmark.id}}</a>
+                        </td>
+                        <td>{{featureBookmark.name}}</td>
+                        <td>
+                            {{featureBookmark.user.login}}
+                        </td>
+                        <td>
+                            <a ui-sref="datasources-detail({id:featureBookmark.datasource.id})">{{featureBookmark.datasource.name}}</a>
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button ng-show="vm.config.view.enabled" type="submit" ui-sref="{{vm.config.view.route || feature-bookmark-detail({id:featureBookmark.id}) }}"
+                                    class="btn btn-info btn-sm">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                    <span class="hidden-sm-down" data-translate="entity.action.view"></span>
+                                </button>
+                                <button ng-show="vm.config.edit.enabled" type="submit" ui-sref="{{ vm.config.edit.route || feature-bookmark.edit({id:featureBookmark.id}) }}"
+                                    class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
+                                </button>
+                                <button ng-show="vm.config.delete.enabled" type="submit" ui-sref="{{vm.config.delete.route || feature-bookmark.delete({id:featureBookmark.id})}}"
+                                    class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                    <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

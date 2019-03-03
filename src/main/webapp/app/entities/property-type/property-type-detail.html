@@ -1,0 +1,36 @@
+<div>
+    <h2><span data-translate="flairbiApp.propertyType.detail.title">Visualizations</span> {{vm.propertyType.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="flairbiApp.propertyType.name">Name</span></dt>
+        <dd>
+            <span>{{vm.propertyType.name}}</span>
+        </dd>
+        <dt><span data-translate="flairbiApp.propertyType.description">Description </span></dt>
+        <dd>
+            <span>{{vm.propertyType.description}}</span>
+        </dd>
+        <dt><span data-translate="flairbiApp.propertyType.type">Input type </span></dt>
+        <dd>
+            <span>{{vm.propertyType.type}}</span>
+        </dd>
+        <dt ng-show="vm.propertyType.type !=='SELECT'"><span data-translate="flairbiApp.propertyType.defaultValue">Default Value </span></dt>
+        <dd ng-show="vm.propertyType.type !=='SELECT'">
+            <span>{{vm.propertyType.defaultValue}}</span>
+        </dd>
+        <dt ng-show="vm.propertyType.type ==='SELECT'"><span data-translate="flairbiApp.propertyType.possibleValues">Possible Values </span></dt>
+        <dd ng-show="vm.propertyType.type ==='SELECT'">
+            <tags-input placeholder="." ng-model="vm.propertyType.values" ng-disabled="true"></tags-input>
+        </dd>
+    </dl>
+
+    <button type="submit" ui-sref="{{ vm.previousState }}" class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="property-type-detail.edit({id:vm.propertyType.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

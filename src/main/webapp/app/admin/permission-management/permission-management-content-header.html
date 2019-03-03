@@ -1,0 +1,31 @@
+<div class="content-header-container ">
+    <div class="containder-fluid">
+        <div class="row">
+            <div class="header-text col-md-8 col-sm-6 com-xs-12">
+                <h2>Permissions</h2>
+                <div class="bread-crumb">
+                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
+                </div>
+            </div>
+            <div class="header-options col-md-4 col-sm-6 hidden-xs">
+                <div class="configuration-options permission-header-controls">
+                    <top-nav-button-component click="vm.save()">
+                        <span uib-tooltip="Save" tooltip-placement="bottom"> <svg class="flaticons-save-button">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#save-button"></use>
+                            </svg></span>
+                    </top-nav-button-component>
+                    <top-nav-button-component click="vm.reset()">
+                        <span uib-tooltip="Reset" tooltip-placement="bottom"> <svg class="flaticons-close">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
+                            </svg></span>
+                    </top-nav-button-component>
+                    <top-nav-button-component click="vm.newUserGroup()">
+                        <span uib-tooltip="New User Group" tooltip-placement="bottom"><svg class="flaticons-group">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#group"></use>
+                            </svg></span>
+                    </top-nav-button-component>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

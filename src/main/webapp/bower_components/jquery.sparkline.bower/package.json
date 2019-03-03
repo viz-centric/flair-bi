@@ -1,0 +1,41 @@
+{
+  "name": "jquery.sparkline.bower",
+  "version": "v2.1.2",
+  "description": "JQuery Sparkline for installation with Bower",
+  "main": "src/jquery.sparkline.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lennonjesus/jquery.sparkline.bower.git"
+  },
+  "keywords": [
+    "sparklines",
+    "charts",
+    "svg",
+    "pie",
+    "bar",
+    "donut",
+    "inline",
+    "tristate",
+    "discrete",
+    "bullet",
+    "graph",
+    "canvas",
+    "graphics",
+    "graphing",
+    "graphs",
+    "ui",
+    "vml"
+  ],
+  "author": "Lennon Jesus <lennon.jesus@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+
+  },
+  "bugs": {
+    "url": "https://github.com/lennonjesus/angular-sparkline-charts/issues"
+  },
+  "homepage": "https://github.com/lennonjesus/angular-sparkline-charts#readme"
+}

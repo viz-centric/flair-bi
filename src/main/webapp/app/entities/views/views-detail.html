@@ -1,0 +1,56 @@
+<div class="fbibox">
+    <div class="fbibox-content">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="image-container-right pull-right">
+            <div class="image-text">Image Preview</div>
+            <div ng-if="vm.views.imageLocation" class="image-body">
+                <a ng-click="vm.openFile(vm.views.imageContentType, vm.views.imageLocation)">
+                    <img ng-src="{{vm.views.imageLocation}}" style="max-width: 100%;" alt="views image"
+                    />
+                </a>
+                {{vm.views.imageContentType}}, {{vm.byteSize(vm.views.imageLocation)}}
+            </div>
+        </div>
+        <div class="table-responsive flair-table-v2">
+            <table class="table property-information-table">
+                <tbody>
+                    <tr>
+                        <td class="data-label">View Name</td>
+                        <td>{{vm.views.viewName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Description</td>
+                        <td>{{vm.views.description}}</td>
+                    </tr>
+                    <tr ng-if="vm.views.currentRelease">
+                        <td class="data-label">Current release version</td>
+                        <td>{{vm.views.currentRelease.versionNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Created by</td>
+                        <td>{{vm.views.createdBy}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Last modified by</td>
+                        <td>{{vm.views.lastModifiedBy}}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Last modified on</td>
+                        <td ng-bind="vm.views.lastModifiedDate | date:'dd/MM/yyyy hh:mm:ss'"></td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Image</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <a ui-sref="dashboards-overview({id:vm.dashboardId})" class="btn btn-info m-b-lg ng-scope">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+        <span data-translate="entity.action.back" class="ng-scope">Back</span>
+    </a>
+</div>

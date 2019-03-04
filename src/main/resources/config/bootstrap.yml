@@ -6,6 +6,8 @@ spring:
             uri: ${CONFIG_URI:http://localhost:8761}
             username: ${CONFIG_USER:admin}
             password: ${CONFIG_PASS:admin}
+    profiles:
+        active: dev
 eureka:
     client:
         serviceUrl:

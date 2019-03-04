@@ -56,7 +56,7 @@ services:
             environment: development
         image: flairbi/flair-registry:latest
         volumes:
-        - /Users/reddys/documents/dev/flair-github/flair-config:/flair-configuration
+        - <Path to your configuration folder>/flair-config:/flair-configuration
         ports:
         - 8761:8761
         environment:

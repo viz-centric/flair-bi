@@ -1,0 +1,97 @@
+version: '2'
+services:
+    flair-engine-pgsql:
+        container_name: "development-postgres-backend"
+        image: postgres:9.4
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=fbiengine
+        ports:
+        - 5430:5432
+
+    flair-bi-pgsql:
+        container_name: development-flair-bi-pgsql
+        image: postgres:9.4-alpine
+        labels:
+            purpose: Metadata store
+            environment: development
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=flairbi
+        ports:
+        - 5432:5432
+
+    flair-notifications-pgsql:
+        container_name: development-flair-notifications-pgsql
+        image: postgres:9.4-alpine
+        labels:
+            purpose: Metadata store
+            environment: development
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=flairnotify
+        ports:
+        - 5431:5432
+
+    flair-couchdb-dev:
+        image: flairbi/couchdb
+        container_name: development-couchdb
+        restart: always
+        labels:
+            purpose: View store
+            environment: development
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=password
+        ports:
+        - 5984:5984
+
+    flair-registry:
+        container_name: "development-flair-registry"
+        labels:
+            purpose: Flair config server and service discovery
+            environment: development
+        image: flairbi/flair-registry:latest
+        volumes:
+        - /Users/reddys/documents/dev/flair-github/flair-config:/flair-configuration
+        ports:
+        - 8761:8761
+        environment:
+        - JHIPSTER_SLEEP=0
+        - SPRING_PROFILES_ACTIVE=prod
+        - BITBUCKET_URI=https://github.com/viz-centric/flair-config.git
+
+    flair-engine-http:
+        image: flairbi/flair-engine:latest
+        labels:
+            purpose: Bankend engine for api calls
+            environment: staging
+        environment:
+            - CONFIG_URI=http://flair-registry:8761
+            - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+            - JHIPSTER_SLEEP=30
+            - SPRING_PROFILES_ACTIVE=dep,http
+            - POSTGRES_URI=flair-engine-pgsql:5432
+        ports:
+        - 8080:8080
+        - 8081:8081
+        - 8082:8082
+
+    flair-engine-grpc:
+        image: flairbi/flair-engine:latest
+        labels:
+            purpose: Bankend engine for data calls
+            environment: staging
+        environment:
+            - CONFIG_URI=http://flair-registry:8761
+            - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+            - JHIPSTER_SLEEP=30
+            - SPRING_PROFILES_ACTIVE=dep,grpc
+            - POSTGRES_URI=flair-engine-pgsql:5432
+            - GRPC_CERT=server.crt
+            - GRPC_KEY=server.key
+        ports:
+        - 6565:6565

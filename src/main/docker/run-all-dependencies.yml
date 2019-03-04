@@ -56,7 +56,7 @@ services:
             environment: development
         image: flairbi/flair-registry:latest
         volumes:
-        - <Path to your configuration folder>/flair-config:/flair-configuration
+        - /Users/reddys/documents/dev/flair-github/flair-config:/flair-configuration
         ports:
         - 8761:8761
         environment:
@@ -68,7 +68,7 @@ services:
         image: flairbi/flair-engine:latest
         labels:
             purpose: Bankend engine for api calls
-            environment: staging
+            environment: development
         environment:
             - CONFIG_URI=http://flair-registry:8761
             - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
@@ -84,7 +84,7 @@ services:
         image: flairbi/flair-engine:latest
         labels:
             purpose: Bankend engine for data calls
-            environment: staging
+            environment: development
         environment:
             - CONFIG_URI=http://flair-registry:8761
             - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
@@ -95,3 +95,15 @@ services:
             - GRPC_KEY=server.key
         ports:
         - 6565:6565
+
+    flair-notifications:
+        image: flairbi/flair-notifications:latest
+        labels:
+            purpose: Flair notifications
+            environment: development
+        volumes:
+        - /Users/reddys/documents/dev/flair-github/flair-config/flair-notifications:/flair-config
+        environment:
+        - APP_CONFIG=/flair-config/application-dep.yml
+        - NODE_ENV=local-dev
+        - SLEEP_TIME=10

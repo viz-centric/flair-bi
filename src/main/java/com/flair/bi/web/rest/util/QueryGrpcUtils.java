@@ -13,8 +13,6 @@ import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public final class QueryGrpcUtils {
@@ -36,6 +34,8 @@ public final class QueryGrpcUtils {
         if (userId != null) {
             builder.setUserId(userId);
         }
+
+        builder.setEnableCaching(queryDTO.isEnableCaching());
 
         queryDTO.getOrders().forEach(sortDTO -> builder.addOrders(Query.SortHolder.newBuilder()
             .setDirectionValue(getDirectionValue(sortDTO.getDirection().ordinal()))

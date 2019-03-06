@@ -59,6 +59,7 @@ services:
         - path to config folder/flair-github/flair-config:/flair-configuration
         ports:
         - 8761:8761
+        - 8762:8762
         environment:
         - JHIPSTER_SLEEP=0
         - SPRING_PROFILES_ACTIVE=prod

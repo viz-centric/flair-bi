@@ -8,11 +8,16 @@ import com.flair.bi.web.rest.util.ResponseUtil;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -77,6 +82,7 @@ public class FeatureBookmarkResource {
     /**
      * GET  /feature-bookmarks : get all the featureBookmarks.
      *
+     * @param predicate predicate
      * @return the ResponseEntity with status 200 (OK) and the list of featureBookmarks in body
      */
     @GetMapping("/feature-bookmarks")

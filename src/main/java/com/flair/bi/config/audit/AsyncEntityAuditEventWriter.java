@@ -28,6 +28,8 @@ public class AsyncEntityAuditEventWriter {
 
     /**
      * Writes audit events to DB asynchronously in a new thread
+     * @param target target
+     * @param action action
      */
     @Async
     public void writeAuditEvent(Object target, EntityAuditAction action) {

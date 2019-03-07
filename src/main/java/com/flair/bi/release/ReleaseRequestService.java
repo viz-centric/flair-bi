@@ -64,6 +64,7 @@ public interface ReleaseRequestService {
     /**
      * Make a request for todays release alerts
      *
+     * @param offset offset
      * @return created for todays alerts  releases
      */
     
@@ -72,6 +73,7 @@ public interface ReleaseRequestService {
     /**
      * Make a request for todays release alerts
      *
+     * @param offset offset
      * @return created for todays alerts  releases
      */
     

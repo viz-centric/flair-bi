@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Report about which permissions does user have or does not have
  *
- * @param <T>
+ * @param <T> permission grantee
  */
 @Data
 @AllArgsConstructor

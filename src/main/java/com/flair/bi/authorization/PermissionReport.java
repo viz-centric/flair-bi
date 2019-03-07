@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Class that holds information about if grantee has a specific permission or not
- * <p>
- * <p>
+ *
  * Currently for this app that represents User and UserGroup
  * because they are the one who receive permissions as grants
  */

@@ -35,8 +35,9 @@ public class SecurityDependenciesConfiguration {
      * This bean is used to extract the user information from the OAuth server and save the user
      * information in application database
      *
-     * @param userRepository
-     * @return
+     * @param userRepository user repository
+     * @param userService user service
+     * @return principal extractor
      */
     @Bean
     public PrincipalExtractor principalExtractor(UserRepository userRepository, UserService userService) {

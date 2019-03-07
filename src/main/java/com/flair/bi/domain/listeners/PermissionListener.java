@@ -9,7 +9,7 @@ public class PermissionListener {
     /**
      * Before we remove permission we must remove referential integrity of foreign key in other tables
      *
-     * @param permission
+     * @param permission permission
      */
     @PreRemove
     public void preRemove(Permission permission) {

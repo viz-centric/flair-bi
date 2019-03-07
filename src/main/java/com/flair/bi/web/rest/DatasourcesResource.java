@@ -19,8 +19,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -104,6 +102,7 @@ public class DatasourcesResource {
     /**
      * GET  /datasources : get all the datasources.
      *
+     * @param predicate predicate
      * @return the ResponseEntity with status 200 (OK) and the list of datasources in body
      */
     @GetMapping("/datasources")
@@ -151,6 +150,7 @@ public class DatasourcesResource {
     /**
      * DELETE  /datasources : get all the datasources.
      *
+     * @param predicate predicate
      * @return the ResponseEntity with status 200 (OK) and the list of datasources in body
      */
     @DeleteMapping("/datasources")

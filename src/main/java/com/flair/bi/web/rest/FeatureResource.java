@@ -16,8 +16,6 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,7 +129,7 @@ public class FeatureResource {
      * POST  /features/list : Create a new features.
      *
      * @param featureListDTO the features to create in bulk
-     * @return 
+     *
      * @return the ResponseEntity with status 201 (Created) and with body the new features
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */

@@ -29,6 +29,8 @@ public interface DashboardService {
     /**
      * Get all the dashboards that principal has permission to.
      *
+     * @param pageable pageable
+     * @param predicate predicate
      * @return the list of entities
      */
     Page<Dashboard> findAllByPrincipalPermissions(Pageable pageable, Predicate predicate);

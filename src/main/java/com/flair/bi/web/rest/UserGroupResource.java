@@ -7,7 +7,6 @@ import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.security.PermissionService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.util.HeaderUtil;
@@ -16,16 +15,20 @@ import com.flair.bi.web.rest.util.ResponseUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.net.URI;
@@ -105,6 +108,7 @@ public class UserGroupResource {
      * GET /userGroups : retrieves page of user groups
      *
      * @param pageable pagination parameters
+     * @throws URISyntaxException exception
      * @return The ResponseEntity with status 200 (OK) and filtered list of user groups as body.
      */
     @GetMapping("/userGroups")
@@ -182,6 +186,7 @@ public class UserGroupResource {
      *
      * @param name     name of user group
      * @param pageable the pagination information
+     * @throws URISyntaxException exception
      * @return the ResponseEntity of status 200 (OK),
      * or status 404(Not found) if given user group is not found
      */

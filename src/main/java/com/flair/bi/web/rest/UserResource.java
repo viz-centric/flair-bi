@@ -16,19 +16,24 @@ import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.querydsl.core.types.Predicate;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
@@ -39,7 +44,7 @@ import java.util.stream.Collectors;
 
 /**
  * REST controller for managing users.
- * <p>
+ *
  * <p>This class accesses the User entity, and needs to fetch its collection of authorities.</p>
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Permission,
@@ -198,6 +203,7 @@ public class UserResource {
      *
      * @param login    usr login information
      * @param pageable pagination parameters
+     * @throws URISyntaxException exception
      * @return the ResponseEntity with status 200(OK),
      * or status 404 (Not Found) if user with provided login does not exist
      */
@@ -253,6 +259,7 @@ public class UserResource {
      * GET  /users : get all users matching with search criteria.
      *
      * @param pageable the pagination information
+     * @param predicate predicate
      * @return the ResponseEntity with status 200 (OK) and with body all users
      * @throws URISyntaxException if the pagination headers couldn't be generated
      */

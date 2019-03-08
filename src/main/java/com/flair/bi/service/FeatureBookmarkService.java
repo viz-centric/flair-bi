@@ -10,8 +10,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +67,7 @@ public class FeatureBookmarkService {
     /**
      * Get all the featureBookmarks.
      *
+     * @param predicate predicate
      * @return the list of entities
      */
     @Transactional(readOnly = true)

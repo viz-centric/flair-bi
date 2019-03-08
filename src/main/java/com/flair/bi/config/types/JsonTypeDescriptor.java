@@ -36,11 +36,11 @@ public class JsonTypeDescriptor extends AbstractTypeDescriptor<Object>
 
     /**
      * Unwrap an instance of our handled Java type into the requested type.
-     * <p/>
+     *
      * As an example, if this is a {@code JavaTypeDescriptor<Integer>} and we are asked to unwrap
      * the {@code Integer value} as a {@code Long} we would return something like
      * <code>Long.valueOf( value.longValue() )</code>.
-     * <p/>
+     *
      * Intended use is during {@link PreparedStatement} binding.
      *
      * @param value   The value to unwrap
@@ -66,7 +66,7 @@ public class JsonTypeDescriptor extends AbstractTypeDescriptor<Object>
 
     /**
      * Wrap a value as our handled Java type.
-     * <p/>
+     *
      * Intended use is during {@link ResultSet} extraction.
      *
      * @param value   The value to wrap.
@@ -85,7 +85,7 @@ public class JsonTypeDescriptor extends AbstractTypeDescriptor<Object>
      * Gets called by Hibernate to pass the configured type parameters to
      * the implementation.
      *
-     * @param parameters
+     * @param parameters properties
      */
     @Override
     public void setParameterValues(Properties parameters) {

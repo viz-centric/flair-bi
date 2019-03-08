@@ -7,11 +7,8 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.SecurityUtils;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -97,8 +94,8 @@ public class UserGroupService {
 
     /**
      * This method checks if the role is predefined
-     * @param name
-     * @return
+     * @param name name
+     * @return boolean
      */
     public boolean isPredefinedGroup(String name){
     	return SecurityUtils.getPredefinedGroups()
@@ -108,8 +105,8 @@ public class UserGroupService {
     
     /**
      * This method checks if the role is not predefined
-     * @param name
-     * @return
+     * @param name name
+     * @return boolean
      */
     public boolean isNotPredefinedGroup(String name){
     	return !isPredefinedGroup(name);

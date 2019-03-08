@@ -1,15 +1,12 @@
 package com.flair.bi.web.websocket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.messages.QueryResponse;
 import io.grpc.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 
 @Async
@@ -23,8 +20,10 @@ public class FbEngineWebSocketService {
      * Send meta to users subscribed on channel "/user/exchange/metaData".
      * <p>
      * The message will be sent only to the user with the given username.
+     *
+     * @param queryResponse query response
+     * @param request request
      */
-
     public void pushGRPCMetaDeta(QueryResponse queryResponse, String request) {
         HashMap<String, Object> header = new HashMap<>();
         header.put("queryId", queryResponse.getQueryId());
@@ -43,6 +42,8 @@ public class FbEngineWebSocketService {
      * Send meta to users subscribed on channel "/user/exchange/sampleMetaData".
      * <p>
      * The message will be sent only to the user with the given username.
+     *
+     * @param queryResponse query response
      */
     public void pushGRPCMetaDeta(QueryResponse queryResponse) {
         HashMap<String, Object> header = new HashMap<>();

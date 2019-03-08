@@ -33,6 +33,8 @@ public final class DefaultProfileUtil {
 
     /**
      * Get the profiles that are applied else get default profiles.
+     * @param env Environment
+     * @return array of profiles
      */
     public static String[] getActiveProfiles(Environment env) {
         String[] profiles = env.getActiveProfiles();

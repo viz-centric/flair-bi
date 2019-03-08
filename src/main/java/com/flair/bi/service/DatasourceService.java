@@ -2,11 +2,10 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Datasource;
 import com.querydsl.core.types.Predicate;
-
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface DatasourceService {
     /**
@@ -20,6 +19,7 @@ public interface DatasourceService {
     /**
      * Get all the datasources.
      *
+     * @param predicate predicate
      * @return the list of entities
      */
     List<Datasource> findAll(Predicate predicate);
@@ -51,8 +51,9 @@ public interface DatasourceService {
     /**
      * Get searched datasources.
      *
+     * @param pageable pageable
+     * @param predicate predicate
      * @return the list of entities
      */
-    
     Page<Datasource> search(Pageable pageable, Predicate predicate);
 }

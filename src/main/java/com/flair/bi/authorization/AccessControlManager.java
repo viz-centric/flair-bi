@@ -187,6 +187,7 @@ public interface AccessControlManager {
      *                      translates that now Principal who has Permission B will also indirectly have access
      *                      to resources that Permission A gives
      *                      <p>
+     * @param transitive transitive
      * @return created connection
      */
     PermissionEdge connectPermissions(Permission from, Permission to, boolean bidirectional, boolean transitive);

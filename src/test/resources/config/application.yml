@@ -21,7 +21,7 @@ spring:
         serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:9999/flairbi?ssl=false
+        url: jdbc:postgresql://localhost:5432/flairbi?ssl=false
         username: postgres
         password: admin
         hikari:
@@ -57,7 +57,7 @@ server:
 couchdb:
     password: password
     username: admin
-    url: http://localhost:9998
+    url: http://localhost:5984
     test-connection-at-startup: false
     database-name: flairbi-view
     #    ssl-factory: com.flair.bi.ssl.FlairBIPgSqlSSLSocketFactory

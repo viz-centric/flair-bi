@@ -21,6 +21,7 @@ public class GrpcProperties {
 
     private Server server = new Server();
     private Tls tls = new Tls();
+    private Integer port;
 
     @Getter
     @Setter

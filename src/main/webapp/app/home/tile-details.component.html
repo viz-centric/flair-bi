@@ -158,6 +158,9 @@
     <div class="search-box inner-addon left-addon b-b-xs">
         <i class="glyphicon glyphicon-search"></i>
         <input type="text" ng-model="searchDataSource" class="form-control" placeholder="Search DataSource..." />
+        <button type="submit" ui-sref="connection.new" class="btn btn-default btn-sm new-datasource" ng-if="vm.isAdmin">
+                <span uib-tooltip="New DataSource" tooltip-placement="left" class="fa fa-edit edit-icon fa-2x"></span>
+        </button>
     </div>
     <br/>
     <table class="table table-striped flair-table-v1">
@@ -167,51 +170,32 @@
                     <span>ID</span>
                     <span class="fa fa-sort"></span>
                 </th>
-                <th jh-sort-by="dashboardName">
-                    <span>Service Name</span>
+                <th jh-sort-by="name">
+                    <span>Datasource Name</span>
                     <span class="fa fa-sort"></span>
                 </th>
-                <th jh-sort-by="category">
-                    <span>Server Address</span>
+                <th jh-sort-by="connectionName">
+                    <span>Connection Name</span>
                     <span class="fa fa-sort"></span>
                 </th>
-                <th jh-sort-by="description">
-                    <span>Server Port</span>
+                <th jh-sort-by="queryPath">
+                    <span>Query Path</span>
                     <span class="fa fa-sort"></span>
                 </th>
-                <th>
-                    <span>App Prefix</span>
-                </th>
-                <th>
-                    <span>Secure</span>
-                </th>
-                <th><span>Actions</span></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="service in vm.pagedItems[vm.currentPage] | filter:vm.filterFn(vm.services,searchDataSource,'serviceName') track by $index">
+            <tr ng-repeat="datasource in vm.pagedItems[vm.currentPage] | filter:vm.filterFn(vm.datasources,searchDataSource,'name') track by $index">
                 <td>
-                    <a ui-sref="service-detail({id:service.id})">{{service.id}}</a>
+                    <a ui-sref="service-detail({id:service.id})">{{datasource.id}}</a>
                 </td>
-                <td>{{service.serviceName}}</td>
-                <td>{{service.serverAddress}}</td>
-                <td>{{service.serverPort}}</td>
-                <td>{{service.appPrefix}}</td>
-                <td>{{service.secure}}</td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit" ui-sref="service-detail({id:service.id})" class="btn btn-default btn-sm">
-                                <span class="fa fa-eye view-icon fa-2x"></span>
-                            </button> &nbsp;
-                        <button type="submit" ui-sref="service.edit({id:service.id})" class="btn btn-default btn-sm">
-                                <span class="fa fa-edit edit-icon fa-2x"></span>
-                            </button>
-                    </div>
-                </td>
+                <td>{{datasource.name}}</td>
+                <td>{{datasource.connectionName}}</td>
+                <td>{{datasource.queryPath}}</td>
             </tr>
         </tbody>
     </table>
-    <div class="text-center" ng-show="vm.services.length > 0">
+    <div class="text-center" ng-show="vm.datasources.length > 0">
         <ul class="pagination">
             <li ng-class="{disabled: vm.currentPage == 0}">
                 <a href="javascript:;" ng-click="vm.prevPage()"><i class="fa fa-angle-double-left"></i></a>

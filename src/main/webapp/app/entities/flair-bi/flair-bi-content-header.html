@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="configuration-options">
-            <div class="col-md-2 col-sm-6 col-xs-6" style="width: 20%;">
+            <div class="col-md-2 col-sm-6 col-xs-6 visual-bookmark">
                 <div class="apply-bookmarks">
                     <div class="dropdown-options-v5">
                         <a class="dropdown-toggle" type="button" id="dropdownBookMark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -48,7 +48,7 @@
                 </div>
             </div>
             
-            <div class="col-md-2 col-sm-6 col-xs-4 visual-arrow" >
+            <div class="col-md-2 col-sm-6 col-xs-4 visual-arrow">
                 <div class="options-1">
                     <top-nav-button-component is-disabled="!vm.ngIfSave()" click="vm.onWriteToPg()">
                         <span uib-tooltip="Save" tooltip-placement="bottom">
@@ -82,17 +82,15 @@
             </div>
             <div class="col-md-1 hidden-sm hidden-xs visual-edit">
                 <div class="options-2" ng-if="!vm.configuration.readOnly">
-                    <p class="">Editing</p>
                     <div class="viz-edit-button" uib-tooltip="Edit" tooltip-placement="bottom">
                         <md-switch class="md-primary edit" ng-if="vm.canEdit" md-no-ink aria-label="Edit button" ng-model="editState" ng-change="vm.editState(editState)">
                         </md-switch>
                         <md-switch class="md-primary edit" ng-if="!vm.canEdit" disabled md-no-ink aria-label="Edit button">
                         </md-switch>
                     </div>
-
                 </div>
             </div>
-            <div class="col-md-2 col-sm-6 col-xs-8">
+            <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">
                 <div class="options-3">
                     <top-nav-button-component click="vm.bookmark()" class="options-3-item">
                         <span uib-tooltip="Bookmark" tooltip-placement="bottom">
@@ -115,10 +113,13 @@
                             </svg>
                         </span>
                     </top-nav-button-component>
-                    <menu-component style="margin-right: -26%"></menu-component>
                 </div>
             </div>
-
+            <div>
+                <div class="options-4">
+                    <menu-component></menu-component>
+                </div>
+            </div>
         </div>
     </div>
 

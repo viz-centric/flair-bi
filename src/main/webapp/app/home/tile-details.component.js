@@ -8,13 +8,14 @@
             controller: tileDetailsController,
             controllerAs: 'vm',
             bindings: {
-                account: "="
+                account: "=",
+                isAdmin: "="  
             }
         });
 
-    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Service','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService'];
+    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService'];
 
-    function tileDetailsController($scope, $state,Dashboards,Service,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService) {
+    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService) {
         var vm = this;
         vm.build=build;
 
@@ -186,7 +187,7 @@
         function fetchDashboards(){
             Dashboards.query(function(result) {
                 vm.dashboards = result;
-                vm.services=[];
+                vm.datasources=[];
                 vm.views=[];
                 vm.bookmarkWatches =[];
                 vm.groupToPages(result);
@@ -194,8 +195,8 @@
         }
 
         function fetchDataSources(){
-            Service.query(function(result) {
-                vm.services = result;
+            Datasources.query(function(result) {
+                vm.datasources = result;
                 vm.dashboards = [];
                 vm.views=[];
                 vm.bookmarkWatches =[];
@@ -207,7 +208,7 @@
             Views.query(function(result) {
                 vm.views = result;
                 vm.dashboards = [];
-                vm.services=[];
+                vm.datasources=[];
                 vm.bookmarkWatches =[];
                 vm.groupToPages(result);
             });
@@ -221,7 +222,7 @@
             }).then(function (result) {
                 vm.bookmarkWatches = result.data;
                 vm.dashboards = [];
-                vm.services=[];
+                vm.datasources=[];
                 vm.views=[];
                 vm.viewWatches=[];
                 vm.groupToPages(result.data);

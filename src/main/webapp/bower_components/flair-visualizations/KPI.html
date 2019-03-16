@@ -1,0 +1,120 @@
+<html>
+<head>
+    <title>KPI</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="kpi.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+        }
+
+        #kpi {
+            border: 1px solid #999;
+            width: 1260px;
+            height: 540px;
+        }     
+
+        #kpi .container .measure {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            height: 50%;
+        }
+
+        #kpi .container .measure .parent .child {
+            padding: 3px;
+            line-height: 80%;
+            color: #636464;
+            text-align: left;
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 300;
+            src: local("Fira Sans Extra Condensed Light"), local("FiraSans-Light"), url(font/FiraSansExtraCondensed-Light.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 400;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans"), url(font/FiraSansExtraCondensed-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans-Semibold"), url(font/FiraSansExtraCondensed-SemiBold.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans-Bold"), url(font/FiraSansExtraCondensed-Bold.ttf);
+        }
+    </style>
+</head>
+<body>
+    <div id="header" style="text-align:center; width:100%; margin: 0 auto; display:block; padding-top:5px; height:60px; margin-bottom:35px;">
+        <h1 style="color:#777; font-weight:100;">KPI</h1>
+    </div>
+    <div id="kpi">
+    </div>
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util();
+
+        var cities = ['Kathmandu', 'Delhi', 'Detroit', 'London', 'Washington', 'Berlin', 'Perth', 'Ottawa'];
+
+        function randomData() {
+            return cities.map(function(city) {
+                return {
+                    city: city,
+                    area: Math.floor(Math.random() * (1000000 - 10000 + 1) + 10000),
+                    population: Math.floor(Math.random() * (150000 - 10000 + 1) + 10000)
+                }
+            });
+        }
+
+        var config = {
+            dimension: ['city'],
+            measure: ['area', 'population'],
+            kpiDisplayName: ['AREA', 'POPULATION'],
+            kpiAlignment: ['left', 'center'], // left|center|right
+            kpiBackgroundColor: ['', ''],
+            kpiNumberFormat: ['K', 'actual'], // actual|K|M|B|percent
+            kpiFontStyle: ['normal', 'normal'], // oblique|normal|italic
+            kpiFontWeight: [100, 100], // 100|200|300|...|900
+            kpiFontSize: ['180px', '60px'],
+            kpiColor: ['#DC1C50', '#FFFFFF'],
+            kpiColorExpression: ['', 'upto,500000,#009D1D|upto,900000,#EBBC00|above,90  0000,#DC1C50|default,,#FFFF00'
+            ],
+            kpiIcon: ['fa fa-globe', 'fa fa-male'],
+            kpiIconFontWeight: [100, 200],
+            kpiIconColor: ['#FFFFFF', '#DDC224'],
+            kpiIconExpression: ['', 'upto,500000,fa fa-chevron-circle-down,#009D1D|upto,900000,fa fa-chevron-circle-up,#EBBC00|above,900000,fa fa-exclamation-circle,#DC1C50|default,,fa fa-minus,#FFFF00'
+            ]
+        }
+
+        var chart = kpi()
+            .config(config);
+
+        d3.select('#kpi')
+            .datum(randomData())
+            .call(chart);
+
+        // setTimeout(function() { chart.update(x) }, 1000);
+       // setInterval(function() { chart.update(randomData()) }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<html>
+<head>
+    <title>Pie</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/d3viz.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="d3-lasso.min.js"></script>
+    <script src="legend.js"></script>
+    <script src="pie.js"></script>
+
+</head>
+<body>
+    <div id="header" style="text-align:center; width:100%; margin: 0 auto; display:block; padding-top:5px; height:60px; margin-bottom:35px;">
+        <h1 style="color:#777; font-weight:100;">PIE</h1>
+    </div>
+    <div style="position: relative; border: 1px solid #999;">
+        
+        <svg id="pie" width="1260" height="540"/>
+        <div id="tooltip"></div>
+        <div class="confirm" style="visibility: hidden;">
+                <button class="btn btn-filters btn-primary">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button class="btn btn-filters btn-default">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+    </div>
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+            LEGEND = legend();
+
+        var data1 = [{
+            "city": "Kathmandu",
+            "cost": 50
+        }, {
+            "city": "Delhi",
+            "cost": 90
+        }, {
+            "city": "Detroit",
+            "cost": 910
+        }, {
+            "city": "London",
+            "cost": 240
+        }, {
+            "city": "Washington",
+            "cost": 300
+        }, {
+            "city": "Berlin",
+            "cost": 120
+        }, {
+            "city": "Perth",
+            "cost": 110
+        }, {
+            "city": "Ottawa",
+            "cost": 180
+        }];
+
+        var data2 = [{
+            "city": "Kathmandu",
+            "cost": 30
+        }, {
+            "city": "Delhi",
+            "cost": 190
+        }, {
+            "city": "Detroit",
+            "cost": 630
+        }, {
+            "city": "London",
+            "cost": 200
+        }, {
+            "city": "Washington",
+            "cost": 130
+        }, {
+            "city": "Berlin",
+            "cost": 30
+        }, {
+            "city": "Perth",
+            "cost": 80
+        }, {
+            "city": "Ottawa",
+            "cost": 160
+        }];
+
+        var config = {
+            dimension: ['city'],
+            measure: ['cost'],
+            showLegend: true, // true|false
+            legendPosition: 'top', // top|bottom|right|left
+            showValueAs: 'label', // label|value|percentage
+            valueAsArc: true, // true|false
+            valuePosition: 'outside' // inside|outside
+        }
+
+        var chart = pie()
+            .config(config)
+            .sort(UTIL.DESCENDING)
+            .tooltip(true);
+
+        d3.select('#pie')
+            .datum(data1)
+            .call(chart);
+
+      //setTimeout(function() { chart.update(data2) }, 3000);
+      //setTimeout(function() { chart.update(data1) }, 6000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/d3viz.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script src="script/bootstrap.min.js"></script>
+
+    <script src="d3-lasso.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="legend_barcharts.js"></script>
+
+    <script src="treemap.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <div id="header" style="position: relative; border: 1px solid #999; width: 800">
+            <div class="row">
+                <div class="col-md-10">
+                    <p> tree map </p>
+                </div>
+                <div class="col-md-2">
+                    <!-- <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox myonoffswitch"
+                            id="myonoffswitch" checked>
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div> -->
+                </div>
+            </div>
+
+        </div>
+        <div style="position: relative; border: 1px solid #999; width: 800;height: 600;" height="540">
+            <svg id="donut" />
+            <div id="tooltip"></div>
+
+            <div class="confirm" style="visibility: hidden;">
+                <button class="btn btn-filters btn-primary">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button class="btn btn-filters btn-default">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div> 
+
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+        LEGEND = legend();
+
+
+        var config = {
+            dimension: ['Contury', 'State'],
+            showLabelForDimension: [true, true],
+            labelColorForDimension: ["#ffffff", "blue"],
+            displayColor: ["#0000FF", "#00BFFF"],
+            "fontStyleForDimension": ["italic", "bold"],
+            fontWeightForDimension: ["900", "900"],
+            "fontSizeForDimension": ["15", "10"],
+            "measure": ['Population'],
+            "showLabel": true,
+            colorPattern: 'single_color',//gradient_color|unique_color|single_color
+            showValues: true,
+            "valueTextColour": "#e06a6a",
+            "fontStyleForMes": "italic",
+            fontWeightForMes: "bold",
+            "fontSizeForMes": "8",
+            "numberFormat": "K",
+        }
+
+        var chart = treemap()
+            .config(config)
+            .tooltip(true);
+
+        d3.csv('treemap.csv', function (data) {
+            d3.select('#donut')
+                .datum(data)
+                .call(chart);
+        });
+    </script>
+</body>
+
+</html>

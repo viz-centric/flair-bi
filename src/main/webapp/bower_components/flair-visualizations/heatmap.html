@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <title>Pie</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <link rel="stylesheet" href="css/d3viz.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script src="script/bootstrap.min.js"></script>
+
+    <script src="d3-lasso.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="legend_barcharts.js"></script>
+
+    <script src="heatmap.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <div id="header" style="position: relative; border: 1px solid #999; width: 800">
+            <div class="row">
+                <div class="col-md-10">
+                    <p>Heatmap Chart </p>
+                </div>
+                <div class="col-md-2">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox myonoffswitch"
+                            id="myonoffswitch" checked>
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="clusteredverticalbar" style="position: relative; border: 1px solid #999; width: 800;height: 600;"
+            height="540">
+            <svg id="donut" />
+            <div id="tooltip"></div>
+
+            <div class="confirm" style="visibility: hidden;">
+                <button class="btn btn-filters btn-primary">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button class="btn btn-filters btn-default">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+        LEGEND = legend();
+        var config = {
+            dimension: ['State'],
+            measure: ['Under 5 Years', '5 to 13 Years', '14 to 17 Years', '18 to 24 Years', '25 to 44 Years', '45 to 64 Years', '65 Years and Over'],
+            dimLabelColor: "00ff00",
+            displayName: "abc",
+            fontStyleForDimension: "italic",
+            fontWeightForDimension: "900",
+            fontSizeForDimension: "15",
+
+            "showValues": [true, true, true, true, true, true, true],
+            "displayNameForMeasure": ["Measure 1", "Measure 2", "Measure 2", "Measure 2", "Measure 2", "Measure 2", "Measure 2"],
+            "showIcon": [true, true, true, true, true, true, true,],
+            valuePosition: ["left", "right", "center", "left", "right", "center", "right"],
+            iconName:  ['fa fa-globe', 'fa fa-male','fa fa-globe', 'fa fa-male','fa fa-globe', 'fa fa-male','fa fa-globe'],
+            iconFontWeight:["bold", "900", "900", "900", "900", "900", "900"],
+            iconColor: ['#FFFFFF', '#DDC224','#FFFFFF', '#DDC224','#FFFFFF', '#DDC224','#FFFFFF'],
+            iconPosition: ["left", "right", "center", "left", "right", "center", "right"],
+            showIcon:[true, true, true, true, true, true, true],
+            colourCoding: [
+                'upto,500000,#ff0000|upto,900000,#ff0080|above,900000,#ff0040|default,,#ff00bf',
+                'upto,500000,#8000ff|upto,900000,#4000ff|above,900000,#0000ff|default,,#00bfff',
+                'upto,500000,#00ff80|upto,900000,#00ff40|above,900000,#40ff00|default,,#bfff00',
+                'upto,500000,#008080|upto,900000,#0B614B|above,900000,#5F9EA0|default,,#00CED1',
+                'upto,500000,#9932CC|upto,900000,#9400D3|above,900000,#8A2BE2|default,,#BA55D3',
+                'upto,500000,#C71585|upto,900000,#DB7093|above,900000,#FF1493|default,,#FFB6C1',
+                'upto,500000,#D2691E|upto,900000,#CD853F|above,900000,#DAA520|default,,#F4A460'
+            ],
+            "valueTextColour": ["#e06a6a", "#00ff00", "#ff0000", "#639ece", "#ababab", "#e06a6a", "#639ece"],
+            "fontStyleForMeasure": ["italic", "bold", "bold", "bold", "bold", "bold", "bold"],
+            "fontWeightForMeasure": ["bold", "900", "900", "900", "900", "900", "900"],
+            "numberFormat": ["M", "M", "M", "M", "M", "M", "M"],
+            "fontSizeForMeasure": ["8", "10", "12", "15", "8", "9", "10"]
+        };
+
+        var chart = heatmap()
+            .config(config)
+            .tooltip(true);
+
+        d3.csv('data.csv', function (data) {
+            d3.select('#donut')
+                .datum(data)
+                .call(chart);
+        });
+    </script>
+</body>
+
+</html>

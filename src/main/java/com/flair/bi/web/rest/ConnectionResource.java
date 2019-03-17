@@ -135,7 +135,7 @@ public class ConnectionResource {
 
         ConnectionDTO connection = grpcConnectionService.getConnection(connectionId);
 
-        log.debug("Deleted connection {}", connectionId);
+        log.debug("Got connection {}", connectionId);
 
         return ResponseEntity.ok(connection);
     }

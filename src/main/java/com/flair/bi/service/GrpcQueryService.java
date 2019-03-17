@@ -3,7 +3,6 @@ package com.flair.bi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
-import com.flair.bi.domain.property.CheckboxProperty;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.messages.QueryResponse;
@@ -138,15 +137,6 @@ public class GrpcQueryService {
             .ifPresent(queryDTO.getConditionExpressions()::add);
 
         queryDTO.setSource(datasource.getName());
-
-
-        Optional.ofNullable(visualMetadata)
-                .map(VisualMetadata::getProperties)
-                .ifPresent(properties -> properties.stream()
-                        .filter(p -> p instanceof CheckboxProperty).map(p -> (CheckboxProperty) p)
-                        .filter(p -> p.getPropertyType().getName().equalsIgnoreCase("Enable caching"))
-                        .findFirst()
-                        .ifPresent(checkboxProperty -> queryDTO.setEnableCaching(checkboxProperty.isValue())));
 
         if (visualMetadata != null && type==null) {
             callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);

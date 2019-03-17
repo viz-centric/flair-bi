@@ -7,7 +7,7 @@
         controller: CacheWizardStepController,
         controllerAs: "vm",
         bindings: {
-            connectionProperties: "=",
+            connectionParameters: "=",
         }
     });
 

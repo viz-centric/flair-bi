@@ -6,40 +6,39 @@
             Enable cache
         </label>
         <input name="cacheEnabled-checkbox-input"
-               ng-model="vm.connectionProperties.cacheEnabled"
+               ng-model="vm.connectionParameters.cacheEnabled"
                class="form-control"
-               type="checkbox"
-               ng-required="true">
+               type="checkbox">
     </div>
     <div class="form-group">
         <label class="control-label">Purge after minutes</label>
-        <input ng-disabled="!vm.connectionProperties.cacheEnabled"
+        <input ng-disabled="!vm.connectionParameters.cacheEnabled"
                name="cachePurgeAfterMinutes-number-input"
-               ng-model="vm.connectionProperties.cachePurgeAfterMinutes"
+               ng-model="vm.connectionParameters.cachePurgeAfterMinutes"
                class="form-control"
                type="number"
                string-to-number
-               ng-required="true">
+               ng-required="vm.connectionParameters.cacheEnabled">
     </div>
     <div class="form-group">
         <label class="control-label">Refresh after times read</label>
-        <input ng-disabled="!vm.connectionProperties.cacheEnabled"
+        <input ng-disabled="!vm.connectionParameters.cacheEnabled"
                name="refreshAfterTimesRead-number-input"
-               ng-model="vm.connectionProperties.refreshAfterTimesRead"
+               ng-model="vm.connectionParameters.refreshAfterTimesRead"
                class="form-control"
                type="number"
                string-to-number
-               ng-required="true">
+               ng-required="vm.connectionParameters.cacheEnabled">
     </div>
     <div class="form-group">
         <label class="control-label">Refresh after minutes</label>
-        <input ng-disabled="!vm.connectionProperties.cacheEnabled"
+        <input ng-disabled="!vm.connectionParameters.cacheEnabled"
                name="refreshAfterMinutes-number-input"
-               ng-model="vm.connectionProperties.refreshAfterMinutes"
+               ng-model="vm.connectionParameters.refreshAfterMinutes"
                class="form-control"
                type="number"
                string-to-number
-               ng-required="true">
+               ng-required="vm.connectionParameters.cacheEnabled">
     </div>
 
     <div class="wizard-navigate-buttons">

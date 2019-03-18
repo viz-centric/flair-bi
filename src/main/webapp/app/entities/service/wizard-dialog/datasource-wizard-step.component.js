@@ -15,8 +15,8 @@
         }
     });
 
-    DatasourceWizardStepController.$inject = ["$scope","Datasources","$rootScope","$translate","Query","Connections","WizardHandler","$q","proxyGrpcService","AuthServerProvider","stompClientService","AlertService"];
-    function DatasourceWizardStepController($scope,Datasources,$rootScope,$translate,Query,Connections,WizardHandler,$q,proxyGrpcService,AuthServerProvider,stompClientService,AlertService) {
+    DatasourceWizardStepController.$inject = ["$scope","Datasources","$rootScope","$translate","Query","Connections","WizardHandler","$q","proxyGrpcService","AuthServerProvider","stompClientService","AlertService","QueryValidationService"];
+    function DatasourceWizardStepController($scope,Datasources,$rootScope,$translate,Query,Connections,WizardHandler,$q,proxyGrpcService,AuthServerProvider,stompClientService,AlertService,QueryValidationService) {
         var vm = this;
 
         vm.datePickerOpenStatus = {};

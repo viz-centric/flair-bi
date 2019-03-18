@@ -79,23 +79,22 @@ public class SchedulerResource {
 		schedulerDTO.getReport_line_item().setQuery_name(SecurityUtils.getCurrentUserLogin() + ":" + schedulerDTO.getReport_line_item().getQuery_name());
 		schedulerDTO.getReport().setMail_body(mail_body);
 		schedulerDTO.getReport().setSubject("Report : " + schedulerDTO.getReport().getSubject() + " : " + new Date());
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
+		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
 		HttpHeaders headers = new HttpHeaders();
-		if (Constants.ai_token == null) {
-			try {
-				authFlairAI(restTemplate);
-			} catch (Exception e) {
-				log.error("error occured while fetching token=", e.getMessage());
-				e.printStackTrace();
-			}
-		}
-		headers.set("Authorization", Constants.ai_token);// add token here
+		/* below code is commented until auth api is not built from notification application*/
+		//		if (Constants.ai_token == null) {
+		//			try {
+		//				authFlairAI(restTemplate);
+		//			} catch (Exception e) {
+		//				log.error("error occured while fetching token=", e.getMessage());
+		//				e.printStackTrace();
+		//			}
+		//		}
+		//		headers.set("Authorization", Constants.ai_token);
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		System.out.println("setChannelCredentials(schedulerDTO)===" + setChannelCredentials(schedulerDTO));
+		log.debug("setChannelCredentials(schedulerDTO)===" + setChannelCredentials(schedulerDTO));
 		HttpEntity<SchedulerDTO> entity = new HttpEntity<SchedulerDTO>(setChannelCredentials(schedulerDTO), headers);
-		// ResponseEntity<String> responseEntity =
-		// restTemplate.exchange(builder.build().encode().toUri(),
-		// HttpMethod.POST, entity, String.class);
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST,
 					entity, String.class);
@@ -111,9 +110,6 @@ public class SchedulerResource {
 		}
 
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Report is not scheduled");
-		// log.info("Result - status ("+ responseEntity.getStatusCode() + ") has
-		// body: " + responseEntity.hasBody());
-		// log.info("Response ="+responseEntity.getBody());
 
 	}
 

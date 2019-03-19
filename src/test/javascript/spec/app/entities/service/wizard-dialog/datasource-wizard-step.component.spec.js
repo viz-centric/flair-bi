@@ -12,7 +12,7 @@ describe('Component Tests', function () {
             $httpBackend = _$httpBackend_;
             component = $componentController("datasourceWizardStep", {
                 $scope: $scope
-            });
+            }, {datasources: {}});
         }));
 
         describe('when datasourceWizardStep is created', function () {

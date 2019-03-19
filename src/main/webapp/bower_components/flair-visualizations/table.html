@@ -1,0 +1,167 @@
+<html>
+
+<head>
+    <title>Pie</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/d3viz.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src=" https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+
+
+    <script src="d3-lasso.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="legend_barcharts.js"></script>
+
+    <script src="table.js"></script>
+
+
+
+    <style>
+        body {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+        }
+
+        th {
+            text-align: center;
+            background-color: rgb(241, 241, 241);
+            font-weight: bold;
+            width: 103px;
+        }
+
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 300;
+            src: local("Fira Sans Extra Condensed Light"), local("FiraSans-Light"), url(font/FiraSansExtraCondensed-Light.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 400;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans"), url(font/FiraSansExtraCondensed-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans-Semibold"), url(font/FiraSansExtraCondensed-SemiBold.ttf);
+        }
+
+        @font-face {
+            font-family: 'Fira Sans Extra Condensed', sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            src: local("Fira Sans Extra Condensed"), local("FiraSans-Bold"), url(font/FiraSansExtraCondensed-Bold.ttf);
+        }
+
+        table {
+            font-size: 9px;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header"
+        style="text-align:center; width:100%; margin: 0 auto; display:block; padding-top:5px; height:60px; margin-bottom:35px;">
+        <h1 style="color:#777; font-weight:100;">Table </h1>
+    </div>
+    <div style="position: relative; border: 1px solid #999;">
+        <div id="donut" width="1200" height="400">
+        </div>
+        <div class="confirm" style="visibility: hidden;">
+            <button class="btn btn-filters btn-primary">
+                <i class="fa fa-check"></i>
+            </button>
+            <button class="btn btn-filters btn-default">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+        LEGEND = legend();
+
+        var config = {
+            "dimension": ['State', 'Under 5 Years'],
+            "displayNameForDimension": ["State Name", "Under 5 Years"],
+            "cellColorForDimension": ["#efefef", "#ff00ff"],
+            "fontStyleForDimension": ["italic", "italic"],
+            "fontWeightForDimension": ["900", "800"],
+            "fontSizeForDimension": ["15", "16"],
+            "textColorForDimension": ["#ff00ff", ""],
+            "textColorExpressionForDimension":['upto,500000,#009D1D|upto,900000,#EBBC00|above,900000,#DC1C50|default,,#FFFF00', 'upto,500000,#009D1D|upto,900000,#EBBC00|above,900000,#DC1C50|default,,#FFFF00'
+            ],
+            "textAlignmentForDimension": ["center", "left"],
+
+            "measure": ['5 to 13 Years', '14 to 17 Years'],
+            "displayNameForMeasure": ['5 to 13 Years', '14 to 17 Years'],
+            "cellColorForMeasure": ["#efefef", "#ff00ff"],
+            "cellColorExpressionForMeasure": ['upto,500000,#efefef|upto,900000,#acacac|above,900000,#00ff00|default,,#ffffaa', 'upto,500000,#ffbbff|upto,900000,#ffaacc|above,900000,#121212|default,,#454545'
+            ],
+            "fontStyleForMeasure": ["italic", "italic"],
+            "fontSizeForMeasure": ["15", "12"],
+            "fontWeightForMeasure": ["900", "800"],
+            "numberFormatForMeasure": ["M", "K"],
+            "textColorForMeasure": ["#eaeaea", ""],
+            "textAlignmentForMeasure": ["center", "left"],
+            "textColorExpressionForMeasure": ['upto,500000,#009D1D|upto,900000,#EBBC00|above,900000,#DC1C50|default,,#FFFF00', 'upto,500000,#009D1D|upto,900000,#EBBC00|above,900000,#DC1C50|default,,#FFFF00'
+            ],
+            "iconNameForMeasure":  ['fa fa-globe', 'fa fa-male'],
+            "iconFontWeight": [100, 200],
+            "iconColor": ['#FFFFFF', '#DDC224'],
+            "iconPositionForMeasure": ["center", "left"],
+            "iconExpressionForMeasure": ['upto,500000,fa fa-chevron-circle-down,#ababab|upto,900000,fa fa-chevron-circle-up,#00ff00|above,900000,fa fa-exclamation-circle,#DC1C50|default,,fa fa-minus,#FFFF00', 'upto,500000,fa fa-chevron-circle-down,#ababab|upto,900000,fa fa-chevron-circle-up,#00ff00|above,900000,fa fa-exclamation-circle,#DC1C50|default,,fa fa-minus,#FFFF00'
+            ]
+        }
+
+        var chart = table()
+            .config(config);
+
+        d3.csv('datatable.csv', function (data) {
+            d3.select('#donut')
+                .datum(data)
+                .call(chart);
+        });
+
+
+    </script>
+</body>
+
+</html>

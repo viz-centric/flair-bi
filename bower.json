@@ -76,7 +76,8 @@
     "stomp-websocket": "^2.3.4",
     "angular-jwt": "^0.1.10",
     "angular-cron-gen": "^0.0.26",
-    "cronstrue": "^0.8.0"
+    "cronstrue": "^0.8.0",
+    "flair-visualizations": "*"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8"

@@ -29,6 +29,9 @@ public class FbEngineWebSocketService {
         header.put("queryId", queryResponse.getQueryId());
         header.put("userId", queryResponse.getUserId());
         header.put("request", request);
+        if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
+            header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
+        }
         messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
     }
 

@@ -205,9 +205,13 @@
                 );
             } else {
                 var contentId = "content-" + data.headers.queryId;
+                var cacheDate = data.headers.cacheDate;
                 var v = VisualMetadataContainer.getOne(
                     data.headers.queryId
                 );
+                if (v) {
+                    v.cacheDate = cacheDate;
+                }
                 visualizationRenderService.setMetaData(
                     v,
                     metaData,

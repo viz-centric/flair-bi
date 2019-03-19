@@ -950,9 +950,10 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <retries>5</retries>
                     <images>
                         <image>
-                            <name>flairbi/flair-couchdb</name>
+                            <name>flairbi/flair-couchdb-test</name>
                             <build>
                                 <tags>
                                     <tag>latest</tag>
@@ -978,7 +979,7 @@
                             </run>
                         </image>
                         <image>
-                            <name>flair/flair-pgsql</name>
+                            <name>flair/flair-pgsql-test</name>
                             <build>
                                 <tags>
                                     <tag>latest</tag>
@@ -1130,33 +1131,6 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>build-dockerfile</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>flairbi/${project.artifactId}</name>
-                                    <build>
-                                        <tags>
-                                            <tag>latest</tag>
-                                            <tag>v${project.version}</tag>
-                                        </tags>
-                                        <dockerFileDir>${project.build.directory}</dockerFileDir>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                    </plugin>
-                    <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <version>2.5</version>
                         <configuration>
@@ -1197,6 +1171,60 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>build-dockerfile</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-images</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>flairbi/${project.artifactId}</name>
+                                    <build>
+                                        <tags>
+                                            <tag>latest</tag>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>flairbi/flair-couchdb</name>
+                                    <build>
+                                        <tags>
+                                            <tag>latest</tag>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>flair/flair-pgsql</name>
+                                    <build>
+                                        <tags>
+                                            <tag>latest</tag>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -1322,9 +1350,6 @@
                     <version>${mapstruct.version}</version>
                 </dependency>
             </dependencies>
-        </profile>
-        <profile>
-            <id>test</id>
         </profile>
     </profiles>
 </project>

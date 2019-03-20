@@ -28,8 +28,8 @@
             },
             {
                 image: "#admin-services",
-                label: "Services",
-                href: "service",
+                label: "Data Connection",
+                href: "connection",
                 order: 2
             },
             {
@@ -131,6 +131,12 @@
                 label: "File Uploader",
                 href: "file-uploader",
                 order: 10
+            },
+            {
+                image: "#admin-services",
+                label: "Data Connection",
+                href: "connection",
+                order: 11
             }
         ];
 

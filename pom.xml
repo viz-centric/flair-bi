@@ -935,7 +935,7 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>releases</releaseProfiles>
+                    <releaseProfiles>prod</releaseProfiles>
                 </configuration>
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->

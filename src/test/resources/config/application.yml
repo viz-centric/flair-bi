@@ -11,17 +11,13 @@
 # ===================================================================
 
 spring:
-    profiles:
-        include:
-            - test
-            - dev
     application:
         name: flairbi
     jackson:
         serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/flairbi?ssl=false
+        url: jdbc:postgresql://localhost:9998/flairbi?ssl=false
         username: postgres
         password: admin
         hikari:
@@ -57,7 +53,7 @@ server:
 couchdb:
     password: password
     username: admin
-    url: http://localhost:5984
+    url: http://localhost:9999
     test-connection-at-startup: false
     database-name: flairbi-view
     #    ssl-factory: com.flair.bi.ssl.FlairBIPgSqlSSLSocketFactory
@@ -137,22 +133,3 @@ flair-ai-api:
 storage-data-files: storage/data/files/
 
 data-file-max-size-mb: 10
-
-
----
-
-spring:
-    profiles: jenkins
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://devsupport-vizcentric.com:9999/flairbi?ssl=false
-        username: postgres
-        password: admin
-
-couchdb:
-    password: password
-    username: admin
-    url: http://devsupport-vizcentric.com:9998/
-    test-connection-at-startup: false
-    database-name: flairbi-view
-    enable-s-s-l: false

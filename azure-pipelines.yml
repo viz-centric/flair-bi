@@ -67,19 +67,19 @@ steps:
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: 'Compile, Test, Package & Deploy the artifact'
 
-- script: |
-    export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
-    docker build -t flairbi/$artifactId:v$version ./target
-  displayName: 'Build Docker image'
+# - script: |
+#     export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
+#     docker build -t flairbi/$artifactId:v$version ./target
+#   displayName: 'Build Docker image'
 
-- script: |
-    export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
-    docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    docker push flairbi/$artifactId:v$version
-    docker tag flairbi/$artifactId:v$version flairbi/$artifactId:latest
-    docker push flairbi/$artifactId:latest
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  env:
-    DOCKER_USER: $(dockerUser)
-    DOCKER_PASSWORD: $(dockerPassword)
-  displayName: 'Push Docker image'
+# - script: |
+#     export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
+#     docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+#     docker push flairbi/$artifactId:v$version
+#     docker tag flairbi/$artifactId:v$version flairbi/$artifactId:latest
+#     docker push flairbi/$artifactId:latest
+#   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+#   env:
+#     DOCKER_USER: $(dockerUser)
+#     DOCKER_PASSWORD: $(dockerPassword)
+#   displayName: 'Push Docker image'

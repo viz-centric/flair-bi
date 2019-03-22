@@ -54,8 +54,7 @@
             "schedule": {
               "timezone": "",
               "start_date": "",
-              "end_date": "",
-              "duration_type":""
+              "end_date": ""
             }
           };
         activate();
@@ -156,16 +155,6 @@
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.report_line_item.visualization=vm.scheduleObj.report_line_item.visualization.toLowerCase();
             vm.scheduleObj.cron_exp=$scope.cronExpression;
-            setDurationType();
-        }
-
-        function setDurationType(){
-            var listItems=$(".cron-gen-main > ul[role=tablist] > li");
-            listItems.each(function(idx, li) {
-                if($(li).hasClass('active')){
-                    vm.scheduleObj.schedule.duration_type=$(li).find('a').text().replace(/['"]+/g, '').trim();
-                }
-            });
         }
 
         function openCalendar (date) {

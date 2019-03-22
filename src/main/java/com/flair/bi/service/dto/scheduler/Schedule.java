@@ -4,7 +4,6 @@ public class Schedule {
 private String  timezone;
 private String start_date;
 private String end_date;
-private String duration_type;
 
 public Schedule(){}
 
@@ -32,18 +31,9 @@ public void setEnd_date(String end_date) {
 	this.end_date = end_date;
 }
 
-public String getDuration_type() {
-	return duration_type;
-}
-
-public void setDuration_type(String duration_type) {
-	this.duration_type = duration_type;
-}
-
 @Override
 public String toString() {
-	return "Schedule [timezone=" + timezone + ", start_date=" + start_date + ", end_date=" + end_date
-			+ ", duration_type=" + duration_type + "]";
+	return "Schedule [timezone=" + timezone + ", start_date=" + start_date + ", end_date=" + end_date + "]";
 }
 
 }

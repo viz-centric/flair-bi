@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function treemap() {
 
     /* These are the constant global variable for the function clusteredverticalbar.
@@ -27,7 +31,7 @@ function treemap() {
         fontWeightForDimension = [],
         fontSizeForDimension = [];
 
-    /* These are the common variables that is shared across the different private/public 
+    /* These are the common variables that is shared across the different private/public
      * methods but is initialized/updated within the methods itself.
      */
     var _localSVG,
@@ -40,7 +44,7 @@ function treemap() {
         height
     // _localLabelStack;
 
-    /* These are the common private functions that is shared across the different private/public 
+    /* These are the common private functions that is shared across the different private/public
      * methods but is initialized beforehand.
      */
     var BASE_COLOR = '#ffffff',
@@ -942,3 +946,5 @@ function treemap() {
 
     return chart;
 }
+
+module.exports = treemap;

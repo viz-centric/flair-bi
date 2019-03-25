@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function donut() {
 
     var _NAME = 'donut';
@@ -774,3 +778,5 @@ function donut() {
 
     return chart;
 }
+
+module.exports = donut;

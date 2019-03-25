@@ -21,3 +21,14 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# SASS cache folder
+.sass-cache/
+
+.DS_Store
+
+# Bower dependencies
+bower_components/
+
+# Node dependencies
+node_modules/

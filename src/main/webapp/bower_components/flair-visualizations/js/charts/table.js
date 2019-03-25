@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function table() {
 
     var _NAME = 'table';
@@ -568,3 +572,5 @@ function table() {
     }
     return chart;
 }
+
+module.exports = table;

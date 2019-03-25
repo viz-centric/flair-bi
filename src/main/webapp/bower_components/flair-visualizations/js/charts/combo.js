@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function combo() {
 
     var _NAME = 'combo';
@@ -49,7 +53,7 @@ function combo() {
         this.measure(config.measure);
         this.showLegend(config.showLegend);
         this.legendPosition(config.legendPosition);
-     
+
         this.showXaxis(config.showXaxis);
         this.showYaxis(config.showYaxis);
         this.showXaxisLabel(config.showXaxisLabel);
@@ -386,7 +390,7 @@ function combo() {
                 legendSpace = 0;
                 plotWidth = parentWidth;
                 plotHeight = parentHeight;
-            } 
+            }
 
             if (_tooltip) {
                 tooltip = d3.select(this.parentNode).select('#tooltip');
@@ -890,7 +894,7 @@ function combo() {
             })
             .classed('selected', false)
             .classed('possible', false);
-            
+
 
         var newBars = bar.enter().append('g')
             .attr('class', 'bar');
@@ -1150,3 +1154,5 @@ function combo() {
 
     return chart;
 }
+
+module.exports = combo;

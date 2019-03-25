@@ -1,0 +1,25 @@
+#kpi {
+    border: 1px solid #999;
+    width: 1260px;
+    height: 540px;
+
+    .container {
+    	.measure {
+    		display: -webkit-box;
+		    display: -moz-box;
+		    display: -ms-flexbox;
+		    display: -webkit-flex;
+		    display: flex;
+		    height: 50%;
+
+		    .parent {
+		    	.child {
+				    padding: 3px;
+				    line-height: 80%;
+				    color: #636464;
+				    text-align: left;
+				}
+		    }
+    	}
+    }
+}     

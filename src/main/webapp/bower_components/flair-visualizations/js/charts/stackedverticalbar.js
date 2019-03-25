@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function stackedverticalbar() {
 
     var _NAME = 'stackedverticalbar';
@@ -946,3 +950,5 @@ function stackedverticalbar() {
 
     return chart;
 }
+
+module.exports = stackedverticalbar;

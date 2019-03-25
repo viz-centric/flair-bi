@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function stackedhorizontalbar() {
 
     var _NAME = 'stackedhorizontalbar';
@@ -951,3 +955,5 @@ function stackedhorizontalbar() {
     }
     return chart;
 }
+
+module.exports = stackedhorizontalbar;

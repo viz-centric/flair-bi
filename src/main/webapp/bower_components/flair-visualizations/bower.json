@@ -31,15 +31,5 @@
   "license": "ISC",
   "ignore": [],
   "homepage": "https://github.com/viz-centric/flair-visualizations",
-  "private": true,
-  "_release": "fa2adf7eff",
-  "_resolution": {
-    "type": "branch",
-    "branch": "feature/initial-implementation-charts",
-    "commit": "fa2adf7effb1257102dfed01812fbf140f4a3444"
-  },
-  "_source": "https://github.com/viz-centric/flair-visualizations.git",
-  "_target": "feature/initial-implementation-charts",
-  "_originalSource": "flair-visualizations",
-  "_direct": true
+  "private": true
 }

@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 
 import com.flair.bi.domain.Functions;
@@ -36,9 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FunctionsResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class FunctionsResourceIntTest {
+public class FunctionsResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";

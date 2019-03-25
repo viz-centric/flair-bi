@@ -20,6 +20,7 @@ import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
 
 import org.h2.command.ddl.CreateView;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -59,6 +60,7 @@ import com.flair.bi.domain.ViewRelease;
  *
  * @see DashboardsResource
  */
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FlairbiApp.class)
 public class DashboardResourceIntTest {

@@ -11,6 +11,8 @@
 # ===================================================================
 
 spring:
+    profiles:
+        active: dev, test
     application:
         name: flairbi
     jackson:

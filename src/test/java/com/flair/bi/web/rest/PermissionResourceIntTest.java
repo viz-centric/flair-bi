@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,9 +32,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class PermissionResourceIntTest {
+public class PermissionResourceIntTest extends AbstractIntegrationTest {
 	
     @Inject
     private UserGroupService userGroupService;

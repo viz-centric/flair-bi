@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.FeatureBookmark;
@@ -39,9 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FeatureBookmarkResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class FeatureBookmarkResourceIntTest {
+public class FeatureBookmarkResourceIntTest extends AbstractIntegrationTest{
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";

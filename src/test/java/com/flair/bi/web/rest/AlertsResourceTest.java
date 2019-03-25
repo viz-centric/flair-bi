@@ -4,6 +4,7 @@ import com.flair.bi.FlairbiApp;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FlairbiApp.class)
 public class AlertsResourceTest {

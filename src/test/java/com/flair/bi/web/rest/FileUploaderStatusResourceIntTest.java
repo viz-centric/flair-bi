@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 
 import com.flair.bi.domain.FileUploaderStatus;
@@ -36,9 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FileUploaderStatusResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class FileUploaderStatusResourceIntTest {
+public class FileUploaderStatusResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_FILE_SYSTEM = "AAAAAAAAAA";
     private static final String UPDATED_FILE_SYSTEM = "BBBBBBBBBB";

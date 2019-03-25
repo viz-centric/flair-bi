@@ -14,10 +14,13 @@ import com.flair.bi.messages.SaveConnectionResponse;
 import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionResponse;
 import io.grpc.stub.StreamObserver;
+
+import org.junit.Ignore;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
+@Ignore
 @Service
 public class TestGrpcService implements IGrpcService {
 
@@ -44,7 +47,8 @@ public class TestGrpcService implements IGrpcService {
     }
 
     @Override
-    public TestConnectionResponse testConnection(String connectionLinkId, String datasourceName, Connection connection) {
+    public TestConnectionResponse testConnection(String connectionLinkId, String datasourceName,
+            Connection connection) {
         return null;
     }
 
@@ -74,7 +78,8 @@ public class TestGrpcService implements IGrpcService {
     }
 
     @Override
-    public ListTablesResponse listTables(String connectionLinkId, String tableNameLike, int maxEntries, Connection connection) {
+    public ListTablesResponse listTables(String connectionLinkId, String tableNameLike, int maxEntries,
+            Connection connection) {
         return null;
     }
 

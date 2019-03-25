@@ -6,6 +6,7 @@ import com.flair.bi.domain.PersistentAuditEvent;
 import com.flair.bi.repository.PersistenceAuditEventRepository;
 import com.flair.bi.service.AuditEventService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the AuditResource REST controller.
  */
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FlairbiApp.class)
 @Transactional

@@ -5,6 +5,7 @@ import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.dto.FbiEngineDTO;
 import com.project.bi.query.dto.QueryDTO;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import java.security.Principal;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class FbGRPCResourceTest {
 

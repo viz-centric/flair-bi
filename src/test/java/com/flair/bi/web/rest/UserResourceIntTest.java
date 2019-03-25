@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
@@ -50,9 +51,7 @@ import java.util.List;
  *
  * @see UserResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class UserResourceIntTest {
+public class UserResourceIntTest extends AbstractIntegrationTest{
 
     @Inject
     private UserRepository userRepository;

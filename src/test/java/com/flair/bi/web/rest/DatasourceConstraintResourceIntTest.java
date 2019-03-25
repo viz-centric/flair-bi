@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 
 import com.flair.bi.domain.Datasource;
@@ -44,9 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see DatasourceConstraintResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class DatasourceConstraintResourceIntTest {
+public class DatasourceConstraintResourceIntTest extends AbstractIntegrationTest {
 
     private static final ConstraintDefinition DEFAULT_CONSTRAINT_DEFINITION = new ConstraintDefinition(Collections.singletonList(new ExclusionFeatureConstraintExpression()));
     private static final ConstraintDefinition UPDATED_CONSTRAINT_DEFINITION = new ConstraintDefinition(Collections.singletonList(new InclusionFeatureConstraintExpression()));

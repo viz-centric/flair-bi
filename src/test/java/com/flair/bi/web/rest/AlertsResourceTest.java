@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
@@ -30,9 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Ignore
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class AlertsResourceTest {
+public class AlertsResourceTest extends AbstractIntegrationTest {
 
 	private MockMvc restMvc;
 

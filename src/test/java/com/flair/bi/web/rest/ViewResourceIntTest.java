@@ -24,6 +24,7 @@ import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
 import com.flair.bi.web.rest.dto.CreateViewReleaseRequestDTO;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -61,6 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see ViewsResource
  */
+@Ignore
 public class ViewResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_VIEW_NAME = "AAAAAAAAAA";

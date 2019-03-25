@@ -15,6 +15,7 @@ import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
 import com.querydsl.core.types.Predicate;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -41,6 +42,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class DashboardsResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

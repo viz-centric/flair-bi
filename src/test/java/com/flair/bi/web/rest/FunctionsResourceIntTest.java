@@ -10,6 +10,7 @@ import com.flair.bi.service.dto.FunctionsDTO;
 import com.flair.bi.service.mapper.FunctionsMapper;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FunctionsResource
  */
+@Ignore
 public class FunctionsResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";

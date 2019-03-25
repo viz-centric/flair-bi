@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 
 import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -46,6 +47,7 @@ import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.flair.bi.web.rest.vm.ChangePermissionVM.Action;
 
+@Ignore
 public class UserGroupResourceIntTest extends AbstractIntegrationTest {
 	
     

@@ -5,6 +5,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.security.jwt.TokenProvider;
 import com.flair.bi.web.rest.vm.LoginVM;
 import io.undertow.security.impl.SecurityContextImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,6 +26,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class UserJWTControllerTest extends AbstractIntegrationTest {
 
 	@MockBean

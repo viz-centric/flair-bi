@@ -6,6 +6,7 @@ import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.mapper.ReleaseRequestMapper;
 import com.flair.bi.web.rest.dto.ReleaseRequestDTO;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class ReleaseResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

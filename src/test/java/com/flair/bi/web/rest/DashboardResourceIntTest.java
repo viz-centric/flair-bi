@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
@@ -61,9 +62,7 @@ import com.flair.bi.domain.ViewRelease;
  * @see DashboardsResource
  */
 @Ignore
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class DashboardResourceIntTest {
+public class DashboardResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_DASHBOARD_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DASHBOARD_NAME = "BBBBBBBBBB";

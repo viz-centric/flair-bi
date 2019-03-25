@@ -17,6 +17,7 @@ import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.CreateViewReleaseRequestDTO;
 import com.querydsl.core.types.Predicate;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class ViewsResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

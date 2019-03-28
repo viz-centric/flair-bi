@@ -1,6 +1,10 @@
-function table() {
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
 
-    var _NAME = 'table';
+function pivottable() {
+
+    var _NAME = 'pivottable';
 
 
     var _isPivoted = [],
@@ -857,3 +861,5 @@ function table() {
 
     return chart;
 }
+
+module.exports = pivottable;

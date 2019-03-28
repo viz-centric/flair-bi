@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function scatter() {
 
     var _NAME = 'scatterChart';
@@ -44,7 +48,7 @@ function scatter() {
         this.measure(config.measure);
         this.showLegend(config.showLegend);
         this.legendPosition(config.legendPosition);
-     
+
         this.showXaxis(config.showXaxis);
         this.showYaxis(config.showYaxis);
         this.showXaxisLabel(config.showXaxisLabel);
@@ -409,7 +413,7 @@ function scatter() {
                 legendSpace = 0;
                 plotWidth = parentWidth;
                 plotHeight = parentHeight;
-            } 
+            }
 
             UTIL.setAxisColor(svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis, _showYaxis, _showXaxis);
         });
@@ -680,7 +684,7 @@ function scatter() {
         }
         return _legendData;
     }
-  
+
     chart.showValues = function (value) {
         if (!arguments.length) {
             return _showValues;
@@ -754,3 +758,5 @@ function scatter() {
     }
     return chart;
 }
+
+module.exports = scatter;

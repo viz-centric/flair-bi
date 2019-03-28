@@ -1,7 +1,5 @@
 package com.flair.bi.service.dto;
 
-import com.flair.bi.domain.hierarchy.Drilldown;
-
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +11,7 @@ public class HierarchyDTO {
     @NotNull
     private String name;
 
-    private Set<Drilldown> drilldown = new HashSet<>();
+    private Set<DrilldownDTO> drilldown = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -31,11 +29,11 @@ public class HierarchyDTO {
         this.name = name;
     }
 
-    public Set<Drilldown> getDrilldown() {
+    public Set<DrilldownDTO> getDrilldown() {
         return drilldown;
     }
 
-    public void setDrilldown(Set<Drilldown> drilldown) {
+    public void setDrilldown(Set<DrilldownDTO> drilldown) {
         this.drilldown = drilldown;
     }
 }

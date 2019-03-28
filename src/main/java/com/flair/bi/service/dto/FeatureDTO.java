@@ -24,6 +24,8 @@ public class FeatureDTO {
     
     private Boolean isSelected;
 
+    private Long hierarchyId;
+
     public Long getId() {
         return id;
     }
@@ -72,12 +74,17 @@ public class FeatureDTO {
 		this.isSelected = isSelected;
 	}
 
-	@Override
-	public String toString() {
-		return "FeatureDTO [id=" + id + ", name=" + name + ", type=" + type + ", definition=" + definition
-				+ ", featureType=" + featureType + ", isSelected=" + isSelected + "]";
-	}
-    
-	
-    
+    public Long getHierarchyId() {
+        return hierarchyId;
+    }
+
+    public void setHierarchyId(Long hierarchyId) {
+        this.hierarchyId = hierarchyId;
+    }
+
+    @Override
+    public String toString() {
+        return "FeatureDTO [id=" + id + ", name=" + name + ", type=" + type + ", definition=" + definition
+                + ", featureType=" + featureType + ", isSelected=" + isSelected + "]";
+    }
 }

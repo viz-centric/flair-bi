@@ -8,11 +8,16 @@ import com.flair.bi.web.rest.util.HeaderUtil;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -29,8 +34,8 @@ public class HierarchyResource {
 
     @GetMapping(path = "/hierarchies")
     @Timed
-    public ResponseEntity<List<Hierarchy>> getAll(@QuerydslPredicate(root = Hierarchy.class) Predicate predicate) {
-        return ResponseEntity.ok(hierarchyService.findAll(predicate));
+    public ResponseEntity<List<HierarchyDTO>> getAll(@QuerydslPredicate(root = Hierarchy.class) Predicate predicate) {
+        return ResponseEntity.ok(hierarchyService.findAllAsDto(predicate));
     }
 
     /**
@@ -45,13 +50,13 @@ public class HierarchyResource {
      */
     @PutMapping("/hierarchies")
     @Timed
-    public ResponseEntity<Hierarchy> updateHierarchy(@Valid @RequestBody HierarchyDTO hierarchy) throws URISyntaxException {
+    public ResponseEntity<HierarchyDTO> updateHierarchy(@Valid @RequestBody HierarchyDTO hierarchy) throws URISyntaxException {
         log.debug("REST request to update Hierarchy : {}", hierarchy);
         if (hierarchy.getId() == null) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Hierarchy result = hierarchyService.findOne(hierarchy.getId());
+        HierarchyDTO result = hierarchyService.findOneAsDTO(hierarchy.getId());
 
         if (null == result) {
             return ResponseEntity.notFound().build();

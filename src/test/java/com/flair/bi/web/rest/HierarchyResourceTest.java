@@ -5,8 +5,9 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.hierarchy.Drilldown;
 import com.flair.bi.domain.hierarchy.Hierarchy;
-import com.flair.bi.service.BookMarkWatchService;
 import com.flair.bi.service.HierarchyService;
+import com.flair.bi.service.dto.DrilldownDTO;
+import com.flair.bi.service.dto.FeatureDTO;
 import com.flair.bi.service.dto.HierarchyDTO;
 import com.querydsl.core.types.Predicate;
 import org.junit.Ignore;
@@ -21,12 +22,10 @@ import org.testcontainers.shaded.com.google.common.collect.ImmutableSet;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Ignore
 public class HierarchyResourceTest extends AbstractIntegrationTest {
@@ -87,8 +86,8 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 		HierarchyDTO request = new HierarchyDTO();
 		request.setId(1L);
 		request.setName("nm");
-		Drilldown element = new Drilldown();
-		Feature feature = new Feature();
+		DrilldownDTO element = new DrilldownDTO();
+		FeatureDTO feature = new FeatureDTO();
 		feature.setId(5L);
 		element.setFeature(feature);
 		element.setOrder(10);

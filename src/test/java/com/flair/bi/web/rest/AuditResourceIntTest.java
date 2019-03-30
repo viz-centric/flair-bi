@@ -1,11 +1,13 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.config.audit.AuditEventConverter;
 import com.flair.bi.domain.PersistentAuditEvent;
 import com.flair.bi.repository.PersistenceAuditEventRepository;
 import com.flair.bi.service.AuditEventService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -31,10 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the AuditResource REST controller.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-@Transactional
-public class AuditResourceIntTest {
+@Ignore
+public class AuditResourceIntTest extends AbstractIntegrationTest {
 
     private static final String SAMPLE_PRINCIPAL = "SAMPLE_PRINCIPAL";
     private static final String SAMPLE_TYPE = "SAMPLE_TYPE";

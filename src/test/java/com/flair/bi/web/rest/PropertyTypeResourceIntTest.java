@@ -9,7 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import javax.inject.Inject;
+
+import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,9 +36,8 @@ import com.flair.bi.service.dto.PropertyTypeDTO;
 import com.flair.bi.service.mapper.PropertyTypeMapper;
 import com.flair.bi.service.properttype.PropertyTypeService;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class PropertyTypeResourceIntTest{
+@Ignore
+public class PropertyTypeResourceIntTest extends AbstractIntegrationTest {
 
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;

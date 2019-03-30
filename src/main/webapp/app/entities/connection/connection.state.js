@@ -8,7 +8,7 @@
     function stateConfig($stateProvider) {
         $stateProvider
             .state("connection", {
-                parent: "entity",
+                parent: "admin",
                 url: "/connection?page&sort&search",
                 data: {
                     authorities: [],

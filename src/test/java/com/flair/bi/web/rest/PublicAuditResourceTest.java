@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.service.AuditEventService;
 import com.flair.bi.service.dto.CountDTO;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
@@ -16,6 +17,7 @@ import java.util.Map;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class PublicAuditResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

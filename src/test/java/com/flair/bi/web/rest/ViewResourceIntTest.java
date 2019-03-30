@@ -1,6 +1,7 @@
 package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.Dashboard;
@@ -23,6 +24,7 @@ import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
 import com.flair.bi.web.rest.dto.CreateViewReleaseRequestDTO;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -60,9 +62,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see ViewsResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class ViewResourceIntTest {
+@Ignore
+public class ViewResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_VIEW_NAME = "AAAAAAAAAA";
     private static final String UPDATED_VIEW_NAME = "BBBBBBBBBB";

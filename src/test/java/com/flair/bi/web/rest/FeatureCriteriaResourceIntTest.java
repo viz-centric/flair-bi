@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.domain.*;
 import com.flair.bi.domain.enumeration.FeatureType;
@@ -47,9 +48,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FeatureCriteriaResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class FeatureCriteriaResourceIntTest {
+@Ignore
+public class FeatureCriteriaResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_VALUE = "BBBBBBBBBB";

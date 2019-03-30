@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -42,16 +44,15 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class ReleaseResourceIntTest {
-	
-	@Inject
-    private  ReleaseRequestService releaseRequestService;
-	
-	@Inject
-    private  ReleaseRequestMapper releaseRequestMapper;
-	
+@Ignore
+public class ReleaseResourceIntTest extends AbstractIntegrationTest {
+
+    @Inject
+    private ReleaseRequestService releaseRequestService;
+
+    @Inject
+    private ReleaseRequestMapper releaseRequestMapper;
+
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -62,35 +63,35 @@ public class ReleaseResourceIntTest {
     private EntityManager em;
 
     private MockMvc restReleasesMockMvc;
-    
+
     @Inject
     private DashboardService dashboardService;
-    
+
     @Inject
     private QuerydslPredicateArgumentResolver querydslPredicateArgumentResolver;
 
     @Inject
     private UserService userService;
-    
+
     @Inject
     private ViewService viewService;
 
-	private static final String RELEASE_COMMENT = "Released";
-	
+    private static final String RELEASE_COMMENT = "Released";
+
     private View view;
-    
+
     private User user;
-	
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ReleaseResource releaseResource = new ReleaseResource(releaseRequestService, releaseRequestMapper);
         ReflectionTestUtils.setField(releaseResource, "releaseRequestService", releaseRequestService);
         this.restReleasesMockMvc = MockMvcBuilders.standaloneSetup(releaseResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
-            .setMessageConverters(jacksonMessageConverter).build();
+                .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
+                .setMessageConverters(jacksonMessageConverter).build();
     }
-    
+
     public static User createUser(UserService userService) {
         return userService.createUser("dash-admin", "dash-admin", "pera", "pera", "admi1@localhost", "en", "test");
     }
@@ -99,66 +100,63 @@ public class ReleaseResourceIntTest {
     public void initTest() {
         view = ViewResourceIntTest.createEntity(em, dashboardService);
         user = createUser(userService);
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("dash-admin", "dash-admin"));
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken("dash-admin", "dash-admin"));
     }
-    
+
     @Test
-    @Transactional    
-    public void getRequests() throws Exception{
-    	View viewInserted=viewService.save(view);
+    @Transactional
+    public void getRequests() throws Exception {
+        View viewInserted = viewService.save(view);
         ViewRelease viewRelease = new ViewRelease();
         viewRelease.setComment(RELEASE_COMMENT);
         viewRelease.setViewState(viewInserted.getCurrentEditingState());
         viewRelease.setView(viewInserted);
-        ReleaseRequest releaseRequest =releaseRequestService.requestRelease(viewRelease);
-        restReleasesMockMvc.perform(get("/api/releases"))
-	        .andExpect(status().isOk())
-	        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-    		.andExpect(jsonPath("$.[*].comment").value(hasItem(RELEASE_COMMENT)))
-        	.andExpect(jsonPath("$.[*].id").value(releaseRequest.getId().intValue()));
+        ReleaseRequest releaseRequest = releaseRequestService.requestRelease(viewRelease);
+        restReleasesMockMvc.perform(get("/api/releases")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.[*].comment").value(hasItem(RELEASE_COMMENT)))
+                .andExpect(jsonPath("$.[*].id").value(releaseRequest.getId().intValue()));
     }
-    
+
     @Test
-    @Transactional    
-    public void getRequest() throws Exception{
-    	View viewInserted=viewService.save(view);
+    @Transactional
+    public void getRequest() throws Exception {
+        View viewInserted = viewService.save(view);
         ViewRelease viewRelease = new ViewRelease();
         viewRelease.setComment(RELEASE_COMMENT);
         viewRelease.setViewState(viewInserted.getCurrentEditingState());
         viewRelease.setView(viewInserted);
-        ReleaseRequest releaseRequest =releaseRequestService.requestRelease(viewRelease);
-        restReleasesMockMvc.perform(get("/api/releases/{id}", releaseRequest.getId()))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.comment").value(RELEASE_COMMENT))
-        .andExpect(jsonPath("$.id").value(releaseRequest.getId().intValue()));
+        ReleaseRequest releaseRequest = releaseRequestService.requestRelease(viewRelease);
+        restReleasesMockMvc.perform(get("/api/releases/{id}", releaseRequest.getId())).andExpect(status().isOk())
+                .andExpect(jsonPath("$.comment").value(RELEASE_COMMENT))
+                .andExpect(jsonPath("$.id").value(releaseRequest.getId().intValue()));
     }
-    
+
     @Test
-    @Transactional    
-    public void approveRequest() throws Exception{
-    	View viewInserted=viewService.save(view);
+    @Transactional
+    public void approveRequest() throws Exception {
+        View viewInserted = viewService.save(view);
         ViewRelease viewRelease = new ViewRelease();
         viewRelease.setComment(RELEASE_COMMENT);
         viewRelease.setViewState(viewInserted.getCurrentEditingState());
         viewRelease.setView(viewInserted);
-        ReleaseRequest releaseRequest =releaseRequestService.requestRelease(viewRelease);
+        ReleaseRequest releaseRequest = releaseRequestService.requestRelease(viewRelease);
         restReleasesMockMvc.perform(put("/api/releases/{id}/approve", releaseRequest.getId()))
-        .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
-    
+
     @Test
-    @Transactional    
-    public void rejectRequest() throws Exception{
-    	View viewInserted=viewService.save(view);
+    @Transactional
+    public void rejectRequest() throws Exception {
+        View viewInserted = viewService.save(view);
         ViewRelease viewRelease = new ViewRelease();
         viewRelease.setComment(RELEASE_COMMENT);
         viewRelease.setViewState(viewInserted.getCurrentEditingState());
         viewRelease.setView(viewInserted);
-        ReleaseRequest releaseRequest =releaseRequestService.requestRelease(viewRelease);
+        ReleaseRequest releaseRequest = releaseRequestService.requestRelease(viewRelease);
         restReleasesMockMvc.perform(put("/api/releases/{id}/reject", releaseRequest.getId()))
-        .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
-    
-    
 
 }

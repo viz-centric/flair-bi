@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.Information;
 import com.flair.bi.service.InformationService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
@@ -17,6 +18,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class InformationResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

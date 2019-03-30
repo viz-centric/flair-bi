@@ -18,5 +18,5 @@ services:
         - COUCHDB_USER=admin
         - COUCHDB_PASSWORD=password
         ports:
-        - 9998:5984
+        - 9999:5984
         - 6980:6984

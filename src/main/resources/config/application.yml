@@ -1,0 +1,6 @@
+grpc:
+  tls:
+    enabled: true
+    root-certificate: ${GRPC_CERT:src/main/resources/ssl/grpc/ca.crt}
+    client-cert: ${GRPC_CERT:src/main/resources/ssl/grpc/server.crt}
+    key: ${GRPC_CERT:src/main/resources/ssl/grpc/server.pem}

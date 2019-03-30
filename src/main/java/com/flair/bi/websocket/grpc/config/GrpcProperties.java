@@ -34,6 +34,8 @@ public class GrpcProperties {
     public static class Tls {
         private boolean enabled = false;
         private String rootCertificate;
+        private String clientCert;
+        private String key;
     }
 
 }

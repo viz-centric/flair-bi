@@ -10,7 +10,7 @@ services:
         ports:
         - 5432:5432
 
-    flair-couchdb-dev:
+    flair-couchdb:
         image: flairbi/couchdb:latest
         container_name: development-couchdb
         restart: always
@@ -28,9 +28,11 @@ services:
         labels:
             purpose: Flair config server and service discovery
             environment: development
+            traefik.frontend.rule: "PathPrefixStrip: /config"
+            traefik.enable: true
+            traefik.backend: flair-registry
+            traefik.port: 8761
         image: flairbi/flair-registry:latest
-        volumes:
-        - path/flair-config:/flair-configuration
         ports:
         - 8761:8761
         - 8762:8762
@@ -68,3 +70,21 @@ services:
         - APP_CONFIG=/flair-config/application-oss.yml
         - NODE_ENV=oss-dev
         - SLEEP_TIME=10
+
+    flair-bi:
+        image: flairbi/flairbi:latest
+        labels:
+            purpose: Flair front end application
+            environment: development
+            traefik.frontend.rule: "PathPrefixStrip: /flairbi"
+            traefik.enable: true
+            traefik.backend: flair-bi
+            traefik.port: 8002
+        environment:
+            - CONFIG_URI=http://flair-registry:8761
+            - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+            - JHIPSTER_SLEEP=60
+            - SPRING_PROFILES_ACTIVE=oss
+            - POSTGRES_URI=flair-pgsql:5432
+        ports:
+        - 8002:8002

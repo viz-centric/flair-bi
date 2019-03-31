@@ -50,7 +50,7 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    goals: '-Pprod package'
+    goals: '-Pprod -Dmaven.wagon.http.pool=false -Dhttp.keepAlive=false package'
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: 'Compile, Test & Package the artifact'
 
@@ -63,7 +63,7 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    goals: '-Pprod deploy'
+    goals: '-Pprod -Dmaven.wagon.http.pool=false -Dhttp.keepAlive=false deploy'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: 'Compile, Test, Package & Deploy the artifact'
 

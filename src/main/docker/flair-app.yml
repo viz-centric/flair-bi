@@ -83,7 +83,7 @@ services:
         environment:
             - CONFIG_URI=http://flair-registry:8761
             - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
-            - JHIPSTER_SLEEP=60
+            - JHIPSTER_SLEEP=120
             - SPRING_PROFILES_ACTIVE=oss
             - POSTGRES_URI=flair-pgsql:5432
         ports:

@@ -23,7 +23,8 @@ public class FbGRPCResource {
             headerAccessor.getUser().getName(),
             fbiEngineDTO.getVisualMetadata(),
             fbiEngineDTO.getQueryDTO(),
-            fbiEngineDTO.getvId());
+            fbiEngineDTO.getvId(),
+            fbiEngineDTO.getType());
     }
     
     @MessageMapping("/fbi-engine-grpc/{sourcesId}/queryAll")

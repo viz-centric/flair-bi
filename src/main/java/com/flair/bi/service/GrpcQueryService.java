@@ -118,7 +118,7 @@ public class GrpcQueryService {
             .orElseThrow(() -> new EntityNotFoundException("Datasource with id " + datasourceId + " not found"));
     }
 
-	public void sendGetDataStream(Long datasourcesId, String userId, VisualMetadata visualMetadata, QueryDTO queryDTO, String visualMetadataId) throws InterruptedException {
+	public void sendGetDataStream(Long datasourcesId, String userId, VisualMetadata visualMetadata, QueryDTO queryDTO, String visualMetadataId,String type) throws InterruptedException {
         Datasource datasource = getDatasource(datasourcesId);
 
         DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId, datasource.getId());
@@ -146,8 +146,10 @@ public class GrpcQueryService {
             .filter(p -> p.isValue() && p.getPropertyType().getName().equalsIgnoreCase("Enable caching"));
         if (enableCaching.isPresent()) {
             // TODO - Need to replace below call with caching engine call
-            if (visualMetadata != null) {
+            if (visualMetadata != null && type==null) {
                 callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
+            } else if(visualMetadata != null && type.equals("share-link")){
+            	callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
             } else {
                 callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
             }
@@ -155,8 +157,10 @@ public class GrpcQueryService {
 
 
         } else {
-            if (visualMetadata != null) {
+            if (visualMetadata != null && type==null) {
                 callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
+            } else if(visualMetadata != null && type.equals("share-link")) {
+            	callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
             } else {
                 callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
             }

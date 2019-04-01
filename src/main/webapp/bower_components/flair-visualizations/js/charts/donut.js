@@ -674,7 +674,7 @@ function donut() {
             .data(_pie(newFilteredData), key);
 
         pieArcGroup.select('path')
-            .transition().duration(1000)
+            .transition() .duration(COMMON.DURATION)
             .attrTween('d', function (d) {
                 var interpolate = d3.interpolate(this._current, d);
                 var _this = this;

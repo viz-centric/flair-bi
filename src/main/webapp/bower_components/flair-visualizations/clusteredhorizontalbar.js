@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend_barcharts.js')();
+
 function clusteredhorizontalbar() {
 
     var _NAME = 'clusteredhorizontalbar';
@@ -15,8 +19,6 @@ function clusteredhorizontalbar() {
         _showYaxisLabel,
         _xAxisColor,
         _yAxisColor,
-        _showGrid,
-        _stacked,
         _displayName,
         _legendData,
         _showValues = [],
@@ -53,10 +55,8 @@ function clusteredhorizontalbar() {
     var _setConfigParams = function (config) {
         this.dimension(config.dimension);
         this.measure(config.measure);
-
         this.showLegend(config.showLegend);
         this.legendPosition(config.legendPosition);
-
         this.showXaxis(config.showXaxis);
         this.showYaxis(config.showYaxis);
         this.showXaxisLabel(config.showXaxisLabel);
@@ -76,7 +76,6 @@ function clusteredhorizontalbar() {
         this.borderColor(config.borderColor);
         this.fontSize(config.fontSize);
         this.legendData(config.displayColor, config.measure);
-
     }
 
     var _buildTooltipData = function (datum, chart) {
@@ -164,11 +163,13 @@ function clusteredhorizontalbar() {
             }
         }
     }
+
     var clearFilter = function () {
         return function () {
             chart.update(_originalData);
         }
     }
+
     var _handleMouseOverFn = function (tooltip, container) {
         var me = this;
 
@@ -375,7 +376,7 @@ function clusteredhorizontalbar() {
                     return 'translate(' + margin.left + ', ' + 0 + ')';
                 });
         }
-        
+
         var keys = UTIL.getMeasureList(data[0], _dimension);
 
         x0.domain(data.map(function (d) { return d[_dimension[0]]; }));
@@ -500,7 +501,7 @@ function clusteredhorizontalbar() {
             .attr("x", 1)
             .attr("height", x1.bandwidth())
             .attr("width", function (d) {
-                return y(d[d.measure]);
+                return 0;
             })
             .style('fill', function (d, i) {
                 return UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor);
@@ -545,6 +546,16 @@ function clusteredhorizontalbar() {
                         }
                     }
                 }
+            })
+            .transition()
+            .duration(COMMON.DURATION)
+            .attr("y", function (d) {
+                return x1(d.measure);
+            })
+            .attr("x", 1)
+            .attr("height", x1.bandwidth())
+            .attr("width", function (d) {
+                return y(d[d.measure]);
             })
 
         element.append('text')
@@ -624,7 +635,6 @@ function clusteredhorizontalbar() {
         return _NAME;
     }
 
-
     var _legendMouseOver = function (data) {
 
         d3.selectAll('g.clusteredhorizontalbar')
@@ -693,7 +703,7 @@ function clusteredhorizontalbar() {
 
         cluster.exit()
             .transition()
-            .duration(1000)
+            .duration(COMMON.DURATION)
             .attr('height', 0)
             .attr('y', plotHeight)
             .remove();
@@ -771,12 +781,12 @@ function clusteredhorizontalbar() {
 
         plot.select('.x_axis')
             .transition()
-            .duration(1000)
+            .duration(COMMON.DURATION)
             .call(d3.axisBottom(y));
 
         plot.select('.y_axis')
             .transition()
-            .duration(1000)
+            .duration(COMMON.DURATION)
             .call(d3.axisLeft(x0).ticks(null, "s"));
 
         UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);
@@ -922,66 +932,42 @@ function clusteredhorizontalbar() {
     }
 
     chart.showValues = function (value, measure) {
-        _baseAccessor.call(_showValues, value, measure)
+        return UTIL.baseAccessor.call(_showValues, value, measure, _measure);
     }
 
     chart.displayNameForMeasure = function (value, measure) {
-        _baseAccessor.call(_displayNameForMeasure, value, measure)
+        return UTIL.baseAccessor.call(_displayNameForMeasure, value, measure, _measure);
     }
 
     chart.fontStyle = function (value, measure) {
-        _baseAccessor.call(_fontStyle, value, measure)
+        return UTIL.baseAccessor.call(_fontStyle, value, measure, _measure);
     }
 
     chart.fontWeight = function (value, measure) {
-        _baseAccessor.call(_fontWeight, value, measure)
+        return UTIL.baseAccessor.call(_fontWeight, value, measure, _measure);
     }
 
     chart.numberFormat = function (value, measure) {
-        _baseAccessor.call(_numberFormat, value, measure)
+        return UTIL.baseAccessor.call(_numberFormat, value, measure, _measure);
     }
 
     chart.textColor = function (value, measure) {
-        _baseAccessor.call(_textColor, value, measure)
+        return UTIL.baseAccessor.call(_textColor, value, measure, _measure);
     }
 
     chart.displayColor = function (value, measure) {
-        _baseAccessor.call(_displayColor, value, measure)
+        return UTIL.baseAccessor.call(_displayColor, value, measure, _measure);
     }
 
     chart.borderColor = function (value, measure) {
-        _baseAccessor.call(_borderColor, value, measure)
+        return UTIL.baseAccessor.call(_borderColor, value, measure, _measure);
     }
 
     chart.fontSize = function (value, measure) {
-        _baseAccessor.call(_fontSize, value, measure)
+        return UTIL.baseAccessor.call(_fontSize, value, measure, _measure);
     }
 
-    var _baseAccessor = function (value, measure) {
-        var me = this;
-
-        if (!arguments.length) {
-            return me;
-        }
-
-        if (value instanceof Array && measure == void 0) {
-            me.splice(0, me.length);
-            me.push.apply(me, value);
-            return chart;
-        }
-
-        var index = _measure.indexOf(measure);
-
-        if (index === -1) {
-            throw new Error('Invalid measure provided');
-        }
-
-        if (value == void 0) {
-            return me[index];
-        } else {
-            me[index] = value;
-        }
-        return chart;
-    }
     return chart;
 }
+
+module.exports = clusteredverticalbar;

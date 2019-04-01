@@ -1,5 +1,6 @@
 // Load the required JS files
 var clusteredverticalbar = require('./charts/clusteredverticalbar.js');
+var clusteredhorizontalbar = require('./charts/clusteredhorizontalbar.js');
 var combo = require('./charts/combo.js');
 var donut = require('./charts/donut.js');
 var heatmap = require('./charts/heatmap.js');
@@ -19,6 +20,7 @@ require('../styles/stylesheets/screen.css');
 
 module.exports = {
 	clusteredverticalbar: clusteredverticalbar,
+	clusteredhorizontalbar:clusteredhorizontalbar,
 	combo: combo,
 	donut: donut,
 	heatmap: heatmap,

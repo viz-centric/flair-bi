@@ -1,0 +1,88 @@
+<html>
+
+<head>
+    <title>Pie</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <link rel="stylesheet" href="css/d3viz.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script src="script/bootstrap.min.js"></script>
+
+    <script src="d3-lasso.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="legend_barcharts.js"></script>
+
+    <script src="boxplot.js"></script>
+    <script src="d3-libs/box.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <div id="header" style="position: relative; border: 1px solid #999; width: 800">
+            <div class="row">
+                <div class="col-md-10">
+                    <p>Clustered Vertical Bar Charts </p>
+                </div>
+                <div class="col-md-2">
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox myonoffswitch"
+                            id="myonoffswitch" checked>
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="clusteredverticalbar" style="position: relative; border: 1px solid #999; width: 800;height: 600;"
+            height="540">
+            <svg id="donut" />
+            <div id="tooltip"></div>
+
+            <div class="confirm" style="visibility: hidden;">
+                <button class="btn btn-filters btn-primary">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button class="btn btn-filters btn-default">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+        LEGEND = legend();
+        var config = {
+            dimension: ['country'],
+            measure: ['low', '1Q', 'median', '3Q', 'high'],
+            "showXaxis": true,
+            "showYaxis": true,
+            "axisColor": true,
+            "showLabels": false,
+            "labelColor": "Dimension 1",
+            "numberFormat": [true, true, true, true, true],
+            "displayColor": ["#efefef", "#909090", "#ababab", "#eeaaee", "#121545"]
+        };
+        var chart = boxplot()
+            .config(config)
+            .tooltip(true);
+           
+        d3.csv('dataForBoxplot.csv', function (data) {
+            d3.select('#donut')
+                .datum(data)
+                .call(chart);
+        });
+    </script>
+</body>
+
+</html>

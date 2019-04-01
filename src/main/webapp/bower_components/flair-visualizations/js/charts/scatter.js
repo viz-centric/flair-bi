@@ -297,7 +297,7 @@ function scatter() {
             })]).nice();
 
             if (_tooltip) {
-                tooltip = d3.select(this.parentNode).select('#tooltip');
+                tooltip = d3.select(this.parentNode).select('.tooltip');
             }
 
             plot.append("g")

@@ -32,7 +32,7 @@ public class GrpcConfig {
 
             final NettyChannelBuilder nettyChannelBuilder =
                 NettyChannelBuilder
-                    .forAddress(instanceInfo.getIPAddr(),
+                    .forAddress("localhost",
                         instanceInfo.getPort());
 
             log.info("GRPC Hostname: {}", instanceInfo.getHostName());

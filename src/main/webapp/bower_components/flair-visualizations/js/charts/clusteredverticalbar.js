@@ -1,605 +1,607 @@
 var COMMON = require('../extras/common.js')(),
     UTIL = require('../extras/util.js')(),
-    LEGEND = require('../extras/legend.js')();
+    LEGEND = require('../extras/legend_barcharts.js')();
 
 function clusteredverticalbar() {
 
-    /* These are the constant global variable for the function clusteredverticalbar.
-     */
     var _NAME = 'clusteredverticalbar';
-
-    /* These are the private variables that is initialized by the arguments sent
-     * by the users and can be updated using public methods.
-     */
 
     var _config,
         _dimension,
         _measure,
-        _xAxis,
-        _yAxis,
+        _showLegend,
+        _legendPosition,
+        _sort,
+        _tooltip,
+        _showXaxis,
+        _showYaxis,
+        _showXaxisLabel,
+        _showYaxisLabel,
         _xAxisColor,
         _yAxisColor,
-        _xAxisLabel,
-        _yAxisLabel,
-        _legend,
-        _legendPosition,
-        _grid,
-        _dimensionDisplayName,
-        _measureShowValue = [],
-        _measureDisplayName = [],
-        _measureFontStyle = [],
-        _measureFontWeight = [],
-        _measureFontSize = [],
-        _measureNumberFormat = [],
-        _measureTextColor = [],
-        _measureDisplayColor = [],
-        _measureBorderColor = [],
-        _tooltip;
+        _showGrid,
+        _stacked,
+        _displayName,
+        _legendData,
+        _showValues = [],
+        _displayNameForMeasure = [],
+        _fontStyle = [],
+        _fontWeight = [],
+        _numberFormat = [],
+        _textColor = [],
+        _displayColor = [],
+        _borderColor = [],
+        _fontSize = [];
 
-    /* These are the common variables that is shared across the different private/public 
-     * methods but is initialized/updated within the methods itself.
-     */
-    var _localSVG,
-        _localTotal = [],
-        _localXAxis,
-        _localYAxis,
-        _localXGrid,
-        _localYGrid,
-        _localData,
-        _localXLabels = [],
-        _localMin = 0,
-        _localMax = 0,
-        _localLegend,
-        _localTooltip;
-        // _localLabelStack;
+    var _local_svg, _Local_data, _originalData, _localLabelStack = [], legendBreakCount = 1;
 
-    /* These are the common private functions that is shared across the different private/public 
-     * methods but is initialized beforehand.
-     */
-    var _xDimension = d3.scaleBand(),
-        _xDimensionGrid = d3.scaleLinear(),
-        _xMeasure = d3.scaleBand(),
-        _y = d3.scaleLinear();
+    var parentWidth, parentHeight, plotWidth, plotHeight;
 
-    /* -------------------------------------------------------------------------------- */
-    var _setConfigParams = function(config) {
+    var x0, x1, y;
+    var margin = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 45
+    };
+
+    var tickLength = d3.scaleLinear()
+        .domain([22, 34])
+        .range([4, 6]);
+
+    var legendSpace = 20, axisLabelSpace = 20, offsetX = 16, offsetY = 3, div;
+
+    var threshold = [];
+    var filter = false, filterData = [];
+
+    var _setConfigParams = function (config) {
         this.dimension(config.dimension);
         this.measure(config.measure);
-        this.xAxis(config.xAxis);
-        this.yAxis(config.yAxis);
+
+        this.showLegend(config.showLegend);
+        this.legendPosition(config.legendPosition);
+
+        this.showXaxis(config.showXaxis);
+        this.showYaxis(config.showYaxis);
+        this.showXaxisLabel(config.showXaxisLabel);
+        this.showYaxisLabel(config.showYaxisLabel);
         this.xAxisColor(config.xAxisColor);
         this.yAxisColor(config.yAxisColor);
-        this.xAxisLabel(config.xAxisLabel);
-        this.yAxisLabel(config.yAxisLabel);
-        this.legend(config.legend);
-        this.legendPosition(config.legendPosition);
-        this.grid(config.grid);
-        this.dimensionDisplayName(config.dimensionDisplayName);
-        this.measureShowValue(config.measureShowValue);
-        this.measureDisplayName(config.measureDisplayName);
-        this.measureFontStyle(config.measureFontStyle);
-        this.measureFontWeight(config.measureFontWeight);
-        this.measureFontSize(config.measureFontSize);
-        this.measureNumberFormat(config.measureNumberFormat);
-        this.measureTextColor(config.measureTextColor);
-        this.measureDisplayColor(config.measureDisplayColor);
-        this.measureBorderColor(config.measureBorderColor);
-        this.tooltip(config.tooltip);
+        this.displayName(config.displayName);
+        this.showYaxis(config.showYaxis);
+        this.showXaxisLabel(config.showXaxisLabel);
+        this.showValues(config.showValues);
+        this.displayNameForMeasure(config.displayNameForMeasure);
+        this.fontStyle(config.fontStyle);
+        this.fontWeight(config.fontWeight);
+        this.numberFormat(config.numberFormat);
+        this.textColor(config.textColor);
+        this.displayColor(config.displayColor);
+        this.borderColor(config.borderColor);
+        this.fontSize(config.fontSize);
+        this.legendData(config.displayColor, config.measure);
     }
 
-    var _setAxisColor = function(axis, color) {
-        var path = axis.select('path'),
-            ticks = axis.selectAll('.tick');
-
-        path.style('stroke', color);
-
-        ticks.select('line')
-            .style('stroke', color);
-
-        ticks.select('text')
-            .style('fill', color);
-    }
-
-    /* Builds the html data for the tooltip
-     *
-     * @param {object} datum Datum forming the bar
-     * @param {function} chart Clustered Vertical Bar chart function
-     * @return {string} String encoded HTML data
-     */
-    var _buildTooltipData = function(datum, chart) {
+    var _buildTooltipData = function (datum, chart) {
         var output = "";
 
         output += "<table><tr>"
-            + "<th>" + (_dimensionDisplayName || _dimension[0]) + ": </th>"
-            + "<td>" + datum[_dimension[0]] + "</td>"
+            + "<th>" + chart.dimension() + ": </th>"
+            + "<td>" + datum[chart.dimension()] + "</td>"
             + "</tr><tr>"
-            + "<th>" + (_measureDisplayName[_measure.indexOf(datum['measure'])] || datum['measure']) + ": </th>"
-            + "<td>" + datum[datum['measure']] + "</td>"
+            + "<th>" + datum["measure"] + ": </th>"
+            + "<td>" + datum[datum["measure"]] + "</td>"
             + "</tr></table>";
 
         return output;
     }
 
-    var _handleMouseOverFn = function(tooltip, container) {
-        var me = this;
+    var onLassoStart = function (lasso, chart) {
+        return function () {
+            if (filter) {
+                lasso.items().selectAll('rect')
+                    .classed('not_possible', true)
+                    .classed('selected', false);
+            }
+        }
+    }
 
-        return function(d, i) {
-            d3.select(this).style('cursor', 'pointer');
+    var onLassoDraw = function (lasso, chart) {
+        return function () {
+            filter = true;
+            lasso.items().selectAll('rect')
+                .classed('selected', false);
 
-            var barGroup = container.selectAll('g.bar')
-                .filter(function(d1) {
-                    return (d1[_dimension[0]] === d[_dimension[0]]) && (d1['measure'] === d['measure']);
+            lasso.possibleItems().selectAll('rect')
+                .classed('not_possible', false)
+                .classed('possible', true);
+
+            lasso.notPossibleItems().selectAll('rect')
+                .classed('not_possible', true)
+                .classed('possible', false);
+        }
+    }
+
+    var onLassoEnd = function (lasso, chart) {
+        return function () {
+            var data = lasso.selectedItems().data();
+            if (!filter) {
+                return;
+            }
+            if (data.length > 0) {
+                lasso.items().selectAll('rect')
+                    .classed('not_possible', false)
+                    .classed('possible', false);
+            }
+
+            lasso.selectedItems().selectAll('rect')
+                .classed('selected', true)
+
+            lasso.notSelectedItems().selectAll('rect');
+
+            var confirm = d3.select('.confirm')
+                .style('visibility', 'visible');
+
+            var _filter = [];
+            if (data.length > 0) {
+                var keys = UTIL.getMeasureList(data[0], _dimension);
+                data.forEach(function (d) {
+                    var obj = new Object();
+                    obj[_dimension[0]] = d[_dimension[0]];
+                    for (var index = 0; index < keys.length; index++) {
+                        obj[keys[index]] = d[keys[index]];
+                    }
+
+                    _filter.push(obj)
                 });
+            }
 
-            barGroup.select('rect:not(.bar-rect-mask)')
-                .style('fill', COMMON.HIGHLIGHTER)
-                .style('stroke', COMMON.HIGHLIGHTER);
+            if (_filter.length > 0) {
+                filterData = _filter;
+            }
+        }
+    }
 
-            barGroup.select('rect.bar-rect-mask')
-                .attr('visibility', 'visible');
-
-            if(tooltip) {
+    var applyFilter = function (chart) {
+        return function () {
+            if (filterData.length > 0) {
+                chart.update(filterData);
+            }
+        }
+    }
+    var clearFilter = function () {
+        return function () {
+            chart.update(_originalData);
+        }
+    }
+    var _handleMouseOverFn = function (tooltip, container) {
+        var me = this;
+        return function (d, i) {
+            d3.select(this).style('cursor', 'pointer')
+                .style('cursor', 'pointer')
+                .style('fill', COMMON.HIGHLIGHTER);
+            var border = UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor)
+            if (tooltip) {
                 UTIL.showTooltip(tooltip);
-                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container);
+                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container, border);
             }
         }
     }
 
-    var _handleMouseMoveFn = function(tooltip, container) {
+    var _handleMouseMoveFn = function (tooltip, container) {
         var me = this;
 
-        return function(d, i) {
-            if(tooltip) {
-                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container);
+        return function (d, i) {
+            if (tooltip) {
+                var border = UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor)
+                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me, border), container, border);
             }
         }
     }
 
-    var _handleMouseOutFn = function(tooltip, container) {
+    var _handleMouseOutFn = function (tooltip, container) {
         var me = this;
 
-        return function(d, i) {
-            d3.select(this).style('cursor', 'default');
-
-            var barGroup = container.selectAll('g.bar')
-                .filter(function(d1) {
-                    return (d1[_dimension[0]] === d[_dimension[0]]) && (d1['measure'] === d['measure']);
-                });
-
-            barGroup.select('rect:not(.bar-rect-mask)')
-                .style('fill', function(d1, i1) {
-                    if(typeof _measureDisplayColor[i1] == 'undefined' || _measureDisplayColor[i1].trim() == '') {
-                        return COMMON.COLORSCALE(d1['measure']);
-                    }
-                    return _measureDisplayColor[i1];
+        return function (d, i) {
+            d3.select(this).style('cursor', 'default')
+                .style('fill', function (d1, i) {
+                    return UTIL.getDisplayColor(_measure.indexOf(d1.measure), _displayColor);
                 })
-                .style('stroke', function(d1, i1) {
-                    if(typeof _measureBorderColor[i1] == 'undefined' || _measureBorderColor[i1].trim() == '') {
-                        return COMMON.COLORSCALE(d1['measure']);
-                    }
-                    return _measureBorderColor[i1];
+                .style('stroke', function (d1, i) {
+                    return UTIL.getBorderColor(_measure.indexOf(d1.measure), _borderColor);
                 });
 
-            barGroup.select('rect.bar-rect-mask')
-                .attr('visibility', 'hidden');
-            
-            if(tooltip) {
+            if (tooltip) {
                 UTIL.hideTooltip(tooltip);
             }
         }
     }
 
-    var _legendMouseOver = function(data) {
-        d3.selectAll('g.arc')
-            .filter(function(d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('fill', COMMON.HIGHLIGHTER);
-
-        d3.selectAll('g.arc-mask')
-            .filter(function(d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('visibility', 'visible');
-    }
-
-    var _legendMouseMove = function(data) {
-
-    }
-
-    var _legendMouseOut = function(data) {
-        d3.selectAll('g.arc')
-            .filter(function(d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('fill', function(d, i) {
-                return COMMON.COLORSCALE(d.data[_dimension[0]]);
-            });
-
-        d3.selectAll('g.arc-mask')
-            .filter(function(d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('visibility', 'hidden');
-    }
-
-    var _legendClick = function(data) {
-        if(_localLabelStack.indexOf(data[_dimension[0]]) < 0) {
-            _localLabelStack.push(data[_dimension[0]]);
-        } else {
-            _localLabelStack.splice(_localLabelStack.indexOf(data[_dimension[0]]), 1);
-        }
-
-        chart.update(_localData);
-    }
-
     function chart(selection) {
-        _localSVG = selection;
+        _local_svg = selection;
 
-        selection.each(function(data) {
-            var svg = d3.select(this),
-                width = +svg.attr('width'),
-                height = +svg.attr('height'),
-                parentWidth = width - 2 * COMMON.PADDING,
-                parentHeight = height - 2 * COMMON.PADDING;
+        selection.each(function (data) {
+            _originalData = data;
+            div = d3.select(this).node().parentNode;
 
-            /* store the data in local variable */
-            _localData = data;
+            _local_svg = d3.select(this);
+            var width = div.clientWidth,
+                height = div.clientHeight;
 
-            /* total sum of the measure values */
-            _localTotal = _measure.map(function(m) {
-                return {
-                    measure: m,
-                    positiveTotal: d3.sum(data.map(function(d) { return (d[m] >= 0) ? d[m] : 0; })),
-                    negativeTotal: d3.sum(data.map(function(d) { return (d[m] < 0) ? Math.abs(d[m]) : 0; }))
-                }
-            });
+            parentWidth = width - 2 * COMMON.PADDING - margin.left;
+            parentHeight = (height - 2 * COMMON.PADDING - axisLabelSpace * 2);
 
-            /* applying sort operation to the data */
-            // UTIL.sorter(data, _measure, _sort);
-
-            var container = svg.append('g')
-                .classed('container', true)
+            container = _local_svg.append('g')
                 .attr('transform', 'translate(' + COMMON.PADDING + ', ' + COMMON.PADDING + ')');
 
+            _local_svg.attr('width', width)
+                .attr('height', height)
+
+            d3.select(div).append('div')
+                .attr('class', 'sort_selection');
+
+            d3.select(div).append('div')
+                .attr('class', 'arrow-down');
+
+            var str = UTIL.createAlert($(div).attr('id'), _measure);
+            $(div).append(str);
+
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
+
+            $(document).on('click', '_local_svg', function (e) {
+                if ($("#myonoffswitch").prop('checked') == false) {
+                    var element = e.target
+                    if (element.tagName == "_local_svg") {
+                        $('#Modal_' + $(div).attr('id') + ' .measure').val('')
+                        $('#Modal_' + $(div).attr('id') + ' .threshold').val('')
+                        $('#Modal_' + $(div).attr('id') + ' .measure').attr('disabled', false)
+                        $('#Modal_' + $(div).attr('id')).modal('toggle');
+                    }
+                }
+            })
+
+            $(document).on('click', '#Modal_' + $(div).attr('id') + ' .ThresholdSubmit', function (e) {
+                var newValue = $('#Modal_' + $(div).attr('id') + ' .threshold').val();
+                var obj = new Object()
+                obj.measure = $('#Modal_' + $(div).attr('id') + ' .measure').val()
+                obj.threshold = newValue;
+                threshold.push(obj);
+                $('#Modal_' + $(div).attr('id')).modal('toggle');
+            })
+
             var legendWidth = 0,
-                legendHeight = 0,
-                plotWidth = parentWidth - (_yAxis ? COMMON.AXIS_THICKNESS : 0),
-                plotHeight = parentHeight - (_xAxis ? (COMMON.AXIS_THICKNESS / 1.5) : 0);
+                legendHeight = 0;
 
-            if(_legend) {
-                _localLegend = LEGEND.bind(chart);
+            plotWidth = parentWidth;
+            plotHeight = parentHeight;
 
-                var result = _localLegend(_measure, container, {
+            if (_showLegend) {
+                var clusteredverticalbarLegend = LEGEND.bind(chart);
+
+                var result = clusteredverticalbarLegend(_legendData, container, {
                     width: parentWidth,
-                    height: parentHeight
+                    height: parentHeight,
+                    legendBreakCount: legendBreakCount
                 });
 
                 legendWidth = result.legendWidth;
                 legendHeight = result.legendHeight;
+                legendBreakCount = result.legendBreakCount;
 
-                switch(_legendPosition) {
+                switch (_legendPosition) {
                     case 'top':
+                        plotHeight = parentHeight - legendHeight - axisLabelSpace;
+                        break;
                     case 'bottom':
-                        plotHeight = plotHeight - legendHeight - (_xAxis ? (COMMON.AXIS_THICKNESS / 1.5) : 0);
+                        plotHeight = parentHeight - legendHeight - axisLabelSpace * 2;
                         break;
                     case 'right':
-                        plotWidth = plotWidth - legendWidth - (COMMON.AXIS_THICKNESS / 2)
-                        break;
                     case 'left':
-                        plotWidth = plotWidth - legendWidth;
+                        plotWidth = parentWidth - legendWidth;
                         break;
                 }
-            }
 
-            if(_tooltip) {
-                _localTooltip = d3.select(this.parentNode).select('#tooltip');
-            }
+                if ((_legendPosition == 'top') || (_legendPosition == 'bottom')) {
+                    plotWidth = parentWidth;
+                    plotHeight = parentHeight - 3 * axisLabelSpace;
+                    legendSpace = 20;
+                } else if ((_legendPosition == 'left') || (_legendPosition == 'right')) {
+                    var legend = _local_svg.selectAll('.item');
+                    legendSpace = legend.node().parentNode.getBBox().width;
+                    plotWidth = (parentWidth - legendSpace) - margin.left + axisLabelSpace;
+                    plotHeight = parentHeight;
 
-            /* Label values for the dimension */
-            _localXLabels = data.map(function(d) {
-                return d[_dimension[0]];
-            });
+                    legend.attr('transform', function (d, i) {
+                        if (_legendPosition == 'left') {
+                            return 'translate(0, ' + i * 20 + ')';
 
-            /* Minimum and Maximum value of the measures */
-            _measure.forEach(function(m) {
-                var temp = d3.min(data, function(d) { return d[m]; });
-                _localMin = _localMin > temp ? temp : _localMin;
-
-                temp = d3.max(data, function(d) { return d[m]; });
-                _localMax = _localMax < temp ? temp : _localMax;
-            });
-            
-            _xDimension.domain(_localXLabels)
-                .rangeRound([0, plotWidth])
-                .padding([0]);
-
-            _xDimensionGrid.domain([0, _localXLabels.length])
-                .range([0, plotWidth]);
-
-            _xMeasure.domain(_measure)
-                .rangeRound([0, _xDimension.bandwidth()])
-                .padding([0.2]);
-
-            _y.domain([_localMin, _localMax])
-                .range([plotHeight, 0])
-                .nice();
-
-            var plot = container.append('g')
-                .attr('id', 'clusteredverticalbar-plot')
-                .attr('transform', function() {
-                    var translate = [0, 0];
-
-                    switch(_legendPosition) {
-                        case 'top':
-                            translate = [COMMON.AXIS_THICKNESS, (legendHeight + (_xAxis ? COMMON.AXIS_THICKNESS : 0) / 1.5)];
-                            break;
-                        case 'bottom':
-                        case 'right':
-                            translate = [(_yAxis ? COMMON.AXIS_THICKNESS : 0), 0];
-                            break;
-                        case 'left':
-                            translate = [(legendWidth + (_yAxis ? COMMON.AXIS_THICKNESS : 0)), 0]
-                    }
-
-                    return 'translate(' + translate.toString() + ')';
-                });
-
-            /* Axes Grid */
-            _localXGrid = d3.axisBottom()
-                .ticks(_localXLabels.length)
-                .tickFormat('')
-                .tickSize(-plotHeight);
-
-            _localYGrid = d3.axisLeft()
-                .tickFormat('')
-                .tickSize(-plotWidth);
-        
-            _localXGrid.scale(_xDimensionGrid);
-            _localYGrid.scale(_y);
-
-            plot.append('g')
-                .attr('class', 'x grid')
-                .attr('visibility', function() {
-                    return _grid ? 'visible' : 'hidden';
-                })
-                .attr('transform', 'translate(0, ' + plotHeight + ')')
-                .call(_localXGrid);
-
-            plot.append('g')
-                .attr('class', 'y grid')
-                .attr('visibility', function() {
-                    return _grid ? 'visible' : 'hidden';
-                })
-                .call(_localYGrid);
-
-            var clusterGroup = plot.append('g')
-                .attr('id', 'cluster-group')
-                .selectAll('.cluster')
-                .data(data)
-                .enter().append('g')
-                    .attr('id', function(d, i) {
-                        return 'cluster-group-' + i;
-                    })
-                    .classed('cluster', true)
-                    .attr('transform', function(d) {
-                        return 'translate(' + _xDimension(d[_dimension[0]]) + ', 0)';
+                        }
+                        else if (_legendPosition == 'right') {
+                            return 'translate(' + (parentWidth - legendSpace + axisLabelSpace) + ', ' + i * 20 + ')';
+                        }
                     });
-
-            var barGroup = clusterGroup.selectAll('.bar')
-                .data(function(d) {
-                    return _measure.map(function(m) {
-                        var obj = {};
-                        obj[_dimension[0]] = d[_dimension[0]];
-                        obj[m] = d[m];
-                        obj['measure'] = m;
-                        return obj;
-                    });
-                })
-                .enter().append('g')
-                    .attr('id', function(d, i) {
-                        return 'bar-group-' + i;
-                    })
-                    .classed('bar', true);
-
-            var rect = barGroup.append('rect')
-                .attr('width', _xMeasure.bandwidth())
-                .attr('height', 0)
-                .attr('x', function(d, i) {
-                    return _xMeasure(d['measure']);
-                })
-                .attr('y', function(d, i) {
-                    return plotHeight;
-                })
-                .style('fill', function(d, i) {
-                    if(typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                        return COMMON.COLORSCALE(d['measure']);
-                    }
-                    return _measureDisplayColor[i];
-                })
-                .style('stroke', function(d, i) {
-                    if(typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                        return COMMON.COLORSCALE(d['measure']);
-                    }
-                    return _measureBorderColor[i];
-                })
-                .style('stroke-width', 1)
-                .on('mouseover', _handleMouseOverFn.call(chart, _localTooltip, svg))
-                .on('mousemove', _handleMouseMoveFn.call(chart, _localTooltip, svg))
-                .on('mouseout', _handleMouseOutFn.call(chart, _localTooltip, svg))
-                .on('click', function(d, i) {
-                    
-                });
-
-            rect.transition()
-                .duration(COMMON.DURATION)
-                .attr('height', function(d, i) {
-                    return plotHeight - _y(d[d['measure']]);
-                })
-                .attr('y', function(d, i) {
-                    return _y(d[d['measure']]);
-                });
-
-            var rectMask = barGroup.append('rect')
-                .classed('bar-rect-mask', true)
-                .attr('width', _xMeasure.bandwidth())
-                .attr('height', 1)
-                .attr('x', function(d, i) {
-                    return _xMeasure(d['measure']);
-                })
-                .attr('y', function(d, i) {
-                    return plotHeight;
-                })
-                .attr('visibility', 'hidden')
-                .style('fill', function(d, i) {
-                    if(typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                        return COMMON.COLORSCALE(d['measure']);
-                    }
-                    return _measureDisplayColor[i];
-                })
-                .style('stroke', function(d, i) {
-                    if(typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                        return COMMON.COLORSCALE(d['measure']);
-                    }
-                    return _measureBorderColor[i];
-                })
-                .style('stroke-width', 1);
-
-            rectMask.transition()
-                .duration(COMMON.DURATION)
-                .attr('y', function(d, i) {
-                    return _y(d[d['measure']]) - (COMMON.OFFSET / 3);
-                });
-
-            var text = barGroup.append('text')
-                .attr('x', function(d, i) {
-                    return _xMeasure(d['measure']) + (_xMeasure.bandwidth() / 2);
-                })
-                .attr('y', function(d, i) {
-                    return plotHeight;
-                })
-                .attr('dy', function(d, i) {
-                    return COMMON.OFFSET;
-                })
-                .attr('opacity', 0)
-                .attr('visibility', function(d, i) {
-                    return _measureShowValue[i] ? "visible" : "hidden";
-                })
-                .style('font-style', function(d, i) {
-                    return _measureFontStyle[i] || COMMON.DEFAULT_FONTSTYLE;
-                })
-                .style('font-weight', function(d, i) {
-                    return _measureFontWeight[i] || COMMON.DEFAULT_FONTWEIGHT;
-                })
-                .style('font-size', function(d, i) {
-                    return _measureFontSize[i] || COMMON.DEFAULT_FONTSIZE;
-                })
-                .style('fill', function(d, i) {
-                    if(typeof _measureTextColor[i] == 'undefined' || _measureTextColor[i].trim() == '') {
-                        return COMMON.DEFAULT_COLOR;
-                    }
-                    return _measureTextColor[i];
-                })
-                .style('text-anchor', 'middle');
-
-            text.transition()
-                .duration(COMMON.DURATION)
-                .attr('opacity', 1)
-                .attr('y', function(d, i) {
-                    return _y(d[d['measure']]);
-                })
-                .text(function(d, i) {
-                    var formatter = UTIL.getNumberFormatterFn(_measureNumberFormat[i]),
-                        value = d[d['measure']],
-                        lt = _localTotal.filter(function(lt) {
-                            return lt['measure'] == d['measure'];
-                        })[0],
-                        positiveTotal = lt['positiveTotal'],
-                        negativeTotal = lt['negativeTotal'];
-
-                    if(_measureNumberFormat[i] == 'percent') {
-                        value = (value >= 0) ? (value / positiveTotal) : (value / negativeTotal);
-                    }
-
-                    return formatter(UTIL.roundNumber(value, 2)).toUpperCase();
-                });
-
-            /* Axes */
-            var xAxisGroup,
-                yAxisGroup;
-
-            if(_xAxis) {
-                _localXAxis = d3.axisBottom(_xDimension)
-                    .tickSize(0)
-                    .tickPadding(10);
-
-                xAxisGroup = plot.append('g')
-                    .attr('class', 'x axis')
-                    .attr('visibility', function() {
-                        return 'visible';
-                    })
-                    .attr('transform', 'translate(0, ' + plotHeight + ')')
-                    .call(_localXAxis);
-
-                xAxisGroup.append('g')
-                    .attr('class', 'label')
-                    .attr('transform', function() {
-                        return 'translate(' + (plotWidth) + ', ' + (COMMON.AXIS_THICKNESS / 1.5) + ')';
-                    })
-                    .append('text')
-                        .style('text-anchor', 'end')
-                        .style('font-weight', 'bold')
-                        .style('fill', _xAxisColor)
-                        .text(_xAxisLabel);
-
-                _setAxisColor(xAxisGroup, _xAxisColor);
+                }
+            }
+            else {
+                legendSpace = 0;
+                plotWidth = parentWidth;
+                plotHeight = parentHeight;
             }
 
-            if(_yAxis) {
-                _localYAxis = d3.axisLeft(_y)
-                    .tickSize(0)
-                    .tickPadding(8)
-                    .tickFormat(function(d) {
-                        return UTIL.shortScale(2)(d);
-                    });
-
-                yAxisGroup = plot.append('g')
-                    .attr('class', 'y axis')
-                    .attr('visibility', function() {
-                        return 'visible';
-                    })
-                    .call(_localYAxis);
-
-                yAxisGroup.append('g')
-                    .attr('class', 'label')
-                    .attr('transform', function() {
-                        return 'translate(' + (-COMMON.AXIS_THICKNESS / 1.15) + ', ' + '0)';
-                    })
-                    .append('text')
-                        .attr('transform', 'rotate(-90)')
-                        .style('text-anchor', 'end')
-                        .style('font-weight', 'bold')
-                        .style('fill', _yAxisColor)
-                        .text(_yAxisLabel);
-
-                _setAxisColor(yAxisGroup, _yAxisColor);
+            if (_tooltip) {
+                tooltip = d3.select(this.parentNode).select('#tooltip');
             }
+            drawPlot.call(this, data);
         });
+
     }
 
-    /**
-     * Private method that delegates legend interactions to respective controllers
-     *
-     * @param {object} event Mouseevent instance
-     * @param {object} datum Record of the data binded to the legend item
-     * @return {undefined}
-     */
-    chart._legendInteraction = function(event, data) {
-        switch(event) {
+    var drawPlot = function (data) {
+        var me = this;
+        _Local_data = data;
+        filterData = [];
+        var confirm = d3.select('.confirm')
+            .style('visibility', 'hidden');
+        x0 = d3.scaleBand()
+            .rangeRound([0, plotWidth])
+            .paddingInner(0.1)
+            .padding([0.1]);
+
+        x1 = d3.scaleBand()
+            .padding(0.2);
+
+        y = d3.scaleLinear()
+            .rangeRound([plotHeight, 0]);
+
+        var plot = container.append('g')
+            .attr('class', 'clusteredverticalbar-plot')
+            .classed('plot', true)
+            .attr('transform', function () {
+                if (_legendPosition == 'top') {
+                    return 'translate(' + margin.left + ', ' + parseInt(legendSpace * 2 + (20 * parseInt(legendBreakCount))) + ')';
+                } else if (_legendPosition == 'bottom') {
+                    return 'translate(' + margin.left + ', 0)';
+                } else if (_legendPosition == 'left') {
+                    return 'translate(' + (legendSpace + margin.left + axisLabelSpace) + ', 0)';
+                } else if (_legendPosition == 'right') {
+                    return 'translate(' + margin.left + ', 0)';
+                }
+            });
+
+        if (!_showLegend) {
+            _local_svg.select('.plot')
+                .attr('transform', function () {
+                    return 'translate(' + margin.left + ', ' + 0 + ')';
+                });
+        }
+
+        var keys = UTIL.getMeasureList(data[0], _dimension);
+
+        x0.domain(data.map(function (d) { return d[_dimension[0]]; }));
+        x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+        y.domain([0, d3.max(data, function (d) {
+            return d3.max(keys, function (key) {
+                return parseInt(d[key]);
+            });
+        })]).nice();
+
+        var cluster = plot.selectAll('.cluster')
+            .data(data)
+            .enter().append('g')
+            .attr('class', 'cluster')
+            .attr('transform', function (d) {
+                return 'translate(' + x0(d[_dimension[0]]) + ', 0)';
+            });
+
+        var labelStack = []
+        var clusteredverticalbar = cluster.selectAll('g.clusteredverticalbar')
+            .data(function (d) {
+                return keys.filter(function (m) {
+                    return labelStack.indexOf(m) == -1;
+                }).map(function (m) {
+                    var obj = {};
+                    obj[_dimension[0]] = d[_dimension[0]];
+                    obj[m] = d[m];
+                    obj['dimension'] = _dimension[0];
+                    obj['measure'] = m;
+                    return obj;
+                });
+            })
+            .enter().append('g')
+            .attr('class', 'clusteredverticalbar');
+
+        var rect = drawViz(clusteredverticalbar);
+
+
+        var text = clusteredverticalbar.append('text')
+            .text(function (d, i) {
+                return UTIL.getFormattedValue(d[d.measure], UTIL.getValueNumberFormat(i, _numberFormat));
+            })
+            .attr("y", function (d, i) {
+                return y(d[d.measure]) - _fontSize[i];
+            })
+            .attr("x", function (d) {
+                return x1(d.measure);
+            })
+            .attr('dy', function (d, i) {
+                return -offsetX / 10;
+            })
+            .attr('dx', function (d, i) {
+                return x1.bandwidth() / 2;
+            })
+            .style('text-anchor', 'middle')
+            .attr('visibility', function (d, i) {
+                return UTIL.getVisibility(_showValues[i]);
+            })
+            .style('font-style', function (d, i) {
+                return _fontStyle[i];
+            })
+            .style('font-weight', function (d, i) {
+                return _fontWeight[i];
+            })
+            .style('font-size', function (d, i) {
+                return _fontSize[i] + 'px';
+            })
+            .style('fill', function (d, i) {
+                return _textColor[i];
+            })
+            .text(function (d, i) {
+                var barWidth = (1 - x0.padding()) * plotWidth / (data.length - 1);
+                barWidth = (1 - x1.padding()) * barWidth / keys.length;
+                return UTIL.getTruncatedTick(d3.select(this).text(), barWidth, tickLength);
+            });
+
+        plot.append("g")
+            .attr("class", "x_axis")
+            .attr("transform", "translate(0," + plotHeight + ")")
+            .call(d3.axisBottom(x0))
+            .append("text")
+            .attr("x", plotWidth / 2)
+            .attr("y", 2 * axisLabelSpace)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .style('text-anchor', 'middle')
+            .style('visibility', UTIL.getVisibility(_showXaxisLabel))
+            .text(function () {
+                return _displayName;
+            });
+
+        plot.append("g")
+            .attr("class", "y_axis")
+            .call(d3.axisLeft(y).ticks(null, "s"))
+            .append("text")
+            .attr("x", plotHeight / 2)
+            .attr("y", 2 * axisLabelSpace)
+            .attr("transform", function (d) { return "rotate(" + 90 + ")"; })
+            .attr("dy", "0.32em")
+            .style('visibility', UTIL.getVisibility(_showYaxisLabel))
+            .attr("font-weight", "bold")
+            .style('text-anchor', 'middle')
+            .text(function () {
+                return _displayNameForMeasure.map(function (p) { return p; }).join(', ');
+            });
+
+        _local_svg.select('g.sort').remove();
+        UTIL.sortingView(container, parentHeight, parentWidth + margin.left, legendBreakCount, axisLabelSpace, offsetX);
+
+        _local_svg.select('g.sort').selectAll('text')
+            .on('click', function () {
+                var order = d3.select(this).attr('class')
+                switch (order) {
+                    case 'ascending':
+                        UTIL.toggleSortSelection(me, 'ascending', drawPlot, _local_svg, keys, _Local_data);
+                        break;
+                    case 'descending':
+                        UTIL.toggleSortSelection(me, 'descending', drawPlot, _local_svg, keys, _Local_data);
+                        break;
+                    case 'reset': {
+                        _local_svg.select(me.parentElement).select('.plot').remove();
+                        drawPlot.call(me, _Local_data);
+                        break;
+                    }
+                }
+            });
+
+        d3.select(div).select('.filterData')
+            .on('click', applyFilter(chart));
+
+        d3.select(div).select('.removeFilter')
+            .on('click', clearFilter());
+
+        _local_svg.select('g.lasso').remove();
+
+        var lasso = d3.lasso()
+            .hoverSelect(true)
+            .closePathSelect(true)
+            .closePathDistance(100)
+            .items(cluster)
+            .targetArea(_local_svg);
+
+        lasso.on('start', onLassoStart(lasso, chart))
+            .on('draw', onLassoDraw(lasso, chart))
+            .on('end', onLassoEnd(lasso, chart));
+
+        _local_svg.call(lasso);
+
+        UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis, _showYaxis, _showXaxis);
+    }
+
+    var drawViz = function (element) {
+        var me = this;
+
+        element.append('rect')
+            .attr("x", function (d) {
+                return x1(d.measure);
+            })
+            .attr("y", function (d) {
+                return y(d[d.measure]);
+            })
+            .attr('class', 'bar')
+            .attr("width", x1.bandwidth())
+            .attr("height", function (d) {
+                return 0;
+            })
+            .style('fill', function (d, i) {
+                return UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor);
+            })
+            .style('stroke', function (d, i) {
+                return UTIL.getBorderColor(_measure.indexOf(d.measure), _borderColor);
+            })
+            .style('stroke-width', 2)
+            .on('mouseover', _handleMouseOverFn.call(chart, tooltip, _local_svg))
+            .on('mousemove', _handleMouseMoveFn.call(chart, tooltip, _local_svg))
+            .on('mouseout', _handleMouseOutFn.call(chart, tooltip, _local_svg))
+            .on('click', function (d) {
+                if ($("#myonoffswitch").prop('checked') == false) {
+                    $('#Modal_' + $(div).attr('id') + ' .measure').val(d.measure);
+                    $('#Modal_' + $(div).attr('id') + ' .threshold').val('');
+                    $('#Modal_' + $(div).attr('id') + ' .measure').attr('disabled', true);;
+                    $('#Modal_' + $(div).attr('id')).modal('toggle');
+                }
+                else {
+                    var confirm = d3.select('.confirm')
+                        .style('visibility', 'visible');
+                    var _filter = _Local_data.filter(function (d1) {
+                        return d[_dimension[0]] === d1[_dimension[0]]
+                    })
+                    var rect = d3.select(this);
+                    if (rect.classed('selected')) {
+                        rect.classed('selected', false);
+                        filterData.map(function (val, i) {
+                            if (val[_dimension[0]] == d[_dimension[0]]) {
+                                filterData.splice(i, 1)
+                            }
+                        })
+                    } else {
+                        rect.classed('selected', true);
+                        var isExist = filterData.filter(function (val) {
+                            if (val[_dimension[0]] == d[_dimension[0]]) {
+                                return val
+                            }
+                        })
+                        if (isExist.length == 0) {
+                            filterData.push(_filter[0]);
+                        }
+                    }
+                }
+            })
+            .transition()
+            .duration(COMMON.DURATION)
+            .attr("height", function (d, i) {
+                return plotHeight - y(d[d.measure]);
+            })
+            .attr("y", function (d, i) {
+                return y(d[d.measure]);
+            })
+            .attr("width", x1.bandwidth())
+            .attr("x", function (d, i) {
+                return x1(d.measure);;
+            })
+    }
+    chart._legendInteraction = function (event, data) {
+        switch (event) {
             case 'mouseover':
                 _legendMouseOver(data);
                 break;
@@ -615,267 +617,167 @@ function clusteredverticalbar() {
         }
     }
 
-    chart._getName = function() {
+    var _legendMouseOver = function (data) {
+
+        d3.selectAll('g.clusteredverticalbar')
+            .filter(function (d) {
+                return d.measure === data;
+            })
+            .select('rect')
+            .style('fill', COMMON.HIGHLIGHTER);
+    }
+
+    var _legendMouseMove = function (data) {
+
+    }
+
+    var _legendMouseOut = function (data) {
+        d3.selectAll('g.clusteredverticalbar')
+            .filter(function (d) {
+                return d.measure === data;
+            })
+            .select('rect')
+            .style('fill', function (d, i) {
+                return UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor);
+            });
+    }
+
+    var _legendClick = function (data) {
+        var _filter = UTIL.getFilterData(_localLabelStack, data, _originalData)
+        drawPlot.call(this, _filter);
+    }
+
+    chart._getName = function () {
         return _NAME;
     }
 
-    chart.update = function(data) {
-        var svg = _localSVG,
-            width = +svg.attr('width'),
-            height = +svg.attr('height'),
-            parentWidth = width - 2 * COMMON.PADDING,
-            parentHeight = height - 2 * COMMON.PADDING,
-            filteredData,
-            _localMin = 0,
-            _localMax = 0;
+    chart.update = function (data) {
+        _Local_data = data;
+        filterData = [];
 
-        /* store the data in local variable */
-        _localData = data;
+        x0 = d3.scaleBand()
+            .rangeRound([0, plotWidth])
+            .paddingInner(0.1)
+            .padding([0.1]);
 
-        /* Label values for the dimension */
-        _localXLabels = data.map(function(d) {
-            return d[_dimension[0]];
-        });
+        x1 = d3.scaleBand()
+            .padding(0.2);
 
-        /* Minimum and Maximum value of the measures */
-        _measure.forEach(function(m) {
-            var temp = d3.min(data, function(d) { return d[m]; });
-            _localMin = _localMin > temp ? temp : _localMin;
+        y = d3.scaleLinear()
+            .rangeRound([plotHeight, 0]);
 
-            temp = d3.max(data, function(d) { return d[m]; });
-            _localMax = _localMax < temp ? temp : _localMax;
-        });
-        
-        /* Update the axes scales */
-        _xDimension.domain(_localXLabels);
-        _xDimensionGrid.domain([0, _localXLabels.length]);
-        _xMeasure.rangeRound([0, _xDimension.bandwidth()]);
-        _y.domain([_localMin, _localMax])
-            .nice();
+        var keys = UTIL.getMeasureList(data[0], _dimension);
 
-        if(_legend) {
-            svg.select('.legend').remove();
-            
-            _localLegend(_measure, svg.select('g'), {
-                width: parentWidth,
-                height: parentHeight
-                // labelStack: _localLabelStack
+        x0.domain(data.map(function (d) { return d[_dimension[0]]; }));
+        x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+        y.domain([0, d3.max(data, function (d) {
+            return d3.max(keys, function (key) {
+                return parseInt(d[key]);
             });
-        }
+        })]).nice();
 
-        var clusterGroup = svg.selectAll('.cluster')
+        var plot = _local_svg.select('.plot')
+        var cluster = plot.selectAll("g.cluster")
             .data(data);
-            
-        clusterGroup.enter().append('g')
-            .attr('id', function(d, i) {
-                return 'cluster-group-' + i;
-            })
-            .classed('cluster', true)
-            .attr('transform', function(d) {
-                return 'translate(' + _xDimension(d[_dimension[0]]) + ', 0)';
+
+        cluster.enter().append('g')
+            .attr('class', 'cluster')
+            .attr('transform', function (d) {
+                return 'translate(' + x0(d[_dimension[0]]) + ', 0)';
             });
 
-        var barGroup = clusterGroup.selectAll('.bar')
-            .data(function(d) {
-                return _measure.map(function(m) {
+        cluster
+            .exit()
+            .transition()
+            .duration(COMMON.DURATION)
+            .attr('height', 0)
+            .attr('y', plotHeight)
+            .remove();
+
+        cluster = plot.selectAll('g.cluster');
+        var labelStack = [];
+
+        var clusteredverticalbar = cluster.selectAll('g.clusteredverticalbar')
+            .data(function (d) {
+                return keys.filter(function (m) {
+                    return labelStack.indexOf(m) == -1;
+                }).map(function (m) {
                     var obj = {};
                     obj[_dimension[0]] = d[_dimension[0]];
                     obj[m] = d[m];
+                    obj['dimension'] = _dimension[0];
                     obj['measure'] = m;
                     return obj;
                 });
-            })
-            .enter().append('g')
-                .attr('id', function(d, i) {
-                    return 'bar-group-' + i;
-                })
-                .classed('bar', true);
-
-        var rect = barGroup.append('rect')
-            .attr('width', _xMeasure.bandwidth())
-            .attr('height', 0)
-            .style('fill', function(d, i) {
-                if(typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureDisplayColor[i];
-            })
-            .style('stroke', function(d, i) {
-                if(typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureBorderColor[i];
-            })
-            .style('stroke-width', 1)
-            .on('mouseover', _handleMouseOverFn.call(chart, _localTooltip, svg))
-            .on('mousemove', _handleMouseMoveFn.call(chart, _localTooltip, svg))
-            .on('mouseout', _handleMouseOutFn.call(chart, _localTooltip, svg))
-            .on('click', function(d, i) {
-                
             });
 
-        var text = barGroup.append('text')
-            .attr('y', function(d, i) {
-                return plotHeight;
+        clusteredverticalbar.select('rect')
+            .attr('class', 'bar')
+            .attr("width", x1.bandwidth())
+            .attr("height", function (d) {
+                return 0;
             })
-            .attr('dy', function(d, i) {
-                return COMMON.OFFSET;
-            })
-            .attr('opacity', 0)
-            .attr('visibility', function(d, i) {
-                return _measureShowValue[i];
-            })
-            .style('font-style', function(d, i) {
-                return _measureFontStyle[i] || COMMON.DEFAULT_FONTSTYLE;
-            })
-            .style('font-weight', function(d, i) {
-                return _measureFontWeight[i] || COMMON.DEFAULT_FONTWEIGHT;
-            })
-            .style('font-size', function(d, i) {
-                return _measureFontSize[i] || COMMON.DEFAULT_FONTSIZE;
-            })
-            .style('fill', function(d, i) {
-                if(typeof _measureTextColor[i] == 'undefined' || _measureTextColor[i].trim() == '') {
-                    return COMMON.DEFAULT_COLOR;
-                }
-                return _measureTextColor[i];
-            })
-            .style('text-anchor', 'middle');
-
-        var rectMask = barGroup.append('rect')
-            .classed('bar-rect-mask', true)
-            .attr('width', _xMeasure.bandwidth())
-            .attr('height', 1)
-            .attr('visibility', 'hidden')
-            .style('fill', function(d, i) {
-                if(typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureDisplayColor[i];
-            })
-            .style('stroke', function(d, i) {
-                if(typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureBorderColor[i];
-            })
-            .style('stroke-width', 1);
-
-        clusterGroup.merge(clusterGroup)
             .transition()
             .duration(COMMON.DURATION)
-            .attr('transform', function(d) {
-                return 'translate(' + _xDimension(d[_dimension[0]]) + ', 0)';
+            .attr("height", function (d, i) {
+                return plotHeight - y(d[d.measure]);
+            })
+            .attr("y", function (d, i) {
+                return y(d[d.measure]);
+            })
+            .attr("width", x1.bandwidth())
+            .attr("x", function (d, i) {
+                return x1(d.measure);;
+            })
+
+        var newBars = clusteredverticalbar.enter().append('g')
+            .attr('class', 'clusteredverticalbar');
+
+        drawViz(newBars);
+
+        clusteredverticalbar.select('text')
+            .text(function (d, i) {
+                return UTIL.getFormattedValue(d[d.measure], UTIL.getValueNumberFormat(i, _numberFormat));
+            })
+            .attr("y", function (d, i) {
+                return y(d[d.measure]) - _fontSize[i];
+            })
+            .attr("x", function (d) {
+                return x1(d.measure);
+            })
+            .attr('dy', function (d, i) {
+                return -offsetX / 10;
+            })
+            .attr('dx', function (d, i) {
+                return x1.bandwidth() / 2;
+            })
+            .text(function (d, i) {
+                var barWidth = (1 - x0.padding()) * plotWidth / (data.length - 1);
+                barWidth = (1 - x1.padding()) * barWidth / keys.length;
+                return UTIL.getTruncatedTick(d3.select(this).text(), barWidth, tickLength);
             });
 
-        clusterGroup.selectAll('.bar').select('rect:not(.bar-rect-mask)')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('height', function(d, i) {
-                return _y(0) - _y(d[d['measure']]);
-            })
-            .attr('width', _xMeasure.bandwidth())
-            .attr('x', function(d, i) {
-                return _xMeasure(d['measure']);
-            })
-            .attr('y', function(d, i) {
-                return _y(d[d['measure']]);
+        d3.selectAll('g.cluster')
+            .attr('transform', function (d) {
+                return 'translate(' + x0(d[_dimension[0]]) + ', 0)';
             });
 
-        clusterGroup.selectAll('.bar').select('rect.bar-rect-mask')
+        plot.select('.x_axis')
             .transition()
             .duration(COMMON.DURATION)
-            .attr('width', _xMeasure.bandwidth())
-            .attr('x', function(d, i) {
-                return _xMeasure(d['measure']);
-            })
-            .attr('y', function(d, i) {
-                return _y(d[d['measure']]) - (COMMON.OFFSET / 3);
-            });
+            .call(d3.axisBottom(x0));
 
-        clusterGroup.selectAll('.bar').select('text')
+        plot.select('.y_axis')
             .transition()
             .duration(COMMON.DURATION)
-            .attr('opacity', 1)
-            .attr('x', function(d, i) {
-                return _xMeasure(d['measure']) + (_xMeasure.bandwidth() / 2);
-            })
-            .attr('y', function(d, i) {
-                return _y(d[d['measure']]);
-            })
-            .text(function(d, i) {
-                var formatter = UTIL.getNumberFormatterFn(_measureNumberFormat[i]),
-                    value = d[d['measure']],
-                    lt = _localTotal.filter(function(lt) {
-                        return lt['measure'] == d['measure'];
-                    })[0],
-                    positiveTotal = lt['positiveTotal'],
-                    negativeTotal = lt['negativeTotal'];
+            .call(d3.axisLeft(y).ticks(null, "s"));
 
-                if(_measureNumberFormat[i] == 'percent') {
-                    value = (value >= 0) ? (value / positiveTotal) : (value / negativeTotal);
-                }
-
-                return formatter(UTIL.roundNumber(value, 2)).toUpperCase();
-            });
-
-        clusterGroup.exit().selectAll('rect:not(.bar-rect-mask)')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('height', 0)
-            .attr('y', _y(0))
-            .remove();
-
-        clusterGroup.exit().selectAll('text')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('y', _y(0))
-            .remove();
-
-        /* Update Axes */
-        var xAxisGroup,
-            yAxisGroup;
-
-        if(_xAxis) {
-            xAxisGroup = svg.select('.x.axis')
-                .transition()
-                .duration(COMMON.DURATION)
-                .call(_localXAxis);
-
-            _setAxisColor(xAxisGroup, _xAxisColor);
-        }
-           
-        if(_yAxis) {
-            yAxisGroup = svg.select('.y.axis')
-                .transition()
-                .duration(COMMON.DURATION)
-                .call(_localYAxis);
-
-            _setAxisColor(yAxisGroup, _yAxisColor);
-        }
-
-        /* Update Axes Grid */
-        _localXGrid.ticks(_localXLabels.length);
-
-        svg.select('.x.grid')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('visibility', function() {
-                return _grid ? 'visible' : 'hidden';
-            })
-            .call(_localXGrid);
-
-        svg.select('.y.grid')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('visibility', function() {
-                return _grid ? 'visible' : 'hidden';
-            })
-            .call(_localYGrid);
+        UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);
+        UTIL.displayThreshold(threshold, data, keys);
     }
 
-    chart.config = function(value) {
-        if(!arguments.length) {
+    chart.config = function (value) {
+        if (!arguments.length) {
             return _config;
         }
         _config = value;
@@ -883,207 +785,152 @@ function clusteredverticalbar() {
         return chart;
     }
 
-    chart.dimension = function(value) {
-        if(!arguments.length) {
+    chart.dimension = function (value) {
+        if (!arguments.length) {
             return _dimension;
         }
         _dimension = value;
         return chart;
     }
 
-    chart.measure = function(value) {
-        if(!arguments.length) {
+    chart.measure = function (value) {
+        if (!arguments.length) {
             return _measure;
         }
         _measure = value;
         return chart;
     }
 
-    chart.xAxis = function(value) {
-        if(!arguments.length) {
-            return _xAxis;
+    chart.showLegend = function (value) {
+        if (!arguments.length) {
+            return _showLegend;
         }
-        _xAxis = value;
+        _showLegend = value;
         return chart;
     }
 
-    chart.yAxis = function(value) {
-        if(!arguments.length) {
-            return _yAxis;
-        }
-        _yAxis = value;
-        return chart;
-    }
-
-    chart.xAxisColor = function(value) {
-        if(!arguments.length) {
-            return _xAxisColor;
-        }
-        _xAxisColor = value;
-        return chart;
-    }
-
-    chart.yAxisColor = function(value) {
-        if(!arguments.length) {
-            return _yAxisColor;
-        }
-        _yAxisColor = value;
-        return chart;
-    }
-    
-    chart.xAxisLabel = function(value) {
-        if(!arguments.length) {
-            return _xAxisLabel;
-        }
-        _xAxisLabel = value;
-        return chart;
-    }
-
-    chart.yAxisLabel = function(value) {
-        if(!arguments.length) {
-            return _yAxisLabel;
-        }
-        _yAxisLabel = value;
-        return chart;
-    }
-
-    chart.legend = function(value) {
-        if(!arguments.length) {
-            return _legend;
-        }
-        _legend = value;
-        return chart;
-    }
-
-    chart.legendPosition = function(value) {
-        if(!arguments.length) {
+    chart.legendPosition = function (value) {
+        if (!arguments.length) {
             return _legendPosition;
         }
         _legendPosition = value;
         return chart;
     }
 
-    chart.grid = function(value) {
-        if(!arguments.length) {
-            return _grid;
+    chart.sort = function (value) {
+        if (!arguments.length) {
+            return _sort;
         }
-        _grid = value;
+        _sort = value;
         return chart;
     }
 
-    chart.dimensionDisplayName = function(value) {
-        if(!arguments.length) {
-            return _dimensionDisplayName;
-        }
-        _dimensionDisplayName = value;
-        return chart;
-    }
-
-    /**
-     * ClusteredVerticalBar Measure Showvalue accessor function
-     *
-     * @param {boolean|array(boolean)|null} value Measure Showvalue value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {boolean|array(boolean)|function}
-     */
-    chart.measureShowValue = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureShowValue, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure Displayname accessor function
-     *
-     * @param {string|array(string)|null} value Measure Displayname value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureDisplayName = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureDisplayName, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure FontStyle accessor function
-     *
-     * @param {string|array(string)|null} value Measure FontStyle value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureFontStyle = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureFontStyle, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure FontWeight accessor function
-     *
-     * @param {number|array(number)|null} value Measure FontWeight value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {number|array(number)|function}
-     */
-    chart.measureFontWeight = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureFontWeight, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure FontSize accessor function
-     *
-     * @param {number|array(number)|null} value Measure FontSize value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {number|array(number)|function}
-     */
-    chart.measureFontSize = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureFontSize, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure NumberFormat accessor function
-     *
-     * @param {string|array(string)|null} value Measure NumberFormat value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureNumberFormat = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureNumberFormat, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure TextColor accessor function
-     *
-     * @param {string|array(string)|null} value Measure TextColor value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureTextColor = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureTextColor, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure DisplayColor accessor function
-     *
-     * @param {string|array(string)|null} value Measure DisplayColor value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureDisplayColor = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureDisplayColor, value, measure, _measure);
-    }
-
-    /**
-     * ClusteredVerticalBar Measure BorderColor accessor function
-     *
-     * @param {string|array(string)|null} value Measure BorderColor value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureBorderColor = function(value, measure) {
-        return UTIL.baseAccessor.call(_measureBorderColor, value, measure, _measure);
-    }
-
-    chart.tooltip = function(value) {
-        if(!arguments.length) {
+    chart.tooltip = function (value) {
+        if (!arguments.length) {
             return _tooltip;
         }
         _tooltip = value;
         return chart;
+    }
+
+    chart.showXaxis = function (value) {
+        if (!arguments.length) {
+            return _showXaxis;
+        }
+        _showXaxis = value;
+        return chart;
+    }
+
+    chart.showYaxis = function (value) {
+        if (!arguments.length) {
+            return _showYaxis;
+        }
+        _showYaxis = value;
+        return chart;
+    }
+
+    chart.showXaxisLabel = function (value) {
+        if (!arguments.length) {
+            return _showXaxisLabel;
+        }
+        _showXaxisLabel = value;
+        return chart;
+    }
+
+    chart.showYaxisLabel = function (value) {
+        if (!arguments.length) {
+            return _showYaxisLabel;
+        }
+        _showYaxisLabel = value;
+        return chart;
+    }
+
+    chart.xAxisColor = function (value) {
+        if (!arguments.length) {
+            return _xAxisColor;
+        }
+        _xAxisColor = value;
+        return chart;
+    }
+
+    chart.yAxisColor = function (value) {
+        if (!arguments.length) {
+            return _yAxisColor;
+        }
+        _yAxisColor = value;
+        return chart;
+    }
+
+    chart.displayName = function (value) {
+        if (!arguments.length) {
+            return _tooltip;
+        }
+        _displayName = value;
+        return chart;
+    }
+
+    chart.legendData = function (measureConfig, measureName) {
+        _legendData = {
+            measureConfig: measureConfig,
+            measureName: measureName
+        }
+        return _legendData;
+    }
+
+    chart.showValues = function (value, measure) {
+        return UTIL.baseAccessor.call(_showValues, value, measure, _measure, chart);
+    }
+
+    chart.displayNameForMeasure = function (value, measure) {
+        return UTIL.baseAccessor.call(_displayNameForMeasure, value, measure, _measure, chart);
+    }
+
+    chart.fontStyle = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontStyle, value, measure, _measure, chart);
+    }
+
+    chart.fontWeight = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontWeight, value, measure, _measure, chart);
+    }
+
+    chart.numberFormat = function (value, measure) {
+        return UTIL.baseAccessor.call(_numberFormat, value, measure, _measure, chart);
+    }
+
+    chart.textColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_textColor, value, measure, _measure, chart);
+    }
+
+    chart.displayColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_displayColor, value, measure, _measure, chart);
+    }
+
+    chart.borderColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_borderColor, value, measure, _measure, chart);
+    }
+
+    chart.fontSize = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontSize, value, measure, _measure, chart);
     }
 
     return chart;

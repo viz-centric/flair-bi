@@ -15,22 +15,20 @@ function line() {
         _showYaxisLabel,
         _xAxisColor,
         _yAxisColor,
-        _showGrid,
-        _stacked,
         _displayName,
         _legendData,
-        _showValues,
-        _displayNameForMeasure,
-        _fontStyle,
-        _fontWeight,
-        _numberFormat,
-        _textColor,
-        _displayColor,
-        _borderColor,
-        _fontSize,
-        _lineType,
-        _pointType,
-        _originalData;
+
+        _showValues = [],
+        _displayNameForMeasure = [],
+        _fontStyle = [],
+        _fontWeight = [],
+        _numberFormat = [],
+        _textColor = [],
+        _displayColor = [],
+        _borderColor = [],
+        _fontSize = [],
+        _lineType = [],
+        _pointType = [];
 
     var margin = {
         top: 0,
@@ -384,10 +382,9 @@ function line() {
 
     }
 
-
     var drawPlot = function (data) {
         var me = this;
-        _Local_data = data;
+        _Local_data = _originalData = data;
         var plot = container.append('g')
             .attr('class', 'line-plot')
             .classed('plot', true)
@@ -627,32 +624,53 @@ function line() {
             .on('end', onLassoEnd(lasso, chart))
 
         _local_svg.call(lasso);
-
     }
 
-
     chart._legendInteraction = function (event, data) {
+
+        switch (event) {
+            case 'mouseover':
+                _legendMouseOver(data);
+                break;
+            case 'mousemove':
+                _legendMouseMove(data);
+                break;
+            case 'mouseout':
+                _legendMouseOut(data);
+                break;
+            case 'click':
+                _legendClick(data);
+                break;
+        }
+    }
+    var _legendMouseOver = function (data) {
 
         var line = d3.selectAll('.line')
             .filter(function (d, i) {
                 return d[i].tag === data;
+            })
+            .style("stroke-width", "2.5px")
+            .style('stroke', COMMON.HIGHLIGHTER);
+    }
+
+    var _legendMouseMove = function (data) {
+
+    }
+
+    var _legendMouseOut = function (data) {
+        var line = d3.selectAll('.line')
+            .filter(function (d, i) {
+                return d[i].tag === data;
+            })
+            .style("stroke-width", "1.5px")
+            .style('stroke', function (d, i) {
+                return UTIL.getBorderColor(_measure.indexOf(d[0]['tag']), _borderColor);
             });
+    }
 
-        if (event === 'mouseover') {
-            line
-                .style("stroke-width", "2.5px")
-                .style('stroke', COMMON.HIGHLIGHTER);
-        } else if (event === 'mousemove') {
-            // do something
-        } else if (event === 'mouseout') {
-            line
-                .style("stroke-width", "1.5px")
-                .style('stroke', function (d, i) {
-                    return UTIL.getBorderColor(_measure.indexOf(d[0]['tag']), _borderColor);
-                });
-        } else if (event === 'click') {
-
-        }
+    var _legendClick = function (data) {
+        var _filter = UTIL.getFilterData(_localLabelStack, data, _originalData)
+        drawPlot.call(this, _filter);
     }
 
     chart.update = function (data) {
@@ -719,18 +737,19 @@ function line() {
 
         plot.select('.x_axis')
             .transition()
-            .duration(1000)
+             .duration(COMMON.DURATION)
             .call(d3.axisBottom(x));
 
         plot.select('.y_axis')
             .transition()
-            .duration(1000)
+             .duration(COMMON.DURATION)
             .call(d3.axisLeft(y).ticks(null, "s"));
 
         UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);
         UTIL.displayThreshold(threshold, data, keys);
 
     }
+
     chart._getName = function () {
         return _NAME;
     }
@@ -775,7 +794,6 @@ function line() {
         _legendPosition = value;
         return chart;
     }
-
 
     chart.sort = function (value) {
         if (!arguments.length) {
@@ -873,90 +891,48 @@ function line() {
         return _legendData;
     }
 
-    chart.showValues = function (value) {
-        if (!arguments.length) {
-            return _showValues;
-        }
-        _showValues = value;
-        return chart;
+    chart.showValues = function (value, measure) {
+        return UTIL.baseAccessor.call(_showValues, value, measure, _measure);
     }
 
-    chart.displayNameForMeasure = function (value) {
-        if (!arguments.length) {
-            return _displayNameForMeasure;
-        }
-        _displayNameForMeasure = value;
-        return chart;
+    chart.displayNameForMeasure = function (value, measure) {
+        return UTIL.baseAccessor.call(_displayNameForMeasure, value, measure, _measure);
     }
 
-    chart.fontStyle = function (value) {
-        if (!arguments.length) {
-            return _fontStyle;
-        }
-        _fontStyle = value;
-        return chart;
+    chart.fontStyle = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontStyle, value, measure, _measure);
     }
 
-    chart.fontWeight = function (value) {
-        if (!arguments.length) {
-            return _fontWeight;
-        }
-        _fontWeight = value;
-        return chart;
+    chart.fontWeight = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontWeight, value, measure, _measure);
     }
 
-    chart.numberFormat = function (value) {
-        if (!arguments.length) {
-            return _numberFormat;
-        }
-        _numberFormat = value;
-        return chart;
+    chart.numberFormat = function (value, measure) {
+        return UTIL.baseAccessor.call(_numberFormat, value, measure, _measure);
     }
 
-    chart.textColor = function (value) {
-        if (!arguments.length) {
-            return _textColor;
-        }
-        _textColor = value;
-        return chart;
+    chart.textColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_textColor, value, measure, _measure);
     }
 
-    chart.displayColor = function (value) {
-        if (!arguments.length) {
-            return _displayColor;
-        }
-        _displayColor = value;
-        return chart;
+    chart.displayColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_displayColor, value, measure, _measure);
     }
 
-    chart.borderColor = function (value) {
-        if (!arguments.length) {
-            return _borderColor;
-        }
-        _borderColor = value;
-        return chart;
+    chart.borderColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_borderColor, value, measure, _measure);
     }
 
-    chart.fontSize = function (value) {
-        if (!arguments.length) {
-            return _fontSize;
-        }
-        _fontSize = value;
-        return chart;
+    chart.fontSize = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontSize, value, measure, _measure);
     }
-    chart.lineType = function (value) {
-        if (!arguments.length) {
-            return _lineType;
-        }
-        _lineType = value;
-        return chart;
+    
+    chart.lineType = function (value, measure) {
+        return UTIL.baseAccessor.call(_lineType, value, measure, _measure);
     }
-    chart.pointType = function (value) {
-        if (!arguments.length) {
-            return _pointType;
-        }
-        _pointType = value;
-        return chart;
+
+    chart.pointType = function (value, measure) {
+        return UTIL.baseAccessor.call(_pointType, value, measure, _measure);
     }
 
     return chart;

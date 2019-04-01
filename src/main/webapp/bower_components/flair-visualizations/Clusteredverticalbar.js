@@ -320,7 +320,7 @@ function clusteredverticalbar() {
                 legendSpace = 0;
                 plotWidth = parentWidth;
                 plotHeight = parentHeight;
-            } 
+            }
 
             if (_tooltip) {
                 tooltip = d3.select(this.parentNode).select('#tooltip');
@@ -525,16 +525,11 @@ function clusteredverticalbar() {
         var me = this;
 
         element.append('rect')
-            .attr("x", function (d) {
-                return x1(d.measure);
-            })
-            .attr("y", function (d) {
-                return y(d[d.measure]);
-            })
+          
             .attr('class', 'bar')
             .attr("width", x1.bandwidth())
             .attr("height", function (d) {
-                return plotHeight - y(d[d.measure]);
+                return 0;
             })
             .style('fill', function (d, i) {
                 return UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor);
@@ -580,6 +575,19 @@ function clusteredverticalbar() {
                     }
                 }
             })
+            .transition()
+            .duration(COMMON.DURATION)
+            .attr("height", function (d, i) {
+                return plotHeight - y(d[d.measure]);
+            })
+            .attr("y", function (d, i) {
+                return y(d[d.measure]);
+            })
+            .attr("width", x1.bandwidth())
+            .attr("x", function (d, i) {
+                return x1(d.measure);;
+            })
+
     }
     chart._legendInteraction = function (event, data) {
         switch (event) {
@@ -667,7 +675,13 @@ function clusteredverticalbar() {
                 return 'translate(' + x0(d[_dimension[0]]) + ', 0)';
             });
 
-        cluster.exit().remove();
+        cluster
+            .exit()
+            .transition()
+            .duration(COMMON.DURATION)
+            .attr('height', 0)
+            .attr('y', plotHeight)
+            .remove();
 
         cluster = plot.selectAll('g.cluster');
         var labelStack = [];
@@ -687,16 +701,22 @@ function clusteredverticalbar() {
             });
 
         clusteredverticalbar.select('rect')
-            .attr("x", function (d) {
-                return x1(d.measure);
-            })
-            .attr("y", function (d) {
-                return y(d[d.measure]);
-            })
             .attr('class', 'bar')
             .attr("width", x1.bandwidth())
             .attr("height", function (d) {
+                return 0;
+            })
+            .transition()
+            .duration(COMMON.DURATION)
+            .attr("height", function (d, i) {
                 return plotHeight - y(d[d.measure]);
+            })
+            .attr("y", function (d, i) {
+                return y(d[d.measure]);
+            })
+            .attr("width", x1.bandwidth())
+            .attr("x", function (d, i) {
+                return x1(d.measure);;
             })
 
         var newBars = clusteredverticalbar.enter().append('g')
@@ -733,12 +753,12 @@ function clusteredverticalbar() {
 
         plot.select('.x_axis')
             .transition()
-            .duration(1000)
+            .duration(COMMON.DURATION)
             .call(d3.axisBottom(x0));
 
         plot.select('.y_axis')
             .transition()
-            .duration(1000)
+            .duration(COMMON.DURATION)
             .call(d3.axisLeft(y).ticks(null, "s"));
 
         UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);
@@ -850,22 +870,6 @@ function clusteredverticalbar() {
         return chart;
     }
 
-    chart.showGrid = function (value) {
-        if (!arguments.length) {
-            return _tooltip;
-        }
-        _showGrid = value;
-        return chart;
-    }
-
-    chart.stacked = function (value) {
-        if (!arguments.length) {
-            return _tooltip;
-        }
-        _stacked = value;
-        return chart;
-    }
-
     chart.displayName = function (value) {
         if (!arguments.length) {
             return _tooltip;
@@ -883,66 +887,39 @@ function clusteredverticalbar() {
     }
 
     chart.showValues = function (value, measure) {
-        _baseAccessor.call(_showValues, value, measure)
+        return UTIL.baseAccessor.call(_showValues, value, measure, _measure);
     }
 
     chart.displayNameForMeasure = function (value, measure) {
-        _baseAccessor.call(_displayNameForMeasure, value, measure)
+        return UTIL.baseAccessor.call(_displayNameForMeasure, value, measure, _measure);
     }
 
     chart.fontStyle = function (value, measure) {
-        _baseAccessor.call(_fontStyle, value, measure)
+        return UTIL.baseAccessor.call(_fontStyle, value, measure, _measure);
     }
 
     chart.fontWeight = function (value, measure) {
-        _baseAccessor.call(_fontWeight, value, measure)
+        return UTIL.baseAccessor.call(_fontWeight, value, measure, _measure);
     }
 
     chart.numberFormat = function (value, measure) {
-        _baseAccessor.call(_numberFormat, value, measure)
+        return UTIL.baseAccessor.call(_numberFormat, value, measure, _measure);
     }
 
     chart.textColor = function (value, measure) {
-        _baseAccessor.call(_textColor, value, measure)
+        return UTIL.baseAccessor.call(_textColor, value, measure, _measure);
     }
 
     chart.displayColor = function (value, measure) {
-        _baseAccessor.call(_displayColor, value, measure)
+        return UTIL.baseAccessor.call(_displayColor, value, measure, _measure);
     }
 
     chart.borderColor = function (value, measure) {
-        _baseAccessor.call(_borderColor, value, measure)
+        return UTIL.baseAccessor.call(_borderColor, value, measure, _measure);
     }
 
     chart.fontSize = function (value, measure) {
-        _baseAccessor.call(_fontSize, value, measure)
-    }
-
-    var _baseAccessor = function (value, measure) {
-        var me = this;
-
-        if (!arguments.length) {
-            return me;
-        }
-
-        if (value instanceof Array && measure == void 0) {
-            me.splice(0, me.length);
-            me.push.apply(me, value);
-            return chart;
-        }
-
-        var index = _measure.indexOf(measure);
-
-        if (index === -1) {
-            throw new Error('Invalid measure provided');
-        }
-
-        if (value == void 0) {
-            return me[index];
-        } else {
-            me[index] = value;
-        }
-        return chart;
+        return UTIL.baseAccessor.call(_fontSize, value, measure, _measure);
     }
 
     return chart;

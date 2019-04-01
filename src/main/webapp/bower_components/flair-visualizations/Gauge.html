@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/d3viz.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script src="script/bootstrap.min.js"></script>
+
+    <script src="d3-lasso.min.js"></script>
+    <script src="common.js"></script>
+    <script src="util.js"></script>
+    <script src="Gauge.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <div id="header" style="position: relative; border: 1px solid #999; width: 600">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Gauge Plot </p>
+                </div>
+
+            </div>
+
+        </div>
+        <div style="position: relative; border: 1px solid #999; width: 600;height: 350;">
+            <svg id="Gauge" />
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        /* Global variable accessible from anywhere */
+        var COMMON = common(),
+            UTIL = util()
+
+        var config = {
+            measures: ['population', 'area'],
+            gaugeType: 'half circle', //radial|half circle
+            displayName: 'population',
+            fontStyle: 'italic',
+            fontWeight: 'italic',
+            "showValues": true,
+            "displayColor": '#00ff00',
+            "isGradient": true,
+            "textColor": '#00ff00',
+            "numberFormat": "K",
+            "targetDisplayName": "area",
+            "targetFontStyle": 'bold',
+            "targetFontWeight": '900',
+            "targetShowValues": true,
+            "targetDisplayColor": '#ff0000',
+            "targetTextColor": '#ff0000',
+            "targetNumberFormat": 'K'
+        }
+
+        var chart = gauge()
+            .config(config)
+
+        function getData() {
+            x = [{
+                population: Math.floor(Math.random() * (100000 - 10000 + 1) + 10000),
+
+                area: Math.floor(Math.random() * (100000 - 10000 + 1) + 10000)
+            }];
+            return x;
+        }
+
+        d3.select('#Gauge')
+            .datum(getData())
+            .call(chart);
+
+        setInterval(function () { chart.update(getData()) }, 1000);
+
+    </script>
+</body>
+
+</html>

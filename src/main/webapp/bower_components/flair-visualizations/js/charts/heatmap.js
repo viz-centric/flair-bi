@@ -261,7 +261,6 @@ function heatmap() {
     var onLassoEnd = function (lasso, chart) {
         return function () {
             var data = lasso.selectedItems().data();
-            debugger
             if (!filter) {
                 return;
             }
@@ -323,7 +322,7 @@ function heatmap() {
             .attr('height', cellHeight - 1)
             .transition()
             .ease(d3.easeQuadIn)
-            .duration(500)
+            .duration(COMMON.DURATION)
             .styleTween('fill', function (d) {
                 return d3.interpolateRgb('transparent', getFillColor(d));
             });
@@ -608,7 +607,7 @@ function heatmap() {
             .attr('height', cellHeight - 1)
             .transition()
             .ease(d3.easeQuadIn)
-            .duration(500)
+            .duration(COMMON.DURATION)
             .styleTween('fill', function (d) {
                 return d3.interpolateRgb('transparent', getFillColor(d));
             });
@@ -697,7 +696,7 @@ function heatmap() {
             .attr('height', cellHeight - 1)
             .transition()
             .ease(d3.easeQuadIn)
-            .duration(500)
+            .duration(COMMON.DURATION)
             .styleTween('fill', function (d) {
                 return d3.interpolateRgb('transparent', getFillColor(d));
             });

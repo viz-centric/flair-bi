@@ -666,7 +666,7 @@ function pie() {
             .data(_pie(newFilteredData), key);
 
         pieArcGroup.select('path')
-            .transition().duration(1000)
+            .transition() .duration(COMMON.DURATION)
             .attrTween('d', function (d) {
                 var interpolate = d3.interpolate(this._current, d);
                 var _this = this;
@@ -682,7 +682,7 @@ function pie() {
         pieArcGroup.exit()
             .transition()
             .delay(1000)
-            .duration(0)
+            .duration(COMMON.DURATION)
             .remove();
     }
 

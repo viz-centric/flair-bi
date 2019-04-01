@@ -308,3 +308,8 @@ text {
     right: 0px;
     margin: 5px;
 }
+.link {
+    fill: none;
+    stroke: #BCBCBC;
+    stroke-opacity: 0.5;
+}

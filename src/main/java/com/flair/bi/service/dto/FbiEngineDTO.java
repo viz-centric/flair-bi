@@ -18,6 +18,8 @@ public class FbiEngineDTO {
     private QueryDTO queryDTO;
     
     private String vId;
+    
+    private String type;
 
 	public String getvId() {
 		return vId;
@@ -27,6 +29,4 @@ public class FbiEngineDTO {
 		this.vId = vId;
 	}
     
-    
-
 }

@@ -6161,7 +6161,8 @@ input.select2-active {
       margin-top: 10px; }
     .recent-tabs .tab svg {
       width: 19px;
-      height: 19px; }
+      height: 19px;
+      margin-top: 6px; }
     .recent-tabs .tab img {
       width: 19px;
       height: 19px; }

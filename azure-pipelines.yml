@@ -17,6 +17,7 @@ pr:
 steps:
 - checkout: self
   persistCredentials: true
+  clean: true
 
 - task: UsePythonVersion@0
   inputs:
@@ -83,3 +84,14 @@ steps:
 #     DOCKER_USER: $(dockerUser)
 #     DOCKER_PASSWORD: $(dockerPassword)
 #   displayName: 'Push Docker image'
+
+- script: |
+    git checkout master
+    git config user.name "Release Bot"
+    git config user.email "admin@vizcentric.com"
+    mvn -B release:clean release:prepare -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} "-DscmCommentPrefix=[skip ci] " -DskipTests
+  env:
+    GIT_USERNAME: $(GIT_USERNAME)
+    GIT_PASSWORD: $(GIT_PASSWORD)
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  displayName: 'Maven release'

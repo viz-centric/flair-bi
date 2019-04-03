@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
@@ -16,6 +17,7 @@ import com.flair.bi.web.rest.vm.ChangePermissionVM.Action;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -50,9 +52,8 @@ import java.util.List;
  *
  * @see UserResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class UserResourceIntTest {
+@Ignore
+public class UserResourceIntTest extends AbstractIntegrationTest{
 
     @Inject
     private UserRepository userRepository;

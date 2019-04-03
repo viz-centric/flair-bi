@@ -16,7 +16,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -45,9 +47,8 @@ import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.flair.bi.web.rest.vm.ChangePermissionVM.Action;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class UserGroupResourceIntTest {
+@Ignore
+public class UserGroupResourceIntTest extends AbstractIntegrationTest {
 	
     
     @Inject

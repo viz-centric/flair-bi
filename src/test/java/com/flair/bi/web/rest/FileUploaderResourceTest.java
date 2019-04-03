@@ -5,6 +5,7 @@ import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.service.FileUploaderStatusService;
 import com.flair.bi.service.dto.FileUploaderDTO;
 import com.flair.bi.service.dto.FileUploaderStatusDTO;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,6 +17,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class FileUploaderResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

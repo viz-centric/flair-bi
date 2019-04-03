@@ -20,4 +20,4 @@ services:
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=flairbi
         ports:
-            - 9999:5432
+            - 9998:5432

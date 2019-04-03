@@ -40,8 +40,17 @@
         line-height: 39px;
     }
     .configuration-options {
+        .visual-bookmark{
+            width:20%;
+        }
         .visual-edit {
-            min-width: 10vw;
+            width: 5%;
+        }
+        .visual-arrow{
+            width: 22%;
+        }
+        .visual-msc{
+            width: 15%;
         }
         .apply-bookmarks {
             display: flex;
@@ -94,9 +103,9 @@
             }
             .viz-edit-button {
                 align-self: center;
-                padding-left: 10px;
                 md-switch {
                     margin: 0px;
+                    margin-top:5px;
                 }
             }
         }
@@ -107,7 +116,7 @@
               border-left: 1px lighten($icons-color, 40%) solid;
               position: absolute;
               right: -3%;
-              top: 50%;
+              top: 59%;
               transform: translateY(-50%);
         }
         .options-3 {
@@ -120,7 +129,7 @@
                display: block;
                border-left: 1px lighten($icons-color, 40%) solid;
                position: absolute;
-               right: 14.5%;
+               right: 6.5%;
                top: 50%;
                transform: translateY(-50%);
             
@@ -140,6 +149,11 @@
                 width: 50px;
                 margin: 0 .2vw;
             }
+        }
+        .options-4{
+            display: flex;
+            flex-direction: row-reverse;
+            margin-right: 6px;
         }
         top-nav-button-component {
             .option-disabled {
@@ -294,7 +308,7 @@
 
 .flairbi-content-header-fullscreen {
     padding: 0;
-    margin-top: 6px;
+    padding-top: 6px;
 }
 
 .dashboard-filter-header {

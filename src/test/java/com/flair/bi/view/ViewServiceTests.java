@@ -14,10 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FlairbiApp.class)
 public class ViewServiceTests {
-
 
     @Inject
     private ViewService viewService;
@@ -70,6 +70,5 @@ public class ViewServiceTests {
         view.setViewDashboard(dashboardService.findOne(id));
         viewService.save(view);
     }
-
 
 }

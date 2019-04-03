@@ -1,11 +1,13 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 import com.flair.bi.domain.Visualization;
 import com.flair.bi.repository.VisualizationRepository;
 import com.flair.bi.service.VisualizationService;
 import com.flair.bi.service.mapper.FieldTypeMapper;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -34,9 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see VisualizationsResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class VisualizationResourceIntTest {
+@Ignore
+public class VisualizationResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -77,22 +78,19 @@ public class VisualizationResourceIntTest {
         MockitoAnnotations.initMocks(this);
         VisualizationsResource visualizationsResource = new VisualizationsResource(visualizationService);
         this.restVisualizationsMockMvc = MockMvcBuilders.standaloneSetup(visualizationsResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setMessageConverters(jacksonMessageConverter).build();
+                .setCustomArgumentResolvers(pageableArgumentResolver).setMessageConverters(jacksonMessageConverter)
+                .build();
     }
 
     /**
      * Create an entity for this test.
      * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
+     * This is a static method, as tests for other entities might also need it, if
+     * they test an entity which requires the current entity.
      */
     public static Visualization createEntity(EntityManager em) {
-        Visualization visualization = new Visualization()
-            .name(DEFAULT_NAME)
-            .icon(DEFAULT_ICON)
-            .customId(DEFAULT_CUSTOM_ID)
-            .functionname(DEFAULT_FUNCTIONNAME);
+        Visualization visualization = new Visualization().name(DEFAULT_NAME).icon(DEFAULT_ICON)
+                .customId(DEFAULT_CUSTOM_ID).functionname(DEFAULT_FUNCTIONNAME);
         return visualization;
     }
 
@@ -108,10 +106,8 @@ public class VisualizationResourceIntTest {
 
         // Create the Visualization
 
-        restVisualizationsMockMvc.perform(post("/api/visualizations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(visualization)))
-            .andExpect(status().isCreated());
+        restVisualizationsMockMvc.perform(post("/api/visualizations").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(visualization))).andExpect(status().isCreated());
 
         // Validate the Visualization in the database
         List<Visualization> visualizationList = visualizationRepository.findAll();
@@ -133,10 +129,10 @@ public class VisualizationResourceIntTest {
         existingVisualization.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restVisualizationsMockMvc.perform(post("/api/visualizations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existingVisualization)))
-            .andExpect(status().isBadRequest());
+        restVisualizationsMockMvc
+                .perform(post("/api/visualizations").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                        .content(TestUtil.convertObjectToJsonBytes(existingVisualization)))
+                .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
         List<Visualization> visualizationList = visualizationRepository.findAll();
@@ -152,10 +148,8 @@ public class VisualizationResourceIntTest {
 
         // Create the Visualization, which fails.
 
-        restVisualizationsMockMvc.perform(post("/api/visualizations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(visualization)))
-            .andExpect(status().isBadRequest());
+        restVisualizationsMockMvc.perform(post("/api/visualizations").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(visualization))).andExpect(status().isBadRequest());
 
         List<Visualization> visualizationList = visualizationRepository.findAll();
         assertThat(visualizationList).hasSize(databaseSizeBeforeTest);
@@ -170,10 +164,8 @@ public class VisualizationResourceIntTest {
 
         // Create the Visualization, which fails.
 
-        restVisualizationsMockMvc.perform(post("/api/visualizations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(visualization)))
-            .andExpect(status().isBadRequest());
+        restVisualizationsMockMvc.perform(post("/api/visualizations").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(visualization))).andExpect(status().isBadRequest());
 
         List<Visualization> visualizationList = visualizationRepository.findAll();
         assertThat(visualizationList).hasSize(databaseSizeBeforeTest);
@@ -186,14 +178,13 @@ public class VisualizationResourceIntTest {
         visualizationRepository.saveAndFlush(visualization);
 
         // Get all the visualizationsList
-        restVisualizationsMockMvc.perform(get("/api/visualizations"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(visualization.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON.toString())))
-            .andExpect(jsonPath("$.[*].customId").value(hasItem(DEFAULT_CUSTOM_ID)))
-            .andExpect(jsonPath("$.[*].functionname").value(hasItem(DEFAULT_FUNCTIONNAME.toString())));
+        restVisualizationsMockMvc.perform(get("/api/visualizations")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(visualization.getId().intValue())))
+                .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+                .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON.toString())))
+                .andExpect(jsonPath("$.[*].customId").value(hasItem(DEFAULT_CUSTOM_ID)))
+                .andExpect(jsonPath("$.[*].functionname").value(hasItem(DEFAULT_FUNCTIONNAME.toString())));
     }
 
     @Test
@@ -204,13 +195,12 @@ public class VisualizationResourceIntTest {
 
         // Get the visualization
         restVisualizationsMockMvc.perform(get("/api/visualizations/{id}", visualization.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(visualization.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.icon").value(DEFAULT_ICON.toString()))
-            .andExpect(jsonPath("$.customId").value(DEFAULT_CUSTOM_ID))
-            .andExpect(jsonPath("$.functionname").value(DEFAULT_FUNCTIONNAME.toString()));
+                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.id").value(visualization.getId().intValue()))
+                .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+                .andExpect(jsonPath("$.icon").value(DEFAULT_ICON.toString()))
+                .andExpect(jsonPath("$.customId").value(DEFAULT_CUSTOM_ID))
+                .andExpect(jsonPath("$.functionname").value(DEFAULT_FUNCTIONNAME.toString()));
     }
 
     @Test
@@ -218,7 +208,7 @@ public class VisualizationResourceIntTest {
     public void getNonExistingVisualizations() throws Exception {
         // Get the visualization
         restVisualizationsMockMvc.perform(get("/api/visualizations/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -231,16 +221,11 @@ public class VisualizationResourceIntTest {
 
         // Update the visualization
         Visualization updatedVisualization = visualizationRepository.findOne(visualization.getId());
-        updatedVisualization
-            .name(UPDATED_NAME)
-            .icon(UPDATED_ICON)
-            .customId(UPDATED_CUSTOM_ID)
-            .functionname(UPDATED_FUNCTIONNAME);
+        updatedVisualization.name(UPDATED_NAME).icon(UPDATED_ICON).customId(UPDATED_CUSTOM_ID)
+                .functionname(UPDATED_FUNCTIONNAME);
 
-        restVisualizationsMockMvc.perform(put("/api/visualizations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedVisualization)))
-            .andExpect(status().isOk());
+        restVisualizationsMockMvc.perform(put("/api/visualizations").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(updatedVisualization))).andExpect(status().isOk());
 
         // Validate the Visualization in the database
         List<Visualization> visualizationList = visualizationRepository.findAll();
@@ -259,11 +244,10 @@ public class VisualizationResourceIntTest {
 
         // Create the Visualization
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
-        restVisualizationsMockMvc.perform(put("/api/visualizations")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(visualization)))
-            .andExpect(status().isCreated());
+        // If the entity doesn't have an ID, it will be created instead of just being
+        // updated
+        restVisualizationsMockMvc.perform(put("/api/visualizations").contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(visualization))).andExpect(status().isCreated());
 
         // Validate the Visualization in the database
         List<Visualization> visualizationList = visualizationRepository.findAll();
@@ -279,9 +263,9 @@ public class VisualizationResourceIntTest {
         int databaseSizeBeforeDelete = visualizationRepository.findAll().size();
 
         // Get the visualization
-        restVisualizationsMockMvc.perform(delete("/api/visualizations/{id}", visualization.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk());
+        restVisualizationsMockMvc.perform(
+                delete("/api/visualizations/{id}", visualization.getId()).accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
 
         // Validate the database is empty
         List<Visualization> visualizationList = visualizationRepository.findAll();

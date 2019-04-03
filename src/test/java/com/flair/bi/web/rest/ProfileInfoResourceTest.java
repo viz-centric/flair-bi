@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class ProfileInfoResourceTest extends AbstractIntegrationTest {
 
 	@Test

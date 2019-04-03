@@ -2,43 +2,50 @@
     <div class="recent-tabs">
         <div id="tab-bookmark" class="tab" ng-click="vm.toggleTabs('bookmark')">
             <p>Recent Bookmarks</span>
-            <div class="icon-box">
-                <img src="content/svgs/created-bookmark.svg" alt="accessed icon">
-            </div>
-            <div class="blue-line"></div>
-        </div>
-        <div id="tab-dashboard" class="tab" ng-click="vm.toggleTabs('dashboard')">
-            <p>Recent Dashboards</span>
-            <div class="icon-box">
-                <img src="content/svgs/created-dashboard.svg" alt="accessed icon">
-            </div>
-            <div class="blue-line"></div>
-        </div>
-        <div id="tab-view" class="tab" ng-click="vm.toggleTabs('view')">
-            <p>Recent Views</span>
-            <div class="icon-box">
-                <img src="content/svgs/created-view.svg" alt="accessed icon">
-            </div>
-            <div class="blue-line"></div>
-        </div>
-        <div id="tab-notification-subscriptions" class="tab" ng-click="vm.toggleTabs('database')">
-            <p>Recent Databases</span>
-            <div class="icon-box">
-                <img src="content/svgs/created-databases.svg" alt="new trashold alert icon">
-            </div>
-            <div class="blue-line"></div>
-        </div>
-    </div>
+                <div class="icon-box">
+                    <svg >
+                     <use xlink:href="#recent-created-bookmark"></use>
+                 </div>
+                 <div class="blue-line"></div>
+             </div>
+             <div id="tab-dashboard" class="tab" ng-click="vm.toggleTabs('dashboard')">
+                <p>Recent Dashboards</span>
+                    <div class="icon-box">
+                        <svg >
+                         <use xlink:href="#recent-created-dashboard"></use>
+                     </svg>
+                 </div>
+                 <div class="blue-line"></div>
+             </div>
+             <div id="tab-view" class="tab" ng-click="vm.toggleTabs('view')">
+                <p>Recent Views</span>
+                    <div class="icon-box">
+                     <svg >
+                         <use xlink:href="#recent-created-view"></use>
+                     </svg>
+                 </div>
+                 <div class="blue-line"></div>
+             </div>
+             <div id="tab-notification-subscriptions" class="tab" ng-click="vm.toggleTabs('database')">
+                <p>Recent Databases</span>
+                    <div class="icon-box">
+                        <svg >
+                         <use xlink:href="#recent-created-database"></use>
+                     </svg>
+                 </div>
+                 <div class="blue-line"></div>
+             </div>
+         </div>
 
-    <div class="recently-accessed">
-        <div class="recently-accessed-row" ng-if="vm.recentlyCreatedViews.length>0 && vm.tabId=='view'">
-        <div class="col-md-3 col-sm-6" ng-repeat="view in vm.recentlyCreatedViews">
-            <view-component class="view" permissions="vm.account.permissions" view="view"></view-component>
+         <div class="recently-accessed">
+            <div class="recently-accessed-row" ng-if="vm.recentlyCreatedViews.length>0 && vm.tabId=='view'">
+                <div class="col-md-3 col-sm-6" ng-repeat="view in vm.recentlyCreatedViews">
+                    <view-component class="view" permissions="vm.account.permissions" view="view"></view-component>
+                </div>
+            </div>
+            <div class="recently-accessed-row" ng-if="vm.bookmarkWatches.length>0 && vm.tabId=='bookmark'">
+                <div class="col-md-3 col-sm-6" ng-repeat="bookmarkWatch in vm.bookmarkWatches">
+                    <view-component class="view" permissions="vm.account.permissions" view="bookmarkWatch.view"></view-component>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="recently-accessed-row" ng-if="vm.bookmarkWatches.length>0 && vm.tabId=='bookmark'">
-        <div class="col-md-3 col-sm-6" ng-repeat="bookmarkWatch in vm.bookmarkWatches">
-        <view-component class="view" permissions="vm.account.permissions" view="bookmarkWatch.view"></view-component>
-        </div>
-    </div>
-</div>

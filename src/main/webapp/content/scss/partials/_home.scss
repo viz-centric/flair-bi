@@ -397,6 +397,25 @@
             margin-top: 0px;
             margin-bottom: 15px;
         }
+        .new-datasource{
+            position: absolute;
+            right: 0px;
+            top: 1px;
+            border: none;
+            background-color: initial;
+            .edit-icon{
+                font-size: 1.5em;
+                color:$primary-color;
+            }
+        }
+        .new-datasource:hover{
+            color: #676a6c;
+            background-color: #d9dee1;
+            border-color: #d9dee1;
+        }
+        .tooltip {
+            display: block;
+        }
     }
     @media screen and (max-width: $break-medium) {
         #box-area {

@@ -1,5 +1,6 @@
 package com.flair.bi.security;
 
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -13,26 +14,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableWebSecurity
 @Profile("integration")
+@Ignore
 public class TestWebMvcConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-            .withUser("flairuser")
-            .password("flairpass")
-            .authorities("USER");
+        auth.inMemoryAuthentication().withUser("flairuser").password("flairpass").authorities("USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic()
-            .and()
-            .authorizeRequests()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .csrf()
-            .disable();
+        http.httpBasic().and().authorizeRequests().anyRequest().authenticated().and().csrf().disable();
     }
 
 }

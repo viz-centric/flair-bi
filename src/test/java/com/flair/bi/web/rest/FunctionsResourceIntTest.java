@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.FlairbiApp;
 
 import com.flair.bi.domain.Functions;
@@ -9,6 +10,7 @@ import com.flair.bi.service.dto.FunctionsDTO;
 import com.flair.bi.service.mapper.FunctionsMapper;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -36,9 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FunctionsResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class FunctionsResourceIntTest {
+@Ignore
+public class FunctionsResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";

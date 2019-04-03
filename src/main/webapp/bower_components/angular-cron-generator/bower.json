@@ -1,0 +1,33 @@
+{
+  "name": "angular-cron-generator",
+  "version": "1.0.0",
+  "authors": [
+    "sarfaraz_designer@live.in"
+  ],
+  "description": "A cron expression generator for AngularJS. In both format quartz and unix",
+  "main": [
+    "dist/angular-cron-generator.min.js"
+  ],
+  "keywords": [
+    "angular",
+    "angularjs",
+    "cron",
+    "cron generator",
+    "quartz",
+    "angular-cron",
+    "angular-cron-generator",
+    "cron-generator"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/sarfarazansari/angular-cron-generator",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.6.3"
+  }
+}

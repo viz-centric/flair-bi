@@ -28,6 +28,8 @@ import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,15 +74,15 @@ public class SchedulerResource {
 
 	@PostMapping("/schedule")
 	@Timed
-	public ResponseEntity<String> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
+	public ResponseEntity<SchedulerResponse> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
 			throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
 		schedulerDTO.setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport_line_item().setQuery_name(SecurityUtils.getCurrentUserLogin() + ":" + schedulerDTO.getReport_line_item().getQuery_name());
 		schedulerDTO.getReport().setMail_body(mail_body);
 		schedulerDTO.getReport().setSubject("Report : " + schedulerDTO.getReport().getSubject() + " : " + new Date());
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
-		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
+		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
 		HttpHeaders headers = new HttpHeaders();
 		/* below code is commented until auth api is not built from notification application*/
 		//		if (Constants.ai_token == null) {
@@ -95,21 +97,23 @@ public class SchedulerResource {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		log.debug("setChannelCredentials(schedulerDTO)===" + setChannelCredentials(schedulerDTO));
 		HttpEntity<SchedulerDTO> entity = new HttpEntity<SchedulerDTO>(setChannelCredentials(schedulerDTO), headers);
+		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST,
 					entity, String.class);
 			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			if (jsonObject.getString("token").equals("true")) {
-				return ResponseEntity.status(HttpStatus.CREATED).body(jsonObject.getString("message"));
-			} else if (jsonObject.getString("token").equals("false")) {
-				return ResponseEntity.status(HttpStatus.FOUND).body(jsonObject.getString("message"));
+			schedulerResponse.setMessage(jsonObject.getString("message"));
+			//schedulerResponse.setStatus(jsonObject.getString("status"));
+			if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+				return ResponseEntity.status(HttpStatus.OK).body(schedulerResponse);
+			} else {
+				return ResponseEntity.status(HttpStatus.FOUND).body(schedulerResponse);
 			}
 		} catch (Exception e) {
 			log.error("error occured while scheduling report:"+e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Report is not scheduled " + e.getMessage());
+			schedulerResponse.setMessage("error occured while accessing end point :"+e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
 		}
-
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Report is not scheduled");
 
 	}
 

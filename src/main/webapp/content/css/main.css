@@ -6205,6 +6205,11 @@ input.select2-active {
     float: right;
     margin-top: -25px; }
 
+.cron-wrap .clearfix .form-group {
+  display: flex; }
+  .cron-wrap .clearfix .form-group label {
+    margin: 5px; }
+
 .file-uploader .drop-box-row {
   margin-left: 0;
   margin-right: 0; }

@@ -8,13 +8,14 @@
         SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_visualizations','scheduler_channels'];
 
     function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_visualizations,scheduler_channels) {
-        $scope.cronExpression = '0 8 9 9 1/8 ? *';
+        $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
         };
         $scope.isCronDisabled = false;
 
         var vm = this;
+        vm.cronConfig = {quartz: false};
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
@@ -126,8 +127,8 @@
             return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
         }
 
-        function onSaveSuccess() {
-            //vm.isSaving = false;
+        function onSaveSuccess(data) {
+            vm.isSaving = false;
             vm.clear();
             var info = {
                 text: "Report is scheduled",
@@ -145,7 +146,23 @@
         function schedule() {
             vm.isSaving = true;
             setScheduledData();
-            schedulerService.scheduleReport(vm.scheduleObj, onSaveSuccess, onSaveError);
+             schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
+                vm.isSaving = false;
+                vm.clear();
+                var info = {
+                    text: success.data.message,
+                    title: "Saved"
+                }
+                $rootScope.showSuccessToast(info);
+            }).catch(function (error) {
+                console.log("error==="+error);
+                vm.isSaving = false;                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            });
         }
 
         function setScheduledData(){

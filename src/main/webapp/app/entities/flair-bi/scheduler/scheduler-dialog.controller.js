@@ -127,22 +127,6 @@
             return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
         }
 
-        function onSaveSuccess(data) {
-            vm.isSaving = false;
-            vm.clear();
-            var info = {
-                text: "Report is scheduled",
-                title: "Saved"
-            }
-            $rootScope.showSuccessToast(info);
-        }
-
-        function onSaveError(error) {
-            console.log("error==="+error);
-            vm.isSaving = false;
-            clear();
-        }
-
         function schedule() {
             vm.isSaving = true;
             setScheduledData();

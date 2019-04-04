@@ -10,39 +10,7 @@
     function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
         return {
             build: function (record, element, panel) {
-                record.data = [{
-                    "order_status": "Kathmandu",
-                    "order_item_subtotal": 50,
-                    "product_price": 80
-                }, {
-                    "order_status": "Delhi",
-                    "order_item_subtotal": 90,
-                    "product_price": 80
-                }, {
-                    "order_status": "Detroit",
-                    "order_item_subtotal": 910,
-                    "product_price": 800
-                }, {
-                    "order_status": "London",
-                    "order_item_subtotal": 240,
-                    "product_price": 500
-                }, {
-                    "order_status": "Washington",
-                    "order_item_subtotal": 300,
-                    "product_price": 600
-                }, {
-                    "order_status": "Berlin",
-                    "order_item_subtotal": 120,
-                    "product_price": 500
-                }, {
-                    "order_status": "Perth",
-                    "order_item_subtotal": 110,
-                    "product_price": 80
-                }, {
-                    "order_status": "Ottawa",
-                    "order_item_subtotal": 180,
-                    "product_price": 90
-                }];
+              
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 

@@ -10,40 +10,7 @@
     function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-                record.data = [{
-                    "order_status": "Kathmandu",
-                    "order_item_subtotal": 50000,
-                    "product_price": 80000
-                }, {
-                    "order_status": "Delhi",
-                    "order_item_subtotal": 90100,
-                    "product_price": 14480
-                }, {
-                    "order_status": "Detroit",
-                    "order_item_subtotal": 914120,
-                    "product_price": 801470
-                }, {
-                    "order_status": "London",
-                    "order_item_subtotal": 21140,
-                    "product_price": 50220
-                }, {
-                    "order_status": "Washington",
-                    "order_item_subtotal": 37700,
-                    "product_price": 60770
-                }, {
-                    "order_status": "Berlin",
-                    "order_item_subtotal": 17720,
-                    "product_price": 50770
-                }, {
-                    "order_status": "Perth",
-                    "order_item_subtotal": 17710,
-                    "product_price": 87770
-                }, {
-                    "order_status": "Ottawa",
-                    "order_item_subtotal": 18770,
-                    "product_price": 97770
-                }];
-
+              
                 function getProperties(VisualizationUtils, record) {
                    
                     var result = {};

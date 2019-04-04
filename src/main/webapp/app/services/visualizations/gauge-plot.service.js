@@ -10,10 +10,7 @@
     function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
         return {
             build: function (record, element, panel) {
-                record.data = [{
-                    "order_item_subtotal": 80000,
-                    "product_price": 3000
-                }];
+                
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 

@@ -10,39 +10,7 @@
     function GenerateSankey(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-                record.data = [{
-                    "order_status": "Panding",
-                    "product_name": "Product 1",
-                    "product_price": 100
-                }, {
-                    "order_status": "Panding",
-                    "product_name": "Product 2",
-                    "product_price": 200
-                }, {
-                    "order_status": "Panding",
-                    "product_name": "Product 3",
-                    "product_price": 300
-                }, {
-                    "order_status": "Payment Review",
-                    "product_name": "Product 4",
-                    "product_price": 400
-                },
-                {
-                    "order_status": "Payment Review",
-                    "product_name": "Product 5",
-                    "product_price": 500
-                },
-                {
-                    "order_status": "Payment Review",
-                    "product_name": "Product 6",
-                    "product_price": 600
-                },
-
-                {
-                    "order_status": "Open",
-                    "product_name": "Product 7",
-                    "product_price": 700
-                }];
+               
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 

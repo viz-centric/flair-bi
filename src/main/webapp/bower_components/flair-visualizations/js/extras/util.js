@@ -52,8 +52,8 @@ function util() {
                 x = pt[0] + 15,
                 y = pt[1] + 20;
 
-            this.style('top', y + 'px')
-                .style('left', x + 'px')
+            this.style('Top', y + 'px')
+                .style('Left', x + 'px')
                 .style('border', 'solid 2px' + borderColor)
                 .html(data);
 
@@ -70,7 +70,34 @@ function util() {
             }
             return 'hidden';
         },
+        setAxisColor: function (_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis) {
+            var svg = _local_svg;
 
+            svg.selectAll('.y_axis text')
+                .style('fill', _yAxisColor)
+
+            svg.selectAll('.x_axis text')
+                .style('fill', _xAxisColor)
+
+            svg.selectAll('.y_axis path')
+                .style('stroke', _yAxisColor)
+
+            svg.selectAll('.x_axis path')
+                .style('stroke', _xAxisColor)
+
+            svg.selectAll('.y_axis line')
+                .style('stroke', _yAxisColor)
+
+            svg.selectAll('.x_axis line')
+                .style('stroke', _xAxisColor)
+
+            svg.selectAll('.x_axis .tick')
+                .style('visibility', UTIL.getVisibility(_showXaxis))
+
+            svg.selectAll('.y_axis .tick')
+                .style('visibility', UTIL.getVisibility(_showYaxis))
+
+        },
         /**
          * Sorts the data based upon the order and keys
          *

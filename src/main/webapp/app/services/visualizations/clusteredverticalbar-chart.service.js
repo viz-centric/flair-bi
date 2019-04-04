@@ -10,6 +10,7 @@
     function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
+
                 record.data = [{
                     "order_status": "Kathmandu",
                     "order_item_subtotal": 50,
@@ -76,7 +77,7 @@
                     result['showXaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
                     result['showYaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
-                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
+                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position');
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
@@ -90,7 +91,7 @@
                     result['displayColor'] = [];
                     result['borderColor'] = [];
                     for (var i = 0; i < result.maxMes; i++) {
-                        
+
                         result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
                         result['displayNameForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
                         result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
@@ -99,7 +100,7 @@
                         result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                         result['textColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
                         result['displayColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour'));
-                        result['borderColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'borderColor'));
+                        result['borderColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour'));
                         //   result['displayColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour');
                         //  result['displayColor'] .push( (eachMeasure['displayColor'] == null) ? colorSet[i] : eachMeasure['displayColor']);
                         //   result['borderColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
@@ -116,7 +117,7 @@
                 } else {
                     d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'pie-' + this.id)
+                        .attr('id', 'clusteredverticalbar-' + element[0].id)
                         .style('width', element[0].clientWidth + 'px')
                         .style('height', element[0].clientHeight + 'px')
                         .style('overflow', 'hidden')

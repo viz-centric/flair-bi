@@ -1,142 +1,87 @@
 var COMMON = require('../extras/common.js')(),
     UTIL = require('../extras/util.js')(),
-    LEGEND = require('../extras/legend.js')();
+    LEGEND = require('../extras/legend_barcharts.js')();
 
 function line() {
 
-    /* These are the constant global variable for the function line.
-     */
     var _NAME = 'line';
-
-    /* These are the private variables that is initialized by the arguments sent
-     * by the users and can be updated using public methods.
-     */
 
     var _config,
         _dimension,
         _measure,
-        _xAxis,
-        _yAxis,
+        _showLegend,
+        _legendPosition,
+        _sort,
+        _tooltip,
+        _showXaxis,
+        _showYaxis,
+        _showXaxisLabel,
+        _showYaxisLabel,
         _xAxisColor,
         _yAxisColor,
-        _xAxisLabel,
-        _yAxisLabel,
-        _legend,
-        _legendPosition,
-        _grid,
-        _stacked,
-        _dimensionDisplayName,
-        _measureShowValue = [],
-        _measureDisplayName = [],
-        _measureFontStyle = [],
-        _measureFontWeight = [],
-        _measureFontSize = [],
-        _measureNumberFormat = [],
-        _measureTextColor = [],
-        _measureDisplayColor = [],
-        _measureBorderColor = [],
-        _measureLineType = [],
-        _measurePointType = [],
-        _tooltip;
+        _displayName,
+        _legendData,
 
-    /* These are the common variables that is shared across the different private/public 
-     * methods but is initialized/updated within the methods itself.
-     */
-    var _localSVG,
-        _localTotal = [],
-        _localXAxis,
-        _localYAxis,
-        _localXGrid,
-        _localYGrid,
-        _localData,
-        _localXLabels = [],
-        _localMin = 0,
-        _localMax = 0,
-        _localLegend,
-        _localTooltip;
-    // _localLabelStack;
+        _showValues = [],
+        _displayNameForMeasure = [],
+        _fontStyle = [],
+        _fontWeight = [],
+        _numberFormat = [],
+        _textColor = [],
+        _displayColor = [],
+        _borderColor = [],
+        _fontSize = [],
+        _lineType = [],
+        _pointType = [];
 
-    /* These are the common private functions that is shared across the different private/public 
-     * methods but is initialized beforehand.
-     */
-    var _x = d3.scalePoint()
-        .padding(0.5),
-        _xGrid = d3.scaleLinear(),
-        _y = d3.scaleLinear(),
-        _line = d3.line(),
-        _area = d3.area();
+    var margin = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 45
+    };
 
-    /* -------------------------------------------------------------------------------- */
+    var _local_svg, _Local_data, _originalData, _localLabelStack = [], legendBreakCount = 1;
+    var legendSpace = 20, axisLabelSpace = 20, offsetX = 16, offsetY = 3, div;
+    var parentWidth, parentHeight, plotWidth, plotHeight, container;
+    var threshold = [];
+    var filter = false, filterData = [];
+
     var _setConfigParams = function (config) {
         this.dimension(config.dimension);
         this.measure(config.measure);
-        this.xAxis(config.xAxis);
-        this.yAxis(config.yAxis);
+        this.showLegend(config.showLegend);
+        this.legendPosition(config.legendPosition);
+
+        this.showXaxis(config.showXaxis);
+        this.showYaxis(config.showYaxis);
+        this.showXaxisLabel(config.showXaxisLabel);
+
+        this.showYaxisLabel(config.showYaxisLabel);
         this.xAxisColor(config.xAxisColor);
         this.yAxisColor(config.yAxisColor);
-        this.xAxisLabel(config.xAxisLabel);
-        this.yAxisLabel(config.yAxisLabel);
-        this.legend(config.legend);
-        this.legendPosition(config.legendPosition);
-        this.grid(config.grid);
-        this.stacked(config.stacked);
-        this.dimensionDisplayName(config.dimensionDisplayName);
-        this.measureShowValue(config.measureShowValue);
-        this.measureDisplayName(config.measureDisplayName);
-        this.measureFontStyle(config.measureFontStyle);
-        this.measureFontWeight(config.measureFontWeight);
-        this.measureFontSize(config.measureFontSize);
-        this.measureNumberFormat(config.measureNumberFormat);
-        this.measureTextColor(config.measureTextColor);
-        this.measureDisplayColor(config.measureDisplayColor);
-        this.measureBorderColor(config.measureBorderColor);
-        this.measureLineType(config.measureLineType);
-        this.measurePointType(config.measurePointType);
-        this.tooltip(config.tooltip);
+        this.displayName(config.displayName);
+
+        this.showXaxisLabel(config.showXaxisLabel);
+
+        this.showValues(config.showValues);
+        this.displayNameForMeasure(config.displayNameForMeasure);
+        this.fontStyle(config.fontStyle);
+        this.fontWeight(config.fontWeight);
+        this.numberFormat(config.numberFormat);
+        this.textColor(config.textColor);
+        this.displayColor(config.displayColor);
+        this.borderColor(config.borderColor);
+        this.fontSize(config.fontSize);
+        this.lineType(config.lineType);
+        this.pointType(config.pointType);
+
+        this.legendData(config.displayColor, config.measure);
     }
-
-    var _setAxisColor = function (axis, color) {
-        var path = axis.select('path'),
-            ticks = axis.selectAll('.tick');
-
-        path.style('stroke', color);
-
-        ticks.select('line')
-            .style('stroke', color);
-
-        ticks.select('text')
-            .style('fill', color);
-    }
-
-    /* Builds the html data for the tooltip
-     *
-     * @param {object} datum Datum forming the bar
-     * @param {function} chart Line Vertical Bar chart function
-     * @return {string} String encoded HTML data
-     */
-    var _buildTooltipData = function (datum, chart) {
-        var output = "";
-
-        output += "<table><tr>"
-            + "<th>" + (_dimensionDisplayName || _dimension[0]) + ": </th>"
-            + "<td>" + datum[_dimension[0]] + "</td>"
-            + "</tr><tr>"
-            + "<th>" + (_measureDisplayName[_measure.indexOf(datum['measure'])] || datum['measure']) + ": </th>"
-            + "<td>" + datum[datum['measure']] + "</td>"
-            + "</tr></table>";
-
-        return output;
-    }
-
-    /* Returns the D3 symbol for the given point shape
-     *
-     * @param {string} pointType Name of the point shape
-     * @return {object} D3 symbol
-     */
-    var _getSymbolForPointType = function (pointType) {
+    var getPointType = function (index) {
         var symbol = null;
 
-        switch (pointType.toLowerCase()) {
+        switch (_pointType[index].toLowerCase()) {
             case "rectrounded":
                 symbol = d3.symbolDiamond;
                 break;
@@ -183,526 +128,517 @@ function line() {
 
         return symbol;
     }
+    var _buildTooltipData = function (datum, chart) {
+        var output = "";
+        output += "<table><tr>"
 
+            + "<th>" + chart.dimension() + ": </th>"
+            + "<td>" + datum.data[_dimension[0]] + "</td>"
+            + "</tr><tr>"
+            + "<th>" + datum.tag + ": </th>"
+            + "<td>" + datum.data[datum.tag] + "</td>"
+            + "</tr></table>";
+
+        return output;
+    }
+    var onLassoStart = function (lasso, scope) {
+        return function () {
+            if (filter) {
+                lasso.items()
+                    .classed('not_possible', true)
+                    .classed('selected', false);
+            }
+        }
+    }
+    var onLassoDraw = function (lasso, scope) {
+        return function () {
+            filter = true;
+            lasso.items()
+                .classed('selected', false);
+
+            lasso.possibleItems()
+                .classed('not_possible', false)
+                .classed('possible', true);
+
+            lasso.notPossibleItems()
+                .classed('not_possible', true)
+                .classed('possible', false);
+        }
+    }
+    var onLassoEnd = function (lasso, scope) {
+        return function () {
+            var data = lasso.selectedItems().data();
+            if (!filter) {
+                return;
+            }
+            if (data.length > 0) {
+                lasso.items()
+                    .classed('not_possible', false)
+                    .classed('possible', false);
+            }
+
+            lasso.selectedItems()
+                .classed('selected', true)
+
+            lasso.notSelectedItems()
+
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
+
+            var _filter = [];
+            data.forEach(function (d) {
+                var obj = new Object();
+                obj[_dimension[0]] = d[_dimension[0]];
+                for (var index = 0; index < _measure.length; index++) {
+                    obj[_measure[index]] = d[_measure[index]];
+                }
+
+                _filter.push(obj)
+            });
+            if (_filter.length > 0) {
+                filterData = _filter;
+            }
+        }
+    }
+    var applyFilter = function (chart) {
+        return function () {
+            if (filterData.length > 0) {
+                chart.update(filterData);
+            }
+        }
+    }
+    var clearFilter = function () {
+        return function () {
+            chart.update(_originalData);
+        }
+    }
     var _handleMouseOverFn = function (tooltip, container) {
         var me = this;
 
         return function (d, i) {
-            d3.select(this).style('cursor', 'pointer');
-
-            var barGroup = container.selectAll('g.bar')
-                .filter(function (d1) {
-                    return (d1[_dimension[0]] === d[_dimension[0]]) && (d1['measure'] === d['measure']);
-                });
-
-            barGroup.select('rect:not(.bar-rect-mask)')
-                .style('fill', COMMON.HIGHLIGHTER)
-                .style('stroke', COMMON.HIGHLIGHTER);
-
-            barGroup.select('rect.bar-rect-mask')
-                .attr('visibility', 'visible');
-
+            d3.select(this).style('cursor', 'pointer')
+                .style('cursor', 'pointer')
+                .style('fill', COMMON.HIGHLIGHTER);
+            var border = UTIL.getDisplayColor(_measure.indexOf(d.tag), _displayColor)
             if (tooltip) {
                 UTIL.showTooltip(tooltip);
-                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container);
+                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container, border);
             }
         }
     }
-
     var _handleMouseMoveFn = function (tooltip, container) {
         var me = this;
 
         return function (d, i) {
             if (tooltip) {
-                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container);
+                var border = UTIL.getDisplayColor(_measure.indexOf(d.tag), _displayColor)
+                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me, border), container, border);
             }
         }
     }
-
     var _handleMouseOutFn = function (tooltip, container) {
         var me = this;
 
         return function (d, i) {
             d3.select(this).style('cursor', 'default');
 
-            var barGroup = container.selectAll('g.bar')
+            var arcGroup = container.selectAll('g.arc')
                 .filter(function (d1) {
-                    return (d1[_dimension[0]] === d[_dimension[0]]) && (d1['measure'] === d['measure']);
+                    return d1.data[_dimension[0]] === d.data[_dimension[0]];
                 });
 
-            barGroup.select('rect:not(.bar-rect-mask)')
-                .style('fill', function (d1, i1) {
-                    if (typeof _measureDisplayColor[i1] == 'undefined' || _measureDisplayColor[i1].trim() == '') {
-                        return COMMON.COLORSCALE(d1['measure']);
-                    }
-                    return _measureDisplayColor[i1];
-                })
-                .style('stroke', function (d1, i1) {
-                    if (typeof _measureBorderColor[i1] == 'undefined' || _measureBorderColor[i1].trim() == '') {
-                        return COMMON.COLORSCALE(d1['measure']);
-                    }
-                    return _measureBorderColor[i1];
+            arcGroup.select('path')
+                .style('fill', function (d1, i) {
+                    return COMMON.COLORSCALE(d1.data[_dimension[0]]);
                 });
 
-            barGroup.select('rect.bar-rect-mask')
-                .attr('visibility', 'hidden');
+            var arcMaskGroup = container.selectAll('g.arc-mask')
+                .filter(function (d1) {
+                    return d1.data[_dimension[0]] === d.data[_dimension[0]];
+                });
+
+            arcMaskGroup.select('path')
+                .style('visibility', 'hidden');
 
             if (tooltip) {
                 UTIL.hideTooltip(tooltip);
             }
         }
     }
-
-    var _legendMouseOver = function (data) {
-        d3.selectAll('g.arc')
-            .filter(function (d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('fill', COMMON.HIGHLIGHTER);
-
-        d3.selectAll('g.arc-mask')
-            .filter(function (d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('visibility', 'visible');
-    }
-
-    var _legendMouseMove = function (data) {
-
-    }
-
-    var _legendMouseOut = function (data) {
-        d3.selectAll('g.arc')
-            .filter(function (d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('fill', function (d, i) {
-                return COMMON.COLORSCALE(d.data[_dimension[0]]);
-            });
-
-        d3.selectAll('g.arc-mask')
-            .filter(function (d) {
-                return d.data[_dimension[0]] === data[_dimension[0]];
-            })
-            .select('path')
-            .style('visibility', 'hidden');
-    }
-
-    var _legendClick = function (data) {
-        if (_localLabelStack.indexOf(data[_dimension[0]]) < 0) {
-            _localLabelStack.push(data[_dimension[0]]);
-        } else {
-            _localLabelStack.splice(_localLabelStack.indexOf(data[_dimension[0]]), 1);
-        }
-
-        chart.update(_localData);
-    }
-
     function chart(selection) {
-        _localSVG = selection;
+        _local_svg = selection;
 
         selection.each(function (data) {
-            var svg = d3.select(this),
-                width = +svg.attr('width'),
-                height = +svg.attr('height'),
-                parentWidth = width - 2 * COMMON.PADDING,
-                parentHeight = height - 2 * COMMON.PADDING;
+            _originalData = data;
+            div = d3.select(this).node().parentNode;
 
-            /* store the data in local variable */
-            _localData = data;
+            var width = div.clientWidth,
+                height = div.clientHeight;
 
-            /* total sum of the measure values */
-            _localTotal = _measure.map(function (m) {
-                return {
-                    measure: m,
-                    positiveTotal: d3.sum(data.map(function (d) { return (d[m] >= 0) ? d[m] : 0; })),
-                    negativeTotal: d3.sum(data.map(function (d) { return (d[m] < 0) ? Math.abs(d[m]) : 0; }))
+            parentWidth = width - 2 * COMMON.PADDING - margin.left;
+            parentHeight = (height - 2 * COMMON.PADDING - axisLabelSpace * 2);
+
+            container = _local_svg.append('g')
+                .attr('transform', 'translate(' + COMMON.PADDING + ', ' + COMMON.PADDING + ')');
+
+            _local_svg.attr('width', width)
+                .attr('height', height)
+
+            d3.select(div).append('div')
+                .attr('class', 'sort_selection');
+
+            d3.select(div).append('div')
+                .attr('class', 'arrow-down');
+
+            var str = UTIL.createAlert($(div).attr('id'), _measure);
+            $(div).append(str);
+
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
+
+            $(document).on('click', '_local_svg', function (e) {
+                if ($("#myonoffswitch").prop('checked') == false) {
+                    var element = e.target
+                    if (element.tagName == "_local_svg") {
+                        $('#Modal_' + $(div).attr('id') + ' .measure').val('')
+                        $('#Modal_' + $(div).attr('id') + ' .threshold').val('')
+                        $('#Modal_' + $(div).attr('id') + ' .measure').attr('disabled', false)
+                        $('#Modal_' + $(div).attr('id')).modal('toggle');
+                    }
                 }
-            });
+            })
 
-            /* applying sort operation to the data */
-            // UTIL.sorter(data, _measure, _sort);
+            $(document).on('click', '#Modal_' + $(div).attr('id') + ' .ThresholdSubmit', function (e) {
+                var newValue = $('#Modal_' + $(div).attr('id') + ' .threshold').val();
+                var obj = new Object()
+                obj.measure = $('#Modal_' + $(div).attr('id') + ' .measure').val()
+                obj.threshold = newValue;
+                threshold.push(obj);
+                $('#Modal_' + $(div).attr('id')).modal('toggle');
+            })
 
-            var container = svg.append('g')
-                .classed('container', true)
+            container = _local_svg.append('g')
                 .attr('transform', 'translate(' + COMMON.PADDING + ', ' + COMMON.PADDING + ')');
 
             var legendWidth = 0,
                 legendHeight = 0,
-                plotWidth = parentWidth - (_yAxis ? COMMON.AXIS_THICKNESS : 0),
-                plotHeight = parentHeight - (_xAxis ? (COMMON.AXIS_THICKNESS / 1.5) : 0);
+                legendBreakCount;
 
-            if (_legend) {
-                _localLegend = LEGEND.bind(chart);
+            plotWidth = parentWidth;
+            plotHeight = parentHeight;
 
-                var result = _localLegend(_measure, container, {
+            if (_showLegend) {
+                var LineLegend = LEGEND.bind(chart);
+
+                var result = LineLegend(_legendData, container, {
                     width: parentWidth,
-                    height: parentHeight
+                    height: parentHeight,
+                    legendBreakCount: legendBreakCount
                 });
 
                 legendWidth = result.legendWidth;
                 legendHeight = result.legendHeight;
+                legendBreakCount = result.legendBreakCount;
 
                 switch (_legendPosition) {
-                    case 'top':
-                    case 'bottom':
-                        plotHeight = plotHeight - legendHeight - (_xAxis ? (COMMON.AXIS_THICKNESS / 1.5) : 0);
+                    case 'Top':
+                        plotHeight = parentHeight - legendHeight - axisLabelSpace;
                         break;
-                    case 'right':
-                        plotWidth = plotWidth - legendWidth - (COMMON.AXIS_THICKNESS / 2)
+                    case 'Bottom':
+                        plotHeight = parentHeight - legendHeight - axisLabelSpace * 2;
                         break;
-                    case 'left':
-                        plotWidth = plotWidth - legendWidth;
+                    case 'Right':
+                    case 'Left':
+                        plotWidth = parentWidth - legendWidth;
                         break;
                 }
+
+                if ((_legendPosition == 'Top') || (_legendPosition == 'Bottom')) {
+                    plotWidth = parentWidth;
+                    plotHeight = parentHeight - 3 * axisLabelSpace;
+                    legendSpace = 20;
+                } else if ((_legendPosition == 'Left') || (_legendPosition == 'Right')) {
+                    var legend = _local_svg.selectAll('.item');
+                    legendSpace = legend.node().parentNode.getBBox().width;
+                    plotWidth = (parentWidth - legendSpace) - margin.left + axisLabelSpace;
+                    plotHeight = parentHeight;
+
+                    legend.attr('transform', function (d, i) {
+                        if (_legendPosition == 'Left') {
+                            return 'translate(0, ' + i * 20 + ')';
+
+                        }
+                        else if (_legendPosition == 'Right') {
+                            return 'translate(' + (parentWidth - legendSpace + axisLabelSpace) + ', ' + i * 20 + ')';
+                        }
+                    });
+                }
+            }
+            else {
+                legendSpace = 0;
+                plotWidth = parentWidth;
+                plotHeight = parentHeight;
             }
 
             if (_tooltip) {
-                _localTooltip = d3.select(this.parentNode).select('.tooltip');
+                tooltip = d3.select(this.parentNode).select('#tooltip');
             }
 
-            /* Label values for the dimension */
-            _localXLabels = data.map(function (d) {
-                return d[_dimension[0]];
-            });
-
-            /* Minimum and Maximum value of the measures */
-            _measure.forEach(function (m) {
-                var temp = d3.min(data, function (d) { return d[m]; });
-                _localMin = _localMin > temp ? temp : _localMin;
-
-                temp = d3.max(data, function (d) { return d[m]; });
-                _localMax = _localMax < temp ? temp : _localMax;
-            });
-
-            _x.domain(_localXLabels)
-                .rangeRound([0, plotWidth]);
-
-            _xGrid.domain([0, _localXLabels.length])
-                .range([0, plotWidth]);
-
-            _y.domain([_localMin, _localMax])
-                .range([plotHeight, 0])
-                .nice();
-
-            _line.x(function (d) {
-                return _x(d[_dimension[0]]);
-            })
-                .y(function (d) {
-                    return _y(d[d['measure']]);
-                });
-
-            _area.x(function (d) {
-                return _x(d[_dimension[0]]);
-            })
-                .y0(plotHeight)
-                .y1(function (d) {
-                    return _y(d[d['measure']]);
-                });
-
-            var plot = container.append('g')
-                .attr('id', 'line-plot')
-                .attr('transform', function () {
-                    var translate = [0, 0];
-
-                    switch (_legendPosition) {
-                        case 'top':
-                            translate = [COMMON.AXIS_THICKNESS, (legendHeight + (_xAxis ? COMMON.AXIS_THICKNESS : 0) / 1.5)];
-                            break;
-                        case 'bottom':
-                        case 'right':
-                            translate = [(_yAxis ? COMMON.AXIS_THICKNESS : 0), 0];
-                            break;
-                        case 'left':
-                            translate = [(legendWidth + (_yAxis ? COMMON.AXIS_THICKNESS : 0)), 0]
-                    }
-
-                    return 'translate(' + translate.toString() + ')';
-                });
-
-            /* Axes Grid */
-            _localXGrid = d3.axisBottom()
-                .ticks(_localXLabels.length)
-                .tickFormat('')
-                .tickSize(-plotHeight);
-
-            _localYGrid = d3.axisLeft()
-                .tickFormat('')
-                .tickSize(-plotWidth);
-
-            _localXGrid.scale(_xGrid);
-            _localYGrid.scale(_y);
-
-            plot.append('g')
-                .attr('class', 'x grid')
-                .attr('visibility', function () {
-                    return _grid ? 'visible' : 'hidden';
-                })
-                .attr('transform', 'translate(0, ' + plotHeight + ')')
-                .call(_localXGrid);
-
-            plot.append('g')
-                .attr('class', 'y grid')
-                .attr('visibility', function () {
-                    return _grid ? 'visible' : 'hidden';
-                })
-                .call(_localYGrid);
-
-            var cluster = plot.selectAll('.cluster')
-                .data(_measure)
-                .enter().append('g')
-                .classed('cluster', true);
-
-            var lineGroup = cluster.append('g')
-                .attr('id', function (d, i) {
-                    return 'line-group-' + i;
-                })
-                .classed('line', true);
-
-            lineGroup.append('path')
-                .datum(function (m, i) {
-                    var clone = jQuery.extend(true, [], data); // deep copy
-
-                    return clone.map(function (d) {
-                        d['measure'] = m;
-                        return d;
-                    });
-                })
-                .style('fill', 'none')
-                .style('stroke', function (d, i) {
-                    if (typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                        return COMMON.COLORSCALE(_measure[i]);
-                    }
-                    return _measureBorderColor[i];
-                })
-                .style('stroke-linejoin', 'round')
-                .style('stroke-linecap', 'round')
-                .style('stroke-width', 3)
-                .attr('d', _line)
-                .transition()
-                .duration(COMMON.DURATION)
-                .attrTween('stroke-dasharray', function () {
-                    var l = this.getTotalLength(),
-                        interpolator = d3.interpolateString('0,' + l, l + ',' + l);
-
-                    return function (t) {
-                        return interpolator(t);
-                    }
-                });
-
-            lineGroup.append('path')
-                .datum(function (m, i) {
-                    var clone = jQuery.extend(true, [], data); // deep copy
-
-                    return clone.map(function (d) {
-                        d['measure'] = m;
-                        return d;
-                    });
-                })
-                .style('fill', function (d, i) {
-                    if (typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                        return COMMON.COLORSCALE(_measure[i]);
-                    }
-                    return _measureDisplayColor[i];
-                })
-                .style('stroke-width', 0)
-                .style('fill-opacity', 0.3)
-                .style('opacity', 0)
-                .attr('d', _area)
-                .transition()
-                .duration(COMMON.DURATION)
-                .styleTween('opacity', function () {
-                    var interpolator = d3.interpolateNumber(0, 1);
-
-                    return function (t) {
-                        return interpolator(t);
-                    }
-                });
-
-            lineGroup.selectAll('.line-point')
-                .data(function (m, i) {
-                    var clone = jQuery.extend(true, [], data); // deep copy
-
-                    return clone.map(function (d) {
-                        d['measure'] = m;
-                        return d;
-                    });
-                })
-                .enter().append('path')
-                .classed('line-point', true)
-                .style('fill', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    if (typeof _measureDisplayColor[index] == 'undefined' || _measureDisplayColor[index].trim() == '') {
-                        return COMMON.COLORSCALE(_measure[index]);
-                    }
-                    return _measureDisplayColor[index];
-                })
-                .attr('d', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-                    return d3.symbol()
-                        .type(_getSymbolForPointType(_measurePointType[index]))
-                        .size(40)();
-                })
-                .attr('transform', function (d) {
-                    return 'translate(' + _x(d[_dimension[0]]) + ',' + _y(d[d['measure']]) + ')';
-                })
-                .on('mouseover', _handleMouseOverFn.call(chart, _localTooltip, svg))
-                .on('mousemove', _handleMouseMoveFn.call(chart, _localTooltip, svg))
-                .on('mouseout', _handleMouseOutFn.call(chart, _localTooltip, svg))
-                .on('click', function (d, i) {
-
-                });
-
-            var text = lineGroup.selectAll('.line-text')
-                .data(function (m, i) {
-                    var clone = jQuery.extend(true, [], data); // deep copy
-
-                    return clone.map(function (d) {
-                        d['measure'] = m;
-                        return d;
-                    });
-                })
-                .enter().append('text')
-                .classed('line-text', true)
-                .attr('x', function (d, i) {
-                    return _x(d[_dimension[0]]);
-                })
-                .attr('y', function (d, i) {
-                    return plotHeight;
-                })
-                .attr('dy', function (d, i) {
-                    return -COMMON.OFFSET;
-                })
-                .attr('opacity', 0)
-                .attr('visibility', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    return _measureShowValue[index] ? "visible" : "hidden";
-                })
-                .style('font-style', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    return _measureFontStyle[index] || COMMON.DEFAULT_FONTSTYLE;
-                })
-                .style('font-weight', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    return _measureFontWeight[index] || COMMON.DEFAULT_FONTWEIGHT;
-                })
-                .style('font-size', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    return _measureFontSize[index] || COMMON.DEFAULT_FONTSIZE;
-                })
-                .style('fill', function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    if (typeof _measureTextColor[index] == 'undefined' || _measureTextColor[index].trim() == '') {
-                        return COMMON.DEFAULT_COLOR;
-                    }
-                    return _measureTextColor[index];
-                })
-                .style('text-anchor', 'middle');
-
-            text.transition()
-                .duration(COMMON.DURATION)
-                .attr('opacity', 1)
-                .attr('y', function (d, i) {
-                    return _y(d[d['measure']]);
-                })
-                .text(function (d, i) {
-                    var index = _measure.indexOf(d['measure']);
-
-                    var formatter = UTIL.getNumberFormatterFn(_measureNumberFormat[index]),
-                        value = d[d['measure']],
-                        lt = _localTotal.filter(function (lt) {
-                            return lt['measure'] == d['measure'];
-                        })[0],
-                        positiveTotal = lt['positiveTotal'],
-                        negativeTotal = lt['negativeTotal'];
-
-                    if (_measureNumberFormat[index] == 'percent') {
-                        value = (value >= 0) ? (value / positiveTotal) : (value / negativeTotal);
-                    }
-
-                    return formatter(UTIL.roundNumber(value, 2)).toUpperCase();
-                });
-
-            /* Axes */
-            var xAxisGroup,
-                yAxisGroup;
-
-            if (_xAxis) {
-                _localXAxis = d3.axisBottom(_x)
-                    .tickSize(0)
-                    .tickPadding(10);
-
-                xAxisGroup = plot.append('g')
-                    .attr('class', 'x axis')
-                    .attr('visibility', function () {
-                        return 'visible';
-                    })
-                    .attr('transform', 'translate(0, ' + plotHeight + ')')
-                    .call(_localXAxis);
-
-                xAxisGroup.append('g')
-                    .attr('class', 'label')
-                    .attr('transform', function () {
-                        return 'translate(' + (plotWidth) + ', ' + (COMMON.AXIS_THICKNESS / 1.5) + ')';
-                    })
-                    .append('text')
-                    .style('text-anchor', 'end')
-                    .style('font-weight', 'bold')
-                    .style('fill', _xAxisColor)
-                    .text(_xAxisLabel);
-
-                _setAxisColor(xAxisGroup, _xAxisColor);
-            }
-
-            if (_yAxis) {
-                _localYAxis = d3.axisLeft(_y)
-                    .tickSize(0)
-                    .tickPadding(8)
-                    .tickFormat(function (d) {
-                        return UTIL.shortScale(2)(d);
-                    });
-
-                yAxisGroup = plot.append('g')
-                    .attr('class', 'y axis')
-                    .attr('visibility', function () {
-                        return 'visible';
-                    })
-                    .call(_localYAxis);
-
-                yAxisGroup.append('g')
-                    .attr('class', 'label')
-                    .attr('transform', function () {
-                        return 'translate(' + (-COMMON.AXIS_THICKNESS / 1.15) + ', ' + '0)';
-                    })
-                    .append('text')
-                    .attr('transform', 'rotate(-90)')
-                    .style('text-anchor', 'end')
-                    .style('font-weight', 'bold')
-                    .style('fill', _yAxisColor)
-                    .text(_yAxisLabel);
-
-                _setAxisColor(yAxisGroup, _yAxisColor);
-            }
+            drawPlot.call(this, data);
         });
+
     }
 
-    /**
-     * Private method that delegates legend interactions to respective controllers
-     *
-     * @param {object} event Mouseevent instance
-     * @param {object} datum Record of the data binded to the legend item
-     * @return {undefined}
-     */
+    var drawPlot = function (data) {
+        var me = this;
+        _Local_data = _originalData = data;
+
+        var confirm = $(me).parent().find('div.confirm')
+        .css('visibility', 'hidden');
+
+        var plot = container.append('g')
+            .attr('class', 'line-plot')
+            .classed('plot', true)
+            .attr('transform', function () {
+                if (_legendPosition == 'Top') {
+                    return 'translate(' + margin.left + ', ' + parseInt(legendSpace * 2 + (20 * parseInt(legendBreakCount))) + ')';
+                } else if (_legendPosition == 'Bottom') {
+                    return 'translate(' + margin.left + ', 0)';
+                } else if (_legendPosition == 'Left') {
+                    return 'translate(' + (legendSpace + margin.left + axisLabelSpace) + ', 0)';
+                } else if (_legendPosition == 'Right') {
+                    return 'translate(' + margin.left + ', 0)';
+                }
+            });
+        var labelStack = [];
+        var x = d3.scaleBand()
+            .rangeRound([0, plotWidth])
+            .padding([1]);
+
+        var y = d3.scaleLinear()
+            .rangeRound([plotHeight, 0]);
+
+        var keys = UTIL.getMeasureList(data[0], _dimension);
+
+        x.domain(data.map(function (d) { return d[_dimension[0]]; }));
+        y.domain([0, d3.max(data, function (d) {
+            return d3.max(keys, function (key) {
+                return parseInt(d[key]);
+            });
+        })]).nice();
+
+        var areaGenerator = d3.area()
+            .curve(d3.curveLinear)
+            .x(function (d, i) {
+                return x(d['data'][_dimension[0]]) + x.bandwidth() / 2;
+            })
+            .y0(plotHeight)
+            .y1(function (d) {
+                return y(d['data'][d['tag']]);
+            });
+
+        var lineGenerator = d3.line()
+            .curve(d3.curveLinear)
+            .x(function (d, i) {
+                return x(d['data'][_dimension[0]]) + x.bandwidth() / 2;
+            })
+            .y(function (d, i) {
+                return y(d['data'][d['tag']]);
+            });
+
+        var clusterLine = plot.selectAll('.cluster_line')
+            .data(keys.filter(function (m) { return labelStack.indexOf(m) == -1; }))
+            .enter().append('g')
+            .attr('class', 'cluster_line');
+
+        var area = clusterLine.append('path')
+            .datum(function (d, i) {
+                return data.map(function (datum) { return { "tag": d, "data": datum }; });
+            })
+            .attr('class', 'area')
+            .attr('fill', function (d, i) {
+                return UTIL.getDisplayColor(_measure.indexOf(d[0]['tag']), _displayColor);
+            })
+            .attr('visibility', function (d, i) {
+                if (_lineType[(_measure.indexOf(d[0]['tag']))] == "Area") {
+                    return 'visible'
+                }
+                else {
+                    return 'hidden';
+                }
+
+            })
+            .on("mouseover", function (d) {
+                d3.select(this)
+                    .style("fill-opacity", 1)
+                    .style("cursor", "pointer");
+            })
+            .on("mouseout", function (d) {
+                d3.select(this)
+                    .style("fill-opacity", .5)
+                    .style("cursor", "none");
+            })
+            .style('fill-opacity', 0.5)
+            .attr('stroke', 'none')
+            .attr('d', areaGenerator);
+
+        var line = clusterLine.append('path')
+            .datum(function (d, i) {
+                return data.map(function (datum) { return { "tag": d, "data": datum }; });
+            })
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', function (d, i) {
+                return UTIL.getBorderColor(_measure.indexOf(d[0]['tag']), _borderColor);
+            })
+            .attr('stroke-linejoin', 'round')
+            .attr('stroke-linecap', 'round')
+            .attr('stroke-width', 1)
+            .on("mouseover", function (d) {
+                d3.select(this)
+                    .style("stroke-width", "2.5px")
+                    .style("cursor", "pointer");
+            })
+            .on("mouseout", function (d) {
+                d3.select(this)
+                    .style("stroke-width", "1.5px")
+                    .style("cursor", "none");
+            })
+            .attr('d', lineGenerator);
+
+        var point = clusterLine.selectAll('point')
+            .data(function (d, i) {
+                return data.map(function (datum) { return { "tag": d, "data": datum }; });
+            })
+            .enter().append('path')
+            .attr('class', 'point')
+            .attr('fill', function (d, i) {
+                return UTIL.getDisplayColor(_measure.indexOf(d.tag), _displayColor);
+            })
+            .attr('d', function (d, i) {
+                return d3.symbol()
+                    .type(getPointType(_measure.indexOf(d.tag)))
+                    .size(40)();
+            })
+            .attr('transform', function (d) {
+                return 'translate('
+                    + (x(d['data'][_dimension[0]]) + x.bandwidth() / 2)
+                    + ',' + y(d['data'][d['tag']]) + ')';
+            })
+            .on('mouseover', _handleMouseOverFn.call(chart, tooltip, _local_svg))
+            .on('mousemove', _handleMouseMoveFn.call(chart, tooltip, _local_svg))
+            .on('mouseout', _handleMouseOutFn.call(chart, tooltip, _local_svg))
+            .on('click', function (d) {
+                if ($("#myonoffswitch").prop('checked') == false) {
+                    $('#Modal_' + $(div).attr('id') + ' .measure').val(d.measure);
+                    $('#Modal_' + $(div).attr('id') + ' .threshold').val('');
+                    $('#Modal_' + $(div).attr('id') + ' .measure').attr('disabled', true);;
+                    $('#Modal_' + $(div).attr('id')).modal('toggle');
+                }
+                else {
+                    var confirm = d3.select('.confirm')
+                        .style('visibility', 'visible');
+                    var _filter = _Local_data.filter(function (d1) {
+                        return d.data[_dimension[0]] === d1[_dimension[0]]
+                    })
+                    var rect = d3.select(this);
+                    if (rect.classed('selected')) {
+                        rect.classed('selected', false);
+                        filterData.map(function (val, i) {
+                            if (val[_dimension[0]] == d.data[_dimension[0]]) {
+                                filterData.splice(i, 1)
+                            }
+                        })
+                    } else {
+                        rect.classed('selected', true);
+                        var isExist = filterData.filter(function (val) {
+                            if (val[_dimension[0]] == d.data[_dimension[0]]) {
+                                return val
+                            }
+                        })
+                        if (isExist.length == 0) {
+                            filterData.push(_filter[0]);
+                        }
+                    }
+                }
+            })
+
+        plot.append("g")
+            .attr("class", "x_axis")
+            .attr("transform", "translate(0," + plotHeight + ")")
+            .call(d3.axisBottom(x))
+            .append("text")
+            .attr("x", plotWidth / 2)
+            .attr("y", 2 * axisLabelSpace)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .style('text-anchor', 'middle')
+            .style('visibility', UTIL.getVisibility(_showXaxisLabel))
+            .text(function () {
+                return _displayName;
+            });
+
+        plot.append("g")
+            .attr("class", "y_axis")
+            .call(d3.axisLeft(y).ticks(null, "s"))
+            .append("text")
+            .attr("x", plotHeight / 2)
+            .attr("y", 2 * axisLabelSpace)
+            .attr("transform", function (d) { return "rotate(" + 90 + ")"; })
+            .attr("dy", "0.32em")
+            .style('visibility', UTIL.getVisibility(_showYaxisLabel))
+            .attr("font-weight", "bold")
+            .style('text-anchor', 'middle')
+            .text(function () {
+                return _displayNameForMeasure.map(function (p) { return p; }).join(', ');
+            });
+
+        UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis, _showYaxis, _showXaxis);
+
+        _local_svg.select('g.sort').remove();
+        UTIL.sortingView(container, parentHeight, parentWidth + margin.left, legendBreakCount, axisLabelSpace, offsetX);
+
+        _local_svg.select('g.sort').selectAll('text')
+            .on('click', function () {
+                var order = d3.select(this).attr('class')
+                switch (order) {
+                    case 'ascending':
+                        UTIL.toggleSortSelection(me, 'ascending', drawPlot, _local_svg, keys, _Local_data);
+                        break;
+                    case 'descending':
+                        UTIL.toggleSortSelection(me, 'descending', drawPlot, _local_svg, keys, _Local_data);
+                        break;
+                    case 'reset': {
+                        _local_svg.select(me.parentElement).select('.plot').remove();
+                        drawPlot.call(me, _Local_data);
+                        break;
+                    }
+                }
+            });
+
+        d3.select(div).select('.filterData')
+            .on('click', applyFilter(chart));
+
+        d3.select(div).select('.removeFilter')
+            .on('click', clearFilter());
+
+        var lasso = d3.lasso()
+            .hoverSelect(true)
+            .closePathSelect(true)
+            .closePathDistance(100)
+            .items(point)
+            .targetArea(_local_svg);
+
+        lasso.on('start', onLassoStart(lasso, me))
+            .on('draw', onLassoDraw(lasso, me))
+            .on('end', onLassoEnd(lasso, me))
+
+        _local_svg.call(lasso);
+    }
+
     chart._legendInteraction = function (event, data) {
+
         switch (event) {
             case 'mouseover':
                 _legendMouseOver(data);
@@ -718,263 +654,115 @@ function line() {
                 break;
         }
     }
+    var _legendMouseOver = function (data) {
 
-    chart._getName = function () {
-        return _NAME;
+        var line = d3.selectAll('.line')
+            .filter(function (d, i) {
+                return d[i].tag === data;
+            })
+            .style("stroke-width", "2.5px")
+            .style('stroke', COMMON.HIGHLIGHTER);
+    }
+
+    var _legendMouseMove = function (data) {
+
+    }
+
+    var _legendMouseOut = function (data) {
+        var line = d3.selectAll('.line')
+            .filter(function (d, i) {
+                return d[i].tag === data;
+            })
+            .style("stroke-width", "1.5px")
+            .style('stroke', function (d, i) {
+                return UTIL.getBorderColor(_measure.indexOf(d[0]['tag']), _borderColor);
+            });
+    }
+
+    var _legendClick = function (data) {
+        var _filter = UTIL.getFilterData(_localLabelStack, data, _originalData)
+        drawPlot.call(this, _filter);
     }
 
     chart.update = function (data) {
-        var svg = _localSVG,
-            width = +svg.attr('width'),
-            height = +svg.attr('height'),
-            parentWidth = width - 2 * COMMON.PADDING,
-            parentHeight = height - 2 * COMMON.PADDING,
-            filteredData,
-            _localMin = 0,
-            _localMax = 0;
 
-        /* store the data in local variable */
-        _localData = data;
+        chart._Local_data = data;
+        filterData = [];
 
-        /* Label values for the dimension */
-        _localXLabels = data.map(function (d) {
+        var plot = _local_svg.select('.plot')
+        var chartplot = _local_svg.select('.chart')
+        labelStack = [];
+
+        var x = d3.scaleBand()
+            .rangeRound([0, plotWidth])
+            .padding([1]);
+
+        var y = d3.scaleLinear()
+            .rangeRound([plotHeight, 0]);
+
+        var keys = UTIL.getMeasureList(data[0], _dimension);
+
+        x.domain(data.map(function (d) {
             return d[_dimension[0]];
-        });
-
-        /* Minimum and Maximum value of the measures */
-        _measure.forEach(function (m) {
-            var temp = d3.min(data, function (d) { return d[m]; });
-            _localMin = _localMin > temp ? temp : _localMin;
-
-            temp = d3.max(data, function (d) { return d[m]; });
-            _localMax = _localMax < temp ? temp : _localMax;
-        });
-
-        /* Update the axes scales */
-        _x.domain(_localXLabels);
-        _xGrid.domain([0, _localXLabels.length]);
-        _y.domain([_localMin, _localMax])
-            .nice();
-
-        if (_legend) {
-            svg.select('.legend').remove();
-
-            _localLegend(_measure, svg.select('g'), {
-                width: parentWidth,
-                height: parentHeight
-                // labelStack: _localLabelStack
+        }));
+        y.domain([0, d3.max(data, function (d) {
+            return d3.max(keys, function (key) {
+                return parseInt(d[key]);
             });
-        }
+        })]).nice();
 
-        var clusterGroup = svg.selectAll('.cluster')
-            .data(data);
-
-        clusterGroup.enter().append('g')
-            .attr('id', function (d, i) {
-                return 'cluster-group-' + i;
+        var areaGenerator = d3.area()
+            .curve(d3.curveLinear)
+            .x(function (d, i) {
+                return x(d['data'][_dimension[0]]) + x.bandwidth() / 2;
             })
-            .classed('cluster', true)
-            .attr('transform', function (d) {
-                return 'translate(' + _x(d[_dimension[0]]) + ', 0)';
+            .y0(plotHeight)
+            .y1(function (d) {
+                return y(d['data'][d.tag[0].tag]);
             });
 
-        var barGroup = clusterGroup.selectAll('.bar')
-            .data(function (d) {
-                return _measure.map(function (m) {
-                    var obj = {};
-                    obj[_dimension[0]] = d[_dimension[0]];
-                    obj[m] = d[m];
-                    obj['measure'] = m;
-                    return obj;
-                });
+        var lineGenerator = d3.line()
+            .curve(d3.curveLinear)
+            .x(function (d, i) {
+                return x(d['data'][_dimension[0]]) + x.bandwidth() / 2;
             })
-            .enter().append('g')
-            .attr('id', function (d, i) {
-                return 'bar-group-' + i;
-            })
-            .classed('bar', true);
-
-        var rect = barGroup.append('rect')
-            .attr('width', _xMeasure.bandwidth())
-            .attr('height', 0)
-            .style('fill', function (d, i) {
-                if (typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureDisplayColor[i];
-            })
-            .style('stroke', function (d, i) {
-                if (typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureBorderColor[i];
-            })
-            .style('stroke-width', 1)
-            .on('mouseover', _handleMouseOverFn.call(chart, _localTooltip, svg))
-            .on('mousemove', _handleMouseMoveFn.call(chart, _localTooltip, svg))
-            .on('mouseout', _handleMouseOutFn.call(chart, _localTooltip, svg))
-            .on('click', function (d, i) {
-
+            .y(function (d, i) {
+                return y(d['data'][d.tag[0].tag]);
             });
 
-        var text = barGroup.append('text')
-            .attr('y', function (d, i) {
-                return plotHeight;
+        var area = plot.selectAll('path.area')
+            .datum(function (d, i) {
+                return data.map(function (datum) { return { "tag": d, "data": datum }; });
             })
-            .attr('dy', function (d, i) {
-                return COMMON.OFFSET;
-            })
-            .attr('opacity', 0)
-            .attr('visibility', function (d, i) {
-                return _measureShowValue[i];
-            })
-            .style('font-style', function (d, i) {
-                return _measureFontStyle[i] || COMMON.DEFAULT_FONTSTYLE;
-            })
-            .style('font-weight', function (d, i) {
-                return _measureFontWeight[i] || COMMON.DEFAULT_FONTWEIGHT;
-            })
-            .style('font-size', function (d, i) {
-                return _measureFontSize[i] || COMMON.DEFAULT_FONTSIZE;
-            })
-            .style('fill', function (d, i) {
-                if (typeof _measureTextColor[i] == 'undefined' || _measureTextColor[i].trim() == '') {
-                    return COMMON.DEFAULT_COLOR;
-                }
-                return _measureTextColor[i];
-            })
-            .style('text-anchor', 'middle');
+            .attr('d', areaGenerator);
 
-        var rectMask = barGroup.append('rect')
-            .classed('bar-rect-mask', true)
-            .attr('width', _xMeasure.bandwidth())
-            .attr('height', 1)
-            .attr('visibility', 'hidden')
-            .style('fill', function (d, i) {
-                if (typeof _measureDisplayColor[i] == 'undefined' || _measureDisplayColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureDisplayColor[i];
+        var line = plot.selectAll('path.line')
+            .datum(function (d, i) {
+                return data.map(function (datum) { return { "tag": d, "data": datum }; });
             })
-            .style('stroke', function (d, i) {
-                if (typeof _measureBorderColor[i] == 'undefined' || _measureBorderColor[i].trim() == '') {
-                    return COMMON.COLORSCALE(d['measure']);
-                }
-                return _measureBorderColor[i];
-            })
-            .style('stroke-width', 1);
+            .attr('d', lineGenerator);
 
-        clusterGroup.merge(clusterGroup)
+
+        plot.selectAll('path.point').remove()
+
+
+        plot.select('.x_axis')
             .transition()
             .duration(COMMON.DURATION)
-            .attr('transform', function (d) {
-                return 'translate(' + _x(d[_dimension[0]]) + ', 0)';
-            });
+            .call(d3.axisBottom(x));
 
-        clusterGroup.selectAll('.bar').select('rect:not(.bar-rect-mask)')
+        plot.select('.y_axis')
             .transition()
             .duration(COMMON.DURATION)
-            .attr('height', function (d, i) {
-                return _y(0) - _y(d[d['measure']]);
-            })
-            .attr('width', _xMeasure.bandwidth())
-            .attr('x', function (d, i) {
-                return _xMeasure(d['measure']);
-            })
-            .attr('y', function (d, i) {
-                return _y(d[d['measure']]);
-            });
+            .call(d3.axisLeft(y).ticks(null, "s"));
 
-        clusterGroup.selectAll('.bar').select('rect.bar-rect-mask')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('width', _xMeasure.bandwidth())
-            .attr('x', function (d, i) {
-                return _xMeasure(d['measure']);
-            })
-            .attr('y', function (d, i) {
-                return _y(d[d['measure']]) - (COMMON.OFFSET / 3);
-            });
+        UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);
+        UTIL.displayThreshold(threshold, data, keys);
 
-        clusterGroup.selectAll('.bar').select('text')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('opacity', 1)
-            .attr('x', function (d, i) {
-                return _xMeasure(d['measure']) + (_xMeasure.bandwidth() / 2);
-            })
-            .attr('y', function (d, i) {
-                return _y(d[d['measure']]);
-            })
-            .text(function (d, i) {
-                var formatter = UTIL.getNumberFormatterFn(_measureNumberFormat[i]),
-                    value = d[d['measure']],
-                    lt = _localTotal.filter(function (lt) {
-                        return lt['measure'] == d['measure'];
-                    })[0],
-                    positiveTotal = lt['positiveTotal'],
-                    negativeTotal = lt['negativeTotal'];
+    }
 
-                if (_measureNumberFormat[i] == 'percent') {
-                    value = (value >= 0) ? (value / positiveTotal) : (value / negativeTotal);
-                }
-
-                return formatter(UTIL.roundNumber(value, 2)).toUpperCase();
-            });
-
-        clusterGroup.exit().selectAll('rect:not(.bar-rect-mask)')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('height', 0)
-            .attr('y', _y(0))
-            .remove();
-
-        clusterGroup.exit().selectAll('text')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('y', _y(0))
-            .remove();
-
-        /* Update Axes */
-        var xAxisGroup,
-            yAxisGroup;
-
-        if (_xAxis) {
-            xAxisGroup = svg.select('.x.axis')
-                .transition()
-                .duration(COMMON.DURATION)
-                .call(_localXAxis);
-
-            _setAxisColor(xAxisGroup, _xAxisColor);
-        }
-
-        if (_yAxis) {
-            yAxisGroup = svg.select('.y.axis')
-                .transition()
-                .duration(COMMON.DURATION)
-                .call(_localYAxis);
-
-            _setAxisColor(yAxisGroup, _yAxisColor);
-        }
-
-        /* Update Axes Grid */
-        _localXGrid.ticks(_localXLabels.length);
-
-        svg.select('.x.grid')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('visibility', function () {
-                return _grid ? 'visible' : 'hidden';
-            })
-            .call(_localXGrid);
-
-        svg.select('.y.grid')
-            .transition()
-            .duration(COMMON.DURATION)
-            .attr('visibility', function () {
-                return _grid ? 'visible' : 'hidden';
-            })
-            .call(_localYGrid);
+    chart._getName = function () {
+        return _NAME;
     }
 
     chart.config = function (value) {
@@ -1002,19 +790,67 @@ function line() {
         return chart;
     }
 
-    chart.xAxis = function (value) {
+    chart.showLegend = function (value) {
         if (!arguments.length) {
-            return _xAxis;
+            return _showLegend;
         }
-        _xAxis = value;
+        _showLegend = value;
         return chart;
     }
 
-    chart.yAxis = function (value) {
+    chart.legendPosition = function (value) {
         if (!arguments.length) {
-            return _yAxis;
+            return _legendPosition;
         }
-        _yAxis = value;
+        _legendPosition = value;
+        return chart;
+    }
+
+    chart.sort = function (value) {
+        if (!arguments.length) {
+            return _sort;
+        }
+        _sort = value;
+        return chart;
+    }
+
+    chart.tooltip = function (value) {
+        if (!arguments.length) {
+            return _tooltip;
+        }
+        _tooltip = value;
+        return chart;
+    }
+
+    chart.showXaxis = function (value) {
+        if (!arguments.length) {
+            return _showXaxis;
+        }
+        _showXaxis = value;
+        return chart;
+    }
+
+    chart.showYaxis = function (value) {
+        if (!arguments.length) {
+            return _showYaxis;
+        }
+        _showYaxis = value;
+        return chart;
+    }
+
+    chart.showXaxisLabel = function (value) {
+        if (!arguments.length) {
+            return _showXaxisLabel;
+        }
+        _showXaxisLabel = value;
+        return chart;
+    }
+
+    chart.showYaxisLabel = function (value) {
+        if (!arguments.length) {
+            return _showYaxisLabel;
+        }
+        _showYaxisLabel = value;
         return chart;
     }
 
@@ -1034,175 +870,80 @@ function line() {
         return chart;
     }
 
-    chart.xAxisLabel = function (value) {
+    chart.showGrid = function (value) {
         if (!arguments.length) {
-            return _xAxisLabel;
+            return _tooltip;
         }
-        _xAxisLabel = value;
-        return chart;
-    }
-
-    chart.yAxisLabel = function (value) {
-        if (!arguments.length) {
-            return _yAxisLabel;
-        }
-        _yAxisLabel = value;
-        return chart;
-    }
-
-    chart.legend = function (value) {
-        if (!arguments.length) {
-            return _legend;
-        }
-        _legend = value;
-        return chart;
-    }
-
-    chart.legendPosition = function (value) {
-        if (!arguments.length) {
-            return _legendPosition;
-        }
-        _legendPosition = value;
-        return chart;
-    }
-
-    chart.grid = function (value) {
-        if (!arguments.length) {
-            return _grid;
-        }
-        _grid = value;
+        _showGrid = value;
         return chart;
     }
 
     chart.stacked = function (value) {
         if (!arguments.length) {
-            return _stacked;
+            return _tooltip;
         }
         _stacked = value;
         return chart;
     }
 
-    chart.dimensionDisplayName = function (value) {
-        if (!arguments.length) {
-            return _dimensionDisplayName;
-        }
-        _dimensionDisplayName = value;
-        return chart;
-    }
-
-    /**
-     * Line Measure Showvalue accessor function
-     *
-     * @param {boolean|array(boolean)|null} value Measure Showvalue value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {boolean|array(boolean)|function}
-     */
-    chart.measureShowValue = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureShowValue, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure Displayname accessor function
-     *
-     * @param {string|array(string)|null} value Measure Displayname value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureDisplayName = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureDisplayName, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure FontStyle accessor function
-     *
-     * @param {string|array(string)|null} value Measure FontStyle value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureFontStyle = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureFontStyle, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure FontWeight accessor function
-     *
-     * @param {number|array(number)|null} value Measure FontWeight value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {number|array(number)|function}
-     */
-    chart.measureFontWeight = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureFontWeight, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure FontSize accessor function
-     *
-     * @param {number|array(number)|null} value Measure FontSize value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {number|array(number)|function}
-     */
-    chart.measureFontSize = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureFontSize, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure NumberFormat accessor function
-     *
-     * @param {string|array(string)|null} value Measure NumberFormat value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureNumberFormat = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureNumberFormat, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure TextColor accessor function
-     *
-     * @param {string|array(string)|null} value Measure TextColor value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureTextColor = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureTextColor, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure DisplayColor accessor function
-     *
-     * @param {string|array(string)|null} value Measure DisplayColor value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureDisplayColor = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureDisplayColor, value, measure, _measure, chart);
-    }
-
-    /**
-     * Line Measure BorderColor accessor function
-     *
-     * @param {string|array(string)|null} value Measure BorderColor value for the measure(s)
-     * @param {string|null} measure Measure for which the value is to be set or retrieved
-     * @return {string|array(string)|function}
-     */
-    chart.measureBorderColor = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureBorderColor, value, measure, _measure, chart);
-    }
-
-    chart.measureLineType = function (value, measure) {
-        return UTIL.baseAccessor.call(_measureLineType, value, measure, _measure, chart);
-    }
-
-    chart.measurePointType = function (value, measure) {
-        return UTIL.baseAccessor.call(_measurePointType, value, measure, _measure, chart);
-    }
-
-    chart.tooltip = function (value) {
+    chart.displayName = function (value) {
         if (!arguments.length) {
             return _tooltip;
         }
-        _tooltip = value;
+        _displayName = value;
         return chart;
+    }
+
+    chart.legendData = function (measureConfig, measureName) {
+        _legendData = {
+            measureConfig: measureConfig,
+            measureName: measureName
+        }
+        return _legendData;
+    }
+
+    chart.showValues = function (value, measure) {
+        return UTIL.baseAccessor.call(_showValues, value, measure, _measure);
+    }
+
+    chart.displayNameForMeasure = function (value, measure) {
+        return UTIL.baseAccessor.call(_displayNameForMeasure, value, measure, _measure);
+    }
+
+    chart.fontStyle = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontStyle, value, measure, _measure);
+    }
+
+    chart.fontWeight = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontWeight, value, measure, _measure);
+    }
+
+    chart.numberFormat = function (value, measure) {
+        return UTIL.baseAccessor.call(_numberFormat, value, measure, _measure);
+    }
+
+    chart.textColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_textColor, value, measure, _measure);
+    }
+
+    chart.displayColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_displayColor, value, measure, _measure);
+    }
+
+    chart.borderColor = function (value, measure) {
+        return UTIL.baseAccessor.call(_borderColor, value, measure, _measure);
+    }
+
+    chart.fontSize = function (value, measure) {
+        return UTIL.baseAccessor.call(_fontSize, value, measure, _measure);
+    }
+
+    chart.lineType = function (value, measure) {
+        return UTIL.baseAccessor.call(_lineType, value, measure, _measure);
+    }
+
+    chart.pointType = function (value, measure) {
+        return UTIL.baseAccessor.call(_pointType, value, measure, _measure);
     }
 
     return chart;

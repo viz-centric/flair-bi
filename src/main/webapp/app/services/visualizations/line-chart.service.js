@@ -70,54 +70,48 @@
 
                     result['maxMes'] = measures.length;
 
-                    result['xAxis'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis');
-                    result['yAxis'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis');
+                    result['showXaxis'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis');
+                    result['showYaxis'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis');
                     result['xAxisColor'] = VisualizationUtils.getPropertyValue(record.properties, 'X Axis Colour');
                     result['yAxisColor'] = VisualizationUtils.getPropertyValue(record.properties, 'Y Axis Colour');
-                    result['xAxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
-                    result['yAxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
-                    result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
-                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
-                    result['grid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
-                    result['stacked'] = VisualizationUtils.getPropertyValue(record.properties, 'Stacked');
+                    result['showXaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
+                    result['showYaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
+                    result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
+                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position');
+                    result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
-                    result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
-                    result['measureShowValue'] = [];
-                    result['measureDisplayName'] = [];
-                    result['measureFontStyle'] = [];
-                    result['measureFontWeight'] = [];
-                    result['measureFontSize'] = [];
-                    result['measureNumberFormat'] = [];
-                    result['measureTextColor'] = [];
-                    result['measureDisplayColor'] = [];
-                    result['measureBorderColor'] = [];
-                    result['measureLineType'] = [];
-                    result['measurePointType'] = [];
-
+                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
+                    result['showValues'] = [];
+                    result['displayNameForMeasure'] = [];
+                    result['fontStyle'] = [];
+                    result['fontWeight'] = [];
+                    result['fontSize'] = [];
+                    result['numberFormat'] = [];
+                    result['textColor'] = [];
+                    result['displayColor'] = [];
+                    result['borderColor'] = [];
+                    result['lineType'] = [];
+                    result['pointType'] = [];
                     for (var i = 0; i < result.maxMes; i++) {
-                        eachMeasure = {};
 
-                        result['measureShowValue'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
-                        result['measureDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
-                        result['measureFontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
-                        result['measureFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
-                        result['measureFontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
-                        result['measureNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
-                        result['measureTextColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
-                        result['measureDisplayColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour'));
-                      //  result['measureDisplayColor'].push(( result['measureDisplayColor'] == null) ? colorSet[i] : result['measureDisplayColor']);
-                        result['measureBorderColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour'));
-                     //   result['measureBorderColor'].push(( result['measureBorderColor'] == null) ? colorSet[i] : eresult['measureBorderColor']);
-                        result['measureLineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type'));
-                        result['measurePointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
-
+                        result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
+                        result['displayNameForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                        result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
+                        result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
+                        result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
+                        result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
+                        result['textColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
+                        result['displayColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour'));
+                        result['borderColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour'));
+                        //   result['displayColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour');
+                        //  result['displayColor'] .push( (eachMeasure['displayColor'] == null) ? colorSet[i] : eachMeasure['displayColor']);
+                        //   result['borderColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
+                        //   result['borderColor'] .push( (eachMeasure['borderColor'] == null) ? colorSet[i] : eachMeasure['borderColor']);
+                        result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type'));
+                        result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                     }
-
-                    result['measureProp'] = allMeasures;
-
                     return result;
                 }
-
 
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
@@ -125,8 +119,9 @@
                         line.update(record.data);
                     }
                 } else {
+                    d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'pie-' + this.id)
+                        .attr('id', 'line-' + element[0].id)
                         .style('width', element[0].clientWidth + 'px')
                         .style('height', element[0].clientHeight + 'px')
                         .style('overflow', 'hidden')
@@ -134,14 +129,9 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
-                        .attr('width', element[0].clientWidth)
-                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip')
-
-                    var tooltip = div.append('div')
-                        .attr('class', 'tooltip');
 
                     var line = flairVisualizations.line()
                         .config(getProperties(VisualizationUtils, record))

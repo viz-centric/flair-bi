@@ -1,6 +1,5 @@
 var COMMON = require('../extras/common.js')(),
-    UTIL = require('../extras/util.js')(),
-    LEGEND = require('../extras/legend.js')();
+    UTIL = require('../extras/util.js')();
 
 function treemap() {
 
@@ -31,7 +30,7 @@ function treemap() {
         fontWeightForDimension = [],
         fontSizeForDimension = [];
 
-    /* These are the common variables that is shared across the different private/public
+    /* These are the common variables that is shared across the different private/public 
      * methods but is initialized/updated within the methods itself.
      */
     var _localSVG,
@@ -44,7 +43,7 @@ function treemap() {
         height
     // _localLabelStack;
 
-    /* These are the common private functions that is shared across the different private/public
+    /* These are the common private functions that is shared across the different private/public 
      * methods but is initialized beforehand.
      */
     var BASE_COLOR = '#ffffff',
@@ -331,7 +330,7 @@ function treemap() {
         }
 
     }
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items().selectAll('rect')
@@ -341,7 +340,7 @@ function treemap() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items().selectAll('rect')
@@ -357,9 +356,10 @@ function treemap() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
+
             if (!filter) {
                 return;
             }
@@ -374,8 +374,8 @@ function treemap() {
 
             lasso.notSelectedItems().selectAll('rect');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             if (data.length > 0) {
@@ -589,6 +589,9 @@ function treemap() {
                 tooltip = d3.select(this.parentNode).select('#tooltip');
             }
 
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
+
             treemap = d3.treemap()
                 .size([width, height])
                 .paddingOuter(function (node) {
@@ -645,10 +648,10 @@ function treemap() {
 
             drawViz(cell)
 
-            d3.select(div).select('.btn-primary')
+            d3.select(div).select('.filterData')
                 .on('click', applyFilter(chart));
 
-            d3.select(div).select('.btn-default')
+            d3.select(div).select('.removeFilter')
                 .on('click', clearFilter());
 
             var lasso = d3.lasso()
@@ -658,9 +661,9 @@ function treemap() {
                 .items(cell)
                 .targetArea(svg);
 
-            lasso.on('start', onLassoStart(lasso, chart))
-                .on('draw', onLassoDraw(lasso, chart))
-                .on('end', onLassoEnd(lasso, chart));
+            lasso.on('start', onLassoStart(lasso, me))
+                .on('draw', onLassoDraw(lasso, me))
+                .on('end', onLassoEnd(lasso, me));
 
             _local_svg.call(lasso);
 

@@ -1,6 +1,9 @@
-function clusteredhorizontalbar() {
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')();
 
-    var _NAME = 'clusteredhorizontalbar';
+function sankey() {
+
+    var _NAME = 'sankey';
 
     var _config,
         dimension = [],
@@ -87,7 +90,7 @@ function clusteredhorizontalbar() {
         return output;
     }
 
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items()
@@ -97,7 +100,7 @@ function clusteredhorizontalbar() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoDraw = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items()
@@ -113,7 +116,7 @@ function clusteredhorizontalbar() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoEnd = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
             if (!filter) {
@@ -130,8 +133,8 @@ function clusteredhorizontalbar() {
 
             lasso.notSelectedItems()
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             if (data.length > 0) {
@@ -306,7 +309,7 @@ function clusteredhorizontalbar() {
             if (_tooltip) {
                 tooltip = d3.select(this.parentNode).select('#tooltip');
             }
-
+            var me=this;
             svg.selectAll('g').remove();
 
             svg.attr('width', width)
@@ -314,6 +317,9 @@ function clusteredhorizontalbar() {
 
             parentWidth = width - margin.left - margin.right,
                 parentHeight = height - margin.top - margin.bottom;
+
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
 
             var container = svg.append('g')
                 .attr('class', 'plot')
@@ -493,10 +499,10 @@ function clusteredhorizontalbar() {
                 .attr('x', 6 + sankey.nodeWidth())
                 .attr('text-anchor', 'start');
 
-            d3.select(div).select('.btn-primary')
+            d3.select(div).select('.filterData')
                 .on('click', applyFilter(chart));
 
-            d3.select(div).select('.btn-default')
+            d3.select(div).select('.removeFilter')
                 .on('click', clearFilter());
 
             var lasso = d3.lasso()
@@ -506,9 +512,9 @@ function clusteredhorizontalbar() {
                 .items(node.select('rect'))
                 .targetArea(svg);
 
-            lasso.on('start', onLassoStart(lasso, chart))
-                .on('draw', onLassoDraw(lasso, chart))
-                .on('end', onLassoEnd(lasso, chart));
+            lasso.on('start', onLassoStart(lasso, me))
+                .on('draw', onLassoDraw(lasso, me))
+                .on('end', onLassoEnd(lasso, me));
 
             svg.call(lasso);
         });
@@ -842,3 +848,5 @@ function clusteredhorizontalbar() {
 
     return chart;
 }
+
+module.exports = sankey;

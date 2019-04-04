@@ -151,7 +151,7 @@ function table() {
                 }
 
             });
-            d3.select('#donut')
+            d3.select('#' + _local_svg.attr('id'))
                 .datum(d)
                 .call(chart);
 
@@ -162,7 +162,7 @@ function table() {
     }
     var clearFilter = function () {
         return function () {
-            d3.select('#donut')
+            d3.select('#' + div.attr('id'))
                 .datum(_localData)
                 .call(chart);
 
@@ -171,18 +171,18 @@ function table() {
             chart(_local_svg)
         }
     }
-    chart.readerTableChart = function (str, ctr, _local_svg, key) {
-        var confirm = d3.select('.confirm')
+    var readerTableChart = function (str, ctr, element) {
+
+        var confirm = ctr.select('div.confirm')
             .style('visibility', 'visible');
-        var searchObj = filterData.find(o => o[key] === str);
+        var searchObj = filterData.find(o => o[str.id] === str.textContent);
         if (searchObj == undefined) {
             var obj = Object();
-            obj.key = key;
-            obj.value = str;
+            obj.key = str.id;
+            obj.value = str.textContent;
             filterData.push(obj);
         }
-        $(ctr).toggleClass('selected')
-
+        $(str).toggleClass('selected')
     }
     function chart(selection) {
         _local_svg = selection;
@@ -200,8 +200,12 @@ function table() {
 
             var width = +div.attr('width');
             var height = +div.attr('height');
-            var disv = d3.select("#donut");
-            $('#donut').css('width', width)
+            var disv = d3.select('#' + div.attr('id'));
+
+            var _filter = UTIL.createFilterElement()
+            $('#' + div.attr('id')).append(_filter)
+
+            $('#' + div.attr('id')).css('width', width)
                 .css('height', height).css('overflow-y', 'hidden').css('overflow-x', 'auto');
 
             var table = $('<table id="viz_table" class="display nowrap" style="width:100%"></table>').addClass('table table-condensed table-hover');
@@ -264,7 +268,8 @@ function table() {
 
                     style = JSON.stringify(style);
                     style = style.replace(/","/g, ';').replace(/["{}]/g, '');
-                    tbody += "<td onClick=\"chart.readerTableChart('" + d[_dimension[index]] + "',this,_local_svg,'" + item + "')\" style=\"" + style + "\">" + d[_dimension[index]] + "</td>";
+                    //    tbody += "<td onClick=\"readerTableChart('" + d[_dimension[index]] + "',this,_local_svg,'" + item + "')\" style=\"" + style + "\">" + d[_dimension[index]] + "</td>";
+                    tbody += "<td id=\"" + item + "\"  style=\"" + style + "\">" + d[_dimension[index]] + "</td>";
                 });
 
                 _measure.forEach(function (item, index) {
@@ -280,7 +285,9 @@ function table() {
                     style['background-color'] = UTIL.expressionEvaluator(_cellColorExpressionForMeasure[index], d[_measure[index]], 'color');
                     style = JSON.stringify(style);
                     style = style.replace(/","/g, ';').replace(/["{}]/g, '');
-                    tbody += "<td onClick=\"chart.readerTableChart('" + d[_measure[index]] + "',this,_local_svg,'" + item + "')\" style=\"" + style + "\">" + getIcon(index, d[_measure[index]]) + UTIL.getFormattedValue(d[_measure[index]], UTIL.getValueNumberFormat(index, _numberFormatForMeasure)) + "</td>";
+                    tbody += "<td id=\"" + item + "\" style=\"" + style + "\">" + getIcon(index, d[_measure[index]]) + UTIL.getFormattedValue(d[_measure[index]], UTIL.getValueNumberFormat(index, _numberFormatForMeasure)) + "</td>";
+                    //  tbody += "<td onClick=\"readerTableChart('" + d[_measure[index]] + "',this,_local_svg,'" + item + "')\" style=\"" + style + "\">" + getIcon(index, d[_measure[index]]) + UTIL.getFormattedValue(d[_measure[index]], UTIL.getValueNumberFormat(index, _numberFormatForMeasure)) + "</td>";
+
                 });
                 tbody += "</tr>";
             });
@@ -288,9 +295,9 @@ function table() {
             tbody += "</tbody>";
             table.append(tbody);
 
-            $('#donut').append(table);
+            $('#' + div.attr('id')).append(table);
 
-            $('#donut').find('#viz_table').dataTable({
+            $('#' + div.attr('id')).find('#viz_table').dataTable({
                 scrollY: height - 150,
                 scrollX: true,
                 scrollCollapse: true,
@@ -310,10 +317,14 @@ function table() {
                 }
             });
 
-            d3.select('.btn-primary')
-                .on('click', applyFilter());
+            $($('#' + div.attr('id') + ' td')).on('click', function () {
+                readerTableChart.call(this.textContent, this, div)
+            })
 
-            d3.select('.btn-default')
+            div.select('.filterData')
+                .on('click', applyFilter(chart));
+
+            div.select('.removeFilter')
                 .on('click', clearFilter());
         }
 

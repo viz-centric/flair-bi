@@ -29,16 +29,16 @@ function legend() {
                     var translate = [0, 0];
 
                     switch(me.legendPosition()) {
-                        case 'top':
+                        case 'Top':
                             translate = [i * Math.floor(extraParams.width/data.length), 0];
                             break;
-                        case 'bottom':
+                        case 'Bottom':
                             translate = [i * Math.floor(extraParams.width/data.length), (extraParams.height - COMMON.PADDING)];
                             break;
                         case 'right':
                             translate = [(4 / 5) * extraParams.width, i * 20];
                             break;
-                        case 'left':
+                        case 'Left':
                             translate = [0, i * 20];
                     }
 
@@ -118,10 +118,10 @@ function legend() {
             var translate = [0, 0];
 
             switch(me.legendPosition()) {
-                case 'top':
+                case 'Top':
                     translate = [i * Math.floor(extraParams.width/data.length), 0];
                     break;
-                case 'bottom':
+                case 'Bottom':
                     translate = [i * Math.floor(extraParams.width/data.length), (extraParams.height - COMMON.PADDING)];
                     break;
                 case 'right':
@@ -132,7 +132,7 @@ function legend() {
                         translate = [(extraParams.width - legendWidth), i * 20];
                     }
                     break;
-                case 'left':
+                case 'Left':
                     /* For pie and doughnut chart vertically center the legend items */
                     if(me._getName() == 'pie' || me._getName() == 'doughnut') {
                         translate = [0, ((extraParams.height / 2) - (legendHeight / 2) + i * 20)];

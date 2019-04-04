@@ -1,3 +1,7 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
+
 function combo() {
 
     var _NAME = 'combo';
@@ -49,7 +53,7 @@ function combo() {
         this.measure(config.measure);
         this.showLegend(config.showLegend);
         this.legendPosition(config.legendPosition);
-     
+
         this.showXaxis(config.showXaxis);
         this.showYaxis(config.showYaxis);
         this.showXaxisLabel(config.showXaxisLabel);
@@ -361,22 +365,22 @@ function combo() {
                         break;
                 }
 
-                if ((_legendPosition == 'top') || (_legendPosition == 'bottom')) {
+                if ((_legendPosition == 'Top') || (_legendPosition == 'Bottom')) {
                     plotWidth = parentWidth;
                     plotHeight = parentHeight - 3 * axisLabelSpace;
                     legendSpace = 20;
-                } else if ((_legendPosition == 'left') || (_legendPosition == 'right')) {
+                } else if ((_legendPosition == 'Left') || (_legendPosition == 'Right')) {
                     var legend = _local_svg.selectAll('.item');
                     legendSpace = legend.node().parentNode.getBBox().width;
                     plotWidth = (parentWidth - legendSpace) - margin.left + axisLabelSpace;
                     plotHeight = parentHeight;
 
                     legend.attr('transform', function (d, i) {
-                        if (_legendPosition == 'left') {
+                        if (_legendPosition == 'Left') {
                             return 'translate(0, ' + i * 20 + ')';
 
                         }
-                        else if (_legendPosition == 'right') {
+                        else if (_legendPosition == 'Right') {
                             return 'translate(' + (parentWidth - legendSpace + axisLabelSpace) + ', ' + i * 20 + ')';
                         }
                     });
@@ -386,10 +390,10 @@ function combo() {
                 legendSpace = 0;
                 plotWidth = parentWidth;
                 plotHeight = parentHeight;
-            } 
+            }
 
             if (_tooltip) {
-                tooltip = d3.select(this.parentNode).select('.tooltip');
+                tooltip = d3.select(this.parentNode).select('#tooltip');
             }
             chart.drawViz = function (element) {
                 var me = this;
@@ -478,13 +482,13 @@ function combo() {
                     .attr('class', 'combo-plot')
                     .classed('plot', true)
                     .attr('transform', function () {
-                        if (_legendPosition == 'top') {
+                        if (_legendPosition == 'Top') {
                             return 'translate(' + margin.left + ', ' + parseInt(legendSpace * 2 + (20 * parseInt(legendBreakCount))) + ')';
-                        } else if (_legendPosition == 'bottom') {
+                        } else if (_legendPosition == 'Bottom') {
                             return 'translate(' + margin.left + ', 0)';
-                        } else if (_legendPosition == 'left') {
+                        } else if (_legendPosition == 'Left') {
                             return 'translate(' + (legendSpace + margin.left + axisLabelSpace) + ', 0)';
-                        } else if (_legendPosition == 'right') {
+                        } else if (_legendPosition == 'Right') {
                             return 'translate(' + margin.left + ', 0)';
                         }
                     });
@@ -890,7 +894,7 @@ function combo() {
             })
             .classed('selected', false)
             .classed('possible', false);
-            
+
 
         var newBars = bar.enter().append('g')
             .attr('class', 'bar');
@@ -904,12 +908,12 @@ function combo() {
 
         plot.select('.x_axis')
             .transition()
-             .duration(COMMON.DURATION)
+            .duration(1000)
             .call(d3.axisBottom(x0));
 
         plot.select('.y_axis')
             .transition()
-             .duration(COMMON.DURATION)
+            .duration(1000)
             .call(d3.axisLeft(y).ticks(null, "s"));
 
         UTIL.setAxisColor(svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);
@@ -1150,3 +1154,5 @@ function combo() {
 
     return chart;
 }
+
+module.exports = combo;

@@ -1,6 +1,5 @@
 var COMMON = require('../extras/common.js')(),
-    UTIL = require('../extras/util.js')(),
-    LEGEND = require('../extras/legend.js')();
+    UTIL = require('../extras/util.js')()
 
 function heatmap() {
 
@@ -232,7 +231,7 @@ function heatmap() {
         return anchor;
     }
 
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items().selectAll('rect')
@@ -242,7 +241,7 @@ function heatmap() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoDraw = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items().selectAll('rect')
@@ -258,9 +257,10 @@ function heatmap() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoEnd = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
+
             if (!filter) {
                 return;
             }
@@ -275,8 +275,8 @@ function heatmap() {
 
             lasso.notSelectedItems().selectAll('rect');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             if (data.length > 0) {
@@ -430,6 +430,8 @@ function heatmap() {
 
             svg.selectAll('g').remove();
 
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
 
             var plot = svg.attr('width', width)
                 .attr('height', height)
@@ -515,10 +517,10 @@ function heatmap() {
 
             drawViz(cell);
 
-            d3.select(div).select('.btn-primary')
+            d3.select(div).select('.filterData')
                 .on('click', applyFilter(chart));
 
-            d3.select(div).select('.btn-default')
+            d3.select(div).select('.removeFilter')
                 .on('click', clearFilter());
 
             var lasso = d3.lasso()
@@ -528,9 +530,9 @@ function heatmap() {
                 .items(cell)
                 .targetArea(svg);
 
-            lasso.on('start', onLassoStart(lasso, chart))
-                .on('draw', onLassoDraw(lasso, chart))
-                .on('end', onLassoEnd(lasso, chart));
+            lasso.on('start', onLassoStart(lasso, me))
+                .on('draw', onLassoDraw(lasso, me))
+                .on('end', onLassoEnd(lasso, me));
 
             _local_svg.call(lasso);
         })

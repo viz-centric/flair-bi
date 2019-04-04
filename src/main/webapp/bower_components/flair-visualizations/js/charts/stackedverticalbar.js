@@ -1,6 +1,6 @@
 var COMMON = require('../extras/common.js')(),
     UTIL = require('../extras/util.js')(),
-    LEGEND = require('../extras/legend.js')();
+    LEGEND = require('../extras/legend_barcharts.js')();
 
 function stackedverticalbar() {
 
@@ -93,7 +93,7 @@ function stackedverticalbar() {
         return output;
     }
 
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items().selectAll('rect')
@@ -103,7 +103,7 @@ function stackedverticalbar() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoDraw = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items().selectAll('rect')
@@ -126,7 +126,7 @@ function stackedverticalbar() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoEnd = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
             if (!filter) {
@@ -143,8 +143,8 @@ function stackedverticalbar() {
 
             lasso.notSelectedItems().selectAll('rect');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             var keys = UTIL.getMeasureList(data[0].data, _dimension);
@@ -253,6 +253,9 @@ function stackedverticalbar() {
             var str = UTIL.createAlert($(div).attr('id'), _measure);
             $(div).append(str);
 
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
+
             $(document).on('click', '_local_svg', function (e) {
                 if ($("#myonoffswitch").prop('checked') == false) {
                     var element = e.target
@@ -273,7 +276,7 @@ function stackedverticalbar() {
                 threshold.push(obj);
                 $('#Modal_' + $(div).attr('id')).modal('toggle');
             })
-           
+
 
             var legendWidth = 0,
                 legendHeight = 0;
@@ -295,34 +298,34 @@ function stackedverticalbar() {
                 legendBreakCount = result.legendBreakCount;
 
                 switch (_legendPosition) {
-                    case 'top':
+                    case 'Top':
                         plotHeight = parentHeight - legendHeight - axisLabelSpace;
                         break;
-                    case 'bottom':
+                    case 'Bottom':
                         plotHeight = parentHeight - legendHeight - axisLabelSpace * 2;
                         break;
-                    case 'right':
-                    case 'left':
+                    case 'Right':
+                    case 'Left':
                         plotWidth = parentWidth - legendWidth;
                         break;
                 }
 
-                if ((_legendPosition == 'top') || (_legendPosition == 'bottom')) {
+                if ((_legendPosition == 'Top') || (_legendPosition == 'Bottom')) {
                     plotWidth = parentWidth;
                     plotHeight = parentHeight - 3 * axisLabelSpace;
                     legendSpace = 20;
-                } else if ((_legendPosition == 'left') || (_legendPosition == 'right')) {
+                } else if ((_legendPosition == 'Left') || (_legendPosition == 'Right')) {
                     var legend = _local_svg.selectAll('.item');
                     legendSpace = legend.node().parentNode.getBBox().width;
                     plotWidth = (parentWidth - legendSpace) - margin.left + axisLabelSpace;
                     plotHeight = parentHeight;
 
                     legend.attr('transform', function (d, i) {
-                        if (_legendPosition == 'left') {
+                        if (_legendPosition == 'Left') {
                             return 'translate(0, ' + i * 20 + ')';
 
                         }
-                        else if (_legendPosition == 'right') {
+                        else if (_legendPosition == 'Right') {
                             return 'translate(' + (parentWidth - legendSpace + axisLabelSpace) + ', ' + i * 20 + ')';
                         }
                     });
@@ -449,17 +452,21 @@ function stackedverticalbar() {
     var drawPlot = function (data) {
         var me = this;
         _Local_data = data;
+
+        var confirm = $(me).parent().find('div.confirm')
+            .css('visibility', 'hidden');
+
         var plot = container.append('g')
             .attr('class', 'stackedverticalbar-plot')
             .classed('plot', true)
             .attr('transform', function () {
-                if (_legendPosition == 'top') {
+                if (_legendPosition == 'Top') {
                     return 'translate(' + margin.left + ', ' + parseInt(legendSpace * 2 + (20 * parseInt(legendBreakCount))) + ')';
-                } else if (_legendPosition == 'bottom') {
+                } else if (_legendPosition == 'Bottom') {
                     return 'translate(' + margin.left + ', 0)';
-                } else if (_legendPosition == 'left') {
+                } else if (_legendPosition == 'Left') {
                     return 'translate(' + (legendSpace + margin.left + axisLabelSpace) + ', 0)';
-                } else if (_legendPosition == 'right') {
+                } else if (_legendPosition == 'Right') {
                     return 'translate(' + margin.left + ', 0)';
                 }
             });
@@ -572,10 +579,10 @@ function stackedverticalbar() {
                 }
             });
 
-        d3.select(div).select('.btn-primary')
+        d3.select(div).select('.filterData')
             .on('click', applyFilter(chart));
 
-        d3.select(div).select('.btn-default')
+        d3.select(div).select('.removeFilter')
             .on('click', clearFilter());
 
         _local_svg.select('g.lasso').remove()
@@ -586,9 +593,9 @@ function stackedverticalbar() {
             .items(stackedverticalbar)
             .targetArea(_local_svg);
 
-        lasso.on('start', onLassoStart(lasso, chart))
-            .on('draw', onLassoDraw(lasso, chart))
-            .on('end', onLassoEnd(lasso, chart));
+        lasso.on('start', onLassoStart(lasso, me))
+            .on('draw', onLassoDraw(lasso, me))
+            .on('end', onLassoEnd(lasso, me));
 
         _local_svg.call(lasso);
     }
@@ -614,7 +621,7 @@ function stackedverticalbar() {
 
         d3.selectAll('g.stackedverticalbar')
             .filter(function (d) {
-                return d.measure === data;
+                return d.key === data;
             })
             .select('rect')
             .style('fill', COMMON.HIGHLIGHTER);
@@ -627,11 +634,11 @@ function stackedverticalbar() {
     var _legendMouseOut = function (data) {
         d3.selectAll('g.stackedverticalbar')
             .filter(function (d) {
-                return d.measure === data;
+                return d.key === data;
             })
             .select('rect')
             .style('fill', function (d, i) {
-                return UTIL.getDisplayColor(_measure.indexOf(d.measure), _displayColor);
+                return UTIL.getDisplayColor(_measure.indexOf(d.key), _displayColor);
             });
     }
 
@@ -730,17 +737,17 @@ function stackedverticalbar() {
 
         plot.select('.x_axis')
             .transition()
-             .duration(COMMON.DURATION)
+            .duration(COMMON.DURATION)
             .call(d3.axisBottom(x));
 
         plot.select('.y_axis')
             .transition()
-             .duration(COMMON.DURATION)
+            .duration(COMMON.DURATION)
             .call(d3.axisLeft(y).ticks(null, "s"));
 
         stackedverticalbar.exit()
             .transition()
-             .duration(COMMON.DURATION)
+            .duration(COMMON.DURATION)
             .remove();
 
         UTIL.setAxisColor(_local_svg, _yAxisColor, _xAxisColor, _showYaxis, _showXaxis);

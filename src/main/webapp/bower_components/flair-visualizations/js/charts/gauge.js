@@ -1,3 +1,6 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')();
+
 function gauge() {
 
     var _NAME = 'gauge';
@@ -139,7 +142,7 @@ function gauge() {
             target = plot.append("text")
                 .attr("transform", "translate(0," + -(-20 + ringInset / 4 + 15) + ")")
                 .attr("text-anchor", "middle")
-                .style('font-size', '1.7em')
+                .style('font-size', '12px')
                 .style('font-weight', targetFontWeight)
                 .style('font-style', targetFontStyle)
                 .style('visibility', targetShowValues)
@@ -333,3 +336,4 @@ function gauge() {
     }
     return chart;
 }
+module.exports = gauge;

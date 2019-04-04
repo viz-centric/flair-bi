@@ -1,3 +1,5 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')()
 function bullet() {
 
     var _NAME = 'bullet';
@@ -23,6 +25,12 @@ function bullet() {
     var _local_svg, _Local_data, _originalData;
 
     var height, width, gWidth, gHeight, bullet;
+    var margin = {
+        top: 15,
+        right: 0,
+        bottom: 15,
+        left: 0
+    };
 
     var offset = 6, div;
 
@@ -63,7 +71,7 @@ function bullet() {
         return output;
     }
 
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items().selectAll('rect.measure')
@@ -73,7 +81,7 @@ function bullet() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoDraw = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items().selectAll('rect.measure')
@@ -89,7 +97,7 @@ function bullet() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoEnd = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
             if (!filter) {
@@ -106,8 +114,8 @@ function bullet() {
 
             lasso.notSelectedItems().selectAll('rect.measure');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             if (data.length > 0) {
@@ -161,7 +169,7 @@ function bullet() {
 
         return function (d, i) {
             if (tooltip) {
-                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me, border), container, valueColor);
+                UTIL.updateTooltip.call(tooltip, _buildTooltipData(d, me), container, valueColor);
             }
         }
     }
@@ -224,14 +232,14 @@ function bullet() {
             bottom: 15
         };
 
-        if (orientation == 'horizontal') {
+        if (orientation == 'Horizontal') {
             if (showLabel) {
                 margin['left'] = Math.floor(containerWidth / 8);
             } else {
                 margin['left'] = 20;
             }
             margin['right'] = 20;
-        } else if (orientation == 'vertical') {
+        } else if (orientation == 'Vertical') {
             margin['left'] = 15;
             margin['right'] = 15;
             margin['top'] = 30;
@@ -252,7 +260,7 @@ function bullet() {
         bullet.find('.measure').removeClass('selected');
         bullet.find('.title').css('font-size', '1.1em');
 
-        if (orientation == 'vertical') {
+        if (orientation == 'Vertical') {
             bullet.find('.tick text').each(function (i, d) {
                 var text = $(d).text();
                 //  $(d).text(UTIL.getTruncatedLabel(d, UTIL.shortScale(2)(UTIL.convertToNumber(text)), 25));
@@ -288,8 +296,11 @@ function bullet() {
             container = _local_svg.append('g')
                 .attr('class', 'plot')
 
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
+
             if (_tooltip) {
-                tooltip = d3.select(this.parentNode).select('.tooltip');
+                tooltip = d3.select(this.parentNode).select('#tooltip');
             }
 
             data = data.map(function (item) {
@@ -310,14 +321,14 @@ function bullet() {
             gWidth = Math.floor((width - margin.left - margin.right) / data.length);
             gHeight = Math.floor((height - margin.top - margin.bottom) / data.length);
             offset = 6;
-            if (orientation == 'horizontal') {
+            if (orientation == 'Horizontal') {
                 bullet.width(width - margin.left - margin.right);
                 if (data.length == 1) {
                     bullet.height(Math.floor(3 * gHeight / 4));
                 } else {
                     bullet.height(Math.floor(gHeight / 2));
                 }
-            } else if (orientation == 'vertical') {
+            } else if (orientation == 'Vertical') {
                 bullet.width(height - margin.top - margin.bottom);
                 if (data.length == 1) {
                     bullet.height(Math.floor(3 * gWidth / 4));
@@ -336,9 +347,9 @@ function bullet() {
                 })
                 .attr('class', 'bullet')
                 .attr('transform', function (d, i) {
-                    if (orientation == 'horizontal') {
+                    if (orientation == 'Horizontal') {
                         return 'translate(' + margin.left + ',' + (margin.top + i * gHeight) + ') rotate(0)';
-                    } else if (orientation == 'vertical') {
+                    } else if (orientation == 'Vertical') {
                         return 'translate(' + (margin.left + i * gWidth) + ',' + (height - margin.top + offset) + ') rotate(-90)';
                     }
 
@@ -374,17 +385,17 @@ function bullet() {
 
             var title = g.append('g')
                 .style('text-anchor', function (d) {
-                    if (orientation == 'horizontal') {
+                    if (orientation == 'Horizontal') {
                         return 'end';
-                    } else if (orientation == 'vertical') {
+                    } else if (orientation == 'Vertical') {
                         return 'middle';
                     }
                 })
                 .attr('display', showLabel ? "inherit" : "none")
                 .attr('transform', function (d) {
-                    if (orientation == 'horizontal') {
+                    if (orientation == 'Horizontal') {
                         return 'translate(' + -offset + ',' + Math.floor(gHeight / 3.25) + ')';
-                    } else if (orientation == 'vertical') {
+                    } else if (orientation == 'Vertical') {
                         return 'translate(' + -offset * 2 + ',' + Math.floor(gWidth / 3.25) + ')';
                     }
                 })
@@ -395,26 +406,26 @@ function bullet() {
                 .attr('font-weight', fontWeight)
                 .attr('font-size', fontSize)
                 .attr('transform', function (d) {
-                    if (orientation == 'horizontal') {
+                    if (orientation == 'Horizontal') {
                         return 'rotate(0)';
-                    } else if (orientation == 'vertical') {
+                    } else if (orientation == 'Vertical') {
                         return 'rotate(90)';
                     }
                 })
                 .text(function (d) { return d.title; })
                 .text(function (d) {
-                    if (orientation == 'horizontal') {
+                    if (orientation == 'Horizontal') {
                         return UTIL.getTruncatedLabel(this, d.title, margin.left, offset);
-                    } else if (orientation == 'vertical') {
+                    } else if (orientation == 'Vertical') {
                         return UTIL.getTruncatedLabel(this, d.title, Math.floor(gWidth / 2), offset);
                     }
                 });
             formatUsingCss(this);
 
-            d3.select(div).select('.btn-primary')
+            d3.select(div).select('.filterData')
                 .on('click', applyFilter(chart));
 
-            d3.select(div).select('.btn-default')
+            d3.select(div).select('.removeFilter')
                 .on('click', clearFilter());
 
             var lasso = d3.lasso()
@@ -424,9 +435,9 @@ function bullet() {
                 .items(g)
                 .targetArea(_local_svg);
 
-            lasso.on('start', onLassoStart(lasso, chart))
-                .on('draw', onLassoDraw(lasso, chart))
-                .on('end', onLassoEnd(lasso, chart));
+            lasso.on('start', onLassoStart(lasso, me))
+                .on('draw', onLassoDraw(lasso, me))
+                .on('end', onLassoEnd(lasso, me));
 
             _local_svg.call(lasso);
         });
@@ -472,9 +483,9 @@ function bullet() {
         _bullet
             .classed('selected', false)
             .attr('transform', function (d, i) {
-                if (orientation == 'horizontal') {
+                if (orientation == 'Horizontal') {
                     return 'translate(' + margin.left + ',' + (margin.top + i * gHeight) + ') rotate(0)';
-                } else if (orientation == 'vertical') {
+                } else if (orientation == 'Vertical') {
                     return 'translate(' + (margin.left + i * gWidth) + ',' + (height - margin.top + offset) + ') rotate(-90)';
                 }
 
@@ -487,9 +498,9 @@ function bullet() {
             })
             .attr('class', 'bullet')
             .attr('transform', function (d, i) {
-                if (orientation == 'horizontal') {
+                if (orientation == 'Horizontal') {
                     return 'translate(' + margin.left + ',' + (margin.top + i * gHeight) + ') rotate(0)';
-                } else if (orientation == 'vertical') {
+                } else if (orientation == 'Vertical') {
                     return 'translate(' + (margin.left + i * gWidth) + ',' + (height - margin.top + offset) + ') rotate(-90)';
                 }
 
@@ -526,17 +537,17 @@ function bullet() {
         plot.selectAll('.title').remove()
         var title = _bullet.append('g')
             .style('text-anchor', function (d) {
-                if (orientation == 'horizontal') {
+                if (orientation == 'Horizontal') {
                     return 'end';
-                } else if (orientation == 'vertical') {
+                } else if (orientation == 'Vertical') {
                     return 'middle';
                 }
             })
             .attr('display', showLabel ? "inherit" : "none")
             .attr('transform', function (d) {
-                if (orientation == 'horizontal') {
+                if (orientation == 'Horizontal') {
                     return 'translate(' + -offset + ',' + Math.floor(gHeight / 3.25) + ')';
-                } else if (orientation == 'vertical') {
+                } else if (orientation == 'Vertical') {
                     return 'translate(' + -offset * 2 + ',' + Math.floor(gWidth / 3.25) + ')';
                 }
             })
@@ -547,17 +558,17 @@ function bullet() {
             .attr('font-weight', fontWeight)
             .attr('font-size', fontSize)
             .attr('transform', function (d) {
-                if (orientation == 'horizontal') {
+                if (orientation == 'Horizontal') {
                     return 'rotate(0)';
-                } else if (orientation == 'vertical') {
+                } else if (orientation == 'Vertical') {
                     return 'rotate(90)';
                 }
             })
             .text(function (d) { return d.title; })
             .text(function (d) {
-                if (orientation == 'horizontal') {
+                if (orientation == 'Horizontal') {
                     return UTIL.getTruncatedLabel(this, d.title, margin.left, offset);
-                } else if (orientation == 'vertical') {
+                } else if (orientation == 'Vertical') {
                     return UTIL.getTruncatedLabel(this, d.title, Math.floor(gWidth / 2), offset);
                 }
             });
@@ -683,3 +694,5 @@ function bullet() {
     }
     return chart;
 }
+
+module.exports = bullet;

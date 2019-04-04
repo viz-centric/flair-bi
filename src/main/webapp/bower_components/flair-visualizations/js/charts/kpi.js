@@ -172,7 +172,7 @@ function kpi() {
                     })
                     .style('padding-left', '5px')
                     .style('text-align', function(d, i1) {
-                        return i ? 'right' : 'left';
+                        return i ? 'right' : 'Left';
                     });
 
                 measure.insert('div', (function() {

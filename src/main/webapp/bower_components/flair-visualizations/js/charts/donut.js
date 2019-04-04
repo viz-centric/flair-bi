@@ -206,8 +206,8 @@ function donut() {
 
             lasso.notSelectedItems().selectAll('path');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             data.forEach(function (d) {
@@ -341,12 +341,12 @@ function donut() {
                 legendHeight = result.legendHeight;
 
                 switch (_legendPosition) {
-                    case 'top':
-                    case 'bottom':
+                    case 'Top':
+                    case 'Bottom':
                         plotHeight = parentHeight - legendHeight;
                         break;
                     case 'right':
-                    case 'left':
+                    case 'Left':
                         plotWidth = parentWidth - legendWidth;
                         break;
                 }
@@ -382,14 +382,14 @@ function donut() {
                         var translate = [0, 0];
 
                         switch (_legendPosition) {
-                            case 'top':
+                            case 'Top':
                                 translate = [(plotWidth / 2), legendHeight + (plotHeight / 2)];
                                 break;
-                            case 'bottom':
+                            case 'Bottom':
                             case 'right':
                                 translate = [(plotWidth / 2), (plotHeight / 2)];
                                 break;
-                            case 'left':
+                            case 'Left':
                                 translate = [legendWidth + (plotWidth / 2), (plotHeight / 2)]
                         }
 
@@ -558,9 +558,9 @@ function donut() {
                     .items(pieArcGroup)
                     .targetArea(plot);
 
-                lasso.on('start', onLassoStart(lasso, chart))
+                lasso.on('start', onLassoStart(lasso, me))
                     .on('draw', onLassoDraw(lasso, chart))
-                    .on('end', onLassoEnd(lasso, chart));
+                    .on('end', onLassoEnd(lasso, me));
 
                 d3.select('.confirm')
                     .on('click', applyFilter(chart));

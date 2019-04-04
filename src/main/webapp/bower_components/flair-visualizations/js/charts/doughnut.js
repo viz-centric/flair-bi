@@ -2,11 +2,11 @@ var COMMON = require('../extras/common.js')(),
     UTIL = require('../extras/util.js')(),
     LEGEND = require('../extras/legend.js')();
 
-function pie() {
+function doughnut() {
 
-    /* These are the constant global variable for the function pie.
+    /* These are the constant global variable for the function doughnut.
      */
-    var _NAME = 'pie';
+    var _NAME = 'doughnut';
 
     /* These are the private variables that is initialized by the arguments sent
      * by the users and can be updated using public methods.
@@ -22,7 +22,7 @@ function pie() {
         _sort,
         _tooltip;
 
-    /* These are the common variables that is shared across the different private/public 
+    /* These are the common variables that is shared across the different private/public
      * methods but is initialized/updated within the methods itself.
      */
     var _localSVG,
@@ -36,14 +36,13 @@ function pie() {
         _localLabelStack = [],
         _localData;
 
-    /* These are the common private functions that is shared across the different private/public 
+    /* These are the common private functions that is shared across the different private/public
      * methods but is initialized beforehand.
      */
-    var _pie = d3.pie()
+    var _doughnut = d3.pie()
         .sort(null);
 
-    var _arc = d3.arc()
-        .innerRadius(190);
+    var _arc = d3.arc();
 
     var _arcMask = d3.arc();
 
@@ -76,12 +75,12 @@ function pie() {
 
         return function(d, i) {
             var t = _localTransitionMap.get(d.value);
-            
+
             if(!t) {
                 t = _localTransitionTime * (d.value / _localTotal)
                 _localTransitionMap.set(d.value, t);
             }
-            
+
             return (t + extraDuration);
         }
     }
@@ -102,12 +101,12 @@ function pie() {
         return function(d, i) {
             var i = _localSortedMeasureValue.indexOf(d.value),
                 t = 0;
-            
+
             while(i > 0) {
                 i--;
                 t += _localTransitionMap.get(_localSortedMeasureValue[i]);
             }
-            
+
             return (t + extraDelay);
         }
     }
@@ -159,7 +158,7 @@ function pie() {
      * Builds the html data for the tooltip
      *
      * @param {object} datum Datum forming the arc
-     * @param {function} chart Pie chart function
+     * @param {function} chart Doughnut chart function
      * @return {string} String encoded HTML data
      */
     var _buildTooltipData = function(datum, chart) {
@@ -238,7 +237,7 @@ function pie() {
 
             arcMaskGroup.select('path')
                 .style('visibility', 'hidden');
-            
+
             if(tooltip) {
                 UTIL.hideTooltip(tooltip);
             }
@@ -366,12 +365,12 @@ function pie() {
                 legendHeight = result.legendHeight;
 
                 switch(_legendPosition) {
-                    case 'Top':
-                    case 'Bottom':
+                    case 'top':
+                    case 'bottom':
                         plotHeight = plotHeight - legendHeight;
                         break;
                     case 'right':
-                    case 'Left':
+                    case 'left':
                         plotWidth = plotWidth - legendWidth;
                         break;
                 }
@@ -382,9 +381,10 @@ function pie() {
             }
 
             outerRadius = Math.min(plotWidth, plotHeight) / 2.25;
-            
+
             /* setting the outerradius of the arc */
-            _arc.outerRadius(outerRadius);
+            _arc.outerRadius(outerRadius)
+                .innerRadius(outerRadius * 0.8);
 
             /* setting the innerradius and outerradius of the masking arc */
             _arcMask.outerRadius(outerRadius * 1.02)
@@ -395,19 +395,19 @@ function pie() {
                 .innerRadius(outerRadius * 0.8);
 
             var plot = container.append('g')
-                .attr('id', 'pie-plot')
+                .attr('id', 'doughnut-plot')
                 .attr('transform', function() {
                     var translate = [0, 0];
 
                     switch(_legendPosition) {
-                        case 'Top':
+                        case 'top':
                             translate = [(plotWidth / 2), legendHeight + (plotHeight / 2)];
                             break;
-                        case 'Bottom':
+                        case 'bottom':
                         case 'right':
                             translate = [(plotWidth / 2), (plotHeight / 2)];
                             break;
-                        case 'Left':
+                        case 'left':
                             translate = [legendWidth + (plotWidth / 2), (plotHeight / 2)]
                     }
 
@@ -418,10 +418,10 @@ function pie() {
                 return d.data[_dimension[0]];
             }
 
-            var pieMask = plot.append('g')
+            var doughnutMask = plot.append('g')
                 .attr('id', 'arc-mask-group')
                 .selectAll('.arc-mask')
-                .data(_pie(data), _localKey)
+                .data(_doughnut(data), _localKey)
                 .enter().append('g')
                     .attr('id', function(d, i) {
                         return 'arc-mask-group-' + i;
@@ -440,17 +440,17 @@ function pie() {
                             this._current = d;
                         });
 
-            var pieArcGroup = plot.append('g')
+            var doughnutArcGroup = plot.append('g')
                 .attr('id', 'arc-group')
                 .selectAll('.arc')
-                .data(_pie(data), _localKey)
+                .data(_doughnut(data), _localKey)
                 .enter().append('g')
                     .attr('id', function(d, i) {
                         return 'arc-group-' + i;
                     })
                     .classed('arc', true);
 
-            var pieArcPath = pieArcGroup.append('path')
+            var doughnutArcPath = doughnutArcGroup.append('path')
                 .attr('id', function(d, i) {
                     return 'arc-path-' + i;
                 })
@@ -464,24 +464,24 @@ function pie() {
                 .on('mousemove', _handleMouseMoveFn.call(chart, _localTooltip, svg))
                 .on('mouseout', _handleMouseOutFn.call(chart, _localTooltip, svg))
                 .on('click', function(d, i) {
-                    
+
                 });
 
-            pieArcPath.transition()
+            doughnutArcPath.transition()
                 .duration(_durationFn())
                 .delay(_delayFn())
                 .attrTween('d', function(d) {
                     var i = d3.interpolate(d.startAngle + 0.1, d.endAngle);
                     return function(t) {
-                        d.endAngle = i(t); 
+                        d.endAngle = i(t);
                         return _arc(d)
                     }
                 });
 
-            var pieLabel;
+            var doughnutLabel;
 
             if(_valueAsArc) {
-                pieLabel = pieArcGroup.append('text')
+                doughnutLabel = doughnutArcGroup.append('text')
                     .attr('dy', function(d, i) {
                         if(_valuePosition == 'inside') {
                             return 10;
@@ -489,8 +489,8 @@ function pie() {
                             return -5;
                         }
                     })
-                
-                pieLabel.append('textPath')
+
+                doughnutLabel.append('textPath')
                     .attr('xlink:href', function(d, i) {
                         return '#arc-path-' + i;
                     })
@@ -501,7 +501,7 @@ function pie() {
                     .delay(_delayFn(200))
                     .on('start', function() {
                         d3.select(this).attr('startOffset', function(d) {
-                            var length = pieArcPath.nodes()[d.index].getTotalLength();
+                            var length = doughnutArcPath.nodes()[d.index].getTotalLength();
                             return 50 * (length - 2 * outerRadius)/length + '%';
                         })
                         .text(_labelFn())
@@ -513,15 +513,15 @@ function pie() {
                         .remove();
                     });
             } else {
-                var pieArcTextGroup = plot.selectAll('.arc-text')
-                    .data(_pie(data))
+                var doughnutArcTextGroup = plot.selectAll('.arc-text')
+                    .data(_doughnut(data))
                     .enter().append('g')
                         .attr('id', function(d, i) {
                             return 'arc-text-group-' + i;
                         })
                         .classed('arc-text', true);
 
-                pieLabel = pieArcTextGroup.append('text')
+                doughnutLabel = doughnutArcTextGroup.append('text')
                     .attr('transform', function(d) {
                         var centroid = _labelArc.centroid(d),
                             x = centroid[0],
@@ -605,7 +605,7 @@ function pie() {
 
         /* store the data in local variable */
         _localData = data;
-            
+
         data.sort(function(a, b) {
             return d3.ascending(a[_dimension[0]], b[_dimension[0]]);
         });
@@ -626,7 +626,7 @@ function pie() {
 
         if(_legend) {
             svg.select('.legend').remove();
-            
+
             _localLegend(data, svg.select('g'), {
                 width: parentWidth,
                 height: parentHeight,
@@ -634,9 +634,9 @@ function pie() {
             });
         }
 
-        var pieMask = svg.select('#arc-mask-group')
+        var doughnutMask = svg.select('#arc-mask-group')
             .selectAll('g.arc-mask')
-            .data(_pie(oldFilteredData), _localKey)
+            .data(_doughnut(oldFilteredData), _localKey)
             .enter()
                 .insert('g')
                 .attr('id', function(d, i) {
@@ -655,11 +655,11 @@ function pie() {
                         this._current = d;
                     });
 
-        pieMask = svg.selectAll('g.arc-mask')
-            .data(_pie(newFilteredData), _localKey)
+        doughnutMask = svg.selectAll('g.arc-mask')
+            .data(_doughnut(newFilteredData), _localKey)
 
-        pieMask.select('path')
-            .transition() .duration(COMMON.DURATION)
+        doughnutMask.select('path')
+            .transition().duration(1000)
             .attrTween('d', function(d) {
                 var interpolate = d3.interpolate(this._current, d);
                 var _this = this;
@@ -669,18 +669,18 @@ function pie() {
                 };
             });
 
-        pieMask = svg.selectAll('g.arc-mask')
-            .data(_pie(filteredData), _localKey);
+        doughnutMask = svg.selectAll('g.arc-mask')
+            .data(_doughnut(filteredData), _localKey);
 
-        pieMask.exit()
+        doughnutMask.exit()
             .transition()
             .delay(1000)
             .duration(0)
             .remove();
 
-        var pieArcGroup = svg.select('#arc-group')
+        var doughnutArcGroup = svg.select('#arc-group')
             .selectAll('g.arc')
-            .data(_pie(oldFilteredData), _localKey)
+            .data(_doughnut(oldFilteredData), _localKey)
             .enter()
                 .insert('g')
                 .attr('id', function(d, i) {
@@ -688,7 +688,7 @@ function pie() {
                 })
                 .classed('arc', true);
 
-        var pieArcPath = pieArcGroup.append('path')
+        var doughnutArcPath = doughnutArcGroup.append('path')
             .attr('id', function(d, i) {
                 return 'arc-path-' + i;
             })
@@ -702,14 +702,14 @@ function pie() {
             .on('mousemove', _handleMouseMoveFn.call(chart, _localTooltip, svg))
             .on('mouseout', _handleMouseOutFn.call(chart, _localTooltip, svg))
             .on('click', function(d, i) {
-                
+
             });
 
-        pieArcGroup = svg.selectAll('g.arc')
-            .data(_pie(newFilteredData), _localKey);
+        doughnutArcGroup = svg.selectAll('g.arc')
+            .data(_doughnut(newFilteredData), _localKey);
 
-        pieArcGroup.select('path')
-            .transition() .duration(COMMON.DURATION)
+        doughnutArcGroup.select('path')
+            .transition().duration(1000)
             .attrTween('d', function(d) {
                 var interpolate = d3.interpolate(this._current, d);
                 var _this = this;
@@ -719,17 +719,17 @@ function pie() {
                 };
             });
 
-        pieArcGroup = svg.selectAll('g.arc')
-            .data(_pie(filteredData), _localKey);
+        doughnutArcGroup = svg.selectAll('g.arc')
+            .data(_doughnut(filteredData), _localKey);
 
-        pieArcGroup.exit()
+        doughnutArcGroup.exit()
             .transition()
             .delay(1000)
             .duration(0)
             .remove();
 
         if(_valueAsArc) {
-            pieLabel = pieArcGroup.append('text')
+            doughnutLabel = doughnutArcGroup.append('text')
                 .attr('dy', function(d, i) {
                     if(_valuePosition == 'inside') {
                         return 10;
@@ -737,8 +737,8 @@ function pie() {
                         return -5;
                     }
                 })
-            
-            pieLabel.append('textPath')
+
+            doughnutLabel.append('textPath')
                 .attr('xlink:href', function(d, i) {
                     return '#arc-path-' + i;
                 })
@@ -749,7 +749,7 @@ function pie() {
                 .delay(_delayFn(200))
                 .on('start', function() {
                     d3.select(this).attr('startOffset', function(d) {
-                        var length = pieArcPath.nodes()[d.index].getTotalLength();
+                        var length = doughnutArcPath.nodes()[d.index].getTotalLength();
                         return 50 * (length - 2 * outerRadius)/length + '%';
                     })
                     .text(_labelFn())
@@ -785,7 +785,7 @@ function pie() {
             return _measure;
         }
         _measure = value;
-        _pie.value(function(d) { return d[_measure[0]]; });
+        _doughnut.value(function(d) { return d[_measure[0]]; });
         return chart;
     }
 
@@ -848,4 +848,4 @@ function pie() {
     return chart;
 }
 
-module.exports = pie;
+module.exports = doughnut;

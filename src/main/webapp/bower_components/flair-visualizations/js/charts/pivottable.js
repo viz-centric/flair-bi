@@ -331,9 +331,9 @@ function pivottable() {
 
             var width = +div.attr('width');
             var height = +div.attr('height');
-            var disv = d3.select("#pivottable");
+            var disv = d3.select('#'+div.attr('id'));
 
-            $('#pivottable').css('width', width)
+            $('#'+div.attr('id')).css('width', width)
                 .css('height', height).css('overflow-y', 'hidden').css('overflow-x', 'auto');
 
             var nester = d3.nest(),
@@ -577,9 +577,9 @@ function pivottable() {
 
             table.append((thead + tbody));
 
-            $('#pivottable').append(table);
+            $('#'+div.attr('id')).append(table);
 
-            $('#pivottable').find('#viz_pivot-table').dataTable({
+            $('#'+div.attr('id')).find('#viz_pivot-table').dataTable({
                 scrollY: height - 50,
                 scrollX: true,
                 scrollCollapse: true,

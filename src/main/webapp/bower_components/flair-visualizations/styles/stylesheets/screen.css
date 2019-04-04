@@ -68,6 +68,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 }
 
 /* line 1, ../sass/partials/_common.scss */
+body {
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
+}
+
+/* line 5, ../sass/partials/_common.scss */
 text {
   font-size: 0.6rem;
 }

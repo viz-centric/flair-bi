@@ -1,3 +1,4 @@
+
 var COMMON = require('../extras/common.js')();
 
 function legend() {
@@ -26,16 +27,16 @@ function legend() {
                 var translate = [0, 0];
 
                 switch (me.legendPosition()) {
-                    case 'top':
+                    case 'Top':
                         translate = [i * Math.floor(extraParams.width / data.measureConfig.length), 0];
                         break;
-                    case 'bottom':
+                    case 'Bottom':
                         translate = [i * Math.floor(extraParams.width / data.measureConfig.length), (extraParams.height - COMMON.PADDING)];
                         break;
-                    case 'right':
+                    case 'Right':
                         translate = [(4 / 5) * extraParams.width, i * 20];
                         break;
-                    case 'left':
+                    case 'Left':
                         translate = [0, i * 20];
                 }
 
@@ -78,16 +79,16 @@ function legend() {
             .attr('width', width)
             .attr('height', height)
             .style('fill', function (d, i) {
-                if (d.displayColor == '' || d.displayColor == null || d.displayColor == undefined) {
+                if (d == '' || d == null || d == undefined) {
                     return COMMON.COLORSCALE(i);
                 }
-                return d.displayColor;
+                return d;
             })
             .style('stroke', function (d, i) {
-                if (d.displayColor == '' || d.displayColor == null || d.displayColor == undefined) {
+                if (d == '' || d == null || d == undefined) {
                     return COMMON.COLORSCALE(i);
                 }
-                return d.displayColor;
+                return d;
             })
             .style('stroke-width', 0);
 
@@ -102,7 +103,7 @@ function legend() {
 
         var legendBreak = 0,
             legendBreakCount = 0;
-        if (me.legendPosition() == 'top') {
+        if (me.legendPosition() == 'Top') {
             legendItem.attr('transform', function (d, i) {
                 var count = i,
                     widthSum = 0
@@ -124,7 +125,7 @@ function legend() {
                     }
                     return 'translate(' + widthSum + ', ' + legendBreakCount * 20 + ')';
                 }
-                return 'translate(' + widthSum + ', ' + (me.legendPosition() == 'top' ? 0 : extraParams.height) + ')';
+                return 'translate(' + widthSum + ', ' + (me.legendPosition() == 'Top' ? 0 : extraParams.height) + ')';
             });
             extraParams.height = extraParams.height - (20 * legendBreakCount);
         }
@@ -136,5 +137,4 @@ function legend() {
         }
     }
 }
-
 module.exports = legend;

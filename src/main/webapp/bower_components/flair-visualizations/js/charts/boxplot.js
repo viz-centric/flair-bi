@@ -1,3 +1,6 @@
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')();
+
 function boxplot() {
 
     var _NAME = 'boxplot';
@@ -12,8 +15,8 @@ function boxplot() {
         axisColor,
         showLabels,
         labelColor,
-        numberFormat = []
-    displayColor = [];
+        numberFormat = [],
+        displayColor = [];
 
     var x, y;
     var margin = {
@@ -74,7 +77,7 @@ function boxplot() {
         return output;
     }
 
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items().selectAll('rect')
@@ -84,7 +87,7 @@ function boxplot() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoDraw = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items().selectAll('rect')
@@ -107,7 +110,7 @@ function boxplot() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoEnd = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
             if (!filter) {
@@ -124,8 +127,8 @@ function boxplot() {
 
             lasso.notSelectedItems().selectAll('rect');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             if (data.length > 0) {
                 filterData = data;
@@ -238,10 +241,13 @@ function boxplot() {
                 gHeight = height - margin.top - margin.bottom;
 
             var barWidth = Math.floor(gWidth / data.length / 2);
-
+            var me = this;
             if (_tooltip) {
-                tooltip = d3.select(this.parentNode).select('.tooltip');
+                tooltip = d3.select(this.parentNode).select('#tooltip');
             }
+
+            var _filter = UTIL.createFilterElement()
+            $(div).append(_filter);
 
             x = d3
                 .scalePoint()
@@ -491,10 +497,10 @@ function boxplot() {
 
             UTIL.setAxisColor(_local_svg, "", "", true, true, true, true);
 
-            d3.select(div).select('.btn-primary')
+            d3.select(div).select('.filterData')
                 .on('click', applyFilter(chart));
 
-            d3.select(div).select('.btn-default')
+            d3.select(div).select('.removeFilter')
                 .on('click', clearFilter());
 
             var lasso = d3
@@ -505,9 +511,9 @@ function boxplot() {
                 .items(box)
                 .targetArea(svg);
 
-            lasso.on('start', onLassoStart(lasso, chart))
-                .on('draw', onLassoDraw(lasso, chart))
-                .on('end', onLassoEnd(lasso, chart));
+            lasso.on('start', onLassoStart(lasso, me))
+                .on('draw', onLassoDraw(lasso, me))
+                .on('end', onLassoEnd(lasso, me));
 
             boxPlot.call(lasso);
         });
@@ -836,3 +842,4 @@ function boxplot() {
 
     return chart;
 }
+module.exports = boxplot;

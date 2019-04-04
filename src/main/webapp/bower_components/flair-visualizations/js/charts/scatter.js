@@ -128,8 +128,8 @@ function scatter() {
 
             lasso.notSelectedItems().selectAll('rect');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             data.forEach(function (d) {
@@ -253,13 +253,13 @@ function scatter() {
                 .attr('class', 'scatter-plot')
                 .classed('plot', true)
                 .attr('transform', function () {
-                    if (_legendPosition == 'top') {
+                    if (_legendPosition == 'Top') {
                         return 'translate(' + margin.left + ', ' + legendSpace * 2 + ')';
-                    } else if (_legendPosition == 'bottom') {
+                    } else if (_legendPosition == 'Bottom') {
                         return 'translate(' + margin.left + ', 0)';
-                    } else if (_legendPosition == 'left') {
+                    } else if (_legendPosition == 'Left') {
                         return 'translate(' + (legendSpace + margin.left + axisLabelSpace) + ', 0)';
-                    } else if (_legendPosition == 'right') {
+                    } else if (_legendPosition == 'Right') {
                         return 'translate(' + margin.left + ', 0)';
                     }
                 });
@@ -376,34 +376,34 @@ function scatter() {
                 legendBreakCount = result.legendBreakCount;
 
                 switch (_legendPosition) {
-                    case 'top':
+                    case 'Top':
                         plotHeight = parentHeight - legendHeight - axisLabelSpace;
                         break;
-                    case 'bottom':
+                    case 'Bottom':
                         plotHeight = parentHeight - legendHeight - axisLabelSpace * 2;
                         break;
                     case 'right':
-                    case 'left':
+                    case 'Left':
                         plotWidth = parentWidth - legendWidth;
                         break;
                 }
 
-                if ((_legendPosition == 'top') || (_legendPosition == 'bottom')) {
+                if ((_legendPosition == 'Top') || (_legendPosition == 'Bottom')) {
                     plotWidth = parentWidth;
                     plotHeight = parentHeight - 3 * axisLabelSpace;
                     legendSpace = 20;
-                } else if ((_legendPosition == 'left') || (_legendPosition == 'right')) {
+                } else if ((_legendPosition == 'Left') || (_legendPosition == 'Right')) {
                     var legend = _local_svg.selectAll('.item');
                     legendSpace = legend.node().parentNode.getBBox().width;
                     plotWidth = (parentWidth - legendSpace) - margin.left + axisLabelSpace;
                     plotHeight = parentHeight;
 
                     legend.attr('transform', function (d, i) {
-                        if (_legendPosition == 'left') {
+                        if (_legendPosition == 'Left') {
                             return 'translate(0, ' + i * 20 + ')';
 
                         }
-                        else if (_legendPosition == 'right') {
+                        else if (_legendPosition == 'Right') {
                             return 'translate(' + (parentWidth - legendSpace + axisLabelSpace) + ', ' + i * 20 + ')';
                         }
                     });

@@ -1,6 +1,10 @@
-function pie() {
+var COMMON = require('../extras/common.js')(),
+    UTIL = require('../extras/util.js')(),
+    LEGEND = require('../extras/legend.js')();
 
-    var _NAME = 'pie';
+function donut() {
+
+    var _NAME = 'donut';
 
     var _config,
         _dimension,
@@ -299,7 +303,7 @@ function pie() {
         _local_svg = selection;
 
         selection.each(function (data) {
-            chart._Local_data=data;
+            chart._Local_data = data;
             var svg = d3.select(this),
                 width = +svg.attr('width'),
                 height = +svg.attr('height'),
@@ -326,9 +330,9 @@ function pie() {
                 plotHeight = parentHeight;
 
             if (_showLegend) {
-                var pieLegend = LEGEND.bind(chart);
+                var donutLegend = LEGEND.bind(chart);
 
-                var result = pieLegend(data, container, {
+                var result = donutLegend(data, container, {
                     width: parentWidth,
                     height: parentHeight
                 });
@@ -351,13 +355,17 @@ function pie() {
             if (_tooltip) {
                 tooltip = d3.select(this.parentNode).select('#tooltip');
             }
+
             chart.drawPlot = function (data) {
-                var me=this;
-                _Local_data=data;
+                var me = this;
+                _Local_data = data;
+
                 outerRadius = Math.min(plotWidth, plotHeight) / 2.25;
+                var innerRadius = outerRadius * .5;
 
                 /* setting the outerradius of the arc */
                 _arc.outerRadius(outerRadius);
+                _arc.innerRadius(innerRadius);
 
                 /* setting the innerradius and outerradius of the masking arc */
                 _arcMask.outerRadius(outerRadius * 1.02)
@@ -403,7 +411,6 @@ function pie() {
                     .attr('d', _arcMask)
                     .style('visibility', 'hidden')
                     .style('fill', function (d) {
-
                         return COMMON.COLORSCALE(d.data[_dimension[0]]);
                     })
 
@@ -477,14 +484,16 @@ function pie() {
                         .delay(_delayFn(200))
                         .on('start', function () {
                             d3.select(this).attr('startOffset', function (d) {
-                                var length = pieArcPath.nodes()[d.index].getTotalLength();
-                                return 50 * (length - 2 * outerRadius) / length + '%';
+                                var length = pieArcPath.nodes()[d.index].getTotalLength(),
+                                    diff = d.endAngle - d.startAngle,
+                                    x = 2 * (outerRadius - innerRadius) + diff * innerRadius;
+
+                                return 50 * (length - x) / length + "%";
                             })
                                 .text(_labelFn())
                                 .filter(function (d, i) {
-                                    /* length of arc = angle in radians * radius */
                                     var diff = d.endAngle - d.startAngle;
-                                    return outerRadius * diff < this.getComputedTextLength();
+                                    return outerRadius * diff - 5 < this.getComputedTextLength();
                                 })
                                 .remove();
                         });
@@ -558,7 +567,7 @@ function pie() {
 
                 plot.call(lasso);
             }
-            chart.drawPlot.call(this, data)
+            chart.drawPlot.call(this, data);
         });
     }
 
@@ -655,7 +664,6 @@ function pie() {
                 return 'arc-path-' + i;
             })
             .style('fill', function (d) {
-
                 return COMMON.COLORSCALE(d.data[_dimension[0]]);
             })
             .each(function (d) {
@@ -682,7 +690,7 @@ function pie() {
         pieArcGroup.exit()
             .transition()
             .delay(1000)
-            .duration(COMMON.DURATION)
+            .duration(0)
             .remove();
     }
 
@@ -770,3 +778,5 @@ function pie() {
 
     return chart;
 }
+
+module.exports = donut;

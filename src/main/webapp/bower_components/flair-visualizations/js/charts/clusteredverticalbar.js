@@ -35,7 +35,7 @@ function clusteredverticalbar() {
 
     var _local_svg, _Local_data, _originalData, _localLabelStack = [], legendBreakCount = 1;
 
-    var parentWidth, parentHeight, plotWidth, plotHeight;
+    var parentWidth, parentHeight, plotWidth, plotHeight, container;
 
     var x0, x1, y;
     var margin = {
@@ -96,7 +96,7 @@ function clusteredverticalbar() {
         return output;
     }
 
-    var onLassoStart = function (lasso, chart) {
+    var onLassoStart = function (lasso, scope) {
         return function () {
             if (filter) {
                 lasso.items().selectAll('rect')
@@ -106,7 +106,7 @@ function clusteredverticalbar() {
         }
     }
 
-    var onLassoDraw = function (lasso, chart) {
+    var onLassoDraw = function (lasso, scope) {
         return function () {
             filter = true;
             lasso.items().selectAll('rect')
@@ -122,7 +122,7 @@ function clusteredverticalbar() {
         }
     }
 
-    var onLassoEnd = function (lasso, chart) {
+    var onLassoEnd = function (lasso, scope) {
         return function () {
             var data = lasso.selectedItems().data();
             if (!filter) {
@@ -139,8 +139,8 @@ function clusteredverticalbar() {
 
             lasso.notSelectedItems().selectAll('rect');
 
-            var confirm = d3.select('.confirm')
-                .style('visibility', 'visible');
+            var confirm = $(scope).parent().find('div.confirm')
+                .css('visibility', 'visible');
 
             var _filter = [];
             if (data.length > 0) {
@@ -302,22 +302,22 @@ function clusteredverticalbar() {
                         break;
                 }
 
-                if ((_legendPosition == 'top') || (_legendPosition == 'bottom')) {
+                if ((_legendPosition == 'Top') || (_legendPosition == 'Bottom')) {
                     plotWidth = parentWidth;
                     plotHeight = parentHeight - 3 * axisLabelSpace;
                     legendSpace = 20;
-                } else if ((_legendPosition == 'left') || (_legendPosition == 'right')) {
+                } else if ((_legendPosition == 'Left') || (_legendPosition == 'Right')) {
                     var legend = _local_svg.selectAll('.item');
                     legendSpace = legend.node().parentNode.getBBox().width;
                     plotWidth = (parentWidth - legendSpace) - margin.left + axisLabelSpace;
                     plotHeight = parentHeight;
 
                     legend.attr('transform', function (d, i) {
-                        if (_legendPosition == 'left') {
+                        if (_legendPosition == 'Left') {
                             return 'translate(0, ' + i * 20 + ')';
 
                         }
-                        else if (_legendPosition == 'right') {
+                        else if (_legendPosition == 'Right') {
                             return 'translate(' + (parentWidth - legendSpace + axisLabelSpace) + ', ' + i * 20 + ')';
                         }
                     });
@@ -358,13 +358,13 @@ function clusteredverticalbar() {
             .attr('class', 'clusteredverticalbar-plot')
             .classed('plot', true)
             .attr('transform', function () {
-                if (_legendPosition == 'top') {
+                if (_legendPosition == 'Top') {
                     return 'translate(' + margin.left + ', ' + parseInt(legendSpace * 2 + (20 * parseInt(legendBreakCount))) + ')';
-                } else if (_legendPosition == 'bottom') {
+                } else if (_legendPosition == 'Bottom') {
                     return 'translate(' + margin.left + ', 0)';
-                } else if (_legendPosition == 'left') {
+                } else if (_legendPosition == 'Left') {
                     return 'translate(' + (legendSpace + margin.left + axisLabelSpace) + ', 0)';
-                } else if (_legendPosition == 'right') {
+                } else if (_legendPosition == 'Right') {
                     return 'translate(' + margin.left + ', 0)';
                 }
             });
@@ -519,9 +519,10 @@ function clusteredverticalbar() {
             .items(cluster)
             .targetArea(_local_svg);
 
-        lasso.on('start', onLassoStart(lasso, chart))
-            .on('draw', onLassoDraw(lasso, chart))
-            .on('end', onLassoEnd(lasso, chart));
+        lasso.on('start', onLassoStart(lasso, me))
+            .on('draw', onLassoDraw(lasso, me))
+            .on('end', onLassoEnd(lasso, me));
+
 
         _local_svg.call(lasso);
 
@@ -757,7 +758,7 @@ function clusteredverticalbar() {
                 return UTIL.getTruncatedTick(d3.select(this).text(), barWidth, tickLength);
             });
 
-        d3.selectAll('g.cluster')
+        plot.selectAll('g.cluster')
             .attr('transform', function (d) {
                 return 'translate(' + x0(d[_dimension[0]]) + ', 0)';
             });

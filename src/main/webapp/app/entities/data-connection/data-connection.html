@@ -19,8 +19,11 @@
 	            <wz-step wz-title="New Data Connection" description="Choose existing connections or create new one">
 	                <connection-wizard-step connection-type="vm.connectionType" selected-connection="vm.selectedConnection" connections="vm.connections" connection="vm.connection"></connection-wizard-step>
 	            </wz-step>
+                <wz-step wz-title="Cache settings" description="Choose cache settings">
+                    <cache-wizard-step connection-parameters="vm.connectionParameters"></cache-wizard-step>
+                </wz-step>
 	            <wz-step wz-title="Explore & Data Model">
-	                <datasource-wizard-step datasources="vm.datasources" connection="vm.connection" connection-type="vm.connectionType" selected-connection="vm.selectedConnection" features="vm.features"></datasource-wizard-step>
+	                <datasource-wizard-step connection-parameters="vm.connectionParameters" datasources="vm.datasources" connection="vm.connection" connection-type="vm.connectionType" selected-connection="vm.selectedConnection" features="vm.features"></datasource-wizard-step>
 	            </wz-step>
 	            <wz-step wz-title="Dimentions Measures">
 	                <dimentions-measures-wizard-step on-finish-handler="vm.handleFinish(result)" features="vm.features" datasources="vm.datasources"></dimentions-measures-wizard-step>

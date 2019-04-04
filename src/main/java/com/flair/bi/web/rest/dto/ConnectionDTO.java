@@ -15,4 +15,5 @@ public class ConnectionDTO {
     private Long connectionTypeId;
     private String linkId;
     private Map<String, String> details;
+    private Map<String, String> connectionParameters;
 }

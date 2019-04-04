@@ -3,7 +3,6 @@ package com.flair.bi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
-import com.flair.bi.domain.property.CheckboxProperty;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.messages.QueryResponse;
@@ -139,32 +138,12 @@ public class GrpcQueryService {
 
         queryDTO.setSource(datasource.getName());
 
-
-        Optional<CheckboxProperty> enableCaching = Optional.ofNullable(visualMetadata)
-            .map(VisualMetadata::getProperties)
-            .filter(p -> p instanceof CheckboxProperty).map(p -> (CheckboxProperty) p)
-            .filter(p -> p.isValue() && p.getPropertyType().getName().equalsIgnoreCase("Enable caching"));
-        if (enableCaching.isPresent()) {
-            // TODO - Need to replace below call with caching engine call
-            if (visualMetadata != null && type==null) {
-                callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
-            } else if(visualMetadata != null && type.equals("share-link")){
-            	callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
-            } else {
-                callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
-            }
-            //callGrpcBiDirectionalAndPushInSocketForFilters(datasource, queryDTO,fbiEngineDTO.getvId());
-
-
+        if (visualMetadata != null && type==null) {
+            callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
+        } else if(visualMetadata != null && type.equals("share-link")){
+            callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
         } else {
-            if (visualMetadata != null && type==null) {
-                callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
-            } else if(visualMetadata != null && type.equals("share-link")) {
-            	callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
-            } else {
-                callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
-            }
-            //callGrpcBiDirectionalAndPushInSocketForFilters(datasource, queryDTO,fbiEngineDTO.getvId());
+            callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
         }
     }
     

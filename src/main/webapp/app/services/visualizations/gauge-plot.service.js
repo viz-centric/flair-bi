@@ -12,7 +12,7 @@
             build: function (record, element, panel) {
                 
                 function getProperties(VisualizationUtils, record) {
-                    var result = {};
+                var result = {};
 
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         measures = features.measures;

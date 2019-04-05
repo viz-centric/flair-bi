@@ -1,0 +1,56 @@
+<div class="info-card">
+    <div class="info-card-content">
+        <div class="card-menu" uib-dropdown is-open="false">
+            <a class="menu-link" href id="dialog-{{vm.dashboard.id}}" uib-dropdown-toggle>
+                <span uib-tooltip="Options" tooltip-placement="bottom">
+                    <i class="fa fa-ellipsis-v"></i>
+                <span>
+            </a>
+            <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.dashboard.id}}">
+                <div class="items">  
+                    <div class="item" role="menuitem">
+                        <a ng-if="vm.canDeleteDashboard" class="pull-right ng-scope" ui-sref="dashboards.delete({id:vm.dashboard.id})">
+                            <svg class="delete">
+                                <use xlink:href="#delete"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="item" role="menuitem">
+                    <a class="pull-right" ui-sref="dashboards-detail({id:vm.dashboard.id})">
+                        <svg class="edit">
+                            <use xlink:href="#fbi-box-settings"></use>
+                        </svg>
+                    </a>
+                    </div>
+                    <div class="item" role="menuitem">
+                        <a ng-if="vm.canRequestDashboardRelease" class="pull-right ng-scope" ui-sref="request-dashboard-publish({id: vm.dashboard.id})">
+                            <svg class="#release-icon">
+                                <use xlink:href="#release-icon"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="item" role="menuitem" ng-if="vm.dashboard.published">
+                        <span uib-tooltip="Published" tooltip-placement="bottom">
+                            <svg class="#published-icon">
+                                <use xlink:href="#published-icon" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-image">
+            <span ng-if="vm.dashboard.imageLocation">
+                <img ng-src="{{vm.dashboard.imageLocation}}" alt="Dashboard" />
+            </span>
+        </div>
+        <div class="card-footer">
+            <h4 class="item">{{vm.dashboard.dashboardName}}
+                <span uib-tooltip={{vm.dashboard.description}} tooltip-placement="top"><i class="fa fa-info-circle"></i></span>
+            </h4>
+            <a class="item build" ui-sref="dashboards-overview({id:vm.dashboard.id})">views
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </div>
+    </div>
+</div>

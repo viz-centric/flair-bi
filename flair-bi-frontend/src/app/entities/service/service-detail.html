@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-md-6">
+        <div ui-view></div>
+    </div>
+    <div class="col-md-6">
+        <div class="fbibox">
+            <div class="fbibox-title">
+                Supported Connections
+            </div>
+            <div class="fbibox-content">
+                <div class="supported-connections-container">
+                    <div class="connection-image" ng-repeat="ct in vm.connectionTypes">
+                        <img data-ng-src="{{ct.connectionPropertiesSchema.imagePath}}">  
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fbibox"> 
+            <div class="fbibox-title">
+                Service details
+            </div>
+            <div class="fbibox-content child-m-b-sm">
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.serviceName">Service Name</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.serviceName}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.serverAddress">Server Address</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.serverAddress}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.serverPort">Server Port</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.serverPort}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.appPrefix">App Prefix</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.appPrefix}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.secure">Secure</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.secure}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.cacheServerAddress">Cache Server Address</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.cacheServerAddress}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.cacheServerPort">Cache Server Port</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.cacheServerPort}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.cacheServerEndpoint">Cache Server Endpoint</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.cacheServerEndpoint}}</span></div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7"><span data-translate="flairbiApp.service.cacheSecure">Cache Secure</span></label>
+                    <div class="col-sm-5"><span>{{vm.service.cacheSecure}}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+<a ui-sref="service" class="btn btn-info m-b-lg ng-scope">
+    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+    <span data-translate="entity.action.back" class="ng-scope">Back</span>
+</a>

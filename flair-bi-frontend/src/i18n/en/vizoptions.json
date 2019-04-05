@@ -1,0 +1,61 @@
+{
+    "flairbiApp": {
+        "vizoptions" : {
+            "home": {
+                "title": "Vizoptions",
+                "createLabel": "Create a new Vizoptions",
+                "createOrEditLabel": "Create or edit a Vizoptions",
+                "search": "Search for Vizoptions"
+            },
+            "created": "A new Vizoptions is created with identifier {{ param }}",
+            "updated": "A Vizoptions is updated with identifier {{ param }}",
+            "deleted": "A Vizoptions is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Vizoptions {{ id }}?"
+            },
+            "detail": {
+                "title": "Vizoptions"
+            },
+            "fieldname": "Show Field Name",
+            "displayname": "Show Display Name",
+            "fontstyle": "Show Font Style",
+            "fontweight": "Show Font Weight",
+            "textcolor": "Show Text Color",
+            "numberformat": "Show Number Format",
+            "displaycolor": "Show Display Color",
+            "displaycolorexp": "Show Display Color Exp",
+            "backgroundcolor": "Show Background Color",
+            "backgroundcolorexp": "Show Background Color Exp",
+            "textcolorexp": "Show Text Color Exp",
+            "sort": "Show Sort",
+            "valueonpoints": "Show Value on Points",
+            "alignment": "Show Alignment",
+            "border": "Show Border",
+            "bordercolor": "Show Border Color",
+            "fontsize": "Show Font Size",
+            "charttype": "Show Chart Type",
+            "icon": "Show Icon",
+            "iconexp": "Show Icon Exp",
+            "linefillarea": "Show Line Fill Area",
+            "dimension": "Show Dimension",
+            "seqno": "Show Seqno",
+            "titletext": "Show Titletext",
+            "titleborderbottom": "Show Title Border Bottom",
+            "titlebackgroundcolor": "Show Title Background Color",
+            "titletextcolor": "Show Title Text Color",
+            "bodyborder": "Show Body Border",
+            "bodyopacity": "Show Body Opacity",
+            "bodybackgroundcolor": "Show Bodybackground Color",
+            "stackedvisual": "Show Stacked Visual",
+            "showxaxis": "Show x-axis",
+            "showyaxis": "Show y-axis",
+            "showlegend": "Show Legend",
+            "showlabels": "Show Labels",
+            "showgrid": "Show Grid",
+            "barcharttype": "Show Barchart Type",
+            "orderofdisplay": "Show Order of  Display",
+            "legendcolor": "Show Legend Color",
+            "vizopt": "Visualization Type"
+        }
+    }
+}

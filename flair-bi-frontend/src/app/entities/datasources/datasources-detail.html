@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-8">
+        <!-- Configured dashboards will be shown here -->
+        <div ui-view></div>
+    </div>
+    <div class="col-md-4">
+        <div class="fbibox">
+            <div class="fbibox-title">
+                Datasource details
+            </div>
+            <div class="fbibox-content child-m-b-sm">
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span data-translate="flairbiApp.datasources.name">Name</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.datasources.name}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span data-translate="flairbiApp.datasources.lastUpdated">Last Updated</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.datasources.lastUpdated | date:'medium'}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span data-translate="flairbiApp.datasources.connectionName">Connection Name</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.datasources.connectionName}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span data-translate="flairbiApp.datasources.queryPath">Query Path</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <span>{{vm.datasources.queryPath}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-7">
+                        <span data-translate="flairbiApp.datasources.service">Service</span>
+                    </label>
+                    <div class="col-sm-5">
+                        <a ui-sref="service-detail({id:vm.datasources.service.id})">{{vm.datasources.service.serviceName}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

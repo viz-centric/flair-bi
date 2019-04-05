@@ -1,0 +1,23 @@
+
+<div>
+    <h2><span data-translate="flairbiApp.visualizationColors.detail.title">Visualization Colors</span> {{vm.visualizationColors.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="flairbiApp.visualizationColors.code">Code</span></dt>
+        <dd>
+            <span>{{vm.visualizationColors.code}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="visualization-colors-detail.edit({id:vm.visualizationColors.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

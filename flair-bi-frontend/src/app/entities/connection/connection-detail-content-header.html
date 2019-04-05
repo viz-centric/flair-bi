@@ -1,0 +1,20 @@
+<div class="content-header-container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="header-text col-md-8 col-sm-6 com-xs-12">
+                <h2>{{vm.connection.name}}</h2>
+                <div class="bread-crumb">
+                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html">></ui-breadcrumbs>
+                </div>
+            </div>
+            <div class="header-options flex-justify-right text-right col-md-4 col-sm-6 col-xs-12">
+                <button class="btn btn-primary" ui-sref="connection.new">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span data-translate="flairbiApp.service.home.createLabel">
+                        Create Data Connection
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

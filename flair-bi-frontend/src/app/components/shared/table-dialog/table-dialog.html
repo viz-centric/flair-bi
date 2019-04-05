@@ -1,0 +1,42 @@
+<div class="inmodal in modal-content">
+  <form name="editForm" novalidate="" role="form">
+    <div class="modal-header flair-model-header">
+      <div class="header-text">
+        Data
+      </div>
+      <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="vm.clear()" type="button">&times;</button>
+      <div class="col-md-3"></div>
+    </div>
+    <div class="modal-body flair-remove-padding">
+      <jhi-alert-error></jhi-alert-error>
+      <div class="viz-data-table">
+        <div class="flair-ibox-data-padding">
+          <div class="table-responsive">
+            <table class="jh-table table table-striped">
+              <thead>
+                <tr>
+                  <th ng-repeat="header in vm.data[0] track by $index">{{header | capitalize}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-hide="$index === 0" ng-repeat="row in vm.data track by $index">
+                  <td ng-repeat="column in row track by $index">{{column}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="vm.exportExcel()">
+        <span class="fa fa-file-excel-o"></span>&nbsp;
+        <span>Export to Excel</span>
+      </button>
+      <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
+        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+        <span data-translate="entity.action.cancel">Cancel</span>
+      </button>
+    </div>
+  </form>
+</div>

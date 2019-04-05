@@ -1,0 +1,27 @@
+{
+    "health": {
+        "title": "Statuskontroller",
+        "refresh.button": "Uppdatera",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detaljer",
+            "properties": "Egenskaper",
+            "name": "Namn",
+            "value": "Värde",
+            "error": "Fel"
+        },
+        "indicator": {
+            "diskSpace": "Diskutrymme",
+            "mail": "E-post",
+            "db": "Databas"
+        },
+        "table": {
+            "service": "Service namn",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UPP",
+            "DOWN": "NED"
+        }
+    }
+}

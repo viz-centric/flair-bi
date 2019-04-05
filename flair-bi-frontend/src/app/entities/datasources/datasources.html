@@ -1,0 +1,57 @@
+<div class="fbibox">
+    <div class="fbibox-title">Configured datasources</div>
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="jh-table table table-striped table-bordered flair-table-v1">
+                <thead>
+                    <tr>
+                        <th>
+                            <span data-translate="global.field.id">ID</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.datasources.name">Name</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.datasources.lastUpdated">Last Updated</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.datasources.connectionName">Connection Link Id</span>
+                        </th>
+                        <th>
+                            <span data-translate="flairbiApp.datasources.queryPath">Query Path</span>
+                        </th>
+                        <th><span> Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="datasources in vm.datasources track by datasources.id">
+                        <td>
+                            <a ui-sref="datasources-detail({id:datasources.id})">{{datasources.id}}</a>
+                        </td>
+                        <td>{{datasources.name}}</td>
+                        <td>{{datasources.lastUpdated | date:'medium'}}</td>
+                        <td>{{datasources.connectionName}}</td>
+                        <td>{{datasources.queryPath}}</td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit" ng-show="vm.config.view.enabled" ui-sref="{{vm.config.view.route || datasources-detail({id:datasources.id})}}"
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-eye view-icon fa-2x"></span>
+                                </button>
+                                &nbsp;
+                                <button type="submit" ng-show="vm.config.edit.enabled" ui-sref="{{ vm.config.edit.route || datasources.edit({id:datasources.id})}}"
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-edit edit-icon fa-2x"></span>
+                                </button>
+                                &nbsp;
+                                <button type="submit" ng-show="vm.config.delete.enabled" ui-sref="{{ vm.config.delete.route || datasources.delete({id:datasources.id})}}"
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-trash delete-icon fa-2x"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>

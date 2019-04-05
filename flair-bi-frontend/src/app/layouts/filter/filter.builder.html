@@ -1,0 +1,7 @@
+<div id="filterarea" ng-cloak> 
+  <center id="filter_div">
+    <select multiple="multiple" class="search_test" ng-repeat="field in filterData" placeholder="{{fieldList[$index]}}" data="{{$index}}_{{fieldList[$index]}}" ng-click="addRemoveFilter()" id="{{fieldList[$index]}}_filter">
+      <option ng-repeat="value in field" value="{{fieldList[$parent.$index]}}|{{value[fieldList[$parent.$index]]}}" id="{{$parent.$index}}_{{$index}}" >{{value[fieldList[$parent.$index]]}}</option>
+    </select>
+  </center>
+</div>

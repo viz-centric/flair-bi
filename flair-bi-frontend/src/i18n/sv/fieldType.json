@@ -1,0 +1,23 @@
+{
+    "flairbiApp": {
+        "fieldType": {
+            "home": {
+                "title": "Field Types",
+                "createLabel": "Create a new Field Type",
+                "createOrEditLabel": "Create or edit a Field Type",
+                "search": "Search for a Field Type"
+            },
+            "created": "A new Field Type is created with identifier {{ param }}",
+            "updated": "A Field Type is updated with identifier {{ param }}",
+            "deleted": "A Field Type is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Field Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Field Type"
+            },
+            "constraint": "Constraint",
+            "featureType": "Feature Type"
+        }
+    }
+}

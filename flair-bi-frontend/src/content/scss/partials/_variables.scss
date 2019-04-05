@@ -1,0 +1,85 @@
+$primary-color: #439dd3;// Primary color for flairbi application
+$btn-default-color: #e7eaec;//Button text color
+$scroll-bar-color: $primary-color;//Custom scroll bar color
+$gray-scroll-bar: rgba(136, 139, 142, 0.5);
+$body-main: #fafafa;//Main body color
+
+/* Colors */
+$blue: #1c84c6; // Success color
+$lazur: #26C6DA; // Info color
+$yellow: #f8ac59; // Warrning color
+$red: #ED5565; // Danger color
+$light-gray: #D1DADE;
+$gray: #f3f3f4;
+
+//Tool Tip Element
+$tool-tip-background: #2F4050;
+
+/* Break Points*/
+$break-medium: 990px;
+$break-small: 768px;
+$break-extra-small: 576px;
+
+/* Borders color */
+$border-color: #e1e3e3;
+
+/* Navigation variables */
+$active-background-color: #f0f0f2;
+
+/* Main page background color */
+$page-content-color: #f1f3f3;
+
+/* Icon color*/
+$icons-color: #676a6c;
+
+/* Anchor color */
+$anchor-color: #676a6c;
+
+/* Text color */
+$text-color: #676a6c;
+
+/* Modal Colors*/ 
+$modal-body-color: #ffffff;
+$modal-header-color: $body-main;
+
+/* Content Header Colors */
+$content-header-color: $body-main;
+
+/* Font size */
+$font-small: 10px;
+$font-regular: 12px;
+
+/* Login Page */
+$login-background: $page-content-color;
+
+/* Info card */
+$info-card-content: #ffffff;
+$info-card-button: $body-main;
+
+/* Resources nav */
+$resources-tab: $body-main;
+
+/* Buttons and Lables*/
+$btn-primary-color: $primary-color;
+$btn-default-color: #e7eaec;
+$btn-danger-color: #ED5565;
+$label-badget-color: #5E5E5E;
+
+/* fbi container */
+$fbibox-title-backgraound: #ffffff;
+$fbibox-content-backgraound: #ffffff;
+
+/* IBox */
+$ibox-title-bg:#fafafa; // IBox Background header
+$ibox-content-bg:#fafafa; // IBox Background content
+
+/* User management*/
+$delete-buttton-color: #ED5565;
+
+/* Viz Settings */ 
+$data-constraint-background:rgba(234, 234, 234, 0.6);
+
+$viz-table-background:#ffffff !important;
+$homepage-table-background: #ffffff ;
+
+$pop_up_header_background: #f6f8f8 ;  

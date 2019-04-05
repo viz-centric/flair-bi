@@ -1,0 +1,120 @@
+<div>
+    <h2 data-translate="flairbiApp.visualmetadata.home.title">Visualmetadata</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button has-authority="{{vm.permissions.WRITE_VISUAL_METADATA}}" class="btn btn-primary" ui-sref="visualmetadata.new">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span  data-translate="flairbiApp.visualmetadata.home.createLabel">
+                        Create new Visualmetadata
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span data-translate="global.field.id">ID</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.height">Height</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.width">Width</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.xposition">Xposition</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.yposition">Yposition</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.sequenceNo">Sequence No</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.query">Query</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.background">Background</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.opacity">Opacity</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.showTitle">Show Title</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.titlebackgroundclr">Titlebackgroundclr</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.titletextclr">Titletextclr</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.sTitle">S Title</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.datasource">Datasource</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.noOfDim">No Of Dim</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.sxaxis">Sxaxis</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.syaxis">Syaxis</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.slegend">Slegend</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.legendPosition">Legend Position</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.clrscheme">Clrscheme</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.vclr">Vclr</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.visualBuildId">Visual Build Id</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.bottomborder">Bottomborder</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.border">Border</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.titletext">Titletext</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.showlabels">Showlabels</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.queryjson">Queryjson</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.orderOfDisplay">Order Of Display</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.stacked">Stacked</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.axisLegendColor">Axis Legend Color</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.barChartType">Bar Chart Type</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.showGrid">Show Grid</span></th>
+                    <th><span data-translate="flairbiApp.visualmetadata.metadataVisual">Metadata Visual</span></th>
+                    <th><span>View</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="visualmetadata in vm.visualmetadata track by visualmetadata.id">
+                    <td><a ui-sref="visualmetadata-detail({id:visualmetadata.id})">{{visualmetadata.id}}</a></td>
+                    <td>{{visualmetadata.height}}</td>
+                    <td>{{visualmetadata.width}}</td>
+                    <td>{{visualmetadata.xposition}}</td>
+                    <td>{{visualmetadata.yposition}}</td>
+                    <td>{{visualmetadata.sequenceNo}}</td>
+                    <td>{{visualmetadata.query}}</td>
+                    <td>{{visualmetadata.background}}</td>
+                    <td>{{visualmetadata.opacity}}</td>
+                    <td>{{visualmetadata.showTitle}}</td>
+                    <td>{{visualmetadata.titlebackgroundclr}}</td>
+                    <td>{{visualmetadata.titletextclr}}</td>
+                    <td>{{visualmetadata.sTitle}}</td>
+                    <td>{{visualmetadata.datasource}}</td>
+                    <td>{{visualmetadata.noOfDim}}</td>
+                    <td>{{visualmetadata.sxaxis}}</td>
+                    <td>{{visualmetadata.syaxis}}</td>
+                    <td>{{visualmetadata.slegend}}</td>
+                    <td>{{visualmetadata.legendPosition}}</td>
+                    <td>{{visualmetadata.clrscheme}}</td>
+                    <td>{{visualmetadata.vclr}}</td>
+                    <td>{{visualmetadata.visualBuildId}}</td>
+                    <td>{{visualmetadata.bottomborder}}</td>
+                    <td>{{visualmetadata.border}}</td>
+                    <td>{{visualmetadata.titletext}}</td>
+                    <td>{{visualmetadata.showlabels}}</td>
+                    <td>{{visualmetadata.queryjson}}</td>
+                    <td>{{visualmetadata.orderOfDisplay}}</td>
+                    <td>{{visualmetadata.stacked}}</td>
+                    <td>{{visualmetadata.axisLegendColor}}</td>
+                    <td data-translate="{{'flairbiApp.BarChartType.' + visualmetadata.barChartType}}">{{visualmetadata.barChartType}}</td>
+                    <td>{{visualmetadata.showGrid}}</td>
+                    <td>
+                        <a ui-sref="visualization-detail({id:visualmetadata.metadataVisual.id})">{{visualmetadata.metadataVisual.name}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="views-detail({id:visualmetadata.views.id})">{{visualmetadata.views.viewName}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit" ui-sref="visualmetadata-detail({id:visualmetadata.id})" class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" data-translate="entity.action.view"></span>
+                            </button>
+                            <button ng-if="vm.hasPermission('UPDATE',visualmetadata.id, 'VISUAL_METADATA')" type="submit" ui-sref="visualmetadata.edit({id:visualmetadata.id})"
+                                class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
+                            </button>
+                            <button ng-if="vm.hasPermission('DELETE',visualmetadata.id,'VISUAL_METADATA')" type="submit" ui-sref="visualmetadata.delete({id:visualmetadata.id})"
+                                class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

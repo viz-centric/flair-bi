@@ -1,0 +1,31 @@
+
+<div>
+    <h2><span data-translate="flairbiApp.datasourceConstraint.detail.title">Datasource Constraint</span> {{vm.datasourceConstraint.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="flairbiApp.datasourceConstraint.constraintDefinition">Constraint Definition</span></dt>
+        <dd>
+            <span>{{vm.datasourceConstraint.constraintDefinition}}</span>
+        </dd>
+        <dt><span data-translate="flairbiApp.datasourceConstraint.user">User</span></dt>
+        <dd>
+            {{vm.datasourceConstraint.user.login}}
+        </dd>
+        <dt><span data-translate="flairbiApp.datasourceConstraint.datasources">Datasources</span></dt>
+        <dd>
+            <a ui-sref="datasources-detail({id:vm.datasourceConstraint.datasource.id})">{{vm.datasourceConstraint.datasource.name}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="datasource-constraint-detail.edit({id:vm.datasourceConstraint.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

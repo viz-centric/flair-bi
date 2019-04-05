@@ -1,0 +1,134 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <div class="header-text" id="myServiceLabel" data-translate="flairbiApp.service.home.createOrEditLabel">Create or edit a Service</div>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.service.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.service.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.serviceName" for="field_serviceName">Service Name</label>
+            <input type="text" class="form-control" name="serviceName" id="field_serviceName"
+                    ng-model="vm.service.serviceName"
+                    required ng-minlength="1" ng-maxlength="200" />
+            <div ng-show="editForm.serviceName.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.serviceName.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.serviceName.$error.minlength" data-translate="entity.validation.minlength" translate-value-min="1">
+                    This field is required to be at least 1 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.serviceName.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="200">
+                    This field cannot be longer than 200 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.serverAddress" for="field_serverAddress">Server Address</label>
+            <input type="text" class="form-control" name="serverAddress" id="field_serverAddress"
+                    ng-model="vm.service.serverAddress"
+                    required />
+            <div ng-show="editForm.serverAddress.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.serverAddress.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.serverPort" for="field_serverPort">Server Port</label>
+            <input type="number" class="form-control" name="serverPort" id="field_serverPort"
+                    ng-model="vm.service.serverPort"
+                    required />
+            <div ng-show="editForm.serverPort.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.serverPort.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.serverPort.$error.number" data-translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.appPrefix" for="field_appPrefix">App Prefix</label>
+            <input type="text" class="form-control" name="appPrefix" id="field_appPrefix"
+                    ng-model="vm.service.appPrefix"
+                    required ng-minlength="5" ng-maxlength="30" ng-pattern="/^[a-zA-Z]+(-[a-zA-Z]+)*$/" />
+            <div ng-show="editForm.appPrefix.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.appPrefix.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.appPrefix.$error.minlength" data-translate="entity.validation.minlength" translate-value-min="5">
+                    This field is required to be at least 5 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.appPrefix.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="30">
+                    This field cannot be longer than 30 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.appPrefix.$error.pattern" data-translate="entity.validation.pattern" translate-value-pattern="App Prefix">
+                    This field should follow pattern for "App Prefix".
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.secure" for="field_secure">Secure</label>
+            <input type="checkbox"  name="secure" id="field_secure"
+                    ng-model="vm.service.secure"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.cacheServerAddress" for="field_cacheServerAddress">Cache Server Address</label>
+            <input type="text" class="form-control" name="cacheServerAddress" id="field_cacheServerAddress"
+                    ng-model="vm.service.cacheServerAddress"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.cacheServerPort" for="field_cacheServerPort">Cache Server Port</label>
+            <input type="number" class="form-control" name="cacheServerPort" id="field_cacheServerPort"
+                    ng-model="vm.service.cacheServerPort"
+                     />
+                     <div ng-show="editForm.cacheServerPort.$invalid">
+                        <p class="help-block"
+                            ng-show="editForm.cacheServerPort.$error.number" data-translate="entity.validation.number">
+                            This field should be a number.
+                        </p>
+                    </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.cacheServerEndpoint" for="field_cacheServerEndpoint">Cache Server Endpoint</label>
+            <input type="text" class="form-control" name="cacheServerEndpoint" id="field_cacheServerEndpoint"
+                    ng-model="vm.service.cacheServerEndpoint"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.service.cacheSecure" for="field_cacheSecure">Cache Secure</label>
+            <input type="checkbox" name="cacheSecure" id="field_cacheSecure"
+                    ng-model="vm.service.cacheSecure"
+                     />
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

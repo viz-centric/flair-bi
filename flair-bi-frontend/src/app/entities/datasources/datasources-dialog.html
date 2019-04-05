@@ -1,0 +1,72 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header flair-model-header">
+        <div class="header-text">Create or edit a Datasource</div>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.datasources.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id" ng-model="vm.datasources.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.datasources.name" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.datasources.name" required ng-maxlength="60"
+            />
+            <div ng-show="editForm.name.$invalid">
+                <p class="help-block" ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block" ng-show="editForm.name.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="60">
+                    This field cannot be longer than 60 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.datasources.lastUpdated" for="field_lastUpdated">Last Updated</label>
+            <div class="input-group">
+                <input id="field_lastUpdated" type="text" class="form-control" name="lastUpdated" datetime-picker="{{dateformat}}" ng-model="vm.datasources.lastUpdated"
+                    is-open="vm.datePickerOpenStatus.lastUpdated" required/>
+                <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('lastUpdated')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+            </div>
+            <div ng-show="editForm.lastUpdated.$invalid">
+                <p class="help-block" ng-show="editForm.lastUpdated.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block" ng-show="editForm.lastUpdated.$error.ZonedDateTimelocal" data-translate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_connectionName">Connection Link Id</label>
+            <input type="text" class="form-control" name="connectionName" id="field_connectionName" ng-model="vm.datasources.connectionName"
+                required/>
+            <div ng-show="editForm.connectionName.$invalid">
+                <p class="help-block" ng-show="editForm.connectionName.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.datasources.queryPath" for="field_queryPath">Query Path</label>
+            <input type="text" class="form-control" name="queryPath" id="field_queryPath" ng-model="vm.datasources.queryPath" required/>
+            <div ng-show="editForm.queryPath.$invalid">
+                <p class="help-block" ng-show="editForm.queryPath.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

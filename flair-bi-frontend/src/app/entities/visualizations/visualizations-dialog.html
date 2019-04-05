@@ -1,0 +1,56 @@
+<div class="inmodal in modal-content">
+    <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+            <h4 class="modal-title" id="myVisualizationsLabel" data-translate="flairbiApp.visualization.home.createOrEditLabel">Create or edit a Visualizations</h4>
+        </div>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-group" ng-show="vm.visualization.id">
+                <label for="id" data-translate="global.field.id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" ng-model="vm.visualization.id" readonly />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualization.name" for="field_name">Name</label>
+                <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.visualization.name" required ng-maxlength="60"
+                />
+                <div ng-show="editForm.name.$invalid">
+                    <p class="help-block" ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="editForm.name.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="60">
+                        This field cannot be longer than 60 characters.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualization.icon" for="field_icon">Icon</label>
+                <input type="text" class="form-control" name="icon" id="field_icon" ng-model="vm.visualization.icon" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualization.customId" for="field_customId">Custom Id</label>
+                <input type="number" class="form-control" name="customId" id="field_customId" ng-model="vm.visualization.customId" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.visualization.functionname" for="field_functionname">Functionname</label>
+                <input type="text" class="form-control" name="functionname" id="field_functionname" ng-model="vm.visualization.functionname"
+                    required />
+                <div ng-show="editForm.functionname.$invalid">
+                    <p class="help-block" ng-show="editForm.functionname.$error.required" data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+            <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+        </div>
+    </form>
+</div>

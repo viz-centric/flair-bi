@@ -1,0 +1,25 @@
+{
+    "flairbiApp": {
+        "datasourceConstraint": {
+            "home": {
+                "title": "Datasource Constraints",
+                "createLabel": "Create a new Datasource Constraint",
+                "createOrEditLabel": "Create or edit a Datasource Constraint"
+            },
+            "created": "A new Datasource Constraint is created with identifier {{ param }}",
+            "updated": "A Datasource Constraint is updated with identifier {{ param }}",
+            "deleted": "A Datasource Constraint is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Datasource Constraint {{ id }}?"
+            },
+            "detail": {
+                "title": "Datasource Constraint"
+            },
+            "constraintDefinition": "Constraint Definition",
+            "user": "User",
+            "datasources": "Datasources",
+            "selectUser": "Select User ...",
+            "selectDatasource": "Search available datasources"
+        }
+    }
+}

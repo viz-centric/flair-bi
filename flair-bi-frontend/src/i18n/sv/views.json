@@ -1,0 +1,26 @@
+{
+    "flairbiApp": {
+        "views" : {
+            "home": {
+                "title": "Views",
+                "createLabel": "Skapa en ny Views",
+                "createOrEditLabel": "Skapa eller ändra en Views",
+                "search": "Sök efter Views"
+            },
+            "created": "En ny Views är skapad med id {{ param }}",
+            "updated": "En Views är uppdaterad med id  {{ param }}",
+            "deleted": "En Views är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Views {{ id }}?"
+            },
+            "detail": {
+                "title": "Views"
+            },
+            "viewName": "View Name",
+            "description": "Description",
+            "published": "Published",
+            "image": "Image",
+            "view_dashboard": "View Dashboard"
+        }
+    }
+}

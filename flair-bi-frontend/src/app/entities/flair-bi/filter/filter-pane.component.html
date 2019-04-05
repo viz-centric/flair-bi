@@ -1,0 +1,22 @@
+<div class="flair-scroll side-widgets overflow resource-nav">
+    <div class="panel panel-default filter-area">
+        <div class="panel-heading">
+            <div class="panel-title">Filters</div>
+        </div>
+        <div class="dimensions-container flair-scroll-gray">
+            <div ng-repeat="dimension in vm.dimensions" class="filter-item">
+                <filter-element-grpc-component ng-if="$root.vizualizationServiceMode == 'grpc'" dimensions="vm.dimensions" dimension="dimension" view="vm.view" ></filter-element-grpc-component>
+                <filter-element-component ng-if="$root.vizualizationServiceMode == 'http'" dimensions="vm.dimensions" dimension="dimension" view="vm.view" ></filter-element-component>
+            </div>
+        </div>
+
+        <div class="filter-button">
+            <div class="btn btn-primary" ng-click="vm.filter()">
+                <i class="fa fa-search" aria-hidden="true"></i> Filter
+            </div>
+            <div class="btn btn-default" ng-click="vm.clear()">
+                Clear Filters
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+<div class="row">
+    <jhi-alert></jhi-alert>
+    <jhi-alert-error></jhi-alert-error>
+    <div class="col-md-4">
+        <h2><span data-translate="flairbiApp.visualizations.detail.title">Visualizations</span> {{vm.visualizations.id}}</h2>
+        <hr>
+        <dl class="dl-horizontal jh-entity-details">
+            <dt><span data-translate="flairbiApp.visualizations.name">Name</span></dt>
+            <dd>
+                <span>{{vm.visualizations.name}}</span>
+            </dd>
+            <dt><span data-translate="flairbiApp.visualizations.icon">Icon</span></dt>
+            <dd>
+                <span>{{vm.visualizations.icon}}</span>
+            </dd>
+            <dt><span data-translate="flairbiApp.customId" class="visualizations">Custom Id</span></dt>
+            <dd>
+                <span>{{vm.visualizations.customId}}</span>
+            </dd>
+            <dt><span data-translate="flairbiApp.visualizations.functionname">Functionname</span></dt>
+            <dd>
+                <span>{{vm.visualizations.functionname}}</span>
+            </dd>
+        </dl>
+
+        <button type="submit" ui-sref="{{ vm.previousState }}" class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+        <button has-authority="{{vm.permissions.UPDATE_VISUALIZATIONS}}" type="button" ui-sref="visualizations-detail.edit({id:vm.visualization.id})"
+            class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
+    </button>
+    </div>
+    <div class="col-md-8">
+        <uib-tabset active="active">
+            <uib-tab heading="Chart Property types" index="0" active="tab.active" disable="tab.disabled" select="tabSelected()" deselect="tabDeselected()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h4><span>Assigned Property Types</span></h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="jh-table table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th><span data-translate="flairbiApp.propertyType.name">Name</span></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="propertyType in vm.visualizations.propertyTypes | orderBy: 'order'">
+                                                <td><a ui-sref="property-type-detail({id:propertyType.id.propertyTypeId})">{{propertyType.propertyType.name}}</a></td>
+                                                <td class="text-right">
+                                                    <div class="btn-group flex-btn-group-container">
+                                                        <button type="submit" ng-click="vm.remove(propertyType.id.propertyTypeId)" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                                <span class="hidden-xs hidden-sm" data-translate="entity.action.remove"></span>
+                                            </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h4><span>Available Property Types</span></h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="jh-table table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th><span data-translate="flairbiApp.propertyType.name">Name</span></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="propertyType in vm.propertyTypes | filter: vm.propertyTypeFilter">
+                                                <td> <a ui-sref="property-type-detail({id:propertyType.id})"> {{propertyType.name}}</a></td>
+                                                <td class="text-right">
+                                                    <div class="btn-group flex-btn-group-container">
+                                                        <button type="submit" ng-click="vm.assign(propertyType.id)" class="btn btn-info btn-sm">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                <span class="hidden-xs hidden-sm" data-translate="entity.action.assign"></span>
+                                            </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </uib-tab>
+            <uib-tab index="1" heading="Field Types">
+                <uib-tab-heading>
+                    Field Types
+                </uib-tab-heading>
+                <field-type-list-component field-types="vm.visualizations.fieldTypes" />
+            </uib-tab>
+        </uib-tabset>
+    </div>
+
+</div>

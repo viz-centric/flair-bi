@@ -12,7 +12,11 @@ module.exports = {
     context: ROOT,
 
     resolve: {
-        extensions: ['.js']
+        extensions: ['.js'],
+        alias: {
+            'angular-split-pane': path.resolve(__dirname, './node_modules/@shagstrom/angular-split-pane/angular-split-pane.js'),
+            'gridstack-angular': path.resolve(__dirname, './node_modules/gridstack-angular/dist/gridstack-angular.min.js')
+        }
     },
 
     module: {
@@ -41,6 +45,15 @@ module.exports = {
                 test: /.html$/,
                 exclude: /index.html$/,
                 use: 'html-loader'
+            },
+            {
+                test: require.resolve('tinycolor2'),
+                use: [
+                    {
+                        loader: 'expose-loader',
+                        options: 'tinycolor'
+                    }
+                ]
             }
         ]
     },

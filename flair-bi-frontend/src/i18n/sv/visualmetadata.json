@@ -1,0 +1,53 @@
+{
+    "flairbiApp": {
+        "visualmetadata" : {
+            "home": {
+                "title": "Visualmetadata",
+                "createLabel": "Skapa en ny Visualmetadata",
+                "createOrEditLabel": "Skapa eller ändra en Visualmetadata",
+                "search": "Sök efter Visualmetadata"
+            },
+            "created": "En ny Visualmetadata är skapad med id {{ param }}",
+            "updated": "En Visualmetadata är uppdaterad med id  {{ param }}",
+            "deleted": "En Visualmetadata är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Visualmetadata {{ id }}?"
+            },
+            "detail": {
+                "title": "Visualmetadata"
+            },
+            "height": "Height",
+            "width": "Width",
+            "xposition": "Xposition",
+            "yposition": "Yposition",
+            "sequenceNo": "Sequence No",
+            "query": "Query",
+            "background": "Background",
+            "opacity": "Opacity",
+            "showTitle": "Show Title",
+            "titlebackgroundclr": "Titlebackgroundclr",
+            "titletextclr": "Titletextclr",
+            "sTitle": "S Title",
+            "datasource": "Datasource",
+            "noOfDim": "No Of Dim",
+            "sxaxis": "Sxaxis",
+            "syaxis": "Syaxis",
+            "slegend": "Slegend",
+            "legendPosition": "Legend Position",
+            "clrscheme": "Clrscheme",
+            "vclr": "Vclr",
+            "visualBuildId": "Visual Build Id",
+            "bottomborder": "Bottomborder",
+            "border": "Border",
+            "titletext": "Titletext",
+            "showlabels": "Showlabels",
+            "queryjson": "Queryjson",
+            "orderOfDisplay": "Order Of Display",
+            "stacked": "Stacked",
+            "axisLegendColor": "Axis Legend Color",
+            "barChartType": "Bar Chart Type",
+            "showGrid": "Show Grid",
+            "metadataVisual": "Metadata Visual"
+        }
+    }
+}

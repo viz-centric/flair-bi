@@ -1,0 +1,9 @@
+
+<div class="admin-header">
+    <h3 class="header-text">Administration</h3>
+</div>
+<div class="admin-page">
+    <div class="config-item" ng-repeat="menuItem in vm.menuItems| orderBy: 'order' ">
+        <admin-card-component menu-item="menuItem"></admin-card-component>
+    </div>
+</div>

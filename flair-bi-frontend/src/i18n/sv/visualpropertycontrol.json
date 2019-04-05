@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "visualpropertycontrol" : {
+            "home": {
+                "title": "Visualpropertycontrols",
+                "createLabel": "Skapa en ny Visualpropertycontrol",
+                "createOrEditLabel": "Skapa eller ändra en Visualpropertycontrol",
+                "search": "Sök efter Visualpropertycontrol"
+            },
+            "created": "En ny Visualpropertycontrol är skapad med id {{ param }}",
+            "updated": "En Visualpropertycontrol är uppdaterad med id  {{ param }}",
+            "deleted": "En Visualpropertycontrol är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Visualpropertycontrol {{ id }}?"
+            },
+            "detail": {
+                "title": "Visualpropertycontrol"
+            },
+            "chartType": "Chart Type",
+            "fontSize": "Font Size",
+            "propertiesLink": "Properties Link"
+        }
+    }
+}

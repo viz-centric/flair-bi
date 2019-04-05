@@ -1,0 +1,53 @@
+{
+    "flairbiApp": {
+        "visualmetadata" : {
+            "home": {
+                "title": "Visualmetadata",
+                "createLabel": "Créer un nouveau Visualmetadata",
+                "createOrEditLabel": "Créer ou éditer un Visualmetadata",
+                "search": "Recherche pour Visualmetadata"
+            },
+            "created": "Un nouveau Visualmetadata a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Visualmetadata avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Visualmetadata avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Visualmetadata {{ id }} ?"
+            },
+            "detail": {
+                "title": "Visualmetadata"
+            },
+            "height": "Height",
+            "width": "Width",
+            "xposition": "Xposition",
+            "yposition": "Yposition",
+            "sequenceNo": "Sequence No",
+            "query": "Query",
+            "background": "Background",
+            "opacity": "Opacity",
+            "showTitle": "Show Title",
+            "titlebackgroundclr": "Titlebackgroundclr",
+            "titletextclr": "Titletextclr",
+            "sTitle": "S Title",
+            "datasource": "Datasource",
+            "noOfDim": "No Of Dim",
+            "sxaxis": "Sxaxis",
+            "syaxis": "Syaxis",
+            "slegend": "Slegend",
+            "legendPosition": "Legend Position",
+            "clrscheme": "Clrscheme",
+            "vclr": "Vclr",
+            "visualBuildId": "Visual Build Id",
+            "bottomborder": "Bottomborder",
+            "border": "Border",
+            "titletext": "Titletext",
+            "showlabels": "Showlabels",
+            "queryjson": "Queryjson",
+            "orderOfDisplay": "Order Of Display",
+            "stacked": "Stacked",
+            "axisLegendColor": "Axis Legend Color",
+            "barChartType": "Bar Chart Type",
+            "showGrid": "Show Grid",
+            "metadataVisual": "Metadata Visual"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "flairbiApp": {
+        "visualizationColors" : {
+            "home": {
+                "title": "Visualization Colors",
+                "createLabel": "Skapa en ny Visualization Colors",
+                "createOrEditLabel": "Skapa eller ändra en Visualization Colors",
+                "search": "Sök efter Visualization Colors"
+            },
+            "created": "En ny Visualization Colors är skapad med id {{ param }}",
+            "updated": "En Visualization Colors är uppdaterad med id  {{ param }}",
+            "deleted": "En Visualization Colors är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Visualization Colors {{ id }}?"
+            },
+            "detail": {
+                "title": "Visualization Colors"
+            },
+            "code": "Code"
+        }
+    }
+}

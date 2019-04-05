@@ -1,0 +1,114 @@
+<div>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="views.new">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span data-translate="flairbiApp.views.home.createLabel">
+                        Create new View
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <!-- adding our code here -->
+    <div class="row m-b-lg m-t-lg">
+        <div class="col-md-6">
+
+            <div class="profile-image">
+                <img data-ng-src="{{'data:' + vm.selectedDashboard.imageContentType + ';base64,' + vm.selectedDashboard.image}}" class="img-circle circle-border m-b-md"
+                    alt="profile">
+            </div>
+            <div class="profile-info">
+                <div class="">
+                    <div>
+                        <h2 class="no-margins">
+                            <strong>{{vm.selectedDashboard.dashboardName}}</strong>
+                            <a ng-click="deleteDashboard(vm.selectedDashboard.id)" class="pull-right" style="margin-left:15px;">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
+                            <!-- <a ng-click="deleteDashboard(vm.selectedDashboard.id)" class="pull-right"  style="margin-left:15px;" ui-sref="dashboards.delete({id:vm.selectedDashboard.id})" ><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+                            <a class="pull-right" style="margin-left:15px;" ui-sref="dashboards-detail({id:vm.selectedDashboard.id})">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                        </h2>
+                        <h4>{{vm.selectedDashboard.category}}</h4>
+                        <small>
+                            {{vm.selectedDashboard.description}}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <table class="table small m-b-xs">
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>142</strong> Projects
+                        </td>
+                        <td>
+                            <strong>22</strong> Followers
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>61</strong> Comments
+                        </td>
+                        <td>
+                            <strong>54</strong> Articles
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>154</strong> Tags
+                        </td>
+                        <td>
+                            <strong>32</strong> Friends
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <small>Sales in last 24h</small>
+            <h2 class="no-margins">206 480</h2>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-3" ng-repeat="views in vm.views track by views.id">
+            <div class="ibox">
+                <div class="ibox-content product-box">
+
+                    <div class="product-imitation" style="padding:0px;">
+
+                        <img data-ng-src="{{'data:' + views.imageContentType + ';base64,' + views.image}}" alt="Dashboard" width="100%" />
+                    </div>
+                    <div class="product-desc">
+                        <span ng-if="views.published" class="product-price">
+                            Published
+                        </span>
+                        <small class="text-muted">{{vm.selectedDashboard.category}}</small>
+                        <a class="pull-right" style="margin-left:15px;" ui-sref="dashboards-overview.view-delete({viewId:views.id})">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                        <a class="pull-right" style="margin-left:15px;" ui-sref="views-detail({id:views.id})">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                        <a class="product-name"> {{views.viewName}}</a>
+
+                        <div class="small m-t-xs">
+                            {{views.description}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Code Injection -->
+</div>

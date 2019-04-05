@@ -1,0 +1,26 @@
+{
+    "flairbiApp": {
+        "functions" : {
+            "home": {
+                "title": "Functions",
+                "createLabel": "Créer un nouveau Functions",
+                "createOrEditLabel": "Créer ou éditer un Functions",
+                "search": "Recherche pour Functions"
+            },
+            "created": "Un nouveau Functions a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Functions avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Functions avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Functions {{ id }} ?"
+            },
+            "detail": {
+                "title": "Functions"
+            },
+            "name": "Name",
+            "description": "Description",
+            "value": "Value",
+            "dimensionUse": "Dimension Use",
+            "measureUse": "Measure Use"
+        }
+    }
+}

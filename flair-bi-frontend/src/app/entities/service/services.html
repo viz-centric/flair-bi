@@ -1,0 +1,91 @@
+<jhi-alert></jhi-alert>
+<div class="fbibox">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="jh-table table table-striped flair-table-v1">
+                <thead>
+                    <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                        <th jh-sort-by="id">
+                            <span data-translate="global.field.id">ID</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="serviceName">
+                            <span data-translate="flairbiApp.service.serviceName">Service Name</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="serverAddress">
+                            <span data-translate="flairbiApp.service.serverAddress">Server Address</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="serverPort">
+                            <span data-translate="flairbiApp.service.serverPort">Server Port</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="appPrefix">
+                            <span data-translate="flairbiApp.service.appPrefix">App Prefix</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="secure">
+                            <span data-translate="flairbiApp.service.secure">Secure</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="cacheServerAddress">
+                            <span data-translate="flairbiApp.service.cacheServerAddress">Cache Server Address</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="cacheServerPort">
+                            <span data-translate="flairbiApp.service.cacheServerPort">Cache Server Port</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="cacheServerEndpoint">
+                            <span data-translate="flairbiApp.service.cacheServerEndpoint">Cache Server Endpoint</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="cacheSecure">
+                            <span data-translate="flairbiApp.service.cacheSecure">Cache Secure</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th>
+                            <span> Actions</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="service in vm.services track by service.id">
+                        <td>
+                            <a ui-sref="service-detail({id:service.id})">{{service.id}}</a>
+                        </td>
+                        <td>{{service.serviceName}}</td>
+                        <td>{{service.serverAddress}}</td>
+                        <td>{{service.serverPort}}</td>
+                        <td>{{service.appPrefix}}</td>
+                        <td>{{service.secure}}</td>
+                        <td>{{service.cacheServerAddress}}</td>
+                        <td>{{service.cacheServerPort}}</td>
+                        <td>{{service.cacheServerEndpoint}}</td>
+                        <td>{{service.cacheSecure}}</td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit" ui-sref="service-detail({id:service.id})" class="btn btn-default btn-sm">
+                                    <span class="fa fa-eye view-icon fa-2x"></span>
+                                </button>
+                                &nbsp;
+                                <button type="submit" ui-sref="service.edit({id:service.id})" class="btn btn-default btn-sm">
+                                    <span class="fa fa-edit edit-icon fa-2x"></span>
+                                </button>
+                                &nbsp;
+                                <button type="submit" ui-sref="service.delete({id:service.id})" class="btn btn-default btn-sm">
+                                    <span class="fa fa-trash delete-icon fa-2x"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+        </div>
+    </div>
+</div>

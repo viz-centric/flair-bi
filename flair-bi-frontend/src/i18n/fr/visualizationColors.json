@@ -1,0 +1,22 @@
+{
+    "flairbiApp": {
+        "visualizationColors" : {
+            "home": {
+                "title": "VisualizationColors",
+                "createLabel": "Créer un nouveau Visualization Colors",
+                "createOrEditLabel": "Créer ou éditer un Visualization Colors",
+                "search": "Recherche pour Visualization Colors"
+            },
+            "created": "Un nouveau Visualization Colors a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Visualization Colors avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Visualization Colors avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Visualization Colors {{ id }} ?"
+            },
+            "detail": {
+                "title": "Visualization Colors"
+            },
+            "code": "Code"
+        }
+    }
+}

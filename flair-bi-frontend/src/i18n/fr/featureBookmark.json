@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "featureBookmark" : {
+            "home": {
+                "title": "FeatureBookmarks",
+                "createLabel": "Créer un nouveau Feature Bookmark",
+                "createOrEditLabel": "Créer ou éditer un Feature Bookmark"
+            },
+            "created": "Un nouveau Feature Bookmark a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Feature Bookmark avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Feature Bookmark avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Feature Bookmark {{ id }} ?"
+            },
+            "detail": {
+                "title": "Feature Bookmark"
+            },
+            "name": "Name",
+            "featureCriteria": "Feature Criteria",
+            "user": "User",
+            "datasources": "Datasources"
+        }
+    }
+}

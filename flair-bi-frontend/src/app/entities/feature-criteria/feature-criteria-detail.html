@@ -1,0 +1,36 @@
+<div>
+    <h2>
+        <span data-translate="flairbiApp.featureCriteria.detail.title">Feature Criteria</span> {{vm.featureCriteria.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt>
+            <span data-translate="flairbiApp.featureCriteria.value">Value</span>
+        </dt>
+        <dd>
+            <span>{{vm.featureCriteria.value}}</span>
+        </dd>
+        <dt>
+            <span data-translate="flairbiApp.featureCriteria.feature">Feature</span>
+        </dt>
+        <dd>
+            <a ui-sref="feature-detail({id:vm.featureCriteria.feature.id})">{{vm.featureCriteria.feature.name}}</a>
+        </dd>
+        <dt>
+            <span data-translate="flairbiApp.featureCriteria.featureBookmark">Feature Bookmark</span>
+        </dt>
+        <dd>
+            <a ui-sref="feature-bookmark-detail({id:vm.featureCriteria.featureBookmark.id})">{{vm.featureCriteria.featureBookmark.name}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit" ui-sref="{{ vm.previousState }}" class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
+        <span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="feature-criteria-detail.edit({id:vm.featureCriteria.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

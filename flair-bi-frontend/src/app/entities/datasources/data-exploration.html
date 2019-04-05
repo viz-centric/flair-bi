@@ -1,0 +1,39 @@
+<div data-split-pane style="height:89vh;">
+				<div data-split-pane-component data-height="50%">
+					<div data-split-pane>
+            <div data-split-pane-component data-width="100%" class="boxprop" style="width:100%;">
+							<div class="pretty-split-pane-component-inner" style="width:100%;">
+                <h3 style="margin:15px;">SQL Editor</h3>
+                <form style="width:100%;">
+                  <textarea id="code" style="height:100%;width:100%;" name="code" ng-model="dataExploration.SQLquery" ng-bind="dataExploration.SQLquery"></textarea>
+                </form>  
+              </div>
+						</div>
+          </div>
+				</div>
+				<div data-split-pane-divider data-height="5px"></div>
+				<div data-split-pane-component data-height="50%">
+          <div data-split-pane>
+            <div data-split-pane-component data-width="100%" class="boxprop flair-scroll" style="width:100%;">
+							<div id="d" class="pretty-split-pane-component-inner" style="height:100%;background-image: url('content/images/back.png');background-repeat: no-repeat;background-position: center;">
+                  <table ng-if="dataExploration.hasData" class="table table-sm flair-scroll">
+                    <thead>
+                      <tr>
+                        <th ng-repeat="column in columns track by $index">{{column.name}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="row in data_display track by $index ">
+                        <td ng-repeat="value in row track by $index">{{value}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div ng-if="dataExploration.hasData">
+                      <p class="pull-left" style="margin-left:10px;"><strong>Query Size: </strong>{{dataExploration.datasetSize}}</p>
+                      <p ng-if="dataExploration.datasetSize > 1000" class="pull-right" style="margin-right:10px;">Showing first <strong>1000</strong> only</p>
+                  </div>
+              </div>
+						</div>
+          </div>
+				</div>
+</div>

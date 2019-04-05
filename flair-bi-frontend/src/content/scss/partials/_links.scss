@@ -1,0 +1,9 @@
+a {
+    color: $anchor-color;
+    text-decoration: none;
+    &:hover,
+    &:focus {
+        color: darken($anchor-color, 3%);
+        text-decoration: darken($anchor-color, 3%);
+    }
+}

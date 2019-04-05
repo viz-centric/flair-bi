@@ -1,0 +1,23 @@
+{
+    "flairbiApp": {
+        "featureCriteria" : {
+            "home": {
+                "title": "Feature Criteria",
+                "createLabel": "Create a new Feature Criteria",
+                "createOrEditLabel": "Create or edit a Feature Criteria"
+            },
+            "created": "A new Feature Criteria is created with identifier {{ param }}",
+            "updated": "A Feature Criteria is updated with identifier {{ param }}",
+            "deleted": "A Feature Criteria is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Feature Criteria {{ id }}?"
+            },
+            "detail": {
+                "title": "Feature Criteria"
+            },
+            "value": "Value",
+            "feature": "Feature",
+            "featureBookmark": "Feature Bookmark"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "flairbiApp": {
+        "views" : {
+            "home": {
+                "title": "Views",
+                "createLabel": "Créer un nouveau Views",
+                "createOrEditLabel": "Créer ou éditer un Views",
+                "search": "Recherche pour Views"
+            },
+            "created": "Un nouveau Views a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Views avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Views avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Views {{ id }} ?"
+            },
+            "detail": {
+                "title": "Views"
+            },
+            "viewName": "View Name",
+            "description": "Description",
+            "published": "Published",
+            "image": "Image",
+            "view_dashboard": "View Dashboard"
+        }
+    }
+}

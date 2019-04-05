@@ -1,0 +1,26 @@
+.steps-indicator{
+    margin-bottom: 50px;
+    display:none;
+    li{
+        a{
+            text-transform: none;
+            font-weight: 600;
+        }
+        &.current,
+        &.editing{
+            a{
+                &:before{
+                    background-color: darken($primary-color, 10%);
+                }
+            }
+        }
+        &.done{
+            a{
+                &:before{
+                    background-color: lighten($primary-color, 20%);
+                }
+            }
+        }
+    }
+
+}

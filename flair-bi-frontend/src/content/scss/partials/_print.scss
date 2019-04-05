@@ -1,0 +1,40 @@
+@media screen {
+    #printSection {
+        display: none;
+    }
+}
+
+@media print {
+    html,
+    body {}
+    #widget-container {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        .printme {
+            -webkit-flex: 1 0 0;
+            flex: 1 0 0;
+            display: block;
+            position: static;
+            top: 0!important;
+            left: 0;
+            right: 0;
+            height: auto!important;
+        }
+    }
+    .print-display-none,
+    .print-display-none * {
+        display: none !important;
+    }
+    .print-visibility-hide,
+    .print-visibility-hide * {
+        visibility: hidden !important;
+    }
+    .printme,
+    .printme * {
+        visibility: visible !important;
+        page-break-after: avoid;
+        page-break-before: always;
+    }
+}

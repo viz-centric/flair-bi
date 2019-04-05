@@ -1,0 +1,26 @@
+{
+    "flairbiApp": {
+        "propertyType": {
+            "home": {
+                "title": "Property Types",
+                "createLabel": "Create a new Property Type",
+                "createOrEditLabel": "Create or edit a Property Type",
+                "search": "Search for a Property Type"
+            },
+            "created": "A new Property Type is created with identifier {{ param }}",
+            "updated": "A Property Type is updated with identifier {{ param }}",
+            "deleted": "A Property Type is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Property Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Property Type"
+            },
+            "name": "Name",
+            "description": "Description",
+            "type": "Input type",
+            "defaultValue": "Default value",
+            "possibleValues": "Possible values"
+        }
+    }
+}

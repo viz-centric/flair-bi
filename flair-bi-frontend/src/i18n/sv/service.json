@@ -1,0 +1,30 @@
+{
+    "flairbiApp": {
+        "service" : {
+            "home": {
+                "title": "Services",
+                "createLabel": "Skapa en ny Service",
+                "createOrEditLabel": "Skapa eller ändra en Service"
+            },
+            "created": "En ny Service är skapad med id {{ param }}",
+            "updated": "En Service är uppdaterad med id  {{ param }}",
+            "deleted": "En Service är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Service {{ id }}?"
+            },
+            "detail": {
+                "title": "Service"
+            },
+            "serviceName": "Service Name",
+            "serverAddress": "Server Address",
+            "serverPort": "Server Port",
+            "appPrefix": "App Prefix",
+            "secure": "Secure",
+            "cacheServerAddress": "Cache Server Address",
+            "cacheServerPort": "Cache Server Port",
+            "cacheServerEndpoint": "Cache Server Endpoint",
+            "cacheSecure": "Cache Secure",
+            "datasources": "Datasources"
+        }
+    }
+}

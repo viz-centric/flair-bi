@@ -1,0 +1,47 @@
+<div class="inmodal in modal-content">
+    <form name="editForm" novalidate="" role="form">
+        <div class="modal-header flair-model-header">
+            <div class="header-text">
+                File Configuration
+            </div>
+            <button aria-hidden="true" class="close" data-dismiss="modal" ng-click="vm.clear()" type="button">&times;</button>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="modal-body flair-remove-padding scheduler-modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="container">
+                <div class="row container data-types-row">
+                    <div class="form-group" ng-repeat="col in vm.csvData[0] track by $index">
+                        <select class="form-control" name="xyz" ng-model="col" ng-options="dataType as dataType for dataType in vm.dataTypesList" ng-change="vm.changeDatatype(col,$index)">
+                        </select>
+                    </div>
+                </div>
+                <div class="row container data-types-row">
+                    <div class="form-group" ng-repeat="header in vm.csvData[1] track by $index">
+                        <div>{{header}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="editForm.$invalid || vm.isSaving">
+                <!-- <span class="fa fa-calendar"></span>&nbsp; -->
+                <span>Save</span>
+            </button>
+            <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
+                <!-- <span class="glyphicon glyphicon-ban-circle"></span>&nbsp; -->
+                <span data-translate="entity.action.cancel">Cancel</span>
+            </button>
+        </div>
+    </form>
+</div>
+<style>
+    .data-types-row {
+        display: flex;
+        flex-flow: wrap;
+    }
+    
+    .form-group {
+        margin: 0px 5px;
+    }
+</style>

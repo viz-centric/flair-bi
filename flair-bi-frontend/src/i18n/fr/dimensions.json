@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "dimensions" : {
+            "home": {
+                "title": "Dimensions",
+                "createLabel": "Créer un nouveau Dimensions",
+                "createOrEditLabel": "Créer ou éditer un Dimensions",
+                "search": "Recherche pour Dimensions"
+            },
+            "created": "Un nouveau Dimensions a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Dimensions avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Dimensions avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Dimensions {{ id }} ?"
+            },
+            "detail": {
+                "title": "Dimensions"
+            },
+            "name": "Name",
+            "type": "Type",
+            "dimensionDatasource": "Dimension Datasource"
+        }
+    }
+}

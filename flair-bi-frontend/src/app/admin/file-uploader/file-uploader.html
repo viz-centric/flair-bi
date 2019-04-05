@@ -1,0 +1,101 @@
+<div class="fbibox">
+    <div class="fbibox-content file-uploader">
+        <form name="editForm" novalidate="" role="form">
+            <div class="row drop-box-row">
+                <div ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" ngf-pattern="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'">
+                    <div class="inner-drop-box" ng-if="vm.fileDTO.fileName==null">
+                        <i class="file-icon fa fa-file"></i>
+                        <p class="inner-drop-box-text">Drop file here or click to upload</p>
+                    </div>
+                    <div class="inner-drop-box" ng-if="vm.fileDTO.fileName!=null">
+                        <i class="file-icon fa fa-file"></i>
+                        <p class="inner-drop-box-text">{{vm.fileDisplayName}}&nbsp;&nbsp;<i ng-click="vm.clearFile()" class="close-icon fa fa-times-circle"></i></p>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="row">
+                <div class="col-md-4 col-sm-10 col-xs-10">
+                    <div class="dropdown-options-v3">
+                        <a class="dropdown-toggle scheduler-input-link" type="button" id="fileSystemId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <div class="input-box">
+                                <input ng-required="vm.fileDTO.fileSystem == null" type="text" ng-model="vm.fileDTO.fileSystem" class="form-control" placeholder="Select File System" ng-readonly="true" />
+                            </div>
+                        </a>
+                        <i ng-click="vm.clearFileSystem()" class="fa fa-times-circle"></i>
+                        <div class="dropdown-menu dropdown-menu-scheduler flair-scroll-gray" aria-labelledby="fileSystemId" ng-show="vm.fileSystemList.length>0">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" ng-model="vm.fileSystemName" class="form-control  rounded-corner" placeholder="Search File System..." />
+                            </div>
+                            <div class="dropdown-sub-menu" ng-repeat="fileSystem in vm.fileSystemList  | filter:vm.fileSystemName">
+                                <a ng-click="vm.changeFileSystem(fileSystem)">
+                                    <span>{{fileSystem}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-10 col-xs-10">
+                    <div class="dropdown-options-v3">
+                        <a class="dropdown-toggle scheduler-input-link" type="button" id="separator-drop-down" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <div class="input-box">
+                                <input ng-required="vm.separator == null" type="text" ng-model="vm.separator.name" class="form-control" placeholder="Select Separator" ng-readonly="true" />
+                            </div>
+                        </a>
+                        <i ng-click="vm.clearSeparator()" class="fa fa-times-circle"></i>
+                        <div class="dropdown-menu dropdown-menu-scheduler flair-scroll-gray" aria-labelledby="separator-drop-down" ng-show="vm.separatorList.length>0">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" ng-model="vm.separatorName" class="form-control  rounded-corner" placeholder="Search Separator..." />
+                            </div>
+                            <div class="dropdown-sub-menu" ng-repeat="separator in vm.separatorList  | filter:{name:vm.separatorName}">
+                                <a ng-click="vm.changeSeparator(separator)">
+                                    <span>{{separator.name}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-10 col-xs-10">
+                    <button class="btn btn-primary" ng-click="vm.uploadFile()" ng-disabled="editForm.$invalid || vm.isSaving">
+                    <span class="fa fa fa-file"></span>&nbsp;
+                    <span>Upload</span>
+                </button> &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="vm.resetFileDTO()" type="button">
+                    <span class="fa fa fa-undo"></span>&nbsp;
+                    <span >Reset</span>
+                </button>
+                </div>
+            </div>
+        </form>
+        <br/>
+        <div class="table-responsive">
+            <table class="jh-table table table-striped">
+                <thead>
+                    <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                        <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="fileSystem"><span data-translate="flairbiApp.fileUploaderStatus.fileSystem">File System</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="fileName"><span data-translate="flairbiApp.fileUploaderStatus.fileName">File Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="contentType"><span data-translate="flairbiApp.fileUploaderStatus.contentType">Content Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="isFileProcessed"><span data-translate="flairbiApp.fileUploaderStatus.isFileProcessed">Is File Processed</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="fileUploaderStatus in vm.fileUploaderStatuses track by fileUploaderStatus.id">
+                        <td><a ui-sref="file-uploader-status-detail({id:fileUploaderStatus.id})">{{fileUploaderStatus.id}}</a></td>
+                        <td>{{fileUploaderStatus.fileSystem}}</td>
+                        <td>{{fileUploaderStatus.fileName}}</td>
+                        <td>{{fileUploaderStatus.contentType}}</td>
+                        <td>{{fileUploaderStatus.isFileProcessed}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+            <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+        </div>
+    </div>
+</div>

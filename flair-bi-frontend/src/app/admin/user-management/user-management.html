@@ -1,0 +1,92 @@
+<jhi-alert></jhi-alert>
+<div class="fbibox">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                    <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                        <th jh-sort-by="id">
+                            <span data-translate="global.field.id">ID</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="login">
+                            <span data-translate="userManagement.login">Login</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="email">
+                            <span data-translate="userManagement.email">Email</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th>
+                            <span>Status</span>
+                        </th>
+                        <th jh-sort-by="langKey">
+                            <span data-translate="userManagement.langKey">Lang Key</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th>
+                            <span data-translate="userManagement.profiles">Profiles</span>
+                        </th>
+                        <th jh-sort-by="createdDate">
+                            <span data-translate="userManagement.createdDate">Created Date</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="lastModifiedBy">
+                            <span data-translate="userManagement.lastModifiedBy">Last Modified By</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jh-sort-by="lastModifiedDate">
+                            <span data-translate="userManagement.lastModifiedDate">Last Modified Date</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th><span>Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in vm.users track by user.id">
+                        <td>
+                            <a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a>
+                        </td>
+                        <td>{{user.login}}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+                            <label class="flair-checkbox" ng-click="vm.setActive(user, !user.activated)">
+                                    <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':user.activated,'fa-square-o-unchecked':!user.activated} "></i>
+                                    <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':user.activated,'fa-check-square-o-unchecked':!user.activated}"></i>
+                            </label>
+                        </td>
+                        <td>{{user.langKey}}</td>
+                        <td>
+                            <div class="m-b-xs roles" ng-repeat="userGroup in user.userGroups">
+                                <span class="role-label label label-info">{{ userGroup }}</span>
+                            </div>
+                        </td>
+                        <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
+                        <td>{{user.lastModifiedBy}}</td>
+                        <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit" ui-sref="user-management-detail({login:user.login})" class="btn btn-default btn-sm">
+                                    <span class="fa fa-eye view-icon fa-2x"></span>
+                                </button>
+                                &nbsp;
+                                <button type="submit" ng-disabled="!vm.canEdit" ui-sref="user-management.edit({login:user.login})" class="btn btn-default btn-sm">
+                                    <span class="fa fa-edit edit-icon fa-2x"></span>
+                                </button>
+                                &nbsp;
+                                <button type="submit" ng-disabled="!vm.canDelete" ui-sref="user-management.delete({login:user.login})" class="btn btn-default btn-sm"
+                                    ng-disabled="vm.currentAccount.login==user.login">
+                                    <span class="fa fa-trash delete-icon fa-2x"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+        </div>
+    </div>
+</div>

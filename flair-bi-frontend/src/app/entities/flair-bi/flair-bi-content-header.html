@@ -1,0 +1,432 @@
+<div class="flairbi-content-header ng-class:{'flairbi-content-header-fullscreen':$root.isFullScreen == true, 'get-sticky':$root.isFullScreen == false}">
+    <div class="row" ng-if="$root.isFullScreen == false">
+        <div class="col-md-4 col-sm-6 col-xs-6 header-first">
+            <div class="logo" ui-sref="home">
+                <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
+            </div>
+            <div class="line"></div>
+            <div class="view-name">
+                <h2>
+                    {{vm.view.viewName}}
+                    <span ng-if="vm.states.versionNumber" uib-tooltip="Relese Version  {{vm.states.versionNumber}}" tooltip-placement="right">
+                        <svg class="information version-info-icon">
+                            <use xlink:href="#information" />
+                        </svg>
+                    </span>
+                </h2>
+            </div>
+        </div>
+        <div class="configuration-options">
+            <div class="col-md-2 col-sm-6 col-xs-6 visual-bookmark">
+                <div class="apply-bookmarks">
+                    <div class="dropdown-options-v5">
+                        <a class="dropdown-toggle" type="button" id="dropdownBookMark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <div class="input-box">   
+                                <svg class="field-icon-left">
+                                <use xlink:href="#bookmark-small" />
+                                </svg>
+                                <input type="text" ng-model="vm.selectedBookmark.name" class="form-control" placeholder="Apply bookmark" />
+                                <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                <use xlink:href="#cancle" />
+                                </svg>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownBookMark" ng-show="vm.bookmarks.length>0">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" ng-model="searchBookmark" class="form-control  rounded-corner" placeholder="Search Bookmark..." />
+                            </div>
+                            <div class="dropdown-sub-menu" ng-repeat="bookmark in vm.bookmarks | filter:{name:searchBookmark}">
+                                <a ng-click="vm.applyBookmark(bookmark)" title={{bookmark.name}}>
+                                    <span>{{bookmark.name}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            
+            <div class="col-md-2 col-sm-6 col-xs-4 visual-arrow">
+                <div class="options-1">
+                    <top-nav-button-component is-disabled="!vm.ngIfSave()" click="vm.onWriteToPg()">
+                        <span uib-tooltip="Save" tooltip-placement="bottom">
+                            <svg class="flaticons-save-button">
+                                <use xlink:href="#save-button" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                    <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()">
+                        <span uib-tooltip="Previous" tooltip-placement="bottom">
+                            <svg class="flaticons-left-arrow">
+                                <use xlink:href="#left-arrow" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                    <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()">
+                        <span uib-tooltip="Next" tooltip-placement="bottom">
+                            <svg class="flaticons-right-arrow">
+                                <use xlink:href="#right-arrow" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                    <top-nav-button-component if="vm.ngIfClearFilters()" click="vm.clearFilters()">
+                        <span uib-tooltip="Close" tooltip-placement="bottom">
+                            <svg class="flaticons-close">
+                                <use xlink:href="#close" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                </div>
+            </div>
+            <div class="col-md-1 hidden-sm hidden-xs visual-edit">
+                <div class="options-2" ng-if="!vm.configuration.readOnly">
+                    <div class="viz-edit-button" uib-tooltip="Edit" tooltip-placement="bottom">
+                        <md-switch class="md-primary edit" ng-if="vm.canEdit" md-no-ink aria-label="Edit button" ng-model="editState" ng-change="vm.editState(editState)">
+                        </md-switch>
+                        <md-switch class="md-primary edit" ng-if="!vm.canEdit" disabled md-no-ink aria-label="Edit button">
+                        </md-switch>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">
+                <div class="options-3">
+                    <top-nav-button-component click="vm.bookmark()" class="options-3-item">
+                        <span uib-tooltip="Bookmark" tooltip-placement="bottom">
+                            <svg class="flaticons-bookmark">
+                                <use xlink:href="#bookmark" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                    <top-nav-button-component click="vm.printAllWidgets()" class="options-3-item">
+                        <span uib-tooltip="Print" tooltip-placement="bottom">
+                            <svg class="flaticons-print">
+                                <use xlink:href="#print" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                    <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()">
+                        <span uib-tooltip="Full Screen" tooltip-placement="bottom">
+                            <svg class="full-screen">
+                                <use xlink:href="#full-screen" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                </div>
+            </div>
+            <div>
+                <div class="options-4">
+                    <menu-component></menu-component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row full-screen-topbar ng-class:{'full-screen-topbar-filter-toggled':vm.showFSFilter == false}" ng-if="$root.isFullScreen == true">
+        <div class="full-screen-options">
+            <div class="logo item" ui-sref="home">
+                <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
+            </div>
+            <div class="line"></div>
+            <div class="dashboards item hidden-xs hidden-sm ">
+                <div class="fullscreen-dropdowns">
+                    <div class="dropdown-options-v5">
+                        <a class="dropdown-toggle" type="button" id="dropdownDashboards" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <div class="input-box">
+                                <svg class="field-icon-left">
+                                    <use xlink:href="#dashboard-header" />
+                                </svg>
+                                <input type="text" ng-model="vm.selectedDashboard.dashboardName" class="form-control" placeholder="Select Dashboard" />
+                                <svg ng-click="vm.clearDashboard()" class="field-icon-right">
+                                <use xlink:href="#cancle" />
+                                </svg>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownDashboards" ng-show="vm.dashboards.length>0">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" ng-model="searchDashboard" class="form-control" placeholder="Search Dashboard..." />
+                            </div>
+                            <div class="dropdown-sub-menu" ng-repeat="dashboard in vm.dashboards | filter:{dashboardName:searchDashboard}">
+                                <a ng-click="vm.changeDashboard(dashboard)" title={{dashboard.dashboardName}}>
+                                    <span>{{dashboard.dashboardName}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="views item hidden-xs hidden-sm ">
+                <div class="fullscreen-dropdowns">
+                    <div class="dropdown-options-v5">
+                        <a class="dropdown-toggle" type="button" id="dropdownViews" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <div class="input-box">
+                                <svg class="field-icon-left">
+                                    <use xlink:href="#eye" />
+                                </svg>
+                                <input type="text" ng-model="vm.selectedView.viewName" class="form-control" placeholder="Select View" />
+                                <svg ng-click="vm.clearView()" class="field-icon-right">
+                                <use xlink:href="#cancle" />
+                                </svg>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownViews" ng-show="vm.views.length>0">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" ng-model="searchView" class="form-control" placeholder="Search View..." />
+                            </div>
+                            <div class="dropdown-sub-menu" ng-repeat="view in vm.views | filter:{viewName:searchView}">
+                                <a ng-click="vm.changeView(view)" title={{view.viewName}}>
+                                    <span>{{view.viewName}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="show item hidden-xs hidden-sm ">
+                <a class="btn btn-primary" ng-disabled="vm.isShowDisabled()" ng-click="vm.build()">
+                    <span class="ng-scope">Show</span>
+                </a>
+            </div>
+            <div class="item hidden-xs hidden-sm ">
+                <div class="fullscreen-dropdowns">
+                    <div class="dropdown-options-v5">
+                        <a class="dropdown-toggle" type="button" id="dropdownBookMark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <div class="input-box">
+                                <svg class="field-icon-left">
+                                <use xlink:href="#bookmark-small" />
+                                </svg>
+                                <input type="text" ng-model="vm.selectedBookmark.name" class="form-control" placeholder="Apply bookmark" />
+                                <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                <use xlink:href="#cancle" />
+                            </div>
+                        </a>
+                        <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownBookMark" ng-show="vm.bookmarks.length>0">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <i class="glyphicon glyphicon-search"></i>
+                                <input type="text" ng-model="searchBookmark" class="form-control  rounded-corner" placeholder="Search Bookmark..." />
+                            </div>
+                            <div class="dropdown-sub-menu" ng-repeat="bookmark in vm.bookmarks | filter:{name:searchBookmark}">
+                                <a ng-click="vm.applyBookmark(bookmark)" title={{bookmark.name}}>
+                                    <span>{{bookmark.name}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fs-btn bookmarks item hidden-xs hidden-sm" ng-click="vm.bookmark()">
+                <svg class="flaticons-bookmark">
+                        <use xlink:href="#bookmark" />
+                    </svg>
+            </div>
+            <div class="line hidden-sm hidden-xs"></div>
+            <div class="fs-btn settings item hidden-xs hidden-sm"
+               ng-click="vm.openSettings()">
+                <svg class="flaticons-edit-screen">
+                        <use xlink:href="#edit-screen" />
+                    </svg>
+            </div>
+            <div class="fs-btn exit-screen item hidden-xs hidden-sm" ng-click="vm.exitFullScreen()">
+                <svg class="flaticons-normal-screen">
+                        <use xlink:href="#normal-screen" />
+                    </svg>
+            </div>
+            <div class="line hidden-sm hidden-xs"></div>
+            <div class="fs-btn filter item" ng-click="vm.toggleFSFilter()">
+                <svg class="flaticons-filter">
+                        <use xlink:href="#filter" />
+                    </svg>
+            </div>
+            <div class=" hidden-sm hidden-xs">
+                <menu-component ></menu-component>
+            </div>
+            <div class="fs-btn menu item hidden-md hidden-lg">
+                <svg class="flaticons-menu" ng-click="vm.activateMobileNavigation()">
+                            <use xlink:href="#menu" />
+                </svg>
+                <pageslide ps-body-class="true" class="navigation-slide" ps-open="vm.mobileNavidationSlide" ps-side="top" ps-auto-close="true" ps-click-outside="close" ps-push="true" ps-size="390" ps-container="ps-slideContainer">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="user-mobile-click" style="cursor: pointer;"
+                           ng-click="vm.activeMobileUserOptionNavigation()">
+                            <img  src="content/svgs/expand-arrow.svg" alt="icon" 
+                            ng-class="{'optionMenuOpen': vm.mobileUserOptionNavigationSlide, 
+                            'optionMenuClose': !vm.mobileUserOptionNavigationSlide}" >
+                            
+                            <svg class="more">
+                                <use xlink:href="#more"></use>
+                            </svg>
+                            <p class="user-name right">{{vm.account.firstName}}</p>
+
+                            <div class="line-horis"></div>
+                        </div>
+                    </div>
+                    <div ng-if="vm.mobileUserOptionNavigationSlide"
+                      class="col-sm-12 col-xs-12">
+                        <a ui-sref="home" title="Home" href="#/">
+                            <div class="user-settings">
+                                <svg class="user-settings-icon">
+                                <use xlink:href="#home" />
+                                </svg>       
+                                <p class="user-settings-item">Home</p>
+                            </div>
+                        </a>
+                        <a ui-sref="account" title="Settings" href="#/">
+                            <div class="user-settings">
+                               <svg class="user-settings-icon">
+                                <use xlink:href="#menu-setting" />
+                                </svg> 
+                                <p class="user-settings-item">Account Settings</p>
+                            </div>
+                        </a>
+                        <a ng-click="vm.logout()" title="Log Out" href="">
+                            <div class="user-settings">
+                                <svg class="user-settings-icon">
+                                <use xlink:href="#menu-logout" />
+                                </svg>
+                                <p class="user-settings-item">Log Out</p>
+                            </div>
+                        </a>    
+                        <div class="line-horis"></div>
+                    </div>
+                        
+                    <div class="col-sm-11 col-xs-11" >
+                        <div class="apply-bookmarks">
+                            <div class="dropdown-options-v5">
+                                <a class="dropdown-toggle" type="button" id="dropdownBookMark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <div class="input-box">
+                                        <svg class="field-icon-left">
+                                        <use xlink:href="#bookmark-small" />
+                                        </svg>
+                                        <input type="text" ng-model="vm.selectedBookmark.name" class="form-control" placeholder="Apply bookmark" />
+                                        <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                        <use xlink:href="#cancle" />
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownBookMark" ng-show="vm.bookmarks.length>0">
+                                    <div class="search-box-list inner-addon left-addon b-b-xs">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                        <input type="text" ng-model="searchBookmark" class="form-control  rounded-corner" placeholder="Search Bookmark..." />
+                                    </div>
+                                    <div class="dropdown-sub-menu" ng-repeat="bookmark in vm.bookmarks | filter:{name:searchBookmark}">
+                                        <a ng-click="vm.applyBookmark(bookmark)" title={{bookmark.name}}>
+                                            <span>{{bookmark.name}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fs-btn bookmarks item col-xs-1 col-sm-1" ng-click="
+                               vm.bookmark()">
+                            <svg class="flaticons-bookmark">
+                                <use xlink:href="#bookmark" />
+                            </svg>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="line-horis" ></div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="dashboards">
+                            <div class="fullscreen-dropdowns">
+                                <div class="dropdown-options-v5">
+                                    <a class="dropdown-toggle" type="button" id="dropdownDashboards" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <div class="input-box">
+                                            <svg class="field-icon-left">
+                                            <use xlink:href="#dashboard-header" />
+                                            </svg>
+                                            <input type="text" ng-model="vm.selectedDashboard.dashboardName" class="form-control" placeholder="Select Dashboard" />
+                                             <svg ng-click="vm.clearDashboard()" class="field-icon-right">
+                                            <use xlink:href="#cancle" />
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownDashboards" ng-show="vm.dashboards.length>0">
+                                        <div class="search-box-list inner-addon left-addon b-b-xs">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                            <input type="text" ng-model="searchDashboard" class="form-control" placeholder="Search Dashboard..." />
+                                        </div>
+                                        <div class="dropdown-sub-menu" ng-repeat="dashboard in vm.dashboards | filter:{dashboardName:searchDashboard}">
+                                            <a ng-click="vm.changeDashboard(dashboard)" title={{dashboard.dashboardName}}>
+                                                <span>{{dashboard.dashboardName}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div  class="views">
+                            <div class="fullscreen-dropdowns">
+                                <div class="dropdown-options-v5">
+                                    <a class="dropdown-toggle" type="button" id="dropdownViews" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <div class="input-box">
+                                            <svg class="field-icon-left">
+                                                <use xlink:href="#eye" />
+                                            </svg>
+                                            <input type="text" ng-model="vm.selectedView.viewName" class="form-control" placeholder="Select View" />
+                                             <svg ng-click="vm.clearView()" class="field-icon-right">
+                                            <use xlink:href="#cancle" />
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownViews" ng-show="vm.views.length>0">
+                                        <div class="search-box-list inner-addon left-addon b-b-xs">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                            <input type="text" ng-model="searchView" class="form-control" placeholder="Search View..." />
+                                        </div>
+                                        <div class="dropdown-sub-menu" ng-repeat="view in vm.views | filter:{viewName:searchView}">
+                                            <a ng-click="vm.changeView(view)" title={{view.viewName}}>
+                                                <span>{{view.viewName}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="col-sm-12 col-xs-12 hideSlider">
+                        <a class="btn btn-default" ng-click="vm.activateMobileNavigation()">
+                            <span class="ng-scope">Close</span>
+                        </a>
+                        <a class="btn btn-primary" ng-disabled="vm.isShowDisabled()" ng-click="vm.build()">
+                            <span class="ng-scope">Show</span>
+                        </a>
+                    </div>
+                </pageslide>
+            </div>
+        </div>
+    </div>
+    <div ng-show="vm.ifFSFilterToggled()" class="row dashboard-filter-header ng-class:{'dashboard-filter-header-fullscreen':$root.isFullScreen == true}">
+        <a ng-hide="vm.currentPage==0 || vm.filtersLength < vm.pageSize" class="prev-arrow next-prev-links ng-class:{'item':$root.isFullScreen == true}" ng-click="vm.prevPage()"><i class="fa fa-angle-double-left"></i></a>
+        <div title="Clear All Filters" class="clear-all ng-class:{'item':$root.isFullScreen == true}" ng-if="vm.filtersLength > 1">
+            <i ng-click="vm.clearFilters()" class="clear-all-icon  glyphicon glyphicon-remove-sign"></i>
+        </div>
+        <ul class="list-inline filter-list ng-class:{'item':$root.isFullScreen == true}">
+            <li ng-if="value.length > 0" ng-show="vm.currentPage==vm.getFloor($index)" style="outline:none;" ng-click="vm.toggleFilters($event)" class="list-inline-item" ng-repeat="(key, value) in vm.filters track by $index">
+                <a class="btn btn-info btn-sm filter" title="{{key}}">
+                    <span class="filter-name">{{key}}</span><span ng-click="vm.removeFilter($event,key)" class="remove glyphicon glyphicon-remove-sign glyphicon-white"></span>
+                </a>
+                <ul class="list-group filter-drop-downs">
+                    <li class="list-group-item" ng-repeat="val in value" style="outline:none;">
+                        <span class="tag">{{val}}</span>
+                        <svg class="flaticon-close" ng-click="vm.removeFilterTag($event,val,value,key)">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
+                    </svg>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="search-box inner-addon left-addon ng-class:{'item':$root.isFullScreen == true}">
+            <i class="glyphicon glyphicon-search"></i>
+            <input ng-keyup="vm.searchFilter(filterName)" type="text" ng-model="filterName" class="form-control  rounded-corner" placeholder="Filter..." />
+        </div>
+        <a ng-hide="vm.currentPage==vm.noOfPages || vm.filtersLength < vm.pageSize" class="next-arrow next-prev-links ng-class:{'item':$root.isFullScreen == true}" ng-click="vm.nextPage()"><i class="fa fa-angle-double-right"></i></a>
+    </div>
+    <!-- slide -->
+    <div id="ps-slideContainer"></div>
+
+</div>

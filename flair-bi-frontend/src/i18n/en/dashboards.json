@@ -1,0 +1,33 @@
+{
+    "flairbiApp": {
+        "dashboards": {
+            "home": {
+                "title": "Dashboards",
+                "createLabel": "Create",
+                "createOrEditLabel": "Create or edit a Dashboards",
+                "search": "Search for Dashboards"
+            },
+            "created": "A new Dashboards is created with identifier {{ param }}",
+            "updated": "A Dashboards is updated with identifier {{ param }}",
+            "deleted": "A Dashboards is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Dashboards {{ id }}?"
+            },
+            "detail": {
+                "title": "Dashboards"
+            },
+            "dashboardName": "Dashboard Name",
+            "category": "Category",
+            "description": "Description",
+            "published": "Published",
+            "image": "Image",
+            "dashboard_view": "Dashboard View",
+            "dashboardDatasources": "Dashboard Datasources",
+            "searchTitle": "Search result for dashboards",
+            "error": {
+                "searched": "Error loading searched dashboards"
+            },
+            "selectDatasource": "Search available datasources"
+        }
+    }
+}

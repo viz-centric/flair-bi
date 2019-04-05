@@ -1,0 +1,9 @@
+<div class="account-header">
+        <h3 class="header-text">Account</h3>
+</div>
+<div class="account-page">
+    <div class="config-item" ng-repeat="menuItem in vm.menuItems| orderBy: 'order' ">
+        <account-card-component menu-item="menuItem"></account-card-component>
+    </div>
+</div>
+    

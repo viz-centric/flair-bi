@@ -11,6 +11,7 @@ import com.flair.bi.service.dto.ListTablesResponseDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.flair.bi.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -53,6 +54,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see DatasourcesResource
  */
+@Ignore
 public class DatasourceResourceIntTest extends AbstractIntegrationTest {
 
     private static final Long id = 501L;

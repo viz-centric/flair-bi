@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ import com.flair.bi.service.dto.PropertyTypeDTO;
 import com.flair.bi.service.mapper.PropertyTypeMapper;
 import com.flair.bi.service.properttype.PropertyTypeService;
 
+@Ignore
 public class PropertyTypeResourceIntTest extends AbstractIntegrationTest {
 
     @Inject

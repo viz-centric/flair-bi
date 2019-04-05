@@ -8,6 +8,7 @@ import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.viewwatch.ViewWatch;
 import com.flair.bi.service.VisualizationService;
 import com.flair.bi.service.dto.IdentifierDTO;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,7 +23,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-
+@Ignore
 public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 	@MockBean

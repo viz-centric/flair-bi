@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -32,6 +33,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 
+@Ignore
 public class PermissionResourceIntTest extends AbstractIntegrationTest {
 	
     @Inject

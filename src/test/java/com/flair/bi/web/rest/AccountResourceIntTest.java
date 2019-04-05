@@ -1,6 +1,6 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.FlairbiApp;
+import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.UserRepository;
@@ -12,22 +12,14 @@ import com.flair.bi.web.rest.vm.ManagedUserVM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.PostgreSQLContainerProvider;
 
 import javax.inject.Inject;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -47,9 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see UserService
  */
 @Ignore
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
-public class AccountResourceIntTest {
+public class AccountResourceIntTest extends AbstractIntegrationTest {
 
     @Inject
     private UserRepository userRepository;

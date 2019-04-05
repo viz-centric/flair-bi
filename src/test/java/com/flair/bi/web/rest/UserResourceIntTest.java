@@ -17,6 +17,7 @@ import com.flair.bi.web.rest.vm.ChangePermissionVM.Action;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -51,6 +52,7 @@ import java.util.List;
  *
  * @see UserResource
  */
+@Ignore
 public class UserResourceIntTest extends AbstractIntegrationTest{
 
     @Inject

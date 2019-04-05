@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import com.flair.bi.AbstractIntegrationTest;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -36,6 +37,7 @@ import com.flair.bi.service.UserService;
 import com.flair.bi.service.ViewWatchService;
 import com.flair.bi.view.ViewService;
 
+@Ignore
 public class ViewWatchResourceIntTest extends AbstractIntegrationTest {
 
     @Inject

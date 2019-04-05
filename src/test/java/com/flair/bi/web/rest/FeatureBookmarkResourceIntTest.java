@@ -10,6 +10,7 @@ import com.flair.bi.service.FeatureBookmarkService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -40,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FeatureBookmarkResource
  */
+@Ignore
 public class FeatureBookmarkResourceIntTest extends AbstractIntegrationTest{
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";

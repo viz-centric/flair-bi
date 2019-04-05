@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    src: local("Fira Sans Extra Condensed Light"), local("FiraSans-Light"), url(../../fonts/FiraSansExtraCondensed-Light.ttf);
+}
+
+@font-face {
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    src: local("Fira Sans Extra Condensed"), local("FiraSans"), url(../../fonts/FiraSansExtraCondensed-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    src: local("Fira Sans Extra Condensed"), local("FiraSans-Semibold"), url(../../fonts/FiraSansExtraCondensed-SemiBold.ttf);
+}
+
+@font-face {
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    src: local("Fira Sans Extra Condensed"), local("FiraSans-Bold"), url(../../fonts/FiraSansExtraCondensed-Bold.ttf);
+}

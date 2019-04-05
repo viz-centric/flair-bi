@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.Information;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class InputTypeResourceTest extends AbstractIntegrationTest {
 
 	@Test

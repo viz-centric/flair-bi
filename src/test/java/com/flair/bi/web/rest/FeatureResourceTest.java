@@ -11,6 +11,7 @@ import com.flair.bi.service.mapper.FeatureMapper;
 import com.flair.bi.web.rest.params.FeatureRequestParams;
 import com.querydsl.core.types.Predicate;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+@Ignore
 public class FeatureResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

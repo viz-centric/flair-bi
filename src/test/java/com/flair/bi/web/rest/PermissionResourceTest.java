@@ -9,6 +9,7 @@ import com.flair.bi.service.HierarchyService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,6 +28,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class PermissionResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

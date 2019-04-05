@@ -11,6 +11,7 @@ import com.flair.bi.web.rest.dto.ValidateVisualMetadataDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
@@ -28,7 +29,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
+@Ignore
 public class VisualMetadataResourceTest extends AbstractIntegrationTest {
 
     @MockBean

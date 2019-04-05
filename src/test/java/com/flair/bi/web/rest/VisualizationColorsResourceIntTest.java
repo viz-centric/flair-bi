@@ -10,6 +10,7 @@ import com.flair.bi.service.dto.VisualizationColorsDTO;
 import com.flair.bi.service.mapper.VisualizationColorsMapper;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see VisualizationColorsResource
  */
+@Ignore
 public class VisualizationColorsResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_CODE = "AAAAAAAAAA";

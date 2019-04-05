@@ -15,6 +15,7 @@ import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class DatasourcesResourceTest extends AbstractIntegrationTest {
 
 	@MockBean

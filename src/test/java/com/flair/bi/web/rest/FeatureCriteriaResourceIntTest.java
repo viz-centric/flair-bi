@@ -48,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see FeatureCriteriaResource
  */
+@Ignore
 public class FeatureCriteriaResourceIntTest extends AbstractIntegrationTest {
 
     private static final String DEFAULT_VALUE = "AAAAAAAAAA";

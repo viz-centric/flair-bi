@@ -15,6 +15,7 @@ import com.flair.bi.service.UserService;
 import com.flair.bi.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -45,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see DatasourceConstraintResource
  */
+@Ignore
 public class DatasourceConstraintResourceIntTest extends AbstractIntegrationTest {
 
     private static final ConstraintDefinition DEFAULT_CONSTRAINT_DEFINITION = new ConstraintDefinition(Collections.singletonList(new ExclusionFeatureConstraintExpression()));

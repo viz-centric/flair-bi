@@ -4,6 +4,7 @@ import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.enumeration.FeatureType;
 import com.flair.bi.service.dto.FeatureDTO;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class FeatureTypeResourceTest extends AbstractIntegrationTest {
 
 	@Test

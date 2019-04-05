@@ -105,7 +105,7 @@ services:
         ports:
         - 8090:8080
         volumes:
-        - path to config folder/flair-github/flair-config/flair-notifications:/flair-config
+        - path to config folder/flair-github/flair-config:/flair-configuration
         environment:
         - APP_CONFIG=/flair-config/application-dep.yml
         - NODE_ENV=local-dev

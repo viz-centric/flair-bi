@@ -1,13 +1,14 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .factory('JhiLanguageService', JhiLanguageService);
+// angular
+//     .module('flairbiApp')
+//     .factory('JhiLanguageService', JhiLanguageService);
 
-JhiLanguageService.$inject = ['$q', '$http', '$translate', 'LANGUAGES'];
+JhiLanguageService.$inject = ['$q', '$translate', 'LANGUAGES'];
 
-function JhiLanguageService($q, $http, $translate, LANGUAGES) {
+export const name = 'JhiLanguageService';
+export function JhiLanguageService($q, $translate, LANGUAGES) {
     var service = {
         getAll: getAll,
         getCurrent: getCurrent

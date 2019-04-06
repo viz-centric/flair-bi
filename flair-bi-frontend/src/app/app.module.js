@@ -1,12 +1,20 @@
 
 import angular from 'angular'
 import { moduleName as ngTagsInputGrpcModule } from './entities/flair-bi/filter/ng-tags-input-grpc';
-import { moduleName as applicationHandlers } from './blocks/handlers/handlers.module';
-
+import { moduleName as applicationHandlersModule } from './blocks/handlers/handlers.module';
+import { moduleName as languageModule } from './components/language/language.module';
 const appModule = angular
     .module("flairbiApp", [
+        /**
+         * Our modules
+         */
         ngTagsInputGrpcModule,
-        applicationHandlers,
+        applicationHandlersModule,
+        languageModule,
+
+        /**
+         * 3rd party library modules
+         */
         "angular-jwt",
         "ngStorage",
         "tmh.dynamicLocale",

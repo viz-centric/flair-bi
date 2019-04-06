@@ -8,7 +8,20 @@
 Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', '$translate', 'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'];
 
 export const name = 'Auth';
-export function Auth($rootScope, $state, $sessionStorage, $q, $translate, Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish) {
+export function Auth($rootScope,
+    $state,
+    $sessionStorage,
+    $q,
+    $translate,
+    Principal,
+    AuthServerProvider,
+    Account,
+    LoginService,
+    Register,
+    Activate,
+    Password,
+    PasswordResetInit,
+    PasswordResetFinish) {
     var service = {
         activateAccount: activateAccount,
         authorize: authorize,

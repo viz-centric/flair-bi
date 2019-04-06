@@ -1,5 +1,7 @@
 import angular from 'angular';
 
+import { moduleName as LoginModule } from "./../../components/login/login.module";
+
 import { name as AccountName, Account } from './account.service';
 import { name as ActivateName, Activate } from './activate.service';
 import { name as AuthName, Auth } from './auth.service';
@@ -20,7 +22,12 @@ import { name as userTypeName, userType } from "./user-type.directive";
 export const moduleName =
     angular.module('application.auth',
 
-        ['angular-jwt'])
+        [
+            LoginModule,
+
+
+            'angular-jwt'
+        ])
 
         .factory(AccountName, Account)
         .factory(ActivateName, Activate)

@@ -1,18 +1,20 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .factory('LoginService', LoginService);
+// angular
+//     .module('flairbiApp')
+//     .factory('LoginService', LoginService);
 
-LoginService.$inject = ['$uibModal', '$state'];
+LoginService.$inject = ['$state'];
 
-function LoginService($uibModal, $state) {
+export const name = 'LoginService';
+export function LoginService($state) {
     var service = {
         open: open
     };
 
     var modalInstance = null;
+
     var resetModal = function () {
         modalInstance = null;
     };

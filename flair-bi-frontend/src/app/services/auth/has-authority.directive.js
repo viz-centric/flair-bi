@@ -1,13 +1,14 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .directive('hasAuthority', hasAuthority);
+// angular
+//     .module('flairbiApp')
+//     .directive('hasAuthority', hasAuthority);
 
 hasAuthority.$inject = ['Principal'];
 
-function hasAuthority(Principal) {
+export const name = 'hasAuthority';
+export function hasAuthority(Principal) {
     var directive = {
         restrict: 'A',
         link: linkFunc

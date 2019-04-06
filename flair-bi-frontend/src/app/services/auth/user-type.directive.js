@@ -5,16 +5,17 @@
  * user can change the password. So for this in Flair BI we have restricted only for internal
  * users(users present in application db).
  */
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .directive('userType', userType);
+// angular
+//     .module('flairbiApp')
+//     .directive('userType', userType);
 
 userType.$inject = ['Principal'];
 
-function userType(Principal) {
+export const name = 'userType';
+export function userType(Principal) {
     var directive = {
         restrict: 'A',
         link: linkFunc

@@ -1,13 +1,15 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .factory('CryptoService', CryptoService);
+// angular
+//     .module('flairbiApp')
+//     .factory('CryptoService', CryptoService);
 
 CryptoService.$inject = [];
 
-function CryptoService() {
+
+export const name = 'CryptoService';
+export function CryptoService() {
     var service = {
         UUIDv4: UUIDv4
     };

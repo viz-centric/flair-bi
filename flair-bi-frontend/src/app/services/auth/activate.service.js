@@ -1,13 +1,15 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .factory('Activate', Activate);
+// angular
+//     .module('flairbiApp')
+//     .factory('Activate', Activate);
 
 Activate.$inject = ['$resource'];
 
-function Activate($resource) {
+export const name = 'Activate';
+
+export function Activate($resource) {
     var service = $resource('api/activate', {}, {
         'get': { method: 'GET', params: {}, isArray: false }
     });

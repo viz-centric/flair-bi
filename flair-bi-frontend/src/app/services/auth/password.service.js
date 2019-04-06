@@ -1,14 +1,15 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .factory('Password', Password);
+// angular
+//     .module('flairbiApp')
+//     .factory('Password', Password);
 
 Password.$inject = ['$resource'];
 
-function Password($resource) {
+export const name = 'Password';
+export function Password($resource) {
     var service = $resource('api/account/change_password', {}, {});
 
     return service;
-} s
+} 

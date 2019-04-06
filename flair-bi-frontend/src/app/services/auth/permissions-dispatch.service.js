@@ -1,13 +1,14 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .factory('AccountDispatch', AccountDispatch);
+// angular
+//     .module('flairbiApp')
+//     .factory('AccountDispatch', AccountDispatch);
 
 AccountDispatch.$inject = [];
 
-function AccountDispatch() {
+export const name = 'AccountDispatch';
+export function AccountDispatch() {
 
     var account = {};
 

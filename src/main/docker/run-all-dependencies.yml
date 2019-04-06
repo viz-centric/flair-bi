@@ -110,3 +110,15 @@ services:
         - APP_CONFIG=/flair-config/application-dep.yml
         - NODE_ENV=local-dev
         - SLEEP_TIME=10
+
+    flair-cache:
+        image: flairbi/flair-cache:latest
+        labels:
+            purpose: Flair cache
+            environment: development
+        environment:
+            - CONFIG_URI=http://flair-registry:8761
+            - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+            - SPRING_PROFILES_ACTIVE=prod
+        ports:
+            - 8769:12355

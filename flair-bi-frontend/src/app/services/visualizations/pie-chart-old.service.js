@@ -3,11 +3,12 @@ import angular from 'angular';
 
 angular
     .module('flairbiApp')
-    .factory('GenerateDoughnutChart', GenerateDoughnutChart);
+    .factory('GeneratePieChart', GeneratePieChart);
 
-GenerateDoughnutChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
+GeneratePieChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
 
-function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
+function GeneratePieChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
+
     return {
         build: function (record, element, panel) {
 
@@ -20,15 +21,6 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
 
                 result['dimension'] = D3Utils.getNames(dimension);
                 result['measure'] = D3Utils.getNames(measure);
-
-                result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name');
-                result['measureDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display name');
-
-                result['fontSize'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size');
-                result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font style');
-                result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font weight');
-                result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
-                result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
 
                 result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                 result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position');
@@ -45,13 +37,6 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                     this.config = config;
                     this.dimension = config.dimension;
                     this.measure = config.measure;
-                    this.dimensionDisplayName = config.dimensionDisplayName;
-                    this.measureDisplayName = config.measureDisplayName;
-                    this.fontSize = config.fontSize;
-                    this.fontStyle = config.fontStyle;
-                    this.fontWeight = config.fontWeight;
-                    this.fontColor = config.fontColor;
-                    this.showLabel = config.showLabel;
                     this.showLegend = config.showLegend;
                     this.legendPosition = config.legendPosition;
                     this.showValueAs = config.showValueAs;
@@ -62,34 +47,6 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
 
                 Helper.prototype.getPadding = function () {
                     return 20;
-                }
-
-                Helper.prototype.getDimensionDisplayName = function () {
-                    return this.dimensionDisplayName;
-                }
-
-                Helper.prototype.getMeasureDisplayName = function () {
-                    return this.measureDisplayName;
-                }
-
-                Helper.prototype.getFontSize = function () {
-                    return this.fontSize;
-                }
-
-                Helper.prototype.getFontWeight = function () {
-                    return this.fontWeight;
-                }
-
-                Helper.prototype.getFontStyle = function () {
-                    return this.fontStyle;
-                }
-
-                Helper.prototype.getFontColor = function () {
-                    return this.fontColor;
-                }
-
-                Helper.prototype.getValueVisibility = function () {
-                    return this.showLabel;
                 }
 
                 Helper.prototype.getShowValueAs = function () {
@@ -143,11 +100,11 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                 Helper.prototype.toggleTooltip = function (visibility, scope) {
                     return function (d, i) {
                         var element = d3.select(this),
-                            DisplayName = scope.helper.dimension[0],
+                            displayName = scope.helper.dimension[0],
                             dimension = d.data[scope.helper.dimension[0]],
                             measures = scope.helper.measure[0],
                             measuresFormate = d.data[scope.helper.measure[0]];
-                        D3Utils.contentTooltip(visibility, scope, element, DisplayName, dimension, measures, measuresFormate);
+                        D3Utils.contentTooltip(visibility, scope, element, displayName, dimension, measures, measuresFormate);
                     }
                 }
 
@@ -232,20 +189,20 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
 
             })();
 
-            var Doughnut = (function () {
+            var Pie = (function () {
 
-                function Doughnut(container, record, properties) {
+                function Pie(container, record, properties) {
                     this.container = container;
                     this.id = record.id;
                     this.originalData = record.data;
                     this.helper = new Helper(properties);
                     this.legendSpace = 20,
-                        this.doughnutOffset = 20;
+                        this.pieOffset = 20;
                     this.offsetY = 5;
 
-                    $('#doughnut-' + this.id).remove();
+                    $('#pie-' + this.id).remove();
                     var div = d3.select(container).append('div')
-                        .attr('id', 'doughnut-' + this.id)
+                        .attr('id', 'pie-' + this.id)
                         .style('width', this.container.clientWidth + 'px')
                         .style('height', this.container.clientHeight + 'px')
                         .style('overflow', 'hidden')
@@ -260,12 +217,12 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                     D3Utils.prepareFilterButtons(div, $rootScope, filterParametersService);
                 }
 
-                Doughnut.prototype.updateChart = function (data) {
+                Pie.prototype.updateChart = function (data) {
                     var me = this;
 
                     var container = d3.select(this.container);
 
-                    var doughnut = d3.pie()
+                    var pie = d3.pie()
                         .sort(null)
                         .value(function (d) { return d[me.helper.measure[0]]; });
 
@@ -274,21 +231,21 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                     this.helper.setTotal(d3.sum(data.map(function (d) { return d[me.helper.measure[0]]; })));
 
                     var arc = container.selectAll('.arc')
-                        .data(doughnut(data));
+                        .data(pie(data));
 
                     arc.exit().remove();
                     arc.enter().append('g')
                         .attr('class', 'arc');
 
                     var arcText = container.selectAll('.arc-text')
-                        .data(doughnut(data))
+                        .data(pie(data))
 
                     arcText.exit().remove();
                     arcText.enter().append('g')
                         .attr('class', 'arc-text');
                 }
 
-                Doughnut.prototype.renderChart = function () {
+                Pie.prototype.renderChart = function () {
                     var data = this.originalData;
                     var me = this;
 
@@ -327,9 +284,8 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                         var me = this,
                             legendBreak = 0,
                             legendBreakCount = 0;
-
                         var legend = container.append('g')
-                            .attr('class', 'doughnut-legend')
+                            .attr('class', 'pie-legend')
                             .attr('display', function () {
                                 if (me.helper.isLegendVisible()) {
                                     return 'block';
@@ -381,7 +337,7 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                                         .style('stroke-width', 1);
                                 }
 
-                                d3.select(me.container).select('.doughnut-plot').remove();
+                                d3.select(me.container).select('.pie-plot').remove();
                                 drawPlot.call(me, data.filter(function (d) { return labelStack.indexOf(d) == -1; }));
                             });
 
@@ -412,6 +368,16 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                                 }
                             });
 
+                        if ((this.helper.getLegendPosition() == 'top') || (this.helper.getLegendPosition() == 'bottom')) {
+                            legend.attr('transform', function (d, i) {
+                                var count = i,
+                                    widthSum = 0
+                                while (count-- != 0) {
+                                    widthSum += d3.select(me.container).select('#legend' + count).node().getBBox().width + 3 * me.offsetY;
+                                }
+                                return 'translate(' + widthSum + ', ' + (me.helper.getLegendPosition() == 'top' ? 0 : containerHeight) + ')';
+                            });
+                        }
                         if (this.helper.getLegendPosition() == 'bottom') {
                             legend.attr('transform', function (d, i) {
                                 var count = i,
@@ -446,7 +412,6 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                             });
                             containerHeight = containerHeight - (20 * legendBreakCount);
                         }
-
                         if (!this.helper.isLegendVisible()) {
                             this.legendSpace = 0;
                         } else {
@@ -461,24 +426,23 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
 
                     var drawPlot = function (data) {
                         var radius = Math.min(contentWidth, contentHeight) / 2,
-                            outerRadius = radius - this.doughnutOffset,
-                            innerRadius = Math.floor((radius - this.doughnutOffset) * 0.7);
+                            outerRadius = radius - this.pieOffset;
 
                         var arc = d3.arc()
                             .outerRadius(outerRadius)
-                            .innerRadius(innerRadius);
+                            .innerRadius(0);
 
                         var labelArc = d3.arc()
-                            .outerRadius(radius - 2 * this.doughnutOffset)
-                            .innerRadius(Math.floor((radius - 2 * this.doughnutOffset) * 0.8));
+                            .outerRadius(radius - 2 * this.pieOffset)
+                            .innerRadius(Math.floor((radius - 2 * this.pieOffset) * 0.8));
 
-                        var doughnut = d3.pie()
+                        var pie = d3.pie()
                             // .padAngle(.02)
                             .sort(null)
                             .value(function (d) { return d[me.helper.measure[0]]; });
 
                         var chart = container.append('g')
-                            .attr('class', 'doughnut-plot')
+                            .attr('class', 'pie-plot')
                             .attr('transform', function () {
                                 if (me.helper.getLegendPosition() == 'top') {
                                     return 'translate(' + (contentWidth / 2) + ', ' + (me.legendSpace + contentHeight / 2) + ')';
@@ -492,7 +456,7 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                             });
 
                         var gArc = chart.selectAll('.arc')
-                            .data(doughnut(data))
+                            .data(pie(data))
                             .enter().append('g')
                             .attr('class', 'arc')
                         // Uncomment the code below to push the arcs away from center
@@ -500,7 +464,7 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                             var theta = (d.startAngle + d.endAngle) / 2,
                                 x = Math.sin(theta) * 2,
                                 y = -Math.cos(theta) * 2;
-                            
+
                             return 'translate(' + x + ', ' + y + ')';
                         });*/
 
@@ -585,36 +549,6 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                                 }
                             });
 
-                        var centerText;
-                        var targetText = this.helper.getMeasureDisplayName();
-                        var targetNumber = this.helper.getTotal();
-
-                        centerText = chart.append('text')
-                            .attr('id', 'measure-value')
-                            .style('text-anchor', 'middle')
-                            .style('fill', me.helper.getFontColor())
-                            .style('font-size', me.helper.getFontSize())
-                            .style('font-weight', me.helper.getFontWeight())
-                            .style('font-style', me.helper.getFontStyle())
-                            .attr('visibility', me.helper.getValueVisibility() == true ? 'visible' : 'hidden')
-                            .append("tspan")
-                            .text(function () {
-                                return D3Utils.getTruncatedLabel(
-                                    this,
-                                    targetText,
-                                    innerRadius)
-                            })
-                            .attr("x", 0)
-                            .append("tspan")
-                            .text(function () {
-                                return D3Utils.getTruncatedLabel(
-                                    this,
-                                    targetNumber,
-                                    innerRadius)
-                            })
-                            .attr("x", 0)
-                            .attr("dy", me.helper.getFontSize() + 5);
-
                         var label;
 
                         if (me.helper.isArcRepresentation()) {
@@ -638,11 +572,8 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                                 .delay(500)
                                 .on('start', function () {
                                     d3.select(this).attr('startOffset', function (d) {
-                                        var length = pathArea.nodes()[d.index].getTotalLength(),
-                                            diff = d.endAngle - d.startAngle,
-                                            x = 2 * (outerRadius - innerRadius) + diff * innerRadius;
-
-                                        return 50 * (length - x) / length + "%";
+                                        var length = pathArea.nodes()[d.index].getTotalLength();
+                                        return 50 * (length - 2 * outerRadius) / length + "%";
                                     })
                                         .text(me.helper.getLabel(me))
                                         .filter(function (d, i) {
@@ -653,7 +584,7 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                                 });
                         } else {
                             var gArcText = chart.selectAll('.arc-text')
-                                .data(doughnut(data))
+                                .data(pie(data))
                                 .enter().append('g')
                                 .attr('class', 'arc-text');
 
@@ -713,28 +644,28 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                     drawPlot.call(this, data);
                 }
 
-                return Doughnut;
+                return Pie;
 
             })();
 
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
-                    /*var doughnut = $rootScope.updateWidget[record.id];
-                    doughnut.updateChart(record.data);*/
+                    /*var pie = $rootScope.updateWidget[record.id];
+                    pie.updateChart(record.data);*/
 
                     // TODO: This needs to be fixed, commented code need to be properly done
                     // ---------------*-----------------
-                    var doughnut = new Doughnut(element[0], record, getProperties(VisualizationUtils, record));
-                    doughnut.renderChart();
+                    var pie = new Pie(element[0], record, getProperties(VisualizationUtils, record));
+                    pie.renderChart();
 
-                    $rootScope.updateWidget[record.id] = doughnut;
+                    $rootScope.updateWidget[record.id] = pie;
                     // ---------------*-----------------
                 }
             } else {
-                var doughnut = new Doughnut(element[0], record, getProperties(VisualizationUtils, record));
-                doughnut.renderChart();
+                var pie = new Pie(element[0], record, getProperties(VisualizationUtils, record));
+                pie.renderChart();
 
-                $rootScope.updateWidget[record.id] = doughnut;
+                $rootScope.updateWidget[record.id] = pie;
             }
         }
     }

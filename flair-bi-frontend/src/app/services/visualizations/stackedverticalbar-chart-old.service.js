@@ -3,11 +3,11 @@ import angular from 'angular';
 
 angular
     .module('flairbiApp')
-    .factory('GenerateComboChart', GenerateComboChart);
+    .factory('GenerateStackedverticalbarChart', GenerateStackedverticalbarChart);
 
-GenerateComboChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
+GenerateStackedverticalbarChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
 
-function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
+function GenerateStackedverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
     return {
         build: function (record, element, panel) {
 
@@ -64,9 +64,6 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     eachMeasure['displayColor'] = (eachMeasure['displayColor'] == null) ? colorSet[i] : eachMeasure['displayColor'];
                     eachMeasure['borderColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                     eachMeasure['borderColor'] = (eachMeasure['borderColor'] == null) ? colorSet[i] : eachMeasure['borderColor'];
-                    eachMeasure['comboChartType'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Combo chart type');
-                    eachMeasure['lineType'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type');
-                    eachMeasure['pointType'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type');
                     allMeasures.push(eachMeasure);
                 }
 
@@ -81,29 +78,31 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
 
                 function Helper(config) {
                     this.config = config;
+                    this.maxMes = config.maxMes;
                     this.dimension = config.dimension;
                     this.measures = config.measures;
-                    this.maxMes = config.maxMes;
-                    this.displayName = config.displayName;
                     this.showXaxis = config.showXaxis;
                     this.showYaxis = config.showYaxis;
-                    this.showXaxisLabel = config.showXaxisLabel;
-                    this.showYaxisLabel = config.showYaxisLabel;
                     this.xAxisColor = config.xAxisColor;
                     this.yAxisColor = config.yAxisColor;
-                    this.showGrid = config.showGrid;
+                    this.showXaxisLabel = config.showXaxisLabel;
+                    this.showYaxisLabel = config.showYaxisLabel;
                     this.showLegend = config.showLegend;
                     this.legendPosition = config.legendPosition;
+                    this.showGrid = config.showGrid;
+                    this.displayName = config.displayName;
                     this.measureProp = config.measureProp;
                 }
 
                 Helper.prototype.getMargin = function () {
-                    return {
+                    var margin = {
                         top: 0,
                         right: 0,
                         bottom: 0,
                         left: 45
                     };
+
+                    return margin;
                 }
 
                 Helper.prototype.getPadding = function () {
@@ -214,27 +213,47 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     return this.measureProp.map(function (p) { return p.displayName; }).join(', ');
                 }
 
-                Helper.prototype.getValueNumberFormat = function (data) {
-                    var si = this.measureProp[this.measures.indexOf(data)]['numberFormat'],
+                Helper.prototype.getValueNumberFormat = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    var si = this.measureProp[index]['numberFormat'],
                         nf = D3Utils.getNumberFormatter(si);
 
                     return nf;
                 }
 
-                Helper.prototype.getValueDisplayColor = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['displayColor'] || DEFAULT_COLOR;
+                Helper.prototype.getDisplayColor = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    return this.measureProp[index]['displayColor'] || DEFAULT_COLOR;
                 }
 
-                Helper.prototype.getValueBorderColor = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['borderColor'] || DEFAULT_COLOR;
+                Helper.prototype.getBorderColor = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    return this.measureProp[index]['borderColor'] || DEFAULT_COLOR;
                 }
 
-                Helper.prototype.getValueTextColor = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['textColor'] || DEFAULT_COLOR;
+                Helper.prototype.getValueColor = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    return this.measureProp[index]['textColor'] || DEFAULT_COLOR;
                 }
 
-                Helper.prototype.getValueVisibility = function (data) {
-                    var isVisible = this.measureProp[this.measures.indexOf(data)]['showValues'];
+                Helper.prototype.getValueVisibility = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    var isVisible = this.measureProp[index]['showValues'];
 
                     if (isVisible) {
                         return 'visible';
@@ -243,76 +262,42 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     return 'hidden';
                 }
 
-                Helper.prototype.getValueFontStyle = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['fontStyle'];
-                }
-
-                Helper.prototype.getValueFontWeight = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['fontWeight'];
-                }
-
-                Helper.prototype.getValueFontSize = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['fontSize'];
-                }
-
-                Helper.prototype.getLineType = function (data) {
-                    return this.measureProp[this.measures.indexOf(data)]['lineType'].toLowerCase() == "area" ? "visible" : "hidden";
-                }
-
-
-                Helper.prototype.getPointType = function (data) {
-                    var symbol = null;
-
-                    switch (this.measureProp[this.measures.indexOf(data)]['pointType'].toLowerCase()) {
-                        case "rectrounded":
-                            symbol = d3.symbolDiamond;
-                            break;
-
-                        case "rectrot":
-                            symbol = d3.symbolDiamond;
-                            break;
-
-                        case "star":
-                            symbol = d3.symbolStar;
-                            break;
-
-                        case "triangle":
-                            symbol = d3.symbolTriangle;
-                            break;
-
-                        case "circle":
-                            symbol = d3.symbolCircle;
-                            break;
-
-                        case "cross":
-                            symbol = d3.symbolCross;
-                            break;
-
-                        case "crossrot":
-                            symbol = d3.symbolCross;
-                            break;
-
-                        case "dash":
-                            symbol = d3.symbolWye;
-                            break;
-
-                        case "line":
-                            symbol = d3.symbolWye;
-                            break;
-
-                        case "rect":
-                            symbol = d3.symbolSquare;
-                            break;
-
-                        default:
-                            symbol = d3.symbolCircle;
+                Helper.prototype.getValueFontStyle = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
                     }
 
-                    return symbol;
+                    return this.measureProp[index]['fontStyle'];
                 }
 
-                Helper.prototype.getComboChartType = function (index) {
-                    return this.measureProp[index]['comboChartType'].toLowerCase();
+                Helper.prototype.getValueFontWeight = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    return this.measureProp[index]['fontWeight'];
+                }
+
+                Helper.prototype.getValueFontSize = function (data, index) {
+                    if (typeof (index) == 'undefined') {
+                        index = this.measures.indexOf(data.measure);
+                    }
+
+                    return this.measureProp[index]['fontSize'];
+                }
+
+                Helper.prototype.toggleTooltip = function (visibility, scope) {
+                    return function (d, i) {
+                        var element = d3.select(this),
+                            si = scope.helper.measureProp[scope.helper.measures.indexOf(d.key)]['numberFormat'],
+                            nf = D3Utils.getNumberFormatter(si),
+                            displayName = scope.helper.getDimDisplayName(),
+                            dimension = d.data[scope.helper.dimension],
+                            measures = d.key,
+                            measuresFormate = D3Utils.getFormattedValue(d.data[d.key], nf);
+                        D3Utils.contentTooltip(visibility, scope, element, displayName, dimension, measures, measuresFormate);
+                    }
+
                 }
 
                 Helper.prototype.toggleSortSelection = function (scope, sortType, callback) {
@@ -333,7 +318,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             };
                         }
 
-                        d3.select(scope.container).select('.combo-plot').remove();
+                        d3.select(scope.container).select('.stackedverticalbar-plot').remove();
                         callback.call(scope, D3Utils.sortData(event.data.data, event.data.measure, sortType));
                     }
 
@@ -363,7 +348,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             var _divRadio = $('<div></div>').addClass('radio');
                             options = '<label><input type="radio" '
                                 + (selected == scope.helper.measures[i] ? 'checked' : '')
-                                + 'name="optradio">'
+                                + ' name="optradio">'
                                 + scope.helper.measures[i]
                                 + '</label>';
 
@@ -381,22 +366,10 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     }
                 }
 
-                Helper.prototype.toggleTooltip = function (visibility, scope) {
-                    return function (d, i) {
-                        var element = d3.select(this),
-                            nf = scope.helper.getValueNumberFormat(d['tag']),
-                            displayName = scope.helper.getDimDisplayName(),
-                            dimension = d['data'][scope.helper.dimension[0]],
-                            measures = d['tag'],
-                            measuresFormate = D3Utils.getFormattedValue(d['data'][d['tag']], nf);
-                        D3Utils.contentTooltip(visibility, scope, element, displayName, dimension, measures, measuresFormate);
-                    }
-
-                }
-
                 Helper.prototype.onLassoStart = function (lasso, scope) {
                     return function () {
                         if ($rootScope.filterSelection.lasso) {
+
                             lasso.items().selectAll('rect')
                                 .classed('not_possible', true)
                                 .classed('selected', false);
@@ -407,14 +380,21 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                 Helper.prototype.onLassoDraw = function (lasso, scope) {
                     return function () {
                         $rootScope.filterSelection.lasso = true;
-                        lasso.items().selectAll(['rect'])
+                        lasso.items().selectAll('rect')
                             .classed('selected', false);
 
-                        lasso.possibleItems().selectAll(['rect'])
+                        lasso.possibleItems().selectAll('rect').each(function (d, i) {
+                            var item = d3.select(this).node().className.baseVal.split(' ')[0];
+                            d3.selectAll('rect.' + item)
+                                .classed('not_possible', false)
+                                .classed('possible', true);
+
+                        });
+                        lasso.possibleItems().selectAll('rect')
                             .classed('not_possible', false)
                             .classed('possible', true);
 
-                        lasso.notPossibleItems().selectAll(['rect'])
+                        lasso.notPossibleItems().selectAll('rect')
                             .classed('not_possible', true)
                             .classed('possible', false);
                     }
@@ -439,6 +419,14 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                         lasso.selectedItems().selectAll('rect')
                             .classed('selected', true)
 
+                        lasso.selectedItems().selectAll('rect').each(function (d, i) {
+                            var item = d3.select(this).node().className.baseVal.split(' ')[0];
+                            d3.selectAll('rect.' + item)
+                                .classed('not_possible', false)
+                                .classed('possible', true);
+
+                        });
+
                         lasso.notSelectedItems().selectAll('rect');
 
                         var confirm = d3.select(scope.container).select('.confirm')
@@ -450,14 +438,15 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                         data.forEach(function (d) {
                             if (filter[scope.helper.dimension]) {
                                 var temp = filter[scope.helper.dimension];
-                                if (temp.indexOf(d['data'][scope.helper.dimension]) < 0) {
-                                    temp.push(d['data'][scope.helper.dimension]);
+                                if (temp.indexOf(d.data[scope.helper.dimension]) < 0) {
+                                    temp.push(d.data[scope.helper.dimension]);
                                 }
                                 filter[scope.helper.dimension] = temp;
                             } else {
-                                filter[scope.helper.dimension] = [d['data'][scope.helper.dimension]];
+                                filter[scope.helper.dimension] = [d.data[scope.helper.dimension]];
                             }
                         });
+
                         // Clear out the updateWidget property
                         var idWidget = $rootScope.updateWidget[scope.id];
                         $rootScope.updateWidget = {};
@@ -474,21 +463,21 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
 
             })();
 
-            var Combo = (function () {
+            var Stackedverticalbar = (function () {
 
-                function Combo(container, record, properties) {
+                function Stackedverticalbar(container, record, properties) {
                     this.container = container;
                     this.id = record.id;
                     this.originalData = record.data;
                     this.helper = new Helper(properties);
-                    this.legendHeight = 20;
-                    this.axisLabelSpace = 20;
+                    this.legendSpace = 20,
+                        this.axisLabelSpace = 20;
                     this.offsetX = 16;
                     this.offsetY = 3;
 
-                    $('#combo-' + this.id).remove();
+                    $('#stackedverticalbar-' + this.id).remove();
                     var div = d3.select(container).append('div')
-                        .attr('id', 'combo-' + this.id)
+                        .attr('id', 'stackedverticalbar-' + this.id)
                         .style('width', this.container.clientWidth + 'px')
                         .style('height', this.container.clientHeight + 'px')
                         .style('overflow', 'hidden')
@@ -509,7 +498,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     D3Utils.prepareFilterButtons(div, $rootScope, filterParametersService);
                 }
 
-                Combo.prototype.updateChart = function (data) {
+                Stackedverticalbar.prototype.updateChart = function (data) {
                     var me = this;
 
                     var dimension = this.helper.dimension,
@@ -523,6 +512,10 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                         globalMin = minMax[0],
                         globalMax = minMax[1];
 
+                    var tickLength = d3.scaleLinear()
+                        .domain([22, 34])
+                        .range([4, 6]);
+
                     var xLabels = this.helper.getXLabels(data);
 
                     var margin = this.helper.getMargin();
@@ -535,36 +528,297 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     yScale.domain([globalMin, globalMax]);
 
                     var _yTicks = yScale.ticks(),
-                        yDiff = _yTicks[1] - _yTicks[0];
+                        yDiff = _yTicks[1] - _yTicks[0],
+                        correctionVal = 10;
 
-                    if ((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + (yDiff / 2)) {
+                    if ((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + correctionVal) {
                         yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + yDiff)])
                     } else {
                         yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + 2 * yDiff)])
                     }
 
-                    var clusterBar = container.selectAll('.cluster_bar')
-                        .data(data)
+                    var posTotal,
+                        negTotal;
 
-                    clusterBar.exit().remove();
-                    clusterBar.enter().append('g')
-                        .attr('class', 'cluster_bar')
-                        .attr('transform', function (d) {
-                            return 'translate(' + xScaleDim(d[dimension[0]]) + ', 0)';
+                    data.forEach(function (d) {
+                        posTotal = 0;
+                        negTotal = 0;
+                        measures.forEach(function (m) {
+                            d[m] = +d[m];
+                            if (d[m] >= 0) {
+                                posTotal += d[m];
+                            } else {
+                                negTotal += d[m];
+                            }
                         });
+                        d.posTotal = posTotal;
+                        d.negTotal = negTotal;
+                    });
+
+                    yScale.domain([
+                        d3.min(data, function (d) { return d.negTotal; }),
+                        d3.max(data, function (d) { return d.posTotal; })
+                    ]).nice();
+
+                    var _yTicks = yScale.ticks(),
+                        yDiff = _yTicks[1] - _yTicks[0];
+
+                    yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + yDiff)]);
+
+                    var isRotate = false;
+
+                    var axisBottom = d3.axisBottom(xScaleDim)
+                        .tickFormat(function (d) {
+                            if (isRotate == false) {
+                                isRotate = D3Utils.getTickRotate(d, (me.contentWidth - 50) / (xLabels.length), tickLength);
+                            }
+                            return D3Utils.getTruncatedTick(d, (me.contentWidth - 50) / (xLabels.length), tickLength);
+                        });
+
+                    var axisLeft = d3.axisLeft(yScale)
+                        .tickFormat(function (d) {
+                            if ((me.contentHeight / yScale.ticks().length) < 11) {
+                                return '';
+                            }
+                            return D3Utils.getTruncatedTick(D3Utils.shortScale(2)(d), margin.left - 8, tickLength);
+                        });
+
+                    container.select('#x_axis').call(axisBottom);
+                    container.select('#y_axis').call(axisLeft);
+
+                    var stack = container.select('g.stack').selectAll('g.stackedverticalbar-group')
+                        .data(d3.stack()
+                            .keys(measures.filter(function (d) {
+                                return me.labelStack.indexOf(d) == -1;
+                            }))
+                            .offset(d3.stackOffsetDiverging)(data)
+                        );
+
+                    stack.enter().append('g')
+                        .attr('class', 'stackedverticalbar-group');
+
+                    stack.exit().remove();
+
+                    var stackedVerticalbarGroup = container.select('g.stack').selectAll('g.stackedverticalbar-group');
+
+                    var stackedverticalbar = stackedVerticalbarGroup.selectAll('g.stackedverticalbar')
+                        .data(function (d, i) {
+                            d.forEach(function (datum) {
+                                datum.key = d.key;
+                            })
+                            return d;
+                        });
+
+                    stackedverticalbar.select('rect')
+                        .attr('x', function (d) { return xScaleDim(d.data[dimension[0]]); })
+                        .attr('y', function (d) {
+                            return (d[1] > d[0]) ? yScale(d[1]) : yScale(d[0]);
+                        })
+                        .attr('height', function (d) { return Math.abs(yScale(d[0]) - yScale(d[1])); })
+                        .attr('width', xScaleDim.bandwidth())
+                        .style('fill', function (d, i) {
+                            return me.helper.getDisplayColor(d, measures.indexOf(d.key));
+                        })
+                        .classed('selected', false)
+                        .classed('possible', false)
+                        .style('stroke', function (d, i) {
+                            return me.helper.getBorderColor(d, measures.indexOf(d.key));
+                        });
+
+                    stackedverticalbar.select('text')
+                        .attr('x', function (d, i) {
+                            return xScaleDim(d.data[dimension[0]]) + xScaleDim.bandwidth() / 2;
+                        })
+                        .attr('y', function (d, i) {
+                            return yScale(d[1]) + 5;
+                        })
+                        .attr('dy', function (d, i) {
+                            return me.offsetX / 2;
+                        })
+                        .style('text-anchor', 'middle')
+                        .text(function (d, i) {
+                            return me.helper.getValueNumberFormat(d, measures.indexOf(d.key))(d.data[d.key]);
+                        })
+                        .attr('visibility', function (d, i) {
+                            return me.helper.getValueVisibility(d, measures.indexOf(d.key));
+                        })
+                        .attr('visibility', function (d, i) {
+                            if (this.getAttribute('visibility') == 'hidden') return 'hidden';
+                            var rect = d3.select(this.previousElementSibling).node(),
+                                rectWidth = rect.getAttribute('width'),
+                                rectHeight = rect.getAttribute('height');
+
+                            if (rectHeight <= ((me.offsetX / 2) + parseFloat(d3.select(this).style('font-size').replace('px', '')))) {
+                                return 'hidden';
+                            }
+
+                            if (this.getComputedTextLength() > parseFloat(rectWidth)) {
+                                return 'hidden';
+                            }
+
+                            return 'visible';
+                        })
+                        .style('font-style', function (d, i) {
+                            return me.helper.getValueFontStyle(d, measures.indexOf(d.key));
+                        })
+                        .style('font-weight', function (d, i) {
+                            return me.helper.getValueFontWeight(d, measures.indexOf(d.key));
+                        })
+                        .style('font-size', function (d, i) {
+                            return me.helper.getValueFontSize(d, measures.indexOf(d.key));
+                        })
+                        .style('fill', function (d, i) {
+                            return me.helper.getValueColor(d, measures.indexOf(d.key));
+                        });
+
+                    var newBars = stackedverticalbar.enter().append('g')
+                        .attr('class', 'stackedverticalbar');
+
+                    var rect = newBars.append('rect')
+                        .style('fill', function (d, i) {
+                            return me.helper.getDisplayColor(d, measures.indexOf(d.key));
+                        })
+                        .attr('class', function (d, i) {
+                            return d.data[me.helper.dimension];
+                        })
+                        .style('stroke', function (d, i) {
+                            return me.helper.getBorderColor(d, measures.indexOf(d.key));
+                        })
+                        .on('mouseover', this.helper.toggleTooltip('visible', me))
+                        .on('mousemove', function () {
+                            var tooltip = d3.select(me.container).select('.tooltip_custom');
+
+                            var offset = $(me.container).offset();
+                            var x = d3.event.pageX - offset.left,
+                                y = d3.event.pageY - offset.top;
+
+                            tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');
+                            D3Utils.constrainTooltip(me.container, tooltip.node());
+                        })
+                        .on('mouseout', this.helper.toggleTooltip('hidden', me))
+                        .on('click', function (d, i) {
+                            if ($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
+                                return;
+                            }
+
+                            $rootScope.filterSelection.lasso = false;
+
+                            var confirm = d3.select(me.container).select('.confirm')
+                                .style('visibility', 'visible');
+
+                            var filter = {};
+
+                            if ($rootScope.filterSelection.id) {
+                                filter = $rootScope.filterSelection.filter;
+                            } else {
+                                $rootScope.filterSelection.id = me.id;
+                            }
+
+                            var rect = d3.select(this);
+
+                            if (rect.classed('selected')) {
+                                rect.classed('selected', false);
+                            } else {
+                                rect.classed('selected', true);
+                            }
+
+                            var dimension = me.helper.dimension[0];
+
+                            if (filter[dimension]) {
+                                var temp = filter[dimension];
+                                if (temp.indexOf(d.data[dimension]) < 0) {
+                                    temp.push(d.data[dimension]);
+                                } else {
+                                    temp.splice(temp.indexOf(d.data[dimension]), 1);
+                                }
+                                filter[dimension] = temp;
+                            } else {
+                                filter[dimension] = [d.data[dimension]];
+                            }
+
+                            // Clear out the updateWidget property
+                            var idWidget = $rootScope.updateWidget[me.id];
+                            $rootScope.updateWidget = {};
+                            $rootScope.updateWidget[me.id] = idWidget;
+
+                            $rootScope.filterSelection.filter = filter;
+                            filterParametersService.save(filter);
+                            $rootScope.$broadcast('flairbiApp:filter-input-refresh');
+                            $rootScope.$broadcast('flairbiApp:filter');
+                        });
+
+                    var text = newBars.append('text')
+                        .text(function (d, i) {
+                            return me.helper.getValueNumberFormat(d, measures.indexOf(d.key))(d.data[d.key]);
+                        })
+                        .attr('visibility', function (d, i) {
+                            return me.helper.getValueVisibility(d, measures.indexOf(d.key));
+                        })
+                        .style('font-style', function (d, i) {
+                            return me.helper.getValueFontStyle(d, measures.indexOf(d.key));
+                        })
+                        .style('font-weight', function (d, i) {
+                            return me.helper.getValueFontWeight(d, measures.indexOf(d.key));
+                        })
+                        .style('font-size', function (d, i) {
+                            return me.helper.getValueFontSize(d, measures.indexOf(d.key));
+                        })
+                        .style('fill', function (d, i) {
+                            return me.helper.getValueColor(d, measures.indexOf(d.key));
+                        });
+
+                    rect.attr('x', function (d) { return xScaleDim(d.data[dimension[0]]); })
+                        .attr('y', function (d) {
+                            return (d[1] > d[0]) ? yScale(d[1]) : yScale(d[0]);
+                        })
+                        .attr('height', function (d) { return Math.abs(yScale(d[0]) - yScale(d[1])); })
+                        .attr('width', xScaleDim.bandwidth());
+
+                    text.attr('x', function (d, i) {
+                        return xScaleDim(d.data[dimension[0]]) + xScaleDim.bandwidth() / 2;
+                    })
+                        .attr('y', function (d, i) {
+                            return yScale(d[1]) + 5;
+                        })
+                        .attr('dy', function (d, i) {
+                            return me.offsetX / 2;
+                        })
+                        .style('text-anchor', 'middle')
+                        .attr('visibility', function (d, i) {
+                            if (this.getAttribute('visibility') == 'hidden') return 'hidden';
+                            var rect = d3.select(this.previousElementSibling).node(),
+                                rectWidth = rect.getAttribute('width'),
+                                rectHeight = rect.getAttribute('height');
+
+                            if (rectHeight <= ((me.offsetX / 2) + parseFloat(d3.select(this).style('font-size').replace('px', '')))) {
+                                return 'hidden';
+                            }
+
+                            if (this.getComputedTextLength() > parseFloat(rectWidth)) {
+                                return 'hidden';
+                            }
+
+                            return 'visible';
+                        });
+
+                    stackedverticalbar.exit().remove();
+
+                    if (isRotate) {
+                        d3.select(this.container).selectAll('#x_axis .tick text')
+                            .attr("transform", "rotate(-15)");
+                    }
+                    me.helper.setAxisColor(this);
                 }
 
-                Combo.prototype.renderChart = function () {
+                Stackedverticalbar.prototype.renderChart = function () {
                     var data = this.originalData;
                     var me = this;
 
                     var width = this.container.clientWidth;
                     var height = this.container.clientHeight;
 
-                    var dimension = this.helper.dimension,
-                        measures = this.helper.measures,
-                        measuresBar = [],
-                        measuresLine = [];
+                    var dimension = me.helper.dimension,
+                        measures = me.helper.measures;
 
                     var svg = d3.select(this.container).select('svg')
                         .on('click', function () {
@@ -580,14 +834,6 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     svg.attr('width', width)
                         .attr('height', height);
 
-                    measures.forEach(function (m, i) {
-                        if (me.helper.getComboChartType(i) == "bar") {
-                            measuresBar.push(m);
-                        } else {
-                            measuresLine.push(m);
-                        }
-                    });
-
                     var padding = this.helper.getPadding(),
                         margin = this.helper.getMargin();
 
@@ -602,13 +848,13 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                         legendBreak = 0,
                         legendBreakCount = 0;
 
-                    var labelStack = [];
+                    var labelStack = this.labelStack = [];
 
                     var drawLegend = function (data) {
                         var me = this;
 
                         var legend = container.append('g')
-                            .attr('class', 'combo-legend')
+                            .attr('class', 'stackedverticalbar-legend')
                             .attr('display', function () {
                                 if (me.helper.isLegendVisible()) {
                                     return 'block';
@@ -624,9 +870,9 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             })
                             .attr('transform', function (d, i) {
                                 if (me.helper.getLegendPosition() == 'top') {
-                                    return 'translate(' + i * Math.floor(containerWidth / me.helper.maxMes) + ', 0)';
+                                    return 'translate(' + i * Math.floor(containerWidth / measures.length) + ', 0)';
                                 } else if (me.helper.getLegendPosition() == 'bottom') {
-                                    return 'translate(' + i * Math.floor(containerWidth / me.helper.maxMes) + ', ' + containerHeight + ')';
+                                    return 'translate(' + i * Math.floor(containerWidth / measures.length) + ', ' + containerHeight + ')';
                                 } else if (me.helper.getLegendPosition() == 'left') {
                                     return 'translate(0, ' + i * 20 + ')';
                                 } else if (me.helper.getLegendPosition() == 'right') {
@@ -660,7 +906,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                         .style('stroke-width', 1);
                                 }
 
-                                d3.select(me.container).select('.combo-plot').remove();
+                                d3.select(me.container).select('.stackedverticalbar-plot').remove();
                                 drawPlot.call(me, data);
                             });
 
@@ -669,10 +915,10 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             .attr('width', 10)
                             .attr('height', 10)
                             .style('fill', function (d, i) {
-                                return me.helper.getValueDisplayColor(d);
+                                return me.helper.getDisplayColor(d, i);
                             })
                             .style('stroke', function (d, i) {
-                                return me.helper.getValueDisplayColor(d, i);
+                                return me.helper.getDisplayColor(d, i);
                             })
                             .style('stroke-width', 0);
 
@@ -687,7 +933,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             })
                             .text(function (d, i) {
                                 if ((me.helper.getLegendPosition() == 'top') || (me.helper.getLegendPosition() == 'bottom')) {
-                                    return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), Math.floor(containerWidth / me.helper.maxMes), 5);
+                                    return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), Math.floor(containerWidth / measures.length), 20);
                                 } else if ((me.helper.getLegendPosition() == 'left') || (me.helper.getLegendPosition() == 'right')) {
                                     return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), containerWidth / 5);
                                 }
@@ -698,7 +944,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                 var count = i,
                                     widthSum = 0
                                 while (count-- != 0) {
-                                    widthSum += d3.select('#legend' + count).node().getBBox().width + me.offsetX;
+                                    widthSum += d3.select(me.container).select('#legend' + count).node().getBBox().width + me.offsetX;
                                 }
                                 return 'translate(' + widthSum + ', ' + (me.helper.getLegendPosition() == 'top' ? 0 : containerHeight) + ')';
                             });
@@ -737,6 +983,9 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                 });
                             }
                         }
+
+                        me.contentWidth = contentWidth;
+                        me.contentHeight = contentHeight;
                     }
 
                     var drawPlot = function (data) {
@@ -753,14 +1002,14 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                         xLabels = this.helper.getXLabels(data);
 
                         var chart = container.append('g')
-                            .attr('class', 'combo-plot')
+                            .attr('class', 'stackedverticalbar-plot')
                             .attr('transform', function () {
                                 if (me.helper.getLegendPosition() == 'top') {
                                     return 'translate(' + margin.left + ', ' + (parseInt(me.legendSpace) + parseInt(legendBreakCount * 20)) + ')';
                                 } else if (me.helper.getLegendPosition() == 'bottom') {
                                     return 'translate(' + margin.left + ', 0)';
                                 } else if (me.helper.getLegendPosition() == 'left') {
-                                    return 'translate(' + (me.legendSpace + me.axisLabelSpace + margin.left) + ', 0)';
+                                    return 'translate(' + (me.legendSpace + margin.left + me.axisLabelSpace) + ', 0)';
                                 } else if (me.helper.getLegendPosition() == 'right') {
                                     return 'translate(' + margin.left + ', 0)';
                                 }
@@ -768,113 +1017,131 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
 
                         var xScaleDim = this.xScaleDim = d3.scaleBand()
                             .domain(xLabels)
-                            .rangeRound([0, contentWidth])
-                            .padding([0.2]);
+                            .padding([0.2])
+                            .rangeRound([0, contentWidth]);
+
+                        var scaleMes = measures.map(function (d, i) {
+                            d = d + i;
+                            return d;
+                        });
 
                         var xScaleMes = d3.scaleBand()
-                            .domain(measuresBar)
+                            .domain(scaleMes)
                             .rangeRound([0, xScaleDim.bandwidth()])
                             .padding([0.2]);
 
                         var yScale = this.yScale = d3.scaleLinear()
-                            .domain([globalMin, globalMax])
-                            .range([contentHeight, 0]);
+                            .domain([globalMin, globalMax]);
 
                         var tickLength = d3.scaleLinear()
                             .domain([22, 34])
                             .range([4, 6]);
 
                         var _yTicks = yScale.ticks(),
-                            yDiff = _yTicks[1] - _yTicks[0];
+                            yDiff = _yTicks[1] - _yTicks[0],
+                            correctionVal = 10;
 
-                        if ((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + (yDiff / 2)) {
+                        if ((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + correctionVal) {
                             yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + yDiff)])
                         } else {
                             yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + 2 * yDiff)])
                         }
 
+                        yScale.range([contentHeight, 0]);
+
                         var content = chart.append('g')
                             .attr('class', 'chart')
 
-                        var xGridLines = d3.axisBottom()
-                            .tickFormat('')
-                            .tickSize(-contentHeight)
-                            .scale(xScaleDim);
+                        var xGridLines,
+                            yGridLines;
 
-                        var yGridLines = d3.axisLeft()
+                        xGridLines = d3.axisBottom()
                             .tickFormat('')
-                            .tickSize(-contentWidth)
-                            .scale(yScale);
+                            .tickSize(-contentHeight);
+
+                        yGridLines = d3.axisLeft()
+                            .tickFormat('')
+                            .tickSize(-contentWidth);
+
+                        xGridLines.scale(xScaleDim);
+                        yGridLines.scale(yScale);
+
+                        var posTotal,
+                            negTotal;
+
+                        data.forEach(function (d) {
+                            posTotal = 0;
+                            negTotal = 0;
+                            measures.forEach(function (m) {
+                                d[m] = +d[m];
+                                if (d[m] >= 0) {
+                                    posTotal += d[m];
+                                } else {
+                                    negTotal += d[m];
+                                }
+                            });
+                            d.posTotal = posTotal;
+                            d.negTotal = negTotal;
+                        });
+
+                        yScale.domain([
+                            d3.min(data, function (d) { return d.negTotal; }),
+                            d3.max(data, function (d) { return d.posTotal; })
+                        ]).nice();
+
+                        var _yTicks = yScale.ticks(),
+                            yDiff = _yTicks[1] - _yTicks[0];
+
+                        yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + yDiff)])
 
                         content.append('g')
                             .attr('class', 'grid')
-                            .attr('visibility', this.helper.getGridVisibility())
+                            .attr('visibility', me.helper.getGridVisibility())
+                            .call((function () {
+                                return yGridLines;
+                            })());
+
+                        content.append('g')
+                            .attr('class', 'grid')
+                            .attr('visibility', me.helper.getGridVisibility())
                             .attr('transform', 'translate(0, ' + contentHeight + ')')
-                            .call(xGridLines);
+                            .call((function () {
+                                return xGridLines;
+                            })());
 
-                        content.append('g')
-                            .attr('class', 'grid')
-                            .attr('visibility', this.helper.getGridVisibility())
-                            .call(yGridLines);
-
-                        var areaGenerator = d3.area()
-                            .curve(d3.curveLinear)
-                            .x(function (d, i) {
-                                return xScaleDim(d['data'][dimension[0]]) + xScaleDim.bandwidth() / 2;
-                            })
-                            .y0(contentHeight)
-                            .y1(function (d) {
-                                return yScale(d['data'][d['tag']]);
-                            });
-
-                        var lineGenerator = d3.line()
-                            .curve(d3.curveLinear)
-                            .x(function (d, i) {
-                                return xScaleDim(d['data'][dimension[0]]) + xScaleDim.bandwidth() / 2;
-                            })
-                            .y(function (d, i) {
-                                return yScale(d['data'][d['tag']]);
-                            });
-
-                        var clusterBar = content.selectAll('.cluster_bar')
-                            .data(data)
+                        var stack = content.append('g')
+                            .attr('class', 'stack')
+                            .selectAll('g')
+                            .data(d3.stack()
+                                .keys(measures.filter(function (d) {
+                                    return labelStack.indexOf(d) == -1;
+                                }))
+                                .offset(d3.stackOffsetDiverging)(data)
+                            )
                             .enter().append('g')
-                            .attr('class', 'cluster_bar')
-                            .attr('transform', function (d) {
-                                return 'translate(' + xScaleDim(d[dimension[0]]) + ', 0)';
-                            });
+                            .attr('class', 'stackedverticalbar-group');
 
-                        var bar = clusterBar.selectAll('g.bar')
-                            .data(function (d) {
-                                return measuresBar
-                                    .filter(function (m) { return labelStack.indexOf(m) == -1; })
-                                    .map(function (m) { return { "tag": m, "data": d }; });
+                        var stackedverticalbar = stack.selectAll('g')
+                            .data(function (d, i) {
+                                d.forEach(function (datum) {
+                                    datum.key = d.key;
+                                })
+                                return d;
                             })
                             .enter().append('g')
-                            .attr('class', 'bar');
+                            .attr('class', 'stackedverticalbar');
 
-                        var t = d3.transition()
-                            .duration(800)
-                            .ease(d3.easeQuadIn)
-                            .on('end', afterTransition);
-
-                        var rect = bar.append('rect')
-                            .attr('width', xScaleMes.bandwidth())
+                        var rect = stackedverticalbar.append('rect')
                             .style('fill', function (d, i) {
-                                return me.helper.getValueDisplayColor(d['tag']);
+                                return me.helper.getDisplayColor(d, measures.indexOf(d.key));
+                            })
+                            .attr('class', function (d, i) {
+                                return d.data[me.helper.dimension];
                             })
                             .style('stroke', function (d, i) {
-                                return me.helper.getValueBorderColor(d['tag']);
+                                return me.helper.getBorderColor(d, measures.indexOf(d.key));
                             })
-                            .style('stroke-width', 1)
-                            .attr('x', function (d, i) {
-                                return xScaleMes(measuresBar[i]);
-                            })
-                            .attr('y', function (d, i) {
-                                return contentHeight;
-                            })
-                            .attr('height', 0)
-                            .on('mouseover', me.helper.toggleTooltip('visible', me))
+                            .on('mouseover', this.helper.toggleTooltip('visible', me))
                             .on('mousemove', function () {
                                 var tooltip = d3.select(me.container).select('.tooltip_custom');
 
@@ -885,7 +1152,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                 tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');
                                 D3Utils.constrainTooltip(me.container, tooltip.node());
                             })
-                            .on('mouseout', me.helper.toggleTooltip('hidden', me))
+                            .on('mouseout', this.helper.toggleTooltip('hidden', me))
                             .on('click', function (d, i) {
                                 if ($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
                                     return;
@@ -916,14 +1183,14 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
 
                                 if (filter[dimension]) {
                                     var temp = filter[dimension];
-                                    if (temp.indexOf(d['data'][dimension]) < 0) {
-                                        temp.push(d['data'][dimension]);
+                                    if (temp.indexOf(d.data[dimension]) < 0) {
+                                        temp.push(d.data[dimension]);
                                     } else {
-                                        temp.splice(temp.indexOf(d['data'][dimension]), 1);
+                                        temp.splice(temp.indexOf(d.data[dimension]), 1);
                                     }
                                     filter[dimension] = temp;
                                 } else {
-                                    filter[dimension] = [d['data'][dimension]];
+                                    filter[dimension] = [d.data[dimension]];
                                 }
 
                                 // Clear out the updateWidget property
@@ -937,215 +1204,68 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                 $rootScope.$broadcast('flairbiApp:filter');
                             });
 
-                        rect.transition(t)
-                            .attr('y', function (d, i) {
-                                if ((d['data'][measuresBar[i]] === null) || (isNaN(d['data'][measuresBar[i]]))) {
-                                    return 0;
-                                } else if (d['data'][measuresBar[i]] > 0) {
-                                    return yScale(d['data'][measuresBar[i]]);
-                                }
-
-                                return yScale(0);
-                            })
-                            .attr('height', function (d, i) {
-                                if ((d['data'][measuresBar[i]] === null) || (isNaN(d['data'][measuresBar[i]]))) return 0;
-                                return Math.abs(yScale(0) - yScale(d['data'][measuresBar[i]]));
-                            });
-
-                        function afterTransition() {
-                            var text = bar.append('text')
-                                .attr('x', function (d, i) {
-                                    return xScaleMes(measuresBar[i]);
-                                })
-                                .attr('y', function (d, i) {
-                                    if ((d['data'][measuresBar[i]] === null) || (isNaN(d['data'][measuresBar[i]]))) {
-                                        return contentHeight;
-                                    } else if (d['data'][measuresBar[i]] > 0) {
-                                        return yScale(d['data'][measuresBar[i]]);
-                                    }
-
-                                    return yScale(0);
-                                })
-                                .attr('dx', function (d, i) {
-                                    return xScaleMes.bandwidth() / 2;
-                                })
-                                .attr('dy', function (d, i) {
-                                    return -me.offsetY;
-                                })
-                                .style('text-anchor', 'middle')
-                                .text(function (d, i) {
-                                    return D3Utils.getFormattedValue(d['data'][measuresBar[i]], me.helper.getValueNumberFormat(d['tag']));
-                                })
-                                .text(function (d, i) {
-                                    var barWidth = (1 - xScaleDim.padding()) * contentWidth / (xLabels.length - 1);
-                                    barWidth = (1 - xScaleMes.padding()) * barWidth / measuresBar.length;
-                                    return D3Utils.getTruncatedLabel(this, d3.select(this).text(), barWidth);
-                                })
-                                .attr('visibility', function (d, i) {
-                                    return me.helper.getValueVisibility(d['tag']);
-                                })
-                                .style('font-style', function (d, i) {
-                                    return me.helper.getValueFontStyle(d['tag']);
-                                })
-                                .style('font-weight', function (d, i) {
-                                    return me.helper.getValueFontWeight(d['tag']);
-                                })
-                                .style('font-size', function (d, i) {
-                                    return me.helper.getValueFontSize(d['tag']);
-                                })
-                                .style('fill', function (d, i) {
-                                    return me.helper.getValueTextColor(d['tag']);
-                                });
-                        }
-
-                        var clusterLine = content.selectAll('.cluster_line')
-                            .data(measuresLine.filter(function (m) { return labelStack.indexOf(m) == -1; }))
-                            .enter().append('g')
-                            .attr('class', 'cluster_line');
-
-                        var area = clusterLine.append('path')
-                            .datum(function (d, i) {
-                                return data.map(function (datum) { return { "tag": d, "data": datum }; });
-                            })
-                            .attr('class', 'area')
-                            .attr('visibility', function (d, i) {
-                                return me.helper.getLineType(d[0]['tag']);
-                            })
-                            .attr('fill', function (d, i) {
-                                return me.helper.getValueDisplayColor(d[0]['tag']);
-                            })
-                            .style('fill-opacity', 0.5)
-                            .attr('stroke', 'none')
-                            .attr('d', areaGenerator);
-
-                        var line = clusterLine.append('path')
-                            .datum(function (d, i) {
-                                return data.map(function (datum) { return { "tag": d, "data": datum }; });
-                            })
-                            .attr('class', 'line')
-                            .attr('fill', 'none')
-                            .attr('stroke', function (d, i) {
-                                return me.helper.getValueBorderColor(d[0]['tag']);
-                            })
-                            .attr('stroke-linejoin', 'round')
-                            .attr('stroke-linecap', 'round')
-                            .attr('stroke-width', 1)
-                            .attr('d', lineGenerator);
-
-                        var point = clusterLine.selectAll('point')
-                            .data(function (d, i) {
-                                return data.map(function (datum) { return { "tag": d, "data": datum }; });
-                            })
-                            .enter().append('path')
-                            .attr('class', 'point')
-                            .attr('fill', function (d, i) {
-                                return me.helper.getValueDisplayColor(d['tag']);
-                            })
-                            .attr('d', function (d, i) {
-                                return d3.symbol()
-                                    .type(me.helper.getPointType(d['tag']))
-                                    .size(40)();
-                            })
-                            .attr('transform', function (d) {
-                                return 'translate('
-                                    + (xScaleDim(d['data'][dimension[0]]) + xScaleDim.bandwidth() / 2)
-                                    + ',' + yScale(d['data'][d['tag']]) + ')';
-                            })
-                            .on('mouseover', me.helper.toggleTooltip('visible', me))
-                            .on('mousemove', function () {
-                                var tooltip = d3.select(me.container).select('.tooltip_custom');
-
-                                var offset = $(me.container).offset();
-                                var x = d3.event.pageX - offset.left,
-                                    y = d3.event.pageY - offset.top;
-
-                                tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');
-                                D3Utils.constrainTooltip(me.container, tooltip.node());
-                            })
-                            .on('mouseout', me.helper.toggleTooltip('hidden', me))
-                            .on('click', function (d, i) {
-                                if ($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
-                                    return;
-                                }
-
-                                $rootScope.filterSelection.lasso = false;
-
-                                var confirm = d3.select(me.container).select('.confirm')
-                                    .style('visibility', 'visible');
-
-                                var filter = {};
-
-                                if ($rootScope.filterSelection.id) {
-                                    filter = $rootScope.filterSelection.filter;
-                                } else {
-                                    $rootScope.filterSelection.id = me.id;
-                                }
-
-                                var point = d3.select(this);
-
-                                if (point.classed('selected')) {
-                                    point.classed('selected', false);
-                                } else {
-                                    point.classed('selected', true);
-                                }
-
-                                var dimension = me.helper.dimension[0];
-
-                                if (filter[dimension]) {
-                                    var temp = filter[dimension];
-                                    if (temp.indexOf(d['data'][dimension]) < 0) {
-                                        temp.push(d['data'][dimension]);
-                                    } else {
-                                        temp.splice(temp.indexOf(d['data'][dimension]), 1);
-                                    }
-                                    filter[dimension] = temp;
-                                } else {
-                                    filter[dimension] = [d['data'][dimension]];
-                                }
-
-                                $rootScope.filterSelection.filter = filter;
-                                filterParametersService.save(filter);
-                                $rootScope.$broadcast('flairbiApp:filter-input-refresh');
-                                $rootScope.$broadcast('flairbiApp:filter');
-                            });
-
-                        var text = clusterLine.selectAll('text')
-                            .data(function (d, i) {
-                                return data.map(function (datum) { return { "tag": d, "data": datum }; });
-                            })
-                            .enter().append('text')
-                            .attr('x', function (d, i) {
-                                return xScaleDim(d['data'][dimension[0]]) + xScaleDim.bandwidth() / 2;
-                            })
-                            .attr('y', function (d, i) {
-                                return yScale(d['data'][d['tag']]);
-                            })
-                            .attr('dy', function (d, i) {
-                                return -2 * me.offsetY;
-                            })
-                            .style('text-anchor', 'middle')
+                        var text = stackedverticalbar.append('text')
                             .text(function (d, i) {
-                                return D3Utils.getFormattedValue(d['data'][d['tag']], me.helper.getValueNumberFormat(d['tag']));
+                                return me.helper.getValueNumberFormat(d, measures.indexOf(d.key))(d.data[d.key]);
                             })
                             .attr('visibility', function (d, i) {
-                                return me.helper.getValueVisibility(d['tag']);
+                                return "visible";
+                                return me.helper.getValueVisibility(d, measures.indexOf(d.key));
                             })
                             .style('font-style', function (d, i) {
-                                return me.helper.getValueFontStyle(d['tag']);
+                                return me.helper.getValueFontStyle(d, measures.indexOf(d.key));
                             })
                             .style('font-weight', function (d, i) {
-                                return me.helper.getValueFontWeight(d['tag']);
+                                return me.helper.getValueFontWeight(d, measures.indexOf(d.key));
                             })
                             .style('font-size', function (d, i) {
-                                return me.helper.getValueFontSize(d['tag']);
+                                return me.helper.getValueFontSize(d, measures.indexOf(d.key));
                             })
                             .style('fill', function (d, i) {
-                                return me.helper.getValueTextColor(d['tag']);
+                                return me.helper.getValueColor(d, measures.indexOf(d.key));
+                            });
+
+                        rect.attr('x', function (d) { return xScaleDim(d.data[dimension[0]]); })
+                            .attr('y', function (d) {
+                                return (d[1] > d[0]) ? yScale(d[1]) : yScale(d[0]);
+                            })
+                            .attr('height', function (d) { return Math.abs(yScale(d[0]) - yScale(d[1])); })
+                            .attr('width', xScaleDim.bandwidth());
+
+                        text.attr('x', function (d, i) {
+                            return xScaleDim(d.data[dimension[0]]) + xScaleDim.bandwidth() / 2;
+                        })
+                            .attr('y', function (d, i) {
+                                return yScale(d[1]) + 5;
+                            })
+                            .attr('dy', function (d, i) {
+                                return me.offsetX / 2;
+                            })
+                            .style('text-anchor', 'middle')
+                            .attr('visibility', function (d, i) {
+                                if (this.getAttribute('visibility') == 'hidden') return 'hidden';
+                                var rect = d3.select(this.previousElementSibling).node(),
+                                    rectWidth = rect.getAttribute('width'),
+                                    rectHeight = rect.getAttribute('height');
+
+                                if (rectHeight <= ((me.offsetX / 2) + parseFloat(d3.select(this).style('font-size').replace('px', '')))) {
+                                    return 'hidden';
+                                }
+
+                                if (this.getComputedTextLength() > parseFloat(rectWidth)) {
+                                    return 'hidden';
+                                }
+
+                                return 'visible';
                             });
 
                         var axisLeftG = chart.append('g')
-                            .attr('class', 'y axis')
-                            .attr('visibility', me.helper.getYaxisVisibility())
+                            .attr('class', function () {
+                                return 'y axis';
+                            })
+                            .attr('visibility', function () {
+                                return me.helper.getYaxisVisibility();
+                            })
                             .attr('transform', 'translate(0, 0)');
 
                         axisLeftG.append('g')
@@ -1154,68 +1274,45 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                 return 'translate(' + (-margin.left) + ', ' + (contentHeight / 2) + ')';
                             })
                             .append('text')
-                            .attr('text-anchor', 'middle')
                             .attr('transform', 'rotate(-90)')
+                            .style('text-anchor', 'middle')
                             .style('fill', function () {
                                 return me.helper.getYaxisColor();
                             })
-                            .style('visibility', me.helper.getYaxisLabelVisibility())
+                            .style('font-weight', 'bold')
+                            .style('visibility', function () {
+                                return me.helper.getYaxisLabelVisibility();
+                            })
                             .text(function () {
                                 return me.helper.getMesDisplayName();
                             });
 
                         var axisBottomG = chart.append('g')
-                            .attr('class', 'x axis')
-                            .attr('visibility', me.helper.getXaxisVisibility())
+                            .attr('class', function () {
+                                return 'x axis';
+                            })
+                            .attr('visibility', function () {
+                                return me.helper.getXaxisVisibility();
+                            })
                             .attr('transform', 'translate(0, ' + contentHeight + ')');
 
-                        axisBottomG.append('g')
-                            .attr('class', 'label')
-                            .attr('transform', 'translate(' + (contentWidth / 2) + ', ' + (2 * this.axisLabelSpace + 5) + ')')
-                            .append('text')
+                        axisBottomG.append('text')
                             .style('font-size', 10)
+                            .attr('transform', 'translate(' + (contentWidth / 2) + ', ' + (2 * me.axisLabelSpace + 5) + ')')
                             .style('text-anchor', 'middle')
                             .style('fill', function () {
                                 return me.helper.getXaxisColor();
                             })
-                            .style('visibility', me.helper.getXaxisLabelVisibility())
+                            .style('font-weight', 'bold')
+                            .style('visibility', function () {
+                                return me.helper.getXaxisLabelVisibility();
+                            })
                             .text(function () {
                                 return me.helper.getDimDisplayName();
                             });
 
-                        var isRotate = false;
-
-                        var axisBottom = d3.axisBottom(xScaleDim)
-                            .tickFormat(function (d) {
-                                if (isRotate == false) {
-                                    isRotate = D3Utils.getTickRotate(d, (contentWidth) / (xLabels.length - 1), tickLength);
-                                }
-                                return D3Utils.getTruncatedTick(d, (contentWidth) / (xLabels.length - 1), tickLength);
-                            });
-
-                        axisBottomG.append('g')
-                            .attr('id', 'x_axis')
-                            .call(axisBottom);
-
-                        if (isRotate) {
-                            d3.select(this.container).selectAll('#x_axis .tick text')
-                                .attr("transform", "rotate(-15)");
-                        }
-
-                        var axisLeft = d3.axisLeft(yScale)
-                            .tickFormat(function (d) {
-                                if ((contentHeight / yScale.ticks().length) < 11) {
-                                    return '';
-                                }
-                                return D3Utils.getTruncatedTick(D3Utils.shortScale(2)(d), margin.left - 8, tickLength);
-                            });
-
-                        axisLeftG.append('g')
-                            .attr('id', 'y_axis')
-                            .call(axisLeft);
-
                         var sortButton = container.append('g')
-                            .attr('class', 'combo-sort')
+                            .attr('class', 'stackedverticalbar-sort')
                             .attr('transform', function () {
                                 return 'translate(0, ' + parseInt((containerHeight - 2 * padding + (legendBreakCount * 20))) + ')';
                             })
@@ -1232,7 +1329,11 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             .text(function () {
                                 return "\uf161";
                             })
-                            .on('click', this.helper.toggleSortSelection(me, 'ascending', drawPlot));
+                            .on('click', this.helper.toggleSortSelection(me, 'ascending', drawPlot))
+                        /*.on('click', function() {
+                            d3.select(me.container).select('.bar-plot').remove();
+                            drawPlot.call(me, D3Utils.sortData(data, measures, 'ascending'));
+                        });*/
 
                         var descendingSort = sortButton.append('svg:text')
                             .attr('fill', '#afafaf')
@@ -1261,12 +1362,47 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                                 return "\uf0c9";
                             })
                             .on('click', function () {
-                                d3.select(me.container).select('.combo-plot').remove();
+                                d3.select(me.container).select('.stackedverticalbar-plot').remove();
                                 drawPlot.call(me, me.originalData);
 
                                 var persistence = $rootScope.persistence[me.id];
                                 persistence['sort'] = {};
                             });
+
+                        var axisBottom,
+                            axisLeft;
+
+                        var isRotate = false;
+
+                        axisBottom = d3.axisBottom(xScaleDim)
+                            .tickFormat(function (d) {
+                                if (isRotate == false) {
+                                    isRotate = D3Utils.getTickRotate(d, (contentWidth - 50) / (xLabels.length - 1), tickLength);
+                                }
+                                return D3Utils.getTruncatedTick(d, (contentWidth - 50) / (xLabels.length - 1), tickLength);
+                            });
+
+                        axisBottomG.append('g')
+                            .attr('id', 'x_axis')
+                            .call(axisBottom);
+
+                        if (isRotate) {
+                            d3.select(this.container).selectAll('#x_axis .tick text')
+                                .attr("transform", "rotate(-15)");
+                        }
+
+                        axisLeft = d3.axisLeft(yScale)
+                            .tickFormat(function (d) {
+                                if ((contentHeight / yScale.ticks().length) < 11) {
+                                    return '';
+                                }
+                                return D3Utils.getTruncatedTick(D3Utils.shortScale(2)(d), margin.left - 8, tickLength);
+                            })
+
+                        axisLeftG.append('g')
+                            .attr('id', 'y_axis')
+                            .call(axisLeft);
+
 
                         me.helper.setAxisColor(this);
 
@@ -1279,7 +1415,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                             .hoverSelect(true)
                             .closePathSelect(true)
                             .closePathDistance(100)
-                            .items(bar)
+                            .items(stackedverticalbar)
                             .targetArea(svg);
 
                         lasso.on('start', me.helper.onLassoStart(lasso, me))
@@ -1300,28 +1436,20 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     }
                 }
 
-                return Combo;
+                return Stackedverticalbar;
 
             })();
 
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
-                    var combo = $rootScope.updateWidget[record.id];
-                    combo.updateChart(record.data);
-
-                    // TODO: This needs to be fixed, commented code need to be properly done
-                    // ---------------*-----------------
-                    // var combo = new Combo(element[0], record, getProperties(VisualizationUtils, record));
-                    // combo.renderChart(); 
-
-                    // $rootScope.updateWidget[record.id] = combo;
-                    // ---------------*-----------------
+                    var stackedverticalbar = $rootScope.updateWidget[record.id];
+                    stackedverticalbar.updateChart(record.data);
                 }
             } else {
-                var combo = new Combo(element[0], record, getProperties(VisualizationUtils, record));
-                combo.renderChart();
+                var stackedverticalbar = new Stackedverticalbar(element[0], record, getProperties(VisualizationUtils, record));
+                stackedverticalbar.renderChart();
 
-                $rootScope.updateWidget[record.id] = combo;
+                $rootScope.updateWidget[record.id] = stackedverticalbar;
             }
         }
     }

@@ -1,4 +1,4 @@
-import * as angular from 'angular';
+import angular from 'angular';
 "use strict";
 
 angular
@@ -8,4 +8,3 @@ angular
         var sockClient = new SockJS(connectionUrl);
         return Stomp.over(sockClient);
     })
-

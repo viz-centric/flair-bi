@@ -1,41 +1,41 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller("ConnectionsController", ConnectionsController);
+angular
+    .module("flairbiApp")
+    .controller("ConnectionsController", ConnectionsController);
 
-    ConnectionsController.$inject = [
-        "Connections",
-        "$stateParams",
-        "$rootScope",
-        "$translate"
-    ];
-    function ConnectionsController(
-        Connections,
-        $stateParams,
-        $rootScope,
-        $translate
-    ) {
-        var vm = this;
-        vm.connections = [];
+ConnectionsController.$inject = [
+    "Connections",
+    "$stateParams",
+    "$rootScope",
+    "$translate"
+];
+function ConnectionsController(
+    Connections,
+    $stateParams,
+    $rootScope,
+    $translate
+) {
+    var vm = this;
+    vm.connections = [];
 
-        vm.serviceId = $stateParams.id;
+    vm.serviceId = $stateParams.id;
 
-        activate();
+    activate();
 
-        ////////////////
+    ////////////////
 
-        function activate() {
-            vm.connections = Connections.query();
+    function activate() {
+        vm.connections = Connections.query();
 
-            vm.connections
-                .$promise
-                .catch(function (data) {
-                    $rootScope.showErrorSingleToast({
-                        text: $translate.instant('flairbiApp.service.error.connections.all')
-                    })
-                });
-        }
+        vm.connections
+            .$promise
+            .catch(function (data) {
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('flairbiApp.service.error.connections.all')
+                })
+            });
     }
-})();
+}
+

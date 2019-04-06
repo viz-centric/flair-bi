@@ -1,168 +1,167 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    /**
-     * Container that contains currently active Widgets
-     *
-     * Flair-bi page is responsible for modifying this container, but rest of the application can use it.
-     */
-    angular
-        .module("flairbiApp")
-        .factory("VisualDispatchService", VisualDispatchService);
+/**
+ * Container that contains currently active Widgets
+ *
+ * Flair-bi page is responsible for modifying this container, but rest of the application can use it.
+ */
+angular
+    .module("flairbiApp")
+    .factory("VisualDispatchService", VisualDispatchService);
 
-    VisualDispatchService.$inject = ['$rootScope'];
-    function VisualDispatchService($rootScope) {
-        var visual = {};
-        var filters={};
-        var feature={};
-        var settings={};
-        var visualId='';
-        var socketMsgs=[];
-        var featureBookmark={};
-        var isBookmarkApplied=false;
-        var hierarchies=[];
+VisualDispatchService.$inject = ['$rootScope'];
+function VisualDispatchService($rootScope) {
+    var visual = {};
+    var filters = {};
+    var feature = {};
+    var settings = {};
+    var visualId = '';
+    var socketMsgs = [];
+    var featureBookmark = {};
+    var isBookmarkApplied = false;
+    var hierarchies = [];
 
-        return {
-            setVisual: setVisual,
-            getVisual: getVisual,
-            setFilters: setFilters,
-            getFilters: getFilters,
-            getFeature:getFeature,
-            setFeature:setFeature,
-            isFeatureExist:isFeatureExist,
-            clearAll: clearAll,
-            setSettings:setSettings,
-            getSettings:getSettings,
-            saveDataConstraints:saveDataConstraints,
-            setOpacity:setOpacity,
-            removeOpacity:removeOpacity,
-            getDashBoard:getDashBoard,
-            getView:getView,
-            addSocketMsgs:addSocketMsgs,
-            getSocketMsgs:getSocketMsgs,
-            reloadGrids:reloadGrids,
-            addFeatureBookmark:addFeatureBookmark,
-            getFeatureBookmark:getFeatureBookmark,
-            setApplyBookmark:setApplyBookmark,
-            getApplyBookmark:getApplyBookmark,
-            saveHierarchies:saveHierarchies,
-            getHierarchies:getHierarchies
-        };
+    return {
+        setVisual: setVisual,
+        getVisual: getVisual,
+        setFilters: setFilters,
+        getFilters: getFilters,
+        getFeature: getFeature,
+        setFeature: setFeature,
+        isFeatureExist: isFeatureExist,
+        clearAll: clearAll,
+        setSettings: setSettings,
+        getSettings: getSettings,
+        saveDataConstraints: saveDataConstraints,
+        setOpacity: setOpacity,
+        removeOpacity: removeOpacity,
+        getDashBoard: getDashBoard,
+        getView: getView,
+        addSocketMsgs: addSocketMsgs,
+        getSocketMsgs: getSocketMsgs,
+        reloadGrids: reloadGrids,
+        addFeatureBookmark: addFeatureBookmark,
+        getFeatureBookmark: getFeatureBookmark,
+        setApplyBookmark: setApplyBookmark,
+        getApplyBookmark: getApplyBookmark,
+        saveHierarchies: saveHierarchies,
+        getHierarchies: getHierarchies
+    };
 
-        function setVisual(v) {
-            visual=v;
-        }
+    function setVisual(v) {
+        visual = v;
+    }
 
-        function getVisual() {
-            return visual;
-        }
+    function getVisual() {
+        return visual;
+    }
 
-        function setFilters(f) {
-            filters=f;
-        }
+    function setFilters(f) {
+        filters = f;
+    }
 
-        function getFilters() {
-            return angular.copy(filters);
-        }
+    function getFilters() {
+        return angular.copy(filters);
+    }
 
-        function getFeature(){
-            return feature;
-        }
+    function getFeature() {
+        return feature;
+    }
 
-        function setFeature(vfeature){
-            feature=vfeature;
-        }
-        
-        function isFeatureExist(){
-            var features = visual.visual.fields.filter(function(item) {
-                return item.feature!=null && item.feature.definition === feature.definition;
-            });
-            return features.length>0?false:true;
-        }
+    function setFeature(vfeature) {
+        feature = vfeature;
+    }
 
-        function clearAll(){
-            visual = {};
-            filters={};
-            feature={};
-            settings={};
-        }
+    function isFeatureExist() {
+        var features = visual.visual.fields.filter(function (item) {
+            return item.feature != null && item.feature.definition === feature.definition;
+        });
+        return features.length > 0 ? false : true;
+    }
 
-        function setSettings(FSsettings){
-            settings=FSsettings;
-        }
+    function clearAll() {
+        visual = {};
+        filters = {};
+        feature = {};
+        settings = {};
+    }
 
-        function getSettings(){
-            return angular.copy(settings);
-        }
-        function saveDataConstraints(dc){
-            visual.visual['conditionExpression']=dc;
-        }
+    function setSettings(FSsettings) {
+        settings = FSsettings;
+    }
 
-        function setOpacity(vId){
-            visualId=vId;
-            var elements=$('div[container-id]');
-            for(var i in elements){
-                if(elements[i].id!=vId)
-                    $('#'+elements[i].id ).addClass('unselected-vizualization'); 
-            }
-            $('div[container-id='+visualId+']').addClass('selected-vizualization');
-        }
-        
-        function removeOpacity(){
-            var elements=$('div[container-id]');
-            for(var i in elements){
-                $('#'+elements[i].id ).removeClass('unselected-vizualization'); 
-            }
-            if(visualId!='')
-            $('div[container-id='+visualId+']').removeClass('selected-vizualization');
-        }
+    function getSettings() {
+        return angular.copy(settings);
+    }
+    function saveDataConstraints(dc) {
+        visual.visual['conditionExpression'] = dc;
+    }
 
-        function getView(views,id){
-            return views.filter(function(item) {
-                return item.id === id;
-            })[0];
+    function setOpacity(vId) {
+        visualId = vId;
+        var elements = $('div[container-id]');
+        for (var i in elements) {
+            if (elements[i].id != vId)
+                $('#' + elements[i].id).addClass('unselected-vizualization');
         }
+        $('div[container-id=' + visualId + ']').addClass('selected-vizualization');
+    }
 
-        function getDashBoard(dashboards,id){
-            return dashboards.filter(function(item) {
-                return item.id === id;
-            })[0];   
+    function removeOpacity() {
+        var elements = $('div[container-id]');
+        for (var i in elements) {
+            $('#' + elements[i].id).removeClass('unselected-vizualization');
         }
+        if (visualId != '')
+            $('div[container-id=' + visualId + ']').removeClass('selected-vizualization');
+    }
 
-        function addSocketMsgs(msg){
-            socketMsgs.push(msg);
-        }
+    function getView(views, id) {
+        return views.filter(function (item) {
+            return item.id === id;
+        })[0];
+    }
 
-        function getSocketMsgs(){
-            return socketMsgs; 
-        }
-        function reloadGrids(){
-            var elements=$('div[visual-build-id-resize]');
-                for(var i in elements){
-                $rootScope.$broadcast(
+    function getDashBoard(dashboards, id) {
+        return dashboards.filter(function (item) {
+            return item.id === id;
+        })[0];
+    }
+
+    function addSocketMsgs(msg) {
+        socketMsgs.push(msg);
+    }
+
+    function getSocketMsgs() {
+        return socketMsgs;
+    }
+    function reloadGrids() {
+        var elements = $('div[visual-build-id-resize]');
+        for (var i in elements) {
+            $rootScope.$broadcast(
                 "update-widget-content-" + elements[i].id || elements[i].id
-                );
-            }
-        }
-
-        function addFeatureBookmark(bookmark){
-            featureBookmark=bookmark;
-        }
-
-        function getFeatureBookmark(){
-            return featureBookmark;
-        }
-        function setApplyBookmark(flag){
-            isBookmarkApplied=flag;
-        }
-        function getApplyBookmark(){
-            return isBookmarkApplied;
-        }
-        function saveHierarchies(hierarchiesDTO){
-            hierarchies=hierarchiesDTO;
-        }
-        function getHierarchies(){
-            return hierarchies;
+            );
         }
     }
-})();
+
+    function addFeatureBookmark(bookmark) {
+        featureBookmark = bookmark;
+    }
+
+    function getFeatureBookmark() {
+        return featureBookmark;
+    }
+    function setApplyBookmark(flag) {
+        isBookmarkApplied = flag;
+    }
+    function getApplyBookmark() {
+        return isBookmarkApplied;
+    }
+    function saveHierarchies(hierarchiesDTO) {
+        hierarchies = hierarchiesDTO;
+    }
+    function getHierarchies() {
+        return hierarchies;
+    }
+}

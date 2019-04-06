@@ -1,38 +1,37 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller(
-            "FeatureCriteriaDeleteController",
-            FeatureCriteriaDeleteController
-        );
+angular
+    .module("flairbiApp")
+    .controller(
+        "FeatureCriteriaDeleteController",
+        FeatureCriteriaDeleteController
+    );
 
-    FeatureCriteriaDeleteController.$inject = [
-        "$uibModalInstance",
-        "entity",
-        "FeatureCriteria"
-    ];
+FeatureCriteriaDeleteController.$inject = [
+    "$uibModalInstance",
+    "entity",
+    "FeatureCriteria"
+];
 
-    function FeatureCriteriaDeleteController(
-        $uibModalInstance,
-        entity,
-        FeatureCriteria
-    ) {
-        var vm = this;
+function FeatureCriteriaDeleteController(
+    $uibModalInstance,
+    entity,
+    FeatureCriteria
+) {
+    var vm = this;
 
-        vm.featureCriteria = entity;
-        vm.clear = clear;
-        vm.confirmDelete = confirmDelete;
+    vm.featureCriteria = entity;
+    vm.clear = clear;
+    vm.confirmDelete = confirmDelete;
 
-        function clear() {
-            $uibModalInstance.dismiss("cancel");
-        }
-
-        function confirmDelete(id) {
-            FeatureCriteria.delete({ id: id }, function() {
-                $uibModalInstance.close(true);
-            });
-        }
+    function clear() {
+        $uibModalInstance.dismiss("cancel");
     }
-})();
+
+    function confirmDelete(id) {
+        FeatureCriteria.delete({ id: id }, function () {
+            $uibModalInstance.close(true);
+        });
+    }
+}

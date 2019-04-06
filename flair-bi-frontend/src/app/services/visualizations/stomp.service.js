@@ -1,12 +1,11 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .service('StompClient', function () {
-            var connectionUrl = location.origin + location.pathname + 'flair-ws';
-            var sockClient = new SockJS(connectionUrl);
-            return Stomp.over(sockClient);
-        })
+angular
+    .module("flairbiApp")
+    .service('StompClient', function () {
+        var connectionUrl = location.origin + location.pathname + 'flair-ws';
+        var sockClient = new SockJS(connectionUrl);
+        return Stomp.over(sockClient);
+    })
 
-})();

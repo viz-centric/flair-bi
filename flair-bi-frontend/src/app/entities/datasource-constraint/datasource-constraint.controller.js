@@ -1,27 +1,26 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller(
-            "DatasourceConstraintController",
-            DatasourceConstraintController
-        );
+angular
+    .module("flairbiApp")
+    .controller(
+        "DatasourceConstraintController",
+        DatasourceConstraintController
+    );
 
-    DatasourceConstraintController.$inject = ["DatasourceConstraint"];
+DatasourceConstraintController.$inject = ["DatasourceConstraint"];
 
-    function DatasourceConstraintController(DatasourceConstraint) {
-        var vm = this;
+function DatasourceConstraintController(DatasourceConstraint) {
+    var vm = this;
 
-        vm.datasourceConstraints = [];
+    vm.datasourceConstraints = [];
 
-        loadAll();
+    loadAll();
 
-        function loadAll() {
-            DatasourceConstraint.query(function(result) {
-                vm.datasourceConstraints = result;
-                vm.searchQuery = null;
-            });
-        }
+    function loadAll() {
+        DatasourceConstraint.query(function (result) {
+            vm.datasourceConstraints = result;
+            vm.searchQuery = null;
+        });
     }
-})();
+}

@@ -1,33 +1,32 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller("DashboardOverviewContentHeaderController", DashboardOverviewContentHeaderController);
+angular
+    .module("flairbiApp")
+    .controller("DashboardOverviewContentHeaderController", DashboardOverviewContentHeaderController);
 
-    DashboardOverviewContentHeaderController.$inject = [
-        "$scope",
-        "entity",
-        "AccountDispatch"
-    ];
+DashboardOverviewContentHeaderController.$inject = [
+    "$scope",
+    "entity",
+    "AccountDispatch"
+];
 
-    function DashboardOverviewContentHeaderController(
-        $scope,
-        entity,
-        AccountDispatch
-    ) {
-        var vm = this;
+function DashboardOverviewContentHeaderController(
+    $scope,
+    entity,
+    AccountDispatch
+) {
+    var vm = this;
 
-        vm.selectedDashboard = entity;
+    vm.selectedDashboard = entity;
 
-        activate();
+    activate();
 
-        function activate() {
+    function activate() {
 
-            vm.canWriteViews = AccountDispatch.hasAuthority(
-                "WRITE_" + vm.selectedDashboard.id + "_DASHBOARD"
-            );
-            
-        }
+        vm.canWriteViews = AccountDispatch.hasAuthority(
+            "WRITE_" + vm.selectedDashboard.id + "_DASHBOARD"
+        );
+
     }
-})();
+}

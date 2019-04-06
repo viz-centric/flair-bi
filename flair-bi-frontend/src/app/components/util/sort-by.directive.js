@@ -1,24 +1,23 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .directive('jhSortBy', jhSortBy);
+angular
+    .module('flairbiApp')
+    .directive('jhSortBy', jhSortBy);
 
-    function jhSortBy() {
-        var directive = {
-            restrict: 'A',
-            scope: false,
-            require: '^jhSort',
-            link: linkFunc
-        };
+function jhSortBy() {
+    var directive = {
+        restrict: 'A',
+        scope: false,
+        require: '^jhSort',
+        link: linkFunc
+    };
 
-        return directive;
+    return directive;
 
-        function linkFunc(scope, element, attrs, parentCtrl) {
-            element.bind('click', function () {
-                parentCtrl.sort(attrs.jhSortBy);
-            });
-        }
+    function linkFunc(scope, element, attrs, parentCtrl) {
+        element.bind('click', function () {
+            parentCtrl.sort(attrs.jhSortBy);
+        });
     }
-})();
+}

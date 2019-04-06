@@ -1,23 +1,22 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .config(stateConfig);
+angular
+    .module('flairbiApp')
+    .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+stateConfig.$inject = ['$stateProvider'];
 
-    function stateConfig($stateProvider) {
-        $stateProvider.state('admin', {
-            parent: 'app',
-            url: '/administration',
-            views: {
-                'content@': {
-                    templateUrl: 'app/admin/admin.html',
-                    controller: 'AdminController',
-                    controllerAs: 'vm'
-                }
+function stateConfig($stateProvider) {
+    $stateProvider.state('admin', {
+        parent: 'app',
+        url: '/administration',
+        views: {
+            'content@': {
+                templateUrl: 'app/admin/admin.html',
+                controller: 'AdminController',
+                controllerAs: 'vm'
             }
-        });
-    }
-})();
+        }
+    });
+}

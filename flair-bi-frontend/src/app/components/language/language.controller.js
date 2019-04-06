@@ -1,25 +1,24 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('JhiLanguageController', JhiLanguageController);
+angular
+    .module('flairbiApp')
+    .controller('JhiLanguageController', JhiLanguageController);
 
-    JhiLanguageController.$inject = ['$translate', 'JhiLanguageService', 'tmhDynamicLocale'];
+JhiLanguageController.$inject = ['$translate', 'JhiLanguageService', 'tmhDynamicLocale'];
 
-    function JhiLanguageController($translate, JhiLanguageService, tmhDynamicLocale) {
-        var vm = this;
+function JhiLanguageController($translate, JhiLanguageService, tmhDynamicLocale) {
+    var vm = this;
 
-        vm.changeLanguage = changeLanguage;
-        vm.languages = null;
+    vm.changeLanguage = changeLanguage;
+    vm.languages = null;
 
-        JhiLanguageService.getAll().then(function (languages) {
-            vm.languages = languages;
-        });
+    JhiLanguageService.getAll().then(function (languages) {
+        vm.languages = languages;
+    });
 
-        function changeLanguage(languageKey) {
-            $translate.use(languageKey);
-            tmhDynamicLocale.set(languageKey);
-        }
+    function changeLanguage(languageKey) {
+        $translate.use(languageKey);
+        tmhDynamicLocale.set(languageKey);
     }
-})();
+}

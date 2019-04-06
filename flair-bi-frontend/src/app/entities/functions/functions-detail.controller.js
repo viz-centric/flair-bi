@@ -1,21 +1,20 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('FunctionsDetailController', FunctionsDetailController);
+angular
+    .module('flairbiApp')
+    .controller('FunctionsDetailController', FunctionsDetailController);
 
-    FunctionsDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Functions'];
+FunctionsDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Functions'];
 
-    function FunctionsDetailController($scope, $rootScope, $stateParams, previousState, entity, Functions) {
-        var vm = this;
+function FunctionsDetailController($scope, $rootScope, $stateParams, previousState, entity, Functions) {
+    var vm = this;
 
-        vm.functions = entity;
-        vm.previousState = previousState.name;
+    vm.functions = entity;
+    vm.previousState = previousState.name;
 
-        var unsubscribe = $rootScope.$on('flairbiApp:functionsUpdate', function(event, result) {
-            vm.functions = result;
-        });
-        $scope.$on('$destroy', unsubscribe);
-    }
-})();
+    var unsubscribe = $rootScope.$on('flairbiApp:functionsUpdate', function (event, result) {
+        vm.functions = result;
+    });
+    $scope.$on('$destroy', unsubscribe);
+}

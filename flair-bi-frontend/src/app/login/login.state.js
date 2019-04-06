@@ -1,44 +1,43 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .config(stateConfig);
+angular
+    .module('flairbiApp')
+    .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+stateConfig.$inject = ['$stateProvider'];
 
-    function stateConfig($stateProvider) {
-        $stateProvider
-            .state('login', {
-                url: '/login',
-                views: {
-                    'content@': {
-                        templateUrl: 'app/login/login.html',
-                        controller: 'LoginController',
-                        controllerAs: 'vm'
-                    },
-                    'navbar@': {
-
-                    },
-                    'topnavbar@': {
-
-                    }
+function stateConfig($stateProvider) {
+    $stateProvider
+        .state('login', {
+            url: '/login',
+            views: {
+                'content@': {
+                    templateUrl: 'app/login/login.html',
+                    controller: 'LoginController',
+                    controllerAs: 'vm'
                 },
-                data: {
+                'navbar@': {
 
                 },
-                resolve: {
-                    authorize: ['Auth',
-                        function (Auth) {
-                            return Auth.authorize();
-                        }
-                    ],
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('login');
-                        $translatePartialLoader.addPart('global');
-                        return $translate.refresh();
-                    }]
+                'topnavbar@': {
+
                 }
-            });
-    }
-})();
+            },
+            data: {
+
+            },
+            resolve: {
+                authorize: ['Auth',
+                    function (Auth) {
+                        return Auth.authorize();
+                    }
+                ],
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('login');
+                    $translatePartialLoader.addPart('global');
+                    return $translate.refresh();
+                }]
+            }
+        });
+}

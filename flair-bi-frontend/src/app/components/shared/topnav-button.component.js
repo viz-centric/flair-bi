@@ -1,37 +1,36 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .component('topNavButtonComponent', {
-            templateUrl: 'app/components/shared/topnav-button.component.html',
-            controller: TopNavButtonController,
-            controllerAs: 'vm',
-            transclude: true,
-            bindings: {
-                icon: '@',
-                click: '&',
-                if: '&',
-                isToggled: '=',
-                isDisabled: '='
-            }
-        });
+angular
+    .module('flairbiApp')
+    .component('topNavButtonComponent', {
+        templateUrl: 'app/components/shared/topnav-button.component.html',
+        controller: TopNavButtonController,
+        controllerAs: 'vm',
+        transclude: true,
+        bindings: {
+            icon: '@',
+            click: '&',
+            if: '&',
+            isToggled: '=',
+            isDisabled: '='
+        }
+    });
 
-    TopNavButtonController.$inject = ['$scope'];
+TopNavButtonController.$inject = ['$scope'];
 
-    function TopNavButtonController($scope) {
-        var vm = this;
+function TopNavButtonController($scope) {
+    var vm = this;
 
-        vm.$onInit = activate;
+    vm.$onInit = activate;
 
-        ////////////////
+    ////////////////
 
-        function activate() {
-            if (angular.isUndefined(vm.if())) {
-                vm.if = function () {
-                    return true;
-                };
-            }
+    function activate() {
+        if (angular.isUndefined(vm.if())) {
+            vm.if = function () {
+                return true;
+            };
         }
     }
-})();
+}

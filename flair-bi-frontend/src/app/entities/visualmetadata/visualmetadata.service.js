@@ -1,39 +1,38 @@
-(function() {
-    "use strict";
-    angular.module("flairbiApp").factory("Visualmetadata", Visualmetadata);
+import * as angular from 'angular';
+"use strict";
+angular.module("flairbiApp").factory("Visualmetadata", Visualmetadata);
 
-    Visualmetadata.$inject = ["$resource"];
+Visualmetadata.$inject = ["$resource"];
 
-    function Visualmetadata($resource) {
-        var resourceUrl = "api/visualmetadata/:id/:q";
+function Visualmetadata($resource) {
+    var resourceUrl = "api/visualmetadata/:id/:q";
 
-        return $resource(
-            resourceUrl,
-            {
-                q: "@q"
+    return $resource(
+        resourceUrl,
+        {
+            q: "@q"
+        },
+        {
+            query: {
+                method: "GET",
+                isArray: true
             },
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                },
-                get: {
-                    method: "GET",
-                    transformResponse: function(data) {
-                        if (data) {
-                            data = angular.fromJson(data);
-                        }
-                        return data;
+            get: {
+                method: "GET",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
                     }
-                },
-                update: {
-                    method: "PUT"
-                },
-                validate: {
-                    url: "api/visualmetadata/validate",
-                    method: "POST"
+                    return data;
                 }
+            },
+            update: {
+                method: "PUT"
+            },
+            validate: {
+                url: "api/visualmetadata/validate",
+                method: "POST"
             }
-        );
-    }
-})();
+        }
+    );
+}

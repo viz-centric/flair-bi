@@ -1,35 +1,34 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .directive('metisMenu', metisMenu);
+angular
+    .module('flairbiApp')
+    .directive('metisMenu', metisMenu);
 
-    metisMenu.$inject = [];
+metisMenu.$inject = [];
 
-    function metisMenu() {
-        // Usage:
-        //
-        // Creates:
-        //
-        var directive = {
-            bindToController: true,
-            controller: MetisMenuController,
-            controllerAs: 'vm',
-            link: link,
-            restrict: 'A',
-            scope: {}
-        };
-        return directive;
+function metisMenu() {
+    // Usage:
+    //
+    // Creates:
+    //
+    var directive = {
+        bindToController: true,
+        controller: MetisMenuController,
+        controllerAs: 'vm',
+        link: link,
+        restrict: 'A',
+        scope: {}
+    };
+    return directive;
 
-        function link(scope, element, attrs) {
-            $(element).metisMenu();
-        }
+    function link(scope, element, attrs) {
+        $(element).metisMenu();
     }
+}
 
-    MetisMenuController.$inject = [];
+MetisMenuController.$inject = [];
 
-    function MetisMenuController() {
+function MetisMenuController() {
 
-    }
-})();
+}

@@ -1,26 +1,25 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('screenDetectService', screenDetectService);
+angular
+    .module('flairbiApp')
+    .factory('screenDetectService', screenDetectService);
 
-    screenDetectService.$inject = ['$http'];
+screenDetectService.$inject = ['$http'];
 
-    function screenDetectService($http) {
-        var service = {
-            isDesktop: isDesktop
-        };
+function screenDetectService($http) {
+    var service = {
+        isDesktop: isDesktop
+    };
 
-        return service;
+    return service;
 
-        ////////////////
-        function isDesktop(){
-            if($(window).width()>990){
-                return true;
-            }else{
-                return false;
-            }
-        } 
+    ////////////////
+    function isDesktop() {
+        if ($(window).width() > 990) {
+            return true;
+        } else {
+            return false;
+        }
     }
-})();
+}

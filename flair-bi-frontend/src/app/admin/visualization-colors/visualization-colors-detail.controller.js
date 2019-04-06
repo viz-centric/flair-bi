@@ -1,21 +1,20 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('VisualizationColorsDetailController', VisualizationColorsDetailController);
+angular
+    .module('flairbiApp')
+    .controller('VisualizationColorsDetailController', VisualizationColorsDetailController);
 
-    VisualizationColorsDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'VisualizationColors'];
+VisualizationColorsDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'VisualizationColors'];
 
-    function VisualizationColorsDetailController($scope, $rootScope, $stateParams, previousState, entity, VisualizationColors) {
-        var vm = this;
+function VisualizationColorsDetailController($scope, $rootScope, $stateParams, previousState, entity, VisualizationColors) {
+    var vm = this;
 
-        vm.visualizationColors = entity;
-        vm.previousState = previousState.name;
+    vm.visualizationColors = entity;
+    vm.previousState = previousState.name;
 
-        var unsubscribe = $rootScope.$on('flairbiApp:visualizationColorsUpdate', function(event, result) {
-            vm.visualizationColors = result;
-        });
-        $scope.$on('$destroy', unsubscribe);
-    }
-})();
+    var unsubscribe = $rootScope.$on('flairbiApp:visualizationColorsUpdate', function (event, result) {
+        vm.visualizationColors = result;
+    });
+    $scope.$on('$destroy', unsubscribe);
+}

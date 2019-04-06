@@ -1,8 +1,12 @@
-import * as angular from 'angular';
-import { moduleName as ngTagsInputModule } from './entities/flair-bi/filter/ng-tags-input-grpc';
+
+import angular from 'angular'
+import { moduleName as ngTagsInputGrpcModule } from './entities/flair-bi/filter/ng-tags-input-grpc';
+import { moduleName as applicationHandlers } from './blocks/handlers/handlers.module';
 
 const appModule = angular
     .module("flairbiApp", [
+        ngTagsInputGrpcModule,
+        applicationHandlers,
         "angular-jwt",
         "ngStorage",
         "tmh.dynamicLocale",
@@ -21,7 +25,6 @@ const appModule = angular
         "minicolors",
         "shagstrom.angular-split-pane",
         "gridstack-angular",
-        ngTagsInputModule,
         "ngTagsInput",
         "ngSanitize",
         "pageslide-directive",
@@ -36,7 +39,6 @@ const appModule = angular
         "angularUtils.directives.uiBreadcrumbs",
         "angular-cron-gen",
         "ngFileUpload"
-        // jhipster-needle-angularjs-add-module JHipster will add new module here
     ])
 
 appModule

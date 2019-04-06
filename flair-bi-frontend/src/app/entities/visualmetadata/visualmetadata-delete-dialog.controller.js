@@ -1,38 +1,37 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller(
-            "VisualmetadataDeleteController",
-            VisualmetadataDeleteController
-        );
+angular
+    .module("flairbiApp")
+    .controller(
+        "VisualmetadataDeleteController",
+        VisualmetadataDeleteController
+    );
 
-    VisualmetadataDeleteController.$inject = [
-        "$uibModalInstance",
-        "entity",
-        "Visualmetadata"
-    ];
+VisualmetadataDeleteController.$inject = [
+    "$uibModalInstance",
+    "entity",
+    "Visualmetadata"
+];
 
-    function VisualmetadataDeleteController(
-        $uibModalInstance,
-        entity,
-        Visualmetadata
-    ) {
-        var vm = this;
+function VisualmetadataDeleteController(
+    $uibModalInstance,
+    entity,
+    Visualmetadata
+) {
+    var vm = this;
 
-        vm.visualmetadata = entity;
-        vm.clear = clear;
-        vm.confirmDelete = confirmDelete;
+    vm.visualmetadata = entity;
+    vm.clear = clear;
+    vm.confirmDelete = confirmDelete;
 
-        function clear() {
-            $uibModalInstance.dismiss("cancel");
-        }
-
-        function confirmDelete(id) {
-            Visualmetadata.delete({ id: id }, function() {
-                $uibModalInstance.close(true);
-            });
-        }
+    function clear() {
+        $uibModalInstance.dismiss("cancel");
     }
-})();
+
+    function confirmDelete(id) {
+        Visualmetadata.delete({ id: id }, function () {
+            $uibModalInstance.close(true);
+        });
+    }
+}

@@ -1,22 +1,21 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular.module("flairbiApp").factory("Constraints", Constraints);
+angular.module("flairbiApp").factory("Constraints", Constraints);
 
-    Constraints.$inject = ["$resource"];
+Constraints.$inject = ["$resource"];
 
-    function Constraints($resource) {
-        var resourceUrl = "api/constraints/:id";
+function Constraints($resource) {
+    var resourceUrl = "api/constraints/:id";
 
-        return $resource(
-            resourceUrl,
-            {},
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                }
+    return $resource(
+        resourceUrl,
+        {},
+        {
+            query: {
+                method: "GET",
+                isArray: true
             }
-        );
-    }
-})();
+        }
+    );
+}

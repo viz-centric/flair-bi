@@ -1,35 +1,34 @@
-(function() {
-    "use strict";
-    angular.module("flairbiApp").factory("FeatureCriteria", FeatureCriteria);
+import * as angular from 'angular';
+"use strict";
+angular.module("flairbiApp").factory("FeatureCriteria", FeatureCriteria);
 
-    FeatureCriteria.$inject = ["$resource"];
+FeatureCriteria.$inject = ["$resource"];
 
-    function FeatureCriteria($resource) {
-        var resourceUrl = "api/feature-criteria/:id/:query";
+function FeatureCriteria($resource) {
+    var resourceUrl = "api/feature-criteria/:id/:query";
 
-        return $resource(
-            resourceUrl,
-            {
-                query: "@query"
+    return $resource(
+        resourceUrl,
+        {
+            query: "@query"
+        },
+        {
+            query: {
+                method: "GET",
+                isArray: true
             },
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                },
-                get: {
-                    method: "GET",
-                    transformResponse: function(data) {
-                        if (data) {
-                            data = angular.fromJson(data);
-                        }
-                        return data;
+            get: {
+                method: "GET",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
                     }
-                },
-                update: {
-                    method: "PUT"
+                    return data;
                 }
+            },
+            update: {
+                method: "PUT"
             }
-        );
-    }
-})();
+        }
+    );
+}

@@ -1,11 +1,10 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller("ConnectionsContentHeaderController", ConnectionsContentHeaderController);
+angular
+    .module("flairbiApp")
+    .controller("ConnectionsContentHeaderController", ConnectionsContentHeaderController);
 
-    ConnectionsContentHeaderController.$inject = [];
-    function ConnectionsContentHeaderController() {
-    }
-})();
+ConnectionsContentHeaderController.$inject = [];
+function ConnectionsContentHeaderController() {
+}

@@ -1,25 +1,24 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller("PropertyTypeController", PropertyTypeController);
+angular
+    .module("flairbiApp")
+    .controller("PropertyTypeController", PropertyTypeController);
 
-    PropertyTypeController.$inject = ["PropertyTypes"];
+PropertyTypeController.$inject = ["PropertyTypes"];
 
-    function PropertyTypeController(PropertyTypes) {
-        var vm = this;
+function PropertyTypeController(PropertyTypes) {
+    var vm = this;
 
-        activate();
+    activate();
 
-        ////////////////
+    ////////////////
 
-        function activate() {
-            loadAll();
-        }
-
-        function loadAll() {
-            vm.propertyTypes = PropertyTypes.query();
-        }
+    function activate() {
+        loadAll();
     }
-})();
+
+    function loadAll() {
+        vm.propertyTypes = PropertyTypes.query();
+    }
+}

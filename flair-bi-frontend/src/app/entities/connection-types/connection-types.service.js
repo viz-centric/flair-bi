@@ -1,34 +1,33 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular.module("flairbiApp").factory("ConnectionTypes", ConnectionTypes);
+angular.module("flairbiApp").factory("ConnectionTypes", ConnectionTypes);
 
-    ConnectionTypes.$inject = ["$resource"];
+ConnectionTypes.$inject = ["$resource"];
 
-    function ConnectionTypes($resource) {
-        var resourceUrl = "api/connection-type/:id";
+function ConnectionTypes($resource) {
+    var resourceUrl = "api/connection-type/:id";
 
-        return $resource(
-            resourceUrl,
-            {},
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                },
-                get: {
-                    method: "GET",
-                    transformResponse: function(data) {
-                        if (data) {
-                            data = angular.fromJson(data);
-                        }
-                        return data;
+    return $resource(
+        resourceUrl,
+        {},
+        {
+            query: {
+                method: "GET",
+                isArray: true
+            },
+            get: {
+                method: "GET",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
                     }
-                },
-                update: {
-                    method: "PUT"
+                    return data;
                 }
+            },
+            update: {
+                method: "PUT"
             }
-        );
-    }
-})();
+        }
+    );
+}

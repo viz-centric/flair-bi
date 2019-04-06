@@ -1,23 +1,22 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('JhiConfigurationController', JhiConfigurationController);
+angular
+    .module('flairbiApp')
+    .controller('JhiConfigurationController', JhiConfigurationController);
 
-    JhiConfigurationController.$inject = ['$filter', 'JhiConfigurationService'];
+JhiConfigurationController.$inject = ['$filter', 'JhiConfigurationService'];
 
-    function JhiConfigurationController(filter, JhiConfigurationService) {
-        var vm = this;
+function JhiConfigurationController(filter, JhiConfigurationService) {
+    var vm = this;
 
-        vm.allConfiguration = null;
-        vm.configuration = null;
+    vm.allConfiguration = null;
+    vm.configuration = null;
 
-        JhiConfigurationService.get().then(function (configuration) {
-            vm.configuration = configuration;
-        });
-        JhiConfigurationService.getEnv().then(function (configuration) {
-            vm.allConfiguration = configuration;
-        });
-    }
-})();
+    JhiConfigurationService.get().then(function (configuration) {
+        vm.configuration = configuration;
+    });
+    JhiConfigurationService.getEnv().then(function (configuration) {
+        vm.allConfiguration = configuration;
+    });
+}

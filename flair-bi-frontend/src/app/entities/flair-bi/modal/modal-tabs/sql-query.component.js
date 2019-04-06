@@ -1,28 +1,27 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .component('sqlQueryComponent', {
-            templateUrl: 'app/entities/flair-bi/modal/modal-tabs/sql-query.component.html',
-            controller: sqlQueryController,
-            controllerAs: 'vm',
-            bindings: {
-                visual: '=',
-                features: '='
-            }
-        });
+angular
+    .module('flairbiApp')
+    .component('sqlQueryComponent', {
+        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/sql-query.component.html',
+        controller: sqlQueryController,
+        controllerAs: 'vm',
+        bindings: {
+            visual: '=',
+            features: '='
+        }
+    });
 
-    sqlQueryController.$inject = ['$scope'];
+sqlQueryController.$inject = ['$scope'];
 
-    function sqlQueryController($scope) {
-        var vm = this;
+function sqlQueryController($scope) {
+    var vm = this;
 
 
-        activate();
+    activate();
 
-        ////////////////
+    ////////////////
 
-        function activate() {}
-    }
-})();
+    function activate() { }
+}

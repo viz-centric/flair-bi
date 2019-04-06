@@ -1,22 +1,21 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular.module("flairbiApp").factory("FeatureTypes", FeatureTypes);
+angular.module("flairbiApp").factory("FeatureTypes", FeatureTypes);
 
-    FeatureTypes.$inject = ["$resource"];
+FeatureTypes.$inject = ["$resource"];
 
-    function FeatureTypes($resource) {
-        var resourceUrl = "api/featureTypes/:id";
+function FeatureTypes($resource) {
+    var resourceUrl = "api/featureTypes/:id";
 
-        return $resource(
-            resourceUrl,
-            {},
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                }
+    return $resource(
+        resourceUrl,
+        {},
+        {
+            query: {
+                method: "GET",
+                isArray: true
             }
-        );
-    }
-})();
+        }
+    );
+}

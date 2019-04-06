@@ -1,24 +1,23 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller("FeatureCriteriaController", FeatureCriteriaController);
+angular
+    .module("flairbiApp")
+    .controller("FeatureCriteriaController", FeatureCriteriaController);
 
-    FeatureCriteriaController.$inject = ["FeatureCriteria"];
+FeatureCriteriaController.$inject = ["FeatureCriteria"];
 
-    function FeatureCriteriaController(FeatureCriteria) {
-        var vm = this;
+function FeatureCriteriaController(FeatureCriteria) {
+    var vm = this;
 
-        vm.featureCriteria = [];
+    vm.featureCriteria = [];
 
-        loadAll();
+    loadAll();
 
-        function loadAll() {
-            FeatureCriteria.query(function(result) {
-                vm.featureCriteria = result;
-                vm.searchQuery = null;
-            });
-        }
+    function loadAll() {
+        FeatureCriteria.query(function (result) {
+            vm.featureCriteria = result;
+            vm.searchQuery = null;
+        });
     }
-})();
+}

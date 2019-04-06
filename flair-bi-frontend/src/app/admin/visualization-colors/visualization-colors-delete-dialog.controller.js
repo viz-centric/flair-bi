@@ -1,28 +1,27 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('VisualizationColorsDeleteController',VisualizationColorsDeleteController);
+angular
+    .module('flairbiApp')
+    .controller('VisualizationColorsDeleteController', VisualizationColorsDeleteController);
 
-    VisualizationColorsDeleteController.$inject = ['$uibModalInstance', 'entity', 'VisualizationColors'];
+VisualizationColorsDeleteController.$inject = ['$uibModalInstance', 'entity', 'VisualizationColors'];
 
-    function VisualizationColorsDeleteController($uibModalInstance, entity, VisualizationColors) {
-        var vm = this;
+function VisualizationColorsDeleteController($uibModalInstance, entity, VisualizationColors) {
+    var vm = this;
 
-        vm.visualizationColors = entity;
-        vm.clear = clear;
-        vm.confirmDelete = confirmDelete;
+    vm.visualizationColors = entity;
+    vm.clear = clear;
+    vm.confirmDelete = confirmDelete;
 
-        function clear () {
-            $uibModalInstance.dismiss('cancel');
-        }
-
-        function confirmDelete (id) {
-            VisualizationColors.delete({id: id},
-                function () {
-                    $uibModalInstance.close(true);
-                });
-        }
+    function clear() {
+        $uibModalInstance.dismiss('cancel');
     }
-})();
+
+    function confirmDelete(id) {
+        VisualizationColors.delete({ id: id },
+            function () {
+                $uibModalInstance.close(true);
+            });
+    }
+}

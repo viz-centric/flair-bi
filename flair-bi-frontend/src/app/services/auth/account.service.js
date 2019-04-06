@@ -1,25 +1,26 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
 
-    angular
-        .module('flairbiApp')
-        .factory('Account', Account);
+'use strict';
 
-    Account.$inject = ['$resource'];
+angular
+    .module('flairbiApp')
+    .factory('Account', Account);
 
-    function Account($resource) {
-        var service = $resource('api/account', {}, {
-            'get': {
-                method: 'GET', params: {}, isArray: false,
-                interceptor: {
-                    response: function (response) {
-                        // expose response
-                        return response;
-                    }
+Account.$inject = ['$resource'];
+
+function Account($resource) {
+    var service = $resource('api/account', {}, {
+        'get': {
+            method: 'GET', params: {}, isArray: false,
+            interceptor: {
+                response: function (response) {
+                    // expose response
+                    return response;
                 }
             }
-        });
+        }
+    });
 
-        return service;
-    }
-})();
+    return service;
+}
+

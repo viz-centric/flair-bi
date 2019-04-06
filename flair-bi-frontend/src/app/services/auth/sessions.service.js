@@ -1,15 +1,14 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('Sessions', Sessions);
+angular
+    .module('flairbiApp')
+    .factory('Sessions', Sessions);
 
-    Sessions.$inject = ['$resource'];
+Sessions.$inject = ['$resource'];
 
-    function Sessions($resource) {
-        return $resource('api/account/sessions/:series', {}, {
-            'getAll': {method: 'GET', isArray: true}
-        });
-    }
-})();
+function Sessions($resource) {
+    return $resource('api/account/sessions/:series', {}, {
+        'getAll': { method: 'GET', isArray: true }
+    });
+}

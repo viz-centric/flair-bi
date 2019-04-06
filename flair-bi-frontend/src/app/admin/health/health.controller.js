@@ -1,63 +1,62 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('JhiHealthCheckController', JhiHealthCheckController);
+angular
+    .module('flairbiApp')
+    .controller('JhiHealthCheckController', JhiHealthCheckController);
 
-    JhiHealthCheckController.$inject = ['JhiHealthService', '$uibModal'];
+JhiHealthCheckController.$inject = ['JhiHealthService', '$uibModal'];
 
-    function JhiHealthCheckController(JhiHealthService, $uibModal) {
-        var vm = this;
+function JhiHealthCheckController(JhiHealthService, $uibModal) {
+    var vm = this;
 
-        vm.updatingHealth = true;
-        vm.getLabelClass = getLabelClass;
-        vm.refresh = refresh;
-        vm.showHealth = showHealth;
-        vm.baseName = JhiHealthService.getBaseName;
-        vm.subSystemName = JhiHealthService.getSubSystemName;
+    vm.updatingHealth = true;
+    vm.getLabelClass = getLabelClass;
+    vm.refresh = refresh;
+    vm.showHealth = showHealth;
+    vm.baseName = JhiHealthService.getBaseName;
+    vm.subSystemName = JhiHealthService.getSubSystemName;
 
-        vm.refresh();
+    vm.refresh();
 
-        function getLabelClass(statusState) {
-            if (statusState === 'UP') {
-                return 'label-success';
-            } else {
-                return 'label-danger';
-            }
+    function getLabelClass(statusState) {
+        if (statusState === 'UP') {
+            return 'label-success';
+        } else {
+            return 'label-danger';
         }
-
-        function refresh() {
-            vm.updatingHealth = true;
-            JhiHealthService.checkHealth().then(function (response) {
-                vm.healthData = JhiHealthService.transformHealthData(response);
-                vm.updatingHealth = false;
-            }, function (response) {
-                vm.healthData = JhiHealthService.transformHealthData(response.data);
-                vm.updatingHealth = false;
-            });
-        }
-
-        function showHealth(health) {
-            $uibModal.open({
-                templateUrl: 'app/admin/health/health.modal.html',
-                controller: 'HealthModalController',
-                controllerAs: 'vm',
-                size: 'lg',
-                resolve: {
-                    currentHealth: function () {
-                        return health;
-                    },
-                    baseName: function () {
-                        return vm.baseName;
-                    },
-                    subSystemName: function () {
-                        return vm.subSystemName;
-                    }
-
-                }
-            });
-        }
-
     }
-})();
+
+    function refresh() {
+        vm.updatingHealth = true;
+        JhiHealthService.checkHealth().then(function (response) {
+            vm.healthData = JhiHealthService.transformHealthData(response);
+            vm.updatingHealth = false;
+        }, function (response) {
+            vm.healthData = JhiHealthService.transformHealthData(response.data);
+            vm.updatingHealth = false;
+        });
+    }
+
+    function showHealth(health) {
+        $uibModal.open({
+            templateUrl: 'app/admin/health/health.modal.html',
+            controller: 'HealthModalController',
+            controllerAs: 'vm',
+            size: 'lg',
+            resolve: {
+                currentHealth: function () {
+                    return health;
+                },
+                baseName: function () {
+                    return vm.baseName;
+                },
+                subSystemName: function () {
+                    return vm.subSystemName;
+                }
+
+            }
+        });
+    }
+
+}

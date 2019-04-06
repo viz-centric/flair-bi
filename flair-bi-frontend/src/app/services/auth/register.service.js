@@ -1,13 +1,12 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('Register', Register);
+angular
+    .module('flairbiApp')
+    .factory('Register', Register);
 
-    Register.$inject = ['$resource'];
+Register.$inject = ['$resource'];
 
-    function Register($resource) {
-        return $resource('api/register', {}, {});
-    }
-})();
+function Register($resource) {
+    return $resource('api/register', {}, {});
+}

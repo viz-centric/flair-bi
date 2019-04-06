@@ -1,9 +1,9 @@
-(function () {
+import * as angular from 'angular';
+'use strict';
 
-    'use strict';
-    angular
-        .module('flairbiApp')
-        .constant('d3', d3)
-        .constant('topojson', topojson)
-        .constant('leaflet', L);
-})();
+angular
+    .module('flairbiApp')
+    .constant('d3', d3)
+    .constant('topojson', topojson)
+    .constant('leaflet', L);
+

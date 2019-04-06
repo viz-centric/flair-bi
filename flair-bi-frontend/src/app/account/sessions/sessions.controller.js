@@ -1,37 +1,36 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('SessionsController', SessionsController);
+angular
+    .module('flairbiApp')
+    .controller('SessionsController', SessionsController);
 
-    SessionsController.$inject = ['Sessions', 'Principal'];
+SessionsController.$inject = ['Sessions', 'Principal'];
 
-    function SessionsController(Sessions, Principal) {
-        var vm = this;
+function SessionsController(Sessions, Principal) {
+    var vm = this;
 
-        vm.account = null;
-        vm.error = null;
-        vm.invalidate = invalidate;
-        vm.sessions = Sessions.getAll();
-        vm.success = null;
+    vm.account = null;
+    vm.error = null;
+    vm.invalidate = invalidate;
+    vm.sessions = Sessions.getAll();
+    vm.success = null;
 
 
-        Principal.identity().then(function (account) {
-            vm.account = account;
-        });
+    Principal.identity().then(function (account) {
+        vm.account = account;
+    });
 
-        function invalidate(series) {
-            Sessions.delete({series: encodeURIComponent(series)},
-                function () {
-                    vm.error = null;
-                    vm.success = 'OK';
-                    vm.sessions = Sessions.getAll();
-                },
-                function () {
-                    vm.success = null;
-                    vm.error = 'ERROR';
-                });
-        }
+    function invalidate(series) {
+        Sessions.delete({ series: encodeURIComponent(series) },
+            function () {
+                vm.error = null;
+                vm.success = 'OK';
+                vm.sessions = Sessions.getAll();
+            },
+            function () {
+                vm.success = null;
+                vm.error = 'ERROR';
+            });
     }
-})();
+}

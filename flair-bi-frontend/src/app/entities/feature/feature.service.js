@@ -1,39 +1,38 @@
-(function() {
-    "use strict";
-    angular.module("flairbiApp").factory("Features", Features);
+import * as angular from 'angular';
+"use strict";
+angular.module("flairbiApp").factory("Features", Features);
 
-    Features.$inject = ["$resource"];
+Features.$inject = ["$resource"];
 
-    function Features($resource) {
-        var resourceUrl = "api/features/:id/:query";
+function Features($resource) {
+    var resourceUrl = "api/features/:id/:query";
 
-        return $resource(
-            resourceUrl,
-            {
-                query: "@query"
+    return $resource(
+        resourceUrl,
+        {
+            query: "@query"
+        },
+        {
+            query: {
+                method: "GET",
+                isArray: true
             },
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                },
-                get: {
-                    method: "GET",
-                    transformResponse: function(data) {
-                        if (data) {
-                            data = angular.fromJson(data);
-                        }
-                        return data;
+            get: {
+                method: "GET",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
                     }
-                },
-                addFeatures: {
-                    url: "api/features/list",
-                    method: "POST"
-                },
-                update: {
-                    method: "PUT"
+                    return data;
                 }
+            },
+            addFeatures: {
+                url: "api/features/list",
+                method: "POST"
+            },
+            update: {
+                method: "PUT"
             }
-        );
-    }
-})();
+        }
+    );
+}

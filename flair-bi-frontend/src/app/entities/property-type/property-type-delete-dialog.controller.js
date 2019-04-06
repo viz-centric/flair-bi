@@ -1,46 +1,45 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller(
-            "PropertyTypeDeleteDialogController",
-            PropertyTypeDeleteDialogController
-        );
+angular
+    .module("flairbiApp")
+    .controller(
+        "PropertyTypeDeleteDialogController",
+        PropertyTypeDeleteDialogController
+    );
 
-    PropertyTypeDeleteDialogController.$inject = [
-        "$scope",
-        "entity",
-        "PropertyTypes",
-        "$uibModalInstance"
-    ];
+PropertyTypeDeleteDialogController.$inject = [
+    "$scope",
+    "entity",
+    "PropertyTypes",
+    "$uibModalInstance"
+];
 
-    function PropertyTypeDeleteDialogController(
-        $scope,
-        entity,
-        PropertyTypes,
-        $uibModalInstance
-    ) {
-        var vm = this;
+function PropertyTypeDeleteDialogController(
+    $scope,
+    entity,
+    PropertyTypes,
+    $uibModalInstance
+) {
+    var vm = this;
 
-        vm.propertyType = entity;
-        vm.clear = clear;
-        vm.confirmDelete = confirmDelete;
+    vm.propertyType = entity;
+    vm.clear = clear;
+    vm.confirmDelete = confirmDelete;
 
-        ////////////////
-        function clear() {
-            $uibModalInstance.dismiss("cancel");
-        }
-
-        function confirmDelete(id) {
-            PropertyTypes.delete(
-                {
-                    id: id
-                },
-                function() {
-                    $uibModalInstance.close(true);
-                }
-            );
-        }
+    ////////////////
+    function clear() {
+        $uibModalInstance.dismiss("cancel");
     }
-})();
+
+    function confirmDelete(id) {
+        PropertyTypes.delete(
+            {
+                id: id
+            },
+            function () {
+                $uibModalInstance.close(true);
+            }
+        );
+    }
+}

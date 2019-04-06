@@ -1,9 +1,8 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .constant('paginationConstants', {
-            'itemsPerPage': 20
-        });
-})();
+angular
+    .module('flairbiApp')
+    .constant('paginationConstants', {
+        'itemsPerPage': 20
+    });

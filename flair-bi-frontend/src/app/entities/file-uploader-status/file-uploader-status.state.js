@@ -1,14 +1,14 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .config(stateConfig);
+angular
+    .module('flairbiApp')
+    .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider','PERMISSIONS'];
-    /**this is just temporary file */
-    function stateConfig($stateProvider,PERMISSIONS) {
-        $stateProvider
+stateConfig.$inject = ['$stateProvider', 'PERMISSIONS'];
+/**this is just temporary file */
+function stateConfig($stateProvider, PERMISSIONS) {
+    $stateProvider
         .state('file-uploader-status', {
             parent: 'entity',
             url: '/file-uploader-status?page&sort&search',
@@ -70,8 +70,8 @@
                     $translatePartialLoader.addPart('fileUploaderStatus');
                     return $translate.refresh();
                 }],
-                entity: ['$stateParams', 'FileUploaderStatus', function($stateParams, FileUploaderStatus) {
-                    return FileUploaderStatus.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'FileUploaderStatus', function ($stateParams, FileUploaderStatus) {
+                    return FileUploaderStatus.get({ id: $stateParams.id }).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
@@ -89,7 +89,7 @@
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/file-uploader-status/file-uploader-status-dialog.html',
                     controller: 'FileUploaderStatusDialogController',
@@ -97,13 +97,13 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['FileUploaderStatus', function(FileUploaderStatus) {
-                            return FileUploaderStatus.get({id : $stateParams.id}).$promise;
+                        entity: ['FileUploaderStatus', function (FileUploaderStatus) {
+                            return FileUploaderStatus.get({ id: $stateParams.id }).$promise;
                         }]
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('^', {}, { reload: false });
-                }, function() {
+                }, function () {
                     $state.go('^');
                 });
             }]
@@ -114,7 +114,7 @@
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/file-uploader-status/file-uploader-status-dialog.html',
                     controller: 'FileUploaderStatusDialogController',
@@ -132,9 +132,9 @@
                             };
                         }
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('file-uploader-status', null, { reload: 'file-uploader-status' });
-                }, function() {
+                }, function () {
                     $state.go('file-uploader-status');
                 });
             }]
@@ -145,7 +145,7 @@
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/file-uploader-status/file-uploader-status-dialog.html',
                     controller: 'FileUploaderStatusDialogController',
@@ -153,13 +153,13 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['FileUploaderStatus', function(FileUploaderStatus) {
-                            return FileUploaderStatus.get({id : $stateParams.id}).$promise;
+                        entity: ['FileUploaderStatus', function (FileUploaderStatus) {
+                            return FileUploaderStatus.get({ id: $stateParams.id }).$promise;
                         }]
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('file-uploader-status', null, { reload: 'file-uploader-status' });
-                }, function() {
+                }, function () {
                     $state.go('^');
                 });
             }]
@@ -170,24 +170,22 @@
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/file-uploader-status/file-uploader-status-delete-dialog.html',
                     controller: 'FileUploaderStatusDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['FileUploaderStatus', function(FileUploaderStatus) {
-                            return FileUploaderStatus.get({id : $stateParams.id}).$promise;
+                        entity: ['FileUploaderStatus', function (FileUploaderStatus) {
+                            return FileUploaderStatus.get({ id: $stateParams.id }).$promise;
                         }]
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('file-uploader-status', null, { reload: 'file-uploader-status' });
-                }, function() {
+                }, function () {
                     $state.go('^');
                 });
             }]
         });
-    }
-
-})();
+}

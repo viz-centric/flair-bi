@@ -1,20 +1,19 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular.module("flairbiApp").config(Config);
+angular.module("flairbiApp").config(Config);
 
-    Config.$inject = ["$httpProvider", "jwtOptionsProvider"];
+Config.$inject = ["$httpProvider", "jwtOptionsProvider"];
 
-    function Config($httpProvider, jwtOptionsProvider) {
-        jwtOptionsProvider.config({
-            tokenGetter: [
-                "AuthServerProvider",
-                function(AuthServerProvider) {
-                    return AuthServerProvider.getToken();
-                }
-            ]
-        });
+function Config($httpProvider, jwtOptionsProvider) {
+    jwtOptionsProvider.config({
+        tokenGetter: [
+            "AuthServerProvider",
+            function (AuthServerProvider) {
+                return AuthServerProvider.getToken();
+            }
+        ]
+    });
 
-        $httpProvider.interceptors.push("jwtInterceptor");
-    }
-})();
+    $httpProvider.interceptors.push("jwtInterceptor");
+}

@@ -1,29 +1,28 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('proxyService', proxyService);
+angular
+    .module('flairbiApp')
+    .factory('proxyService', proxyService);
 
-    proxyService.$inject = ['$http'];
+proxyService.$inject = ['$http'];
 
-    function proxyService($http) {
-        var service = {
-            forwardCall: forwardCall
-        };
+function proxyService($http) {
+    var service = {
+        forwardCall: forwardCall
+    };
 
-        return service;
+    return service;
 
-        ////////////////
-        function forwardCall(sourceId, body) {
-            return $http({
-                url: 'api/fbi-engine/' + sourceId + '/query',
-                method: 'POST',
-                data: body
-            });
-        }
-
-
-
+    ////////////////
+    function forwardCall(sourceId, body) {
+        return $http({
+            url: 'api/fbi-engine/' + sourceId + '/query',
+            method: 'POST',
+            data: body
+        });
     }
-})();
+
+
+
+}

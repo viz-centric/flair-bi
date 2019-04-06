@@ -1,34 +1,33 @@
-(function() {
-    "use strict";
-    angular.module("flairbiApp").factory("QueryValidationService", QueryValidationService);
+import * as angular from 'angular';
+"use strict";
+angular.module("flairbiApp").factory("QueryValidationService", QueryValidationService);
 
-    QueryValidationService.$inject = [];
+QueryValidationService.$inject = [];
 
-    function QueryValidationService() {
+function QueryValidationService() {
 
-        return {
-            getQueryValidationError: getQueryValidationError
-        };
+    return {
+        getQueryValidationError: getQueryValidationError
+    };
 
-        function getQueryValidationError(error) {
-            if (!error) {
-                return null;
-            }
+    function getQueryValidationError(error) {
+        if (!error) {
+            return null;
+        }
 
-            var errorObject = JSON.parse(error || '{}');
-            if (errorObject.errorCode) {
-                var features = errorObject.features || [];
-                return {
-                    msgKey: 'error.query.' + errorObject.errorCode,
-                    params: {
-                        features: features.join(', ')
-                    }
-                };
-            }
-
+        var errorObject = JSON.parse(error || '{}');
+        if (errorObject.errorCode) {
+            var features = errorObject.features || [];
             return {
-                msgKey: 'error.query.validation.generic'
+                msgKey: 'error.query.' + errorObject.errorCode,
+                params: {
+                    features: features.join(', ')
+                }
             };
         }
+
+        return {
+            msgKey: 'error.query.validation.generic'
+        };
     }
-})();
+}

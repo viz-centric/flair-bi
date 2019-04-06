@@ -1,35 +1,37 @@
-(function (){
-    "use strict";
-    angular.module('flairbiApp').factory('Release', Release);
+import * as angular from 'angular';
+"use strict";
+angular.module('flairbiApp').factory('Release', Release);
 
-    Release.$inject = ['$resource'];
+Release.$inject = ['$resource'];
 
-    function Release($resource){
-        var resourceUrl = "api/releases/:id";
+function Release($resource) {
+    var resourceUrl = "api/releases/:id";
 
-        return $resource(
-            resourceUrl,
-            {},
-            {
-                query: {method: 'GET', isArray: true},
-                get: {
-                    method: "GET",
-                    transformResponse: function(data){
-                        if(data){
-                            data = angular.fromJson(data);
-                        }
-                        return data;
+    return $resource(
+        resourceUrl,
+        {},
+        {
+            query: { method: 'GET', isArray: true },
+            get: {
+                method: "GET",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
                     }
-                },
-                update: { method: "PUT" },
-                approve:
-                { method : "PUT",
-                  url: "api/releases/:id/approve"}
-                ,
-                reject: {
-                    url: "api/releases/:id/reject",
-                    method: "PUT"}
-            });
+                    return data;
+                }
+            },
+            update: { method: "PUT" },
+            approve:
+            {
+                method: "PUT",
+                url: "api/releases/:id/approve"
+            }
+            ,
+            reject: {
+                url: "api/releases/:id/reject",
+                method: "PUT"
+            }
+        });
 
-    }
-})();
+}

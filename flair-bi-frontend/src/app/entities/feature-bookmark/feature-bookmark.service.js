@@ -1,35 +1,34 @@
-(function() {
-    "use strict";
-    angular.module("flairbiApp").factory("FeatureBookmark", FeatureBookmark);
+import * as angular from 'angular';
+"use strict";
+angular.module("flairbiApp").factory("FeatureBookmark", FeatureBookmark);
 
-    FeatureBookmark.$inject = ["$resource"];
+FeatureBookmark.$inject = ["$resource"];
 
-    function FeatureBookmark($resource) {
-        var resourceUrl = "api/feature-bookmarks/:id/:query";
+function FeatureBookmark($resource) {
+    var resourceUrl = "api/feature-bookmarks/:id/:query";
 
-        return $resource(
-            resourceUrl,
-            {
-                query: "@query"
+    return $resource(
+        resourceUrl,
+        {
+            query: "@query"
+        },
+        {
+            query: {
+                method: "GET",
+                isArray: true
             },
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                },
-                get: {
-                    method: "GET",
-                    transformResponse: function(data) {
-                        if (data) {
-                            data = angular.fromJson(data);
-                        }
-                        return data;
+            get: {
+                method: "GET",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
                     }
-                },
-                update: {
-                    method: "PUT"
+                    return data;
                 }
+            },
+            update: {
+                method: "PUT"
             }
-        );
-    }
-})();
+        }
+    );
+}

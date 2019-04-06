@@ -1,34 +1,33 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('uploadFileService', uploadFileService);
+angular
+    .module('flairbiApp')
+    .factory('uploadFileService', uploadFileService);
 
-    uploadFileService.$inject = ['$http'];
+uploadFileService.$inject = ['$http'];
 
-    function uploadFileService($http) {
-        var service = {
-            uploadFile: uploadFile,
-            getUploadedFiles:getUploadedFiles
-        };
+function uploadFileService($http) {
+    var service = {
+        uploadFile: uploadFile,
+        getUploadedFiles: getUploadedFiles
+    };
 
-        return service;
+    return service;
 
-        ////////////////
-        function uploadFile(body,success, error) {
-            return $http({
-                url: 'api/file-upload',
-                method: 'POST',
-                data: body
-            }).then(success, error);
-        }
-
-        function getUploadedFiles(){
-            return $http({
-                url: 'api/file-upload',
-                method: 'GET'
-            }).then(success, error);
-        }
+    ////////////////
+    function uploadFile(body, success, error) {
+        return $http({
+            url: 'api/file-upload',
+            method: 'POST',
+            data: body
+        }).then(success, error);
     }
-})();
+
+    function getUploadedFiles() {
+        return $http({
+            url: 'api/file-upload',
+            method: 'GET'
+        }).then(success, error);
+    }
+}

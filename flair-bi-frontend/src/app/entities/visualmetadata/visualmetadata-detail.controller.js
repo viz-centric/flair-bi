@@ -1,43 +1,42 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller(
-            "VisualmetadataDetailController",
-            VisualmetadataDetailController
-        );
+angular
+    .module("flairbiApp")
+    .controller(
+        "VisualmetadataDetailController",
+        VisualmetadataDetailController
+    );
 
-    VisualmetadataDetailController.$inject = [
-        "$scope",
-        "$rootScope",
-        "$stateParams",
-        "previousState",
-        "entity",
-        "Visualmetadata",
-        "Visualizations"
-    ];
+VisualmetadataDetailController.$inject = [
+    "$scope",
+    "$rootScope",
+    "$stateParams",
+    "previousState",
+    "entity",
+    "Visualmetadata",
+    "Visualizations"
+];
 
-    function VisualmetadataDetailController(
-        $scope,
-        $rootScope,
-        $stateParams,
-        previousState,
-        entity,
-        Visualmetadata,
-        Visualizations
-    ) {
-        var vm = this;
+function VisualmetadataDetailController(
+    $scope,
+    $rootScope,
+    $stateParams,
+    previousState,
+    entity,
+    Visualmetadata,
+    Visualizations
+) {
+    var vm = this;
 
-        vm.visualmetadata = entity;
-        vm.previousState = previousState.name;
+    vm.visualmetadata = entity;
+    vm.previousState = previousState.name;
 
-        var unsubscribe = $rootScope.$on(
-            "flairbiApp:visualmetadataUpdate",
-            function(event, result) {
-                vm.visualmetadata = result;
-            }
-        );
-        $scope.$on("$destroy", unsubscribe);
-    }
-})();
+    var unsubscribe = $rootScope.$on(
+        "flairbiApp:visualmetadataUpdate",
+        function (event, result) {
+            vm.visualmetadata = result;
+        }
+    );
+    $scope.$on("$destroy", unsubscribe);
+}

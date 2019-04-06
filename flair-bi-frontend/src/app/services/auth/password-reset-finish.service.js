@@ -1,15 +1,14 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('PasswordResetFinish', PasswordResetFinish);
+angular
+    .module('flairbiApp')
+    .factory('PasswordResetFinish', PasswordResetFinish);
 
-    PasswordResetFinish.$inject = ['$resource'];
+PasswordResetFinish.$inject = ['$resource'];
 
-    function PasswordResetFinish($resource) {
-        var service = $resource('api/account/reset_password/finish', {}, {});
+function PasswordResetFinish($resource) {
+    var service = $resource('api/account/reset_password/finish', {}, {});
 
-        return service;
-    }
-})();
+    return service;
+}

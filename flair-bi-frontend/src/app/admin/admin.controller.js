@@ -1,18 +1,17 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular.module("flairbiApp").controller("AdminController", AdminController);
+angular.module("flairbiApp").controller("AdminController", AdminController);
 
-    AdminController.$inject = ["$scope","adminListService"];
+AdminController.$inject = ["$scope", "adminListService"];
 
-    function AdminController($scope,adminListService) {
-        var vm = this;
-        activate();
+function AdminController($scope, adminListService) {
+    var vm = this;
+    activate();
 
-        ////////////////
+    ////////////////
 
-        function activate() {
-            vm.menuItems=adminListService.getList();
-        }
+    function activate() {
+        vm.menuItems = adminListService.getList();
     }
-})();
+}

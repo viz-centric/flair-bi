@@ -1,24 +1,23 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('FunctionsController', FunctionsController);
+angular
+    .module('flairbiApp')
+    .controller('FunctionsController', FunctionsController);
 
-    FunctionsController.$inject = ['$scope', '$state', 'Functions'];
+FunctionsController.$inject = ['$scope', '$state', 'Functions'];
 
-    function FunctionsController ($scope, $state, Functions) {
-        var vm = this;
+function FunctionsController($scope, $state, Functions) {
+    var vm = this;
 
-        vm.functions = [];
+    vm.functions = [];
 
-        loadAll();
+    loadAll();
 
-        function loadAll() {
-            Functions.query(function(result) {
-                vm.functions = result;
-                vm.searchQuery = null;
-            });
-        }
+    function loadAll() {
+        Functions.query(function (result) {
+            vm.functions = result;
+            vm.searchQuery = null;
+        });
     }
-})();
+}

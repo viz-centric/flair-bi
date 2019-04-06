@@ -1,55 +1,54 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('AccountDispatch', AccountDispatch);
+angular
+    .module('flairbiApp')
+    .factory('AccountDispatch', AccountDispatch);
 
-    AccountDispatch.$inject = [];
+AccountDispatch.$inject = [];
 
-    function AccountDispatch() {
+function AccountDispatch() {
 
-        var account={};
+    var account = {};
 
-        var service = {
-            getPermissions: getPermissions,
-            saveAccount:saveAccount,
-            getAccount:getAccount,
-            hasAuthority:hasAuthority,
-            isAdmin:isAdmin
-        };
+    var service = {
+        getPermissions: getPermissions,
+        saveAccount: saveAccount,
+        getAccount: getAccount,
+        hasAuthority: hasAuthority,
+        isAdmin: isAdmin
+    };
 
-        return service;
+    return service;
 
-        ////////////////
+    ////////////////
 
-        function getPermissions(){
-            return account.permissions;
-        }
-
-        function hasAuthority(authority) {
-            if (account.permissions && account.permissions.indexOf(authority) !== -1) {
-                return true;
-            } {
-                return false;
-            }
-        }
-
-        function saveAccount(accountDTO){
-            account=accountDTO;
-        }
-
-        function getAccount(){
-            return account;
-        }
-
-        function isAdmin(){
-            if(account.userGroups && account.userGroups.indexOf("ROLE_ADMIN")>-1)
-                return true;
-            else
-                return false;
-        }
-        
-
+    function getPermissions() {
+        return account.permissions;
     }
-})();
+
+    function hasAuthority(authority) {
+        if (account.permissions && account.permissions.indexOf(authority) !== -1) {
+            return true;
+        } {
+            return false;
+        }
+    }
+
+    function saveAccount(accountDTO) {
+        account = accountDTO;
+    }
+
+    function getAccount() {
+        return account;
+    }
+
+    function isAdmin() {
+        if (account.userGroups && account.userGroups.indexOf("ROLE_ADMIN") > -1)
+            return true;
+        else
+            return false;
+    }
+
+
+}

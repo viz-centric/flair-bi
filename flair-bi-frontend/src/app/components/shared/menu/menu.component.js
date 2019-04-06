@@ -1,25 +1,24 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .component('menuComponent', {
-            templateUrl: 'app/components/shared/menu/menu.component.html',
-            controller: menuController,
-            controllerAs: 'vm',
-        });
+angular
+    .module('flairbiApp')
+    .component('menuComponent', {
+        templateUrl: 'app/components/shared/menu/menu.component.html',
+        controller: menuController,
+        controllerAs: 'vm',
+    });
 
-    menuController.$inject = ['$scope', '$state', 'Auth','AccountDispatch'];
+menuController.$inject = ['$scope', '$state', 'Auth', 'AccountDispatch'];
 
-    function menuController($scope, $state, Auth, AccountDispatch) {
-        var vm = this;
-        vm.$state = $state;
-        vm.logout = logout;
-        vm.account = AccountDispatch.getAccount();
+function menuController($scope, $state, Auth, AccountDispatch) {
+    var vm = this;
+    vm.$state = $state;
+    vm.logout = logout;
+    vm.account = AccountDispatch.getAccount();
 
-        function logout() {
-            Auth.logout();
-            $state.go('login');
-        }
+    function logout() {
+        Auth.logout();
+        $state.go('login');
     }
-})();
+}

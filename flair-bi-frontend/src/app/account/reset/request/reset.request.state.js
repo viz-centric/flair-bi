@@ -1,41 +1,40 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .config(stateConfig);
+angular
+    .module('flairbiApp')
+    .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+stateConfig.$inject = ['$stateProvider'];
 
-    function stateConfig($stateProvider) {
-        $stateProvider.state('requestReset', {
-            parent: 'entity',
-            url: '/reset/request',
-            data: {
-                authorities: []
+function stateConfig($stateProvider) {
+    $stateProvider.state('requestReset', {
+        parent: 'entity',
+        url: '/reset/request',
+        data: {
+            authorities: []
+        },
+        views: {
+            'content@': {
+                templateUrl: 'app/account/reset/request/reset.request.html',
+                controller: 'RequestResetController',
+                controllerAs: 'vm'
             },
-            views: {
-                'content@': {
-                    templateUrl: 'app/account/reset/request/reset.request.html',
-                    controller: 'RequestResetController',
-                    controllerAs: 'vm'
-                },
-                'navbar@': {
+            'navbar@': {
 
-                },
-                'topnavbar@': {
-
-                },
-                'footer@': {
-                        
-                }
             },
-            resolve: {
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('reset');
-                    return $translate.refresh();
-                }]
+            'topnavbar@': {
+
+            },
+            'footer@': {
+
             }
-        });
-    }
-})();
+        },
+        resolve: {
+            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                $translatePartialLoader.addPart('reset');
+                return $translate.refresh();
+            }]
+        }
+    });
+}

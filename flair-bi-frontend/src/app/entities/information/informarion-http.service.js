@@ -1,26 +1,25 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .factory('informationHttpService', informationHttpService);
+angular
+    .module('flairbiApp')
+    .factory('informationHttpService', informationHttpService);
 
-        informationHttpService.$inject = ['$http'];
+informationHttpService.$inject = ['$http'];
 
-    function informationHttpService($http) {
-        var service = {
-            query: query,
-        };
+function informationHttpService($http) {
+    var service = {
+        query: query,
+    };
 
-        return service;
+    return service;
 
-        ////////////////
-        function query(isDesktop) {
-            return $http({
-                url: 'api/information/based-on-viewport/' + isDesktop,
-                method: 'GET'
-            });
-        }
-
+    ////////////////
+    function query(isDesktop) {
+        return $http({
+            url: 'api/information/based-on-viewport/' + isDesktop,
+            method: 'GET'
+        });
     }
-})();
+
+}

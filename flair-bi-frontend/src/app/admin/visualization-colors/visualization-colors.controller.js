@@ -1,24 +1,23 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .controller('VisualizationColorsController', VisualizationColorsController);
+angular
+    .module('flairbiApp')
+    .controller('VisualizationColorsController', VisualizationColorsController);
 
-    VisualizationColorsController.$inject = ['$scope', '$state', 'VisualizationColors'];
+VisualizationColorsController.$inject = ['$scope', '$state', 'VisualizationColors'];
 
-    function VisualizationColorsController ($scope, $state, VisualizationColors) {
-        var vm = this;
+function VisualizationColorsController($scope, $state, VisualizationColors) {
+    var vm = this;
 
-        vm.visualizationColors = [];
+    vm.visualizationColors = [];
 
-        loadAll();
+    loadAll();
 
-        function loadAll() {
-            VisualizationColors.query(function(result) {
-                vm.visualizationColors = result;
-                vm.searchQuery = null;
-            });
-        }
+    function loadAll() {
+        VisualizationColors.query(function (result) {
+            vm.visualizationColors = result;
+            vm.searchQuery = null;
+        });
     }
-})();
+}

@@ -1,14 +1,14 @@
-(function() {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .config(stateConfig);
+angular
+    .module('flairbiApp')
+    .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+stateConfig.$inject = ['$stateProvider'];
 
-    function stateConfig($stateProvider) {
-        $stateProvider
+function stateConfig($stateProvider) {
+    $stateProvider
         .state('functions', {
             parent: 'entity',
             url: '/functions',
@@ -48,8 +48,8 @@
                     $translatePartialLoader.addPart('functions');
                     return $translate.refresh();
                 }],
-                entity: ['$stateParams', 'Functions', function($stateParams, Functions) {
-                    return Functions.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'Functions', function ($stateParams, Functions) {
+                    return Functions.get({ id: $stateParams.id }).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
@@ -66,7 +66,7 @@
             url: '/detail/edit',
             data: {
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/functions/functions-dialog.html',
                     controller: 'FunctionsDialogController',
@@ -74,13 +74,13 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Functions', function(Functions) {
-                            return Functions.get({id : $stateParams.id}).$promise;
+                        entity: ['Functions', function (Functions) {
+                            return Functions.get({ id: $stateParams.id }).$promise;
                         }]
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('^', {}, { reload: false });
-                }, function() {
+                }, function () {
                     $state.go('^');
                 });
             }]
@@ -90,7 +90,7 @@
             url: '/new',
             data: {
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/functions/functions-dialog.html',
                     controller: 'FunctionsDialogController',
@@ -109,9 +109,9 @@
                             };
                         }
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('functions', null, { reload: 'functions' });
-                }, function() {
+                }, function () {
                     $state.go('functions');
                 });
             }]
@@ -121,7 +121,7 @@
             url: '/{id}/edit',
             data: {
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/functions/functions-dialog.html',
                     controller: 'FunctionsDialogController',
@@ -129,13 +129,13 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Functions', function(Functions) {
-                            return Functions.get({id : $stateParams.id}).$promise;
+                        entity: ['Functions', function (Functions) {
+                            return Functions.get({ id: $stateParams.id }).$promise;
                         }]
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('functions', null, { reload: 'functions' });
-                }, function() {
+                }, function () {
                     $state.go('^');
                 });
             }]
@@ -145,24 +145,22 @@
             url: '/{id}/delete',
             data: {
             },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+            onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/functions/functions-delete-dialog.html',
                     controller: 'FunctionsDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['Functions', function(Functions) {
-                            return Functions.get({id : $stateParams.id}).$promise;
+                        entity: ['Functions', function (Functions) {
+                            return Functions.get({ id: $stateParams.id }).$promise;
                         }]
                     }
-                }).result.then(function() {
+                }).result.then(function () {
                     $state.go('functions', null, { reload: 'functions' });
-                }, function() {
+                }, function () {
                     $state.go('^');
                 });
             }]
         });
-    }
-
-})();
+}

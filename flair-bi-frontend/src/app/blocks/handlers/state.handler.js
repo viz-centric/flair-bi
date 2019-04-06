@@ -1,15 +1,9 @@
-import * as angular from 'angular';
-
-
-angular
-    .module('flairbiApp')
-    .factory('stateHandler', stateHandler);
-
-stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$translate', 'JhiLanguageService', 'translationHandler', '$window',
+stateHandler.$inject = ['$rootScope', '$translate', 'JhiLanguageService', 'translationHandler', '$window',
     'Auth', 'Principal', 'VERSION'
 ];
 
-function stateHandler($rootScope, $state, $sessionStorage, $translate, JhiLanguageService, translationHandler, $window,
+export const factoryName = "stateHandler";
+export function stateHandler($rootScope, $translate, JhiLanguageService, translationHandler, $window,
     Auth, Principal, VERSION) {
     return {
         initialize: initialize

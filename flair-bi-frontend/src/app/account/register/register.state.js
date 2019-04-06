@@ -1,33 +1,32 @@
-(function () {
-    'use strict';
+import * as angular from 'angular';
+'use strict';
 
-    angular
-        .module('flairbiApp')
-        .config(stateConfig);
+angular
+    .module('flairbiApp')
+    .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+stateConfig.$inject = ['$stateProvider'];
 
-    function stateConfig($stateProvider) {
-        $stateProvider.state('register', {
-            parent: 'account',
-            url: '/register',
-            data: {
-                authorities: [],
-                pageTitle: 'register.title'
-            },
-            views: {
-                'content@': {
-                    templateUrl: 'app/account/register/register.html',
-                    controller: 'RegisterController',
-                    controllerAs: 'vm'
-                }
-            },
-            resolve: {
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('register');
-                    return $translate.refresh();
-                }]
+function stateConfig($stateProvider) {
+    $stateProvider.state('register', {
+        parent: 'account',
+        url: '/register',
+        data: {
+            authorities: [],
+            pageTitle: 'register.title'
+        },
+        views: {
+            'content@': {
+                templateUrl: 'app/account/register/register.html',
+                controller: 'RegisterController',
+                controllerAs: 'vm'
             }
-        });
-    }
-})();
+        },
+        resolve: {
+            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                $translatePartialLoader.addPart('register');
+                return $translate.refresh();
+            }]
+        }
+    });
+}

@@ -1,35 +1,34 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller("VisualizationsController", VisualizationsController);
+angular
+    .module("flairbiApp")
+    .controller("VisualizationsController", VisualizationsController);
 
-    VisualizationsController.$inject = [
-        "$scope",
-        "$state",
-        "Visualizations",
-        "PERMISSIONS"
-    ];
+VisualizationsController.$inject = [
+    "$scope",
+    "$state",
+    "Visualizations",
+    "PERMISSIONS"
+];
 
-    function VisualizationsController(
-        $scope,
-        $state,
-        Visualizations,
-        PERMISSIONS
-    ) {
-        var vm = this;
+function VisualizationsController(
+    $scope,
+    $state,
+    Visualizations,
+    PERMISSIONS
+) {
+    var vm = this;
 
-        vm.visualizations = [];
-        vm.permissions = PERMISSIONS;
+    vm.visualizations = [];
+    vm.permissions = PERMISSIONS;
 
-        loadAll();
+    loadAll();
 
-        function loadAll() {
-            Visualizations.query(function(result) {
-                vm.visualizations = result;
-                vm.searchQuery = null;
-            });
-        }
+    function loadAll() {
+        Visualizations.query(function (result) {
+            vm.visualizations = result;
+            vm.searchQuery = null;
+        });
     }
-})();
+}

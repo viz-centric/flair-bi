@@ -1,38 +1,37 @@
-(function() {
-    "use strict";
+import * as angular from 'angular';
+"use strict";
 
-    angular
-        .module("flairbiApp")
-        .controller(
-            "FeatureBookmarkDeleteController",
-            FeatureBookmarkDeleteController
-        );
+angular
+    .module("flairbiApp")
+    .controller(
+        "FeatureBookmarkDeleteController",
+        FeatureBookmarkDeleteController
+    );
 
-    FeatureBookmarkDeleteController.$inject = [
-        "$uibModalInstance",
-        "entity",
-        "FeatureBookmark"
-    ];
+FeatureBookmarkDeleteController.$inject = [
+    "$uibModalInstance",
+    "entity",
+    "FeatureBookmark"
+];
 
-    function FeatureBookmarkDeleteController(
-        $uibModalInstance,
-        entity,
-        FeatureBookmark
-    ) {
-        var vm = this;
+function FeatureBookmarkDeleteController(
+    $uibModalInstance,
+    entity,
+    FeatureBookmark
+) {
+    var vm = this;
 
-        vm.featureBookmark = entity;
-        vm.clear = clear;
-        vm.confirmDelete = confirmDelete;
+    vm.featureBookmark = entity;
+    vm.clear = clear;
+    vm.confirmDelete = confirmDelete;
 
-        function clear() {
-            $uibModalInstance.dismiss("cancel");
-        }
-
-        function confirmDelete(id) {
-            FeatureBookmark.delete({ id: id }, function() {
-                $uibModalInstance.close(true);
-            });
-        }
+    function clear() {
+        $uibModalInstance.dismiss("cancel");
     }
-})();
+
+    function confirmDelete(id) {
+        FeatureBookmark.delete({ id: id }, function () {
+            $uibModalInstance.close(true);
+        });
+    }
+}

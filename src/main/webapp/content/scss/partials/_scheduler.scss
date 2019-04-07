@@ -28,3 +28,14 @@
 	    }
     }
 }
+
+.cron-wrap{
+	.clearfix{
+		.form-group{
+			display:flex;
+			label{
+			    margin: 5px;
+			}
+		}
+	}
+}

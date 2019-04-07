@@ -7862,6 +7862,11 @@ disabled look for disabled choices in the results dropdown
   margin-top: -25px;
 }
 
+.cron-wrap .clearfix .form-group {
+  display: flex; }
+  .cron-wrap .clearfix .form-group label {
+    margin: 5px; }
+
 .file-uploader .drop-box-row {
   margin-left: 0;
   margin-right: 0;

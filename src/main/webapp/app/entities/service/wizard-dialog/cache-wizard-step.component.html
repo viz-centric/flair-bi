@@ -1,0 +1,54 @@
+<form name="cacheForm" role="form" show-validation>
+    <p class="wizard-help-text">Configure cache</p>
+
+    <div class="form-group">
+        <label class="control-label">
+            Enable cache
+        </label>
+        <input name="cacheEnabled-checkbox-input"
+               ng-model="vm.connectionParameters.cacheEnabled"
+               class="form-control"
+               type="checkbox">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Purge after minutes</label>
+        <input ng-disabled="!vm.connectionParameters.cacheEnabled"
+               name="cachePurgeAfterMinutes-number-input"
+               ng-model="vm.connectionParameters.cachePurgeAfterMinutes"
+               class="form-control"
+               type="number"
+               string-to-number
+               ng-required="vm.connectionParameters.cacheEnabled">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Refresh after times read</label>
+        <input ng-disabled="!vm.connectionParameters.cacheEnabled"
+               name="refreshAfterTimesRead-number-input"
+               ng-model="vm.connectionParameters.refreshAfterTimesRead"
+               class="form-control"
+               type="number"
+               string-to-number
+               ng-required="vm.connectionParameters.cacheEnabled">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Refresh after minutes</label>
+        <input ng-disabled="!vm.connectionParameters.cacheEnabled"
+               name="refreshAfterMinutes-number-input"
+               ng-model="vm.connectionParameters.refreshAfterMinutes"
+               class="form-control"
+               type="number"
+               string-to-number
+               ng-required="vm.connectionParameters.cacheEnabled">
+    </div>
+
+    <div class="wizard-navigate-buttons">
+        <button class="btn btn-default" type="button" wz-previous value="Back" ng-click="vm.previousStep()">
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Back
+        </button>
+        <button class="btn btn-primary" type="submit" ng-disabled="cacheForm.$invalid" wz-next value="Next" ng-click="vm.nextStep()">
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>
+            Next
+        </button>
+    </div>
+</form>

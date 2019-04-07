@@ -77,8 +77,8 @@
     "angular-jwt": "^0.1.10",
     "angular-cron-gen": "^0.0.26",
     "cronstrue": "^0.8.0",
-    "flair-visualizations": "*",
-    "angular-cron-generator": "^1.0.0"
+    "angular-cron-generator": "^1.0.0",
+    "flair-visualizations": "1.2.1"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8"

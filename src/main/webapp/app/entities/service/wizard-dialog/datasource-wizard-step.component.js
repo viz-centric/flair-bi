@@ -11,7 +11,8 @@
             connection: "=",
             connectionType: "=",
             selectedConnection: "=",
-            features: "="
+            features: "=",
+            connectionParameters: "=",
         }
     });
 
@@ -76,6 +77,7 @@
             var conn = vm.connection;
             conn.connectionType = vm.connectionType;
             conn.connectionTypeId = vm.connectionType.id;
+            conn.connectionParameters = vm.connectionParameters;
             conn.details["@type"] =
                 vm.connectionType.connectionPropertiesSchema.connectionDetailsType;
             return conn;

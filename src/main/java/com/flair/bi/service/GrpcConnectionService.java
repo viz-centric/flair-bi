@@ -117,6 +117,7 @@ public class GrpcConnectionService {
                     .setConnectionUsername(c.getConnectionUsername())
                     .setConnectionType(c.getConnectionTypeId())
                     .setName(c.getName())
+                    .putAllConnectionParameters(c.getConnectionParameters())
                     .putAllDetails(c.getDetails());
                 if (c.getId() != null) {
                     builder.setId(c.getId());
@@ -138,6 +139,7 @@ public class GrpcConnectionService {
         dto.setConnectionTypeId(conn.getConnectionType());
         dto.setLinkId(conn.getLinkId());
         dto.setDetails(conn.getDetailsMap());
+        dto.setConnectionParameters(conn.getConnectionParametersMap());
         return dto;
     }
 

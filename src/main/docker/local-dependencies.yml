@@ -1,0 +1,56 @@
+version: '2'
+services:
+  testdata:
+    image: manoj10/postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+    labels:
+      environment: testing
+    ports:
+      - "5429:5430"
+
+  flair-bi-pgsql:
+    container_name: development-flair-bi-pgsql
+    image: postgres:9.4-alpine
+    labels:
+      purpose: Metadata store
+      environment: development
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_MULTIPLE_DATABASES=flairbi,fbiengine
+    volumes:
+      - ./multiple-databases:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+
+  flair-couchdb-dev:
+    image: flairbi/couchdb
+    container_name: development-couchdb
+    restart: always
+    labels:
+      purpose: View store
+      environment: development
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - 5984:5984
+
+  flair-registry:
+    container_name: "development-flair-registry"
+    labels:
+      purpose: Flair config server and service discovery
+      environment: development
+    image: flairbi/flair-registry:latest
+    volumes:
+      - .../flair-github/flair-config:/flair-configuration
+    ports:
+      - 8761:8761
+      - 8762:8762
+    environment:
+      - JHIPSTER_SLEEP=0
+      - SPRING_PROFILES_ACTIVE=prod
+      - BITBUCKET_URI=https://github.com/viz-centric/flair-config.git

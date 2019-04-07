@@ -40,6 +40,7 @@
             registerNextStep();
             registerPreviousStep();
             vm.connectionTypes = ConnectionTypes.query();
+            vm.connectionProperties = {};
             vm.connectionTypes.$promise
             .catch(function (data) {
                 $rootScope.showErrorSingleToast({

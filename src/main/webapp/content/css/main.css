@@ -4293,6 +4293,13 @@ jhi-alert .alerts .alert-danger {
     opacity: .8; }
   to {
     opacity: 0; } }
+          #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-title .viz-cache-dot {
+            vertical-align: middle;
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block; }
         #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-settings {
           margin: 0 10px; }
           #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-settings.btn-group {

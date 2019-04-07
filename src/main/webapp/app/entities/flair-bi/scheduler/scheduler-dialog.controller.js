@@ -8,13 +8,14 @@
         SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_visualizations','scheduler_channels'];
 
     function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_visualizations,scheduler_channels) {
-        $scope.cronExpression = '0 8 9 9 1/8 ? *';
+        $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
         };
         $scope.isCronDisabled = false;
 
         var vm = this;
+        vm.cronConfig = {quartz: false};
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
@@ -54,8 +55,7 @@
             "schedule": {
               "timezone": "",
               "start_date": "",
-              "end_date": "",
-              "duration_type":""
+              "end_date": ""
             }
           };
         activate();
@@ -127,26 +127,26 @@
             return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
         }
 
-        function onSaveSuccess() {
-            //vm.isSaving = false;
-            vm.clear();
-            var info = {
-                text: "Report is scheduled",
-                title: "Saved"
-            }
-            $rootScope.showSuccessToast(info);
-        }
-
-        function onSaveError(error) {
-            console.log("error==="+error);
-            vm.isSaving = false;
-            clear();
-        }
-
         function schedule() {
             vm.isSaving = true;
             setScheduledData();
-            schedulerService.scheduleReport(vm.scheduleObj, onSaveSuccess, onSaveError);
+             schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
+                vm.isSaving = false;
+                vm.clear();
+                var info = {
+                    text: success.data.message,
+                    title: "Saved"
+                }
+                $rootScope.showSuccessToast(info);
+            }).catch(function (error) {
+                console.log("error==="+error);
+                vm.isSaving = false;                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            });
         }
 
         function setScheduledData(){
@@ -156,16 +156,6 @@
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.report_line_item.visualization=vm.scheduleObj.report_line_item.visualization.toLowerCase();
             vm.scheduleObj.cron_exp=$scope.cronExpression;
-            setDurationType();
-        }
-
-        function setDurationType(){
-            var listItems=$(".cron-gen-main > ul[role=tablist] > li");
-            listItems.each(function(idx, li) {
-                if($(li).hasClass('active')){
-                    vm.scheduleObj.schedule.duration_type=$(li).find('a').text().replace(/['"]+/g, '').trim();
-                }
-            });
         }
 
         function openCalendar (date) {

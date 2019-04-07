@@ -1,0 +1,163 @@
+<div class="cron-wrap">
+
+    <script type="text/ng-template" id="minutes-template.html">
+        <select 
+            class="form-control"
+            ng-model="myFrequency.minutes"
+            ng-if="allowMultiple" multiple
+            ng-options="value as value for value in minutes">
+        </select>
+        <!-- If Multiple is not Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.minutes"
+            ng-if="!allowMultiple"
+            ng-options="value as value for value in minutes">
+        </select>
+    </script>
+
+    <script type="text/ng-template" id="hours-template.html">
+        <select 
+            class="form-control"
+            ng-model="myFrequency.hours"
+            ng-if="allowMultiple" multiple
+            ng-options="value as value for value in hours">
+        </select>
+        <!-- If Multiple is not Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.hours"
+            ng-if="!allowMultiple"
+            ng-options="value as value for value in hours">
+        </select>
+    </script>
+
+    <script type="text/ng-template" id="dates-template.html">
+        <!-- If Multiple is Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.daysOfMonth"
+            ng-if="allowMultiple" multiple
+            ng-options="value as (value | cronNumeral) for value in daysOfMonth">
+        </select>
+        <!-- If Multiple is not Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.daysOfMonth"
+            ng-if="!allowMultiple"
+            ng-options="value as (value | cronNumeral) for value in daysOfMonth">
+        </select>
+    </script>
+
+    <script type="text/ng-template" id="days-template.html">
+        <!-- If Multiple is Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.days"
+            ng-if="allowMultiple" multiple
+            ng-options="value as (value | cronDayName: cronStyle) for value in days">
+        </select>
+        <!-- If Multiple is not Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.days"
+            ng-if="!allowMultiple"
+            ng-options="value as (value | cronDayName: cronStyle) for value in days">
+        </select>
+    </script>
+
+    <script type="text/ng-template" id="month-template.html">
+        <select 
+            class="form-control"
+            ng-model="myFrequency.months"
+            ng-if="allowMultiple" multiple
+            ng-options="value as (value | cronMonthName) for value in months">
+        </select>
+        <!-- If Multiple is not Enabled -->
+        <select 
+            class="form-control"
+            ng-model="myFrequency.months"
+            ng-if="!allowMultiple"
+            ng-options="value as (value | cronMonthName) for value in months">
+        </select>
+    </script>
+    
+    <div class="clearfix" style="margin-bottom: 20px;">
+        <select ng-change="initKeys()" class="form-control" ng-model="myFrequency.base" ng-options="item.value as item.label for item in frequency"></select>
+    </div>
+
+    <div class="clearfix form-inline well well-small" ng-if="myFrequency.base !== 0">
+
+        <!-- only for minutes -->
+        <div class="form-group" ng-show="myFrequency.base === 1">
+            <label>Every: </label>
+            <div class="select-options" ng-include="'minutes-template.html'"></div>
+            <label>minute(s)</label>
+        </div>
+        <!-- only for minutes end-->
+
+        <!-- hourly -->
+        <div class="form-group" ng-show="myFrequency.base === 2">
+            <label>Every: </label>
+            <div class="select-options" ng-include="'hours-template.html'"></div>
+            <label>hour(s) on minute</label>
+            <div class="select-options" ng-include="'minutes-template.html'"></div>
+        </div>
+        <!-- hourly end -->
+
+
+        <!-- daily -->
+        <div class="form-group" ng-show="myFrequency.base === 3">
+            <label>Every: </label>
+            <div class="select-options" ng-include="'dates-template.html'"></div>
+            <label>day(s) at</label>
+            <div class="select-options" ng-include="'hours-template.html'"></div>
+            <label>hours(s) and</label>
+            <div class="select-options" ng-include="'minutes-template.html'"></div>
+            <label>minute(s).</label>
+        </div>
+        <!-- daily end -->
+
+
+        <!-- weekly -->
+        <div class="form-group" ng-show="myFrequency.base === 4">
+            <label>Every: </label>
+            <div class="select-options" ng-include="'days-template.html'"></div>
+            <label>at</label>
+            <div class="select-options" ng-include="'hours-template.html'"></div>
+            <label>hours(s) and</label>
+            <div class="select-options" ng-include="'minutes-template.html'"></div>
+            <label>minute(s).</label>
+        </div>
+        <!-- weekly end -->
+
+        <!-- monthly -->
+        <div class="form-group" ng-show="myFrequency.base === 5">
+            <label>On the: </label>
+            <div class="select-options" ng-include="'dates-template.html'"></div>
+            <label>of every</label>
+            <div class="select-options" ng-include="'month-template.html'"></div>
+            <label>month(s) at</label>
+            <div class="select-options" ng-include="'hours-template.html'"></div>
+            <label>hours(s) and</label>
+            <div class="select-options" ng-include="'minutes-template.html'"></div>
+            <label>minute(s).</label>
+        </div>
+        <!-- monthly end -->
+
+        <!-- yearly -->
+        <div class="form-group" ng-show="myFrequency.base === 6">
+            <label>Every: </label>
+            <div class="select-options" ng-include="'month-template.html'"></div>
+            <label>On the: </label>
+            <div class="select-options" ng-include="'dates-template.html'"></div>
+            <label>at</label>
+            <div class="select-options" ng-include="'hours-template.html'"></div>
+            <label>hours(s) and</label>
+            <div class="select-options" ng-include="'minutes-template.html'"></div>
+            <label>minute(s).</label>
+        </div>
+        <!-- yearly end -->
+
+    </div>
+</div>

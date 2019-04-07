@@ -35,7 +35,8 @@
             "angular.filter",
             "angularUtils.directives.uiBreadcrumbs",
             "angular-cron-gen",
-            "ngFileUpload"
+            "ngFileUpload",
+            "angular-cron-generator"
             // jhipster-needle-angularjs-add-module JHipster will add new module here
         ])
         .config(angularThemingConfig)

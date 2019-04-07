@@ -12,7 +12,6 @@
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
-            <jhi-alert-error></jhi-alert-error>
             <div class="container">
                 <div class="row container">
                     <div class="col-xs-4">
@@ -63,10 +62,11 @@
                 </div>
                 <div class="row container">
                     <div class="col-xs-9">
-                        <form name="cronForm">
+<!--                         <form name="cronForm">
                             <cron-gen ng-model="cronExpression" ng-disabled="isCronDisabled" options="cronOptions" name="cron">
                             </cron-gen>
-                        </form>
+                        </form> -->
+                        <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
                     </div>
                 </div>
                 <br />
@@ -77,7 +77,7 @@
                     </div>
                     <div class="col-xs-5">
                         Cron Expression:
-                        <span class="text-success"><b>{{cronExpression}}</b></span>
+                        <span id="example-val" class="text-success"><b>{{cronExpression}}</b></span>
                     </div>
                 </div>
                 <br />

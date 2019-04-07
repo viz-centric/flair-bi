@@ -1,7 +1,5 @@
-import * as angular from 'angular';
-"use strict";
-
-angular.module("flairbiApp").component("connectionTypeComponent", {
+export const name = 'connectionTypeComponent';
+export const component = {
     templateUrl:
         "app/entities/connection-types/connection-type.component.html",
     controller: connectionTypeController,
@@ -10,11 +8,11 @@ angular.module("flairbiApp").component("connectionTypeComponent", {
         connectionType: "=",
         onClick: "&"
     }
-});
+};
 
-connectionTypeController.$inject = ["$scope"];
+connectionTypeController.$inject = [];
 
-function connectionTypeController($scope) {
+function connectionTypeController() {
     var vm = this;
 
     vm.$onInit = activate;

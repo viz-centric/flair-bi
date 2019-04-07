@@ -1,17 +1,11 @@
-import * as angular from 'angular';
-"use strict";
-
-angular
-    .module("flairbiApp")
-    .controller("ConnectionsController", ConnectionsController);
-
 ConnectionsController.$inject = [
     "Connections",
     "$stateParams",
     "$rootScope",
     "$translate"
 ];
-function ConnectionsController(
+export const name = 'ConnectionsController';
+export function ConnectionsController(
     Connections,
     $stateParams,
     $rootScope,

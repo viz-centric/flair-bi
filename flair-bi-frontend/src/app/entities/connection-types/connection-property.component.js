@@ -1,7 +1,5 @@
-import * as angular from 'angular';
-"use strict";
-
-angular.module("flairbiApp").component("connectionPropertyComponent", {
+export const name = 'connectionPropertyComponent';
+export const component = {
     templateUrl:
         "app/entities/connection-types/connection-property.component.html",
     controller: connectionPropertyController,
@@ -12,11 +10,11 @@ angular.module("flairbiApp").component("connectionPropertyComponent", {
         disabled: "=",
         connection: "="
     }
-});
+};
 
-connectionPropertyController.$inject = ["$scope"];
+connectionPropertyController.$inject = [];
 
-function connectionPropertyController($scope) {
+function connectionPropertyController() {
     var vm = this;
 
     vm.property = property;

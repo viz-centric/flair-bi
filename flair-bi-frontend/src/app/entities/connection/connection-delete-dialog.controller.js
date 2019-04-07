@@ -1,13 +1,3 @@
-import * as angular from 'angular';
-"use strict";
-
-angular
-    .module("flairbiApp")
-    .controller(
-        "ConnectionDeleteDialogController",
-        ConnectionDeleteDialogController
-    );
-
 ConnectionDeleteDialogController.$inject = [
     "$uibModalInstance",
     "entity",
@@ -16,7 +6,8 @@ ConnectionDeleteDialogController.$inject = [
     "Datasources"
 ];
 
-function ConnectionDeleteDialogController(
+export const name = 'ConnectionDeleteDialogController';
+export function ConnectionDeleteDialogController(
     $uibModalInstance,
     entity,
     Connections,

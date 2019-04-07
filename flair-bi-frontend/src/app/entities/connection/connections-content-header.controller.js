@@ -1,10 +1,5 @@
-import * as angular from 'angular';
-"use strict";
-
-angular
-    .module("flairbiApp")
-    .controller("ConnectionsContentHeaderController", ConnectionsContentHeaderController);
-
 ConnectionsContentHeaderController.$inject = [];
-function ConnectionsContentHeaderController() {
+
+export const name = 'ConnectionsContentHeaderController';
+export function ConnectionsContentHeaderController() {
 }

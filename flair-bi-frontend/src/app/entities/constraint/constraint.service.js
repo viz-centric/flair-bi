@@ -1,11 +1,5 @@
-import * as angular from 'angular';
-"use strict";
-
-angular.module("flairbiApp").factory("Constraints", Constraints);
-
-Constraints.$inject = ["$resource"];
-
-function Constraints($resource) {
+export const name = 'Constraints';
+export function Constraints($resource) {
     var resourceUrl = "api/constraints/:id";
 
     return $resource(

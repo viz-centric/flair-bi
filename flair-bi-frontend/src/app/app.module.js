@@ -3,6 +3,8 @@ import angular from 'angular'
 import { moduleName as ngTagsInputGrpcModule } from './entities/flair-bi/filter/ng-tags-input-grpc';
 import { moduleName as applicationHandlersModule } from './blocks/handlers/handlers.module';
 import { moduleName as languageModule } from './components/language/language.module';
+
+import { stateConfig as AppState } from "./app.state";
 const appModule = angular
     .module("flairbiApp", [
         /**
@@ -51,6 +53,7 @@ const appModule = angular
 
 appModule
     .config(angularThemingConfig)
+    .config(AppState)
     .run(run);
 
 run.$inject = [

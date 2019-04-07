@@ -1,3 +1,5 @@
+import angular from 'angular';
+
 stateHandler.$inject = ['$rootScope', '$translate', 'JhiLanguageService', 'translationHandler', '$window',
     'Auth', 'Principal', 'VERSION'
 ];

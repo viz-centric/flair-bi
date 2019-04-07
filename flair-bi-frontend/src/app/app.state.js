@@ -1,16 +1,10 @@
-import * as angular from 'angular';
-
-
 "use strict";
 
-angular.module("flairbiApp").config(stateConfig);
-
 stateConfig.$inject = [
-    "$stateProvider",
-    "$locationProvider"
+    "$stateProvider"
 ];
 
-function stateConfig($stateProvider, $locationProvider) {
+export function stateConfig($stateProvider) {
     $stateProvider.state("app", {
         abstract: true,
         views: {

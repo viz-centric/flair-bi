@@ -1,9 +1,9 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .controller('NavbarController', NavbarController);
+// angular
+//     .module('flairbiApp')
+//     .controller('NavbarController', NavbarController);
 
 NavbarController.$inject = ['$scope', '$state', 'Auth',
     'Principal', 'ProfileService', 'LoginService',
@@ -11,7 +11,8 @@ NavbarController.$inject = ['$scope', '$state', 'Auth',
     'Views', '$stateParams', '$rootScope', 'ExecutorFactory', 'PERMISSIONS'
 ];
 
-function NavbarController($scope, $state, Auth,
+export const name = 'NavbarController';
+export function NavbarController($scope, $state, Auth,
     Principal, ProfileService, LoginService,
     Visualizations,
     Views, $stateParams, $rootScope, ExecutorFactory, PERMISSIONS) {

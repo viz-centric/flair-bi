@@ -1,14 +1,15 @@
-import * as angular from 'angular';
-'use strict';
-angular
-    .module('flairbiApp')
-    .directive('minimalizaSidebar', minimalizaSidebar);
+// import * as angular from 'angular';
+// 'use strict';
+// angular
+//     .module('flairbiApp')
+//     .directive('minimalizaSidebar', minimalizaSidebar);
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
  */
 minimalizaSidebar.$inject = ['$timeout'];
 
-function minimalizaSidebar($timeout) {
+export const name = 'minimalizaSidebar';
+export function minimalizaSidebar($timeout) {
     return {
         restrict: 'A',
         template: '<a href="" ng-click="minimalize()"><svg class="hamburger"><use xlink:href="#bars" /></svg></a>',

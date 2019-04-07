@@ -1,13 +1,15 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .directive('loginStyle', loginStyle);
+// angular
+//     .module('flairbiApp')
+//     .directive('loginStyle', loginStyle);
+
+
 
 loginStyle.$inject = [];
-
-function loginStyle() {
+export const name = 'loginStyle';
+export function loginStyle() {
     // Usage:
     //  Handling styling for login page since it has only one content and it is different from others
     // Creates:

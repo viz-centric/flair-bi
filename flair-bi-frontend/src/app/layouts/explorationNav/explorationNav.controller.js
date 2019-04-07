@@ -1,14 +1,15 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .controller('ExplorationNavController', ExplorationNavController);
+// angular
+//     .module('flairbiApp')
+//     .controller('ExplorationNavController', ExplorationNavController);
 
 ExplorationNavController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'ProfileService', 'LoginService',
     'Visualizations', 'Measures', 'Dimensions', 'Views', '$stateParams', '$rootScope', 'modalInfo', 'Datasources', 'Explorer'];
 
-function ExplorationNavController($scope, $state, Auth, Principal, ProfileService, LoginService, Visualizations, Measures, Dimensions, Views, $stateParams, $rootScope, modalInfo,
+export const name = 'ExplorationNavController';
+export function ExplorationNavController($scope, $state, Auth, Principal, ProfileService, LoginService, Visualizations, Measures, Dimensions, Views, $stateParams, $rootScope, modalInfo,
     Datasources, Explorer) {
     var vm = this;
     initializeMetisMenu();

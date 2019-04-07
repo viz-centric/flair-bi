@@ -1,6 +1,7 @@
 const path = require('path');
 const ROOT = path.resolve(__dirname, 'src');
 const devMode = process.env.NODE_ENV !== 'production'
+const webpack = require('webpack');
 
 /**
  * Webpack Plugins
@@ -69,6 +70,10 @@ module.exports = {
             // both options are optional
             filename: devMode ? '[name].css' : '[name].[hash].css',
             chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
         })
     ],
 

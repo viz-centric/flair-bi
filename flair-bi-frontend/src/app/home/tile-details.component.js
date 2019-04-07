@@ -1,21 +1,17 @@
-import * as angular from 'angular';
-'use strict';
+export const name = 'tileDetailsComponent';
+export const component = {
+    templateUrl: 'app/home/tile-details.component.html',
+    controller: tileDetailsController,
+    controllerAs: 'vm',
+    bindings: {
+        account: "=",
+        isAdmin: "="
+    }
+}
 
-angular
-    .module('flairbiApp')
-    .component('tileDetailsComponent', {
-        templateUrl: 'app/home/tile-details.component.html',
-        controller: tileDetailsController,
-        controllerAs: 'vm',
-        bindings: {
-            account: "=",
-            isAdmin: "="
-        }
-    });
+tileDetailsController.$inject = ['$scope', 'Dashboards', 'Datasources', 'Views', 'recentBookmarkService', 'ViewWatches', 'screenDetectService', '$window', '$rootScope', 'VisualDispatchService'];
 
-tileDetailsController.$inject = ['$scope', '$state', 'Dashboards', 'Datasources', 'Views', 'recentBookmarkService', 'ViewWatches', 'screenDetectService', '$window', '$rootScope', 'VisualDispatchService'];
-
-function tileDetailsController($scope, $state, Dashboards, Datasources, Views, recentBookmarkService, ViewWatches, screenDetectService, $window, $rootScope, VisualDispatchService) {
+function tileDetailsController($scope, Dashboards, Datasources, Views, recentBookmarkService, ViewWatches, screenDetectService, $window, $rootScope, VisualDispatchService) {
     var vm = this;
     vm.build = build;
 

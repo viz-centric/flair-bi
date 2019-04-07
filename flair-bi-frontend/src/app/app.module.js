@@ -3,6 +3,9 @@ import angular from 'angular'
 import { moduleName as ngTagsInputGrpcModule } from './entities/flair-bi/filter/ng-tags-input-grpc';
 import { moduleName as applicationHandlersModule } from './blocks/handlers/handlers.module';
 import { moduleName as languageModule } from './components/language/language.module';
+import { moduleName as loginFeatureModule } from "./login/login.module";
+import { moduleName as layoutsModule } from "./layouts/layouts.module";
+import { moduleName as homeModule } from "./home/home.module";
 
 import { stateConfig as AppState } from "./app.state";
 const appModule = angular
@@ -13,6 +16,9 @@ const appModule = angular
         ngTagsInputGrpcModule,
         applicationHandlersModule,
         languageModule,
+        loginFeatureModule,
+        layoutsModule,
+        homeModule,
 
         /**
          * 3rd party library modules

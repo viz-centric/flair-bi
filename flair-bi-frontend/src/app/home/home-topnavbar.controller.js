@@ -1,19 +1,19 @@
-import * as angular from 'angular';
-"use strict";
+// import * as angular from 'angular';
+// "use strict";
 
-angular
-    .module("flairbiApp")
-    .controller("HomeTopNavBarController", HomeTopNavBarController);
+// angular
+//     .module("flairbiApp")
+//     .controller("HomeTopNavBarController", HomeTopNavBarController);
 
 HomeTopNavBarController.$inject = [
-    "$rootScope",
     "PERMISSIONS",
     "Principal",
     "$state",
     "$stateParams"
 ];
 
-function HomeTopNavBarController($rootScope, PERMISSIONS, Principal, $state, $stateParams) {
+export const name = 'HomeTopNavBarController';
+export function HomeTopNavBarController(PERMISSIONS, Principal, $state, $stateParams) {
     var vm = this;
 
     vm.search = search;

@@ -1,13 +1,13 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .config(stateConfig);
+// angular
+//     .module('flairbiApp')
+//     .config(stateConfig);
 
 stateConfig.$inject = ['$stateProvider'];
 
-function stateConfig($stateProvider) {
+export function stateConfig($stateProvider) {
     $stateProvider.state('home', {
         parent: 'app',
         url: '/',

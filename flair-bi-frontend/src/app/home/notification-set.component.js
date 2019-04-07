@@ -1,20 +1,16 @@
-import * as angular from 'angular';
-'use strict';
+export const name = 'notificationSetComponent';
+export const component = {
+    templateUrl: 'app/home/notification-set.component.html',
+    controller: notificationSetController,
+    controllerAs: 'vm',
+    bindings: {
+        releaseAlert: "="
+    }
+}
 
-angular
-    .module('flairbiApp')
-    .component('notificationSetComponent', {
-        templateUrl: 'app/home/notification-set.component.html',
-        controller: notificationSetController,
-        controllerAs: 'vm',
-        bindings: {
-            releaseAlert: "="
-        }
-    });
+notificationSetController.$inject = ['alertsService'];
 
-notificationSetController.$inject = ['$scope', '$state', 'alertsService'];
-
-function notificationSetController($scope, $state, alertsService) {
+function notificationSetController(alertsService) {
     var vm = this;
     vm.toggleNotifications = toggleNotifications;
     vm.pageSize = 5;

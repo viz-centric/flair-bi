@@ -1,13 +1,14 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .controller('TopNavBarController', TopNavBarController);
+// angular
+//     .module('flairbiApp')
+//     .controller('TopNavBarController', TopNavBarController);
 
 TopNavBarController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'PERMISSIONS'];
 
-function TopNavBarController($scope, $state, Auth, Principal, PERMISSIONS) {
+export const name = 'TopNavBarController';
+export function TopNavBarController($scope, $state, Auth, Principal, PERMISSIONS) {
     var vm = this;
     vm.$state = $state;
     vm.logout = logout;

@@ -1,13 +1,14 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .directive('activeMenu', activeMenu);
+// angular
+//     .module('flairbiApp')
+//     .directive('activeMenu', activeMenu);
 
 activeMenu.$inject = ['$translate', '$locale', 'tmhDynamicLocale'];
 
-function activeMenu($translate, $locale, tmhDynamicLocale) {
+export const name = 'activeMenu';
+export function activeMenu($translate, $locale, tmhDynamicLocale) {
     var directive = {
         restrict: 'A',
         link: linkFunc

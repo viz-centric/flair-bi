@@ -12,7 +12,7 @@ import 'angular-bootstrap';
 import 'ui-select';
 import 'bootstrap-ui-datetime-picker';
 import 'oclazyload';
-import 'angular-ui-router';
+import '@uirouter/angularjs'
 import 'ng-infinite-scroll';
 import 'angular-minicolors';
 import 'angular-split-pane';

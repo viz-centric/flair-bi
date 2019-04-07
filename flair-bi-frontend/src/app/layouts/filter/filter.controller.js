@@ -1,15 +1,16 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .controller('FilterController', FilterController);
+// angular
+//     .module('flairbiApp')
+//     .controller('FilterController', FilterController);
 
 FilterController.$inject = ['$scope', '$timeout', '$state', 'Auth', 'Principal', 'ProfileService', 'LoginService',
     'Visualizations', 'Views', '$stateParams', '$rootScope', 'ExecutorFactory'
 ];
 
-function FilterController($scope, $timeout, $state, Auth, Principal, ProfileService, LoginService,
+export const name = 'FilterController';
+export function FilterController($scope, $timeout, $state, Auth, Principal, ProfileService, LoginService,
     Visualizations, Views, $stateParams, $rootScope, ExecutorFactory) {
     var vm = this;
     vm.filterData = [];

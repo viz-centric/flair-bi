@@ -95,6 +95,12 @@
   dependencies:
     csstype "^2.2.0"
 
+"@uirouter/angularjs@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.22.tgz#581ab38794a2d7c2790851087072c4066b2b6c46"
+  dependencies:
+    "@uirouter/core" "5.0.23"
+
 "@uirouter/core@5.0.23":
   version "5.0.23"
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.23.tgz#363b4bea635a1b48900dc7e65793a65a3b58a79e"
@@ -423,12 +429,6 @@ angular-translate@^2.18.1, angular-translate@~2.18.1:
   resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.18.1.tgz#b29ed0d2f9bac44075e7aad3284166c59e150791"
   dependencies:
     angular ">=1.2.26 <=1.7"
-
-angular-ui-router@^1.0.22:
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.22.tgz#54a88a06baba576e186fa1b4d5aac913eb4ccb08"
-  dependencies:
-    "@uirouter/core" "5.0.23"
 
 angular-ui-tree@^2.22.6:
   version "2.22.6"

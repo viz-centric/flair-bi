@@ -1,13 +1,14 @@
-import * as angular from 'angular';
-'use strict';
+// import * as angular from 'angular';
+// 'use strict';
 
-angular
-    .module('flairbiApp')
-    .controller('LoginController', LoginController);
+// angular
+//     .module('flairbiApp')
+//     .controller('LoginController', LoginController);
 
-LoginController.$inject = ['$scope', 'Auth', '$rootScope', '$state', 'appPropertiesService'];
+LoginController.$inject = ['Auth', '$rootScope', '$state', 'appPropertiesService'];
 
-function LoginController($scope, Auth, $rootScope, $state, appPropertiesService) {
+export const name = 'LoginController';
+export function LoginController(Auth, $rootScope, $state, appPropertiesService) {
     var vm = this;
 
     vm.authenticationError = false;
@@ -36,7 +37,7 @@ function LoginController($scope, Auth, $rootScope, $state, appPropertiesService)
         vm.authenticationError = false;
     }
 
-    function login(event) {
+    function login(_) {
         vm.loading = true;
         Auth.login({
             username: vm.username,
@@ -86,6 +87,6 @@ function LoginController($scope, Auth, $rootScope, $state, appPropertiesService)
         $rootScope.appProperies = result.data;
     }
 
-    function onPropertiesServiceError(error) {
+    function onPropertiesServiceError(_) {
     }
 }

@@ -1,5 +1,15 @@
+import angular from 'angular';
 
 'use strict';
-Chart.defaults.global.responsive = true;
-Chart.defaults.global.maintainAspectRatio = false;
-Chart.defaults.global.elements.rectangle.borderWidth = 1;
+angular.module('flairbiApp')
+    .run(chartConfiguration);
+
+chartConfiguration.$inject = ['Chartjs']
+
+function chartConfiguration(Chartjs) {
+    Chartjs.defaults.global.responsive = true;
+    Chartjs.defaults.global.maintainAspectRatio = false;
+    Chartjs.defaults.global.elements.rectangle.borderWidth = 1;
+}
+
+

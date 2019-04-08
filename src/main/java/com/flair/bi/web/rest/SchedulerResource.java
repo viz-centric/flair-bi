@@ -103,12 +103,7 @@ public class SchedulerResource {
 					entity, String.class);
 			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
 			schedulerResponse.setMessage(jsonObject.getString("message"));
-			//schedulerResponse.setStatus(jsonObject.getString("status"));
-			if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
-				return ResponseEntity.status(HttpStatus.OK).body(schedulerResponse);
-			} else {
-				return ResponseEntity.status(HttpStatus.FOUND).body(schedulerResponse);
-			}
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
 		} catch (Exception e) {
 			log.error("error occured while scheduling report:"+e.getMessage());
 			schedulerResponse.setMessage("error occured while accessing end point :"+e.getMessage());

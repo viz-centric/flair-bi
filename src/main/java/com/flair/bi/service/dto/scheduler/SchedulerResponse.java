@@ -2,7 +2,7 @@ package com.flair.bi.service.dto.scheduler;
 
 public class SchedulerResponse {
 private String message;
-private String status;
+private String success;
 
 public SchedulerResponse() {}
 
@@ -14,12 +14,12 @@ public void setMessage(String message) {
 	this.message = message;
 }
 
-public String getStatus() {
-	return status;
+public String getSuccess() {
+	return success;
 }
 
-public void setStatus(String status) {
-	this.status = status;
+public void setSuccess(String success) {
+	this.success = success;
 }
 
 

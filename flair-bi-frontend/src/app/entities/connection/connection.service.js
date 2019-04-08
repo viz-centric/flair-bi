@@ -1,7 +1,11 @@
+import angular from 'angular';
+
+angular.module('flairbiApp')
+    .factory('Connections', ConnectionTypes)
+
 ConnectionTypes.$inject = ["$resource"];
 
-export const name = 'Connections'
-export function ConnectionTypes($resource) {
+function ConnectionTypes($resource) {
     var resourceUrl = "api/connection/:id/";
 
     return $resource(

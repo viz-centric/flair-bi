@@ -1,14 +1,13 @@
-// import * as angular from 'angular';
-// 'use strict';
+import angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('alertsService', alertsService);
+angular
+    .module('flairbiApp')
+    .factory('alertsService', alertsService);
 
 alertsService.$inject = ['$http'];
 
-export const name = 'alertsService';
-export function alertsService($http) {
+function alertsService($http) {
     var service = {
         getReleaseAlerts: getReleaseAlerts,
         getReleaseAlertsCount: getReleaseAlertsCount,

@@ -1,14 +1,14 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .directive('hasAnyAuthority', hasAnyAuthority);
+'use strict';
 
-// hasAnyAuthority.$inject = ['Principal'];
+angular
+    .module('flairbiApp')
+    .directive('hasAnyAuthority', hasAnyAuthority);
 
-export const name = 'hasAnyAuthority';
-export function hasAnyAuthority(Principal) {
+hasAnyAuthority.$inject = ['Principal'];
+
+function hasAnyAuthority(Principal) {
     var directive = {
         restrict: 'A',
         link: linkFunc
@@ -20,8 +20,8 @@ export function hasAnyAuthority(Principal) {
         var authorities = attrs.hasAnyAuthority.replace(/\s+/g, '').split(',');
 
         var setVisible = function () {
-            element.removeClass('hidden');
-        },
+                element.removeClass('hidden');
+            },
             setHidden = function () {
                 element.addClass('hidden');
             },

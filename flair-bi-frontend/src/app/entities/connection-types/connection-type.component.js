@@ -1,14 +1,18 @@
-export const name = 'connectionTypeComponent';
-export const component = {
-    templateUrl:
-        "app/entities/connection-types/connection-type.component.html",
-    controller: connectionTypeController,
-    controllerAs: "vm",
-    bindings: {
-        connectionType: "=",
-        onClick: "&"
-    }
-};
+import angular from 'angular';
+
+angular.module('flairbiApp')
+    .component('connectionTypeComponent', {
+        templateUrl:
+            "app/entities/connection-types/connection-type.component.html",
+        controller: connectionTypeController,
+        controllerAs: "vm",
+        bindings: {
+            connectionType: "=",
+            onClick: "&"
+        }
+    })
+
+
 
 connectionTypeController.$inject = [];
 

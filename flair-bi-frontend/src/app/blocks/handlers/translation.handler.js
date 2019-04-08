@@ -1,7 +1,10 @@
+import angular from 'angular';
+
+angular.module('flairbiApp')
+.factory('translationHandler',translationHandler);
 translationHandler.$inject = ['$rootScope', '$window', '$state', '$translate'];
 
-export const factoryName = 'translationHandler';
-export function translationHandler($rootScope, $window, $state, $translate) {
+ function translationHandler($rootScope, $window, $state, $translate) {
     return {
         initialize: initialize,
         updateTitle: updateTitle

@@ -1,11 +1,15 @@
+import angular from 'angular';
+
+angular.module('flairbiApp')
+    .controller('ConnectionDialogController', ConnectionDialogController);
+
 ConnectionDialogController.$inject = [
     "entity",
     "$uibModalInstance",
     "Connections",
     "$stateParams"
 ];
-export const name = 'ConnectionDialogController';
-export function ConnectionDialogController(
+function ConnectionDialogController(
     entity,
     $uibModalInstance,
     Connections,

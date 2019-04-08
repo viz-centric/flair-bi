@@ -1,10 +1,14 @@
+import angular from 'angular';
 "use strict";
+
+angular.module('flairbiApp')
+.config(stateConfig);
 
 stateConfig.$inject = [
     "$stateProvider"
 ];
 
-export function stateConfig($stateProvider) {
+ function stateConfig($stateProvider) {
     $stateProvider.state("app", {
         abstract: true,
         views: {

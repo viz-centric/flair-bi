@@ -1,12 +1,11 @@
-// import * as angular from 'angular';
-// 'use strict';
+import angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .filter('findLanguageFromKey', findLanguageFromKey);
+angular
+    .module('flairbiApp')
+    .filter('findLanguageFromKey', findLanguageFromKey);
 
-export const name = 'findLanguageFromKey';
-export function findLanguageFromKey() {
+function findLanguageFromKey() {
     return findLanguageFromKeyFilter;
 
     function findLanguageFromKeyFilter(lang) {

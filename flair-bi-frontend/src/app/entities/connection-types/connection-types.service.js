@@ -1,5 +1,9 @@
-export const name = 'ConnectionTypes';
-export function ConnectionTypes($resource) {
+import angular from 'angular';
+
+angular.module('flairbiApp')
+    .factory('ConnectionTypes', ConnectionTypes);
+
+function ConnectionTypes($resource) {
     var resourceUrl = "api/connection-type/:id";
 
     return $resource(

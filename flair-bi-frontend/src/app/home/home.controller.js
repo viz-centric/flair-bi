@@ -1,16 +1,15 @@
-// import * as angular from 'angular';
-// 'use strict';
+import angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .controller('HomeController', HomeController);
+angular
+    .module('flairbiApp')
+    .controller('HomeController', HomeController);
 
 HomeController.$inject = ['$scope', 'Principal', 'LoginService',
     '$state', 'Information', '$rootScope', 'alertsService', 'screenDetectService', 'adminListService', 'AccountDispatch'
 ];
 
-export const name = 'HomeController';
-export function HomeController($scope, Principal, LoginService,
+function HomeController($scope, Principal, LoginService,
     $state, Information, $rootScope, alertsService, screenDetectService, adminListService, AccountDispatch) {
     var vm = this;
 

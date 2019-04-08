@@ -1,12 +1,14 @@
-export const name = 'notificationSetComponent';
-export const component = {
-    templateUrl: 'app/home/notification-set.component.html',
-    controller: notificationSetController,
-    controllerAs: 'vm',
-    bindings: {
-        releaseAlert: "="
-    }
-}
+import angular from 'angular';
+
+angular.module('flairbiApp')
+    .component('notificationSetComponent', {
+        templateUrl: 'app/home/notification-set.component.html',
+        controller: notificationSetController,
+        controllerAs: 'vm',
+        bindings: {
+            releaseAlert: "="
+        }
+    });
 
 notificationSetController.$inject = ['alertsService'];
 

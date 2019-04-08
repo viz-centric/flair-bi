@@ -1,14 +1,14 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('PasswordResetInit', PasswordResetInit);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .factory('PasswordResetInit', PasswordResetInit);
 
 PasswordResetInit.$inject = ['$resource'];
 
-export const name = 'PasswordResetInit';
-export function PasswordResetInit($resource) {
+function PasswordResetInit($resource) {
     var service = $resource('api/account/reset_password/init', {}, {});
 
     return service;

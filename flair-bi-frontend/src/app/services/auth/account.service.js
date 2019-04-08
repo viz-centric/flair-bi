@@ -1,15 +1,14 @@
-// import * as angular from 'angular';
+import * as angular from 'angular';
 
-// 'use strict';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('Account', Account);
+angular
+    .module('flairbiApp')
+    .factory('Account', Account);
 
 Account.$inject = ['$resource'];
 
-export const name = 'Account';
-export function Account($resource) {
+function Account($resource) {
     var service = $resource('api/account', {}, {
         'get': {
             method: 'GET', params: {}, isArray: false,

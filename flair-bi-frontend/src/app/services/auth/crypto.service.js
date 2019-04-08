@@ -1,15 +1,14 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('CryptoService', CryptoService);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .factory('CryptoService', CryptoService);
 
 CryptoService.$inject = [];
 
-
-export const name = 'CryptoService';
-export function CryptoService() {
+function CryptoService() {
     var service = {
         UUIDv4: UUIDv4
     };
@@ -23,7 +22,6 @@ export function CryptoService() {
             function (c) {
                 return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
             }
-
         )
     }
 }

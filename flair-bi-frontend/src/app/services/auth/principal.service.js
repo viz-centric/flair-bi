@@ -1,14 +1,14 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('Principal', Principal);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .factory('Principal', Principal);
 
 Principal.$inject = ['$q', 'Account', 'AccountDispatch'];
 
-export const name = 'Principal';
-export function Principal($q, Account, AccountDispatch) {
+function Principal($q, Account, AccountDispatch) {
     var _identity,
         _authenticated = false;
 

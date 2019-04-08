@@ -7,6 +7,15 @@ import { moduleName as appModule } from './app/app.module';
 import './content/scss/main/main.scss';
 import './vendor';
 
+var templates = require.context('./app', true, /\.js$/);
+
+templates.keys().forEach(function (key) {
+    if (key === './app/app.module.js') { }
+    else {
+        templates(key);
+    }
+});
+
 
 /**
  * Bootstrap the application using the imported moduleName

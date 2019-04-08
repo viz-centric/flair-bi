@@ -1,12 +1,12 @@
-// import * as angular from 'angular';
-// "use strict";
+import * as angular from 'angular';
 
-// angular.module("flairbiApp").config(Config);
+"use strict";
+
+angular.module("flairbiApp").config(Config);
 
 Config.$inject = ["$httpProvider", "jwtOptionsProvider"];
 
-
-export function Config($httpProvider, jwtOptionsProvider) {
+function Config($httpProvider, jwtOptionsProvider) {
     jwtOptionsProvider.config({
         tokenGetter: [
             "AuthServerProvider",

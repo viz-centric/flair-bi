@@ -1,14 +1,13 @@
-// import * as angular from 'angular';
-// 'use strict';
+import angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .controller('JhiLanguageController', JhiLanguageController);
+angular
+    .module('flairbiApp')
+    .controller('JhiLanguageController', JhiLanguageController);
 
 JhiLanguageController.$inject = ['$translate', 'JhiLanguageService', 'tmhDynamicLocale'];
 
-export const name = "JhiLanguageController";
-export function JhiLanguageController($translate, JhiLanguageService, tmhDynamicLocale) {
+function JhiLanguageController($translate, JhiLanguageService, tmhDynamicLocale) {
     var vm = this;
 
     vm.changeLanguage = changeLanguage;

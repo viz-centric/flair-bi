@@ -1,6 +1,8 @@
-export const name = 'LANGUAGES';
-export const constants = [
-    'en',
-    'fr',
-    'sv'
-]
+import angular from 'angular';
+
+angular.module('flairbiApp')
+    .constant('LANGUAGES', [
+        'en',
+        'fr',
+        'sv'
+    ]);

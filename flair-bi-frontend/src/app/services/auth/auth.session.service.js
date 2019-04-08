@@ -1,14 +1,14 @@
-// import * as angular from 'angular';
-// "use strict";
+import * as angular from 'angular';
 
-// angular
-//     .module("flairbiApp")
-//     .factory("AuthServerProvider", AuthServerProvider);
+"use strict";
+
+angular
+    .module("flairbiApp")
+    .factory("AuthServerProvider", AuthServerProvider);
 
 AuthServerProvider.$inject = ["$http", "$localStorage"];
 
-export const name = 'AuthServerProvider';
-export function AuthServerProvider($http, $localStorage) {
+function AuthServerProvider($http, $localStorage) {
     var service = {
         getToken: getToken,
         hasValidToken: hasValidToken,

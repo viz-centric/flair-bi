@@ -1,14 +1,13 @@
-// import * as angular from 'angular';
-// 'use strict';
+import angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('LoginService', LoginService);
+angular
+    .module('flairbiApp')
+    .factory('LoginService', LoginService);
 
 LoginService.$inject = ['$state'];
 
-export const name = 'LoginService';
-export function LoginService($state) {
+function LoginService($state) {
     var service = {
         open: open
     };

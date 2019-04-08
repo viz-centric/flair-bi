@@ -1,24 +1,23 @@
-// import * as angular from 'angular';
-// 'use strict';
-// angular
-//     .module('flairbiApp')
-//     .directive('minimalizaSidebar', minimalizaSidebar);
+import angular from 'angular';
+'use strict';
+angular
+    .module('flairbiApp')
+    .directive('minimalizaSidebar', minimalizaSidebar);
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
  */
-minimalizaSidebar.$inject = ['$timeout'];
+minimalizaSidebar.$inject = [];
 
-export const name = 'minimalizaSidebar';
-export function minimalizaSidebar($timeout) {
+function minimalizaSidebar() {
     return {
         restrict: 'A',
         template: '<a href="" ng-click="minimalize()"><svg class="hamburger"><use xlink:href="#bars" /></svg></a>',
         controller: minimalizaSidebarController,
     };
 };
-minimalizaSidebarController.$inject = ['$scope', '$element', '$state', '$rootScope'];
+minimalizaSidebarController.$inject = ['$scope'];
 
-function minimalizaSidebarController($scope, $element, $state, $rootScope) {
+function minimalizaSidebarController($scope) {
     $scope.minimalize = function () {
         $("body").toggleClass("mini-navbar");
         if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {

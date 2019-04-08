@@ -1,15 +1,15 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('Sessions', Sessions);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .factory('Sessions', Sessions);
 
 Sessions.$inject = ['$resource'];
 
-export const name = 'Sessions';
-export function Sessions($resource) {
+function Sessions($resource) {
     return $resource('api/account/sessions/:series', {}, {
-        'getAll': { method: 'GET', isArray: true }
+        'getAll': {method: 'GET', isArray: true}
     });
 }

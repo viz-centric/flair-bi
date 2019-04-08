@@ -1,14 +1,14 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .factory('AccountDispatch', AccountDispatch);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .factory('AccountDispatch', AccountDispatch);
 
 AccountDispatch.$inject = [];
 
-export const name = 'AccountDispatch';
-export function AccountDispatch() {
+function AccountDispatch() {
 
     var account = {};
 
@@ -31,7 +31,8 @@ export function AccountDispatch() {
     function hasAuthority(authority) {
         if (account.permissions && account.permissions.indexOf(authority) !== -1) {
             return true;
-        } {
+        }
+        {
             return false;
         }
     }

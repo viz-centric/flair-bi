@@ -8,6 +8,7 @@ import 'angular-cookies';
 import 'angular-aria';
 import 'angular-cache-buster';
 import 'ng-file-upload';
+import 'angular-ui-bootstrap';
 import 'angular-bootstrap';
 import 'ui-select';
 import 'bootstrap-ui-datetime-picker';

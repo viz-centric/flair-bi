@@ -430,6 +430,10 @@ angular-translate@^2.18.1, angular-translate@~2.18.1:
   dependencies:
     angular ">=1.2.26 <=1.7"
 
+angular-ui-bootstrap@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
+
 angular-ui-tree@^2.22.6:
   version "2.22.6"
   resolved "https://registry.yarnpkg.com/angular-ui-tree/-/angular-ui-tree-2.22.6.tgz#849727fdd1d13d84c1a590bb08934cc224e5a407"

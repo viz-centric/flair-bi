@@ -89,7 +89,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 }]
             }
         })
-        .state('user-management-detail.newConstraint', {
+        .state('newConstraint', {
             parent: 'user-management-detail',
             url: '/newConstraint',
             data: {
@@ -127,7 +127,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 }]
             }
         })
-        .state('user-management-detail.editConstraint', {
+        .state('editConstraint', {
             parent: 'user-management-detail',
             url: '/editConstraint/:constraintId',
             data: {
@@ -163,7 +163,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state('user-management-detail.deleteConstraint', {
-            parent: 'user-management-detail',
             url: '/deleteConstraint/:constraintId',
             data: {
                 authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT],
@@ -197,7 +196,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state('user-management.new', {
-            parent: 'user-management',
             url: '/new',
             data: {
                 authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT]
@@ -239,7 +237,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('user-management.edit', {
-            parent: 'user-management',
             url: '/{login}/edit',
             data: {
                 authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT]
@@ -268,7 +265,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('user-management.delete', {
-            parent: 'user-management',
             url: '/{login}/delete',
             data: {
                 authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT]

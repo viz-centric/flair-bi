@@ -1,19 +1,11 @@
-
 import angular from 'angular'
-// import { moduleName as ngTagsInputGrpcModule } from './entities/flair-bi/filter/ng-tags-input-grpc';
-// import { moduleName as applicationHandlersModule } from './blocks/handlers/handlers.module';
-// import { moduleName as languageModule } from './components/language/language.module';
-// import { moduleName as loginFeatureModule } from "./login/login.module";
-// import { moduleName as layoutsModule } from "./layouts/layouts.module";
-// import { moduleName as homeModule } from "./home/home.module";
 
-// import { stateConfig as AppState } from "./app.state";
 const appModule = angular
     .module("flairbiApp", [
         /**
          * Our modules
          */
-        
+
         /**
          * 3rd party library modules
          */
@@ -67,9 +59,7 @@ function run(stateHandler, translationHandler, $rootScope, $window) {
     stateHandler.initialize();
     translationHandler.initialize();
     $rootScope.noIframe =
-        $window.location.href.indexOf("flair-integration") < 0
-            ? true
-            : false;
+        $window.location.href.indexOf("flair-integration") < 0;
     $rootScope.obj = [];
     $rootScope.drilldowns = [];
     $rootScope.vizsel = [];

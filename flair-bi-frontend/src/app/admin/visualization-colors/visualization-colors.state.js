@@ -64,7 +64,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state('visualization-colors-detail.edit', {
-            parent: 'visualization-colors-detail',
             url: '/detail/edit',
             data: {
                 authorities: [PERMISSIONS.UPDATE_VISUALIZATION_COLORS]
@@ -89,7 +88,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('visualization-colors.new', {
-            parent: 'visualization-colors',
             url: '/new',
             data: {
                 authorities: [PERMISSIONS.WRITE_VISUALIZATION_COLORS]
@@ -117,7 +115,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('visualization-colors.edit', {
-            parent: 'visualization-colors',
             url: '/{id}/edit',
             data: {
                 authorities: [PERMISSIONS.UPDATE_VISUALIZATION_COLORS]
@@ -142,7 +139,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('visualization-colors.delete', {
-            parent: 'visualization-colors',
             url: '/{id}/delete',
             data: {
                 authorities: [PERMISSIONS.DELETE_VISUALIZATION_COLORS]

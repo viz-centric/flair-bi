@@ -62,7 +62,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state('functions-detail.edit', {
-            parent: 'functions-detail',
             url: '/detail/edit',
             data: {
             },
@@ -86,7 +85,6 @@ function stateConfig($stateProvider) {
             }]
         })
         .state('functions.new', {
-            parent: 'functions',
             url: '/new',
             data: {
             },
@@ -117,7 +115,6 @@ function stateConfig($stateProvider) {
             }]
         })
         .state('functions.edit', {
-            parent: 'functions',
             url: '/{id}/edit',
             data: {
             },
@@ -141,7 +138,6 @@ function stateConfig($stateProvider) {
             }]
         })
         .state('functions.delete', {
-            parent: 'functions',
             url: '/{id}/delete',
             data: {
             },

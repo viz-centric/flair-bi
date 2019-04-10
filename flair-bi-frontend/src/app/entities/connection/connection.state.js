@@ -70,7 +70,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("connection.new", {
-            parent: "connection",
             url: "/new",
             data: {
                 authorities: [],
@@ -105,7 +104,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("connection.edit", {
-            parent: "connection",
             url: "/{connectionId}/edit",
             onEnter: [
                 "$stateParams",
@@ -145,7 +143,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("connection.delete", {
-            parent: "connection",
             url: "/{connectionId}/delete",
             onEnter: [
                 "$stateParams",

@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -136,7 +137,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state("visualmetadata-detail.edit", {
-            parent: "visualmetadata-detail",
             url: "/detail/edit",
             data: {
                 authorities: []
@@ -166,24 +166,23 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go(
-                                    "^",
-                                    {},
-                                    {
-                                        reload: false
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go(
+                                "^",
+                                {},
+                                {
+                                    reload: false
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("visualmetadata.new", {
-            parent: "visualmetadata",
             url: "/new",
             data: {
                 authorities: [PERMISSIONS.WRITE_VISUAL_METADATA]
@@ -241,20 +240,19 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("visualmetadata", null, {
-                                    reload: "visualmetadata"
-                                });
-                            },
-                            function () {
-                                $state.go("visualmetadata");
-                            }
-                        );
+                        function () {
+                            $state.go("visualmetadata", null, {
+                                reload: "visualmetadata"
+                            });
+                        },
+                        function () {
+                            $state.go("visualmetadata");
+                        }
+                    );
                 }
             ]
         })
         .state("visualmetadata.edit", {
-            parent: "visualmetadata",
             url: "/{id}/edit",
             data: {
                 authorities: []
@@ -284,20 +282,19 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("visualmetadata", null, {
-                                    reload: "visualmetadata"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("visualmetadata", null, {
+                                reload: "visualmetadata"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("visualmetadata.delete", {
-            parent: "visualmetadata",
             url: "/{id}/delete",
             data: {
                 authorities: []
@@ -326,15 +323,15 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("visualmetadata", null, {
-                                    reload: "visualmetadata"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("visualmetadata", null, {
+                                reload: "visualmetadata"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         });

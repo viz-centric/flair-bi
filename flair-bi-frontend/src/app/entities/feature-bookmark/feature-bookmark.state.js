@@ -83,7 +83,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("feature-bookmark-detail.edit", {
-            parent: "feature-bookmark-detail",
             url: "/detail/edit",
             data: {
                 authorities: ["ROLE_USER"]
@@ -124,7 +123,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("feature-bookmark.new", {
-            parent: "feature-bookmark",
             url: "/new",
             data: {
                 authorities: ["ROLE_USER"]
@@ -165,7 +163,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("feature-bookmark.edit", {
-            parent: "feature-bookmark",
             url: "/{id}/edit",
             data: {
                 authorities: ["ROLE_USER"]
@@ -208,7 +205,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("feature-bookmark.delete", {
-            parent: "feature-bookmark",
             url: "/{id}/delete",
             data: {
                 authorities: ["ROLE_USER"]

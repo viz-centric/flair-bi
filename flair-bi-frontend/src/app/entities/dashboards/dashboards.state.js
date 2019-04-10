@@ -153,7 +153,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state("dashboards-detail.edit", {
-            parent: "dashboards-detail",
             url: "/edit",
             data: {
                 authorities: [],
@@ -191,7 +190,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             ]
         })
         .state("dashboards.new", {
-            parent: "dashboards",
             // TODO : this is just a work around not a permanent fix
             url: "/create/new",
             data: {
@@ -226,7 +224,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             ]
         })
         .state("dashboards.edit", {
-            parent: "dashboards",
             url: "/{id}/edit",
             data: {
                 authorities: []
@@ -259,7 +256,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             ]
         })
         .state("dashboards.delete", {
-            parent: "dashboards",
             url: "/{id}/delete",
             data: {
                 authorities: [],
@@ -401,7 +397,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state("dashboard-bookmarks.edit", {
-            parent: "dashboard-bookmarks",
             url: "/{bookmarkId}/edit",
             onEnter: [
                 "$stateParams",
@@ -441,7 +436,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             ]
         })
         .state("dashboard-bookmarks.delete", {
-            parent: "dashboard-bookmarks",
             url: "/{bookmarkId}/delete",
             onEnter: [
                 "$stateParams",

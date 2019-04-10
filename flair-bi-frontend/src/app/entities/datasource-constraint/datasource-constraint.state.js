@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -90,7 +91,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("datasource-constraint-detail.edit", {
-            parent: "datasource-constraint-detail",
             url: "/detail/edit",
             data: {
                 authorities: []
@@ -121,18 +121,17 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("^", {}, { reload: false });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("^", {}, {reload: false});
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("datasource-constraint.new", {
-            parent: "datasource-constraint",
             url: "/new",
             data: {
                 authorities: []
@@ -161,20 +160,19 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("datasource-constraint", null, {
-                                    reload: "datasource-constraint"
-                                });
-                            },
-                            function () {
-                                $state.go("datasource-constraint");
-                            }
-                        );
+                        function () {
+                            $state.go("datasource-constraint", null, {
+                                reload: "datasource-constraint"
+                            });
+                        },
+                        function () {
+                            $state.go("datasource-constraint");
+                        }
+                    );
                 }
             ]
         })
         .state("datasource-constraint.edit", {
-            parent: "datasource-constraint",
             url: "/{id}/edit",
             data: {
                 authorities: []
@@ -205,20 +203,19 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("datasource-constraint", null, {
-                                    reload: "datasource-constraint"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("datasource-constraint", null, {
+                                reload: "datasource-constraint"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("datasource-constraint.delete", {
-            parent: "datasource-constraint",
             url: "/{id}/delete",
             data: {
                 authorities: []
@@ -248,15 +245,15 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("datasource-constraint", null, {
-                                    reload: "datasource-constraint"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("datasource-constraint", null, {
+                                reload: "datasource-constraint"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         });

@@ -84,7 +84,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state('file-uploader-status-detail.edit', {
-            parent: 'file-uploader-status-detail',
             url: '/detail/edit',
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
@@ -109,7 +108,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('file-uploader-status.new', {
-            parent: 'file-uploader-status',
             url: '/new',
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
@@ -140,7 +138,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('file-uploader-status.edit', {
-            parent: 'file-uploader-status',
             url: '/{id}/edit',
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]
@@ -165,7 +162,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }]
         })
         .state('file-uploader-status.delete', {
-            parent: 'file-uploader-status',
             url: '/{id}/delete',
             data: {
                 authorities: [PERMISSIONS.WRITE_FILE_UPLOADER]

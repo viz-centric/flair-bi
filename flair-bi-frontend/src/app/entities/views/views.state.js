@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -37,7 +38,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("dashboards-overview.view-detail", {
-            parent: "dashboards-overview",
             url: "/views/{viewId}/details",
             data: {
                 authorities: [],
@@ -194,7 +194,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("dashboards-overview.view-detail.edit", {
-            parent: "dashboards-overview.view-detail",
             url: "/edit",
             data: {
                 authorities: [],
@@ -233,24 +232,23 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go(
-                                    "^",
-                                    {},
-                                    {
-                                        reload: false
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go(
+                                "^",
+                                {},
+                                {
+                                    reload: false
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("views-detail.edit", {
-            parent: "views-detail",
             url: "/edit",
             data: {
                 authorities: []
@@ -280,24 +278,23 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go(
-                                    "^",
-                                    {},
-                                    {
-                                        reload: false
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go(
+                                "^",
+                                {},
+                                {
+                                    reload: false
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("dashboards-overview.view-new", {
-            parent: "dashboards-overview",
             url: "/views/new",
             data: {
                 authorities: [],
@@ -331,7 +328,7 @@ function stateConfig($stateProvider) {
                                 entity: function () {
                                     return {
                                         viewDashboard:
-                                            $stateParams.dashboard,
+                                        $stateParams.dashboard,
                                         viewName: null,
                                         description: null,
                                         published: false,
@@ -346,21 +343,21 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function (result) {
-                                $state.go(
-                                    "dashboards-overview",
-                                    {
-                                        id: result.viewDashboard.id
-                                    },
-                                    {
-                                        reload: "dashboards-overview"
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("dashboards");
-                            }
-                        );
+                        function (result) {
+                            $state.go(
+                                "dashboards-overview",
+                                {
+                                    id: result.viewDashboard.id
+                                },
+                                {
+                                    reload: "dashboards-overview"
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("dashboards");
+                        }
+                    );
                 }
             ],
             resolve: {
@@ -376,7 +373,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("dashboards-overview.view-delete", {
-            parent: "dashboards-overview",
             url: "/views/{viewId}/delete",
             data: {
                 authorities: [],
@@ -406,21 +402,21 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function (result) {
-                                $state.go(
-                                    "dashboards-overview",
-                                    {
-                                        id: result.dashboardId
-                                    },
-                                    {
-                                        reload: "dashboards-overview"
-                                    }
-                                );
-                            },
-                            function () {
-                                //$state.go('^');
-                            }
-                        );
+                        function (result) {
+                            $state.go(
+                                "dashboards-overview",
+                                {
+                                    id: result.dashboardId
+                                },
+                                {
+                                    reload: "dashboards-overview"
+                                }
+                            );
+                        },
+                        function () {
+                            //$state.go('^');
+                        }
+                    );
                 }
             ],
             resolve: {
@@ -465,20 +461,20 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function (result) {
-                                $state.go(
-                                    "dashboards-overview",
-                                    {
-                                        id: result.dashboardId
-                                    },
-                                    {
-                                        reload: "dashboards-overview"
-                                    }
-                                );
-                            },
-                            function () {
-                            }
-                        );
+                        function (result) {
+                            $state.go(
+                                "dashboards-overview",
+                                {
+                                    id: result.dashboardId
+                                },
+                                {
+                                    reload: "dashboards-overview"
+                                }
+                            );
+                        },
+                        function () {
+                        }
+                    );
                 }
             ]
         });

@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -86,7 +87,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state("visualizations-detail.edit", {
-            parent: "visualizations-detail",
             url: "/detail/edit",
             data: {
                 authorities: [PERMISSIONS.UPDATE_VISUALIZATIONS]
@@ -116,24 +116,23 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go(
-                                    "^",
-                                    {},
-                                    {
-                                        reload: false
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go(
+                                "^",
+                                {},
+                                {
+                                    reload: false
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("visualizations.new", {
-            parent: "visualizations",
             url: "/new",
             data: {
                 authorities: [PERMISSIONS.WRITE_VISUALIZATIONS]
@@ -164,20 +163,19 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("visualizations", null, {
-                                    reload: "visualizations"
-                                });
-                            },
-                            function () {
-                                $state.go("visualizations");
-                            }
-                        );
+                        function () {
+                            $state.go("visualizations", null, {
+                                reload: "visualizations"
+                            });
+                        },
+                        function () {
+                            $state.go("visualizations");
+                        }
+                    );
                 }
             ]
         })
         .state("visualizations.edit", {
-            parent: "visualizations",
             url: "/{id}/edit",
             data: {
                 authorities: [PERMISSIONS.UPDATE_VISUALIZATIONS]
@@ -207,20 +205,19 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("visualizations", null, {
-                                    reload: "visualizations"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("visualizations", null, {
+                                reload: "visualizations"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("visualizations.delete", {
-            parent: "visualizations",
             url: "/{id}/delete",
             data: {
                 authorities: [PERMISSIONS.DELETE_VISUALIZATIONS]
@@ -249,15 +246,15 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("visualizations", null, {
-                                    reload: "visualizations"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("visualizations", null, {
+                                reload: "visualizations"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         });

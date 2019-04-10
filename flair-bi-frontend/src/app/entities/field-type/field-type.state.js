@@ -13,7 +13,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             parent: "visualizations-detail"
         })
         .state("field-type.new", {
-            parent: "field-type",
             url: "/new",
             data: {},
             onEnter: [
@@ -109,7 +108,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state("field-type.delete", {
-            parent: "field-type",
             url: "/{fieldTypeId}/delete",
             data: {},
             onEnter: [

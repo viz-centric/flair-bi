@@ -113,7 +113,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("datasources-detail.edit", {
-            parent: "datasources-detail",
             url: "/detail/edit",
             data: {
                 authorities: ["UPDATE_DATASOURCES_APPLICATION"]
@@ -160,7 +159,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("datasources.new", {
-            parent: "datasources",
             url: "/new",
             data: {
                 authorities: ["WRITE_DATASOURCES_APPLICATION"]
@@ -204,7 +202,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("datasources.edit", {
-            parent: "datasources",
             url: "/{id}/edit",
             data: {
                 authorities: ["UPDATE_DATASOURCES_APPLICATION"]
@@ -247,7 +244,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("datasources.delete", {
-            parent: "datasources",
             url: "/{id}/delete",
             data: {
                 authorities: ["DELETE_DATASOURCES_APPLICATION"]

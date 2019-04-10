@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -85,7 +86,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
             }
         })
         .state("property-type-detail.edit", {
-            parent: "property-type-detail",
             url: "/detail/edit",
             data: {},
             onEnter: [
@@ -113,24 +113,23 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go(
-                                    "^",
-                                    {},
-                                    {
-                                        reload: true
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go(
+                                "^",
+                                {},
+                                {
+                                    reload: true
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("property-type.new", {
-            parent: "property-type",
             url: "/new",
             data: {},
             onEnter: [
@@ -153,20 +152,19 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("property-type", null, {
-                                    reload: "property-type"
-                                });
-                            },
-                            function () {
-                                $state.go("property-type");
-                            }
-                        );
+                        function () {
+                            $state.go("property-type", null, {
+                                reload: "property-type"
+                            });
+                        },
+                        function () {
+                            $state.go("property-type");
+                        }
+                    );
                 }
             ]
         })
         .state("property-type.edit", {
-            parent: "property-type",
             url: "/{id}/edit",
             data: {},
             onEnter: [
@@ -194,20 +192,19 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("property-type", null, {
-                                    reload: "property-type"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("property-type", null, {
+                                reload: "property-type"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
         .state("property-type.delete", {
-            parent: "property-type",
             url: "/{id}/delete",
             data: {},
             onEnter: [
@@ -236,15 +233,15 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("property-type", null, {
-                                    reload: "property-type"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("property-type", null, {
+                                reload: "property-type"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         });

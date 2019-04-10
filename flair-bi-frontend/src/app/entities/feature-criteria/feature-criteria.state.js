@@ -83,7 +83,6 @@ function stateConfig($stateProvider) {
             }
         })
         .state("feature-criteria-detail.edit", {
-            parent: "feature-criteria-detail",
             url: "/detail/edit",
             data: {
                 authorities: ["ROLE_USER"]
@@ -124,7 +123,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("feature-criteria.new", {
-            parent: "feature-criteria",
             url: "/new",
             data: {
                 authorities: ["ROLE_USER"]
@@ -165,7 +163,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("feature-criteria.edit", {
-            parent: "feature-criteria",
             url: "/{id}/edit",
             data: {
                 authorities: ["ROLE_USER"]
@@ -208,7 +205,6 @@ function stateConfig($stateProvider) {
             ]
         })
         .state("feature-criteria.delete", {
-            parent: "feature-criteria",
             url: "/{id}/delete",
             data: {
                 authorities: ["ROLE_USER"]

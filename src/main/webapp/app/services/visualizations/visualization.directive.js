@@ -29,7 +29,7 @@
         };
         return directive;
 
-        function link(scope, element, attrs) {}
+        function link(scope, element, attrs) { }
     }
 
     VisualizationRenderController.$inject = [
@@ -37,6 +37,7 @@
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
+        'clusteredverticalbar',
         'GenerateClusteredhorizontalbarChart',
         'GenerateLineChart',
         'GeneratePieChart',
@@ -68,6 +69,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
+        clusteredverticalbar,
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -105,6 +107,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
+            widgets.clusteredverticalbar = clusteredverticalbar;
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -160,9 +163,9 @@
             } else {
                 if (!vm.data.data) {
                     proxyService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                            queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                            visualmetadata: vm.data
-                        })
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                        visualmetadata: vm.data
+                    })
                         .then(onForwardCallSuccess, onForwardCallError);
                 } else {
                     createWidget(vm.data);
@@ -181,7 +184,8 @@
             widgets[vm.widget].build(
                 visualMetadata,
                 el,
-                panel
+                panel,
+                widgets
             );
         }
 

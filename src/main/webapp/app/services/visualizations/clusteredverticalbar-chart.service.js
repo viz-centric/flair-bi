@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('GenerateClusteredverticalbarChart', GenerateClusteredverticalbarChart);
 
-    GenerateClusteredverticalbarChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
+    GenerateClusteredverticalbarChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService','clusteredverticalbar'];
 
-    function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
+    function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService,Clusteredverticalbar) {
         return {
             build: function (record, element, panel, widgets) {
 
@@ -94,8 +94,7 @@
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip');
 
-
-                    var clusteredverticalbar = widgets.clusteredverticalbar.build()
+                    var clusteredverticalbar = Clusteredverticalbar.build()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true);
 

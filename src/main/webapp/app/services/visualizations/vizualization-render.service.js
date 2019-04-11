@@ -14,7 +14,6 @@
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
-        'clusteredverticalbar',
         'GenerateClusteredhorizontalbarChart',
         'GenerateLineChart',
         'GeneratePieChart',
@@ -44,7 +43,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
-        clusteredverticalbar,
+     
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -80,7 +79,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
-            widgets.clusteredverticalbar = clusteredverticalbar;
+           
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -115,8 +114,7 @@
             widgets[vm.widget].build(
                 visualMetadata,
                 el,
-                panel,
-                widgets
+                panel
             );
         }
 

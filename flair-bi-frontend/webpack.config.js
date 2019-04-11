@@ -8,6 +8,7 @@ const webpack = require('webpack');
  */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     context: ROOT,
@@ -16,7 +17,8 @@ module.exports = {
         extensions: ['.js'],
         alias: {
             'angular-split-pane': path.resolve(__dirname, './node_modules/@shagstrom/angular-split-pane/angular-split-pane.js'),
-            'gridstack-angular': path.resolve(__dirname, './node_modules/gridstack-angular/dist/gridstack-angular.min.js')
+            'gridstack-angular': path.resolve(__dirname, './node_modules/gridstack-angular/dist/gridstack-angular.min.js'),
+            'i18n': path.resolve(__dirname, './src/i18n')
         }
     },
 
@@ -76,7 +78,10 @@ module.exports = {
             jQuery: 'jquery',
             d3: 'd3',
             topojson: 'topojson'
-        })
+        }),
+        new CopyWebpackPlugin([
+            { from: 'i18n', to: 'i18n'}
+        ])
     ],
 
     entry: './index.js'

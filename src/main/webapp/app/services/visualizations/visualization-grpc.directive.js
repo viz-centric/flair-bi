@@ -29,7 +29,7 @@
         };
         return directive;
 
-        function link(scope, element, attrs) {}
+        function link(scope, element, attrs) { }
     }
 
     VisualizationRenderGrpcController.$inject = [
@@ -37,6 +37,7 @@
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
+      
         'GenerateClusteredhorizontalbarChart',
         'GenerateLineChart',
         'GeneratePieChart',
@@ -69,6 +70,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
+       
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -106,6 +108,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
+           
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -151,21 +154,20 @@
          * @param {Boolean} forceQuery : if querying for data must be done
          */
         function build(forceQuery) {
-            forceQuery=false
             if (forceQuery) {
                 proxyGrpcService.forwardCall(vm.datasource.id, {
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
                     visualMetadata: vm.data
                 });
             } else {
-                // if (!vm.data.data) {
-                //     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                //             queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                //             visualmetadata: vm.data
-                //     });
-                // } else {
+                if (!vm.data.data) {
+                    proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
+                            queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                            visualmetadata: vm.data
+                    });
+                } else {
                     createWidget(vm.data);
-                //}
+                }
             }
         }
 

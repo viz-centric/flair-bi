@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     /**
@@ -10,7 +10,7 @@
         .module("flairbiApp")
         .factory("visualizationRenderService", visualizationRenderService);
 
-        visualizationRenderService.$inject = [
+    visualizationRenderService.$inject = [
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
@@ -43,6 +43,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
+     
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -64,7 +65,7 @@
         GenerateSankey,
         GeneratePivotTable,
         proxyService,
-        filterParametersService  
+        filterParametersService
     ) {
 
         var vm = this;
@@ -78,6 +79,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
+           
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -100,8 +102,8 @@
             widgets.GeneratePivotTable = GeneratePivotTable;
         }
 
-    
-        function createWidget(visualMetadata,contentId) {
+
+        function createWidget(visualMetadata, contentId) {
             var widgetId = '#' + contentId;
             var el = $(widgetId);
             var width = el.width(),
@@ -116,14 +118,14 @@
             );
         }
 
-        function setMetaData(v,metadata,contentId) {
+        function setMetaData(v, metadata, contentId) {
             addWidgets();
-            vm.data=v;
-            vm.data.data=metadata.data;
-            vm.widget=v.metadataVisual.functionname;
-            createWidget(vm.data,contentId);
+            vm.data = v;
+            vm.data.data = metadata.data;
+            vm.widget = v.metadataVisual.functionname;
+            createWidget(vm.data, contentId);
         }
 
-    
+
     }
 })();

@@ -1,9 +1,10 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .controller('NavbarController', NavbarController);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .controller('NavbarController', NavbarController);
 
 NavbarController.$inject = ['$scope', '$state', 'Auth',
     'Principal', 'ProfileService', 'LoginService',

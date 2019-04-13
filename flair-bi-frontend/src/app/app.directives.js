@@ -26,7 +26,6 @@ function iCheck($timeout, $parse) {
                 value = $parse($attrs["ngValue"])($scope);
                 return $(element)
                     .iCheck({
-                        checkboxClass: "icheckbox_square",
                         radioClass: "iradio_square-blue",
                         checkboxClass: "icheckbox_square-blue",
                         increaseArea: "20%"

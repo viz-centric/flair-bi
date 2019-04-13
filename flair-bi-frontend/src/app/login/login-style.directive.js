@@ -1,9 +1,10 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .directive('loginStyle', loginStyle);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .directive('loginStyle', loginStyle);
 
 
 

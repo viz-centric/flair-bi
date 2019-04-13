@@ -1,8 +1,8 @@
-// import * as angular from 'angular';
-// 'use strict';
-// angular
-//     .module('flairbiApp')
-//     .controller('FooterController', FooterController);
+import * as angular from 'angular';
+'use strict';
+angular
+    .module('flairbiApp')
+    .controller('FooterController', FooterController);
 
 FooterController.$inject = ['$scope', '$rootScope', '$state'];
 

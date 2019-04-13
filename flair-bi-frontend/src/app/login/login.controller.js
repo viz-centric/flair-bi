@@ -1,9 +1,10 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .controller('LoginController', LoginController);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .controller('LoginController', LoginController);
 
 LoginController.$inject = ['Auth', '$rootScope', '$state', 'appPropertiesService'];
 

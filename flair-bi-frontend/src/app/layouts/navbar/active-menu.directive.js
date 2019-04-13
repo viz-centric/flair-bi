@@ -1,9 +1,9 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .directive('activeMenu', activeMenu);
+angular
+    .module('flairbiApp')
+    .directive('activeMenu', activeMenu);
 
 activeMenu.$inject = ['$translate', '$locale', 'tmhDynamicLocale'];
 

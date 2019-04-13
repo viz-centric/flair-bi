@@ -1,9 +1,10 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
 
-// angular
-//     .module('flairbiApp')
-//     .controller('ExplorationNavController', ExplorationNavController);
+'use strict';
+
+angular
+    .module('flairbiApp')
+    .controller('ExplorationNavController', ExplorationNavController);
 
 ExplorationNavController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'ProfileService', 'LoginService',
     'Visualizations', 'Measures', 'Dimensions', 'Views', '$stateParams', '$rootScope', 'modalInfo', 'Datasources', 'Explorer'];

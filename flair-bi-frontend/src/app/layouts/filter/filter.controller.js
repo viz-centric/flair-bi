@@ -1,9 +1,9 @@
-// import * as angular from 'angular';
-// 'use strict';
+import * as angular from 'angular';
+'use strict';
 
-// angular
-//     .module('flairbiApp')
-//     .controller('FilterController', FilterController);
+angular
+    .module('flairbiApp')
+    .controller('FilterController', FilterController);
 
 FilterController.$inject = ['$scope', '$timeout', '$state', 'Auth', 'Principal', 'ProfileService', 'LoginService',
     'Visualizations', 'Views', '$stateParams', '$rootScope', 'ExecutorFactory'

@@ -13,6 +13,7 @@ import 'ui-select';
 import 'bootstrap-ui-datetime-picker';
 import 'oclazyload';
 import '@uirouter/angularjs'
+import '@uirouter/angularjs/release/stateEvents'
 import 'ng-infinite-scroll';
 import 'angular-minicolors';
 import 'angular-split-pane';

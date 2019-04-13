@@ -23,6 +23,7 @@ const appModule = angular
         "ui.bootstrap.datetimepicker",
         "oc.lazyLoad",
         "ui.router",
+        'ui.router.state.events',
         "infinite-scroll",
         "minicolors",
         "shagstrom.angular-split-pane",
@@ -42,10 +43,9 @@ const appModule = angular
         "angular-cron-gen",
         "ngFileUpload"
     ])
-
-appModule
     .config(angularThemingConfig)
     .run(run);
+
 
 run.$inject = [
     "stateHandler",

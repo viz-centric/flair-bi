@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 "use strict";
 
 /**
@@ -78,6 +79,7 @@ function visualizationRenderService(
         widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
         widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
         widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
+
         widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
         widgets.GenerateLineChart = GenerateLineChart;
         widgets.GeneratePieChart = GeneratePieChart;

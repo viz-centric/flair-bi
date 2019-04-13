@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 
 angular
@@ -29,7 +30,8 @@ function Directive() {
     };
     return directive;
 
-    function link(scope, element, attrs) { }
+    function link(scope, element, attrs) {
+    }
 }
 
 VisualizationRenderController.$inject = [
@@ -37,6 +39,7 @@ VisualizationRenderController.$inject = [
     'GenerateStackedverticalbarChart',
     'GenerateStackedhorizontalbarChart',
     'GenerateClusteredverticalbarChart',
+
     'GenerateClusteredhorizontalbarChart',
     'GenerateLineChart',
     'GeneratePieChart',
@@ -62,6 +65,7 @@ VisualizationRenderController.$inject = [
     '$log',
     '$timeout'
 ];
+
 /* @ngInject */
 function VisualizationRenderController(
     $scope,
@@ -105,6 +109,7 @@ function VisualizationRenderController(
         widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
         widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
         widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
+
         widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
         widgets.GenerateLineChart = GenerateLineChart;
         widgets.GeneratePieChart = GeneratePieChart;

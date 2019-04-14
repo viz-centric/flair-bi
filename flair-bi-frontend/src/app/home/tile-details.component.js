@@ -1,8 +1,9 @@
 import angular from 'angular';
+import tileDetails from './tile-details.component.html';
 
 angular.module('flairbiApp')
     .component('tileDetailsComponent', {
-        templateUrl: 'app/home/tile-details.component.html',
+        template: tileDetails,
         controller: tileDetailsController,
         controllerAs: 'vm',
         bindings: {
@@ -21,7 +22,6 @@ function tileDetailsController($scope, Dashboards, Datasources, Views, recentBoo
 
     function active() {
         registerOnClickTile();
-        //$(".tile-area-table").stop(true).slideUp(600);
     }
 
     vm.filteredItems = [];
@@ -35,7 +35,7 @@ function tileDetailsController($scope, Dashboards, Datasources, Views, recentBoo
     vm.prevPage = prevPage;
     vm.range = range;
     vm.filterFn = filterFn;
-    vm.toggleTables = { 'tile-1': false, 'tile-2': false, 'tile-3': false, 'tile-4': false, 'tile-5': false }
+    vm.toggleTables = {'tile-1': false, 'tile-2': false, 'tile-3': false, 'tile-4': false, 'tile-5': false}
     vm.isDesktop = isDesktop;
     vm.filterBookmarks = filterBookmarks;
     // functions have been describe process the data for display
@@ -127,25 +127,20 @@ function tileDetailsController($scope, Dashboards, Datasources, Views, recentBoo
             activeTile(tileId);
             fetchViews();
             toggle4Boxes(tileId);
-        }
-        else if (tileId == "4") {
+        } else if (tileId == "4") {
             activeTile(tileId);
             toggle4Boxes(tileId);
             $("#box-area").show();
-        }
-        else if (tileId == "5") {
+        } else if (tileId == "5") {
             activeTile(tileId);
             getRecentAccessedBookmark();
             toggle4Boxes(tileId);
-        }
-        else if (tileId == "6") {
+        } else if (tileId == "6") {
             activeTile(tileId);
-        }
-        else if (tileId == "7") {
+        } else if (tileId == "7") {
             activeTile(tileId);
             getRecentAccessedViews();
-        }
-        else if (tileId == "8") {
+        } else if (tileId == "8") {
             activeTile(tileId);
             getRecentAccessedBookmark();
         }

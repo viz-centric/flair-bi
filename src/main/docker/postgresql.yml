@@ -9,7 +9,7 @@ services:
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=flairbi
         ports:
-            - 5432:5430
+            - 5432:5432
 
 
     flairbi-postgresql-test:

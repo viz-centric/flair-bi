@@ -3,8 +3,9 @@
     <div class="home-container container-margin-top">
         <div class="home-left-container">
             <div class="row tile-area">
-                <div ng-style="{'display': vm.isTileVisible(info.isDesktop)}" ng-click="vm.expandTile(info)" class="tile" ng-repeat="info in vm.information | orderBy: 'order'">
-                    <information-component information="info" />
+                <div ng-style="{'display': vm.isTileVisible(info.isDesktop)}" ng-click="vm.expandTile(info)"
+                     class="tile" ng-repeat="info in vm.information | orderBy: 'order'">
+                    <information-component information="info"/>
                 </div>
             </div>
 
@@ -20,48 +21,48 @@
                         <!--start.box QUICK START-->
                         <div class="box-title cf">
                             <p>Quick Start</p>
-                            <img src="content/svgs/box-flag-1.svg" alt="quick start icon">
+                            <img src="${vm.boxFlag1}" alt="quick start icon">
                         </div>
                         <div class="box-content cf flex-flow">
-                            <a ui-sref="dashboards.new" title="Dashboards" class="quick-box new-dash"> 
-                                <svg >
-                                   <use xlink:href="#new-dashboard" ></use>
-                               </svg>
+                            <a ui-sref="dashboards.new" title="Dashboards" class="quick-box new-dash">
+                                <svg>
+                                    <use xlink:href="#new-dashboard"></use>
+                                </svg>
                                 <p>New Dashboard</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a class="quick-box new-data-ins">
-                                <svg >
-                                   <use xlink:href="#new-data-insights"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#new-data-insights"></use>
+                                </svg>
                                 <p>New Data Insights</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a class="quick-box new-data-sou" ui-sref="connection.new" ng-if="vm.isAdmin">
-                                <svg >
-                                   <use xlink:href="#new-data-source" ></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#new-data-source"></use>
+                                </svg>
                                 <p>New Data Source</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a class="quick-box new-email">
-                                <svg >
-                                   <use xlink:href="#new-email-report"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#new-email-report"></use>
+                                </svg>
                                 <p>New Email Reporter</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a class="quick-box new-trash">
-                                <svg >
-                                   <use xlink:href="#new-thresolda-lert"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#new-thresolda-lert"></use>
+                                </svg>
                                 <p>New Trashold Alert</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a ui-sref="dashboards" class="quick-box view-dashboard">
-                                <svg >
-                                   <use xlink:href="#new-dashboard-view"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#new-dashboard-view"></use>
+                                </svg>
                                 <p>View Dashboard</p>
                                 <div class="blue-line"></div>
                             </a>
@@ -73,13 +74,13 @@
                         <!--start.box RECENTLY CREATED-->
                         <div class="box-title cf">
                             <p>Recently Created</p>
-                            <img src="content/svgs/box-flag-3.svg" alt="recently created icon">
+                            <img src="${vm.boxFlag3}" alt="recently created icon">
                         </div>
                         <div class="box-content cf">
                             <div id="on-recently-box1" class="recently-box cf" ng-click="vm.onRecentlyBox1()">
-                                <img src="content/svgs/accessed.svg" alt="accessed icon">
+                                <img src="${vm.accessed}" alt="accessed icon">
                                 <p>Accessed</p>
-                                <img src="content/svgs/expand-arrow.svg" alt="expand arrow icon" class="expand1 rotate">
+                                <img src="${vm.expandArrow}" alt="expand arrow icon" class="expand1 rotate">
                                 <div class="blue-line"></div>
                             </div>
 
@@ -87,34 +88,35 @@
                                 <!--FIRST BLOCK-->
 
                                 <div class="recently-box-inside cf">
-                                    <svg >
-                                   <use xlink:href="#recent-accessed-bookmark"></use>
+                                    <svg>
+                                        <use xlink:href="#recent-accessed-bookmark"></use>
                                     </svg>
                                     <a ui-sref="recently-accessed({id:'bookmark'})">Recently accessed Bookmarks</a>
                                 </div>
                                 <div class="recently-box-inside cf">
-                                    <svg >
-                                   <use xlink:href="#recent-accessed-dashboard"></use>
+                                    <svg>
+                                        <use xlink:href="#recent-accessed-dashboard"></use>
                                     </svg>
                                     <a ui-sref="recently-accessed({id:'dashboard'})">Recently accessed Dashboard</a>
                                 </div>
                                 <div class="recently-box-inside cf">
-                                    <svg >
-                                   <use xlink:href="#recent-accessed-view"></use>
-                               </svg>
+                                    <svg>
+                                        <use xlink:href="#recent-accessed-view"></use>
+                                    </svg>
                                     <a ui-sref="recently-accessed({id:'view'})">Recently accessed Views</a>
                                 </div>
                                 <div class="recently-box-inside cf">
-                                    <svg >
-                                   <use xlink:href="#recent-accessed-dashboard"></use>
-                               </svg>
+                                    <svg>
+                                        <use xlink:href="#recent-accessed-dashboard"></use>
+                                    </svg>
                                     <a ui-sref="recently-accessed({id:'overall-most-popular'})">Overall most popular</a>
                                 </div>
                                 <div class="recently-box-inside cf">
-                                   <svg >
-                                   <use xlink:href="#system-alert"></use>
-                               </svg>
-                                    <a ui-sref="recently-accessed({id:'notification-subscriptions'})">Notification Subscriptions</a>
+                                    <svg>
+                                        <use xlink:href="#system-alert"></use>
+                                    </svg>
+                                    <a ui-sref="recently-accessed({id:'notification-subscriptions'})">Notification
+                                        Subscriptions</a>
                                 </div>
 
                             </div>
@@ -123,9 +125,9 @@
 
 
                             <div class="recently-box cf recently-box2" ng-click="vm.onRecentlyBox2()">
-                                <img src="content/svgs/created.svg" alt="created icon">
+                                <img src="${vm.created}" alt="created icon">
                                 <p>Created</p>
-                                <img src="content/svgs/expand-arrow.svg" alt="expand arrow icon" class="expand2">
+                                <img src="${vm.expandArrow}" alt="expand arrow icon" class="expand2">
                                 <div class="blue-line"></div>
                             </div>
 
@@ -133,33 +135,33 @@
                                 <!--SECOND BLOCK-->
                                 <div class="recently-box-inside cf">
 
-                                    <svg >
-                                   <use xlink:href="#recent-created-bookmark"></use>
-                               </svg>
+                                    <svg>
+                                        <use xlink:href="#recent-created-bookmark"></use>
+                                    </svg>
                                     <a ui-sref="recently-created({id:'bookmark'})">Recently created Bookmarks</a>
 
                                 </div>
                                 <div class="recently-box-inside cf">
 
-                                   <svg >
-                                   <use xlink:href="#recent-created-dashboard"></use>
-                               </svg>
+                                    <svg>
+                                        <use xlink:href="#recent-created-dashboard"></use>
+                                    </svg>
                                     <a ui-sref="recently-created({id:'dashboard'})">Recently created Dashboard</a>
 
                                 </div>
                                 <div class="recently-box-inside cf">
 
-                                    <svg >
-                                   <use xlink:href="#recent-created-view"></use>
-                               </svg>
+                                    <svg>
+                                        <use xlink:href="#recent-created-view"></use>
+                                    </svg>
                                     <a ui-sref="recently-created({id:'view'})">Recently created Views</a>
 
                                 </div>
                                 <div class="recently-box-inside cf">
 
-                                    <svg >
-                                   <use xlink:href="#recent-created-database"></use>
-                               </svg>
+                                    <svg>
+                                        <use xlink:href="#recent-created-database"></use>
+                                    </svg>
                                     <a ui-sref="recently-created({id:'database'})">Recently created Databases</a>
 
                                 </div>
@@ -179,7 +181,7 @@
                 <!--end LEFT SIDE-->
 
                 <div id="welcome-message" class="hidden-sm hidden-xs hidden-md">
-                    <img src="content/svgs/central-logo.svg" alt="central logo">
+                    <img src="${vm.centralLogo}" alt="central logo">
                     <p>Welcome to</p>
                     <p>Flair BI</p>
                     <p>Brand new <br> Business Intelligence tool <br> in 2018</p>
@@ -195,7 +197,7 @@
                         <div class="box-title cf">
 
                             <p>Help</p>
-                            <img src="content/svgs/box-flag-2.svg" alt="help icon">
+                            <img src="${vm.boxFlag2}" alt="help icon">
 
                         </div>
 
@@ -203,21 +205,24 @@
 
                             <a href="#" class="help-box cf">
 
-                                <img src="content/svgs/repository.svg" alt="repository icon">
+                                <img src="${vm.repository}" alt="repository icon">
 
-                                <p>Repository &nbsp; <i style="font-size: 16px" class="fa fa-external-link-square"></i> </p>
+                                <p>Repository &nbsp; <i style="font-size: 16px" class="fa fa-external-link-square"></i>
+                                </p>
 
                                 <div class="blue-line"></div>
 
                             </a>
 
-                            <iframe width="100%" height="165" src="https://www.youtube.com/embed/jkCCnwvO_fg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <iframe width="100%" height="165" src="https://www.youtube.com/embed/jkCCnwvO_fg"
+                                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
                             <a href="#" class="help-box cf">
 
-                                <img src="content/svgs/documentation.svg" alt="repository icon">
+                                <img src="${vm.documentation}" alt="repository icon">
 
-                                <p>Documentation &nbsp; <i style="font-size: 16px" class="fa fa-external-link-square"></i> </p>
+                                <p>Documentation &nbsp; <i style="font-size: 16px"
+                                                           class="fa fa-external-link-square"></i></p>
 
                                 <div class="blue-line"></div>
 
@@ -235,7 +240,7 @@
                         <div class="box-title cf">
 
                             <p>Admin</p>
-                            <img src="content/svgs/box-flag-4.svg" alt="admin icon">
+                            <img src="${vm.boxFlag4}" alt="admin icon">
 
                         </div>
 
@@ -243,9 +248,9 @@
 
                             <a class="quick-box admin-box" ui-sref="user-management">
                                 <i style="font-size: 16px" class="fa fa-external-link-square"></i>
-                                <svg >
-                                   <use xlink:href="#user-management"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#user-management"></use>
+                                </svg>
                                 <p>User Management</p>
                                 <div class="blue-line"></div>
 
@@ -253,27 +258,27 @@
 
                             <a class="quick-box admin-box" ui-sref="permission-management">
                                 <i style="font-size: 16px" class="fa fa-external-link-square"></i>
-                                <svg >
-                                   <use xlink:href="#permission-management"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#permission-management"></use>
+                                </svg>
                                 <p>Permission Management</p>
                                 <div class="blue-line"></div>
                             </a>
 
                             <a class="quick-box admin-box">
                                 <i style="font-size: 16px" class="fa fa-external-link-square"></i>
-                                <svg >
-                                   <use xlink:href="#system-alert"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#system-alert"></use>
+                                </svg>
                                 <p>System Alerts</p>
                                 <div class="blue-line"></div>
                             </a>
 
                             <a class="quick-box admin-box">
                                 <i style="font-size: 16px" class="fa fa-external-link-square"></i>
-                                <svg >
-                                   <use xlink:href="#monitoring-dashboard"></use>
-                               </svg>
+                                <svg>
+                                    <use xlink:href="#monitoring-dashboard"></use>
+                                </svg>
                                 <p>Monitoring Dashboards</p>
                                 <div class="blue-line"></div>
                             </a>
@@ -283,14 +288,16 @@
                         <br/>
 
                         <div class="admin-expand dropdown-options-v4 btn-group">
-                            <a class="dropdown-toggle link" type="button" id="drop-down-admin-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">More...</a>
+                            <a class="dropdown-toggle link" type="button" id="drop-down-admin-menu"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">More...</a>
                             <div class="dropdown-menu" aria-labelledby="drop-down-admin-menu">
                                 <div class="items">
-                                    <div class="item" role="menuitem" ng-repeat="menuItem in vm.menuItems| orderBy: 'order' ">
+                                    <div class="item" role="menuitem"
+                                         ng-repeat="menuItem in vm.menuItems| orderBy: 'order' ">
                                         <a ui-sref="{{menuItem.href}}" class="admin-link">
                                             <span uib-tooltip="{{menuItem.label}}" tooltip-placement="bottom">
                                                 <svg class="admin-page-flaticons">
-                                                    <use xlink:href="{{menuItem.image}}" />
+                                                    <use xlink:href="{{menuItem.image}}"/>
                                                 </svg>
                                             </span>
                                         </a>
@@ -303,39 +310,39 @@
                     <!--end .box QUICK START-->
 
                     <div class="box" ng-if="vm.isAdmin==false">
-                            <!--start.box QUICK START-->
-    
-                            <div class="box-title cf">
-    
-                                <p>User</p>
-                                <img src="content/svgs/box-flag-4.svg" alt="admin icon">
-    
-                            </div>
-    
-                            <div class="box-content cf admin-box-content user-box-content">
-                                <a class="quick-box admin-box" ui-sref="jhi-health">
-                                    <i style="font-size: 16px" class="fa fa-external-link-square"></i>
-                                    <svg class="admin-page-flaticons">
-                                        <use xlink:href="#admin-health" />
-                                    </svg>
-                                    <p>Health Overview</p>
-                                    <div class="blue-line"></div>
-                                </a>
-    
-                                <a class="quick-box admin-box" ui-sref="jhi-metrics">
-                                    <i style="font-size: 16px" class="fa fa-external-link-square"></i>
-                                    <svg class="admin-page-flaticons">
-                                        <use xlink:href="#admin-metrics" />
-                                    </svg>
-                                    <p>Metrics Overview</p>
-                                    <div class="blue-line"></div>
-                                </a>
-    
-                            </div>
-                            <!--end .box-content-->
-                            <br/>
+                        <!--start.box QUICK START-->
+
+                        <div class="box-title cf">
+
+                            <p>User</p>
+                            <img src="${vm.boxFlag4}" alt="admin icon">
+
                         </div>
-                        <!--end .box QUICK START-->
+
+                        <div class="box-content cf admin-box-content user-box-content">
+                            <a class="quick-box admin-box" ui-sref="jhi-health">
+                                <i style="font-size: 16px" class="fa fa-external-link-square"></i>
+                                <svg class="admin-page-flaticons">
+                                    <use xlink:href="#admin-health"/>
+                                </svg>
+                                <p>Health Overview</p>
+                                <div class="blue-line"></div>
+                            </a>
+
+                            <a class="quick-box admin-box" ui-sref="jhi-metrics">
+                                <i style="font-size: 16px" class="fa fa-external-link-square"></i>
+                                <svg class="admin-page-flaticons">
+                                    <use xlink:href="#admin-metrics"/>
+                                </svg>
+                                <p>Metrics Overview</p>
+                                <div class="blue-line"></div>
+                            </a>
+
+                        </div>
+                        <!--end .box-content-->
+                        <br/>
+                    </div>
+                    <!--end .box QUICK START-->
 
                 </div>
                 <!--end RIGHT SIDE-->
@@ -348,25 +355,25 @@
             <div class="alerts-tabs">
                 <div id="notifications-tab" class="tab notifications-tab" ng-click="vm.openNotifications()">
                     <p>Notifications</span>
-                        <div>
-                            <svg class="alarm-icon">
-                          <use xlink:href="#alarm" />
-                      </svg>
-                        </div>
-                        <div class="blue-line"></div>
+                    <div>
+                        <svg class="alarm-icon">
+                            <use xlink:href="#alarm"/>
+                        </svg>
+                    </div>
+                    <div class="blue-line"></div>
                 </div>
                 <div id="releases-tab" class="tab releases-tab" ng-click="vm.openReleases()">
                     <p>Releases</span>
-                        <div>
-                            <svg class="release-icon">
-                            <use xlink:href="#release-icon" />
-                      </svg>
-                        </div>
-                        <div class="blue-line"></div>
+                    <div>
+                        <svg class="release-icon">
+                            <use xlink:href="#release-icon"/>
+                        </svg>
+                    </div>
+                    <div class="blue-line"></div>
                 </div>
             </div>
             <div class="notification-container">
-                <notification-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts" />
+                <notification-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts"/>
             </div>
         </div>
     </div>

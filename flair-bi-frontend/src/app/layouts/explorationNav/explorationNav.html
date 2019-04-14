@@ -3,11 +3,11 @@
         <ul side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="main-logo-element" ng-switch-when="false">
-                    <img src="content/images/flair_logo.png" alttext="flair BI" height="48" />
+                    <img src="${vm.logo}" alttext="flair BI" height="48" />
                 </div>
                 <div class="profile-element align-center" uib-dropdown ng-switch-when="true">
                     <a uib-dropdown-toggle href> <span class="clear">
-                        <img alt="image" class="img-circle" src="content/images/default_user_img.png">
+                        <img alt="image" class="img-circle" src="${vm.userImg}">
                         <span class="block m-t-xs">
                             <strong class="font-bold">
                                 {{vm.account.firstName}}

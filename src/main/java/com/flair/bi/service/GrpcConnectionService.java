@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.context.annotation.Lazy;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GrpcConnectionService {
 
+    @Lazy
     private final IGrpcService grpcService;
 
     public List<ConnectionTypeDTO> getAllConnectionTypes() {

@@ -18,7 +18,8 @@ module.exports = {
         alias: {
             'angular-split-pane': path.resolve(__dirname, './node_modules/@shagstrom/angular-split-pane/angular-split-pane.js'),
             'gridstack-angular': path.resolve(__dirname, './node_modules/gridstack-angular/dist/gridstack-angular.min.js'),
-            'i18n': path.resolve(__dirname, './src/i18n')
+            'i18n': path.resolve(__dirname, './src/i18n'),
+            'content': path.resolve(__dirname, './src/content')
         }
     },
 
@@ -36,7 +37,11 @@ module.exports = {
 
             {
                 test: /\.(jpg|png|gif)$/,
-                use: 'file-loader'
+                use: [
+                    {
+                        loader: 'file-loader'
+                    }
+                ]
             },
 
             {
@@ -80,7 +85,8 @@ module.exports = {
             topojson: 'topojson'
         }),
         new CopyWebpackPlugin([
-            { from: 'i18n', to: 'i18n'}
+            {from: 'i18n', to: 'i18n'},
+            {from: 'content', to: 'content'}
         ])
     ],
 

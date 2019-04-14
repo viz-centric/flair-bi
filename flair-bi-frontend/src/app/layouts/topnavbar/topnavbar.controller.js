@@ -1,4 +1,5 @@
 import angular from 'angular';
+import logo from 'content/svgs/flairbi-logo-no-text.svg'
 'use strict';
 
 angular
@@ -9,6 +10,7 @@ TopNavBarController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'PERMISS
 
 function TopNavBarController($scope, $state, Auth, Principal, PERMISSIONS) {
     var vm = this;
+    vm.logo = logo;
     vm.$state = $state;
     vm.logout = logout;
     vm.mobileNavidationSlide = false;

@@ -3,45 +3,49 @@
         <ul side-navigation class="nav metismenu" id="side-menu" metis-menu>
             <li class="nav-header">
                 <div class="logo-element" ui-sref="home">
-                    <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
+                    <!--                    <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">-->
+                    <img src="${vm.logo}" alt="flair bi">
                 </div>
             </li>
             <li ui-sref-active="active" title="Home">
                 <a ui-sref="home" title="Home">
                     <svg class="nav-flaticon-home">
-                        <use xlink:href="#nav-home" />
+                        <use xlink:href="#nav-home"/>
                     </svg>
                     <span data-translate="global.menu.home">Home</span>
                 </a>
             </li>
 
-            <li ng-class="{active: vm.$state.includes('dashboards')}" has-authority="{{vm.permissions.READ_DASHBOARDS}}" title="Dashboards">
+            <li ng-class="{active: vm.$state.includes('dashboards')}" has-authority="{{vm.permissions.READ_DASHBOARDS}}"
+                title="Dashboards">
                 <a ui-sref="dashboards" title="Dashboards">
                     <svg class="nav-flaticon-dashboard">
-                            <use xlink:href="#nav-dashboard" />
+                        <use xlink:href="#nav-dashboard"/>
                     </svg>
                     <span>Dashboards</span>
                 </a>
             </li>
 
-            <li ng-class="{active: vm.$state.includes('data-exploration')}" has-authority="ROLE_DEVELOPER" title="Data Explorer">
+            <li ng-class="{active: vm.$state.includes('data-exploration')}" has-authority="ROLE_DEVELOPER"
+                title="Data Explorer">
                 <a ui-sref="data-exploration">
                     <i class="fa fa-flask"></i>
-                    <span >Data Explorer</span>
+                    <span>Data Explorer</span>
                 </a>
             </li>
 
-            <li ng-class="{active: vm.$state.includes('data-extraction')}" has-authority="ROLE_DEVELOPER" title="Data Extraction">
+            <li ng-class="{active: vm.$state.includes('data-extraction')}" has-authority="ROLE_DEVELOPER"
+                title="Data Extraction">
                 <a ui-sref="data-extraction">
-                <i class="fa fa-random"></i>
-                <span >Data Extraction</span>
-            </a>
+                    <i class="fa fa-random"></i>
+                    <span>Data Extraction</span>
+                </a>
             </li>
 
             <li ng-class="{active: vm.$state.includes('account')}" title="Account Management">
                 <a ui-sref="account">
                     <svg class="nav-flaticon-settings">
-                            <use xlink:href="#nav-settings" />
+                        <use xlink:href="#nav-settings"/>
                     </svg>
                     <span class="nav-label" data-translate="global.menu.account.main">Account</span>
                 </a>
@@ -49,9 +53,9 @@
             <li ng-class="{active: vm.$state.includes('admin')}" ng-show="$root.isAdmin" title="Aministration">
                 <a ui-sref="admin" title="Aministration">
                     <svg class="nav-flaticon-admin">
-                            <use xlink:href="#nav-admin" />
+                        <use xlink:href="#nav-admin"/>
                     </svg>
-                     <span data-translate="global.menu.admin.main">Administration</span>
+                    <span data-translate="global.menu.admin.main">Administration</span>
                 </a>
             </li>
         </ul>

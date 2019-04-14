@@ -1,4 +1,14 @@
 import angular from 'angular';
+import boxFlag1 from 'content/svgs/box-flag-1.svg';
+import boxFlag3 from 'content/svgs/box-flag-3.svg';
+import accessed from 'content/svgs/accessed.svg';
+import expandArrow from 'content/svgs/expand-arrow.svg';
+import repository from 'content/svgs/repository.svg';
+import documentation from 'content/svgs/documentation.svg';
+import boxFlag4 from 'content/svgs/box-flag-4.svg';
+import created from 'content/svgs/created.svg';
+import centralLogo from 'content/svgs/central-logo.svg';
+import boxFlag2 from 'content/svgs/box-flag-2.svg';
 'use strict';
 
 angular
@@ -10,8 +20,19 @@ HomeController.$inject = ['$scope', 'Principal', 'LoginService',
 ];
 
 function HomeController($scope, Principal, LoginService,
-    $state, Information, $rootScope, alertsService, screenDetectService, adminListService, AccountDispatch) {
+                        $state, Information, $rootScope, alertsService, screenDetectService, adminListService, AccountDispatch) {
     var vm = this;
+    // LOGOS
+    vm.boxFlag1 = boxFlag1;
+    vm.boxFlag2 = boxFlag2;
+    vm.boxFlag3 = boxFlag3;
+    vm.boxFlag4 = boxFlag4;
+    vm.accessed = accessed;
+    vm.expandArrow = expandArrow;
+    vm.repository = repository;
+    vm.documentation = documentation;
+    vm.created = created;
+    vm.centralLogo = centralLogo;
 
     vm.account = null;
     vm.isAuthenticated = null;
@@ -58,7 +79,8 @@ function HomeController($scope, Principal, LoginService,
             $(".expand2").removeClass("rotate");
             $(".recently-box:first-of-type > .blue-line").css("width", "100%");
             $(".recently-box2 > .blue-line").css("width", "0%");
-        };
+        }
+        ;
     }
 
     function onRecentlyBox2() {
@@ -70,7 +92,8 @@ function HomeController($scope, Principal, LoginService,
             $(".expand1").removeClass("rotate");
             $(".recently-box2 > .blue-line").css("width", "100%");
             $(".recently-box:first-of-type > .blue-line").css("width", "0%");
-        };
+        }
+        ;
     }
 
     function onRecentlyBox() {

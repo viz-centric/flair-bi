@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import flair_logo from 'content/svgs/flair-logo.svg';
+import default_user_img from 'content/images/back.png';
 
 'use strict';
 
@@ -10,9 +12,13 @@ ExplorationNavController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'Pr
     'Visualizations', 'Measures', 'Dimensions', 'Views', '$stateParams', '$rootScope', 'modalInfo', 'Datasources', 'Explorer'];
 
 export const name = 'ExplorationNavController';
+
 export function ExplorationNavController($scope, $state, Auth, Principal, ProfileService, LoginService, Visualizations, Measures, Dimensions, Views, $stateParams, $rootScope, modalInfo,
-    Datasources, Explorer) {
+                                         Datasources, Explorer) {
     var vm = this;
+
+    vm.logo = flair_logo;
+    vm.userImg = default_user_img;//TODO fix this
     initializeMetisMenu();
     getAccount();
     vm.account = null;
@@ -117,12 +123,20 @@ export function ExplorationNavController($scope, $state, Auth, Principal, Profil
         }
         for (s = 0; s < vm.dimensions.length; s++) {
             if (vm.dimensions[s].dimensionDatasource.id == id) {
-                $scope.fields.push({ name: vm.dimensions[s].name.toUpperCase(), icon: "fa fa-tag", id: vm.dimensions[s].id });
+                $scope.fields.push({
+                    name: vm.dimensions[s].name.toUpperCase(),
+                    icon: "fa fa-tag",
+                    id: vm.dimensions[s].id
+                });
             }
         }
         for (s = 0; s < vm.measures.length; s++) {
             if (vm.measures[s].measureDatasource.id == id) {
-                $scope.fields.push({ name: vm.measures[s].name.toUpperCase(), icon: "fa fa-percent", id: vm.measures[s].id });
+                $scope.fields.push({
+                    name: vm.measures[s].name.toUpperCase(),
+                    icon: "fa fa-percent",
+                    id: vm.measures[s].id
+                });
             }
         }
     }

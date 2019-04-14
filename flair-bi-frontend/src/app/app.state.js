@@ -1,35 +1,40 @@
 import angular from 'angular';
+
+import navbar from './layouts/navbar/navbar.html';
+import explorationNav from './layouts/explorationNav/explorationNav.html';
+import footer from './layouts/footer/footer.html';
+import topNavbar from './layouts/topnavbar/topnavbar.html';
+
 "use strict";
 
 angular.module('flairbiApp')
-.config(stateConfig);
+    .config(stateConfig);
 
 stateConfig.$inject = [
     "$stateProvider"
 ];
 
- function stateConfig($stateProvider) {
+function stateConfig($stateProvider) {
     $stateProvider.state("app", {
         abstract: true,
         views: {
             "navbar@": {
-                templateUrl: "app/layouts/navbar/navbar.html",
+                template: navbar,
                 controller: "NavbarController",
                 controllerAs: "vm"
             },
             "explorationNav@": {
-                templateUrl:
-                    "app/layouts/explorationNav/explorationNav.html",
+                template: explorationNav,
                 controller: "ExplorationNavController",
                 controllerAs: "vm"
             },
             "footer@": {
-                templateUrl: "app/layouts/footer/footer.html",
+                template: footer,
                 controller: "FooterController",
                 controllerAs: "vm"
             },
             "topnavbar@": {
-                templateUrl: "app/layouts/topnavbar/topnavbar.html",
+                template: topNavbar,
                 controller: "TopNavBarController",
                 controllerAs: "vm"
             }

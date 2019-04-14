@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+import logo from 'content/svgs/flairbi-logo-no-text.svg';
 
 'use strict';
 
@@ -12,12 +13,12 @@ NavbarController.$inject = ['$scope', '$state', 'Auth',
     'Views', '$stateParams', '$rootScope', 'ExecutorFactory', 'PERMISSIONS'
 ];
 
-export const name = 'NavbarController';
-export function NavbarController($scope, $state, Auth,
-    Principal, ProfileService, LoginService,
-    Visualizations,
-    Views, $stateParams, $rootScope, ExecutorFactory, PERMISSIONS) {
+function NavbarController($scope, $state, Auth,
+                          Principal, ProfileService, LoginService,
+                          Visualizations,
+                          Views, $stateParams, $rootScope, ExecutorFactory, PERMISSIONS) {
     var vm = this;
+    vm.logo = logo;
     getAccount();
     vm.account = null;
     vm.isNavbarCollapsed = true;

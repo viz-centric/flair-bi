@@ -1,4 +1,7 @@
 import angular from 'angular';
+import home from './home.html';
+import homeTopNavbar from './home-topnavbar.html';
+
 'use strict';
 
 angular
@@ -16,12 +19,12 @@ function stateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/home/home.html',
+                template: home,
                 controller: 'HomeController',
                 controllerAs: 'vm'
             },
             'topnavbar@': {
-                templateUrl: 'app/home/home-topnavbar.html',
+                template: homeTopNavbar,
                 controller: 'HomeTopNavBarController',
                 controllerAs: 'vm'
             }

@@ -29,14 +29,16 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
+
+@Lazy
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Profile("!test")
 public class GrpcService implements IGrpcService {
 
     private final ManagedChannelFactory managedChannelFactory;
@@ -45,31 +47,46 @@ public class GrpcService implements IGrpcService {
     private QueryServiceGrpc.QueryServiceStub queryAsyncStub;
     private ConnectionServiceGrpc.ConnectionServiceBlockingStub connectionStub;
 
-    @PostConstruct
-    public void init() {
-        queryStub = QueryServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
-        queryAsyncStub = QueryServiceGrpc.newStub(managedChannelFactory.getInstance());
-        connectionStub = ConnectionServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
+    private QueryServiceGrpc.QueryServiceBlockingStub getQueryStub(){
+        if(queryStub == null){
+            queryStub = QueryServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
+        }
+        return queryStub;
     }
+
+    private QueryServiceGrpc.QueryServiceStub getQueryAsyncStub(){
+        if(queryAsyncStub == null){
+            queryAsyncStub = QueryServiceGrpc.newStub(managedChannelFactory.getInstance());
+        }
+        return queryAsyncStub;
+    }
+
+    private ConnectionServiceGrpc.ConnectionServiceBlockingStub getConnectionStub(){
+        if(connectionStub == null){
+            connectionStub = ConnectionServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
+        }
+        return connectionStub;
+    }
+
 
     @Override
     public QueryValidationResponse validate(Query query) {
-        return queryStub.validate(query);
+        return getQueryStub().validate(query);
     }
 
     @Override
     public StreamObserver<Query> getDataStream(StreamObserver<QueryResponse> responseObserver) {
-        return queryAsyncStub.getDataStream(responseObserver);
+        return getQueryAsyncStub().getDataStream(responseObserver);
     }
 
     @Override
     public ConnectionResponses getAllConnections() {
-        return connectionStub.getAllConnections(EmptyConnection.newBuilder().build());
+        return getConnectionStub().getAllConnections(EmptyConnection.newBuilder().build());
     }
 
     @Override
     public RunQueryResponse runQuery(Query query, boolean metaRetrieved) {
-        return queryStub.runQuery(RunQueryRequest.newBuilder()
+        return getQueryStub().runQuery(RunQueryRequest.newBuilder()
             .setQuery(query)
             .setRetrieveMeta(metaRetrieved)
             .build());
@@ -88,38 +105,38 @@ public class GrpcService implements IGrpcService {
             builder.setConnection(connection);
         }
 
-        return connectionStub.testConnection(builder.build());
+        return getConnectionStub().testConnection(builder.build());
     }
 
     @Override
     public ConnectionTypesResponses getAllConnectionTypes() {
-        return connectionStub.getConnectionTypes(GetAllConnectionTypesRequest.newBuilder().build());
+        return getConnectionStub().getConnectionTypes(GetAllConnectionTypesRequest.newBuilder().build());
     }
 
     @Override
     public SaveConnectionResponse saveConnection(Connection connection) {
-        return connectionStub.saveConnection(SaveConnectionRequest.newBuilder()
+        return getConnectionStub().saveConnection(SaveConnectionRequest.newBuilder()
             .setConnection(connection)
             .build());
     }
 
     @Override
     public GetConnectionResponse getConnection(Long connectionId) {
-        return connectionStub.getConnection(GetConnectionRequest.newBuilder()
+        return getConnectionStub().getConnection(GetConnectionRequest.newBuilder()
             .setId(connectionId)
             .build());
     }
 
     @Override
     public DeleteConnectionResponse deleteConnection(Long connectionId) {
-        return connectionStub.deleteConnection(DeleteConnectionRequest.newBuilder()
+        return getConnectionStub().deleteConnection(DeleteConnectionRequest.newBuilder()
             .setConnectionId(connectionId)
             .build());
     }
 
     @Override
     public UpdateConnectionResponse updateConnection(Connection connection) {
-        return connectionStub.updateConnection(UpdateConnectionRequest.newBuilder()
+        return getConnectionStub().updateConnection(UpdateConnectionRequest.newBuilder()
             .setConnection(connection)
             .build());
     }
@@ -134,7 +151,7 @@ public class GrpcService implements IGrpcService {
             builder.setConnectionLinkId(connectionLinkId);
         }
         builder.setMaxEntries(maxEntries);
-        return connectionStub.listTables(builder
+        return getConnectionStub().listTables(builder
             .setTableNameLike(tableNameLike)
             .build());
     }

@@ -4,7 +4,7 @@ const commonConfig = require('./webpack.config.js');
 const DESTINATION = path.resolve(__dirname, '.tmp');
 
 const conf = {
-    server: 'http://localhost:80'
+    server: 'http://localhost:8002'
 };
 
 

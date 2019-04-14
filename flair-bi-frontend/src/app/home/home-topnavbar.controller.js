@@ -1,4 +1,6 @@
 import angular from 'angular';
+import logo from 'content/svgs/flairbi-logo-no-text.svg';
+
 "use strict";
 
 angular
@@ -14,6 +16,8 @@ HomeTopNavBarController.$inject = [
 
 function HomeTopNavBarController(PERMISSIONS, Principal, $state, $stateParams) {
     var vm = this;
+
+    vm.logo = logo;
 
     vm.search = search;
     vm.reset = reset;
@@ -62,7 +66,7 @@ function HomeTopNavBarController(PERMISSIONS, Principal, $state, $stateParams) {
     }
 
     function search() {
-        $state.go('searched-results', { searchCriteria: vm.searchCriteria });
+        $state.go('searched-results', {searchCriteria: vm.searchCriteria});
     }
 
     function reset() {

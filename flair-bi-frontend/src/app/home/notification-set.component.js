@@ -1,8 +1,9 @@
 import angular from 'angular';
+import notificationSet from './notification-set.component.html';
 
 angular.module('flairbiApp')
     .component('notificationSetComponent', {
-        templateUrl: 'app/home/notification-set.component.html',
+        template: notificationSet,
         controller: notificationSetController,
         controllerAs: 'vm',
         bindings: {

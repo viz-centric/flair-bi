@@ -135,7 +135,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(status().isCreated());
-    			//.andExpect(jsonPath("$.message").value("Report is scheduled successfully"));
     	
     }
    

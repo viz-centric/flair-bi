@@ -20,6 +20,8 @@
         vm.requestResetPassword = requestResetPassword;
         vm.username = null;
         vm.loading = false;
+        vm.rememberMe=true;
+        vm.setRememberMe=setRememberMe;
 
         activate();
 
@@ -31,7 +33,7 @@
             vm.credentials = {
                 username: null,
                 password: null,
-                rememberMe: true
+                rememberMe: vm.rememberMe
             };
             vm.authenticationError = false;
         }
@@ -87,6 +89,10 @@
         }
 
         function onPropertiesServiceError(error) {
+        }
+
+        function setRememberMe(){
+            vm.rememberMe=!vm.rememberMe;
         }
     }
 })();

@@ -1081,7 +1081,7 @@ nav.navbar-static-top {
       display: flex;
       align-items: center; }
     nav.navbar-static-top .navbar-header .search-right-icon {
-      right: 62px;
+      right: 70px;
       position: absolute;
       outline: none;
       -webkit-transition: all 1s ease;
@@ -2716,7 +2716,8 @@ input[type="search"] {
   margin-right: 10px;
   display: flex;
   align-items: center;
-  border-radius: 2px; }
+  border-radius: 2px;
+  border-left: 1px #ced0d1 solid; }
   .dropdown-options-v2 > .dropdown-menu {
     right: 10px;
     left: auto;
@@ -3942,7 +3943,6 @@ jhi-alert .alerts .alert-danger {
       content: "";
       height: 35px;
       display: block;
-      border-left: 1px #ced0d1 solid;
       position: absolute;
       right: 6.5%;
       top: 50%;
@@ -4293,13 +4293,6 @@ jhi-alert .alerts .alert-danger {
     opacity: .8; }
   to {
     opacity: 0; } }
-          #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-title .viz-cache-dot {
-            vertical-align: middle;
-            height: 15px;
-            width: 15px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block; }
         #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-settings {
           margin: 0 10px; }
           #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-settings.btn-group {

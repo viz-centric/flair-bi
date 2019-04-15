@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('GenerateClusteredverticalbarChart', GenerateClusteredverticalbarChart);
 
-    GenerateClusteredverticalbarChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService','clusteredverticalbar'];
+    GenerateClusteredverticalbarChart.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
 
-    function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService,Clusteredverticalbar) {
+    function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, widgets) {
 
@@ -94,9 +94,10 @@
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip');
 
-                    var clusteredverticalbar = Clusteredverticalbar.build()
+                    var clusteredverticalbar = flairVisualizations.clusteredverticalbar()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true);
+                        .tooltip(true)
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(clusteredverticalbar);

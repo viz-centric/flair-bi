@@ -10,7 +10,7 @@
     function GenerateLineChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-               
+
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
                         'display': 'flex',
@@ -69,12 +69,10 @@
                         result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
                         result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                         result['textColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
-                        result['displayColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour'));
-                        result['borderColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour'));
-                        //   result['displayColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour');
-                        //  result['displayColor'] .push( (eachMeasure['displayColor'] == null) ? colorSet[i] : eachMeasure['displayColor']);
-                        //   result['borderColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
-                        //   result['borderColor'] .push( (eachMeasure['borderColor'] == null) ? colorSet[i] : eachMeasure['borderColor']);
+                        var displayColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour');
+                        result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
+                        var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
+                        result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
                         result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type'));
                         result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                     }
@@ -103,7 +101,8 @@
 
                     var line = flairVisualizations.line()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true);
+                        .tooltip(true)
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(line);

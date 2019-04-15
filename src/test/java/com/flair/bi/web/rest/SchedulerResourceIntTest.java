@@ -15,8 +15,10 @@ import com.flair.bi.service.dto.scheduler.emailsDTO;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.HttpStatus;
@@ -38,19 +40,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-/**
- * Test class for the UserResource REST controller.
- *
- * @see UserResource
- */
 @Ignore
 public class SchedulerResourceIntTest extends AbstractIntegrationTest{
 
     private MockMvc restSchedulerResourceMockMvc;
-
-    @Mock
-    private AccessControlManager accessControlManager;
     
     private SchedulerDTO schedulerDTO;
     
@@ -63,7 +56,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;   
     
-    @Inject
+    @Mock
     private UserService userService;
     
     public SchedulerDTO createScheduledObject() {
@@ -72,8 +65,9 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setUserid("flairadmin");
     	ReportDTO reportDTO= new ReportDTO();
     	reportDTO.setConnection_name("Transactions");
+    	reportDTO.setSource_id("Transactions");
     	reportDTO.setMail_body("this is a test email");
-    	reportDTO.setReport_name("Cludsdstersssed-Vertisscal-Bar-Chart-90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a");
+    	reportDTO.setReport_name("Clustered-Vertical-Bar-Chart-90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	reportDTO.setSubject("Clustered Vertical Bar Chart Report");
     	reportDTO.setTitle_name("Clustered Vertical Bar Chart");
     	schedulerDTO.setReport(reportDTO);
@@ -103,7 +97,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setAssign_report(assignReport);
     	
     	Schedule schedule= new Schedule();
-    	schedule.setEnd_date("2021-04-08");
+    	schedule.setEnd_date("2021-04-15");
     	schedule.setStart_date("2021-04-09 00:00");
     	schedule.setTimezone("Asia/Kolkata");
     	schedulerDTO.setSchedule(schedule);
@@ -134,14 +128,15 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     }
 
     @Test
-    @Transactional
     public void schduleReport() throws Exception {
     	restSchedulerResourceMockMvc.perform(post("/api/schedule")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(schedulerDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.status").value(HttpStatus.CREATED));
+                .andExpect(status().isCreated());
+    			//.andExpect(jsonPath("$.message").value("Report is scheduled successfully"));
+    	
     }
    
 }

@@ -17,7 +17,9 @@
         "Dashboards",
         "$window",
         "viewReleases",
-        "Principal"
+        "Principal",
+        "$translate",
+        "$rootScope"
     ];
 
     function ViewsDialogController(
@@ -32,7 +34,9 @@
         Dashboards,
         $window,
         viewReleases,
-        Principal
+        Principal,
+        $translate,
+        $rootScope
     ) {
         var vm = this;
 
@@ -63,21 +67,36 @@
         function save() {
             vm.isSaving = true;
             if (vm.views.id !== null) {
-                Views.update(vm.views, onSaveSuccess, onSaveError);
+                Views.update(vm.views, onUpdateSuccess, onSaveError);
             } else {
                 Views.save(vm.views, onSaveSuccess, onSaveError);
             }
         }
 
         function onSaveSuccess(result) {
+            onSave(result);
+            var info = {text:$translate.instant('flairbiApp.views.created',{param:result.id}),title: "Saved"}
+            $rootScope.showSuccessToast(info);
+        }
+
+        function onUpdateSuccess(result) {
+            onSave(result);
+            var info = {text:$translate.instant('flairbiApp.views.updated',{param:result.id}),title: "Updated"}
+            $rootScope.showSuccessToast(info);
+        }
+
+        function onSave(result){
             $scope.$emit("flairbiApp:viewsUpdate", result);
             $uibModalInstance.close(result);
             vm.isSaving = false;
-            Principal.identity(true);
+            Principal.identity(true);    
         }
 
         function onSaveError() {
             vm.isSaving = false;
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.views.errorSaving')
+            });
         }
 
         $scope.moveToOverview = function(info) {

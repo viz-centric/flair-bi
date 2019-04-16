@@ -18,6 +18,7 @@
             "detail": {
                 "title": "Dashboards"
             },
+            "releaseRequest":"New release request has been made successfully",
             "dashboardName": "Dashboard Name",
             "category": "Category",
             "description": "Description",

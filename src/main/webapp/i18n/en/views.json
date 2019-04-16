@@ -18,6 +18,7 @@
             "detail": {
                 "title": "Views"
             },
+            "releaseRequest":"New release request has been made successfully",
             "viewName": "View Name",
             "description": "Description",
             "published": "Published",

@@ -122,6 +122,9 @@
 
         function onSaveError() {
             vm.isSaving = false;
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.dashboards.errorSaving')
+            });
         }
 
         vm.setImage = function($file, dashboards) {

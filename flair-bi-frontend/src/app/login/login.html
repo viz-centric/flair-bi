@@ -2,29 +2,37 @@
 
     <form class="login-form form" role="form" ng-submit="vm.login($event)">
         <div class="form-group text-center login-logo">
-            <img src="content/svgs/flairbi-logo.svg" alt="flair bi">
+
+            <img src=<%=require("content/svgs/flair-logo.svg")%>>
+            <img src="${{vm.flairBiLogo}}" alt="flair bi">
         </div>
         <div class="form-group text-center">
             <h3 class="login-title"> Login to Your Account </h3>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="username" placeholder="{{'global.form.username.placeholder' | translate}}"
-                ng-model="vm.username" required>
+            <input type="text" class="form-control" id="username"
+                   placeholder="{{'global.form.username.placeholder' | translate}}"
+                   ng-model="vm.username" required>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
-                ng-model="vm.password" required>
+            <input type="password" class="form-control" id="password"
+                   placeholder="{{'login.form.password.placeholder' | translate}}"
+                   ng-model="vm.password" required>
         </div>
         <div class="form-group login-error-message" ng-if="vm.authenticationError">Your flair BI account or password
-            was entered incorrectly</div>
+            was entered incorrectly
+        </div>
         <div class="form-group">
-            <label for="rememberMe">
-                <input icheck type="checkbox" id="rememberMe" ng-model="vm.rememberMe" checked>
-                <span style='margin-left:10px' data-translate="login.form.rememberme">Remember me {{vm.rememberMe}}</span>
+            <label class="flair-checkbox" ng-click="vm.setRememberMe()" style="margin-bottom: 0;">
+                <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.rememberMe,'fa-square-o-unchecked':!vm.rememberMe} "></i>
+                <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.rememberMe,'fa-check-square-o-unchecked':!vm.rememberMe}"></i>
             </label>
+            <span style='vertical-align: 3px;margin-left: 4px;'
+                  data-translate="login.form.rememberme">Remember me </span>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-login" data-translate="login.form.button">Sign in</button>
+        <button type="submit" class="btn btn-primary btn-block btn-login" data-translate="login.form.button">Sign in
+        </button>
         <div class="forgot-password-link">
             <a ng-click="vm.requestResetPassword()" data-translate="login.password.forgot">Did you forget your
                 password?</a>
@@ -37,7 +45,7 @@
                         Sign in using
                     </span>
                     <span class="okta-icon">
-                        <img src="content/svgs/okta-logo-v2.svg" alt="Okta">
+                        <img src="${vm.oktaLogo}" alt="Okta">
                     </span>
                 </a>
             </div>

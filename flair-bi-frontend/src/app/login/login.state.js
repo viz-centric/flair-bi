@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import login from './login.html';
+
 'use strict';
 
 angular
@@ -13,20 +15,14 @@ export function stateConfig($stateProvider) {
             url: '/login',
             views: {
                 'content@': {
-                    templateUrl: 'app/login/login.html',
+                    template: login,
                     controller: 'LoginController',
                     controllerAs: 'vm'
                 },
-                'navbar@': {
-
-                },
-                'topnavbar@': {
-
-                }
+                'navbar@': {},
+                'topnavbar@': {}
             },
-            data: {
-
-            },
+            data: {},
             resolve: {
                 authorize: ['Auth',
                     function (Auth) {

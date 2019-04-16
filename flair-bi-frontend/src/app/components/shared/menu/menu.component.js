@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import menu from './menu.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('menuComponent', {
-        templateUrl: 'app/components/shared/menu/menu.component.html',
+        template: menu,
         controller: menuController,
         controllerAs: 'vm',
     });

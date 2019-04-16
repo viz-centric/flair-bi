@@ -118,7 +118,7 @@ flair-ai-api:
   username: admin
   password: admin
   auth-url : http://devsupport-vizcentric.com:9100/api-token-auth/
-  schedule-report-url : http://devsupport-vizcentric.com:9100/flairServiceApi/
+  schedule-report-url : http://localhost:8090/api/jobSchedule/
   mail_body : This is a test email to check api functionality
   slack_API_Token : xoxp-338558815156-339648235094-401148640099-d844d7552f5b0081546729d997e92f52
   channel_id : C9ZK2705U

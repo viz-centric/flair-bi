@@ -27,6 +27,7 @@ module.exports = webpackMerge(commonConfig, {
 
     output: {
         path: DESTINATION,
-        filename: 'js/index.js'
+        filename: 'js/index.js',
+        publicPath: '/'
     },
 });

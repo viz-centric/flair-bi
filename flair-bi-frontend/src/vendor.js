@@ -33,3 +33,8 @@ import 'angular-utils-ui-breadcrumbs';
 import 'angular-cron-gen';
 import 'angular-translate-interpolation-messageformat';
 import 'angular-translate-loader-partial';
+import 'jquery';
+
+import 'content/js/custom';
+import 'content/js/icheck';
+import 'content/js/sweetalert.min';

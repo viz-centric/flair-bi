@@ -39,14 +39,37 @@ module.exports = {
                 test: /\.(jpg|png|gif)$/,
                 use: [
                     {
-                        loader: 'file-loader'
+                        loader: "file-loader",
+                        options: {
+                            name: "[name].[ext]",
+                            publicPath: 'content/images'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(svg)$/,
+                use: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            name: '[name].[ext]',
+                            publicPath: 'content/svgs'
+                        }
                     }
                 ]
             },
 
             {
-                test: /\.(svg|woff|woff2|eot|ttf)$/,
-                use: 'file-loader?outputPath=fonts/'
+                test: /\.(woff|woff2|eot|ttf)$/,
+                use: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            outputPath: 'content/fonts'
+                        }
+                    }
+                ]
             },
 
             {
@@ -81,6 +104,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
+            'window.jQuery': 'jquery',
             d3: 'd3',
             topojson: 'topojson'
         }),

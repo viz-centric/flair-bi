@@ -3,8 +3,7 @@
     <form class="login-form form" role="form" ng-submit="vm.login($event)">
         <div class="form-group text-center login-logo">
 
-            <img src=<%=require("content/svgs/flair-logo.svg")%>>
-            <img src="${{vm.flairBiLogo}}" alt="flair bi">
+            <img src="{{vm.flairBiLogo}}" alt="flair bi">
         </div>
         <div class="form-group text-center">
             <h3 class="login-title"> Login to Your Account </h3>
@@ -45,7 +44,7 @@
                         Sign in using
                     </span>
                     <span class="okta-icon">
-                        <img src="${vm.oktaLogo}" alt="Okta">
+                        <img src="{{vm.oktaLogo}}" alt="Okta">
                     </span>
                 </a>
             </div>

@@ -66,6 +66,7 @@
     "datatables.net-jqui": "^1.10.19",
     "dom-to-image": "^2.6.0",
     "flair-visualizations": "https://github.com/viz-centric/flair-visualizations.git",
+    "font-awesome": "^4.7.0",
     "fontawesome": "^5.6.3",
     "global": "^4.3.2",
     "gridstack": "^0.4.0",

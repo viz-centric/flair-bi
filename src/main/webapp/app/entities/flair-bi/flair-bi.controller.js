@@ -36,7 +36,8 @@
         "HttpService",
         "AuthServerProvider",
         "AlertService",
-        "QueryValidationService"
+        "QueryValidationService",
+        "$translate"
     ];
 
     function FlairBiController(
@@ -70,7 +71,8 @@
         HttpService,
         AuthServerProvider,
         AlertService,
-        QueryValidationService
+        QueryValidationService,
+        $translate
     ) {
         var vm = this;
         var editMode = false;
@@ -402,6 +404,8 @@
                     function(result){
                         vm.isSaving = false;
                         VisualMetadataContainer.update(v.id,result,'id');
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:v.id}),title: "Updated"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveFeaturesError
                 );
@@ -414,6 +418,8 @@
                     function(result){
                         vm.isSaving = false;
                         VisualMetadataContainer.update(v.visualBuildId,result,'visualBuildId');
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveFeaturesError
                 );
@@ -422,6 +428,9 @@
 
         function onSaveFeaturesError(error) {
             vm.isSaving = false;
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.dashboards.errorSaving')
+            });
         }
 
         function flipCard(v) {

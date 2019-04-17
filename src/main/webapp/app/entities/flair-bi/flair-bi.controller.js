@@ -190,10 +190,17 @@
         function onExchangeMetadataError(data) {
             console.log('controller on metadata error', data);
             var body = JSON.parse(data.body || '{}');
-            var error = QueryValidationService.getQueryValidationError(body.description);
+            if(body.description==="io exception"){
+                var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
+                $rootScope.showErrorSingleToast({
+                    text: msg
+                });
+            }else{
+                var error = QueryValidationService.getQueryValidationError(body.description);
 
-            if (error) {
-                AlertService.error(error.msgKey, error.params);
+                if (error) {
+                    AlertService.error(error.msgKey, error.params);
+                }
             }
         }
 

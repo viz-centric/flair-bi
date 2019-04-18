@@ -60,8 +60,11 @@
                     }
                 } else {
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'kpi-' + this.id)
-                        .attr('class', 'kpi');
+                        .attr('id', 'kpi-' + element[0].id)
+                        .attr('class', 'kpi')
+                        .style('width', element[0].clientWidth + 'px')
+                        .style('height', element[0].clientHeight + 'px')
+
 
                     var kpi = flairVisualizations.kpi()
                         .config(getProperties(VisualizationUtils, record));

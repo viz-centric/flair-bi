@@ -40,21 +40,31 @@
                     return result;
                 }
 
-                if(Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if($rootScope.filterSelection.id != record.id) {
+                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                    if ($rootScope.filterSelection.id != record.id) {
                         var infographics = $rootScope.updateWidget[record.id];
                         infographics.update(record.data);
                     }
                 } else {
+                    d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'infographics-' + this.id)
-                        .attr('class', 'infographics');
+                        .attr('id', 'infographics-' + element[0].id)
+                        .attr('class', 'infographics')
+                        .style('width', element[0].clientWidth + 'px')
+                        .style('height', element[0].clientHeight + 'px')
+
+                    var tooltip = div.append('div')
+                        .attr('id', 'tooltip')
 
                     var infographics = flairVisualizations.infographics()
-                        .config(getProperties(VisualizationUtils, record));
+                        .config(getProperties(VisualizationUtils, record))
+                        .tooltip(true)
+                        .print(false);
 
                     div.datum(record.data)
                         .call(infographics);
+
+                    infographics._getHTML()
 
                     $rootScope.updateWidget[record.id] = infographics;
                 }

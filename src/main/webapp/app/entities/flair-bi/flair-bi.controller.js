@@ -36,7 +36,8 @@
         "HttpService",
         "AuthServerProvider",
         "AlertService",
-        "QueryValidationService"
+        "QueryValidationService",
+        "$translate"
     ];
 
     function FlairBiController(
@@ -70,7 +71,8 @@
         HttpService,
         AuthServerProvider,
         AlertService,
-        QueryValidationService
+        QueryValidationService,
+        $translate
     ) {
         var vm = this;
         var editMode = false;
@@ -188,10 +190,17 @@
         function onExchangeMetadataError(data) {
             console.log('controller on metadata error', data);
             var body = JSON.parse(data.body || '{}');
-            var error = QueryValidationService.getQueryValidationError(body.description);
+            if(body.description==="io exception"){
+                var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
+                $rootScope.showErrorSingleToast({
+                    text: msg
+                });
+            }else{
+                var error = QueryValidationService.getQueryValidationError(body.description);
 
-            if (error) {
-                AlertService.error(error.msgKey, error.params);
+                if (error) {
+                    AlertService.error(error.msgKey, error.params);
+                }
             }
         }
 
@@ -402,6 +411,8 @@
                     function(result){
                         vm.isSaving = false;
                         VisualMetadataContainer.update(v.id,result,'id');
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:v.id}),title: "Updated"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveFeaturesError
                 );
@@ -414,6 +425,8 @@
                     function(result){
                         vm.isSaving = false;
                         VisualMetadataContainer.update(v.visualBuildId,result,'visualBuildId');
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveFeaturesError
                 );
@@ -422,6 +435,9 @@
 
         function onSaveFeaturesError(error) {
             vm.isSaving = false;
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.dashboards.errorSaving')
+            });
         }
 
         function flipCard(v) {

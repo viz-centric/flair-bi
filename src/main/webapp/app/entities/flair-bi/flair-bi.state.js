@@ -117,6 +117,7 @@
                             $translatePartialLoader.addPart("dimensions");
                             $translatePartialLoader.addPart("drilldown");
                             $translatePartialLoader.addPart("featureBookmark");
+                            $translatePartialLoader.addPart("visualmetadata");
                             return $translate.refresh();
                         }
                     ],

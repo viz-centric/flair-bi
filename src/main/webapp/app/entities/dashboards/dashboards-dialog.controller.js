@@ -110,12 +110,21 @@
             $uibModalInstance.close(result);
             vm.isSaving = false;
             //fetch new permission for dashboards
-            if($state.current.url.includes("new"))
+            if($state.current.url.includes("new")){
                 Principal.identity(true);
+                var info = {text:$translate.instant('flairbiApp.dashboards.created',{param:result.id}),title: "Saved"}
+                $rootScope.showSuccessToast(info);
+            }else{
+                var info = {text:$translate.instant('flairbiApp.dashboards.updated',{param:result.id}),title: "Updated"}
+                $rootScope.showSuccessToast(info);
+            }
         }
 
         function onSaveError() {
             vm.isSaving = false;
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.dashboards.errorSaving')
+            });
         }
 
         vm.setImage = function($file, dashboards) {

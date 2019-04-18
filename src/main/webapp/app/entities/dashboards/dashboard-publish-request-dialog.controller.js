@@ -12,7 +12,9 @@
         "$scope",
         "entity",
         "$stateParams",
-        "Views"
+        "Views",
+        "$translate",
+        "$rootScope"
     ];
 
     function DashboardPublishRequestDialogController(
@@ -22,7 +24,9 @@
         $scope,
         entity,
         $stateParams,
-        Views
+        Views,
+        $translate,
+        $rootScope
     ){
         var vm = this;
         vm.dashboard = entity;
@@ -64,6 +68,8 @@
                     $scope.$emit("flairbiApp:dashboardRequestRelease", identifier);
                     $uibModalInstance.close({ dashboardId: $stateParams.id });
                     $window.history.back();
+                    var info = {text:$translate.instant('flairbiApp.dashboards.releaseRequest'),title: "Requested"}
+                    $rootScope.showSuccessToast(info);
                 }
             );
         }

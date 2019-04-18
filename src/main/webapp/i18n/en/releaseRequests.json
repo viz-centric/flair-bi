@@ -6,7 +6,7 @@
 			"reject":"Request has been rejected",
 			"errorRejecting":"error occured while rejecting",
 			"errorApproving":"error occured while approving"
-		}	
+		}
 	}
 
 }

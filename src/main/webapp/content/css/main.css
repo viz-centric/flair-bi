@@ -764,6 +764,18 @@ body.modal-open .animated {
   .flair-checkbox .fa:hover {
     color: #439dd3; }
 
+.flair-checkbox-disabled {
+  pointer-events: none; }
+  .flair-checkbox-disabled .fa-check-square-o-checked {
+    color: #aaa;
+    display: inline; }
+
+.flair-checkbox-enabled {
+  pointer-events: visible; }
+  .flair-checkbox-enabled .fa-check-square-o-checked {
+    color: #439dd3;
+    display: inline; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -6216,21 +6228,6 @@ input.select2-active {
 .scheduler-tags > tags-input .host {
   margin-top: 0px; }
 
-.dag-scheduler-modal .modal-header {
-  background-color: #f6f8f8; }
-  .dag-scheduler-modal .modal-header .edit-icon {
-    height: 20px;
-    width: 20px;
-    display: inline-block;
-    float: left;
-    margin-bottom: -20px; }
-  .dag-scheduler-modal .modal-header .cancle-icon {
-    height: 15px;
-    width: 15px;
-    display: inline-block;
-    float: right;
-    margin-top: -25px; }
-
 .cron-wrap .clearfix .form-group {
   display: flex; }
   .cron-wrap .clearfix .form-group label {
@@ -6316,7 +6313,7 @@ input.select2-active {
 .common-create-popup .modal-header {
   background-color: #f6f8f8; }
 
-.common-create-popup .common-icon {
+.common-create-popup .common-edit-icon {
   height: 20px;
   width: 20px;
   display: inline-block;

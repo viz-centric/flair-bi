@@ -29,6 +29,9 @@
         "lastModifiedBy": "Modified by",
         "lastModifiedDate": "Modified date",
         "selectUser": "Select User ...",
+        "activatedSuccess":"User has been Activated",
+        "deactivatedSuccess":"User has been Dectivated",
+        "errorUpdating":"Error occured updating user",
         "error": {
             "users.all": "Error loading users"
         }

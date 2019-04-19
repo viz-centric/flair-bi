@@ -764,6 +764,18 @@ body.modal-open .animated {
   .flair-checkbox .fa:hover {
     color: #439dd3; }
 
+.flair-checkbox-disabled {
+  pointer-events: none; }
+  .flair-checkbox-disabled .fa-check-square-o-checked {
+    color: #aaa;
+    display: inline; }
+
+.flair-checkbox-enabled {
+  pointer-events: visible; }
+  .flair-checkbox-enabled .fa-check-square-o-checked {
+    color: #439dd3;
+    display: inline; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }

@@ -31,9 +31,9 @@ function AuthServerProvider($http, $localStorage) {
     function login(credentials) {
         return $http
             .post("api/authenticate", credentials)
-            .success(function (response) {
-                $localStorage.authenticationToken = response.id_token;
-                return response;
+            .then(function (response) {
+                $localStorage.authenticationToken = response.data.id_token;
+                return response.data;
             });
     }
 

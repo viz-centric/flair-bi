@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+
+import expandArrowSvg from 'content/svgs/expand-arrow.svg';
+import flairLogoNoTextSvg from 'content/svgs/flairbi-logo-no-text.svg';
 "use strict";
 
 angular
@@ -65,6 +68,9 @@ function FlairBiContentHeaderController(
 
     var editMode = false;
     var showOpt = true;
+
+    vm.expandArrowSvg = expandArrowSvg;
+    vm.flairLogoNoTextSvg = flairLogoNoTextSvg;
 
     vm.configuration = configuration;
     vm.states = states;

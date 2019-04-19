@@ -8,9 +8,9 @@ angular
         DatasourceConstraintController
     );
 
-DatasourceConstraintController.$inject = ["DatasourceConstraint"];
+DatasourceConstraintController.$inject = ["DatasourceConstraint","$translate","$rootScope"];
 
-function DatasourceConstraintController(DatasourceConstraint) {
+function DatasourceConstraintController(DatasourceConstraint,$translate,$rootScope) {
     var vm = this;
 
     vm.datasourceConstraints = [];
@@ -18,9 +18,13 @@ function DatasourceConstraintController(DatasourceConstraint) {
     loadAll();
 
     function loadAll() {
-        DatasourceConstraint.query(function (result) {
+        DatasourceConstraint.query(function(result) {
             vm.datasourceConstraints = result;
             vm.searchQuery = null;
+        },function(){
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.datasourceConstraint.errorFetching')
+            });
         });
     }
 }

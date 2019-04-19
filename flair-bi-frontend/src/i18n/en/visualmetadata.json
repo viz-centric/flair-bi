@@ -9,6 +9,7 @@
             },
             "created": "A new Visualmetadata is created with identifier {{ param }}",
             "updated": "A Visualmetadata is updated with identifier {{ param }}",
+            "errorSaving": "Error saving Visualmetadata",
             "deleted": "A Visualmetadata is deleted with identifier {{ param }}",
             "delete": {
                 "question": "Are you sure you want to delete Visualmetadata {{ id }}?"
@@ -47,7 +48,8 @@
             "axisLegendColor": "Axis Legend Color",
             "barChartType": "Bar Chart Type",
             "showGrid": "Show Grid",
-            "metadataVisual": "Metadata Visual"
+            "metadataVisual": "Metadata Visual",
+            "errorOnReceivingMataData":"Error receiving data"
         }
     }
 }

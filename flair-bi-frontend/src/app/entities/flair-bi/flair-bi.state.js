@@ -1,4 +1,11 @@
 import * as angular from 'angular';
+
+import flairBiFullscreen from './fullscreen/flair-bi-fullscreen.html';
+import flairbiHtml from './flair-bi.html';
+import flairbiFooterHtml from './flair-bi-footer.html';
+import flairbiContentHeaderHtml from './flair-bi-content-header.html';
+import flairbiRightnavbarHtml from './rightnavbar/flair-bi-rightnavbar.html';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -36,8 +43,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/flair-bi/fullscreen/flair-bi-fullscreen.html",
+                    template: flairBiFullscreen,
                     controller: "FlairBiFullscreenController",
                     controllerAs: "vm"
                 },
@@ -79,25 +85,22 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl: "app/entities/flair-bi/flair-bi.html",
+                    template: flairbiHtml,
                     controller: "FlairBiController",
                     controllerAs: "vm"
                 },
                 "footer@": {
-                    templateUrl:
-                        "app/entities/flair-bi/flair-bi-footer.html",
+                    template: flairbiFooterHtml,
                     controller: "FlairBiFooterController",
                     controllerAs: "vm"
                 },
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/flair-bi/flair-bi-content-header.html",
+                    template: flairbiContentHeaderHtml,
                     controller: "FlairBiContentHeaderController",
                     controllerAs: "vm"
                 },
                 "rightnavbar@": {
-                    templateUrl:
-                        "app/entities/flair-bi/rightnavbar/flair-bi-rightnavbar.html",
+                    template: flairbiRightnavbarHtml,
                     controller: "FlairBiRightNavBarController",
                     controllerAs: "vm"
                 }
@@ -117,6 +120,7 @@ function stateConfig($stateProvider) {
                         $translatePartialLoader.addPart("dimensions");
                         $translatePartialLoader.addPart("drilldown");
                         $translatePartialLoader.addPart("featureBookmark");
+                        $translatePartialLoader.addPart("visualmetadata");
                         return $translate.refresh();
                     }
                 ],

@@ -5,8 +5,8 @@ angular
     .module("flairbiApp")
     .controller("ReleaseManagementController", ReleaseManagementController);
 
-ReleaseManagementController.$inject = ["$scope", "Release"];
-function ReleaseManagementController($scope, Release) {
+ReleaseManagementController.$inject = ["$scope", "Release","$translate","$rootScope"];
+function ReleaseManagementController($scope, Release,$translate,$rootScope) {
     var vm = this;
 
     vm.approve = approve;
@@ -23,10 +23,15 @@ function ReleaseManagementController($scope, Release) {
         Release.reject(
             { id: vr.id },
             {},
-            function (res) {
+            function(res) {
+                var info = {text:$translate.instant('flairbiApp.releaseRequests.reject',{param:name}),title: "Rejected"}
+                $rootScope.showSuccessToast(info);
                 activate();
             },
-            function (err) {
+            function(err) {
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('flairbiApp.releaseRequests.errorRejecting')
+                });
                 activate();
             }
         );
@@ -36,10 +41,15 @@ function ReleaseManagementController($scope, Release) {
         Release.approve(
             { id: vr.id },
             {},
-            function (res) {
+            function(res) {
+                var info = {text:$translate.instant('flairbiApp.releaseRequests.approve',{param:name}),title: "Approved"}
+                $rootScope.showSuccessToast(info);
                 activate();
             },
-            function (err) {
+            function(err) {
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('flairbiApp.releaseRequests.errorApproving')
+                });
                 activate();
             }
         );

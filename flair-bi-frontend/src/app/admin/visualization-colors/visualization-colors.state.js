@@ -10,7 +10,7 @@ stateConfig.$inject = ['$stateProvider', 'PERMISSIONS'];
 function stateConfig($stateProvider, PERMISSIONS) {
     $stateProvider
         .state('visualization-colors', {
-            parent: 'entity',
+            parent: 'admin',
             url: '/visualization-colors',
             data: {
                 authorities: [PERMISSIONS.READ_VISUALIZATION_COLORS],

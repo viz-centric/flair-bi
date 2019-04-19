@@ -9,13 +9,16 @@
             },
             "created": "A new Dashboards is created with identifier {{ param }}",
             "updated": "A Dashboards is updated with identifier {{ param }}",
+            "errorSaving": "Error saving dashboard",
             "deleted": "A Dashboards is deleted with identifier {{ param }}",
             "delete": {
                 "question": "Are you sure you want to delete Dashboards {{ id }}?"
             },
+            "errorDeleting": "Error deleting dashboard",
             "detail": {
                 "title": "Dashboards"
             },
+            "releaseRequest":"New release request has been made successfully",
             "dashboardName": "Dashboard Name",
             "category": "Category",
             "description": "Description",

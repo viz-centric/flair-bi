@@ -11,13 +11,17 @@ angular
 FeatureBookmarkDeleteController.$inject = [
     "$uibModalInstance",
     "entity",
-    "FeatureBookmark"
+    "FeatureBookmark",
+    "$translate",
+    "$rootScope"
 ];
 
 function FeatureBookmarkDeleteController(
     $uibModalInstance,
     entity,
-    FeatureBookmark
+    FeatureBookmark,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -30,8 +34,15 @@ function FeatureBookmarkDeleteController(
     }
 
     function confirmDelete(id) {
-        FeatureBookmark.delete({ id: id }, function () {
+        FeatureBookmark.delete({ id: id }, function() {
             $uibModalInstance.close(true);
+            $uibModalInstance.close(true);
+            var info = {text:$translate.instant('flairbiApp.featureBookmark.deleted',{param:id}),title: "Deleted"}
+            $rootScope.showSuccessToast(info);
+        },function(){
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.featureBookmark.errorDeleting')
+            });
         });
     }
 }

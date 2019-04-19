@@ -14,7 +14,9 @@ ViewRequestPublishController.$inject = [
     "$stateParams",
     "Views",
     "$uibModalInstance",
-    "$window"
+    "$window",
+    "$translate",
+    "$rootScope"
 ];
 function ViewRequestPublishController(
     $scope,
@@ -22,7 +24,9 @@ function ViewRequestPublishController(
     $stateParams,
     Views,
     $uibModalInstance,
-    $window
+    $window,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -34,7 +38,7 @@ function ViewRequestPublishController(
 
     ////////////////
 
-    function activate() { }
+    function activate() {}
 
     function clear() {
         $uibModalInstance.dismiss("cancel");
@@ -45,10 +49,12 @@ function ViewRequestPublishController(
         Views.requestRelease(
             { id: identifier },
             { comment: vm.releaseComment },
-            function () {
+            function() {
                 $scope.$emit("flairbiApp:viewRequestRelease", identifier);
                 $uibModalInstance.close({ dashboardId: $stateParams.id });
                 $window.history.back();
+                var info = {text:$translate.instant('flairbiApp.views.releaseRequest'),title: "Requested"}
+                $rootScope.showSuccessToast(info);
             }
         );
     }

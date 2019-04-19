@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 import boxFlag1 from 'content/svgs/box-flag-1.svg';
 import boxFlag3 from 'content/svgs/box-flag-3.svg';
 import accessed from 'content/svgs/accessed.svg';
@@ -9,6 +10,7 @@ import boxFlag4 from 'content/svgs/box-flag-4.svg';
 import created from 'content/svgs/created.svg';
 import centralLogo from 'content/svgs/central-logo.svg';
 import boxFlag2 from 'content/svgs/box-flag-2.svg';
+
 'use strict';
 
 angular
@@ -93,7 +95,6 @@ function HomeController($scope, Principal, LoginService,
             $(".recently-box2 > .blue-line").css("width", "100%");
             $(".recently-box:first-of-type > .blue-line").css("width", "0%");
         }
-        ;
     }
 
     function onRecentlyBox() {

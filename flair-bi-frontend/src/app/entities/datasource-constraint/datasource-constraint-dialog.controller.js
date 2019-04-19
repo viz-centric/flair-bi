@@ -46,12 +46,12 @@ function DatasourceConstraintDialogController(
     vm.removeConstraint = removeConstraint;
     vm.createArray = createArray;
     vm.features = [];
-    vm.search = search;
-    vm.searchUser = searchUser;
+    vm.search=search;
+    vm.searchUser=searchUser;
 
     activate();
 
-    $timeout(function () {
+    $timeout(function() {
         angular.element(".form-group:eq(1)>input").focus();
     });
 
@@ -61,7 +61,7 @@ function DatasourceConstraintDialogController(
             vm.datasourceConstraint.constraintDefinition.featureConstraints
         ) {
             vm.datasourceConstraint.constraintDefinition.featureConstraints.forEach(
-                function (item) {
+                function(item) {
                     if (item.values) {
                         item.stringValues = item.values.join();
                     }
@@ -104,10 +104,10 @@ function DatasourceConstraintDialogController(
                     datasource: vm.datasourceConstraint.datasource.id,
                     featureType: "DIMENSION"
                 },
-                function (result) {
+                function(result) {
                     vm.features = result;
                 },
-                function (errors) { }
+                function(errors) {}
             );
         }
     }
@@ -121,7 +121,7 @@ function DatasourceConstraintDialogController(
         if (vm.datasourceConstraint.id !== null) {
             DatasourceConstraint.update(
                 vm.datasourceConstraint,
-                onSaveSuccess,
+                onUpdateSuccess,
                 onSaveError
             );
         } else {
@@ -134,16 +134,31 @@ function DatasourceConstraintDialogController(
     }
 
     function onSaveSuccess(result) {
+        onSave(result);
+        var info = {text:$translate.instant('flairbiApp.datasourceConstraint.created',{param:result.id}),title: "Saved"}
+        $rootScope.showSuccessToast(info);
+    }
+
+    function onUpdateSuccess(result) {
+        onSave(result);
+        var info = {text:$translate.instant('flairbiApp.datasourceConstraint.updated',{param:result.id}),title: "Updated"}
+        $rootScope.showSuccessToast(info);
+    }
+
+    function onSaveError() {
+        vm.isSaving = false;
+        $rootScope.showErrorSingleToast({
+            text: $translate.instant('flairbiApp.datasourceConstraint.errorSaving')
+        });
+    }
+
+    function onSave(result){
         $scope.$emit("flairbiApp:datasourceConstraintUpdate", result);
         $uibModalInstance.close(result);
         vm.isSaving = false;
     }
 
-    function onSaveError() {
-        vm.isSaving = false;
-    }
-
-    function search(e, searchedText) {
+    function search(e,searchedText) {
         e.preventDefault();
         if (searchedText) {
             Datasources.search({
@@ -161,7 +176,7 @@ function DatasourceConstraintDialogController(
         }
     }
 
-    function searchUser(e, searchedText) {
+    function searchUser(e,searchedText) {
         e.preventDefault();
         if (searchedText) {
             User.search({

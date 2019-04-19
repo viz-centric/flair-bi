@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+
+import adminHtml from './admin.html';
+
 'use strict';
 
 angular
@@ -13,7 +16,7 @@ function stateConfig($stateProvider) {
         url: '/administration',
         views: {
             'content@': {
-                templateUrl: 'app/admin/admin.html',
+                template: adminHtml,
                 controller: 'AdminController',
                 controllerAs: 'vm'
             }

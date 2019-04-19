@@ -1,13 +1,14 @@
-<div uib-tooltip="{{vm.information.name}}" tooltip-placement="bottom" class="information-card" id=information-card-{{vm.information.id}}>
+<div uib-tooltip="{{vm.information.name}}" tooltip-placement="bottom" class="information-card"
+     id=information-card-{{vm.information.id}}>
     <div class="information-card-body">
-        <img ng-if="vm.information.id==1" src="content/svgs/flag1.svg" alt="flair bi">
-        <img ng-if="vm.information.id==2" src="content/svgs/flag2.svg" alt="flair bi">
-        <img ng-if="vm.information.id==3" src="content/svgs/flag3.svg" alt="flair bi">
-        <img ng-if="vm.information.id==4" src="content/svgs/flag4.svg" alt="flair bi">
-        <img ng-if="vm.information.id==5" src="content/svgs/flag5.svg" alt="flair bi">
-        <img ng-if="vm.information.id==6" src="content/svgs/flag1.svg" alt="flair bi">
-        <img ng-if="vm.information.id==7" src="content/svgs/flag2.svg" alt="flair bi">
-        <img ng-if="vm.information.id==8" src="content/svgs/flag5.svg" alt="flair bi">
+        <img ng-if="vm.information.id==1" src="{{vm.flag1}}" alt="flair bi">
+        <img ng-if="vm.information.id==2" src="{{vm.flag2}}" alt="flair bi">
+        <img ng-if="vm.information.id==3" src="{{vm.flag3}}" alt="flair bi">
+        <img ng-if="vm.information.id==4" src="{{vm.flag4}}" alt="flair bi">
+        <img ng-if="vm.information.id==5" src="{{vm.flag5}}" alt="flair bi">
+        <img ng-if="vm.information.id==6" src="{{vm.flag1}}" alt="flair bi">
+        <img ng-if="vm.information.id==7" src="{{vm.flag2}}" alt="flair bi">
+        <img ng-if="vm.information.id==8" src="{{vm.flag5}}" alt="flair bi">
         <div class="tile-value">
             <p ng-repeat="(key, value) in vm.value">{{value}}</p>
             <p ng-if="vm.isDesktop()">{{vm.information.name}}</p>

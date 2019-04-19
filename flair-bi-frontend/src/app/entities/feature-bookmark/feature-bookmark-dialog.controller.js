@@ -17,7 +17,9 @@ FeatureBookmarkDialogController.$inject = [
     "FeatureBookmark",
     "FeatureCriteria",
     "User",
-    "Datasources"
+    "Datasources",
+    "$translate",
+    "$rootScope"
 ];
 
 function FeatureBookmarkDialogController(
@@ -29,7 +31,9 @@ function FeatureBookmarkDialogController(
     FeatureBookmark,
     FeatureCriteria,
     User,
-    Datasources
+    Datasources,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -40,7 +44,7 @@ function FeatureBookmarkDialogController(
     //vm.users = User.query();
     //vm.datasources = Datasources.query();
 
-    $timeout(function () {
+    $timeout(function() {
         angular.element(".form-group:eq(1)>input").focus();
     });
 
@@ -53,7 +57,7 @@ function FeatureBookmarkDialogController(
         if (vm.featureBookmark.id !== null) {
             FeatureBookmark.update(
                 vm.featureBookmark,
-                onSaveSuccess,
+                onUpdateSuccess,
                 onSaveError
             );
         } else {
@@ -66,6 +70,18 @@ function FeatureBookmarkDialogController(
     }
 
     function onSaveSuccess(result) {
+        onSave(result);
+        var info = {text:$translate.instant('flairbiApp.featureBookmark.created',{param:result.id}),title: "Saved"}
+        $rootScope.showSuccessToast(info);
+    }
+
+    function onUpdateSuccess(result) {
+        onSave(result);
+        var info = {text:$translate.instant('flairbiApp.featureBookmark.updated',{param:result.id}),title: "Updated"}
+        $rootScope.showSuccessToast(info);
+    }
+
+    function onSave(result){
         $scope.$emit("flairbiApp:featureBookmarkUpdate", result);
         $uibModalInstance.close(result);
         vm.isSaving = false;
@@ -73,5 +89,8 @@ function FeatureBookmarkDialogController(
 
     function onSaveError() {
         vm.isSaving = false;
+        $rootScope.showErrorSingleToast({
+            text: $translate.instant('flairbiApp.featureBookmark.errorSaving')
+        });
     }
 }

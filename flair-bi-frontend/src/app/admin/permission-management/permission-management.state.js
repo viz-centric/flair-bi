@@ -52,6 +52,7 @@ function stateConfig($stateProvider) {
                     };
                 }],
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('userGroups');
                     return $translate.refresh();
                 }]
             }

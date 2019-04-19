@@ -1,4 +1,10 @@
 import * as angular from 'angular';
+
+import functionsHtml from './functions.html';
+import functionsDetailHtml from './functions-detail.html';
+import functionsDialogHtml from './functions-dialog.html';
+import functionsDeleteDialogHtml from './functions-delete-dialog.html';
+
 'use strict';
 
 angular
@@ -17,7 +23,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/functions/functions.html',
+                    template: functionsHtml,
                     controller: 'FunctionsController',
                     controllerAs: 'vm'
                 }
@@ -38,7 +44,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/functions/functions-detail.html',
+                    template: functionsDetailHtml,
                     controller: 'FunctionsDetailController',
                     controllerAs: 'vm'
                 }
@@ -49,36 +55,34 @@ function stateConfig($stateProvider) {
                     return $translate.refresh();
                 }],
                 entity: ['$stateParams', 'Functions', function ($stateParams, Functions) {
-                    return Functions.get({ id: $stateParams.id }).$promise;
+                    return Functions.get({id: $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
-                    var currentStateData = {
+                    return {
                         name: $state.current.name || 'functions',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };
-                    return currentStateData;
                 }]
             }
         })
         .state('functions-detail.edit', {
             url: '/detail/edit',
-            data: {
-            },
+            data: {},
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/functions/functions-dialog.html',
+                    template: functionsDialogHtml,
                     controller: 'FunctionsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: ['Functions', function (Functions) {
-                            return Functions.get({ id: $stateParams.id }).$promise;
+                            return Functions.get({id: $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function () {
-                    $state.go('^', {}, { reload: false });
+                    $state.go('^', {}, {reload: false});
                 }, function () {
                     $state.go('^');
                 });
@@ -86,11 +90,10 @@ function stateConfig($stateProvider) {
         })
         .state('functions.new', {
             url: '/new',
-            data: {
-            },
+            data: {},
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/functions/functions-dialog.html',
+                    template: functionsDialogHtml,
                     controller: 'FunctionsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -108,7 +111,7 @@ function stateConfig($stateProvider) {
                         }
                     }
                 }).result.then(function () {
-                    $state.go('functions', null, { reload: 'functions' });
+                    $state.go('functions', null, {reload: 'functions'});
                 }, function () {
                     $state.go('functions');
                 });
@@ -116,22 +119,21 @@ function stateConfig($stateProvider) {
         })
         .state('functions.edit', {
             url: '/{id}/edit',
-            data: {
-            },
+            data: {},
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/functions/functions-dialog.html',
+                    template: functionsDialogHtml,
                     controller: 'FunctionsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: ['Functions', function (Functions) {
-                            return Functions.get({ id: $stateParams.id }).$promise;
+                            return Functions.get({id: $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function () {
-                    $state.go('functions', null, { reload: 'functions' });
+                    $state.go('functions', null, {reload: 'functions'});
                 }, function () {
                     $state.go('^');
                 });
@@ -139,21 +141,20 @@ function stateConfig($stateProvider) {
         })
         .state('functions.delete', {
             url: '/{id}/delete',
-            data: {
-            },
+            data: {},
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/functions/functions-delete-dialog.html',
+                    template: functionsDeleteDialogHtml,
                     controller: 'FunctionsDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
                         entity: ['Functions', function (Functions) {
-                            return Functions.get({ id: $stateParams.id }).$promise;
+                            return Functions.get({id: $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function () {
-                    $state.go('functions', null, { reload: 'functions' });
+                    $state.go('functions', null, {reload: 'functions'});
                 }, function () {
                     $state.go('^');
                 });

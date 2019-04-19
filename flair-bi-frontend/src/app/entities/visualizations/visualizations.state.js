@@ -1,5 +1,11 @@
 import * as angular from 'angular';
 
+import visualizationsHtml from './visualizations.html';
+import visualizationsDeleteDialogHtml from './visualizations-delete-dialog.html';
+import visualizationsDetailsHtml from './visualizations-detail.html';
+import visualizationsDialogHtml from './visualizations-dialog.html';
+
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -17,8 +23,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/visualizations/visualizations.html",
+                    template: visualizationsHtml,
                     controller: "VisualizationsController",
                     controllerAs: "vm"
                 }
@@ -44,8 +49,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/visualizations/visualizations-detail.html",
+                    template: visualizationsDetailsHtml,
                     controller: "VisualizationsDetailController",
                     controllerAs: "vm"
                 }
@@ -73,7 +77,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 previousState: [
                     "$state",
                     function ($state) {
-                        var currentStateData = {
+                        return {
                             name: $state.current.name || "visualizations",
                             params: $state.params,
                             url: $state.href(
@@ -81,7 +85,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
                                 $state.params
                             )
                         };
-                        return currentStateData;
                     }
                 ]
             }
@@ -98,8 +101,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualizations/visualizations-dialog.html",
+                            template: visualizationsDialogHtml,
                             controller: "VisualizationsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -144,8 +146,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualizations/visualizations-dialog.html",
+                            template: visualizationsDialogHtml,
                             controller: "VisualizationsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -187,8 +188,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualizations/visualizations-dialog.html",
+                            template: visualizationsDialogHtml,
                             controller: "VisualizationsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -229,8 +229,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualizations/visualizations-delete-dialog.html",
+                            template: visualizationsDeleteDialogHtml,
                             controller: "VisualizationsDeleteController",
                             controllerAs: "vm",
                             size: "md",

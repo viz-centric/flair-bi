@@ -1,5 +1,13 @@
 import * as angular from 'angular';
 
+import viewsHtml from './views.html';
+import viewsPropertiesContentHeaderHtml from './views-properties-content-header.html';
+import viewsDetailHtml from './views-detail.html';
+import flairBiHtml from './../flair-bi/flair-bi.html';
+import viewsDialogHtml from './views-dialog.html';
+import viewsDeleteDialogHtml from './views-delete-dialog.html';
+import viewRequestPublishDialogHtml from './view-request-publish-dialog.html';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -20,7 +28,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl: "app/entities/views/views.html",
+                    template: viewsHtml,
                     controller: "ViewsController",
                     controllerAs: "vm"
                 }
@@ -46,13 +54,12 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/views/views-properties-content-header.html",
+                    template: viewsPropertiesContentHeaderHtml,
                     controller: "ViewsDetailController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl: "app/entities/views/views-detail.html",
+                    template: viewsDetailHtml,
                     controller: "ViewsDetailController",
                     controllerAs: "vm"
                 }
@@ -78,7 +85,7 @@ function stateConfig($stateProvider) {
                 previousState: [
                     "$state",
                     function ($state) {
-                        var currentStateData = {
+                        return {
                             name: $state.current.name || "views",
                             params: $state.params,
                             url: $state.href(
@@ -86,7 +93,6 @@ function stateConfig($stateProvider) {
                                 $state.params
                             )
                         };
-                        return currentStateData;
                     }
                 ]
             }
@@ -100,13 +106,12 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/views/views-properties-content-header.html",
+                    template: viewsPropertiesContentHeaderHtml,
                     controller: "ViewsDetailController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl: "app/entities/views/views-detail.html",
+                    template: viewsDetailHtml,
                     controller: "ViewsDetailController",
                     controllerAs: "vm"
                 }
@@ -132,7 +137,7 @@ function stateConfig($stateProvider) {
                 previousState: [
                     "$state",
                     function ($state) {
-                        var currentStateData = {
+                        return {
                             name: $state.current.name || "views",
                             params: $state.params,
                             url: $state.href(
@@ -140,7 +145,6 @@ function stateConfig($stateProvider) {
                                 $state.params
                             )
                         };
-                        return currentStateData;
                     }
                 ]
             }
@@ -154,7 +158,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl: "app/entities/views/flairbi.html",
+                    template: flairBiHtml,
                     controller: "flairbiController",
                     controllerAs: "vm"
                 }
@@ -180,7 +184,7 @@ function stateConfig($stateProvider) {
                 previousState: [
                     "$state",
                     function ($state) {
-                        var currentStateData = {
+                        return {
                             name: $state.current.name || "views",
                             params: $state.params,
                             url: $state.href(
@@ -188,7 +192,6 @@ function stateConfig($stateProvider) {
                                 $state.params
                             )
                         };
-                        return currentStateData;
                     }
                 ]
             }
@@ -206,8 +209,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/views/views-dialog.html",
+                            template: viewsDialogHtml,
                             controller: "ViewsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -260,8 +262,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/views/views-dialog.html",
+                            template: viewsDialogHtml,
                             controller: "ViewsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -318,8 +319,7 @@ function stateConfig($stateProvider) {
                 ) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/views/views-dialog.html",
+                            template: viewsDialogHtml,
                             controller: "ViewsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -385,8 +385,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/views/views-delete-dialog.html",
+                            template: viewsDeleteDialogHtml,
                             controller: "ViewsDeleteController",
                             controllerAs: "vm",
                             size: "md",
@@ -444,8 +443,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/views/view-request-publish-dialog.html",
+                            template: viewRequestPublishDialogHtml,
                             controller: "ViewRequestPublishController",
                             controllerAs: "vm",
                             size: "md",

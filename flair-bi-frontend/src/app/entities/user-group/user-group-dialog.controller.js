@@ -9,14 +9,18 @@ UserGroupDialogController.$inject = [
     "$scope",
     "entity",
     "$uibModalInstance",
-    "UserGroup"
+    "UserGroup",
+    "$translate",
+    "$rootScope"
 ];
 
 function UserGroupDialogController(
     $scope,
     entity,
     $uibModalInstance,
-    UserGroup
+    UserGroup,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -28,7 +32,7 @@ function UserGroupDialogController(
 
     ////////////////
 
-    function activate() { }
+    function activate() {}
 
     function save() {
         vm.isSaving = true;
@@ -43,9 +47,14 @@ function UserGroupDialogController(
         $scope.$emit("flairbiApp:userGroupUpdate", result);
         $uibModalInstance.close(result);
         vm.isSaving = false;
+        var info = {text:$translate.instant('userGroups.created',{param:result.name}),title: "Created"}
+        $rootScope.showSuccessToast(info);
     }
 
     function onSaveError() {
         vm.isSaving = false;
+        $rootScope.showErrorSingleToast({
+            text: $translate.instant('userGroups.errorSaving')
+        });
     }
 }

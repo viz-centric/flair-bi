@@ -17,7 +17,9 @@ ViewsDialogController.$inject = [
     "Dashboards",
     "$window",
     "viewReleases",
-    "Principal"
+    "Principal",
+    "$translate",
+    "$rootScope"
 ];
 
 function ViewsDialogController(
@@ -32,7 +34,9 @@ function ViewsDialogController(
     Dashboards,
     $window,
     viewReleases,
-    Principal
+    Principal,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -51,7 +55,7 @@ function ViewsDialogController(
             ? "Edit View"
             : "Create View";
 
-    $timeout(function () {
+    $timeout(function() {
         angular.element(".form-group:eq(1)>input").focus();
     });
 
@@ -63,13 +67,25 @@ function ViewsDialogController(
     function save() {
         vm.isSaving = true;
         if (vm.views.id !== null) {
-            Views.update(vm.views, onSaveSuccess, onSaveError);
+            Views.update(vm.views, onUpdateSuccess, onSaveError);
         } else {
             Views.save(vm.views, onSaveSuccess, onSaveError);
         }
     }
 
     function onSaveSuccess(result) {
+        onSave(result);
+        var info = {text:$translate.instant('flairbiApp.views.created',{param:result.id}),title: "Saved"}
+        $rootScope.showSuccessToast(info);
+    }
+
+    function onUpdateSuccess(result) {
+        onSave(result);
+        var info = {text:$translate.instant('flairbiApp.views.updated',{param:result.id}),title: "Updated"}
+        $rootScope.showSuccessToast(info);
+    }
+
+    function onSave(result){
         $scope.$emit("flairbiApp:viewsUpdate", result);
         $uibModalInstance.close(result);
         vm.isSaving = false;
@@ -78,19 +94,22 @@ function ViewsDialogController(
 
     function onSaveError() {
         vm.isSaving = false;
+        $rootScope.showErrorSingleToast({
+            text: $translate.instant('flairbiApp.views.errorSaving')
+        });
     }
 
-    $scope.moveToOverview = function (info) {
+    $scope.moveToOverview = function(info) {
         $window.history.back();
     };
 
-    vm.setImage = function ($file, views) {
+    vm.setImage = function($file, views) {
         if ($file && $file.$error === "pattern") {
             return;
         }
         if ($file) {
-            DataUtils.toBase64($file, function (base64Data) {
-                $scope.$apply(function () {
+            DataUtils.toBase64($file, function(base64Data) {
+                $scope.$apply(function() {
                     views.image = base64Data;
                     views.imageLocation = null;
                     views.imageContentType = $file.type.substring($file.type.lastIndexOf("/") + 1, $file.type.length);

@@ -1,10 +1,13 @@
 import * as angular from 'angular';
+
+import filterElementComponentHtml from './filter-element.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('filterElementComponent', {
-        templateUrl: 'app/entities/flair-bi/filter/filter-element.component.html',
+        template: filterElementComponentHtml,
         controller: filterElementController,
         controllerAs: 'vm',
         bindings: {
@@ -66,7 +69,7 @@ function filterElementController($scope, proxyService, filterParametersService, 
     function processRemoveFilter(filter) {
         var filterParameters = filterParametersService.get();
         if (filterParameters[filter].length != 0) {
-            $filter('filter')(vm.dimensions, { 'name': filter })[0].selected = [];
+            $filter('filter')(vm.dimensions, {'name': filter})[0].selected = [];
             filterParameters[filter] = [];
             filterParametersService.save(filterParameters);
             applyFilter();

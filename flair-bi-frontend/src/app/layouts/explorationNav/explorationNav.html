@@ -3,11 +3,11 @@
         <ul side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="main-logo-element" ng-switch-when="false">
-                    <img src="${vm.logo}" alttext="flair BI" height="48" />
+                    <img src="{{vm.logo}}" alttext="flair BI" height="48"/>
                 </div>
                 <div class="profile-element align-center" uib-dropdown ng-switch-when="true">
                     <a uib-dropdown-toggle href> <span class="clear">
-                        <img alt="image" class="img-circle" src="${vm.userImg}">
+                        <img alt="image" class="img-circle" src="{{vm.userImg}}">
                         <span class="block m-t-xs">
                             <strong class="font-bold">
                                 {{vm.account.firstName}}
@@ -16,64 +16,65 @@
                     <ul uib-dropdown-menu="" class="animated fadeInRight m-t-xs">
                         <li><a href="" ng-click="vm.logout()" id="logout"><span
                             data-translate="global.menu.account.logout">Sign out</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="logo-element">flair</div>
             </li>
-        </ul>
-        </div>
-        <div class="logo-element">flair</div>
-        </li>
-        <li ui-sref-active="active">
-            <a ui-sref="home">
-                <i class="fa fa-home"></i>
-                <span data-translate="global.menu.home">Home</span>
-            </a>
-        </li>
+            <li ui-sref-active="active">
+                <a ui-sref="home">
+                    <i class="fa fa-home"></i>
+                    <span data-translate="global.menu.home">Home</span>
+                </a>
+            </li>
 
-        <li ng-class="{active: vm.$state.includes('dashboards')}">
-            <a ui-sref="dashboards">
-                <i class="fa fa-tachometer"></i>
-                <span >Dashboards</span>
-            </a>
-        </li>
+            <li ng-class="{active: vm.$state.includes('dashboards')}">
+                <a ui-sref="dashboards">
+                    <i class="fa fa-tachometer"></i>
+                    <span>Dashboards</span>
+                </a>
+            </li>
 
-        <li ng-class="{active: vm.$state.includes('data-exploration')}">
-            <a ui-sref="data-exploration">
-                <i class="fa fa-flask"></i>
-                <span >Data Explorer</span>
-            </a>
-        </li>
+            <li ng-class="{active: vm.$state.includes('data-exploration')}">
+                <a ui-sref="data-exploration">
+                    <i class="fa fa-flask"></i>
+                    <span>Data Explorer</span>
+                </a>
+            </li>
 
-        <li ng-class="{active: vm.$state.includes('data-extraction')}">
-            <a ui-sref="data-extraction">
-                <i class="fa fa-random"></i>
-                <span >Data Extraction</span>
-            </a>
-        </li>
+            <li ng-class="{active: vm.$state.includes('data-extraction')}">
+                <a ui-sref="data-extraction">
+                    <i class="fa fa-random"></i>
+                    <span>Data Extraction</span>
+                </a>
+            </li>
 
-        <li ui-sref-active="active">
-            <a href=""><i class="fa fa-database" aria-hidden="true"></i>
+            <li ui-sref-active="active">
+                <a href=""><i class="fa fa-database" aria-hidden="true"></i>
                     <span class="nav-label">Data Sources</span><span
                         class="fa arrow"></span>
-            </a>
-            <ul class="nav nav-second-level collapse">
-                <li ui-sref-active="active" ng-switch-when="true" ng-repeat="source in vm.datasources" ng-click="displayInfo(source.id)">
-                    <a ng-click="displayInfo(source.id)">{{source.name}}</a>
-                </li>
-            </ul>
-        </li>
-        <li ui-sref-active="active" >
-            <a href=""><i class="fa fa-tags" aria-hidden="true"></i>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li ui-sref-active="active" ng-switch-when="true" ng-repeat="source in vm.datasources"
+                        ng-click="displayInfo(source.id)">
+                        <a ng-click="displayInfo(source.id)">{{source.name}}</a>
+                    </li>
+                </ul>
+            </li>
+            <li ui-sref-active="active">
+                <a href=""><i class="fa fa-tags" aria-hidden="true"></i>
                     <span class="nav-label">{{selectedSourceName}} : Fields</span><span
                         class="fa arrow"></span>
-            </a>
-            <ul class="nav nav-second-level collapse">
-                <li ui-sref-active="active" ng-switch-when="true" ng-repeat="field in fields">
-                    <a>
-                        <i class="{{field.icon}}"></i>
-                        <span>{{field.name}}</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li ui-sref-active="active" ng-switch-when="true" ng-repeat="field in fields">
+                        <a>
+                            <i class="{{field.icon}}"></i>
+                            <span>{{field.name}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

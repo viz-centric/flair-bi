@@ -10,7 +10,9 @@ UserGroupDeleteController.$inject = [
     "entity",
     "UserGroup",
     "$scope",
-    "$localStorage"
+    "$localStorage",
+    "$translate",
+    "$rootScope"
 ];
 
 function UserGroupDeleteController(
@@ -18,7 +20,9 @@ function UserGroupDeleteController(
     entity,
     UserGroup,
     $scope,
-    $localStorage
+    $localStorage,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -39,10 +43,17 @@ function UserGroupDeleteController(
     }
 
     function confirmDelete(name) {
-        UserGroup.delete({ name: name }, function () {
-            reset();
-            $scope.$broadcast("flairbiApp:userGroupDeleted");
-            $uibModalInstance.close(true);
-        });
+        UserGroup.delete({ name: name }, function() {
+                reset();
+                $scope.$broadcast("flairbiApp:userGroupDeleted");
+                $uibModalInstance.close(true);
+                var info = {text:$translate.instant('userGroups.deleted',{param:name}),title: "Deleted"}
+                $rootScope.showSuccessToast(info);
+            },
+            function(){
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('userGroups.errorDeleting')
+                });
+            });
     }
 }

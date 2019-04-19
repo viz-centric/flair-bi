@@ -1,0 +1,9 @@
+{
+    "userGroups":{
+        "created": "A new user group is created with identifier {{ param }}",
+        "updated": "An user group is updated with identifier {{ param }}",
+        "deleted": "An user group is deleted with identifier {{ param }}",
+        "errorSaving":"Error saving user group",
+        "errorDeleting":"Error deleting user group"
+    }
+}

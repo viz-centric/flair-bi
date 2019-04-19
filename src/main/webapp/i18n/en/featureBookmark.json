@@ -9,6 +9,8 @@
             "created": "A new Feature Bookmark is created with identifier {{ param }}",
             "updated": "A Feature Bookmark is updated with identifier {{ param }}",
             "deleted": "A Feature Bookmark is deleted with identifier {{ param }}",
+            "errorSaving":"Error saving Feature Bookmark",
+            "errorDeleting":"Error deleting Feature Bookmark",
             "delete": {
                 "question": "Are you sure you want to delete Feature Bookmark {{ id }}?"
             },

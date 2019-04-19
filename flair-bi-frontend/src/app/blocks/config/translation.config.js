@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 'use strict';
 
 angular
@@ -12,7 +13,6 @@ function translationConfig($translateProvider, tmhDynamicLocaleProvider) {
     $translateProvider.useLoader('$translatePartialLoader', {
         urlTemplate: 'i18n/{lang}/{part}.json'
     });
-
     $translateProvider.preferredLanguage('en');
     $translateProvider.useStorage('translationStorageProvider');
     $translateProvider.useSanitizeValueStrategy('escaped');

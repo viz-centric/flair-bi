@@ -2,7 +2,7 @@
     <div class="row" ng-if="$root.isFullScreen == false">
         <div class="col-md-4 col-sm-6 col-xs-6 header-first">
             <div class="logo" ui-sref="home">
-                <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
+                <img src="{{vm.flairLogoNoTextSvg}}" alt="flair bi">
             </div>
             <div class="line"></div>
             <div class="view-name">
@@ -126,7 +126,7 @@
     <div class="row full-screen-topbar ng-class:{'full-screen-topbar-filter-toggled':vm.showFSFilter == false}" ng-if="$root.isFullScreen == true">
         <div class="full-screen-options">
             <div class="logo item" ui-sref="home">
-                <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
+                <img src="{{vm.flairLogoNoTextSvg}}" alt="flair bi">
             </div>
             <div class="line"></div>
             <div class="dashboards item hidden-xs hidden-sm ">
@@ -252,7 +252,7 @@
                     <div class="col-sm-12 col-xs-12">
                         <div class="user-mobile-click" style="cursor: pointer;"
                            ng-click="vm.activeMobileUserOptionNavigation()">
-                            <img  src="content/svgs/expand-arrow.svg" alt="icon" 
+                            <img  src="{{vm.expandArrowSvg}}" alt="icon"
                             ng-class="{'optionMenuOpen': vm.mobileUserOptionNavigationSlide, 
                             'optionMenuClose': !vm.mobileUserOptionNavigationSlide}" >
                             

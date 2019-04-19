@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+
 "use strict";
 
 angular
@@ -36,7 +37,8 @@ FlairBiController.$inject = [
     "HttpService",
     "AuthServerProvider",
     "AlertService",
-    "QueryValidationService"
+    "QueryValidationService",
+    "$translate"
 ];
 
 function FlairBiController(
@@ -70,7 +72,8 @@ function FlairBiController(
     HttpService,
     AuthServerProvider,
     AlertService,
-    QueryValidationService
+    QueryValidationService,
+    $translate
 ) {
     var vm = this;
     var editMode = false;
@@ -176,7 +179,7 @@ function FlairBiController(
     function connectWebSocket() {
         console.log('controller connect web socket');
         stompClientService.connect(
-            { token: AuthServerProvider.getToken() },
+            {token: AuthServerProvider.getToken()},
             function (frame) {
                 console.log('controller connected web socket');
                 stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata.bind(this));
@@ -188,10 +191,17 @@ function FlairBiController(
     function onExchangeMetadataError(data) {
         console.log('controller on metadata error', data);
         var body = JSON.parse(data.body || '{}');
-        var error = QueryValidationService.getQueryValidationError(body.description);
+        if (body.description === "io exception") {
+            var msg = $translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') + " : " + body.cause.message;
+            $rootScope.showErrorSingleToast({
+                text: msg
+            });
+        } else {
+            var error = QueryValidationService.getQueryValidationError(body.description);
 
-        if (error) {
-            AlertService.error(error.msgKey, error.params);
+            if (error) {
+                AlertService.error(error.msgKey, error.params);
+            }
         }
     }
 
@@ -228,7 +238,8 @@ function FlairBiController(
             function (success) {
                 saveClonedVisual(setVisualProps(v, createVisualMetadata(success)));
             },
-            function (error) { }
+            function (error) {
+            }
         );
     }
 
@@ -286,7 +297,7 @@ function FlairBiController(
                 }
             }
         });
-        VisualDispatchService.setVisual({ visual: v, view: entity });
+        VisualDispatchService.setVisual({visual: v, view: entity});
     }
 
     function removeField(fields, index) {
@@ -341,7 +352,8 @@ function FlairBiController(
                     if (isFeatureExist(v.fields, feature))
                         v.fields.push(field);
                 },
-                function (error) { }
+                function (error) {
+                }
             );
         }
     }
@@ -375,7 +387,8 @@ function FlairBiController(
                     if (isFeatureExist(v.fields, feature))
                         v.fields.push(field);
                 },
-                function (error) { }
+                function (error) {
+                }
             );
         }
     }
@@ -402,6 +415,11 @@ function FlairBiController(
                 function (result) {
                     vm.isSaving = false;
                     VisualMetadataContainer.update(v.id, result, 'id');
+                    var info = {
+                        text: $translate.instant('flairbiApp.visualmetadata.updated', {param: v.id}),
+                        title: "Updated"
+                    }
+                    $rootScope.showSuccessToast(info);
                 },
                 onSaveFeaturesError
             );
@@ -414,6 +432,11 @@ function FlairBiController(
                 function (result) {
                     vm.isSaving = false;
                     VisualMetadataContainer.update(v.visualBuildId, result, 'visualBuildId');
+                    var info = {
+                        text: $translate.instant('flairbiApp.visualmetadata.created', {param: result.id}),
+                        title: "Created"
+                    }
+                    $rootScope.showSuccessToast(info);
                 },
                 onSaveFeaturesError
             );
@@ -422,6 +445,9 @@ function FlairBiController(
 
     function onSaveFeaturesError(error) {
         vm.isSaving = false;
+        $rootScope.showErrorSingleToast({
+            text: $translate.instant('flairbiApp.dashboards.errorSaving')
+        });
     }
 
     function flipCard(v) {
@@ -442,7 +468,8 @@ function FlairBiController(
             if (data != undefined) {
                 VisualDispatchService.setFeature(data);
             }
-            $timeout(function () { });
+            $timeout(function () {
+            });
         });
         $scope.$on("$destroy", unsubscribe);
     }
@@ -477,7 +504,7 @@ function FlairBiController(
                         } else {
                             VisualDispatchService.getVisual().visual.fields[
                                 index
-                            ].feature = VisualDispatchService.getFeature();
+                                ].feature = VisualDispatchService.getFeature();
                         }
                     }
                     if (
@@ -496,7 +523,7 @@ function FlairBiController(
                         } else {
                             VisualDispatchService.getVisual().visual.fields[
                                 index
-                            ].feature = VisualDispatchService.getFeature();
+                                ].feature = VisualDispatchService.getFeature();
                         }
                     }
                 }
@@ -507,11 +534,13 @@ function FlairBiController(
     $(document).on("dragenter", function (event) {
         event.preventDefault();
     });
-    $(document).on("dragleave", function (event) { });
+    $(document).on("dragleave", function (event) {
+    });
     $(document).on("dragover", function (event) {
         event.preventDefault();
     });
-    $(document).on("dragstart", function (event) { });
+    $(document).on("dragstart", function (event) {
+    });
 
     function registerRefreshWidgetsEvent() {
         $scope.$on("flairbiApp:refreshWidgets", function () {
@@ -557,7 +586,8 @@ function FlairBiController(
                 function (success) {
                     addWidget(createVisualMetadata(success));
                 },
-                function (error) { }
+                function (error) {
+                }
             );
             viewEditedBeforeSave = true;
         });
@@ -730,11 +760,12 @@ function FlairBiController(
                 }
             })
             .result.then(
-                function () {
-                    cb();
-                },
-                function () { }
-            );
+            function () {
+                cb();
+            },
+            function () {
+            }
+        );
     }
 
     function canBuild(v) {
@@ -794,7 +825,9 @@ function FlairBiController(
                     }
                 }
             })
-            .result.then(function () { }, function () { });
+            .result.then(function () {
+        }, function () {
+        });
     }
 
     /**
@@ -854,7 +887,8 @@ function FlairBiController(
                     );
                     isSaving = false;
                 },
-                function (error) { }
+                function (error) {
+                }
             );
         } else {
             Visualmetadata.query({
@@ -882,7 +916,8 @@ function FlairBiController(
         }
     }
 
-    function onSaveError() { }
+    function onSaveError() {
+    }
 
     function createVisualMetadata(visualization) {
         var newVM = {
@@ -955,7 +990,8 @@ function FlairBiController(
                         }
                     );
                 },
-                function (error) { }
+                function (error) {
+                }
             );
         });
 
@@ -978,12 +1014,13 @@ function FlairBiController(
 
     function settings(v) {
         $rootScope.updateWidget = {};
-        VisualDispatchService.setVisual({ visual: v, view: entity });
+        VisualDispatchService.setVisual({visual: v, view: entity});
         $rootScope.$broadcast("flairbiApp:toggleProperties-on");
         VisualDispatchService.setOpacity(v.visualBuildId);
     }
 
-    function onResizeStart(event, ui) { }
+    function onResizeStart(event, ui) {
+    }
 
     function onResizeStop(event, ui) {
         delete $rootScope.updateWidget[ui.element.attr("id")];
@@ -993,15 +1030,20 @@ function FlairBiController(
         );
     }
 
-    function onChange(event, items) { }
+    function onChange(event, items) {
+    }
 
-    function onDragStart(event, ui) { }
+    function onDragStart(event, ui) {
+    }
 
-    function onDragStop(event, ui) { }
+    function onDragStop(event, ui) {
+    }
 
-    function onItemAdded(item) { }
+    function onItemAdded(item) {
+    }
 
-    function onItemRemoved(item) { }
+    function onItemRemoved(item) {
+    }
 
     function addWidget(widget) {
         vm.visualmetadata.push(widget);
@@ -1072,7 +1114,9 @@ function FlairBiController(
                     return vm.view.viewName;
                 }
             }
-        }).result.then(function () { }, function () { });
+        }).result.then(function () {
+        }, function () {
+        });
 
     }
 }

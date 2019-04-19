@@ -11,13 +11,17 @@ angular
 DatasourceConstraintDeleteController.$inject = [
     "$uibModalInstance",
     "entity",
-    "DatasourceConstraint"
+    "DatasourceConstraint",
+    "$translate",
+    "$rootScope"
 ];
 
 function DatasourceConstraintDeleteController(
     $uibModalInstance,
     entity,
-    DatasourceConstraint
+    DatasourceConstraint,
+    $translate,
+    $rootScope
 ) {
     var vm = this;
 
@@ -30,8 +34,14 @@ function DatasourceConstraintDeleteController(
     }
 
     function confirmDelete(id) {
-        DatasourceConstraint.delete({ id: id }, function () {
+        DatasourceConstraint.delete({ id: id }, function() {
             $uibModalInstance.close(true);
+            var info = {text:$translate.instant('flairbiApp.datasourceConstraint.deleted',{param:id}),title: "Deleted"}
+            $rootScope.showSuccessToast(info);
+        },function(){
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.datasourceConstraint.errorDeleting')
+            });
         });
     }
 }

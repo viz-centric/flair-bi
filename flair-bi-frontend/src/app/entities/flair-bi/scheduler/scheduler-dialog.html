@@ -1,28 +1,27 @@
-<div class="inmodal in modal-content dag-scheduler-modal">
+<div class="inmodal in modal-content common-create-popup">
     <form name="editForm" novalidate="" role="form">
         <div class="modal-header flair-model-header">
-            <svg class="edit-icon">
-              <use xlink:href="#edit-dashboard" />
+            <svg class="common-edit-icon">
+                <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
                 Dag Scheduler
             </div>
-            <svg class="cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
                 <use xlink:href="#cancle" />
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
-            <jhi-alert-error></jhi-alert-error>
             <div class="container">
                 <div class="row container">
                     <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="timezoneGroup">Timezone*</label>
                             <ui-select ng-model="vm.scheduleObj.schedule.timezone">
-                              <ui-select-match placeholder="Select Timezones ...">{{$select.selected}}</ui-select-match>
-                              <ui-select-choices repeat="timezoneGroup in vm.timezoneGroups | filter: $select.search track by timezoneGroup">
-                                <div ng-bind="timezoneGroup"></div>
-                              </ui-select-choices>
+                                <ui-select-match placeholder="Select Timezones ...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="timezoneGroup in vm.timezoneGroups | filter: $select.search track by timezoneGroup">
+                                    <div ng-bind="timezoneGroup"></div>
+                                </ui-select-choices>
                             </ui-select>
                         </div>
                     </div>
@@ -30,10 +29,10 @@
                         <div class="form-group">
                             <label class="control-label" for="channels">Channels*</label>
                             <ui-select ng-model="vm.scheduleObj.assign_report.channel">
-                              <ui-select-match placeholder="Select Channel ...">{{$select.selected}}</ui-select-match>
-                              <ui-select-choices repeat="channel in vm.channels  | filter: $select.search track by channel">
-                                <div ng-bind="channel"></div>
-                              </ui-select-choices>
+                                <ui-select-match placeholder="Select Channel ...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="channel in vm.channels  | filter: $select.search track by channel">
+                                    <div ng-bind="channel"></div>
+                                </ui-select-choices>
                             </ui-select>
                         </div>
                     </div>
@@ -43,7 +42,7 @@
                         <div class="form-group scheduler-tags">
                             <label class="control-label" for="emails">Share Report with Users*</label>
                             <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
-                                replace-spaces-with-dashes="false">
+                                        replace-spaces-with-dashes="false">
                                 <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
                                 </auto-complete>
                             </tags-input>
@@ -53,20 +52,21 @@
                         <div class="form-group">
                             <label class="control-label" for="visualizations">Visualization Type*</label>
                             <ui-select ng-model="vm.scheduleObj.report_line_item.visualization">
-                              <ui-select-match placeholder="Select Visualization ...">{{$select.selected}}</ui-select-match>
-                              <ui-select-choices repeat="visualization in vm.visualizations  | filter: $select.search track by visualization">
-                                <div ng-bind="visualization"></div>
-                              </ui-select-choices>
+                                <ui-select-match placeholder="Select Visualization ...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="visualization in vm.visualizations  | filter: $select.search track by visualization">
+                                    <div ng-bind="visualization"></div>
+                                </ui-select-choices>
                             </ui-select>
                         </div>
                     </div>
                 </div>
                 <div class="row container">
                     <div class="col-xs-9">
-                        <form name="cronForm">
-                            <cron-gen ng-model="cronExpression" ng-disabled="isCronDisabled" options="cronOptions" name="cron">
-                            </cron-gen>
-                        </form>
+                        <!--                         <form name="cronForm">
+                                                    <cron-gen ng-model="cronExpression" ng-disabled="isCronDisabled" options="cronOptions" name="cron">
+                                                    </cron-gen>
+                                                </form> -->
+                        <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
                     </div>
                 </div>
                 <br />
@@ -77,7 +77,7 @@
                     </div>
                     <div class="col-xs-5">
                         Cron Expression:
-                        <span class="text-success"><b>{{cronExpression}}</b></span>
+                        <span id="example-val" class="text-success"><b>{{cronExpression}}</b></span>
                     </div>
                 </div>
                 <br />

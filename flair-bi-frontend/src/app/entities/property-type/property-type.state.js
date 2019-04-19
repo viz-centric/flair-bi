@@ -1,12 +1,17 @@
 import * as angular from 'angular';
 
+import propertyTypeHtml from './property-type.html';
+import propertyTypeDetailHtml from './property-type-detail.html';
+import propertyTypeDialogHtml from './property-type-dialog.html';
+import propertyTypeDeleteDialogHtml from './property-type-delete-dialog.html';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
 
-stateConfig.$inject = ["$stateProvider", "PERMISSIONS"];
+stateConfig.$inject = ["$stateProvider"];
 
-function stateConfig($stateProvider, PERMISSIONS) {
+function stateConfig($stateProvider) {
     $stateProvider
         .state("property-type", {
             parent: "entity",
@@ -17,8 +22,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/property-type/property-type.html",
+                    template: propertyTypeHtml,
                     controller: "PropertyTypeController",
                     controllerAs: "vm"
                 }
@@ -43,8 +47,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/property-type/property-type-detail.html",
+                    template: propertyTypeDetailHtml,
                     controller: "PropertyTypeDetailController",
                     controllerAs: "vm"
                 }
@@ -72,7 +75,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                     "$state",
                     "$stateParams",
                     function ($state, $stateParams) {
-                        var currentStateData = {
+                        return {
                             name: $state.current.name || "property-type",
                             params: $state.params,
                             url: $state.href(
@@ -80,7 +83,6 @@ function stateConfig($stateProvider, PERMISSIONS) {
                                 $state.params
                             )
                         };
-                        return currentStateData;
                     }
                 ]
             }
@@ -95,8 +97,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/property-type/property-type-dialog.html",
+                            template: propertyTypeDialogHtml,
                             controller: "PropertyTypeDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -139,8 +140,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/property-type/property-type-dialog.html",
+                            template: propertyTypeDialogHtml,
                             controller: "PropertyTypeDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -174,8 +174,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/property-type/property-type-dialog.html",
+                            template: propertyTypeDialogHtml,
                             controller: "PropertyTypeDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -214,8 +213,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/property-type/property-type-delete-dialog.html",
+                            template: propertyTypeDeleteDialogHtml,
                             controller:
                                 "PropertyTypeDeleteDialogController",
                             controllerAs: "vm",

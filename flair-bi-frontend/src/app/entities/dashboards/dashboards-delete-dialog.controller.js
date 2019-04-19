@@ -8,10 +8,12 @@ angular
 DashboardsDeleteController.$inject = [
     "$uibModalInstance",
     "entity",
-    "Dashboards"
+    "Dashboards",
+    "$translate",
+    "$rootScope"
 ];
 
-function DashboardsDeleteController($uibModalInstance, entity, Dashboards) {
+function DashboardsDeleteController($uibModalInstance, entity, Dashboards,$translate,$rootScope) {
     var vm = this;
 
     vm.dashboards = entity;
@@ -23,8 +25,14 @@ function DashboardsDeleteController($uibModalInstance, entity, Dashboards) {
     }
 
     function confirmDelete(id) {
-        Dashboards.delete({ id: id }, function () {
+        Dashboards.delete({ id: id }, function() {
             $uibModalInstance.close(true);
+            var info = {text:$translate.instant('flairbiApp.dashboards.deleted',{param:id}),title: "Deleted"}
+            $rootScope.showSuccessToast(info);
+        },function(){
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.dashboards.errorDeleting')
+            });
         });
     }
 }

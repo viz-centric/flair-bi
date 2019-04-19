@@ -59,7 +59,15 @@ module.exports = {
                     }
                 ]
             },
-
+            {
+                test: /\.(json)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        outputPath: 'i18n'
+                    }
+                }]
+            },
             {
                 test: /\.(woff|woff2|eot|ttf)$/,
                 use: [
@@ -71,7 +79,6 @@ module.exports = {
                     }
                 ]
             },
-
             {
                 test: /.html$/,
                 exclude: /index.html$/,

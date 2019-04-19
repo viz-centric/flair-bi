@@ -95,6 +95,8 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip')

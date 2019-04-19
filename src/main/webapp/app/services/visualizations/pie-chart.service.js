@@ -18,16 +18,13 @@
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimension = features.dimensions,
                         measure = features.measures;
-
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measure);
-
-                    result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
-                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position');
+                    result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
+                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
                     result['valueAsArc'] = VisualizationUtils.getPropertyValue(record.properties, 'Value as Arc');
                     result['valuePosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Value position').toLowerCase();
-
                     return result;
                 }
 
@@ -47,13 +44,15 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip');
 
-                    var pie = flairVisualizations.pie_server()
+                    var pie = flairVisualizations.pie()
                         .config(getProperties(VisualizationUtils, record))
-                        .print(false)
+
                         .tooltip(true);
 
                     svg.datum(record.data)

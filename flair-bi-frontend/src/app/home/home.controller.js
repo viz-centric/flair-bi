@@ -36,6 +36,7 @@ function HomeController($scope, Principal, LoginService,
     vm.created = created;
     vm.centralLogo = centralLogo;
 
+
     vm.account = null;
     vm.isAuthenticated = null;
     vm.login = LoginService.open;
@@ -100,7 +101,7 @@ function HomeController($scope, Principal, LoginService,
     function onRecentlyBox() {
         var $innerWrapper = $('.recently-block');
         $(".recently-box").click(function () {
-            var $inn = $(this).next(".recently-block").stop(true).slideToggle(600);
+            const $inn = $(this).next(".recently-block").stop(true).slideToggle(600);
             $innerWrapper.not($inn).filter(':visible').stop(true).slideUp(600);
         });
     }
@@ -144,9 +145,9 @@ function HomeController($scope, Principal, LoginService,
 
     function isTileVisible(flag) {
         if (screenDetectService.isDesktop()) {
-            return flag == true ? 'block' : 'none';
+            return flag ? 'block' : 'none';
         } else {
-            return flag == false ? 'block' : 'none';
+            return !flag ? 'block' : 'none';
         }
     }
 }

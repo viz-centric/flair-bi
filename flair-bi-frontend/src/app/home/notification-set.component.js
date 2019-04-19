@@ -23,9 +23,12 @@ function notificationSetController(alertsService) {
     vm.range = range;
     vm.noOfPages = 1;
     vm.currentPage = 0;
-    vm.isMsgVisible = vm.releaseAlert.id == 1 ? true : false;
 
-    active();
+    this.$onInit = function () {
+        vm.isMsgVisible = vm.releaseAlert && vm.releaseAlert.id;
+        active();
+    };
+
 
     function active() {
         vm.alerts = vm.releaseAlert.alerts;
@@ -71,26 +74,24 @@ function notificationSetController(alertsService) {
             ret.push(i);
         }
         return ret;
-    };
+    }
 
     function prevPage() {
         if (vm.currentPage > 0) {
             vm.currentPage--;
             getReleasedAlerts(vm.releaseAlert.id, vm.pageSize * (vm.currentPage + 1) - vm.pageSize);
         }
-    };
+    }
 
     function nextPage() {
         if (vm.currentPage < vm.noOfPages - 1) {
             vm.currentPage++;
             getReleasedAlerts(vm.releaseAlert.id, vm.pageSize * (vm.currentPage + 1) - vm.pageSize);
         }
-    };
+    }
 
     function setPage(n) {
         vm.currentPage = n;
         getReleasedAlerts(vm.releaseAlert.id, vm.pageSize * (vm.currentPage + 1) - vm.pageSize);
-    };
-
-
+    }
 }

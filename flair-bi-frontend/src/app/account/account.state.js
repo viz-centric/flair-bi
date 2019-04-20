@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import accountHtml from './account.html';
+
 'use strict';
 
 angular
@@ -13,7 +15,7 @@ function stateConfig($stateProvider) {
         url: '/account',
         views: {
             'content@': {
-                templateUrl: 'app/account/account.html',
+                template: accountHtml,
                 controller: 'AccountController',
                 controllerAs: 'vm'
 

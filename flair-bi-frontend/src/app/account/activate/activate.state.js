@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import activateHtml from './activate.html';
+
 'use strict';
 
 angular
@@ -17,7 +19,7 @@ function stateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/account/activate/activate.html',
+                template: activateHtml,
                 controller: 'ActivationController',
                 controllerAs: 'vm'
             }

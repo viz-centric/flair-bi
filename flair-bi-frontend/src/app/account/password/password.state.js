@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import passwordContentHeaderHtml from './password-content-header.html';
+import passwordHtml from './password.html';
+
 'use strict';
 
 angular
@@ -17,10 +20,10 @@ function stateConfig($stateProvider) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/account/password/password-content-header.html'
+                template: passwordContentHeaderHtml
             },
             'content@': {
-                templateUrl: 'app/account/password/password.html',
+                template: passwordHtml,
                 controller: 'PasswordController',
                 controllerAs: 'vm'
             }

@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import registerHtml from './register.html';
+
 'use strict';
 
 angular
@@ -17,7 +19,7 @@ function stateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/account/register/register.html',
+                template: registerHtml,
                 controller: 'RegisterController',
                 controllerAs: 'vm'
             }

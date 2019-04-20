@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import accountCardComponentHtml from './account-card.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('accountCardComponent', {
-        templateUrl: 'app/account/account-card.component.html',
+        template: accountCardComponentHtml,
         controller: accountCardController,
         controllerAs: 'vm',
         bindings: {
@@ -12,9 +14,9 @@ angular
         }
     });
 
-accountCardController.$inject = ['$scope'];
+accountCardController.$inject = [];
 
-function accountCardController($scope) {
+function accountCardController() {
     var vm = this;
 
 

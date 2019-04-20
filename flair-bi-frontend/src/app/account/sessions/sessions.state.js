@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import sessionsHtml from './sessions.html';
+
 'use strict';
 
 angular
@@ -17,7 +19,7 @@ function stateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/account/sessions/sessions.html',
+                template: sessionsHtml,
                 controller: 'SessionsController',
                 controllerAs: 'vm'
             }

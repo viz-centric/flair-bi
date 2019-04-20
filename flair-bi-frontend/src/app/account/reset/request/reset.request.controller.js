@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+import flairLogo from 'content/svgs/flair-logo.svg';
 'use strict';
 
 angular
@@ -9,7 +10,7 @@ RequestResetController.$inject = ['$timeout', 'Auth'];
 
 function RequestResetController($timeout, Auth) {
     var vm = this;
-
+    vm.flairLogo = flairLogo;
     vm.error = null;
     vm.errorEmailNotExists = null;
     vm.errorExternalUser = null;

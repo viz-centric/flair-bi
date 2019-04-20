@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+import flairLogo from 'content/svgs/flair-logo.svg';
 'use strict';
 
 angular
@@ -9,7 +10,7 @@ ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginServi
 
 function ResetFinishController($stateParams, $timeout, Auth, LoginService) {
     var vm = this;
-
+    vm.flairLogo = flairLogo;
     vm.keyMissing = angular.isUndefined($stateParams.key);
     vm.confirmPassword = null;
     vm.doNotMatch = null;

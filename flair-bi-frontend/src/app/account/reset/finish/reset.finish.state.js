@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import resetFinishHtml from './reset.finish.html';
+
 'use strict';
 
 angular
@@ -16,19 +18,13 @@ function stateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/account/reset/finish/reset.finish.html',
+                template: resetFinishHtml,
                 controller: 'ResetFinishController',
                 controllerAs: 'vm'
             },
-            'navbar@': {
-
-            },
-            'topnavbar@': {
-
-            },
-            'footer@': {
-
-            }
+            'navbar@': {},
+            'topnavbar@': {},
+            'footer@': {}
         },
         resolve: {
             translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {

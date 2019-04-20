@@ -6,15 +6,19 @@
         text-align: center;
         background: whitesmoke;
         padding-left: 0px;
-        .property-title{
+
+        .property-title {
             font-weight: 700;
         }
     }
+
     .row {
-        margin: .5vw; 
+        margin: .5vw;
+
         .entity-states {
             .entity-list {
                 padding-left: 0vw;
+
                 li {
                     .entity-type {
                         span.entity-icon {
@@ -22,19 +26,24 @@
                                 height: 25px;
                                 width: 25px;
                             }
+
                             .flaticon-entity-dimension {
                                 fill: $primary-color;
                             }
+
                             .flaticon-entity-measure {
                                 fill: #f8ac59;
                             }
                         }
+
                         padding: 10px 10px 6px 10px;
                         border-bottom: 1px solid $border-color;
+
                         &:hover {
                             background-color: $active-background-color;
                         }
                     }
+
                     &:focus {
                         outline: none;
                         background-color: $active-background-color;
@@ -43,16 +52,19 @@
             }
         }
     }
+
     .field-property-options {
         padding: 10px;
-        .form-group{
-            input[type=checkbox]{
+
+        .form-group {
+            input[type=checkbox] {
                 width: 20px;
                 height: 20px;
                 float: right;
                 margin: 0;
             }
         }
+
         div {
             property-component {
                 .row {
@@ -64,27 +76,30 @@
         }
     }
 
-    .add-chart-property-container{
+    .add-chart-property-container {
         border-bottom: 1px solid $border-color;
         display: block;
         width: 100%;
         margin-top: -15px;
         min-height: 60px;
-        .property-button{
+
+        .property-button {
             padding: 15px;
             text-align: center;
             float: left;
             width: 50%;
-            svg{
+
+            svg {
                 fill: $icons-color;
                 width: 25px;
                 height: 25px;
             }
-            &:hover{
+
+            &:hover {
                 background-color: $active-background-color;
             }
         }
-    } 
+    }
 }
 
 .data-constrains-properties {
@@ -95,38 +110,46 @@
         text-align: center;
         background: whitesmoke;
         padding-left: 0px;
-        .property-title{
+
+        .property-title {
             font-weight: 700;
         }
-        
+
     }
+
     .data-constaraint-conditions-container {
         /**min-height: 200px;**/
         height: 425px;
         overflow-y: auto;
         overflow-x: hidden;
-        .query{
+
+        .query {
             border: 2px dotted $border-color;
-            border-radius:25px;
+            border-radius: 25px;
             padding: 10px;
             background: $data-constraint-background;
         }
-        .simple-condition{
-            .fields{
+
+        .simple-condition {
+            .fields {
                 display: flex;
-                .field{
+
+                .field {
                     align-self: center;
                 }
-                .between-label{
+
+                .between-label {
                     width: 7%;
                     margin: auto;
                 }
-                .drop-downs{
+
+                .drop-downs {
                     z-index: 1000;
                     position: absolute;
                 }
-            }  
+            }
         }
+
         .condition-component-wrapper {
             padding: 1vw;
             margin-bottom: .5vw;
@@ -134,8 +157,10 @@
             border: 2px dotted $border-color;
             border-radius: 25px;
         }
+
         .data-constraint-operation-button {
             outline: none;
+
             &.icon {
                 i {
                     color: $primary-color;

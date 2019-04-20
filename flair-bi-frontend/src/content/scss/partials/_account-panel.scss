@@ -1,42 +1,44 @@
-.account-header{
+.account-header {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.account-page{
+.account-page {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     min-height: 350px;
 
-    .config-item{
+    .config-item {
         padding: 0px;
         align-self: center;
 
-        svg.account-page-flaticons{
+        svg.account-page-flaticons {
             width: auto;
             height: 60px;
             fill: $icons-color;
             transition: fill 0.5s ease;
+
             &:hover {
                 fill: darken($anchor-color, 20%);
-                
+
             }
         }
 
-        .account-icon-label{
+        .account-icon-label {
             margin-top: 10px;
         }
 
-        a{
+        a {
             transition: color 0.5s ease;
+
             &:hover {
                 color: darken($anchor-color, 20%);
             }
         }
 
-       
+
     }
 }

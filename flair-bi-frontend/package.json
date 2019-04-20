@@ -92,6 +92,7 @@
     "oclazyload": "^1.1.0",
     "pace": "^0.0.4",
     "pdfmake": "^0.1.54",
+    "popper.js": "^1.15.0",
     "slidereveal": "https://github.com/nnattawat/slideReveal.git",
     "sockjs": "^0.3.19",
     "split.js": "https://github.com/nathancahill/splitjs-bower.git",

@@ -12,23 +12,29 @@ $card-height: 300px;
     flex-flow: row wrap;
     -webkit-align-content: space-between;
     align-content: space-between;
+
     .menu-item {
         margin: 0px 5px 0px 5px;
         width: $card-width;
+
         .admin-item,
         .search-result-item {
             &:hover {
                 box-shadow: $md-shadow-main;
             }
+
             transition: 500ms linear;
+
             a {
                 color: $body-main;
                 transition: font-size 300ms linear;
                 width: auto;
                 display: block;
+
                 .admin-content {
                     background-color: $ibox-content-bg;
                     border-color: $border-color;
+
                     .admin-image {
                         img {
                             width: $card-width;
@@ -36,6 +42,7 @@ $card-height: 300px;
                             padding: 30px;
                         }
                     }
+
                     .admin-label {
                         transition: background-color 300ms linear;
                         font-size: 30px;

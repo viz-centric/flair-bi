@@ -1,30 +1,26 @@
 @font-face {
-  font-family: "Fira Sans Extra Condensed", sans-serif;
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
   font-style: normal;
   font-weight: 300;
-  src: local("Fira Sans Extra Condensed Light"), local("FiraSans-Light"), url(../fonts/FiraSansExtraCondensed-Light.ttf);
-}
+  src: local("Fira Sans Extra Condensed Light"), local("FiraSans-Light"), url(../fonts/FiraSansExtraCondensed-Light.ttf); }
 
 @font-face {
-  font-family: "Fira Sans Extra Condensed", sans-serif;
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
   font-style: normal;
   font-weight: 400;
-  src: local("Fira Sans Extra Condensed"), local("FiraSans"), url(../fonts/FiraSansExtraCondensed-Regular.ttf);
-}
+  src: local("Fira Sans Extra Condensed"), local("FiraSans"), url(../fonts/FiraSansExtraCondensed-Regular.ttf); }
 
 @font-face {
-  font-family: "Fira Sans Extra Condensed", sans-serif;
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
   font-style: normal;
   font-weight: 600;
-  src: local("Fira Sans Extra Condensed"), local("FiraSans-Semibold"), url(../fonts/FiraSansExtraCondensed-SemiBold.ttf);
-}
+  src: local("Fira Sans Extra Condensed"), local("FiraSans-Semibold"), url(../fonts/FiraSansExtraCondensed-SemiBold.ttf); }
 
 @font-face {
-  font-family: "Fira Sans Extra Condensed", sans-serif;
+  font-family: 'Fira Sans Extra Condensed', sans-serif;
   font-style: normal;
   font-weight: 700;
-  src: local("Fira Sans Extra Condensed"), local("FiraSans-Bold"), url(../fonts/FiraSansExtraCondensed-Bold.ttf);
-}
+  src: local("Fira Sans Extra Condensed"), local("FiraSans-Bold"), url(../fonts/FiraSansExtraCondensed-Bold.ttf); }
 
 /* Colors */
 /* Break Points*/
@@ -45,45 +41,30 @@
 /* IBox */
 /* User management*/
 /* Viz Settings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 100;
-}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 100; }
 
 h1 {
-  font-size: 30px;
-}
+  font-size: 30px; }
 
 h2 {
-  font-size: 24px;
-}
+  font-size: 24px; }
 
 h3 {
-  font-size: 16px;
-}
+  font-size: 16px; }
 
 h4 {
-  font-size: 14px;
-}
+  font-size: 14px; }
 
 h5 {
-  font-size: 12px;
-}
+  font-size: 12px; }
 
 h6 {
-  font-size: 10px;
-}
+  font-size: 10px; }
 
-h3,
-h4,
-h5 {
+h3, h4, h5 {
   margin-top: 5px;
-  font-weight: 600;
-}
+  font-weight: 600; }
 
 .footer {
   background: none repeat scroll 0 0 #fafafa;
@@ -782,6 +763,18 @@ body.modal-open .animated {
     font-size: 1.5em; }
   .flair-checkbox .fa:hover {
     color: #439dd3; }
+
+.flair-checkbox-disabled {
+  pointer-events: none; }
+  .flair-checkbox-disabled .fa-check-square-o-checked {
+    color: #aaa;
+    display: inline; }
+
+.flair-checkbox-enabled {
+  pointer-events: visible; }
+  .flair-checkbox-enabled .fa-check-square-o-checked {
+    color: #439dd3;
+    display: inline; }
 
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
@@ -2194,7 +2187,9 @@ tags-input .autocomplete {
 tags-input-grpc {
   display: block; }
 
-tags-input-grpc *, tags-input-grpc *:before, tags-input-grpc *:after {
+tags-input-grpc *,
+tags-input-grpc *:before,
+tags-input-grpc *:after {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
@@ -2241,11 +2236,11 @@ tags-input-grpc .tags .tag-item {
   line-height: 25px;
   border: 1px solid #acacac;
   border-radius: 3px;
-  background: -webkit-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+  background: -webkit-linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
   background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%); }
 
 tags-input-grpc .tags .tag-item.selected {
-  background: -webkit-linear-gradient(top, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
+  background: -webkit-linear-gradient(to bottom, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
   background: linear-gradient(to bottom, #febbbb 0%, #fe9090 45%, #ff5c5c 100%); }
 
 tags-input-grpc .tags .tag-item .remove-button {
@@ -2291,7 +2286,7 @@ tags-input-grpc[disabled] .tags {
 
 tags-input-grpc[disabled] .tags .tag-item {
   opacity: 0.65;
-  background: -webkit-linear-gradient(top, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%);
+  background: -webkit-linear-gradient(to bottom, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%);
   background: linear-gradient(to bottom, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%); }
 
 tags-input-grpc[disabled] .tags .tag-item .remove-button {
@@ -2380,7 +2375,7 @@ tags-input-grpc .autocomplete {
     font-size: 13px; }
 
 .filter-area .filter-element tags-input-grpc.filter-input {
-  margin: .5vw; }
+  margin: 0.5vw; }
 
 @media screen {
   #printSection {
@@ -2543,7 +2538,7 @@ tags-input-grpc .autocomplete {
   width: 15px;
   display: inline-block;
   float: right;
-  margin-top: -25px; }
+  margin-top: -20px; }
 
 .dashboard-create-popup .image-upload-holder {
   margin-top: 5px;
@@ -6235,21 +6230,6 @@ input.select2-active {
 .scheduler-tags > tags-input .host {
   margin-top: 0px; }
 
-.dag-scheduler-modal .modal-header {
-  background-color: #f6f8f8; }
-  .dag-scheduler-modal .modal-header .edit-icon {
-    height: 20px;
-    width: 20px;
-    display: inline-block;
-    float: left;
-    margin-bottom: -20px; }
-  .dag-scheduler-modal .modal-header .cancle-icon {
-    height: 15px;
-    width: 15px;
-    display: inline-block;
-    float: right;
-    margin-top: -25px; }
-
 .cron-wrap .clearfix .form-group {
   display: flex; }
   .cron-wrap .clearfix .form-group label {
@@ -6331,3 +6311,42 @@ input.select2-active {
     .dataSource-sidebar .step-line svg {
       width: 2px;
       height: 45px; }
+
+.common-create-popup .modal-header {
+  background-color: #f6f8f8; }
+
+.common-create-popup .common-edit-icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  float: left;
+  margin-bottom: -20px; }
+
+.common-create-popup .common-cancle-icon {
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+  float: right;
+  margin-top: -20px; }
+
+.common-create-popup .image-upload-holder {
+  margin-top: 5px;
+  background-color: #f2fbfe;
+  border-radius: 8px 8px;
+  padding: 8px 8px;
+  box-sizing: border-box; }
+  .common-create-popup .image-upload-holder .image-upload-inner {
+    border: 1px dashed #439dd3;
+    border-radius: 8px 8px;
+    padding: 15px 0;
+    text-align: center; }
+
+.common-create-popup .image-disc {
+  margin-top: 7px;
+  font-size: 15px; }
+
+.common-create-popup input {
+  border-radius: 10px; }
+
+.common-create-popup .uploaded-image {
+  float: right; }

@@ -11,6 +11,8 @@ import 'ng-file-upload';
 import 'angular-ui-bootstrap';
 import 'ui-select';
 import 'bootstrap-ui-datetime-picker';
+import 'bootstrap';
+import 'bootstrap-toggle'
 import 'oclazyload';
 import '@uirouter/angularjs'
 import '@uirouter/angularjs/release/stateEvents'
@@ -34,6 +36,7 @@ import 'angular-cron-gen';
 import 'angular-translate-interpolation-messageformat';
 import 'angular-translate-loader-partial';
 import 'jquery';
+import 'popper.js';
 
 import 'content/js/custom';
 import 'content/js/icheck';

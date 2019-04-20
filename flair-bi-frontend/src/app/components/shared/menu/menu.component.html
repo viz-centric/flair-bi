@@ -1,25 +1,25 @@
 <div class="dropdown-options-v2 menu-container">
-    <a class="dropdown-toggle" type="button" id="dropdownMainMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    <a class="dropdown-toggle" type="button" id="dropdownMainMenu" data-toggle="dropdown" aria-haspopup="true"
+       aria-expanded="true">
         <div class="menu">
             <svg class="more">
-                <use xlink:href="#more" />
+                <use xlink:href="#more"></use>
             </svg>
         </div>
     </a>
 
     <div class="dropdown-menu" aria-labelledby="dropdownMainMenu">
-
         <div class=" user-holder">
-                <svg>
-                <use xlink:href="#more" />
-                </svg>
-                <p class="user-name">{{vm.account.firstName}}</p>
+            <svg>
+                <use xlink:href="#more"></use>
+            </svg>
+            <p class="user-name">{{vm.account.firstName}}</p>
         </div>
-        <div class="line-horis"></div>            
+        <div class="line-horis"></div>
         <div class="dropdown-sub-menu">
             <a ui-sref="home" title="Home">
                 <svg class="nav-flaticon-home">
-                    <use xlink:href="#home" />
+                    <use xlink:href="#home"></use>
                 </svg>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>Home</span>
@@ -28,16 +28,16 @@
         <div class="dropdown-sub-menu">
             <a ui-sref="account">
                 <svg class="icon">
-                    <use xlink:href="#menu-setting" />
+                    <use xlink:href="#menu-setting"></use>
                 </svg>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>Account</span>
             </a>
         </div>
         <div class="dropdown-sub-menu">
-            <a href="" ng-click="vm.logout()" id="logout" >
+            <a href="" ng-click="vm.logout()" id="logout">
                 <svg class="logout-flair">
-                    <use xlink:href="#menu-logout" />
+                    <use xlink:href="#menu-logout"></use>
                 </svg>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span>Sign out</span>

@@ -50,7 +50,7 @@
 @import "../partials/file-uploader";
 @import "../partials/data-connection.scss";
 @import "../partials/commons-modal";
-@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 $fa-font-path: "~font-awesome/fonts";
 @import '~font-awesome/scss/font-awesome.scss';

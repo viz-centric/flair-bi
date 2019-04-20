@@ -54,7 +54,7 @@
     "angular-wizard": "^1.1.1",
     "angularjs-slider": "^7.0.0",
     "animate.css": "^3.7.0",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "~3.3.7",
     "bootstrap-toggle": "^2.2.2",
     "bootstrap-ui-datetime-picker": "^2.6.3",
     "chart.js": "^2.8.0",

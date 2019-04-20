@@ -1,4 +1,19 @@
 import * as angular from 'angular';
+
+import dashboardContentHeaderHtml from './dashboards-content-header.html';
+import dashboardHtml from './dashboards.html';
+import dashboardPropertiesContentHeaderHtml from './dashboards-properties-content-header.html';
+import dashboardDetailHtml from './dashboards-detail.html';
+import dashboardOverviewContentHeaderHtml from './dashboards-overview-content-header.html';
+import dashboardOverviewHtml from './dashboards-overview.html';
+import dashboardDialogHtml from './dashboards-dialog.html';
+import dashboardDeleteDialogHtml from './dashboards-delete-dialog.html';
+import featureBookmarkContentHeaderHtml from './../feature-bookmark/feature-bookmark-content-header.html';
+import featureBookmarksHtml from './../feature-bookmark/feature-bookmarks.html';
+import featureBookmarkDialogHtml from './../feature-bookmark/feature-bookmark-dialog.html';
+import featureBookmarkDeleteDialogHtml from './../feature-bookmark/feature-bookmark-delete-dialog.html';
+import dashboardPublishRequestDialogHtml from './dashboard-publish-request-dialog.html';
+
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -17,13 +32,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/dashboards/dashboards-content-header.html",
+                    template: dashboardContentHeaderHtml,
                     controller: "DashboardsController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl: "app/entities/dashboards/dashboards.html",
+                    template: dashboardHtml,
                     controller: "DashboardsController",
                     controllerAs: "vm"
                 }
@@ -50,14 +64,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/dashboards/dashboards-properties-content-header.html",
+                    template: dashboardPropertiesContentHeaderHtml,
                     controller: "DashboardsDetailController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl:
-                        "app/entities/dashboards/dashboards-detail.html",
+                    template: dashboardDetailHtml,
                     controller: "DashboardsDetailController",
                     controllerAs: "vm"
                 }
@@ -106,14 +118,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/dashboards/dashboards-overview-content-header.html",
+                    template: dashboardOverviewContentHeaderHtml,
                     controller: "DashboardOverviewContentHeaderController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl:
-                        "app/entities/dashboards/dashboards-overview.html",
+                    template: dashboardOverviewHtml,
                     controller: "DashboardOverviewController",
                     controllerAs: "vm"
                 }
@@ -165,27 +175,26 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/dashboards/dashboards-dialog.html",
+                            template: dashboardDialogHtml,
                             controller: "DashboardsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
                             size: "md"
                         })
                         .result.then(
-                            function () {
-                                $state.go(
-                                    "^",
-                                    {},
-                                    {
-                                        reload: false
-                                    }
-                                );
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go(
+                                "^",
+                                {},
+                                {
+                                    reload: false
+                                }
+                            );
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -203,23 +212,22 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/dashboards/dashboards-dialog.html",
+                            template: dashboardDialogHtml,
                             controller: "DashboardsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
                             size: "md"
                         })
                         .result.then(
-                            function () {
-                                $state.go("dashboards", null, {
-                                    reload: "dashboards"
-                                });
-                            },
-                            function () {
-                                $state.go("dashboards");
-                            }
-                        );
+                        function () {
+                            $state.go("dashboards", null, {
+                                reload: "dashboards"
+                            });
+                        },
+                        function () {
+                            $state.go("dashboards");
+                        }
+                    );
                 }
             ]
         })
@@ -235,23 +243,22 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/dashboards/dashboards-dialog.html",
+                            template: dashboardDialogHtml,
                             controller: "DashboardsDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
                             size: "lg"
                         })
                         .result.then(
-                            function () {
-                                $state.go("dashboards", null, {
-                                    reload: "dashboards"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("dashboards", null, {
+                                reload: "dashboards"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -268,8 +275,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/dashboards/dashboards-delete-dialog.html",
+                            template: dashboardDeleteDialogHtml,
                             controller: "DashboardsDeleteController",
                             controllerAs: "vm",
                             size: "md",
@@ -285,15 +291,15 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("dashboards", null, {
-                                    reload: "dashboards"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("dashboards", null, {
+                                reload: "dashboards"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -307,12 +313,10 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/feature-bookmark/feature-bookmark-content-header.html"
+                    template: featureBookmarkContentHeaderHtml
                 },
                 "content@": {
-                    templateUrl:
-                        "app/entities/feature-bookmark/feature-bookmarks.html",
+                    template: featureBookmarksHtml,
                     controller: "FeatureBookmarkController",
                     controllerAs: "vm"
                 }
@@ -339,7 +343,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                                 FeatureBookmark.query(
                                     {
                                         "datasource.id":
-                                            res.dashboardDatasource.id
+                                        res.dashboardDatasource.id
                                     },
                                     function (res) {
                                         defered.resolve(res);
@@ -405,8 +409,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-bookmark/feature-bookmark-dialog.html",
+                            template: featureBookmarkDialogHtml,
                             controller: "FeatureBookmarkDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -423,15 +426,15 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("dashboard-bookmarks", null, {
-                                    reload: "dashboard-bookmarks"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("dashboard-bookmarks", null, {
+                                reload: "dashboard-bookmarks"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -444,8 +447,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-bookmark/feature-bookmark-delete-dialog.html",
+                            template: featureBookmarkDeleteDialogHtml,
                             controller: "FeatureBookmarkDeleteController",
                             controllerAs: "vm",
                             size: "md",
@@ -461,15 +463,15 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("dashboard-bookmarks", null, {
-                                    reload: "dashboard-bookmarks"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("dashboard-bookmarks", null, {
+                                reload: "dashboard-bookmarks"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -486,8 +488,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/dashboards/dashboard-publish-request-dialog.html",
+                            template: dashboardPublishRequestDialogHtml,
                             controller:
                                 "DashboardPublishRequestDialogController",
                             controllerAs: "vm",
@@ -504,20 +505,20 @@ function stateConfig($stateProvider, PERMISSIONS) {
                             }
                         })
                         .result.then(
-                            function (result) {
-                                $state.go(
-                                    "dashboards-overview",
-                                    {
-                                        id: result.dashboardId
-                                    },
-                                    {
-                                        reload: "dashboards-overview"
-                                    }
-                                );
-                            },
-                            function () {
-                            }
-                        );
+                        function (result) {
+                            $state.go(
+                                "dashboards-overview",
+                                {
+                                    id: result.dashboardId
+                                },
+                                {
+                                    reload: "dashboards-overview"
+                                }
+                            );
+                        },
+                        function () {
+                        }
+                    );
                 }
             ]
         });

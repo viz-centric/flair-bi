@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import healthContentHeaderHtml from './health-content-header.html';
+import healthHtml from './health.html';
 'use strict';
 
 angular
@@ -17,12 +19,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/admin/health/health-content-header.html',
+                template: healthContentHeaderHtml,
                 controller: 'JhiHealthCheckController',
                 controllerAs: 'vm'
             },
             'content@': {
-                templateUrl: 'app/admin/health/health.html',
+                template: healthHtml,
                 controller: 'JhiHealthCheckController',
                 controllerAs: 'vm'
             }

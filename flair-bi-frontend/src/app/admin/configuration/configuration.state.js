@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import configurationContentHeaderHtml from './configuration-content-header.html';
+import configurationHtml from './configuration.html';
+
 'use strict';
 
 angular
@@ -17,12 +20,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/admin/configuration/configuration-content-header.html',
+                template: configurationContentHeaderHtml,
                 controller: 'JhiConfigurationController',
                 controllerAs: 'vm'
             },
             'content@': {
-                templateUrl: 'app/admin/configuration/configuration.html',
+                template: configurationHtml,
                 controller: 'JhiConfigurationController',
                 controllerAs: 'vm'
             }

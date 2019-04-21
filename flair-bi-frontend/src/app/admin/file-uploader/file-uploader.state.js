@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+
+import fileUploaderHeaderHtml from './file-uploader-header.html';
+import fileUploaderHtml from './file-uploader.html'
 'use strict';
 
 angular
@@ -16,12 +19,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/admin/file-uploader/file-uploader-header.html',
+                template: fileUploaderHeaderHtml,
                 controller: 'FileUploaderController',
                 controllerAs: 'vm'
             },
             'content@': {
-                templateUrl: 'app/admin/file-uploader/file-uploader.html',
+                template: fileUploaderHtml,
                 controller: 'FileUploaderController',
                 controllerAs: 'vm'
             }

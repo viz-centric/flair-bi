@@ -1,5 +1,14 @@
 import * as angular from 'angular';
-'use strict';
+import userManagementContentHeaderHtml from './user-management-content-header.html';
+import userManagementHtml from './user-management.html';
+import userManagementPropertiesContentHeader from './user-management-properties-content-header.html';
+import userManagementDetailHtml from './user-management-detail.html';
+import datasourceConstraintDialogHtml from './../../entities/datasource-constraint/datasource-constraint-dialog.html';
+import datasourceConstraintDeleteDialogHtml
+    from './../../entities/datasource-constraint/datasource-constraint-delete-dialog.html';
+import userManagementDialogHtml from './user-management-dialog.html';
+import userManagementDeleteDialogHtml from './user-management-delete-dialog.html';
+import 'use strict';
 
 angular
     .module('flairbiApp')
@@ -18,12 +27,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/user-management/user-management-content-header.html',
+                    template: userManagementContentHeaderHtml,
                     controller: 'UserManagementController',
                     controllerAs: 'vm'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/user-management/user-management.html',
+                    template: userManagementHtml,
                     controller: 'UserManagementController',
                     controllerAs: 'vm'
                 }
@@ -63,12 +72,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/user-management/user-management-properties-content-header.html',
+                    template: userManagementPropertiesContentHeader,
                     controller: 'UserManagementDetailController',
                     controllerAs: 'vm'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/user-management/user-management-detail.html',
+                    template: userManagementDetailHtml,
                     controller: 'UserManagementDetailController',
                     controllerAs: 'vm'
                 }
@@ -97,7 +106,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/datasource-constraint/datasource-constraint-dialog.html',
+                    template: datasourceConstraintDialogHtml,
                     controller: 'DatasourceConstraintDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -135,7 +144,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/datasource-constraint/datasource-constraint-dialog.html',
+                    template: datasourceConstraintDialogHtml,
                     controller: 'DatasourceConstraintDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -169,7 +178,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/datasource-constraint/datasource-constraint-delete-dialog.html',
+                    template: datasourceConstraintDeleteDialogHtml,
                     controller: 'DatasourceConstraintDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
@@ -202,7 +211,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-dialog.html',
+                    template: userManagementDialogHtml,
                     controller: 'UserManagementDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -243,7 +252,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-dialog.html',
+                    template: userManagementDialogHtml,
                     controller: 'UserManagementDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -271,7 +280,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
+                    template: userManagementDeleteDialogHtml,
                     controller: 'UserManagementDeleteController',
                     controllerAs: 'vm',
                     size: 'md',

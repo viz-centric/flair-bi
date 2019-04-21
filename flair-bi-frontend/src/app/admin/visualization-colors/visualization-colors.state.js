@@ -1,4 +1,9 @@
 import * as angular from 'angular';
+import visualizationColorsHtml from './visualization-colors.html';
+import visualizationColorsDetailHtml from './visualization-colors-detail.html';
+import visualizationColorsDialogHtml from './visualization-colors-dialog.html';
+import visualizationColorsDeleteDialogHtml from './visualization-colors-delete-dialog.html';
+
 'use strict';
 
 angular
@@ -18,7 +23,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/visualization-colors/visualization-colors.html',
+                    template: visualizationColorsHtml,
                     controller: 'VisualizationColorsController',
                     controllerAs: 'vm'
                 }
@@ -40,7 +45,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/visualization-colors/visualization-colors-detail.html',
+                    template: visualizationColorsDetailHtml,
                     controller: 'VisualizationColorsDetailController',
                     controllerAs: 'vm'
                 }
@@ -51,7 +56,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                     return $translate.refresh();
                 }],
                 entity: ['$stateParams', 'VisualizationColors', function ($stateParams, VisualizationColors) {
-                    return VisualizationColors.get({ id: $stateParams.id }).$promise;
+                    return VisualizationColors.get({id: $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
@@ -70,18 +75,18 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/visualization-colors/visualization-colors-dialog.html',
+                    template: visualizationColorsDialogHtml,
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'sm',
                     resolve: {
                         entity: ['VisualizationColors', function (VisualizationColors) {
-                            return VisualizationColors.get({ id: $stateParams.id }).$promise;
+                            return VisualizationColors.get({id: $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function () {
-                    $state.go('^', {}, { reload: false });
+                    $state.go('^', {}, {reload: false});
                 }, function () {
                     $state.go('^');
                 });
@@ -94,7 +99,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/visualization-colors/visualization-colors-dialog.html',
+                    template: visualizationColorsDialogHtml,
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -108,7 +113,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                         }
                     }
                 }).result.then(function () {
-                    $state.go('visualization-colors', null, { reload: 'visualization-colors' });
+                    $state.go('visualization-colors', null, {reload: 'visualization-colors'});
                 }, function () {
                     $state.go('visualization-colors');
                 });
@@ -121,18 +126,18 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/visualization-colors/visualization-colors-dialog.html',
+                    template: visualizationColorsDialogHtml,
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'sm',
                     resolve: {
                         entity: ['VisualizationColors', function (VisualizationColors) {
-                            return VisualizationColors.get({ id: $stateParams.id }).$promise;
+                            return VisualizationColors.get({id: $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function () {
-                    $state.go('visualization-colors', null, { reload: 'visualization-colors' });
+                    $state.go('visualization-colors', null, {reload: 'visualization-colors'});
                 }, function () {
                     $state.go('^');
                 });
@@ -145,17 +150,17 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/visualization-colors/visualization-colors-delete-dialog.html',
+                    template: visualizationColorsDeleteDialogHtml,
                     controller: 'VisualizationColorsDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function (VisualizationColors) {
-                            return VisualizationColors.get({ id: $stateParams.id }).$promise;
+                            return VisualizationColors.get({id: $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function () {
-                    $state.go('visualization-colors', null, { reload: 'visualization-colors' });
+                    $state.go('visualization-colors', null, {reload: 'visualization-colors'});
                 }, function () {
                     $state.go('^');
                 });

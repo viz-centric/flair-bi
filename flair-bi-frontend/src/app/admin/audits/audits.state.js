@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import auditsContentHeaderHtml from './audits-content-header.html';
+import auditsHtml from './audits.html';
 'use strict';
 
 angular
@@ -17,12 +19,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/admin/audits/audits-content-header.html',
+                template: auditsContentHeaderHtml,
                 controller: 'AuditsController',
                 controllerAs: 'vm'
             },
             'content@': {
-                templateUrl: 'app/admin/audits/audits.html',
+                template: auditsHtml,
                 controller: 'AuditsController',
                 controllerAs: 'vm'
             }

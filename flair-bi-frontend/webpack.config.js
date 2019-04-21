@@ -20,7 +20,8 @@ module.exports = {
             'angular-split-pane': path.resolve(__dirname, './node_modules/@shagstrom/angular-split-pane/angular-split-pane.js'),
             'gridstack-angular': path.resolve(__dirname, './node_modules/gridstack-angular/dist/gridstack-angular.min.js'),
             'i18n': path.resolve(__dirname, './src/i18n'),
-            'content': path.resolve(__dirname, './src/content')
+            'content': path.resolve(__dirname, './src/content'),
+            'templates': path.resolve(__dirname, './src/templates')
         }
     },
 

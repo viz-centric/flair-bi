@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import releaseManagementContentHeaderHtml from './release-management-content-header.html';
+import releaseManagementHtml from './release-management.html';
 
 "use strict";
 
@@ -15,10 +17,10 @@ function stateConfig($stateProvider) {
         },
         views: {
             "content-header@": {
-                templateUrl: "app/admin/release-management/release-management-content-header.html"
+                template: releaseManagementContentHeaderHtml
             },
             "content@": {
-                templateUrl: "app/admin/release-management/release-management.html",
+                template: releaseManagementHtml,
                 controller: "ReleaseManagementController",
                 controllerAs: "vm"
             }

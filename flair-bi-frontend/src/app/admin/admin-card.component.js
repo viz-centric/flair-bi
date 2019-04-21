@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import adminCardComponentHtml from './admin-card.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('adminCardComponent', {
-        templateUrl: 'app/admin/admin-card.component.html',
+        template: adminCardComponentHtml,
         controller: adminCardController,
         controllerAs: 'vm',
         bindings: {

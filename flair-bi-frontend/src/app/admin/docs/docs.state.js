@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import docsHtml from './docs.html';
+
 'use strict';
 
 angular
@@ -17,7 +19,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/docs/docs.html'
+                template: docsHtml
             }
         },
         resolve: {

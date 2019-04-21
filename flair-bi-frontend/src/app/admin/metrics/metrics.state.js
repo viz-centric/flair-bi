@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import metricsContentHeaderHtml from './metrics-content-header.html';
+import metricsHtml from './metrics.html';
+
 'use strict';
 
 angular
@@ -17,12 +20,12 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/admin/metrics/metrics-content-header.html',
+                template: metricsContentHeaderHtml,
                 controller: 'JhiMetricsMonitoringController',
                 controllerAs: 'vm'
             },
             'content@': {
-                templateUrl: 'app/admin/metrics/metrics.html',
+                template: metricsHtml,
                 controller: 'JhiMetricsMonitoringController',
                 controllerAs: 'vm'
             }

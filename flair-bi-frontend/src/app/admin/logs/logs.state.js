@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import logsContentHeaderHtml from './logs-content-header.html';
+import logsHtml from './logs.html';
+
 'use strict';
 
 angular
@@ -17,10 +20,10 @@ function stateConfig($stateProvider, PERMISSIONS) {
         },
         views: {
             'content-header@': {
-                templateUrl: 'app/admin/logs/logs-content-header.html',
+                template: logsContentHeaderHtml,
             },
             'content@': {
-                templateUrl: 'app/admin/logs/logs.html',
+                template: logsHtml,
                 controller: 'LogsController',
                 controllerAs: 'vm'
             }

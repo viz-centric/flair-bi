@@ -1,4 +1,8 @@
 import * as angular from 'angular';
+import permissionManagementContentHeaderHtml from './permission-management-content-header.html';
+import permissionManagementHtml from './permission-management.html';
+import userGroupDeleteDialog from './../../entities/user-group/user-group-delete-dialog.html';
+
 'use strict';
 
 angular
@@ -18,12 +22,12 @@ function stateConfig($stateProvider) {
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/permission-management/permission-management-content-header.html',
+                    template: permissionManagementContentHeaderHtml,
                     controller: 'PermissionManagementContentHeaderController',
                     controllerAs: 'vm'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/permission-management/permission-management.html',
+                    template: permissionManagementHtml,
                     controller: 'PermissionManagementController',
                     controllerAs: 'vm'
                 }
@@ -64,7 +68,7 @@ function stateConfig($stateProvider) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/user-group/user-group-delete-dialog.html',
+                    template: userGroupDeleteDialog,
                     controller: 'UserGroupDeleteController',
                     controllerAs: 'vm',
                     size: 'md',

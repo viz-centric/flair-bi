@@ -39,4 +39,18 @@
     .uploaded-image{
       float:right;
     }
+    .form-group{
+        .img-label{
+            margin-bottom: 0px;
+        }
+        .row{
+            padding-top: 5px;
+            margin-left:0px;
+            margin-right:0px;
+            img{
+                max-width:100%
+            }
+        }
+
+    }
 }

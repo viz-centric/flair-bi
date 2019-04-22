@@ -10,33 +10,6 @@
     function GenerateMap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-                record.data = [
-                    {
-                        "country": "Afghanistan",
-                        "Under 5 Years":50000
-                    },
-                    {
-                        "country": "India",
-                        "Under 5 Years":78500
-                    },
-                    {
-                        "country": "Brazil",
-                        "Under 5 Years":6666
-                    },
-                    {
-                        "country": "Nepal",
-                        "Under 5 Years":7000
-                    },
-                    {
-                        "country": "Chile",
-                        "Under 5 Years":4600
-                    },
-                    {
-                        "country": "France",
-                        "Under 5 Years":5000
-                    },
-                ];
-
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -44,8 +17,8 @@
                         dimension = features.dimensions,
                         measure = features.measures;
 
-                    result['dimension'] =['country']// [D3Utils.getNames(dimension)[0]];
-                    result['measure'] = ['Under 5 Years']//[D3Utils.getNames(measure)[0]];
+                    result['dimension'] =  [D3Utils.getNames(dimension)[0]];
+                    result['measure'] = [D3Utils.getNames(measure)[0]];
 
                     result['displayColor'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display colour');
                     result['borderColor'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Border colour');

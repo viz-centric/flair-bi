@@ -64,8 +64,6 @@
                     div.datum(record.data)
                         .call(infographics);
 
-                    infographics._getHTML()
-
                     $rootScope.updateWidget[record.id] = infographics;
                 }
             }

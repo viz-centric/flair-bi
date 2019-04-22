@@ -65,7 +65,7 @@
 
                     var gauge = flairVisualizations.gauge()
                         .config(getProperties(VisualizationUtils, record))
-                        .print(falses);
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(gauge)

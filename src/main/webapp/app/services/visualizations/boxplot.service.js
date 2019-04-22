@@ -18,56 +18,7 @@
     ) {
         return {
             build: function (record, element, panel) {
-                record.data = [{
-                    "country": "Nepal",
-                    "low": 10,
-                    "1Q": 15,
-                    "median": 20,
-                    "3Q": 30,
-                    "high": 45
-                }, {
-                    "country": "Denmark",
-                    "low": 5,
-                    "1Q": 10,
-                    "median": 15,
-                    "3Q": 20,
-                    "high": 30
-                }, {
-                    "country": "India",
-                    "low": 22,
-                    "1Q": 25,
-                    "median": 30,
-                    "3Q": 45,
-                    "high": 67
-                }, {
-                    "country": "UK",
-                    "low": 20,
-                    "1Q": 34,
-                    "median": 55,
-                    "3Q": 72,
-                    "high": 90
-                }, {
-                    "country": "Canada",
-                    "low": 2,
-                    "1Q": 5,
-                    "median": 8,
-                    "3Q": 13,
-                    "high": 20
-                }, {
-                    "country": "Australia",
-                    "low": 25,
-                    "1Q": 30,
-                    "median": 35,
-                    "3Q": 52,
-                    "high": 70
-                }, {
-                    "country": "USA",
-                    "low": -15,
-                    "1Q": -5,
-                    "median": 0,
-                    "3Q": 10,
-                    "high": 20
-                }]
+                
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -80,8 +31,8 @@
                         eachMeasure,
                         allMeasures = [];
 
-                    result["dimension"] = ['country']// D3Utils.getNames(dimensions)[0];
-                    result["measure"] = ['low', '1Q', 'median', '3Q', 'high']//D3Utils.getNames(measures);
+                    result["dimension"] =  D3Utils.getNames(dimensions)[0];
+                    result["measure"] = D3Utils.getNames(measures);
 
                     result["maxMes"] = measures.length;
 

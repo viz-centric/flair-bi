@@ -15,7 +15,7 @@
 <div class="fbibox">
     <div class="fbibox-content">
         <div class="table-responsive">
-            <table class="jh-table table table-striped">
+            <table class="jh-table table table-striped flair-table-v1">
                 <thead>
                     <tr>
                         <th>
@@ -30,7 +30,7 @@
                         <th>
                             <span data-translate="flairbiApp.featureBookmark.datasources">Datasources</span>
                         </th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,14 +53,12 @@
                                     <span class="hidden-sm-down" data-translate="entity.action.view"></span>
                                 </button>
                                 <button ng-show="vm.config.edit.enabled" type="submit" ui-sref="{{ vm.config.edit.route || feature-bookmark.edit({id:featureBookmark.id}) }}"
-                                    class="btn btn-primary btn-sm">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                    <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-edit edit-icon fa-2x"></span>
                                 </button>
                                 <button ng-show="vm.config.delete.enabled" type="submit" ui-sref="{{vm.config.delete.route || feature-bookmark.delete({id:featureBookmark.id})}}"
-                                    class="btn btn-danger btn-sm">
-                                    <span class="glyphicon glyphicon-remove-circle"></span>
-                                    <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-trash delete-icon fa-2x"></span>
                                 </button>
                             </div>
                         </td>

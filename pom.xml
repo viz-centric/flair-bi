@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>0.0.18</version>
+    <version>0.0.19-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -18,7 +18,7 @@
     <scm>
         <connection>scm:git:https://github.com/viz-centric/flair-bi.git</connection>
         <developerConnection>scm:git:https://github.com/viz-centric/flair-bi.git</developerConnection>
-        <tag>v0.0.18</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/viz-centric/flair-bi.git</url>
     </scm>
     <distributionManagement>

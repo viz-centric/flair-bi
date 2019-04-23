@@ -1,13 +1,13 @@
-<div class="inmodal in modal-content dashboard-create-popup">
+<div class="inmodal in modal-content common-create-popup">
     <form name="editForm" ng-submit="vm.save()" novalidate="" role="form" show-validation="">
         <div class="modal-header">
-            <svg class="dashboard-icon">
+            <svg class="common-edit-icon">
               <use xlink:href="#edit-dashboard" />
       </svg>
             <div class="header-text">
                 {{vm.dialogMode}}
             </div>
-            <svg class=" dashboard-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
               <use xlink:href="#cancle" />
               </svg>
         </div>
@@ -49,8 +49,8 @@
                 </div>
             </div>
             <div class="form-group" ngf-change="vm.setImage($file, vm.dashboards)" ngf-drop="" ngf-pattern="'image/*'">
-                <label class="control-label" data-translate="flairbiApp.dashboards.image" for="field_image">Image </label>
-                <div>
+                <label class="control-label img-label" data-translate="flairbiApp.dashboards.image" for="field_image">Image </label>
+                <div class="row" ng-if="vm.dashboards.image || vm.dashboards.imageLocation">
                     <img alt="dashboards image" data-ng-src="{{'data:' + vm.dashboards.imageContentType + ';base64,' + vm.dashboards.image}}" ng-if="vm.dashboards.image" style="max-height: 100px;" />
 
                     <img alt="dashboards image" ng-src="{{vm.dashboards.imageLocation}}" ng-if="vm.dashboards.imageLocation" style="max-height: 100px;" />
@@ -58,22 +58,20 @@
                     <div class="help-block clearfix col-md-7 col-sm-7 uploaded-image" ng-if="vm.dashboards.image">
                         <span class=" image-disc pull-left">{{vm.dashboards.imageContentType}}, {{vm.byteSize(vm.dashboards.image)}}</span>
                         <button class="btn btn-danger btn-xs pull-right" ng-click="vm.dashboards.image=null;vm.dashboards.imageContentType=null;" type="button">
-              <span class="glyphicon glyphicon-remove"></span> Remove Image
-            </button>
+                            <span class="glyphicon glyphicon-remove"></span> Remove Image
+                        </button>
                     </div>
                     <div ng-show="vm.isInValidImage">
                         <p class="help-block">you can upload the image upto {{vm.maxImageSize}} MB </p>
                     </div>
-                    <div class="image-upload-holder">
-                        <div class="image-upload-inner">
-                            <div class="button" ngf-select name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" data-translate="entity.action.addimage" ngf-min-height="100" ngf-change="vm.setImage($file, vm.dashboards)">
-                                <p>Add Image</p>
-                            </div>
+                </div>
+                <div class="image-upload-holder">
+                    <div class="image-upload-inner">
+                        <div class="button" ngf-select name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" data-translate="entity.action.addimage" ngf-min-height="100" ngf-change="vm.setImage($file, vm.dashboards)">
+                            <p>Add Image</p>
                         </div>
                     </div>
                 </div>
-
-
                 <input class="form-control" id="field_image" name="image" ng-model="vm.dashboards.image" type="hidden" />
                 <input class="form-control" id="field_imageContentType" name="imageContentType" ng-model="vm.dashboards.imageContentType" type="hidden" />
             </div>

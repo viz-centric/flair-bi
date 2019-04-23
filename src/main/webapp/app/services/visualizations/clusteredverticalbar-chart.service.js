@@ -28,8 +28,6 @@
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
                         measures = features.measures,
-                        eachMeasure,
-                        allMeasures = [],
                         colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimensions);

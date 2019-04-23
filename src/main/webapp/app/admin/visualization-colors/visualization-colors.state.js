@@ -80,7 +80,7 @@
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function(VisualizationColors) {
                             return VisualizationColors.get({id : $stateParams.id}).$promise;
@@ -105,7 +105,7 @@
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: function () {
                             return {
@@ -133,7 +133,7 @@
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function(VisualizationColors) {
                             return VisualizationColors.get({id : $stateParams.id}).$promise;

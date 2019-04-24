@@ -146,6 +146,11 @@
         "dist/angular-cron-generator.css",
         "dist/angular-cron-generator.js"
       ]
+    },
+    "flair-visualizations": {
+      "main": [
+        "dist/main.bundle.js"
+      ]
     }
   },
   "resolutions": {

@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_visualizations','scheduler_channels'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_visualizations,scheduler_channels) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -19,7 +19,6 @@
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
-        vm.visualizations=scheduler_visualizations;
         vm.channels=scheduler_channels;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -93,6 +92,7 @@
         vm.scheduleObj.report_line_item.table=visualMetaData.metadataVisual.name;
         vm.scheduleObj.report_line_item.table=datasource.name;
         vm.scheduleObj.report_line_item.where=JSON.stringify(visualMetaData.conditionExpression);
+        vm.scheduleObj.report_line_item.visualization=visualMetaData.metadataVisual.name;
         
     }
 
@@ -154,7 +154,6 @@
             vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
             vm.scheduleObj.schedule.cronExpression=$scope.cronExpression;
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
-            vm.scheduleObj.report_line_item.visualization=vm.scheduleObj.report_line_item.visualization.toLowerCase();
             vm.scheduleObj.cron_exp=$scope.cronExpression;
         }
 

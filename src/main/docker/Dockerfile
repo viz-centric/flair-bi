@@ -6,23 +6,26 @@ LABEL maintainer="admin@vizcentric.com"
 LABEL name="Vizcentric"
 
 RUN groupadd -g 999 flairuser && \
-    useradd -r -u 999 -g flairuser flairuser
-USER flairuser
-WORKDIR /usr/local/bin/flairuser
+    useradd --shell /bin/bash --create-home --home /home/flairuser -r -u 999 -g flairuser flairuser
+WORKDIR /app
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS="" \
     JHIPSTER_SLEEP=0
 
-VOLUME /tmp
 EXPOSE 80
 
-COPY ssl/keystore/flairbi-keystore.p12 /keystore.p12
-COPY ssl/keystore/flairbi-truststore.p12 /truststore.p12
-COPY ssl/cert/ca/ca.pem /ca.crt
+COPY ssl/keystore/flairbi-keystore.p12 /app/keystore.p12
+COPY ssl/keystore/flairbi-truststore.p12 /app/truststore.p12
+COPY ssl/cert/ca/ca.pem /app/ca.crt
 
-COPY *.war /app.war
+COPY *.war /app/app.war
+
+RUN chown -R flairuser:flairuser /app
+RUN chmod -R 755 /app
+
+USER flairuser
 
 CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
     sleep ${JHIPSTER_SLEEP} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar app.war
+    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app/app.war

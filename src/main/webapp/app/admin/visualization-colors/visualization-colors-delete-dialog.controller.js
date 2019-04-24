@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('VisualizationColorsDeleteController',VisualizationColorsDeleteController);
 
-    VisualizationColorsDeleteController.$inject = ['$uibModalInstance', 'entity', 'VisualizationColors'];
+    VisualizationColorsDeleteController.$inject = ['$uibModalInstance', 'entity', 'VisualizationColors','$translate','$rootScope'];
 
-    function VisualizationColorsDeleteController($uibModalInstance, entity, VisualizationColors) {
+    function VisualizationColorsDeleteController($uibModalInstance, entity, VisualizationColors,$translate,$rootScope) {
         var vm = this;
 
         vm.visualizationColors = entity;
@@ -22,6 +22,12 @@
             VisualizationColors.delete({id: id},
                 function () {
                     $uibModalInstance.close(true);
+                    var info = {text:$translate.instant('flairbiApp.visualizationColors.deleted',{param:id}),title: "Deleted"}
+                    $rootScope.showSuccessToast(info);
+                },function(){
+                    $rootScope.showErrorSingleToast({
+                        text: $translate.instant('flairbiApp.visualizationColors.errorDeleting')
+                    });
                 });
         }
     }

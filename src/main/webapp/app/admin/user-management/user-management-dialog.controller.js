@@ -18,6 +18,8 @@
         vm.languages = null;
         vm.save = save;
         vm.user = entity;
+        vm.user.activated=vm.user.id === null?true:vm.user.activated;
+        vm.setActive=setActive;
 
         JhiLanguageService.getAll().then(function (languages) {
             vm.languages = languages;
@@ -60,6 +62,10 @@
             } else {
                 User.save(vm.user, onSaveSuccess, onSaveError);
             }
+        }
+
+        function setActive(isActivated) {
+            vm.user.activated = isActivated;
         }
     }
 })();

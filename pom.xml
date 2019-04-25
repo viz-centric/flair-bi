@@ -1042,16 +1042,16 @@
                                     <arguments>build --no-notification</arguments>
                                 </configuration>
                             </execution>
-                            <execution>
+                            <!-- <execution>
                                 <id>gulp test</id>
                                 <phase>test</phase>
                                 <goals>
                                     <goal>gulp</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>test --no-notification</arguments>
+                                    <arguments>test no-notification</arguments>
                                 </configuration>
-                            </execution>
+                            </execution> -->
                         </executions>
                     </plugin>
 

@@ -15,6 +15,7 @@ ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
 
 EXPOSE 80
 
+COPY classes/config/ssl/ssl-oss.properties /app/ssl.properties
 COPY ssl/keystore/flairbi-keystore.p12 /app/keystore.p12
 COPY ssl/keystore/flairbi-truststore.p12 /app/truststore.p12
 COPY ssl/cert/ca/ca.pem /app/ca.crt

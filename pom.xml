@@ -71,6 +71,7 @@
         <postgres.test.pw>admin</postgres.test.pw>
         <postgres.test.user>postgres</postgres.test.user>
         <postgresql.version>9.4.1212</postgresql.version>
+        <lombok.version>1.16.22</lombok.version>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />

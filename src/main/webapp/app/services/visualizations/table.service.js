@@ -96,6 +96,7 @@
 
                 var table = flairVisualizations.table()
                     .config(getProperties(VisualizationUtils, record))
+                    .print(false)
 
                 div.datum(record.data)
                     .call(table);

@@ -10,9 +10,9 @@
     function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
         return {
             build: function (record, element, panel) {
-                
+
                 function getProperties(VisualizationUtils, record) {
-                var result = {};
+                    var result = {};
 
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         measures = features.measures;
@@ -57,15 +57,18 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip')
 
                     var gauge = flairVisualizations.gauge()
-                        .config(getProperties(VisualizationUtils, record));
-                     
+                        .config(getProperties(VisualizationUtils, record))
+                        .print(false);
+
                     svg.datum(record.data)
-                        .call(gauge);
+                        .call(gauge)
 
                     $rootScope.updateWidget[record.id] = gauge;
                 }

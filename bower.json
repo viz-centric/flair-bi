@@ -149,7 +149,8 @@
     },
     "flair-visualizations": {
       "main": [
-        "dist/main.bundle.js"
+        "dist/main.bundle.js",
+        "styles/stylesheets/screen.css"
       ]
     }
   },

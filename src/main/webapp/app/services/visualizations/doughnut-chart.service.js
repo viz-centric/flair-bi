@@ -48,7 +48,7 @@
                 } else {
                     d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'pie-' + element[0].id)
+                        .attr('id', 'doughnut-' + element[0].id)
                         .style('width', element[0].clientWidth + 'px')
                         .style('height', element[0].clientHeight + 'px')
                         .style('overflow', 'hidden')

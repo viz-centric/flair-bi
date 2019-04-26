@@ -97,7 +97,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip');
+                        .attr('class', 'tooltip');
 
                     var stackedhorizontalbar = flairVisualizations.stackedhorizontalbar()
                         .config(getProperties(VisualizationUtils, record))

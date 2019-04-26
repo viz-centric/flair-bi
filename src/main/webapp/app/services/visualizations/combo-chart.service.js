@@ -137,7 +137,7 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var combo = $rootScope.updateWidget[record.id];
-                        combo.updateChart(record.data);
+                        combo.update(record.data);
 
                         // TODO: This needs to be fixed, commented code need to be properly done
                         // ---------------*-----------------
@@ -162,7 +162,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip');
+                        .attr('class', 'tooltip');
 
                     var combo = flairVisualizations.combo()
                         .config(getProperties(VisualizationUtils, record))

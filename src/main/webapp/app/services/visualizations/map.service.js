@@ -47,7 +47,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip');
+                        .attr('class', 'tooltip');
 
                     var map = flairVisualizations.map()
                         .config(getProperties(VisualizationUtils, record))

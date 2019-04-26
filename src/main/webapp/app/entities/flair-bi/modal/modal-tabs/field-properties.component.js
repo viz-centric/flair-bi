@@ -74,7 +74,6 @@
         }
 
         function addFieldMeasure() {
-            debugger
             var fieldType = vm.visual.nextFieldMeasure();
             var field = {
                 fieldType: fieldType,

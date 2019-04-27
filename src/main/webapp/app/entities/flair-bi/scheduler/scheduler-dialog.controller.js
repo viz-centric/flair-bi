@@ -30,31 +30,33 @@
         vm.scheduleObj={
             "cron_exp":"",
             "report": {
-              "connection_name": "",
-              "report_name": "",
-              "source_id":"",
-              "subject":"",
-              "title_name":""
+                "connection_name": "",
+                "report_name": "",
+                "source_id":"",
+                "subject":"",
+                "title_name":""
             },
             "report_line_item": {
-              "query_name": "",
-              "fields": [],
-              "group_by": [],
-              "order_by": [],
-              "where": "",
-              "limit": 5,
-              "table": "",
-              "visualization": ""
+                "query_name": "",
+                "fields": [],
+                "group_by": [],
+                "order_by": [],
+                "where": "",
+                "limit": 5,
+                "table": "",
+                "visualization": "",
+                "dimension":[],
+                "measure":[]
             },
             "assign_report": {
-              "channel": "",
-              "condition": "test",
-              "email_list":[]
+                "channel": "",
+                "condition": "test",
+                "email_list":[]
             },
             "schedule": {
-              "timezone": "",
-              "start_date": "",
-              "end_date": ""
+                "timezone": "",
+                "start_date": "",
+                "end_date": ""
             }
           };
         activate();
@@ -93,6 +95,7 @@
         vm.scheduleObj.report_line_item.table=datasource.name;
         vm.scheduleObj.report_line_item.where=JSON.stringify(visualMetaData.conditionExpression);
         vm.scheduleObj.report_line_item.visualization=visualMetaData.metadataVisual.name;
+        setDimentionsAndMeasures(visualMetaData.fields);
         
     }
 
@@ -175,7 +178,17 @@
                 vm.scheduleObj.assign_report.email_list.splice(index, 1);
             }
         }
-    }
+
+        function setDimentionsAndMeasures(fields){
+            fields.filter(function(item) {
+                if(item.feature.featureType === "DIMENSION"){
+                    vm.scheduleObj.report_line_item.dimension.push(item.feature.definition);
+                }else if(item.feature.featureType === "MEASURE"){
+                    vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
+                }
+            });
+        }
+}
 })();
 
 

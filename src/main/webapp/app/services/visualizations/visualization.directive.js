@@ -57,6 +57,7 @@
         'GenerateWordCloud',
         'GenerateSankey',
         'GeneratePivotTable',
+        'GenerateIframe',
         'proxyService',
         'filterParametersService',
         '$log',
@@ -88,6 +89,7 @@
         GenerateWordCloud,
         GenerateSankey,
         GeneratePivotTable,
+        GenerateIfram,
         proxyService,
         filterParametersService,
         $log,
@@ -125,6 +127,7 @@
             widgets.GenerateWordCloud = GenerateWordCloud;
             widgets.GenerateSankey = GenerateSankey;
             widgets.GeneratePivotTable = GeneratePivotTable;
+            widgets.GenerateIframe = GenerateIframe;
 
             registerCanBuildChange();
             registerFilterEvent();

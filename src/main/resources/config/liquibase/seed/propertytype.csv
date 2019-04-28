@@ -12,7 +12,7 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 611|Bar Type|Types of bar charts|SELECT|null|null|null|null|flairadmin|STRING
 612|Line Type|Types of line charts|SELECT|null|null|null|null|flairadmin|STRING
 613|Info graphic Type|Types of Info graphic charts|SELECT|null|null|null|null|flairadmin|STRING
-614|Map Type|Types of map charts|SELECT|null|null|null|null|flairadmin|STRING 
+614|Map Type|Types of map charts|SELECT|null|null|null|null|flairadmin|STRING
 615|Gauge Type|Type of gauges|SELECT|null|null|null|null|flairadmin|STRING
 616|Stacked|Boolean that says if chart is stacked|CHECKBOX|false|null|null|null|flairadmin|null
 617|Show Labels|Boolean to show labels|CHECKBOX|true|null|null|null|flairadmin|null
@@ -74,4 +74,4 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 673|Number Color|Number Color|COLOR_PICKER|null|null|null|null|flairadmin|null
 674|Number Font size|Number Size of fonts|NUMBER|null|null|null|9|flairadmin|null
 675|Icon Font size|Icon Size of fonts|NUMBER|null|null|null|9|flairadmin|null
-
+676|I frame link|i frame external link|TEXT|null|null|null|null|flairadmin|null

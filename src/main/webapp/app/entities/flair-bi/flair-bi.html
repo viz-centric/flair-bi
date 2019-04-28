@@ -28,7 +28,7 @@
                                 <span>
                            </a>
                            <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.visualBuildId}}">
-                                <div class="items">  
+                                <div class="items">
                                     <div class="item" role="menuitem">
                                         <a href ng-click="vm.printElement(v)">
                                             <span uib-tooltip="Print" tooltip-placement="top">
@@ -158,46 +158,56 @@
                   </div>
                   <br/>
                   <div class="row">
-                     <div class="feature-box">
-                        <ul class="list-group" drop-box={{v.visualBuildId}}>
-                           <li class="list-group-item dimension-item active">
-                              Dimensions
-                              <svg class="flaticon-entity-dimension">
-                                 <use xlink:href="#entity-dimension" />
-                              </svg>
+                  <div ng-show="v.metadataVisual.name == 'Iframe'">
+                    <div class="form-group"style="margin-left: 20px;">
+                      <label for="iframelink">I-Frame Link</label>
+                      <input type="text" class="form-control" ng-model="v.metadataVisual.propertyTypes[0].propertyType.defaultValue" style="
+                        margin-top: 10px;" id="iframelink" placeholder="I frame link">
+                      </div>
+                  </div>
+                  <div ng-hide="v.metadataVisual.name == 'Iframe'">
+                    <div class="feature-box">
+                       <ul class="list-group" drop-box={{v.visualBuildId}}>
+                          <li class="list-group-item dimension-item active">
+                             Dimensions
+                             <svg class="flaticon-entity-dimension">
+                                <use xlink:href="#entity-dimension" />
+                             </svg>
+                          </li>
+                          <li  ng-repeat="field in v.fields | filter:{fieldType:{featureType:'DIMENSION'}}:true | orderBy:'fieldType.id'"  class="list-group-item dimension-item">
+                               <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition"  placeholder="Drop Here" readonly>
+                               <svg ng-if="field.fieldType.constraint ==='OPTIONAL' && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
+                                   <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
+                               </svg>
+                               <i  ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>
                            </li>
-                           <li  ng-repeat="field in v.fields | filter:{fieldType:{featureType:'DIMENSION'}}:true | orderBy:'fieldType.id'"  class="list-group-item dimension-item">   
-                                <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition"  placeholder="Drop Here" readonly>
-                                <svg ng-if="field.fieldType.constraint ==='OPTIONAL' && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
-                                </svg>
-                                <i  ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>    
-                            </li>
-                            <li ng-if="v.nextFieldDimension()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'DIMENSION')" class="list-group-item dimension-item"> 
-                            <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>  
-                            </li>
-                        </ul>
-                     </div>
-                     <div class="feature-box">
-                        <ul  class="list-group" drop-box={{v.visualBuildId}}>
-                           <li  class="list-group-item measure-item active">
-                              Measures
-                              <svg class="flaticon-entity-measure">
-                                 <use xlink:href="#entity-measure" />
-                              </svg>
+                           <li ng-if="v.nextFieldDimension()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'DIMENSION')" class="list-group-item dimension-item">
+                           <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>
                            </li>
-                           <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'MEASURE'}}:true | orderBy:'fieldType.id'" class="list-group-item measure-item"> 
-                            <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition" placeholder="Drop Here" readonly>
-                                <svg ng-if="field.fieldType.constraint ==='OPTIONAL'  && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
-                                </svg>
-                                <i ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>   
-                            </li>
-                            <li ng-if="v.nextFieldMeasure()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'MEASURE')" class="list-group-item measure-item"> 
-                            <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>
-                            </li>
-                        </ul>
-                     </div>
+                       </ul>
+                    </div>
+                    <div class="feature-box">
+                       <ul  class="list-group" drop-box={{v.visualBuildId}}>
+                          <li  class="list-group-item measure-item active">
+                             Measures
+                             <svg class="flaticon-entity-measure">
+                                <use xlink:href="#entity-measure" />
+                             </svg>
+                          </li>
+                          <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'MEASURE'}}:true | orderBy:'fieldType.id'" class="list-group-item measure-item">
+                           <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition" placeholder="Drop Here" readonly>
+                               <svg ng-if="field.fieldType.constraint ==='OPTIONAL'  && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
+                                   <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
+                               </svg>
+                               <i ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>
+                           </li>
+                           <li ng-if="v.nextFieldMeasure()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'MEASURE')" class="list-group-item measure-item">
+                           <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>
+                           </li>
+                       </ul>
+                    </div>
+                  </div>
+
                   </div>
                   <!-- end of row -->
                </div>

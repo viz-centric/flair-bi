@@ -35,7 +35,8 @@
         'GenerateSankey',
         'GeneratePivotTable',
         'proxyService',
-        'filterParametersService'
+        'filterParametersService',
+        'GenerateIframe'
         //,'stompClientService'
     ];
 
@@ -64,7 +65,8 @@
         GenerateSankey,
         GeneratePivotTable,
         proxyService,
-        filterParametersService  
+        filterParametersService,
+        GenerateIframe,
     ) {
 
         var vm = this;
@@ -98,9 +100,10 @@
             widgets.GenerateWordCloud = GenerateWordCloud;
             widgets.GenerateSankey = GenerateSankey;
             widgets.GeneratePivotTable = GeneratePivotTable;
+            widgets.GenerateIframe = GenerateIframe;
         }
 
-    
+
         function createWidget(visualMetadata,contentId) {
             var widgetId = '#' + contentId;
             var el = $(widgetId);
@@ -124,6 +127,6 @@
             createWidget(vm.data,contentId);
         }
 
-    
+
     }
 })();

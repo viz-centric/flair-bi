@@ -69,7 +69,7 @@
     "angular-material": "^1.1.5",
     "md-color-picker": "^0.2.6",
     "angular-filter": "^0.5.17",
-    "angular-drag-and-drop-lists": "^2.1.0", 
+    "angular-drag-and-drop-lists": "^2.1.0",
     "angularjs-slider": "^6.5.1",
     "angular-utils-ui-breadcrumbs": "^0.2.2",
     "sockjs": "^0.3.4",
@@ -78,7 +78,7 @@
     "angular-cron-gen": "^0.0.26",
     "cronstrue": "^0.8.0",
     "angular-cron-generator": "^1.0.0",
-    "flair-visualizations": "1.2.1"
+    "flair-visualizations": "master"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8"

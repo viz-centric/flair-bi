@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_visualizations','scheduler_channels'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_visualizations,scheduler_channels) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -19,7 +19,6 @@
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
-        vm.visualizations=scheduler_visualizations;
         vm.channels=scheduler_channels;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -31,31 +30,33 @@
         vm.scheduleObj={
             "cron_exp":"",
             "report": {
-              "connection_name": "",
-              "report_name": "",
-              "source_id":"",
-              "subject":"",
-              "title_name":""
+                "connection_name": "",
+                "report_name": "",
+                "source_id":"",
+                "subject":"",
+                "title_name":""
             },
             "report_line_item": {
-              "query_name": "",
-              "fields": [],
-              "group_by": [],
-              "order_by": [],
-              "where": "",
-              "limit": 5,
-              "table": "",
-              "visualization": ""
+                "query_name": "",
+                "fields": [],
+                "group_by": [],
+                "order_by": [],
+                "where": "",
+                "limit": 5,
+                "table": "",
+                "visualization": "",
+                "dimension":[],
+                "measure":[]
             },
             "assign_report": {
-              "channel": "",
-              "condition": "test",
-              "email_list":[]
+                "channel": "",
+                "condition": "test",
+                "email_list":[]
             },
             "schedule": {
-              "timezone": "",
-              "start_date": "",
-              "end_date": ""
+                "timezone": "",
+                "start_date": "",
+                "end_date": ""
             }
           };
         activate();
@@ -93,6 +94,8 @@
         vm.scheduleObj.report_line_item.table=visualMetaData.metadataVisual.name;
         vm.scheduleObj.report_line_item.table=datasource.name;
         vm.scheduleObj.report_line_item.where=JSON.stringify(visualMetaData.conditionExpression);
+        vm.scheduleObj.report_line_item.visualization=visualMetaData.metadataVisual.name;
+        setDimentionsAndMeasures(visualMetaData.fields);
         
     }
 
@@ -154,7 +157,6 @@
             vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
             vm.scheduleObj.schedule.cronExpression=$scope.cronExpression;
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
-            vm.scheduleObj.report_line_item.visualization=vm.scheduleObj.report_line_item.visualization.toLowerCase();
             vm.scheduleObj.cron_exp=$scope.cronExpression;
         }
 
@@ -176,7 +178,17 @@
                 vm.scheduleObj.assign_report.email_list.splice(index, 1);
             }
         }
-    }
+
+        function setDimentionsAndMeasures(fields){
+            fields.filter(function(item) {
+                if(item.feature.featureType === "DIMENSION"){
+                    vm.scheduleObj.report_line_item.dimension.push(item.feature.definition);
+                }else if(item.feature.featureType === "MEASURE"){
+                    vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
+                }
+            });
+        }
+}
 })();
 
 

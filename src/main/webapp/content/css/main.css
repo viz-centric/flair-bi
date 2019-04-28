@@ -6313,3 +6313,6 @@ input.select2-active {
   margin-right: 0px; }
   .common-create-popup .form-group .row img {
     max-width: 100%; }
+
+.common-create-popup md-input-container .md-input {
+  border-radius: 0px; }

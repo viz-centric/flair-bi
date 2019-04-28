@@ -1,28 +1,35 @@
-<form name="deleteForm" ng-submit="vm.confirmRelease(vm.view.id)">
-    <div class="modal-header">
-        <div class="header-text">
-            Release request confirm
+<div class="inmodal in modal-content common-create-popup">
+    <form name="deleteForm" ng-submit="vm.confirmRelease(vm.view.id)">
+        <div class="modal-header">
+            <svg class="common-edit-icon">
+              <use xlink:href="#edit-dashboard" />
+            </svg>
+            <div class="header-text">
+                Release request confirm
+            </div>
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+              <use xlink:href="#cancle" />
+            </svg>
         </div>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
-    </div>
-    <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-        <p>Are you sure you want to request a new release for this view <strong>{{vm.view.viewName}}</strong> ?</p>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <p>Are you sure you want to request a new release for this view <strong>{{vm.view.viewName}}</strong> ?</p>
 
-        <div class="form-group">
-            <label class="control-label">
-                Release comment
-            </label>
-            <textarea class="form-control" ng-model="vm.releaseComment" ></textarea>
+            <div class="form-group">
+                <label class="control-label">
+                    Release comment
+                </label>
+                <textarea class="form-control" ng-model="vm.releaseComment" ></textarea>
+            </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
-            <span data-translate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-primary">
-            <span>Request Release</span>
-        </button>
-    </div>
-</form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                <span data-translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-primary">
+                <span>Request Release</span>
+            </button>
+        </div>
+    </form>
+</div>

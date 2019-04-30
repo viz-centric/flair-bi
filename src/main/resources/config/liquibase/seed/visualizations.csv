@@ -22,3 +22,4 @@ id|name|icon|custom_id|function_name
 525|Chord Diagram|#sankey|16|GenerateChordDiagram
 526|Word Cloud|#wordcloud|17|GenerateWordCloud
 527|Sankey|#sankey|18|GenerateSankey
+533|Iframe|#iframe|19|GenerateIframe

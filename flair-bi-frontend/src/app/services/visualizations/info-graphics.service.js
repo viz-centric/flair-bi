@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GenerateInfoGraphic', GenerateInfoGraphic);
@@ -46,12 +45,20 @@ function GenerateInfoGraphic(VisualizationUtils, $rootScope, D3Utils) {
                     infographics.update(record.data);
                 }
             } else {
+                d3.select(element[0]).html('')
                 var div = d3.select(element[0]).append('div')
-                    .attr('id', 'infographics-' + this.id)
-                    .attr('class', 'infographics');
+                    .attr('id', 'infographics-' + element[0].id)
+                    .attr('class', 'infographics')
+                    .style('width', element[0].clientWidth + 'px')
+                    .style('height', element[0].clientHeight + 'px')
+
+                var tooltip = div.append('div')
+                    .attr('id', 'tooltip')
 
                 var infographics = flairVisualizations.infographics()
-                    .config(getProperties(VisualizationUtils, record));
+                    .config(getProperties(VisualizationUtils, record))
+                    .tooltip(true)
+                    .print(false);
 
                 div.datum(record.data)
                     .call(infographics);

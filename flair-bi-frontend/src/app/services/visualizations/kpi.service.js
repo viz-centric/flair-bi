@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GenerateKPI', GenerateKPI);
@@ -35,7 +34,7 @@ function GenerateKPI(VisualizationUtils, $rootScope, D3Utils) {
                 result['kpiIconExpression'] = [];
 
                 for (var i = 0; i < measures.length; i++) {
-                    result['kpiDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                    result['kpiDisplayName'].push("Display name");
                     result['kpiAlignment'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text alignment'));
                     result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                     result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
@@ -49,7 +48,6 @@ function GenerateKPI(VisualizationUtils, $rootScope, D3Utils) {
                     result['kpiIconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon colour'));
                     result['kpiIconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
                 }
-
                 return result;
             }
 
@@ -59,12 +57,18 @@ function GenerateKPI(VisualizationUtils, $rootScope, D3Utils) {
                     kpi.update(record.data);
                 }
             } else {
+                d3.select(element[0]).html('')
                 var div = d3.select(element[0]).append('div')
-                    .attr('id', 'kpi-' + this.id)
-                    .attr('class', 'kpi');
+                    .attr('id', 'kpi-' + element[0].id)
+                    .attr('class', 'kpi')
+                    .style('width', element[0].clientWidth + 'px')
+                    .style('height', element[0].clientHeight + 'px')
+                    .style('padding', '15px')
+
 
                 var kpi = flairVisualizations.kpi()
-                    .config(getProperties(VisualizationUtils, record));
+                    .config(getProperties(VisualizationUtils, record))
+                    .print(false);
 
                 div.datum(record.data)
                     .call(kpi);

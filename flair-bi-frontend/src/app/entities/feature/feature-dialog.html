@@ -1,13 +1,16 @@
-<div class="inmodal in modal-content feature-dialog-modal">
+<div class="inmodal in modal-content feature-dialog-modal common-create-popup">
     <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
         <div class="modal-header">
+            <svg class="common-edit-icon">
+                <use xlink:href="#edit-dashboard" />
+            </svg>
             <div class="header-text">
                 <span class="modal-title" id="myDimensionsLabel">Create or edit a Feature</span>
             </div>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+                <use xlink:href="#cancle" />
+            </svg>
         </div>
-
-
         <div class="modal-body">
             <jhi-alert-error></jhi-alert-error>
 
@@ -48,7 +51,7 @@
                     <div class="form-group">
                         <label class="control-label">Definition</label>
                         <input type="text" class="feature-definition form-control" name="definition" id="field_definition" ng-model="vm.feature.definition"
-                            required>
+                               required>
                         <div ng-show="editoForm.definition.$invalid">
                             <p class="help-block" ng-show="editForm.definition.$error.required">
                                 This field is required

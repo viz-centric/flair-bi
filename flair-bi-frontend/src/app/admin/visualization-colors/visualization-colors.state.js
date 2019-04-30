@@ -79,7 +79,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function (VisualizationColors) {
                             return VisualizationColors.get({id: $stateParams.id}).$promise;
@@ -103,7 +103,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: function () {
                             return {
@@ -130,7 +130,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function (VisualizationColors) {
                             return VisualizationColors.get({id: $stateParams.id}).$promise;

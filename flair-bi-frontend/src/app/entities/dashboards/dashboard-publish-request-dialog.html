@@ -1,48 +1,55 @@
-<form name="requestForm" ng-submit="vm.confirmRelease(vm.dashboard.id)">
-    <div class="modal-header">
-        <div class="header-text">
-            Release request confirm
-        </div>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times; </button>
-    </div>
-    <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-        <p> Are you sure you want to request a new release for this dashboard <strong>{{vm.dashboard.dashboardName}} </strong>?</p>
-        <div class="form-group" ng-if="vm.dashboard.dashboardViews.length !== 0">
-            <label class="control-label">
-                Select which views you want to be released
-            </label>
-            <div class="m-lg" ng-repeat="view in vm.dashboard.dashboardViews">
-                <label class="checkbox-container" title="Click Here">
-                    <input class="flair-check-box" ng-model="view.selected" ng-change="vm.checkIfAnySelected()" type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-                <span class="">
-                    {{view.viewName}}
-                </span>
+<div class="inmodal in modal-content common-create-popup">
+    <form name="requestForm" ng-submit="vm.confirmRelease(vm.dashboard.id)">
+        <div class="modal-header">
+            <svg class="common-edit-icon">
+                <use xlink:href="#edit-dashboard" />
+            </svg>
+            <div class="header-text">
+                Release request confirm
             </div>
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+                <use xlink:href="#cancle" />
+            </svg>
+        </div>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <p> Are you sure you want to request a new release for this dashboard <strong>{{vm.dashboard.dashboardName}} </strong>?</p>
+            <div class="form-group" ng-if="vm.dashboard.dashboardViews.length !== 0">
+                <label class="control-label">
+                    Select which views you want to be released
+                </label>
+                <div class="m-lg" ng-repeat="view in vm.dashboard.dashboardViews">
+                    <label class="checkbox-container" title="Click Here">
+                        <input class="flair-check-box" ng-model="view.selected" ng-change="vm.checkIfAnySelected()" type="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <span class="">
+                        {{view.viewName}}
+                    </span>
+                </div>
 
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                    Release comment
+                </label>
+                <textarea class="form-control" ng-model="vm.comment" ></textarea>
+            </div>
+            <div style="color:red;" ng-if="vm.dashboard.dashboardViews.length === 0">
+                You cannot request a release for this dashboard, because the dashboard does not have a view.
+            </div>
+            <div style="color:red" ng-if="!vm.anySelected && vm.dashboard.dashboardViews.length !== 0">
+                You have to select atleast one view
+            </div>
         </div>
-        <div class="form-group">
-            <label class="control-label">
-                Release comment
-            </label>
-            <textarea class="form-control" ng-model="vm.comment" ></textarea>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                <span data-translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" ng-disabled="deleteForm.$invalid || vm.dashboard.dashboardViews.length === 0 || !vm.anySelected" class="btn btn-primary">
+                <span>Request Release</span>
+            </button>
         </div>
-        <div style="color:red;" ng-if="vm.dashboard.dashboardViews.length === 0">
-            You cannot request a release for this dashboard, because the dashboard does not have a view.
-        </div>
-        <div style="color:red" ng-if="!vm.anySelected && vm.dashboard.dashboardViews.length !== 0">
-            You have to select atleast one view
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
-            <span data-translate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="submit" ng-disabled="deleteForm.$invalid || vm.dashboard.dashboardViews.length === 0 || !vm.anySelected" class="btn btn-primary">
-            <span>Request Release</span>
-        </button>
-    </div>
-</form>
+    </form>
+</div>

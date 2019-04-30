@@ -36,7 +36,8 @@ visualizationRenderService.$inject = [
     'GenerateSankey',
     'GeneratePivotTable',
     'proxyService',
-    'filterParametersService'
+    'filterParametersService',
+    'GenerateIframe'
     //,'stompClientService'
 ];
 
@@ -44,6 +45,7 @@ function visualizationRenderService(
     GenerateStackedverticalbarChart,
     GenerateStackedhorizontalbarChart,
     GenerateClusteredverticalbarChart,
+
     GenerateClusteredhorizontalbarChart,
     GenerateLineChart,
     GeneratePieChart,
@@ -65,8 +67,8 @@ function visualizationRenderService(
     GenerateSankey,
     GeneratePivotTable,
     proxyService,
-    filterParametersService
-) {
+    filterParametersService,
+    GenerateIframe) {
 
     var vm = this;
     var widgets = [];
@@ -100,10 +102,11 @@ function visualizationRenderService(
         widgets.GenerateWordCloud = GenerateWordCloud;
         widgets.GenerateSankey = GenerateSankey;
         widgets.GeneratePivotTable = GeneratePivotTable;
+        widgets.GenerateIframe = GenerateIframe;
     }
 
 
-    function createWidget(visualMetadata, contentId) {
+    function createWidget(visualMetadata,contentId) {
         var widgetId = '#' + contentId;
         var el = $(widgetId);
         var width = el.width(),
@@ -125,6 +128,4 @@ function visualizationRenderService(
         vm.widget = v.metadataVisual.functionname;
         createWidget(vm.data, contentId);
     }
-
-
 }

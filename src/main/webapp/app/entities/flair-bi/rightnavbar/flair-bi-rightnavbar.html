@@ -176,6 +176,17 @@
                             <path style="fill:#933EC5;" d="M201.697,418.909v-46.545H256v-46.545h-54.303v-46.545H256v-46.545h-54.303v-46.545h-46.545v46.545 H46.545v-46.545H23.273C10.42,186.182,0,175.762,0,162.909V256v93.091v93.091c0,12.853,10.42,23.273,23.273,23.273h155.152H256 v-46.545H201.697z M155.152,418.909H46.545v-46.545h108.606V418.909z M155.152,325.818H46.545v-46.545h108.606V325.818z"
                             />
                         </symbol>
+                        <symbol id="iframe" viewBox="0 0 512 512">
+                            <title>I frame</title>
+                            <path style="fill:#B87FD9;" d="M488.727,46.545H23.273C10.42,46.545,0,56.965,0,69.818v93.091V256v93.091v93.091 c0,12.853,10.42,23.273,23.273,23.273h155.152h155.152h155.152c12.853,0,23.273-10.42,23.273-23.273v-93.091V256v-93.091V69.818 C512,56.965,501.58,46.545,488.727,46.545z M155.152,418.909H46.545v-46.545h108.606V418.909z M155.152,325.818H46.545v-46.545 h108.606V325.818z M155.152,232.727H46.545v-46.545h108.606V232.727z M310.303,418.909H201.697v-46.545h108.606V418.909z M310.303,325.818H201.697v-46.545h108.606V325.818z M310.303,232.727H201.697v-46.545h108.606V232.727z M465.455,418.909H356.848 v-46.545h108.606V418.909z M465.455,325.818H356.848v-46.545h108.606V325.818z M465.455,232.727H356.848v-46.545h108.606V232.727z"
+                            />
+                            <path style="fill:#6E76E5;" d="M488.727,46.545H23.273C10.42,46.545,0,56.965,0,69.818v93.091c0,12.853,10.42,23.273,23.273,23.273 h23.273h108.606h46.545h108.606h46.545h108.606h23.273c12.853,0,23.273-10.42,23.273-23.273V69.818 C512,56.965,501.58,46.545,488.727,46.545z"
+                            />
+                            <path style="fill:#424EDE;" d="M23.273,46.545C10.42,46.545,0,56.965,0,69.818v93.091c0,12.853,10.42,23.273,23.273,23.273h23.273 h108.606h46.545H256V46.545H23.273z"
+                            />
+                            <path style="fill:#933EC5;" d="M201.697,418.909v-46.545H256v-46.545h-54.303v-46.545H256v-46.545h-54.303v-46.545h-46.545v46.545 H46.545v-46.545H23.273C10.42,186.182,0,175.762,0,162.909V256v93.091v93.091c0,12.853,10.42,23.273,23.273,23.273h155.152H256 v-46.545H201.697z M155.152,418.909H46.545v-46.545h108.606V418.909z M155.152,325.818H46.545v-46.545h108.606V325.818z"
+                            />
+                        </symbol>
                         <symbol id="kpi" viewBox="0 0 512.002 512.002">
                             <title>#KPI</title>
                             <path d="M279.459,281.992v-3.844c0-16.182-9.911-22.049-24.678-22.049c-5.057,0-6.878-4.248-6.878-8.496 c0-4.45,1.821-8.699,6.878-8.699c12.339,0,21.037-3.844,21.037-22.251c0-14.767-7.08-20.835-20.228-20.835 c-16.386,0-21.037,8.293-21.037,16.587c0,5.26-2.428,8.699-10.115,8.699c-9.507,0-11.125-2.225-11.125-9.912 c0-13.148,9.103-34.185,42.479-34.185c23.667,0,40.659,9.304,40.659,36.006c0,16.789-6.473,29.129-16.182,33.782 c11.935,4.654,20.633,14.16,20.633,31.354v3.844c0,32.162-20.633,44.097-46.12,44.097c-31.556,0-44.704-19.621-44.704-35.602 c0-7.08,2.63-9.103,9.912-9.103c8.9,0,11.125,2.63,11.125,8.091c0,8.901,7.485,17.599,23.869,17.599 C271.57,307.075,279.459,299.59,279.459,281.992z"
@@ -374,7 +385,7 @@
                         </li>
                     </ul>
                 <div class="side-widgets overflow resource-nav">
-                    
+
                     <div class="panel panel-default" ng-show="vm.activeTab == 'dimensions'">
                         <div class="panel-heading" id="resource-dimensions" role="tab" id="headingTwo">
                             <div class="panel-title">
@@ -389,12 +400,12 @@
                                     <div class="search-box inner-addon left-addon b-b-xs">
                                         <i class="glyphicon glyphicon-search"></i>
                                         <input type="text" ng-model="searchDimention" class="form-control  rounded-corner" placeholder="Search Dimentions..." /></div>
-                                    <div class="resource-list" dnd-draggable="vm.getSelectedItem(dimension)"  dnd-moved="vm.features.splice($index, 1)"  dnd-effect-allowed="move"  
+                                    <div class="resource-list" dnd-draggable="vm.getSelectedItem(dimension)"  dnd-moved="vm.features.splice($index, 1)"  dnd-effect-allowed="move"
                                         ng-repeat="dimension in vm.features | filter: {featureType: 'DIMENSION'} | filter: {name: searchDimention} ">
                                         <div class="list-group-item">
                                             <span uib-tooltip="Drag and Drop into Vizualization" tooltip-placement="right"><i class="fa fa-arrows-alt" ></i></span>
                                             <span class="feature-name" ng-click="vm.changeFeature(dimension)">{{dimension.name}}</span>
-                                            <span class="delete" ng-click="vm.deleteFeature(dimension)" aria-hidden="true">                                
+                                            <span class="delete" ng-click="vm.deleteFeature(dimension)" aria-hidden="true">
                                         <svg class="flaticon-close">
                                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
                                         </svg>
@@ -466,7 +477,7 @@
 
                     </div>
 
-            </div>    
+            </div>
 
             <div ng-show="vm.sideBarTab == 'filters'">
 

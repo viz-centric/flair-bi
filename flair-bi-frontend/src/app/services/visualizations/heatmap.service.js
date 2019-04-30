@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GenerateHeatmap', GenerateHeatmap);
@@ -10,16 +9,11 @@ GenerateHeatmap.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filte
 function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
     return {
         build: function (record, element, panel) {
-
             function getProperties(VisualizationUtils, record) {
-
                 var result = {};
-
                 var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                     dimensions = features.dimensions,
-                    measures = features.measures,
-                    eachMeasure,
-                    allMeasures = [];
+                    measures = features.measures;
 
                 result['dimension'] = [D3Utils.getNames(dimensions)[0]];
                 result['measure'] = D3Utils.getNames(measures);
@@ -61,7 +55,6 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                 }
                 return result;
-
             }
 
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
@@ -69,8 +62,11 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     var heatmap = $rootScope.updateWidget[record.id];
                     heatmap.update(record.data);
                 }
-            } else {
+            }
+            else {
+
                 d3.select(element[0]).html('')
+
                 var div = d3.select(element[0]).append('div')
                     .attr('id', 'heatmap-' + element[0].id)
                     .style('width', element[0].clientWidth + 'px')
@@ -88,7 +84,8 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
 
                 var heatmap = flairVisualizations.heatmap()
                     .config(getProperties(VisualizationUtils, record))
-                    .tooltip(true);
+                    .tooltip(true)
+                    .print(false);
 
                 svg.datum(record.data)
                     .call(heatmap);
@@ -97,4 +94,5 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
             }
         }
     }
+
 }

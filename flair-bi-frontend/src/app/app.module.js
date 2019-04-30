@@ -100,11 +100,25 @@ function run(stateHandler, translationHandler, $rootScope, $window) {
     };
     // possible values grpc and http
     $rootScope.vizualizationServiceMode = "grpc";
-    /** Methods for toaster notifications */
-    $rootScope.initializeToastrOptions = function () {
-        toastr.options.closeButton = true;
-        toastr.options.progressBar = true;
-    };
+
+    //toaster configurations
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
     $rootScope.showSuccessToast = function (info) {
         toastr.success(info.text, info.title);
     };

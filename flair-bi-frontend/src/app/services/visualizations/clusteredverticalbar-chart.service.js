@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GenerateClusteredverticalbarChart', GenerateClusteredverticalbarChart);
@@ -9,7 +8,7 @@ GenerateClusteredverticalbarChart.$inject = ['VisualizationUtils', '$rootScope',
 
 function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
     return {
-        build: function (record, element, panel) {
+        build: function (record, element, panel, widgets) {
 
             if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                 element.css({
@@ -28,8 +27,6 @@ function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Uti
                 var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                     dimensions = features.dimensions,
                     measures = features.measures,
-                    eachMeasure,
-                    allMeasures = [],
                     colorSet = D3Utils.getDefaultColorset();
 
                 result['dimension'] = D3Utils.getNames(dimensions);
@@ -44,7 +41,7 @@ function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Uti
                 result['showXaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
                 result['showYaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
                 result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
-                result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position');
+                result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                 result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
                 result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
@@ -66,12 +63,10 @@ function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Uti
                     result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
                     result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                     result['textColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
-                    result['displayColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour'));
-                    result['borderColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour'));
-                    //   result['displayColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour');
-                    //  result['displayColor'] .push( (eachMeasure['displayColor'] == null) ? colorSet[i] : eachMeasure['displayColor']);
-                    //   result['borderColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
-                    //   result['borderColor'] .push( (eachMeasure['borderColor'] == null) ? colorSet[i] : eachMeasure['borderColor']);
+                    var displayColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour');
+                    result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
+                    var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
+                    result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
                 }
 
                 return result;
@@ -91,14 +86,17 @@ function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Uti
                     .style('text-align', 'center')
                     .style('position', 'relative');
 
-                var svg = div.append('svg');
+                var svg = div.append('svg')
+                    .attr('width', element[0].clientWidth)
+                    .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('id', 'tooltip');
+                    .attr('class', 'tooltip');
 
                 var clusteredverticalbar = flairVisualizations.clusteredverticalbar()
                     .config(getProperties(VisualizationUtils, record))
-                    .tooltip(true);
+                    .tooltip(true)
+                    .print(false);
 
                 svg.datum(record.data)
                     .call(clusteredverticalbar);

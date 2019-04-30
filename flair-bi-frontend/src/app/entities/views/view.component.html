@@ -8,11 +8,11 @@
                     <span>
                 </a>
                 <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.visualBuildId}}">
-                    <div class="items">  
+                    <div class="items">
                         <div class="item" role="menuitem">
-                            <a ng-if="vm.canDelete" 
-                                ng-style="{ 'cursor' : (!(vm.view.published && vm.deletePublish))? 'not-allowed' : 'pointer' } "
-                                ui-sref="dashboards-overview.view-delete({id: vm.view.viewDashboard.id, viewId:vm.view.id})">
+                            <a ng-if="vm.canDelete"
+                               ng-style="{ 'cursor' : (!(vm.view.published && vm.deletePublish))? 'not-allowed' : 'pointer' } "
+                               ui-sref="dashboards-overview.view-delete({id: vm.view.viewDashboard.id, viewId:vm.view.id})">
                                 <svg class="delete">
                                     <use xlink:href="#delete" />
                                 </svg>
@@ -21,7 +21,7 @@
                         <div class="item" role="menuitem">
                             <a  ui-sref="dashboards-overview.view-detail({id: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="edit">
-                                    <use xlink:href="#fbi-box-settings" />
+                                    <use xlink:href="#fbi-box-settings-primary" />
                                 </svg>
                             </a>
                         </div>
@@ -46,7 +46,7 @@
                                         <use xlink:href="#published-icon" />
                                     </svg>
                                 </span>
-                            </a> 
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 </span>
             </div>
             <div class="card-footer">
-                <h4 class="item">{{vm.view.viewName}} 
+                <h4 class="item">{{vm.view.viewName}}
                     <span uib-tooltip={{vm.view.description}} tooltip-placement="top"><i class="fa fa-info-circle"></i></span>
                 </h4>
                 <a class="item build" ng-if="vm.canUpdate" ui-sref="flair-bi-build({id:vm.view.id, dashboardId:vm.view.viewDashboard.id})">Build

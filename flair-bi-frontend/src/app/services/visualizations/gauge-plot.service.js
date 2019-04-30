@@ -1,10 +1,5 @@
 import angular from 'angular';
 'use strict';
-
-angular
-    .module('flairbiApp')
-    .factory('GenerateGaugePlot', GenerateGaugePlot);
-
 GenerateGaugePlot.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils'];
 
 function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
@@ -57,15 +52,18 @@ function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
                     .style('position', 'relative');
 
                 var svg = div.append('svg')
+                    .attr('width', element[0].clientWidth)
+                    .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
                     .attr('id', 'tooltip')
 
                 var gauge = flairVisualizations.gauge()
-                    .config(getProperties(VisualizationUtils, record));
+                    .config(getProperties(VisualizationUtils, record))
+                    .print(false);
 
                 svg.datum(record.data)
-                    .call(gauge);
+                    .call(gauge)
 
                 $rootScope.updateWidget[record.id] = gauge;
             }

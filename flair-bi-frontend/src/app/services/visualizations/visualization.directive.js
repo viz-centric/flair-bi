@@ -30,8 +30,7 @@ function Directive() {
     };
     return directive;
 
-    function link(scope, element, attrs) {
-    }
+    function link(scope, element, attrs) { }
 }
 
 VisualizationRenderController.$inject = [
@@ -60,18 +59,19 @@ VisualizationRenderController.$inject = [
     'GenerateWordCloud',
     'GenerateSankey',
     'GeneratePivotTable',
+    'GenerateIframe',
     'proxyService',
     'filterParametersService',
     '$log',
     '$timeout'
 ];
-
 /* @ngInject */
 function VisualizationRenderController(
     $scope,
     GenerateStackedverticalbarChart,
     GenerateStackedhorizontalbarChart,
     GenerateClusteredverticalbarChart,
+
     GenerateClusteredhorizontalbarChart,
     GenerateLineChart,
     GeneratePieChart,
@@ -92,6 +92,7 @@ function VisualizationRenderController(
     GenerateWordCloud,
     GenerateSankey,
     GeneratePivotTable,
+    GenerateIfram,
     proxyService,
     filterParametersService,
     $log,
@@ -130,6 +131,7 @@ function VisualizationRenderController(
         widgets.GenerateWordCloud = GenerateWordCloud;
         widgets.GenerateSankey = GenerateSankey;
         widgets.GeneratePivotTable = GeneratePivotTable;
+        widgets.GenerateIframe = GenerateIframe;
 
         registerCanBuildChange();
         registerFilterEvent();
@@ -231,5 +233,4 @@ function VisualizationRenderController(
         $scope.$on('$destroy', unsubscribe);
 
     }
-
 }

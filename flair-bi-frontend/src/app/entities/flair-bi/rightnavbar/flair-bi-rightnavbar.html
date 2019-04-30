@@ -141,7 +141,7 @@
                             <path style="fill:#F3705A;" d="M328,374.4c0,50.133-41.6,91.733-91.733,91.733s-91.733-41.6-91.733-91.733 c0-41.6,28.8-77.867,67.2-88.533v-98.133h50.133v98.133C300.267,296.533,328,331.733,328,374.4z"
                             />
                             <ellipse transform="matrix(0.7071 -0.7071 0.7071 0.7071 -157.2939 292.9228)" style="fill:#FFFFFF;" cx="274.942" cy="336.332"
-                                rx="14.933" ry="30.933" />
+                                     rx="14.933" ry="30.933" />
                             <g>
                                 <path style="fill:#F3F3F3;" d="M403.733,64h-57.6c-5.333,0-10.667-4.267-10.667-10.667l0,0c0-5.333,4.267-10.667,10.667-10.667 h57.6c5.333,0,10.667,4.267,10.667,10.667l0,0C414.4,59.733,409.067,64,403.733,64z"
                                 />
@@ -167,6 +167,17 @@
                     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
                         <symbol id="table" viewBox="0 0 512 512">
                             <title>Table</title>
+                            <path style="fill:#B87FD9;" d="M488.727,46.545H23.273C10.42,46.545,0,56.965,0,69.818v93.091V256v93.091v93.091 c0,12.853,10.42,23.273,23.273,23.273h155.152h155.152h155.152c12.853,0,23.273-10.42,23.273-23.273v-93.091V256v-93.091V69.818 C512,56.965,501.58,46.545,488.727,46.545z M155.152,418.909H46.545v-46.545h108.606V418.909z M155.152,325.818H46.545v-46.545 h108.606V325.818z M155.152,232.727H46.545v-46.545h108.606V232.727z M310.303,418.909H201.697v-46.545h108.606V418.909z M310.303,325.818H201.697v-46.545h108.606V325.818z M310.303,232.727H201.697v-46.545h108.606V232.727z M465.455,418.909H356.848 v-46.545h108.606V418.909z M465.455,325.818H356.848v-46.545h108.606V325.818z M465.455,232.727H356.848v-46.545h108.606V232.727z"
+                            />
+                            <path style="fill:#6E76E5;" d="M488.727,46.545H23.273C10.42,46.545,0,56.965,0,69.818v93.091c0,12.853,10.42,23.273,23.273,23.273 h23.273h108.606h46.545h108.606h46.545h108.606h23.273c12.853,0,23.273-10.42,23.273-23.273V69.818 C512,56.965,501.58,46.545,488.727,46.545z"
+                            />
+                            <path style="fill:#424EDE;" d="M23.273,46.545C10.42,46.545,0,56.965,0,69.818v93.091c0,12.853,10.42,23.273,23.273,23.273h23.273 h108.606h46.545H256V46.545H23.273z"
+                            />
+                            <path style="fill:#933EC5;" d="M201.697,418.909v-46.545H256v-46.545h-54.303v-46.545H256v-46.545h-54.303v-46.545h-46.545v46.545 H46.545v-46.545H23.273C10.42,186.182,0,175.762,0,162.909V256v93.091v93.091c0,12.853,10.42,23.273,23.273,23.273h155.152H256 v-46.545H201.697z M155.152,418.909H46.545v-46.545h108.606V418.909z M155.152,325.818H46.545v-46.545h108.606V325.818z"
+                            />
+                        </symbol>
+                        <symbol id="iframe" viewBox="0 0 512 512">
+                            <title>I frame</title>
                             <path style="fill:#B87FD9;" d="M488.727,46.545H23.273C10.42,46.545,0,56.965,0,69.818v93.091V256v93.091v93.091 c0,12.853,10.42,23.273,23.273,23.273h155.152h155.152h155.152c12.853,0,23.273-10.42,23.273-23.273v-93.091V256v-93.091V69.818 C512,56.965,501.58,46.545,488.727,46.545z M155.152,418.909H46.545v-46.545h108.606V418.909z M155.152,325.818H46.545v-46.545 h108.606V325.818z M155.152,232.727H46.545v-46.545h108.606V232.727z M310.303,418.909H201.697v-46.545h108.606V418.909z M310.303,325.818H201.697v-46.545h108.606V325.818z M310.303,232.727H201.697v-46.545h108.606V232.727z M465.455,418.909H356.848 v-46.545h108.606V418.909z M465.455,325.818H356.848v-46.545h108.606V325.818z M465.455,232.727H356.848v-46.545h108.606V232.727z"
                             />
                             <path style="fill:#6E76E5;" d="M488.727,46.545H23.273C10.42,46.545,0,56.965,0,69.818v93.091c0,12.853,10.42,23.273,23.273,23.273 h23.273h108.606h46.545h108.606h46.545h108.606h23.273c12.853,0,23.273-10.42,23.273-23.273V69.818 C512,56.965,501.58,46.545,488.727,46.545z"
@@ -344,43 +355,43 @@
 
             <div ng-show="vm.sideBarTab == 'data'" ng-cloak>
 
-                    <ul class="nav nav-tabs right-nav-option-tabs">
-                        <li class="first-tab">
-                            <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'dimensions'}" ng-click="vm.activeTab = 'dimensions' ">
+                <ul class="nav nav-tabs right-nav-option-tabs">
+                    <li class="first-tab">
+                        <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'dimensions'}" ng-click="vm.activeTab = 'dimensions' ">
                                 <span  uib-tooltip="Dimensions" tooltip-placement="bottom">
                                     <svg class="flaticon-entity-dimension">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#entity-dimension"></use>
                                     </svg>
                                 </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'measures'}" ng-click="vm.activeTab = 'measures' ">
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'measures'}" ng-click="vm.activeTab = 'measures' ">
                                 <span  uib-tooltip="Measures" tooltip-placement="bottom">
                                     <svg class="flaticon-entity-measure">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#entity-measure"></use>
                                     </svg>
                                 </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'hierarchy'}" ng-click="vm.activeTab = 'hierarchy' ">
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'hierarchy'}" ng-click="vm.activeTab = 'hierarchy' ">
                                 <span  uib-tooltip="Hierarchy" tooltip-placement="bottom">
                                     <svg class="flaticon-hierarchy">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hierarchy"></use>
                                     </svg>
                                 </span>
-                            </a>
-                        </li>
-                    </ul>
+                        </a>
+                    </li>
+                </ul>
                 <div class="side-widgets overflow resource-nav">
-                    
+
                     <div class="panel panel-default" ng-show="vm.activeTab == 'dimensions'">
                         <div class="panel-heading" id="resource-dimensions" role="tab" id="headingTwo">
                             <div class="panel-title">
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">Dimensions
-                                <i class="fa fa-plus pull-right" aria-hidden="true" ng-click="vm.openDialog('DIMENSION')"></i>
-                            </a>
+                                    <i class="fa fa-plus pull-right" aria-hidden="true" ng-click="vm.openDialog('DIMENSION')"></i>
+                                </a>
                             </div>
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
@@ -389,12 +400,12 @@
                                     <div class="search-box inner-addon left-addon b-b-xs">
                                         <i class="glyphicon glyphicon-search"></i>
                                         <input type="text" ng-model="searchDimention" class="form-control  rounded-corner" placeholder="Search Dimentions..." /></div>
-                                    <div class="resource-list" dnd-draggable="vm.getSelectedItem(dimension)"  dnd-moved="vm.features.splice($index, 1)"  dnd-effect-allowed="move"  
-                                        ng-repeat="dimension in vm.features | filter: {featureType: 'DIMENSION'} | filter: {name: searchDimention} ">
+                                    <div class="resource-list" dnd-draggable="vm.getSelectedItem(dimension)"  dnd-moved="vm.features.splice($index, 1)"  dnd-effect-allowed="move"
+                                         ng-repeat="dimension in vm.features | filter: {featureType: 'DIMENSION'} | filter: {name: searchDimention} ">
                                         <div class="list-group-item">
                                             <span uib-tooltip="Drag and Drop into Vizualization" tooltip-placement="right"><i class="fa fa-arrows-alt" ></i></span>
                                             <span class="feature-name" ng-click="vm.changeFeature(dimension)">{{dimension.name}}</span>
-                                            <span class="delete" ng-click="vm.deleteFeature(dimension)" aria-hidden="true">                                
+                                            <span class="delete" ng-click="vm.deleteFeature(dimension)" aria-hidden="true">
                                         <svg class="flaticon-close">
                                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
                                         </svg>
@@ -410,8 +421,8 @@
                         <div class="panel-heading" id="resource-measures" role="tab" id="headingThree">
                             <div class="panel-title">
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="collapseThree">
-                                Measures
-                                <i class="fa fa-plus pull-right" ng-click="vm.openDialog('MEASURE')"></i>
+                                    Measures
+                                    <i class="fa fa-plus pull-right" ng-click="vm.openDialog('MEASURE')"></i>
                                 </a>
                             </div>
                         </div>
@@ -422,7 +433,7 @@
                                         <i class="glyphicon glyphicon-search"></i>
                                         <input type="text" ng-model="searchMeasure" class="form-control  rounded-corner" placeholder="Search Measures..." /></div>
                                     <div class="resource-list" dnd-draggable="vm.getSelectedItem(measure)" dnd-moved="vm.features.splice($index, 1)" dnd-effect-allowed="move" dnd-selected="vm.selected = measure"  ng-class="{'selected': vm.selected === measure}"
-                                        ng-repeat="measure in vm.features | filter: {featureType: 'MEASURE'} | filter: {name: searchMeasure}">
+                                         ng-repeat="measure in vm.features | filter: {featureType: 'MEASURE'} | filter: {name: searchMeasure}">
                                         <div class="list-group-item" href>
                                             <span uib-tooltip="Drag and Drop into chart" tooltip-placement="right"><i class="fa fa-arrows-alt" ></i></span>
                                             <span class="feature-name" ng-click="vm.changeFeature(measure)">{{measure.name}}</span>
@@ -464,9 +475,9 @@
                         </div>
                     </div>
 
-                    </div>
+                </div>
 
-            </div>    
+            </div>
 
             <div ng-show="vm.sideBarTab == 'filters'">
 
@@ -506,9 +517,9 @@
                 </div>
 
                 <div ng-show="vm.propTab == 'data-constraints-properties'">
-                <button class="btn btn-primary" ng-click="vm.openDataContraints()">
-                    open
-                </button>
+                    <button class="btn btn-primary" ng-click="vm.openDataContraints()">
+                        open
+                    </button>
                     <!-- <condition-tab-component features="vm.features" condition-expression="vm.visual.conditionExpression" /> -->
                 </div>
 
@@ -526,14 +537,14 @@
 
     <nav id="leftside-thinbar" class="resource-tabs navbar-default">
         <button uib-tooltip="Vizualizations" tooltip-placement="left" ng-show="vm.ngIfResources()" ng-toggled="vm.navbarToggled" ng-class="{selected: vm.sideBarTab == 'vizualizations',optiondisabled:!vm.ngIfResources()}"
-            ng-click="vm.onVizualizationsOpen()">
-                <svg class="flaticons-resources">
+                ng-click="vm.onVizualizationsOpen()">
+            <svg class="flaticons-resources">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#resources"></use>
-                </svg>
+            </svg>
         </button>
 
         <button uib-tooltip="Data" tooltip-placement="left" ng-show="vm.ngIfResources()" ng-toggled="vm.dataToggled" ng-class="{selected: vm.sideBarTab == 'data',optiondisabled:!vm.ngIfResources()}"
-            ng-click="vm.onDataOpen()">
+                ng-click="vm.onDataOpen()">
             <svg class="flaticons-data-properties" >
                 <use xlink:href="#data-properties" />
             </svg>

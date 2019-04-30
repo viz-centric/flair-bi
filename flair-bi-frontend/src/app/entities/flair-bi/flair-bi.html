@@ -2,7 +2,7 @@
     <div id="grid-container" class="col-md-12 ng-class:{'worksheet-fullscreen':$root.isFullScreen,'worksheet':!$root.isFullScreen}">
         <div gridstack class="flip-container grid-stack grid1" options="vm.gridStackOptions" on-change="vm.onChange(event,items)" on-drag-start="vm.onDragStart(event,ui)" on-drag-stop="vm.onDragStop(event,ui)" on-resize-start="vm.onResizeStart(event,ui)" on-resize-stop="vm.onResizeStop(event,ui)">
             <div data-gs-min-height="2" data-gs-min-width="3" id="{{v.visualBuildId}}" visual-build-id-resize="{{v.visualBuildId}}" gridstack-item ng-repeat="v in vm.visualmetadata" class="grid-flipper grid-stack-item grid-stack-item-{{v.visualBuildId}}    ng-class:{'flipToFront':v.isCardRevealed, 'flipToBack':!v.isCardRevealed}"
-                gs-item-x="v.xPosition" gs-item-y="v.yPosition" gs-item-width="v.width" gs-item-height="v.height" on-item-added="vm.onItemAdded(item)" on-item-removed="vm.onItemRemoved(item)">
+                 gs-item-x="v.xPosition" gs-item-y="v.yPosition" gs-item-width="v.width" gs-item-height="v.height" on-item-added="vm.onItemAdded(item)" on-item-removed="vm.onItemRemoved(item)">
                 <div id="{{v.id}}" container-id="{{v.visualBuildId}}" ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border,
                'opacity': v.bodyProperties.opacity}" class="grid-stack-item-content ui-draggable-handle visualization-card grid-front ng-class:{'face-hidden':!hideBackFace}">
                     <div id="title-{{v.id}}" class="float-e-margins header  grid-stack-item-content print-visibility-hide" style="margin-bottom:0px;">
@@ -23,184 +23,194 @@
                                         <use xlink:href="#settings-button" />
                                     </svg>
                                 <span>
-                           </a>
-                           <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.visualBuildId}}">
-                                <div class="items">  
-                                    <div class="item" role="menuitem">
-                                        <a href ng-click="vm.printElement(v)">
+                                    </a>
+                                    <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.visualBuildId}}">
+                                        <div class="items">
+                                            <div class="item" role="menuitem">
+                                                <a href ng-click="vm.printElement(v)">
                                             <span uib-tooltip="Print" tooltip-placement="top">
                                                 <svg class="flaticons-print">
                                                     <use xlink:href="#print" />
                                                 </svg>
                                             </span>
-                                    </a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
-                                    <a href ng-click="vm.settings(v)">
+                                                </a>
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+                                                <a href ng-click="vm.settings(v)">
                                         <span uib-tooltip="Settings" tooltip-placement="top">
                                                 <svg class="flaticons-settings">
                                                     <use xlink:href="#fbi-box-settings" />
                                                 </svg>
                                             </span></a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
-                                    <a href ng-click="vm.openDataContraints(v)">
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+                                                <a href ng-click="vm.openDataContraints(v)">
                                         <span uib-tooltip="Data&nbsp;Constraints" tooltip-placement="top">
                                                 <svg class="flaticons-data-constraints" >
                                                     <use xlink:href="#data-constraints" />
                                                 </svg>
                                             </span></a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="v.data">
-                                    <a href ng-click="vm.exportCSV(v)">
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="v.data">
+                                                <a href ng-click="vm.exportCSV(v)">
                                         <span uib-tooltip="Export" tooltip-placement="top">
                                                 <svg class="flaticons-export">
                                                     <use xlink:href="#export" />
                                                 </svg>
                                             </span>
-                                    </a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="v.data">
-                                    <a href ng-click="vm.openTableDialog(v)">
+                                                </a>
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="v.data">
+                                                <a href ng-click="vm.openTableDialog(v)">
                                         <span uib-tooltip="Data" tooltip-placement="top">
                                                 <svg class="flaticons-excel">
                                                     <use xlink:href="#excel" />
                                                 </svg>
                                             </span>
-                                    </a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="v.id">
-                                    <a href ng-click="vm.share(v)">
+                                                </a>
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="v.id">
+                                                <a href ng-click="vm.share(v)">
                                         <span uib-tooltip="Share" tooltip-placement="top">
                                                 <svg class="flaticons-share">
                                                     <use xlink:href="#share" />
                                                 </svg>
                                             </span>
-                                    </a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="vm.ngIfDelete()">
-                                    <a href ng-click="vm.removeWidget(v)">
+                                                </a>
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="vm.ngIfDelete()">
+                                                <a href ng-click="vm.removeWidget(v)">
                                         <span uib-tooltip="Delete" tooltip-placement="top">
                                                 <svg class="flaticons-delete">
                                                     <use xlink:href="#delete" />
                                                 </svg>
                                             </span>
-                                    </a>
-                                </div>
-                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
-                                    <a href ng-click="vm.recreateVisual(v)">
+                                                </a>
+                                            </div>
+                                            <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+                                                <a href ng-click="vm.recreateVisual(v)">
                                         <span uib-tooltip="Duplicate&nbsp;Vizualization" tooltip-placement="top">
                                                 <svg class="clone">
                                                     <use xlink:href="#clone" />
                                                 </svg>
                                             </span>
-                                    </a>
-                                </div>
-                                <div class="item" role="menuitem">
-                                    <a href ng-click="vm.openSchedulerDialog(v)">
+                                                </a>
+                                            </div>
+                                            <div class="item" role="menuitem">
+                                                <a href ng-click="vm.openSchedulerDialog(v)">
                                         <span uib-tooltip="Schedule&nbsp;Report" tooltip-placement="top">
                                             <svg class="calendar">
                                                     <use xlink:href="#calendar" />
                                             </svg>
                                         </span>
-                                    </a>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href class="reload-button" ng-click="vm.refreshWidget(v)">
+                                <a href class="reload-button" ng-click="vm.refreshWidget(v)">
                         <span uib-tooltip="Refresh" tooltip-placement="bottom">
                                 <svg class="reload">
                                     <use xlink:href="#reload" />
                                 </svg>
                             </span>
-                    </a>
-                    <a ng-show="vm.ngIfSettings()" href class="reload-button" ng-click="vm.flipCard(v)" title="Flip Vizualization">
+                                </a>
+                                <a ng-show="vm.ngIfSettings()" href class="reload-button" ng-click="vm.flipCard(v)" title="Flip Vizualization">
                         <span uib-tooltip="Flip" tooltip-placement="bottom">
                                 <i class="reload fa fa-rotate-right"></i>
                             </span>
-                    </a>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-style="{'opacity': v.bodyProperties.opacity}" ng-if="$root.vizualizationServiceMode == 'grpc'" id="content-{{v.visualBuildId}}" class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()" data="v" id="v.id || v.visualBuildId"
+                         widget="{{v.metadataVisual.functionname}}" reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
+                    </div>
+                    <div ng-if="$root.vizualizationServiceMode == 'http'" id="content-{{v.visualBuildId}}" class="printme content widget-content" visualization-render can-build="v.canBuild()" data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
+                         reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div ng-style="{'opacity': v.bodyProperties.opacity}" ng-if="$root.vizualizationServiceMode == 'grpc'" id="content-{{v.visualBuildId}}" class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()" data="v" id="v.id || v.visualBuildId"
-            widget="{{v.metadataVisual.functionname}}" reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
-        </div>
-        <div ng-if="$root.vizualizationServiceMode == 'http'" id="content-{{v.visualBuildId}}" class="printme content widget-content" visualization-render can-build="v.canBuild()" data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
-            reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
-        </div>
-    </div>
-    <!-- end of grid container -->
-    <div class="grid-back" ng-show="v.isCardRevealed==false">
-        <div class="grid-stack-item ng-class:{'grid-min-height':v.id==undefined}" id="grid-back-{{v.visualBuildId}}">
-            <div ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border
+                <!-- end of grid container -->
+                <div class="grid-back" ng-show="v.isCardRevealed==false">
+                    <div class="grid-stack-item ng-class:{'grid-min-height':v.id==undefined}" id="grid-back-{{v.visualBuildId}}">
+                        <div ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border
                      }" class="grid-stack-item-content ui-draggable-handle" style="background-color: rgb(255, 255, 255); border: none; opacity: 1;">
-                <div class="float-e-margins header  grid-stack-item-content print-visibility-hide ui-draggable-handle" style="margin-bottom:0px;">
-                    <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px; background-color: rgb(250, 250, 250); border-bottom: none; color: rgb(103, 106, 108);">
-                        <div class="viz-header-content">
-                            <div class="viz-title ng-binding">Dimensions and Measures</div>
-                            <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href="" class="reload-button" ng-click="vm.saveFeatures(v)" title="Build Vizualization" ng-disabled="vm.isSaving">
+                            <div class="float-e-margins header  grid-stack-item-content print-visibility-hide ui-draggable-handle" style="margin-bottom:0px;">
+                                <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px; background-color: rgb(250, 250, 250); border-bottom: none; color: rgb(103, 106, 108);">
+                                    <div class="viz-header-content">
+                                        <div class="viz-title ng-binding">Dimensions and Measures</div>
+                                        <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href="" class="reload-button" ng-click="vm.saveFeatures(v)" title="Build Vizualization" ng-disabled="vm.isSaving">
                                 <span uib-tooltip="Build" tooltip-placement="bottom">
                                         <i class="reload fa fa-gavel"></i>
                                     </span>
-                            </a>
-                            <a href="" class="reload-button" ng-click="vm.flipCard(v)" title="Flip Vizualization">
+                                        </a>
+                                        <a href="" class="reload-button" ng-click="vm.flipCard(v)" title="Flip Vizualization">
                                 <span uib-tooltip="Flip" tooltip-placement="bottom">
                                         <i class="reload fa fa-rotate-right"></i>
                                     <span>
-                                </a>
-                           </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-                  <br/>
-                  <div class="row">
-                     <div class="feature-box">
-                        <ul class="list-group" drop-box={{v.visualBuildId}}>
-                           <li class="list-group-item dimension-item active">
-                              Dimensions
-                              <svg class="flaticon-entity-dimension">
-                                 <use xlink:href="#entity-dimension" />
-                              </svg>
-                           </li>
-                           <li  ng-repeat="field in v.fields | filter:{fieldType:{featureType:'DIMENSION'}}:true | orderBy:'fieldType.id'"  class="list-group-item dimension-item">   
-                                <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition"  placeholder="Drop Here" readonly>
-                                <svg ng-if="field.fieldType.constraint ==='OPTIONAL' && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
-                                </svg>
-                                <i  ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>    
-                            </li>
-                            <li ng-if="v.nextFieldDimension()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'DIMENSION')" class="list-group-item dimension-item"> 
-                            <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>  
-                            </li>
-                        </ul>
-                     </div>
-                     <div class="feature-box">
-                        <ul  class="list-group" drop-box={{v.visualBuildId}}>
-                           <li  class="list-group-item measure-item active">
-                              Measures
-                              <svg class="flaticon-entity-measure">
-                                 <use xlink:href="#entity-measure" />
-                              </svg>
-                           </li>
-                           <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'MEASURE'}}:true | orderBy:'fieldType.id'" class="list-group-item measure-item"> 
-                            <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition" placeholder="Drop Here" readonly>
-                                <svg ng-if="field.fieldType.constraint ==='OPTIONAL'  && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
-                                </svg>
-                                <i ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>   
-                            </li>
-                            <li ng-if="v.nextFieldMeasure()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'MEASURE')" class="list-group-item measure-item"> 
-                            <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>
-                            </li>
-                        </ul>
-                     </div>
-                  </div>
-                  <!-- end of row -->
-               </div>
+                        <br/>
+                        <div class="row">
+                            <div ng-show="v.metadataVisual.name == 'Iframe'">
+                                <div class="form-group"style="margin-left: 20px;">
+                                    <label for="iframelink">I-Frame Link</label>
+                                    <input type="text" class="form-control" ng-model="v.metadataVisual.propertyTypes[0].propertyType.defaultValue" style="
+                        margin-top: 10px;" id="iframelink" placeholder="I frame link">
+                                </div>
+                            </div>
+                            <div ng-hide="v.metadataVisual.name == 'Iframe'">
+                                <div class="feature-box">
+                                    <ul class="list-group" drop-box={{v.visualBuildId}}>
+                                        <li class="list-group-item dimension-item active">
+                                            Dimensions
+                                            <svg class="flaticon-entity-dimension">
+                                                <use xlink:href="#entity-dimension" />
+                                            </svg>
+                                        </li>
+                                        <li  ng-repeat="field in v.fields | filter:{fieldType:{featureType:'DIMENSION'}}:true | orderBy:'fieldType.id'"  class="list-group-item dimension-item">
+                                            <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition"  placeholder="Drop Here" readonly>
+                                            <svg ng-if="field.fieldType.constraint ==='OPTIONAL' && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
+                                            </svg>
+                                            <i  ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>
+                                        </li>
+                                        <li ng-if="v.nextFieldDimension()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'DIMENSION')" class="list-group-item dimension-item">
+                                            <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="feature-box">
+                                    <ul  class="list-group" drop-box={{v.visualBuildId}}>
+                                        <li  class="list-group-item measure-item active">
+                                            Measures
+                                            <svg class="flaticon-entity-measure">
+                                                <use xlink:href="#entity-measure" />
+                                            </svg>
+                                        </li>
+                                        <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'MEASURE'}}:true | orderBy:'fieldType.id'" class="list-group-item measure-item">
+                                            <input index={{v.fields.indexOf(field)}} type="text" class="form-control" ng-model="field.feature.definition" placeholder="Drop Here" readonly>
+                                            <svg ng-if="field.fieldType.constraint ==='OPTIONAL'  && field.feature!=null" class="flaticon-close" ng-click="vm.removeField(v.fields,v.fields.indexOf(field))">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#close"></use>
+                                            </svg>
+                                            <i ng-if="field.fieldType.constraint ==='REQUIRED'" class="fa fa-lock flaticon-close"></i>
+                                        </li>
+                                        <li ng-if="v.nextFieldMeasure()!=undefined && vm.isDefaultFeatureEmpty(v.fields,'MEASURE')" class="list-group-item measure-item">
+                                            <input index="-1" type="text" class="form-control"  placeholder="Drop Here" readonly>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- end of row -->
+                    </div>
+                </div>
+                <!-- end of of flip part -->
             </div>
-            <!-- end of of flip part -->
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 </div>

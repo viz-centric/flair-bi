@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GenerateSankey', GenerateSankey);
@@ -59,6 +58,8 @@ function GenerateSankey(VisualizationUtils, $rootScope, D3Utils, filterParameter
                     .style('position', 'relative');
 
                 var svg = div.append('svg')
+                    .attr('width', element[0].clientWidth)
+                    .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
                     .attr('id', 'tooltip')

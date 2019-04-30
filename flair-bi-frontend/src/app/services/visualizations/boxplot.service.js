@@ -1,6 +1,5 @@
 import angular from 'angular';
 "use strict";
-
 angular.module("flairbiApp").factory("GenerateBoxplot", GenerateBoxplot);
 
 GenerateBoxplot.$inject = [
@@ -22,16 +21,17 @@ function GenerateBoxplot(
             function getProperties(VisualizationUtils, record) {
                 var result = {};
 
+
                 var features = VisualizationUtils.getDimensionsAndMeasures(
                     record.fields
-                ),
+                    ),
                     dimensions = features.dimensions,
                     measures = features.measures,
                     eachMeasure,
                     allMeasures = [];
 
-                result["dimension"] = ['country']// D3Utils.getNames(dimensions)[0];
-                result["measure"] = ['low', '1Q', 'median', '3Q', 'high']//D3Utils.getNames(measures);
+                result["dimension"] =  D3Utils.getNames(dimensions)[0];
+                result["measure"] = D3Utils.getNames(measures);
 
                 result["maxMes"] = measures.length;
 
@@ -66,13 +66,16 @@ function GenerateBoxplot(
                     .style('position', 'relative');
 
                 var svg = div.append('svg')
+                    .attr('width', element[0].clientWidth)
+                    .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
                     .attr('id', 'tooltip')
 
                 var boxplot = flairVisualizations.boxplot()
                     .config(getProperties(VisualizationUtils, record))
-                    .tooltip(true);
+                    .tooltip(true)
+                    .print(false);
 
                 svg.datum(record.data)
                     .call(boxplot);

@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GeneratePivotTable', GeneratePivotTable);
@@ -62,7 +61,6 @@ function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
                     result['textColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Text colour'));
                     result['textColorExpressionForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Text colour expression'));
                     result['textAlignmentForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Alignment'));
-                    result['textAlignmentForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Alignment'));
                     result['isPivoted'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Pivot'));
 
                 }
@@ -83,15 +81,14 @@ function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
                     result['iconPositionForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon position'));
                     result['iconExpressionForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
                 }
-
                 return result;
             }
 
             d3.select(element[0]).html('')
             var div = d3.select(element[0]).append('div')
                 .attr('id', 'pivot-' + element[0].id)
-                .attr('width', element[0].clientWidth)
-                .attr('height', element[0].clientHeight)
+                .style('width', element[0].clientWidth + 'px')
+                .style('height', element[0].clientHeight + 'px')
                 .style('overflow', 'hidden')
                 .style('text-align', 'center')
                 .style('position', 'relative');

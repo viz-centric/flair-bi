@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GeneratePieChart', GeneratePieChart);
@@ -18,16 +17,13 @@ function GeneratePieChart(VisualizationUtils, $rootScope, D3Utils, filterParamet
                 var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                     dimension = features.dimensions,
                     measure = features.measures;
-
                 result['dimension'] = D3Utils.getNames(dimension);
                 result['measure'] = D3Utils.getNames(measure);
-
                 result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
-                result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position');
-                result['value'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
+                result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
+                result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
                 result['valueAsArc'] = VisualizationUtils.getPropertyValue(record.properties, 'Value as Arc');
                 result['valuePosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Value position').toLowerCase();
-
                 return result;
             }
 
@@ -37,8 +33,9 @@ function GeneratePieChart(VisualizationUtils, $rootScope, D3Utils, filterParamet
                     pie.update(record.data);
                 }
             } else {
+                d3.select(element[0]).html('')
                 var div = d3.select(element[0]).append('div')
-                    .attr('id', 'pie-' + this.id)
+                    .attr('id', 'pie-' + element[0].id)
                     .style('width', element[0].clientWidth + 'px')
                     .style('height', element[0].clientHeight + 'px')
                     .style('overflow', 'hidden')
@@ -52,35 +49,10 @@ function GeneratePieChart(VisualizationUtils, $rootScope, D3Utils, filterParamet
                 var tooltip = div.append('div')
                     .attr('class', 'tooltip');
 
-                record.data = [{
-                    "order_status": "Kathmandu",
-                    "order_item_subtotal": 50
-                }, {
-                    "order_status": "Delhi",
-                    "order_item_subtotal": 90
-                }, {
-                    "order_status": "Detroit",
-                    "order_item_subtotal": 910
-                }, {
-                    "order_status": "London",
-                    "order_item_subtotal": 240
-                }, {
-                    "order_status": "Washington",
-                    "order_item_subtotal": 300
-                }, {
-                    "order_status": "Berlin",
-                    "order_item_subtotal": 120
-                }, {
-                    "order_status": "Perth",
-                    "order_item_subtotal": 110
-                }, {
-                    "order_status": "Ottawa",
-                    "order_item_subtotal": 180
-                }];
-
                 var pie = flairVisualizations.pie()
                     .config(getProperties(VisualizationUtils, record))
-                    .tooltip(true);
+                    .tooltip(true)
+                    .print(false)
 
                 svg.datum(record.data)
                     .call(pie);

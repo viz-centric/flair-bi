@@ -10,7 +10,7 @@
     function GenerateBulletChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-              
+
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -19,7 +19,7 @@
                         measures = features.measures;
 
                     result['dimension'] = [D3Utils.getNames(dimensions)[0]];
-                    result['measure'] = D3Utils.getNames(measures);
+                    result['measures'] = D3Utils.getNames(measures);
 
                     result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font style');
                     result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font weight');
@@ -47,7 +47,7 @@
                 } else {
                     d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'bullet-' +  element[0].id)
+                        .attr('id', 'bullet-' + element[0].id)
                         .style('width', element[0].clientWidth + 'px')
                         .style('height', element[0].clientHeight + 'px')
                         .style('overflow', 'hidden')
@@ -55,6 +55,8 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth )
+                        .attr('height', element[0].clientHeight )
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip')

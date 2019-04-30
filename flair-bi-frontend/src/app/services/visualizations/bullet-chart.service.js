@@ -1,6 +1,5 @@
 import angular from 'angular';
 'use strict';
-
 angular
     .module('flairbiApp')
     .factory('GenerateBulletChart', GenerateBulletChart);
@@ -19,7 +18,7 @@ function GenerateBulletChart(VisualizationUtils, $rootScope, D3Utils, filterPara
                     measures = features.measures;
 
                 result['dimension'] = [D3Utils.getNames(dimensions)[0]];
-                result['measure'] = D3Utils.getNames(measures);
+                result['measures'] = D3Utils.getNames(measures);
 
                 result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font style');
                 result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font weight');
@@ -55,6 +54,8 @@ function GenerateBulletChart(VisualizationUtils, $rootScope, D3Utils, filterPara
                     .style('position', 'relative');
 
                 var svg = div.append('svg')
+                    .attr('width', element[0].clientWidth )
+                    .attr('height', element[0].clientHeight )
 
                 var tooltip = div.append('div')
                     .attr('id', 'tooltip')

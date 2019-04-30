@@ -22,6 +22,7 @@
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
+
                     var features = VisualizationUtils.getDimensionsAndMeasures(
                         record.fields
                     ),
@@ -30,8 +31,8 @@
                         eachMeasure,
                         allMeasures = [];
 
-                    result["dimension"] = ['country']// D3Utils.getNames(dimensions)[0];
-                    result["measure"] = ['low', '1Q', 'median', '3Q', 'high']//D3Utils.getNames(measures);
+                    result["dimension"] =  D3Utils.getNames(dimensions)[0];
+                    result["measure"] = D3Utils.getNames(measures);
 
                     result["maxMes"] = measures.length;
 
@@ -58,7 +59,7 @@
                 } else {
                     d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('div')
-                        .attr('id', 'boxplot-' +  element[0].id)
+                        .attr('id', 'boxplot-' + element[0].id)
                         .style('width', element[0].clientWidth + 'px')
                         .style('height', element[0].clientHeight + 'px')
                         .style('overflow', 'hidden')
@@ -66,13 +67,16 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip')
 
                     var boxplot = flairVisualizations.boxplot()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true);
+                        .tooltip(true)
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(boxplot);

@@ -1,18 +1,18 @@
-<div class="inmodal in modal-content view-create-popup">
+<div class="inmodal in modal-content common-create-popup">
     <form name="editForm" ng-submit="vm.save()" novalidate="" role="form" show-validation="">
         <div class="modal-header">
-            <svg class="view-icon">
+            <svg class="common-edit-icon">
               <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
                 {{vm.dialogMode}}
             </div>
-            <svg class=" view-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
               <use xlink:href="#cancle" />
               </svg>
       </div>
         
-        <div class="modal-body view-create-popup-content">
+        <div class="modal-body">
             <jhi-alert-error></jhi-alert-error>
             <div class="form-group">
                 <label class="control-label" data-translate="flairbiApp.views.viewName" for="field_viewName">View Name</label>
@@ -36,8 +36,8 @@
               <input type="checkbox" ng-model="vm.views.published"/>
             </div>
             <div class="form-group" ngf-change="vm.setImage($file, vm.views)" ngf-drop="" ngf-pattern="'image/*'">
-                <label class="control-label" data-translate="flairbiApp.views.image" for="field_image">Image</label>
-                <div>
+                <label class="control-label img-label" data-translate="flairbiApp.views.image" for="field_image">Image</label>
+                <div class="row" ng-if="vm.views.imageLocation || vm.views.image">
                     <img alt="views image" data-ng-src="{{'data:' + vm.views.imageContentType + ';base64,' + vm.views.image}}" ng-if="vm.views.image"
                         style="max-height: 100px;" />
                     <img alt="views image" ng-src="{{vm.views.imageLocation}}" ng-if="vm.views.imageLocation"
@@ -48,14 +48,14 @@
                             <span class="glyphicon glyphicon-remove"></span> Remove Image
                         </button>
                     </div>
-            <div class="image-upload-holder">
-            <div class="image-upload-inner">
-              <div class="button" ngf-select name="file" ngf-pattern="'image/*'"
-              ngf-accept="'image/*'" data-translate="entity.action.addimage" ngf-min-height="100"ngf-change="vm.setImage($file, vm.views)">
-               <p>Add Image</p> 
-             </div>
-            </div>
-          </div>
+                </div>
+                <div class="image-upload-holder">
+                    <div class="image-upload-inner">
+                        <div class="button" ngf-select name="file" ngf-pattern="'image/*'"
+                          ngf-accept="'image/*'" data-translate="entity.action.addimage" ngf-min-height="100"ngf-change="vm.setImage($file, vm.views)">
+                           <p>Add Image</p> 
+                         </div>
+                    </div>
                 </div>
                 <input class="form-control" id="field_image" name="image" ng-model="vm.views.image" type="hidden" />
                 <input class="form-control" id="field_imageContentType" name="imageContentType" ng-model="vm.views.imageContentType" type="hidden"

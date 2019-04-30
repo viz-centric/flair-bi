@@ -10,7 +10,7 @@
     function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-               
+
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -63,14 +63,17 @@
                         .style('text-align', 'center')
                         .style('position', 'relative');
 
-                    var svg = div.append('svg');
+                    var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip');
+                        .attr('class', 'tooltip');
 
                     var treemap = flairVisualizations.treemap()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true);
+                        .tooltip(true)
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(treemap);

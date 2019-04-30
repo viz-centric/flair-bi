@@ -3954,6 +3954,14 @@ jhi-alert .alerts .alert-danger {
           position: relative; }
           .flairbi-content-header .full-screen-topbar .full-screen-options .item .fullscreen-dropdowns .dropdown-menu {
             right: 0px; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .item md-input-container {
+          display: none; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .item .md-button.md-icon-button md-icon, .flairbi-content-header .full-screen-topbar .full-screen-options .item button.md-button.md-fab md-icon {
+          display: none; }
+      .flairbi-content-header .full-screen-topbar .full-screen-options .settings {
+        display: flex; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .settings .settings-item {
+          margin-top: -19px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .show {
         margin-right: 4%; }
       .flairbi-content-header .full-screen-topbar .full-screen-options menu-component .menu-container .menu {

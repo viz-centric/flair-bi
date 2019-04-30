@@ -242,6 +242,18 @@
                         right: 0px;
                     }
                 }
+                md-input-container {
+                    display:none;
+                }
+                .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
+                    display: none;
+                }
+            }
+            .settings{
+                display:flex;
+                .settings-item{
+                    margin-top: -19px;
+                }
             }
             .show {
                 margin-right: 4%;

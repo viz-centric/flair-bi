@@ -129,6 +129,7 @@
         vm.mobileUserOptionNavigationSlide=false;
         vm.logout=logout;
         vm.filtersLength=0;
+        $scope.headerColor=null;
 
         
         Principal.identity().then(function (account) {
@@ -594,5 +595,16 @@
            Auth.logout();
             $state.go('login');
         }
+
+        $scope.$watch('headerColor', function() {
+            if($scope.headerColor!=null)
+                $('.flairbi-content-header-fullscreen').css('background-color',$scope.headerColor);
+            //VisualDispatchService.setSettings(vm.settings);
+        });
+
+        $scope.$watch('containerColor', function() {
+            if($scope.containerColor!=undefined)
+                $('.page-wrapper-full-screen').css('background-color',$scope.containerColor)
+        });
     }
 })();

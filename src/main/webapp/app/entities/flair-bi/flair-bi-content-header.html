@@ -224,11 +224,9 @@
                     </svg>
             </div>
             <div class="line hidden-sm hidden-xs"></div>
-            <div class="fs-btn settings item hidden-xs hidden-sm"
-               ng-click="vm.openSettings()">
-                <svg class="flaticons-edit-screen">
-                        <use xlink:href="#edit-screen" />
-                    </svg>
+            <div class="fs-btn settings item hidden-xs hidden-sm">
+                <div md-color-picker ng-model="headerColor" label="Choose a header color" class="settings-item"></div>
+                <div md-color-picker ng-model="containerColor" label="Choose a container color" class="settings-item"></div>
             </div>
             <div class="fs-btn exit-screen item hidden-xs hidden-sm" ng-click="vm.exitFullScreen()">
                 <svg class="flaticons-normal-screen">

@@ -99,7 +99,8 @@
 
                     var scatter = flairVisualizations.scatter()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true);
+                        .tooltip(true)
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(scatter);

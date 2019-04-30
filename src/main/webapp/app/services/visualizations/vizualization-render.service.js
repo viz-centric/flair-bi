@@ -67,8 +67,7 @@
         GeneratePivotTable,
         proxyService,
         filterParametersService,
-        GenerateIframe,
-    ) {
+        GenerateIframe) {
 
         var vm = this;
         var widgets = [];

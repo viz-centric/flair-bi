@@ -1,8 +1,10 @@
 import * as angular from 'angular';
+import dashboardComponentHtml from './dashboard.component.html';
+
 "use strict";
 
 angular.module("flairbiApp").component("dashboardComponent", {
-    templateUrl: "app/entities/dashboards/dashboard.component.html",
+    template: dashboardComponentHtml,
     controller: dashboardController,
     controllerAs: "vm",
     bindings: {
@@ -19,7 +21,8 @@ function dashboardController($scope, Principal) {
 
     ////////////////
 
-    function activate() { }
+    function activate() {
+    }
 
     //Issue Fix - hasAuthority returns promise object - Below is the way to get the value from promise - Start
     Principal.hasAuthority(

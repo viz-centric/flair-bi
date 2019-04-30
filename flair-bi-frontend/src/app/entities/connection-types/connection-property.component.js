@@ -1,7 +1,10 @@
+import angular from 'angular';
+import connectionPropertyComponentHtml from './connection-property.component.html';
+
+
 export const name = 'connectionPropertyComponent';
 export const component = {
-    templateUrl:
-        "app/entities/connection-types/connection-property.component.html",
+    template: connectionPropertyComponentHtml,
     controller: connectionPropertyController,
     controllerAs: "vm",
     bindings: {
@@ -11,6 +14,9 @@ export const component = {
         connection: "="
     }
 };
+
+angular.module('flairbiApp')
+    .component(name, component);
 
 connectionPropertyController.$inject = [];
 

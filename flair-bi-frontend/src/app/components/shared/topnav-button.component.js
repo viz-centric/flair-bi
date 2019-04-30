@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import topnavButtonComponentHtml from './topnav-button.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('topNavButtonComponent', {
-        templateUrl: 'app/components/shared/topnav-button.component.html',
+        template: topnavButtonComponentHtml,
         controller: TopNavButtonController,
         controllerAs: 'vm',
         transclude: true,

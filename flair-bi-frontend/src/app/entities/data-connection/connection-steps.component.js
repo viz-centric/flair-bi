@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import connectionStepsComponentHtml from './connection-steps.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('connectionStepsComponent', {
-        templateUrl: 'app/entities/data-connection/connection-steps.component.html',
+        template: connectionStepsComponentHtml,
         controller: DataConnectionStepsController,
         controllerAs: 'vm',
         bindings: {

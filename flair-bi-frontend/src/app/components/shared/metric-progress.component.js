@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import metricProgressComponentHtml from './metric-progress.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('metricProgressComponent', {
-        templateUrl: 'app/components/shared/metric-progress.component.html',
+        template: metricProgressComponentHtml,
         controller: metricProgressController,
         controllerAs: 'vm',
         transclude: true,
@@ -27,5 +29,6 @@ function metricProgressController($scope) {
 
     ////////////////
 
-    function activate() { }
+    function activate() {
+    }
 }

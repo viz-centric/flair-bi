@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import propertyComponentHtml from './property.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('propertyComponent', {
-        templateUrl: 'app/components/shared/property.component.html',
+        template: propertyComponentHtml,
         controller: propertyController,
         controllerAs: 'vm',
         bindings: {
@@ -24,7 +26,6 @@ function propertyController($scope) {
     vm.getDisplayName = getDisplayName;
 
 
-
     function getDisplayName(value) {
         return value;
     }
@@ -32,6 +33,7 @@ function propertyController($scope) {
     vm.$onInit = function () {
         activate();
     }
+
     ////////////////
 
     function activate() {

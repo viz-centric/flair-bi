@@ -1,4 +1,8 @@
 import * as angular from 'angular';
+import datasourceConstraintsHtml from './datasource-constraints.html';
+import datasourceConstraintDetailHtml from './datasource-constraint-detail.html';
+import datasourceConstraintDialogHtml from './datasource-constraint-dialog.html';
+import datasourceConstraintDeleteDialogHtml from './datasource-constraint-delete-dialog.html';
 
 "use strict";
 
@@ -17,8 +21,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/datasource-constraint/datasource-constraints.html",
+                    template: datasourceConstraintsHtml,
                     controller: "DatasourceConstraintController",
                     controllerAs: "vm"
                 }
@@ -46,8 +49,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/datasource-constraint/datasource-constraint-detail.html",
+                    template: datasourceConstraintDetailHtml,
                     controller: "DatasourceConstraintDetailController",
                     controllerAs: "vm"
                 }
@@ -102,8 +104,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasource-constraint/datasource-constraint-dialog.html",
+                            template: datasourceConstraintDialogHtml,
                             controller:
                                 "DatasourceConstraintDialogController",
                             controllerAs: "vm",
@@ -143,8 +144,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasource-constraint/datasource-constraint-dialog.html",
+                            template: datasourceConstraintDialogHtml,
                             controller:
                                 "DatasourceConstraintDialogController",
                             controllerAs: "vm",
@@ -184,8 +184,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasource-constraint/datasource-constraint-dialog.html",
+                            template: datasourceConstraintDialogHtml,
                             controller:
                                 "DatasourceConstraintDialogController",
                             controllerAs: "vm",
@@ -227,8 +226,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasource-constraint/datasource-constraint-delete-dialog.html",
+                            template: datasourceConstraintDeleteDialogHtml,
                             controller:
                                 "DatasourceConstraintDeleteController",
                             controllerAs: "vm",

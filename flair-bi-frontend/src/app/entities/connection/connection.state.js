@@ -1,4 +1,17 @@
 import angular from 'angular';
+import connectionsContentHeaderHtml from './connections-content-header.html';
+import connectionsHtml from './connections.html';
+import dataConnectionHtml from './../data-connection/data-connection.html';
+import connectionDialogHtml from './connection-dialog.html';
+import connectionDeleteDialogHtml from './connection-delete-dialog.html';
+import connectionDetailContentHeaderHtml from './connection-detail-content-header.html';
+import connectionDetailHtml from './connection-detail.html';
+import datasourcesHtml from './../datasources/datasources.html';
+import datasourcesDetailContentHeaderHtml from './../datasources/datasources-detail-content-header.html';
+import datasourcesDetailHtml from './../datasources/datasources-detail.html';
+import dashboardListHtml from './../dashboards/dashboard-list.html';
+import datasourcesDialogHtml from './../datasources/datasources-dialog.html';
+import datasourcesDeleteDialogHtml from './../datasources/datasources-delete-dialog.html';
 
 angular.module('flairbiApp')
     .config(stateConfig);
@@ -16,13 +29,12 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/connection/connections-content-header.html",
+                    template: connectionsContentHeaderHtml,
                     controller: "ConnectionsContentHeaderController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl: "app/entities/connection/connections.html",
+                    template: connectionsHtml,
                     controller: "ConnectionsController",
                     controllerAs: "vm"
                 }
@@ -77,7 +89,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl: "app/entities/data-connection/data-connection.html",
+                    template: dataConnectionHtml,
                     controller: "DataConnectionController",
                     controllerAs: "vm"
                 }
@@ -112,8 +124,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/connection/connection-dialog.html",
+                            template: connectionDialogHtml,
                             controller: "ConnectionDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -130,15 +141,15 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("connection", null, {
-                                    reload: "connection"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("connection", null, {
+                                reload: "connection"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -151,8 +162,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/connection/connection-delete-dialog.html",
+                            template: connectionDeleteDialogHtml,
                             controller: "ConnectionDeleteDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -169,15 +179,15 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("connection", null, {
-                                    reload: "connection"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("connection", null, {
+                                reload: "connection"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -187,14 +197,12 @@ function stateConfig($stateProvider) {
             url: "/{connectionLinkId}",
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/connection/connection-detail-content-header.html",
+                    template: connectionDetailContentHeaderHtml,
                     controller: "ConnectionDetailController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl:
-                        "app/entities/connection/connection-detail.html",
+                    template: connectionDetailHtml,
                     controller: "ConnectionDetailController",
                     controllerAs: "vm"
                 }
@@ -235,7 +243,7 @@ function stateConfig($stateProvider) {
         .state("connection-detail", {
             parent: "connection-detail-abstract",
             url: "/detail",
-            templateUrl: "app/entities/datasources/datasources.html",
+            template: datasourcesHtml,
             controller: "DatasourcesController",
             controllerAs: "vm",
             data: {
@@ -309,14 +317,12 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/datasources/datasources-detail-content-header.html",
+                    template: datasourcesDetailContentHeaderHtml,
                     controller: "DatasourcesDetailController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl:
-                        "app/entities/datasources/datasources-detail.html",
+                    template: datasourcesDetailHtml,
                     controller: "DatasourcesDetailController",
                     controllerAs: "vm"
                 }
@@ -362,7 +368,7 @@ function stateConfig($stateProvider) {
                 authorities: ["READ_DATASOURCES_APPLICATION"],
                 displayName: "Datasource Details"
             },
-            templateUrl: "app/entities/dashboards/dashboard-list.html",
+            template: dashboardListHtml,
             controller: "DashboardListController",
             controllerAs: "vm",
             resolve: {
@@ -371,7 +377,7 @@ function stateConfig($stateProvider) {
                     function ($stateParams) {
                         return {
                             "dashboardDatasources.id":
-                                $stateParams.datasourceId
+                            $stateParams.datasourceId
                         };
                     }
                 ]
@@ -390,8 +396,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasources/datasources-dialog.html",
+                            template: datasourcesDialogHtml,
                             controller: "DatasourcesDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -408,15 +413,15 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("connection-detail", null, {
-                                    reload: "connection-detail"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("connection-detail", null, {
+                                reload: "connection-detail"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         })
@@ -433,8 +438,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasources/datasources-delete-dialog.html",
+                            template: datasourcesDeleteDialogHtml,
                             controller: "DatasourcesDeleteController",
                             controllerAs: "vm",
                             size: "md",
@@ -458,15 +462,15 @@ function stateConfig($stateProvider) {
                             }
                         })
                         .result.then(
-                            function () {
-                                $state.go("connection-detail", null, {
-                                    reload: "connection-detail"
-                                });
-                            },
-                            function () {
-                                $state.go("^");
-                            }
-                        );
+                        function () {
+                            $state.go("connection-detail", null, {
+                                reload: "connection-detail"
+                            });
+                        },
+                        function () {
+                            $state.go("^");
+                        }
+                    );
                 }
             ]
         });

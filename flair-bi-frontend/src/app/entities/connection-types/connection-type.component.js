@@ -1,9 +1,9 @@
 import angular from 'angular';
+import connectionTypeComponentHtml from './connection-type.component.html';
 
 angular.module('flairbiApp')
     .component('connectionTypeComponent', {
-        templateUrl:
-            "app/entities/connection-types/connection-type.component.html",
+        template: connectionTypeComponentHtml,
         controller: connectionTypeController,
         controllerAs: "vm",
         bindings: {
@@ -11,7 +11,6 @@ angular.module('flairbiApp')
             onClick: "&"
         }
     })
-
 
 
 connectionTypeController.$inject = [];
@@ -23,6 +22,7 @@ function connectionTypeController() {
 
     ////////////////
 
-    function activate() { }
+    function activate() {
+    }
 }
 

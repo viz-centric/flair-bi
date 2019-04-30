@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import userProfileComponentHtml from './user-profile.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('userProfileComponent', {
-        templateUrl: 'app/components/shared/user-profile/user-profile.component.html',
+        template: userProfileComponentHtml,
         controller: userProfileController,
         controllerAs: 'vm',
     });

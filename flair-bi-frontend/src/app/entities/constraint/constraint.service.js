@@ -1,5 +1,9 @@
-export const name = 'Constraints';
-export function Constraints($resource) {
+import angular from 'angular';
+
+
+angular.module('flairbiApp').factory('Constraints', Constraints);
+
+function Constraints($resource) {
     var resourceUrl = "api/constraints/:id";
 
     return $resource(

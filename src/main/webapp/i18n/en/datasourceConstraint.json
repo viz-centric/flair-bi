@@ -9,12 +9,15 @@
             "created": "A new Datasource Constraint is created with identifier {{ param }}",
             "updated": "A Datasource Constraint is updated with identifier {{ param }}",
             "deleted": "A Datasource Constraint is deleted with identifier {{ param }}",
+            "errorSaving":"Error saving Datasource Constraint",
+            "errorDeleting":"Error deleting Datasource Constraint",
             "delete": {
                 "question": "Are you sure you want to delete Datasource Constraint {{ id }}?"
             },
             "detail": {
                 "title": "Datasource Constraint"
             },
+            "errorFetching":"Error fetching Datasource Constraints",
             "constraintDefinition": "Constraint Definition",
             "user": "User",
             "datasources": "Datasources",

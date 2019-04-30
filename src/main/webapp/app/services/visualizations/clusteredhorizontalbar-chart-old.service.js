@@ -1358,7 +1358,6 @@
                                     return me.helper.getYaxisVisibility();
                                 })
                                 .attr('transform', 'translate(0, ' + contentHeight + ')');
-
                          
                                 var width=d3.select('.clusteredhorizontalbar-plot .chart').node().getBBox()
                                 axisBottomG.append('text')

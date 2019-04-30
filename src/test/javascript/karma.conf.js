@@ -59,6 +59,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/sockjs/sockjs.js',
             'src/main/webapp/bower_components/stomp-websocket/lib/stomp.min.js',
             'src/main/webapp/bower_components/cronstrue/dist/cronstrue.js',
+            'src/main/webapp/bower_components/flair-visualizations/dist/main.bundle.js',
             'src/main/webapp/bower_components/angular/angular.js',
             'src/main/webapp/bower_components/angular-aria/angular-aria.js',
             'src/main/webapp/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
@@ -97,6 +98,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js',
             'src/main/webapp/bower_components/angular-jwt/dist/angular-jwt.js',
             'src/main/webapp/bower_components/angular-cron-gen/build/cron-gen.min.js',
+            'src/main/webapp/bower_components/angular-cron-generator/dist/angular-cron-generator.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'src/main/webapp/app/app.module.js',

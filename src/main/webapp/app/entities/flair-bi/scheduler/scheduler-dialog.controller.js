@@ -5,20 +5,20 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_visualizations','scheduler_channels'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_visualizations,scheduler_channels) {
-        $scope.cronExpression = '0 8 9 9 1/8 ? *';
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels) {
+        $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
         };
         $scope.isCronDisabled = false;
 
         var vm = this;
+        vm.cronConfig = {quartz: false};
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
-        vm.visualizations=scheduler_visualizations;
         vm.channels=scheduler_channels;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -30,32 +30,33 @@
         vm.scheduleObj={
             "cron_exp":"",
             "report": {
-              "connection_name": "",
-              "report_name": "",
-              "source_id":"",
-              "subject":"",
-              "title_name":""
+                "connection_name": "",
+                "report_name": "",
+                "source_id":"",
+                "subject":"",
+                "title_name":""
             },
             "report_line_item": {
-              "query_name": "",
-              "fields": [],
-              "group_by": [],
-              "order_by": [],
-              "where": "",
-              "limit": 5,
-              "table": "",
-              "visualization": ""
+                "query_name": "",
+                "fields": [],
+                "group_by": [],
+                "order_by": [],
+                "where": "",
+                "limit": 5,
+                "table": "",
+                "visualization": "",
+                "dimension":[],
+                "measure":[]
             },
             "assign_report": {
-              "channel": "",
-              "condition": "test",
-              "email_list":[]
+                "channel": "",
+                "condition": "test",
+                "email_list":[]
             },
             "schedule": {
-              "timezone": "",
-              "start_date": "",
-              "end_date": "",
-              "duration_type":""
+                "timezone": "",
+                "start_date": "",
+                "end_date": ""
             }
           };
         activate();
@@ -93,6 +94,8 @@
         vm.scheduleObj.report_line_item.table=visualMetaData.metadataVisual.name;
         vm.scheduleObj.report_line_item.table=datasource.name;
         vm.scheduleObj.report_line_item.where=JSON.stringify(visualMetaData.conditionExpression);
+        vm.scheduleObj.report_line_item.visualization=visualMetaData.metadataVisual.name;
+        setDimentionsAndMeasures(visualMetaData.fields);
         
     }
 
@@ -127,26 +130,26 @@
             return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
         }
 
-        function onSaveSuccess() {
-            //vm.isSaving = false;
-            vm.clear();
-            var info = {
-                text: "Report is scheduled",
-                title: "Saved"
-            }
-            $rootScope.showSuccessToast(info);
-        }
-
-        function onSaveError(error) {
-            console.log("error==="+error);
-            vm.isSaving = false;
-            clear();
-        }
-
         function schedule() {
             vm.isSaving = true;
             setScheduledData();
-            schedulerService.scheduleReport(vm.scheduleObj, onSaveSuccess, onSaveError);
+             schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
+                vm.isSaving = false;
+                vm.clear();
+                var info = {
+                    text: success.data.message,
+                    title: "Saved"
+                }
+                $rootScope.showSuccessToast(info);
+            }).catch(function (error) {
+                console.log("error==="+error);
+                vm.isSaving = false;                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            });
         }
 
         function setScheduledData(){
@@ -154,18 +157,7 @@
             vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
             vm.scheduleObj.schedule.cronExpression=$scope.cronExpression;
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
-            vm.scheduleObj.report_line_item.visualization=vm.scheduleObj.report_line_item.visualization.toLowerCase();
             vm.scheduleObj.cron_exp=$scope.cronExpression;
-            setDurationType();
-        }
-
-        function setDurationType(){
-            var listItems=$(".cron-gen-main > ul[role=tablist] > li");
-            listItems.each(function(idx, li) {
-                if($(li).hasClass('active')){
-                    vm.scheduleObj.schedule.duration_type=$(li).find('a').text().replace(/['"]+/g, '').trim();
-                }
-            });
         }
 
         function openCalendar (date) {
@@ -186,7 +178,17 @@
                 vm.scheduleObj.assign_report.email_list.splice(index, 1);
             }
         }
-    }
+
+        function setDimentionsAndMeasures(fields){
+            fields.filter(function(item) {
+                if(item.feature.featureType === "DIMENSION"){
+                    vm.scheduleObj.report_line_item.dimension.push(item.feature.definition);
+                }else if(item.feature.featureType === "MEASURE"){
+                    vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
+                }
+            });
+        }
+}
 })();
 
 

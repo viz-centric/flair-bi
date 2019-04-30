@@ -10,7 +10,7 @@
     function GenerateSankey(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
-               
+
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -59,6 +59,8 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
                         .attr('id', 'tooltip')

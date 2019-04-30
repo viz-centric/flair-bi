@@ -77,7 +77,8 @@
     "angular-jwt": "^0.1.10",
     "angular-cron-gen": "^0.0.26",
     "cronstrue": "^0.8.0",
-    "flair-visualizations": "*"
+    "angular-cron-generator": "^1.0.0",
+    "flair-visualizations": "master"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8"
@@ -138,6 +139,17 @@
       "main": [
         "build/cron-gen.min.css",
         "build/cron-gen.min.js"
+      ]
+    },
+    "angular-cron-generator": {
+      "main": [
+        "dist/angular-cron-generator.css",
+        "dist/angular-cron-generator.js"
+      ]
+    },
+    "flair-visualizations": {
+      "main": [
+        "dist/main.bundle.js"
       ]
     }
   },

@@ -7,12 +7,12 @@
 
     UserManagementController.$inject = ['Principal', 'User', 'ParseLinks',
         'AlertService', '$state', 'pagingParams',
-        'paginationConstants', 'JhiLanguageService', 'PERMISSIONS'
+        'paginationConstants', 'JhiLanguageService', 'PERMISSIONS','$translate','$rootScope'
     ];
 
     function UserManagementController(Principal, User, ParseLinks,
         AlertService, $state, pagingParams,
-        paginationConstants, JhiLanguageService, PERMISSIONS) {
+        paginationConstants, JhiLanguageService, PERMISSIONS,$translate,$rootScope) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
@@ -48,6 +48,17 @@
             User.update(user, function () {
                 vm.loadAll();
                 vm.clear();
+                if(isActivated){
+                    var info = {text:$translate.instant('userManagement.activatedSuccess'),title: "Activated"};
+                    $rootScope.showSuccessToast(info);
+                }else{
+                    var info = {text:$translate.instant('userManagement.deactivatedSuccess'),title: "Deactivated"};
+                    $rootScope.showSuccessToast(info);
+                }
+            },function(error){
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('userManagement.errorUpdating')
+                });
             });
         }
 

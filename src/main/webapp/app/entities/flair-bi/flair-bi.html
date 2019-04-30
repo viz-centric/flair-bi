@@ -1,8 +1,5 @@
 <div visualization-window-resize class="row print-visibility-hide widget-container-resized" id="widget-container" style="min-height:70vh;">
     <div id="grid-container" class="col-md-12 ng-class:{'worksheet-fullscreen':$root.isFullScreen,'worksheet':!$root.isFullScreen}">
-        <div class="jhi-alert">
-            <jhi-alert></jhi-alert>
-        </div>
         <div gridstack class="flip-container grid-stack grid1" options="vm.gridStackOptions" on-change="vm.onChange(event,items)" on-drag-start="vm.onDragStart(event,ui)" on-drag-stop="vm.onDragStop(event,ui)" on-resize-start="vm.onResizeStart(event,ui)" on-resize-stop="vm.onResizeStop(event,ui)">
             <div data-gs-min-height="2" data-gs-min-width="3" id="{{v.visualBuildId}}" visual-build-id-resize="{{v.visualBuildId}}" gridstack-item ng-repeat="v in vm.visualmetadata" class="grid-flipper grid-stack-item grid-stack-item-{{v.visualBuildId}}    ng-class:{'flipToFront':v.isCardRevealed, 'flipToBack':!v.isCardRevealed}"
                 gs-item-x="v.xPosition" gs-item-y="v.yPosition" gs-item-width="v.width" gs-item-height="v.height" on-item-added="vm.onItemAdded(item)" on-item-removed="vm.onItemRemoved(item)">

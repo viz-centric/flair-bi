@@ -10,7 +10,7 @@
     function stateConfig($stateProvider,PERMISSIONS) {
         $stateProvider
         .state('visualization-colors', {
-            parent: 'entity',
+            parent: 'admin',
             url: '/visualization-colors',
             data: {
                 authorities: [PERMISSIONS.READ_VISUALIZATION_COLORS],
@@ -19,6 +19,11 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/visualization-colors/visualization-colors.html',
+                    controller: 'VisualizationColorsController',
+                    controllerAs: 'vm'
+                },
+                'content-header@': {
+                    templateUrl: 'app/admin/visualization-colors/visualization-colors-content-header.html',
                     controller: 'VisualizationColorsController',
                     controllerAs: 'vm'
                 }
@@ -75,7 +80,7 @@
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function(VisualizationColors) {
                             return VisualizationColors.get({id : $stateParams.id}).$promise;
@@ -100,7 +105,7 @@
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: function () {
                             return {
@@ -128,7 +133,7 @@
                     controller: 'VisualizationColorsDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         entity: ['VisualizationColors', function(VisualizationColors) {
                             return VisualizationColors.get({id : $stateParams.id}).$promise;

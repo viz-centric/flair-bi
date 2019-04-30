@@ -8,12 +8,14 @@
         "created": "A new user is created with identifier {{ param }}",
         "updated": "An user is updated with identifier {{ param }}",
         "deleted": "An user is deleted with identifier {{ param }}",
+        "errorSaving":"Error saving user",
         "delete": {
             "question": "Are you sure you want to delete user {{ login }}?"
         },
         "detail": {
             "title": "User"
         },
+        "errorDeleting":"Error deleting user",
         "login": "Login Id",
         "firstName": "First name",
         "lastName": "Last name",
@@ -27,6 +29,9 @@
         "lastModifiedBy": "Modified by",
         "lastModifiedDate": "Modified date",
         "selectUser": "Select User ...",
+        "activatedSuccess":"User has been Activated",
+        "deactivatedSuccess":"User has been Dectivated",
+        "errorUpdating":"Error occured updating user",
         "error": {
             "users.all": "Error loading users"
         }

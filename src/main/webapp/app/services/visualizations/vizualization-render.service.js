@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     /**
@@ -10,7 +10,7 @@
         .module("flairbiApp")
         .factory("visualizationRenderService", visualizationRenderService);
 
-        visualizationRenderService.$inject = [
+    visualizationRenderService.$inject = [
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
@@ -44,6 +44,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
+     
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -80,6 +81,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
+           
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -119,12 +121,12 @@
             );
         }
 
-        function setMetaData(v,metadata,contentId) {
+        function setMetaData(v, metadata, contentId) {
             addWidgets();
-            vm.data=v;
-            vm.data.data=metadata.data;
-            vm.widget=v.metadataVisual.functionname;
-            createWidget(vm.data,contentId);
+            vm.data = v;
+            vm.data.data = metadata.data;
+            vm.widget = v.metadataVisual.functionname;
+            createWidget(vm.data, contentId);
         }
 
 

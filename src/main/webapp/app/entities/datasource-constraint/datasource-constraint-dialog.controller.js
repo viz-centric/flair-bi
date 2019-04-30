@@ -121,7 +121,7 @@
             if (vm.datasourceConstraint.id !== null) {
                 DatasourceConstraint.update(
                     vm.datasourceConstraint,
-                    onSaveSuccess,
+                    onUpdateSuccess,
                     onSaveError
                 );
             } else {
@@ -134,12 +134,27 @@
         }
 
         function onSaveSuccess(result) {
-            $scope.$emit("flairbiApp:datasourceConstraintUpdate", result);
-            $uibModalInstance.close(result);
-            vm.isSaving = false;
+            onSave(result);
+            var info = {text:$translate.instant('flairbiApp.datasourceConstraint.created',{param:result.id}),title: "Saved"}
+            $rootScope.showSuccessToast(info);
+        }
+
+        function onUpdateSuccess(result) {
+            onSave(result);
+            var info = {text:$translate.instant('flairbiApp.datasourceConstraint.updated',{param:result.id}),title: "Updated"}
+            $rootScope.showSuccessToast(info);
         }
 
         function onSaveError() {
+            vm.isSaving = false;
+            $rootScope.showErrorSingleToast({
+                text: $translate.instant('flairbiApp.datasourceConstraint.errorSaving')
+            });
+        }
+
+        function onSave(result){
+            $scope.$emit("flairbiApp:datasourceConstraintUpdate", result);
+            $uibModalInstance.close(result);
             vm.isSaving = false;
         }
 

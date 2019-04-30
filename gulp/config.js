@@ -11,7 +11,7 @@ module.exports = {
     tmp: 'target/tmp',
     revManifest: 'target/tmp/rev-manifest.json',
     port: 9001,
-    apiPort: 80,
+    apiPort: 8002,
     liveReloadPort: 35729,
     uri: 'http://localhost:',
     constantTemplate: '(function () {\n' +

@@ -883,3 +883,18 @@ body.modal-open .animated {
         color:$primary-color;
     }
 }
+
+.flair-checkbox-disabled{
+    pointer-events: none;
+    .fa-check-square-o-checked{
+        color:#aaa;
+        display: inline;
+    }
+}
+.flair-checkbox-enabled{
+    pointer-events: visible;
+    .fa-check-square-o-checked{
+        color:$primary-color;
+        display: inline;
+    }
+}

@@ -19,6 +19,9 @@ COPY classes/config/ssl/ssl-oss.properties /app/ssl.properties
 COPY ssl/keystore/flairbi-keystore.p12 /app/keystore.p12
 COPY ssl/keystore/flairbi-truststore.p12 /app/truststore.p12
 COPY ssl/cert/ca/ca.pem /app/ca.crt
+COPY ssl/certsgen/client.crt /app/clientCertChainFile.crt
+COPY ssl/certsgen/client.pem /app/clientPrivateKeyFile.pem
+COPY ssl/certsgen/ca.crt /app/trustCertCollectionFile.crt
 
 COPY *.war /app/app.war
 

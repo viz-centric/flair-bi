@@ -1,6 +1,6 @@
 grpc:
   tls:
-    enabled: true
-    root-certificate: ${GRPC_CERT:src/main/resources/ssl/grpc/ca.crt}
-    client-cert: ${GRPC_CERT:src/main/resources/ssl/grpc/server.crt}
-    key: ${GRPC_CERT:src/main/resources/ssl/grpc/server.pem}
+    enabled: ${GRPC_SSL_ENABLED:false}
+    clientCertChainFile: ${GRPC_CERT:/app/clientCertChainFile.crt}
+    clientPrivateKeyFile: ${GRPC_KEY:/app/clientPrivateKeyFile.pem}
+    trustCertCollectionFile: ${GRPC_TRUST_CERT:/app/trustCertCollectionFile.crt}

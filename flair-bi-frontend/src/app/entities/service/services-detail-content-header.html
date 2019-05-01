@@ -4,7 +4,8 @@
             <div class="header-text col-md-8 col-sm-6 com-xs-12">
                 <h2>{{vm.service.serviceName}} 1</h2>
                 <div class="bread-crumb">
-                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
+                    <ui-breadcrumbs displayname-property="data.displayName"
+                    ></ui-breadcrumbs>
                 </div>
             </div>
             <div class="dashboards-create-button col-md-4 col-sm-6 col-xs-12">
@@ -15,16 +16,17 @@
                     </span>
                 </button>
                 <div class="dropdown-options">
-                    <a aria-expanded="true" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1" type="button">
+                    <a aria-expanded="true" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown"
+                       id="dropdownMenu1" type="button">
                         <svg class="dashboard-more-option">
-                            <use xlink:href="#dashboard-more-option" />
+                            <use xlink:href="#dashboard-more-option"/>
                         </svg>
                     </a>
                     <ul aria-labelledby="dropdownMenu1" class="dropdown-menu dropdown-menu-right custom-dropdown-menu">
                         <li>
                             <a href="#" ui-sref="service-detail.edit({id:vm.service.id})">
                                 <svg class="edit">
-                                    <use xlink:href="#fbi-box-settings" />
+                                    <use xlink:href="#fbi-box-settings"/>
                                 </svg>
                                 <span class="option-text">Edit</span>
                             </a>
@@ -32,7 +34,7 @@
                         <li>
                             <a href="#" ui-sref="service.delete({id:vm.service.id})">
                                 <svg class="delete">
-                                    <use xlink:href="#delete" />
+                                    <use xlink:href="#delete"/>
                                 </svg>
                                 <span class="option-text">Delete</span>
                             </a>

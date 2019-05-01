@@ -438,10 +438,6 @@ angular-ui-tree@^2.22.6:
   version "2.22.6"
   resolved "https://registry.yarnpkg.com/angular-ui-tree/-/angular-ui-tree-2.22.6.tgz#849727fdd1d13d84c1a590bb08934cc224e5a407"
 
-angular-utils-ui-breadcrumbs@^0.2.2-1:
-  version "0.2.2-1"
-  resolved "https://registry.yarnpkg.com/angular-utils-ui-breadcrumbs/-/angular-utils-ui-breadcrumbs-0.2.2-1.tgz#c77bf62741debe7b1774482e240139d65819ec12"
-
 angular-wizard@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/angular-wizard/-/angular-wizard-1.1.1.tgz#6e36991ae85e6be2cc9d14f1c8e703fe9c42888c"

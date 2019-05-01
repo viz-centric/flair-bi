@@ -2,33 +2,38 @@
     <div class="containder-fluid">
         <div class="row">
             <div class="dashboards-header-text col-md-8 col-sm-6 com-xs-12">
-                <h2>{{vm.selectedDashboard.dashboardName}} 
-                    <span ng-if="vm.selectedDashboard.published" uib-tooltip="Version  {{vm.selectedDashboard.currentRelease.versionNumber}}" tooltip-placement="right">
+                <h2>{{vm.selectedDashboard.dashboardName}}
+                    <span ng-if="vm.selectedDashboard.published"
+                          uib-tooltip="Version  {{vm.selectedDashboard.currentRelease.versionNumber}}"
+                          tooltip-placement="right">
                         <svg class="information version-info-icon">
-                            <use xlink:href="#information" />
+                            <use xlink:href="#information"/>
                         </svg>
                     </span>
                 </h2>
                 <div class="bread-crumb">
-                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
+                    <ui-breadcrumbs displayname-property="data.displayName"
+                    ></ui-breadcrumbs>
                 </div>
             </div>
             <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs">
-                <button class="btn btn-primary" ng-if="vm.canWriteViews" ui-sref="dashboards-overview.view-new({dashboard: vm.selectedDashboard})">
+                <button class="btn btn-primary" ng-if="vm.canWriteViews"
+                        ui-sref="dashboards-overview.view-new({dashboard: vm.selectedDashboard})">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>Create View</span>
                 </button>
                 <div class="dropdown-options">
-                    <a aria-expanded="true" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1" type="button">
+                    <a aria-expanded="true" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown"
+                       id="dropdownMenu1" type="button">
                         <svg class="dashboard-more-option">
-                            <use xlink:href="#dashboard-more-option" />
+                            <use xlink:href="#dashboard-more-option"/>
                         </svg>
                     </a>
                     <ul aria-labelledby="dropdownMenu1" class="dropdown-menu dropdown-menu-right">
                         <li>
                             <a href ui-sref="dashboard-bookmarks({id: vm.selectedDashboard.id})">
                                 <svg class="bookmark-2">
-                                    <use xlink:href="#bookmark-2" />
+                                    <use xlink:href="#bookmark-2"/>
                                 </svg>
                                 <span class="option-text">Bookmarks</span>
                             </a>

@@ -4,11 +4,13 @@
             <div class="dashboards-header-text col-md-8 col-sm-6 com-xs-12">
                 <h2>Dashboards</h2>
                 <div class="bread-crumb">
-                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
+                    <ui-breadcrumbs displayname-property="data.displayName"
+                    ></ui-breadcrumbs>
                 </div>
             </div>
             <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs">
-                <button has-authority="{{vm.permissions.WRITE_DASHBOARDS}}" class="btn btn-primary" ui-sref="dashboards.new">
+                <button has-authority="{{vm.permissions.WRITE_DASHBOARDS}}" class="btn btn-primary"
+                        ui-sref="dashboards.new">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span data-translate="flairbiApp.dashboards.home.createLabel">
                         Create new Dashboard

@@ -31,7 +31,6 @@ import 'md-color-picker';
 import 'angular-filter';
 import 'angular-drag-and-drop-lists';
 import 'angularjs-slider';
-import 'angular-utils-ui-breadcrumbs';
 import 'angular-cron-gen';
 import 'angular-translate-interpolation-messageformat';
 import 'angular-translate-loader-partial';

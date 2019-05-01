@@ -8,7 +8,7 @@ import datasourceConstraintDeleteDialogHtml
     from './../../entities/datasource-constraint/datasource-constraint-delete-dialog.html';
 import userManagementDialogHtml from './user-management-dialog.html';
 import userManagementDeleteDialogHtml from './user-management-delete-dialog.html';
-import 'use strict';
+'use strict';
 
 angular
     .module('flairbiApp')

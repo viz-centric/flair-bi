@@ -4,11 +4,14 @@
             <div class="header-text col-md-8 col-sm-6 com-xs-12">
                 <h2>{{vm.views.viewName}}</h2>
                 <div class="bread-crumb">
-                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
+                    <ui-breadcrumbs displayname-property="data.displayName"
+                    ></ui-breadcrumbs>
                 </div>
             </div>
             <div class="header-options col-md-4 col-sm-6 col-xs-12">
-                <button has-authority="UPDATE_{{vm.views.id}}_VIEW" type="button" ui-sref="dashboards-overview.view-detail.edit({id:vm.views.viewDashboard.id,viewId:vm.views.id})" class="btn btn-primary">
+                <button has-authority="UPDATE_{{vm.views.id}}_VIEW" type="button"
+                        ui-sref="dashboards-overview.view-detail.edit({id:vm.views.viewDashboard.id,viewId:vm.views.id})"
+                        class="btn btn-primary">
                     <span class="glyphicon glyphicon-pencil"></span>
                     <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
                 </button>

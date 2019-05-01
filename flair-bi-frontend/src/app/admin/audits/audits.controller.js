@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import template from './../../components/shared/breadcrumb/uiBreadcrumbs.tpl.html';
+
 'use strict';
 
 angular
@@ -10,6 +12,7 @@ AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks'];
 function AuditsController($filter, AuditsService, ParseLinks) {
     var vm = this;
 
+    vm.template = template;
     vm.audits = null;
     vm.fromDate = null;
     vm.links = null;

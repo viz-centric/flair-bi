@@ -51,11 +51,12 @@ run.$inject = [
     "stateHandler",
     "translationHandler",
     "$rootScope",
-    "$window"
+    "$window",
+    'toastr'
 ];
 angularThemingConfig.$inject = ["$mdThemingProvider"];
 
-function run(stateHandler, translationHandler, $rootScope, $window) {
+function run(stateHandler, translationHandler, $rootScope, $window, toastr) {
     stateHandler.initialize();
     translationHandler.initialize();
     $rootScope.noIframe =

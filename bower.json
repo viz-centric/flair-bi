@@ -144,7 +144,7 @@
     "angular-cron-generator": {
       "main": [
         "dist/angular-cron-generator.css",
-        "dist/angular-cron-generator.js"
+        "dist/angular-cron-generator.min.js"
       ]
     },
     "flair-visualizations": {

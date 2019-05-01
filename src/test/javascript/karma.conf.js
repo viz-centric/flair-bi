@@ -98,7 +98,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js',
             'src/main/webapp/bower_components/angular-jwt/dist/angular-jwt.js',
             'src/main/webapp/bower_components/angular-cron-gen/build/cron-gen.min.js',
-            'src/main/webapp/bower_components/angular-cron-generator/dist/angular-cron-generator.js',
+            'src/main/webapp/bower_components/angular-cron-generator/dist/angular-cron-generator.min.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'src/main/webapp/app/app.module.js',

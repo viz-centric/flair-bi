@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import bodyPropertiesComponentHtml from './body-properties.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('bodyPropertiesComponent', {
-        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/body-properties.component.html',
+        template: bodyPropertiesComponentHtml,
         controller: BodyPropertiesController,
         controllerAs: 'vm',
         bindings: {

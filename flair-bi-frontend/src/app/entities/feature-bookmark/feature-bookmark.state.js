@@ -1,4 +1,8 @@
 import * as angular from 'angular';
+import featureBookmarksHtml from './feature-bookmarks.html';
+import featureBookmarkDetailHtml from './feature-bookmark-detail.html';
+import featureBookmarkDialogHtml from './feature-bookmark-dialog.html';
+import featureBookmarkDeleteDialogHtml from './feature-bookmark-delete-dialog.html';
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -16,8 +20,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/feature-bookmark/feature-bookmarks.html",
+                    template: featureBookmarksHtml,
                     controller: "FeatureBookmarkController",
                     controllerAs: "vm"
                 }
@@ -43,8 +46,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/feature-bookmark/feature-bookmark-detail.html",
+                    template: featureBookmarkDetailHtml,
                     controller: "FeatureBookmarkDetailController",
                     controllerAs: "vm"
                 }
@@ -94,8 +96,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-bookmark/feature-bookmark-dialog.html",
+                            template: featureBookmarkDialogHtml,
                             controller: "FeatureBookmarkDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -134,8 +135,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-bookmark/feature-bookmark-dialog.html",
+                            template: featureBookmarkDialogHtml,
                             controller: "FeatureBookmarkDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -174,8 +174,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-bookmark/feature-bookmark-dialog.html",
+                            template: featureBookmarkDialogHtml,
                             controller: "FeatureBookmarkDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -216,8 +215,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-bookmark/feature-bookmark-delete-dialog.html",
+                            template: featureBookmarkDeleteDialogHtml,
                             controller: "FeatureBookmarkDeleteController",
                             controllerAs: "vm",
                             size: "md",

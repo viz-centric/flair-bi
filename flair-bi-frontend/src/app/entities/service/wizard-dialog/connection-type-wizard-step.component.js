@@ -1,9 +1,9 @@
 import * as angular from 'angular';
+import connectionTypeWizardStepComponentHtml from './connection-type-wizard-step.component.html';
 "use strict";
 
 angular.module("flairbiApp").component("connectionTypeWizardStep", {
-    templateUrl:
-        "app/entities/service/wizard-dialog/connection-type-wizard-step.component.html",
+    template: connectionTypeWizardStepComponentHtml,
     controller: ConnectionTypeWizardStepController,
     controllerAs: "vm",
     bindings: {

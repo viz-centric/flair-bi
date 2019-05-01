@@ -1,9 +1,9 @@
 import * as angular from 'angular';
+import datasourceWizardStepComponentHtml from './datasource-wizard-step.component.html';
 "use strict";
 
 angular.module("flairbiApp").component("datasourceWizardStep", {
-    templateUrl:
-        "app/entities/service/wizard-dialog/datasource-wizard-step.component.html",
+    template: datasourceWizardStepComponentHtml,
     controller: DatasourceWizardStepController,
     controllerAs: "vm",
     bindings: {

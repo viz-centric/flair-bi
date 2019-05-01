@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import fieldPropertiesComponentHtml from './field-properties.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('fieldPropertiesComponent', {
-        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/field-properties.component.html',
+        template: fieldPropertiesComponentHtml,
         controller: fieldPropertiesController,
         controllerAs: 'vm',
         bindings: {

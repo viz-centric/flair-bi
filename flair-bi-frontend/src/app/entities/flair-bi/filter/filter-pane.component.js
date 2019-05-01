@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import filterPaneComponentHtml from './filter-pane.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('filterPaneComponent', {
-        templateUrl: 'app/entities/flair-bi/filter/filter-pane.component.html',
+        template: filterPaneComponentHtml,
         controller: filterPaneController,
         controllerAs: 'vm',
         bindings: {

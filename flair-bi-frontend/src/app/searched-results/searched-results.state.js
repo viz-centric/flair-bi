@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import searchedResultHtml from './searched-results.html';
+import homeTopnavbarHtml from './../home/home-topnavbar.html';
+
 'use strict';
 
 angular
@@ -13,13 +16,13 @@ function stateConfig($stateProvider) {
         url: '/searched-results/{searchCriteria}',
         views: {
             'content@': {
-                templateUrl: 'app/searched-results/searched-results.html',
+                template: searchedResultHtml,
                 controller: 'SearchedResultsController',
                 controllerAs: 'vm'
 
             },
             'topnavbar@': {
-                templateUrl: 'app/home/home-topnavbar.html',
+                template: homeTopnavbarHtml,
                 controller: 'HomeTopNavBarController',
                 controllerAs: 'vm'
             }

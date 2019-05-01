@@ -1,4 +1,11 @@
 import * as angular from 'angular';
+import datasourcesHtml from './datasources.html';
+import datasourcesDetailContentHeaderHtml from './datasources-detail-content-header.html';
+import datasourcesDetailHtml from './datasources-detail.html';
+import dashboardListHtml from './../dashboards/dashboard-list.html';
+import datasourcesDialogHtml from './datasources-dialog.html';
+import wizardDialogHtml from './../service/wizard-dialog.html';
+import datasourcesDeleteDialogHtml from './datasources-delete-dialog.html';
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -16,8 +23,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/datasources/datasources.html",
+                    template: datasourcesHtml,
                     controller: "DatasourcesController",
                     controllerAs: "vm"
                 }
@@ -49,14 +55,12 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content-header@": {
-                    templateUrl:
-                        "app/entities/datasources/datasources-detail-content-header.html",
+                    template: datasourcesDetailContentHeaderHtml,
                     controller: "DatasourcesDetailController",
                     controllerAs: "vm"
                 },
                 "content@": {
-                    templateUrl:
-                        "app/entities/datasources/datasources-detail.html",
+                    template: datasourcesDetailHtml,
                     controller: "DatasourcesDetailController",
                     controllerAs: "vm"
                 }
@@ -98,7 +102,7 @@ function stateConfig($stateProvider) {
         .state("datasources-detail", {
             parent: "datasources-detail-abstract",
             url: "/detail",
-            templateUrl: "app/entities/dashboards/dashboard-list.html",
+            template: dashboardListHtml,
             controller: "DashboardListController",
             controllerAs: "vm",
             resolve: {
@@ -124,8 +128,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasources/datasources-dialog.html",
+                            template:datasourcesDialogHtml,
                             controller: "DatasourcesDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -170,8 +173,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/service/wizard-dialog.html",
+                            template: wizardDialogHtml,
                             controller: "WizardDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -213,8 +215,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasources/datasources-dialog.html",
+                            template: datasourcesDialogHtml,
                             controller: "DatasourcesDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -255,8 +256,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/datasources/datasources-delete-dialog.html",
+                            template: datasourcesDeleteDialogHtml,
                             controller: "DatasourcesDeleteController",
                             controllerAs: "vm",
                             size: "md",

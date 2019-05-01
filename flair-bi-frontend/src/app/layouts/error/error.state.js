@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import errorHtml from './error.html';
+import accessDeniedHtml from './accessdenied.html';
+
 'use strict';
 
 angular
@@ -18,7 +21,7 @@ export function stateConfig($stateProvider) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/layouts/error/error.html'
+                    template: errorHtml
                 }
             },
             resolve: {
@@ -36,7 +39,7 @@ export function stateConfig($stateProvider) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/layouts/error/accessdenied.html'
+                    template: accessDeniedHtml
                 }
             },
             resolve: {

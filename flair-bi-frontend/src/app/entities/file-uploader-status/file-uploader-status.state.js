@@ -1,4 +1,8 @@
 import * as angular from 'angular';
+import fileUploaderStatusesHtml from './file-uploader-statuses.html';
+import fileUploaderStatusDetailHtml from './file-uploader-status-detail.html';
+import fileUploaderStatusDialogHtml from './file-uploader-status-dialog.html';
+import fileUploaderStatusDeleteDialogHtml from './file-uploader-status-delete-dialog.html';
 'use strict';
 
 angular
@@ -18,7 +22,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/file-uploader-status/file-uploader-statuses.html',
+                    template: fileUploaderStatusesHtml,
                     controller: 'FileUploaderStatusController',
                     controllerAs: 'vm'
                 }
@@ -60,7 +64,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/file-uploader-status/file-uploader-status-detail.html',
+                    template: fileUploaderStatusDetailHtml,
                     controller: 'FileUploaderStatusDetailController',
                     controllerAs: 'vm'
                 }
@@ -90,7 +94,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/file-uploader-status/file-uploader-status-dialog.html',
+                    template: fileUploaderStatusDialogHtml,
                     controller: 'FileUploaderStatusDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -114,7 +118,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/file-uploader-status/file-uploader-status-dialog.html',
+                    template: fileUploaderStatusDialogHtml,
                     controller: 'FileUploaderStatusDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -144,7 +148,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/file-uploader-status/file-uploader-status-dialog.html',
+                    template: fileUploaderStatusDialogHtml,
                     controller: 'FileUploaderStatusDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
@@ -168,7 +172,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/file-uploader-status/file-uploader-status-delete-dialog.html',
+                    template: fileUploaderStatusDeleteDialogHtml,
                     controller: 'FileUploaderStatusDeleteController',
                     controllerAs: 'vm',
                     size: 'md',

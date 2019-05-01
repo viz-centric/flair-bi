@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import filterResultComponentHtml from './filter-result.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('filerResultComponent', {
-        templateUrl: 'app/entities/flair-bi/filter/filter-result.component.html',
+        template: filterResultComponentHtml,
         controller: filerResultController,
         controllerAs: 'vm',
         bindings: {}

@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import sqlQueryComponentHtml from './sql-query.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('sqlQueryComponent', {
-        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/sql-query.component.html',
+        template: sqlQueryComponentHtml,
         controller: sqlQueryController,
         controllerAs: 'vm',
         bindings: {

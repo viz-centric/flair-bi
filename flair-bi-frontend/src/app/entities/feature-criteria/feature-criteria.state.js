@@ -1,4 +1,8 @@
 import * as angular from 'angular';
+import featureCriteriaHtml from './feature-criteria.html';
+import featureCriteriaDetailHtml from './feature-criteria-detail.html';
+import featureCriteriaDialogHtml from './feature-criteria-dialog.html';
+import featureCriteriaDeleteDialogHtml from './feature-criteria-delete-dialog.html';
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -16,8 +20,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/feature-criteria/feature-criteria.html",
+                    template: featureCriteriaHtml,
                     controller: "FeatureCriteriaController",
                     controllerAs: "vm"
                 }
@@ -43,8 +46,7 @@ function stateConfig($stateProvider) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/feature-criteria/feature-criteria-detail.html",
+                    template: featureCriteriaDetailHtml,
                     controller: "FeatureCriteriaDetailController",
                     controllerAs: "vm"
                 }
@@ -94,8 +96,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-criteria/feature-criteria-dialog.html",
+                            template: featureCriteriaDialogHtml,
                             controller: "FeatureCriteriaDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -134,8 +135,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-criteria/feature-criteria-dialog.html",
+                            template: featureCriteriaDialogHtml,
                             controller: "FeatureCriteriaDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -174,8 +174,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-criteria/feature-criteria-dialog.html",
+                            template: featureCriteriaDialogHtml,
                             controller: "FeatureCriteriaDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -216,8 +215,7 @@ function stateConfig($stateProvider) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/feature-criteria/feature-criteria-delete-dialog.html",
+                            template: featureCriteriaDeleteDialogHtml,
                             controller: "FeatureCriteriaDeleteController",
                             controllerAs: "vm",
                             size: "md",

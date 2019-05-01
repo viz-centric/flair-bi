@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import fieldTypeDialogHtml from './field-type-dialog.html';
+import fieldTypeDetailHtml from './field-type-detail.html';
+import fieldTypeDeleteDialogHtml from './field-type-delete-dialog.html';
 "use strict";
 
 angular.module("flairbiApp").config(stateConfig);
@@ -22,8 +25,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/field-type/field-type-dialog.html",
+                            template: fieldTypeDialogHtml,
                             controller: "FieldTypeDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -62,8 +64,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/field-type/field-type-detail.html",
+                    template: fieldTypeDetailHtml,
                     controller: "FieldTypeDetailController",
                     controllerAs: "vm"
                 }
@@ -117,8 +118,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/field-type/field-type-delete-dialog.html",
+                            template: fieldTypeDeleteDialogHtml,
                             controller: "FieldTypeDeleteDialogController",
                             controllerAs: "vm",
                             backdrop: "static",

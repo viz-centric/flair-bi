@@ -1,9 +1,10 @@
 import * as angular from 'angular';
+import testConnectionWizardStepComponentHtml from './test-connection-wizard-step.component.html';
+
 "use strict";
 
 angular.module("flairbiApp").component("testConnectionWizardStep", {
-    templateUrl:
-        "app/entities/service/wizard-dialog/test-connection-wizard-step.component.html",
+    template: testConnectionWizardStepComponentHtml,
     controller: TestConnectionWizardStepController,
     controllerAs: "vm",
     bindings: {
@@ -22,6 +23,7 @@ TestConnectionWizardStepController.$inject = [
     "Query",
     "$q"
 ];
+
 function TestConnectionWizardStepController(
     Connections,
     Datasources,
@@ -122,7 +124,7 @@ function TestConnectionWizardStepController(
         };
 
         Connections.fetchFeatures(
-            { datasourceId: datasourceId },
+            {datasourceId: datasourceId},
             vm.queryDTO,
             function (data) {
                 onFeaturesFetched(data);
@@ -144,7 +146,7 @@ function TestConnectionWizardStepController(
                 name: prop,
                 featureType:
                     typeof data[prop] === "string" ||
-                        data[prop] instanceof String
+                    data[prop] instanceof String
                         ? "DIMENSION"
                         : "MEASURE",
                 type: metaData[prop],
@@ -156,9 +158,11 @@ function TestConnectionWizardStepController(
     function rollbackConnection() {
         if (!vm.selectedConnection) {
             Connections.delete(
-                { id: vm.connection.id },
-                function () { },
-                function () { }
+                {id: vm.connection.id},
+                function () {
+                },
+                function () {
+                }
             );
         }
     }
@@ -168,7 +172,8 @@ function TestConnectionWizardStepController(
             function (conn) {
                 saveDatasource(conn.linkId);
             },
-            function () { }
+            function () {
+            }
         );
     }
 }

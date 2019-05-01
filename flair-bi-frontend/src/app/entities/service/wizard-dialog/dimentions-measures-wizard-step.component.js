@@ -1,11 +1,12 @@
 import * as angular from 'angular';
+import dimensionsMeasuresWizardStepComponentHtml from './dimentions-measures-wizard-step.component.html';
+
 "use strict";
 
 angular
     .module("flairbiApp")
     .component("dimentionsMeasuresWizardStep", {
-        templateUrl: "app/entities/service/wizard-dialog/dimentions-measures-wizard-step.component.htm" +
-            "l",
+        template: dimensionsMeasuresWizardStepComponentHtml,
         controller: DatasourceWizardStepController,
         controllerAs: "vm",
         bindings: {
@@ -17,6 +18,7 @@ angular
     });
 
 DatasourceWizardStepController.$inject = ["$scope", "Features", "$rootScope", "$state"];
+
 function DatasourceWizardStepController($scope, Features, $rootScope, $state) {
     var vm = this;
     vm.toggleCheckbox = toggleCheckbox;
@@ -27,9 +29,12 @@ function DatasourceWizardStepController($scope, Features, $rootScope, $state) {
     vm.finishResult = '';
     ////////////////
 
-    vm.$onInit = function () { };
-    vm.$onChanges = function (changesObj) { };
-    vm.$onDestroy = function () { };
+    vm.$onInit = function () {
+    };
+    vm.$onChanges = function (changesObj) {
+    };
+    vm.$onDestroy = function () {
+    };
 
     function openCalendar(date) {
         vm.datePickerOpenStatus[date] = true;
@@ -71,7 +76,7 @@ function DatasourceWizardStepController($scope, Features, $rootScope, $state) {
                     title: "Saved"
                 });
 
-                vm.onFinishHandler({ result: result });
+                vm.onFinishHandler({result: result});
                 $state.go('^');
             }, function (err) {
                 vm.finishResult = "error";

@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import fitlerElementGrpcComponentHtml from './filter-element-grpc.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('filterElementGrpcComponent', {
-        templateUrl: 'app/entities/flair-bi/filter/filter-element-grpc.component.html',
+        template: fitlerElementGrpcComponentHtml,
         controller: filterElementGrpcController,
         controllerAs: 'vm',
         bindings: {

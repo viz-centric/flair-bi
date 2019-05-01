@@ -1,10 +1,12 @@
 import * as angular from 'angular';
+import viewComponentHtml from './view.component.html';
+
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('viewComponent', {
-        templateUrl: 'app/entities/views/view.component.html',
+        template: viewComponentHtml,
         controller: viewController,
         controllerAs: 'vm',
         bindings: {
@@ -18,6 +20,7 @@ viewController.$inject = ['$scope', 'AccountDispatch', '$stateParams'];
 function viewController($scope, AccountDispatch, $stateParams) {
     var vm = this;
     vm.$onInit = activate;
+
     ////////////////
 
 

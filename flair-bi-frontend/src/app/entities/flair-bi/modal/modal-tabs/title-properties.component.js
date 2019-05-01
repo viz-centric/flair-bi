@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import titlePropertiesComponentHtml from './title-properties.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('titlePropertiesComponent', {
-        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/title-properties.component.html',
+        template: titlePropertiesComponentHtml,
         controller: titlePropertiesController,
         controllerAs: 'vm',
         bindings: {

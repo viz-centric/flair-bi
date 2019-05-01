@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import recentlyAccessedHtml from './recently-accessed.html';
+import recentlyCreatedHtml from './recently-created.html';
+
 'use strict';
 
 angular
@@ -13,7 +16,7 @@ function stateConfig($stateProvider) {
         url: '/recently-accessed/{id}',
         views: {
             'content@': {
-                templateUrl: 'app/recents/recently-accessed.html',
+                template: recentlyAccessedHtml,
                 controller: 'recentlyAccessedController',
                 controllerAs: 'vm'
 
@@ -24,7 +27,7 @@ function stateConfig($stateProvider) {
         url: '/recently-created/{id}',
         views: {
             'content@': {
-                templateUrl: 'app/recents/recently-created.html',
+                template: recentlyCreatedHtml,
                 controller: 'recentlyCreatedController',
                 controllerAs: 'vm'
 

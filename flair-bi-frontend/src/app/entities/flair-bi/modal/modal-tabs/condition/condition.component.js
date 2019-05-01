@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import conditionComponentHtml from './condition.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('conditionComponent', {
-        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/condition/condition.component.html',
+        template: conditionComponentHtml,
         controller: conditionComponent,
         controllerAs: 'vm',
         bindings: {

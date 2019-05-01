@@ -1,9 +1,9 @@
 import * as angular from 'angular';
+import cacheWizardStepComponentHtml from './cache-wizard-step.component.html';
 "use strict";
 
 angular.module("flairbiApp").component("cacheWizardStep", {
-    templateUrl:
-        "app/entities/service/wizard-dialog/cache-wizard-step.component.html",
+    template: cacheWizardStepComponentHtml,
     controller: CacheWizardStepController,
     controllerAs: "vm",
     bindings: {

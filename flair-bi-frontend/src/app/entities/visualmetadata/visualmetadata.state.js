@@ -1,4 +1,9 @@
 import * as angular from 'angular';
+import visualmetadataHtml from './visualmetadata.html';
+import visualmetadataDetailHtml from './visualmetadata-detail.html';
+import flairIntegrationHtml from './flair-integration.html';
+import visualmetadataDialogHtml from './visualmetadata-dialog.html';
+import visualmetadataDeleteDialogHtml from './visualmetadata-delete-dialog.html';
 
 "use strict";
 
@@ -17,8 +22,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/visualmetadata/visualmetadata.html",
+                    template: visualmetadataHtml,
                     controller: "VisualmetadataController",
                     controllerAs: "vm"
                 }
@@ -45,8 +49,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "content@": {
-                    templateUrl:
-                        "app/entities/visualmetadata/visualmetadata-detail.html",
+                    template: visualmetadataDetailHtml,
                     controller: "VisualmetadataDetailController",
                     controllerAs: "vm"
                 }
@@ -95,8 +98,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
             },
             views: {
                 "flairintegration@": {
-                    templateUrl:
-                        "app/entities/visualmetadata/flair-integration.html",
+                    template: flairIntegrationHtml,
                     controller: "flairIntegrationController",
                     controllerAs: "vm"
                 }
@@ -148,8 +150,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualmetadata/visualmetadata-dialog.html",
+                            template: visualmetadataDialogHtml,
                             controller: "VisualmetadataDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -194,8 +195,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualmetadata/visualmetadata-dialog.html",
+                            template: visualmetadataDialogHtml,
                             controller: "VisualmetadataDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -264,8 +264,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualmetadata/visualmetadata-dialog.html",
+                            template: visualmetadataDialogHtml,
                             controller: "VisualmetadataDialogController",
                             controllerAs: "vm",
                             backdrop: "static",
@@ -306,8 +305,7 @@ function stateConfig($stateProvider, PERMISSIONS) {
                 function ($stateParams, $state, $uibModal) {
                     $uibModal
                         .open({
-                            templateUrl:
-                                "app/entities/visualmetadata/visualmetadata-delete-dialog.html",
+                            template: visualmetadataDeleteDialogHtml,
                             controller: "VisualmetadataDeleteController",
                             controllerAs: "vm",
                             size: "md",

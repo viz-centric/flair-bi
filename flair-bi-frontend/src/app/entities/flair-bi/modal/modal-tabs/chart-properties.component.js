@@ -1,10 +1,11 @@
 import * as angular from 'angular';
+import chartPropertiesComponentHtml from './chart-properties.component.html';
 'use strict';
 
 angular
     .module('flairbiApp')
     .component('chartPropertiesComponent', {
-        templateUrl: 'app/entities/flair-bi/modal/modal-tabs/chart-properties.component.html',
+        template: chartPropertiesComponentHtml,
         controller: chartPropertiesController,
         controllerAs: 'vm',
         bindings: {

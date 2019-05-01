@@ -1,4 +1,5 @@
-import angular from 'angular';
+import angular from 'angular'
+import oktaLogoV2 from 'content/svgs/okta-logo-v2.svg';
 'use strict';
 
 angular
@@ -9,6 +10,7 @@ LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModa
 
 function LoginController($rootScope, $state, $timeout, Auth, $uibModalInstance) {
     var vm = this;
+    vm.oktaLogoV2 = oktaLogoV2;
 
     vm.authenticationError = false;
     vm.cancel = cancel;

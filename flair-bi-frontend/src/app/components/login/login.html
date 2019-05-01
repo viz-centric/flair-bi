@@ -8,7 +8,8 @@
             <h1 data-translate="login.title">Sign in</h1>
         </div>
         <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-danger" ng-show="vm.authenticationError" data-translate="login.messages.error.authentication">
+            <div class="alert alert-danger" ng-show="vm.authenticationError"
+                 data-translate="login.messages.error.authentication">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
         </div>
@@ -16,12 +17,14 @@
             <form class="form" role="form" ng-submit="vm.login($event)">
                 <div class="form-group">
                     <label for="username" data-translate="global.form.username">Login</label>
-                    <input type="text" class="form-control" id="username" placeholder="{{'global.form.username.placeholder' | translate}}" ng-model="vm.username">
+                    <input type="text" class="form-control" id="username"
+                           placeholder="{{'global.form.username.placeholder' | translate}}" ng-model="vm.username">
                 </div>
                 <div class="form-group">
                     <label for="password" data-translate="login.form.password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
-                        ng-model="vm.password">
+                    <input type="password" class="form-control" id="password"
+                           placeholder="{{'login.form.password.placeholder' | translate}}"
+                           ng-model="vm.password">
                 </div>
                 <div class="form-group">
                     <label for="rememberMe">
@@ -39,7 +42,9 @@
 <div class="modal-footer">
     <div class="pull-left modal-footer-login">
         <button type="button" class="btn btn-w-m btn-link">Login using :</button>
-        <a href="/login"><img src="content/svgs/okta-logo-v2.svg" /></a>
+        <a href="/login"><img ng-src="{{vm.oktaLogoV2}}" alt=""/></a>
     </div>
-    <button type="button" class="btn btn-w-m btn-link" ng-click="vm.requestResetPassword()" data-translate="login.password.forgot">Did you forget your password?</button>
+    <button type="button" class="btn btn-w-m btn-link" ng-click="vm.requestResetPassword()"
+            data-translate="login.password.forgot">Did you forget your password?
+    </button>
 </div>

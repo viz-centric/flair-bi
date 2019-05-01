@@ -20,7 +20,7 @@
                         <!--start.box QUICK START-->
                         <div class="box-title cf">
                             <p>Quick Start</p>
-                            <img src="{{vm.boxFlag1}}" alt="quick start icon">
+                            <img ng-src="{{vm.boxFlag1}}" alt="quick start icon">
                         </div>
                         <div class="box-content cf flex-flow">
                             <a ui-sref="dashboards.new" title="Dashboards" class="quick-box new-dash">
@@ -73,13 +73,13 @@
                         <!--start.box RECENTLY CREATED-->
                         <div class="box-title cf">
                             <p>Recently Created</p>
-                            <img src="{{vm.boxFlag3}}" alt="recently created icon">
+                            <img ng-src="{{vm.boxFlag3}}" alt="recently created icon">
                         </div>
                         <div class="box-content cf">
                             <div id="on-recently-box1" class="recently-box cf" ng-click="vm.onRecentlyBox1()">
-                                <img src="{{vm.accessed}}" alt="accessed icon">
+                                <img ng-src="{{vm.accessed}}" alt="accessed icon">
                                 <p>Accessed</p>
-                                <img src="{{vm.expandArrow}}" alt="expand arrow icon" class="expand1 rotate">
+                                <img ng-src="{{vm.expandArrow}}" alt="expand arrow icon" class="expand1 rotate">
                                 <div class="blue-line"></div>
                             </div>
 
@@ -124,9 +124,9 @@
 
 
                             <div class="recently-box cf recently-box2" ng-click="vm.onRecentlyBox2()">
-                                <img src="{{vm.created}}" alt="created icon">
+                                <img ng-src="{{vm.created}}" alt="created icon">
                                 <p>Created</p>
-                                <img src="{{vm.expandArrow}}" alt="expand arrow icon" class="expand2">
+                                <img ng-src="{{vm.expandArrow}}" alt="expand arrow icon" class="expand2">
                                 <div class="blue-line"></div>
                             </div>
 
@@ -180,7 +180,7 @@
                 <!--end LEFT SIDE-->
 
                 <div id="welcome-message" class="hidden-sm hidden-xs hidden-md">
-                    <img src="{{vm.centralLogo}}" alt="central logo">
+                    <img ng-src="{{vm.centralLogo}}" alt="central logo">
                     <p>Welcome to</p>
                     <p>Flair BI</p>
                     <p>Brand new <br> Business Intelligence tool <br> in 2018</p>
@@ -196,7 +196,7 @@
                         <div class="box-title cf">
 
                             <p>Help</p>
-                            <img src="{{vm.boxFlag2}}" alt="help icon">
+                            <img ng-src="{{vm.boxFlag2}}" alt="help icon">
 
                         </div>
 
@@ -204,7 +204,7 @@
 
                             <a href="#" class="help-box cf">
 
-                                <img src="{{vm.repository}}" alt="repository icon">
+                                <img ng-src="{{vm.repository}}" alt="repository icon">
 
                                 <p>Repository &nbsp; <i style="font-size: 16px" class="fa fa-external-link-square"></i>
                                 </p>
@@ -218,7 +218,7 @@
 
                             <a href="#" class="help-box cf">
 
-                                <img src="{{vm.documentation}}" alt="repository icon">
+                                <img ng-src="{{vm.documentation}}" alt="repository icon">
 
                                 <p>Documentation &nbsp; <i style="font-size: 16px"
                                                            class="fa fa-external-link-square"></i></p>
@@ -239,7 +239,7 @@
                         <div class="box-title cf">
 
                             <p>Admin</p>
-                            <img src="{{vm.boxFlag4}}" alt="admin icon">
+                            <img ng-src="{{vm.boxFlag4}}" alt="admin icon">
 
                         </div>
 
@@ -314,7 +314,7 @@
                         <div class="box-title cf">
 
                             <p>User</p>
-                            <img src="{{vm.boxFlag4}}" alt="admin icon">
+                            <img ng-src="{{vm.boxFlag4}}" alt="admin icon">
 
                         </div>
 

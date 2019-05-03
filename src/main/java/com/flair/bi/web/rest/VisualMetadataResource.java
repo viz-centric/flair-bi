@@ -151,4 +151,22 @@ public class VisualMetadataResource {
         visualMetadataService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("visualmetadata", id)).build();
     }
+    
+    /**
+     * GET  /visualmetadata/:id : get the "id" visualmetadata.
+     *
+     * @param id the id of the visualmetadata to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the visualmetadata, or with status 404 (Not Found)
+     */
+    @GetMapping("/external/visualMetaDataById/{id}")
+    @Timed
+    public ResponseEntity<VisualMetadata> getVisualMetadata2(@PathVariable String id) {
+        log.debug("REST request to get VisualMetadata : {}", id);
+        VisualMetadata visualMetadata = visualMetadataService.findOne(id);
+        return Optional.ofNullable(visualMetadata)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }

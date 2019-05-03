@@ -160,7 +160,7 @@ public class VisualMetadataResource {
      */
     @GetMapping("/external/visualMetaDataById/{id}")
     @Timed
-    public ResponseEntity<VisualMetadata> getVisualMetadata2(@PathVariable String id) {
+    public ResponseEntity<VisualMetadata> getVisualMetadataExternal(@PathVariable String id) {
         log.debug("REST request to get VisualMetadata : {}", id);
         VisualMetadata visualMetadata = visualMetadataService.findOne(id);
         return Optional.ofNullable(visualMetadata)

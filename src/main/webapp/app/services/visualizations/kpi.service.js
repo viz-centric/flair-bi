@@ -35,7 +35,7 @@
                     result['kpiIconExpression'] = [];
 
                     for (var i = 0; i < measures.length; i++) {
-                        result['kpiDisplayName'].push("Display name");
+                        result['kpiDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
                         result['kpiAlignment'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text alignment'));
                         result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                         result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));

@@ -102,6 +102,8 @@
                     var clusteredhorizontalbar = flairVisualizations.clusteredhorizontalbar()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService)
                         .print(false)
 
                     svg.datum(record.data)

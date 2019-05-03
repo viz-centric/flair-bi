@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>0.0.33-SNAPSHOT</version>
+    <version>0.0.33</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -18,7 +18,7 @@
     <scm>
         <connection>scm:git:https://github.com/viz-centric/flair-bi.git</connection>
         <developerConnection>scm:git:https://github.com/viz-centric/flair-bi.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.0.33</tag>
         <url>https://github.com/viz-centric/flair-bi.git</url>
     </scm>
     <distributionManagement>
@@ -34,6 +34,7 @@
         </repository>
     </distributionManagement>
     <properties>
+        <all-grpc.version>1.20.0</all-grpc.version>
         <apache-httpclient.version>4.5</apache-httpclient.version>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.9.0</assertj-core.version>
@@ -105,7 +106,6 @@
         <spring-boot.version>1.5.13.RELEASE</spring-boot.version>
         <spring-security.version>4.1.3.RELEASE</spring-security.version>
         <springfox.version>2.8.0</springfox.version>
-        <all-grpc.version>1.20.0</all-grpc.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -182,11 +182,6 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty-shaded</artifactId>
-            <version>${all-grpc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ryantenney.metrics</groupId>
@@ -272,22 +267,27 @@
             <version>3.1.0</version>
             <exclusions>
                 <exclusion>
-                    <groupId>io.grpc</groupId>
                     <artifactId>grpc-netty</artifactId>
+                    <groupId>io.grpc</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-tcnative-boringssl-static</artifactId>
-            <version>2.0.20.Final</version>
-            <scope>runtime</scope>
-            <classifier>${os.detected.classifier}</classifier>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${all-grpc.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-tcnative-boringssl-static</artifactId>
+            <version>2.0.20.Final</version>
+            <classifier>${os.detected.classifier}</classifier>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
@@ -563,7 +563,6 @@
         </repository>
     </repositories>
     <build>
-        <defaultGoal>spring-boot:run</defaultGoal>
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
@@ -571,6 +570,7 @@
                 <version>1.5.0.Final</version>
             </extension>
         </extensions>
+        <defaultGoal>spring-boot:run</defaultGoal>
         <pluginManagement>
             <plugins>
                 <plugin>

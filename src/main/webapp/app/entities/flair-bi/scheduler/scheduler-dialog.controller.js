@@ -29,6 +29,7 @@
         vm.endDateFormat='yyyy-MM-dd';
         vm.scheduleObj={
             "cron_exp":"",
+            "visualizationid":"",
             "report": {
                 "connection_name": "",
                 "report_name": "",
@@ -78,7 +79,7 @@
 
         function buildScheduleObject(visualMetaData,datasource){
         //report's data
-        //vm.scheduleObj.report.connection_id=datasource.connectionName;
+        vm.scheduleObj.visualizationid=visualMetaData.id;
         vm.scheduleObj.report.connection_name=datasource.name;
         vm.scheduleObj.report.subject=visualMetaData.metadataVisual.name;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);

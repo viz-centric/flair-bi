@@ -4,6 +4,7 @@ public class SchedulerDTO {
 
 	private String userid;
 	private String cron_exp;
+	private String visualizationid;
 	private ReportDTO report;
 	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
@@ -58,12 +59,20 @@ public class SchedulerDTO {
 	public void setCron_exp(String cron_exp) {
 		this.cron_exp = cron_exp;
 	}
+	
+	public String getVisualizationid() {
+		return visualizationid;
+	}
+
+	public void setVisualizationid(String visualizationid) {
+		this.visualizationid = visualizationid;
+	}
 
 	@Override
 	public String toString() {
-		return "SchedulerDTO [userid=" + userid + ", cron_exp=" + cron_exp + ", report=" + report
-				+ ", report_line_item=" + report_line_item + ", assign_report=" + assign_report + ", schedule="
-				+ schedule + "]";
+		return "SchedulerDTO [userid=" + userid + ", cron_exp=" + cron_exp + ", visualizationid=" + visualizationid
+				+ ", report=" + report + ", report_line_item=" + report_line_item + ", assign_report=" + assign_report
+				+ ", schedule=" + schedule + "]";
 	}	
 	
 }

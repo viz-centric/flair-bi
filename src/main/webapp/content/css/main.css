@@ -1175,14 +1175,14 @@ nav.navbar-static-top {
 #slider {
   box-shadow: 0 0 3px 0 #a8a8a8;
   background: #fafafa;
-  width: 15vw;
+  width: 17vw;
   position: fixed;
   right: 0;
   display: none;
   transition-duration: 0.5s;
   transition-property: top, bottom, left, right;
   z-index: 10;
-  height: calc(100% - 123px);
+  height: calc(100% - 95px);
   overflow-y: auto;
   margin-right: 46px;
   margin-top: 58px; }
@@ -1240,8 +1240,8 @@ nav.navbar-static-top {
             margin-top: 10px;
             padding: 10px 15px; }
             #slider .resource-nav .panel .panel-body .list-group .visualContainer .visual-items .visual-sub-items svg {
-              height: 28px;
-              width: 28px;
+              height: 35px;
+              width: 35px;
               fill: #676a6c; }
         #slider .resource-nav .panel .panel-body .list-group .list-group-item {
           border: none;
@@ -1397,8 +1397,8 @@ property-component .control-label-color-picker {
     .viz-properties .form-inline select.legend-position {
       width: 39%; }
     .viz-properties .form-inline .rzslider {
-      width: 67%;
-      margin-top: 18px; }
+      width: 95%;
+      margin-top: 30px; }
 
 .properties-sidebar button.btn {
   margin: 1.5vw .5vw; }

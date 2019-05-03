@@ -1,0 +1,6 @@
+grpc:
+  tls:
+    enabled: ${GRPC_SSL_ENABLED:false}
+    clientCertChainFile: ${GRPC_CERT:/app/clientCertChainFile.crt}
+    clientPrivateKeyFile: ${GRPC_KEY:/app/clientPrivateKeyFile.pem}
+    trustCertCollectionFile: ${GRPC_TRUST_CERT:/app/trustCertCollectionFile.crt}

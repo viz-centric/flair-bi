@@ -97,7 +97,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('class', 'tooltip');
+                        .attr('class', 'custom_tooltip');
 
                     var clusteredhorizontalbar = flairVisualizations.clusteredhorizontalbar()
                         .config(getProperties(VisualizationUtils, record))

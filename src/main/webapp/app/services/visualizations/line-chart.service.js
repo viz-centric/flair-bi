@@ -99,7 +99,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip')
+                      .attr('class', 'custom_tooltip')
 
                     var line = flairVisualizations.line()
                         .config(getProperties(VisualizationUtils, record))

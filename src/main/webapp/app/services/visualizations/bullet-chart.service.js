@@ -16,7 +16,8 @@
 
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
-                        measures = features.measures;
+                        measures = features.measures,
+                        colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = [D3Utils.getNames(dimensions)[0]];
                     result['measures'] = D3Utils.getNames(measures);
@@ -26,8 +27,10 @@
                     result['fontSize'] = parseInt(VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font size'));
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Value on Points');
 
-                    result['valueColor'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display colour');
-                    result['targetColor'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Target colour');
+                    var valueColor = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display colour');
+                    result['valueColor'] = (valueColor == null) ? colorSet[0] : valueColor;
+                    var targetColor = VisualizationUtils.getFieldPropertyValue(measures[1], 'Target colour');
+                    result['targetColor'] = (targetColor == null) ? colorSet[1] : targetColor;
 
                     result['orientation'] = VisualizationUtils.getPropertyValue(record.properties, 'Orientation');
                     result['segments'] = VisualizationUtils.getPropertyValue(record.properties, 'Segments');
@@ -55,11 +58,11 @@
                         .style('position', 'relative');
 
                     var svg = div.append('svg')
-                        .attr('width', element[0].clientWidth )
-                        .attr('height', element[0].clientHeight )
+                        .attr('width', element[0].clientWidth)
+                        .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip')
+                        .attr('class', 'custom_tooltip')
 
                     var bulletchart = flairVisualizations.bullet()
                         .config(getProperties(VisualizationUtils, record))

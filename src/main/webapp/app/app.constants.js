@@ -4,12 +4,17 @@
     angular
         .module('flairbiApp')
 <<<<<<< HEAD
+<<<<<<< HEAD
         .constant('VERSION', "0.0.18-SNAPSHOT")
         .constant('DEBUG_INFO_ENABLED', true)
 =======
         .constant('VERSION', "0.0.21-SNAPSHOT")
         .constant('DEBUG_INFO_ENABLED', false)
 >>>>>>> 355bd3104851a8f32923a80d0054a58431ca8fa0
+=======
+        .constant('VERSION', "0.0.30-SNAPSHOT")
+        .constant('DEBUG_INFO_ENABLED', true)
+>>>>>>> f232a5d10778e53a80df47cd70c54522235b212b
         .constant('PERMISSION_TYPES', {
 	"APPLICATION": "APPLICATION",
 	"DASHBOARD": "DASHBOARD",

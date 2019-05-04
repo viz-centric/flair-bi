@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -54,15 +55,18 @@ function GenerateBulletChart(VisualizationUtils, $rootScope, D3Utils, filterPara
                     .style('position', 'relative');
 
                 var svg = div.append('svg')
-                    .attr('width', element[0].clientWidth )
-                    .attr('height', element[0].clientHeight )
+                    .attr('width', element[0].clientWidth)
+                    .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
                     .attr('id', 'tooltip')
 
                 var bulletchart = flairVisualizations.bullet()
                     .config(getProperties(VisualizationUtils, record))
-                    .tooltip(true);
+                    .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
+                    .print(false);
 
                 svg.datum(record.data)
                     .call(bulletchart);

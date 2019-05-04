@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 
 
@@ -74,6 +75,8 @@ function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                 var treemap = flairVisualizations.treemap()
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
                     .print(false);
 
                 svg.datum(record.data)

@@ -47,7 +47,7 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
             } else {
                 d3.select(element[0]).html('')
                 var div = d3.select(element[0]).append('div')
-                    .attr('id', 'pie-' + element[0].id)
+                    .attr('id', 'doughnut-' + element[0].id)
                     .style('width', element[0].clientWidth + 'px')
                     .style('height', element[0].clientHeight + 'px')
                     .style('overflow', 'hidden')
@@ -64,6 +64,8 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                 var doughnut = flairVisualizations.doughnut()
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
                     .print(false);
 
                 svg.datum(record.data)

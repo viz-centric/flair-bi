@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -66,7 +67,10 @@ function GenerateSankey(VisualizationUtils, $rootScope, D3Utils, filterParameter
 
                 var sankey = flairVisualizations.sankey()
                     .config(getProperties(VisualizationUtils, record))
-                    .tooltip(true);
+                    .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
+                    .print(true);
 
                 svg.datum(record.data)
                     .call(sankey);

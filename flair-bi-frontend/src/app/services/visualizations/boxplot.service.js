@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 "use strict";
 angular.module("flairbiApp").factory("GenerateBoxplot", GenerateBoxplot);
 
@@ -30,7 +31,7 @@ function GenerateBoxplot(
                     eachMeasure,
                     allMeasures = [];
 
-                result["dimension"] =  D3Utils.getNames(dimensions)[0];
+                result["dimension"] = D3Utils.getNames(dimensions)[0];
                 result["measure"] = D3Utils.getNames(measures);
 
                 result["maxMes"] = measures.length;
@@ -70,11 +71,13 @@ function GenerateBoxplot(
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('id', 'tooltip')
+                    .attr('id', 'tooltip');
 
                 var boxplot = flairVisualizations.boxplot()
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
                     .print(false);
 
                 svg.datum(record.data)

@@ -144,12 +144,13 @@
     "angular-cron-generator": {
       "main": [
         "dist/angular-cron-generator.css",
-        "dist/angular-cron-generator.js"
+        "dist/angular-cron-generator.min.js"
       ]
     },
     "flair-visualizations": {
       "main": [
-        "dist/main.bundle.js"
+        "dist/main.bundle.js",
+        "styles/stylesheets/screen.css"
       ]
     }
   },

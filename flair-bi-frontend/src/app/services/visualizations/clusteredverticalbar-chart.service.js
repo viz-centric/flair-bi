@@ -74,7 +74,8 @@ function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Uti
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var clusteredverticalbar = $rootScope.updateWidget[record.id];
-                    clusteredverticalbar.update(record.data);
+                    var filter = clusteredverticalbar.update(record.data);
+
                 }
             } else {
                 d3.select(element[0]).html('')
@@ -96,6 +97,8 @@ function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Uti
                 var clusteredverticalbar = flairVisualizations.clusteredverticalbar()
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
                     .print(false);
 
                 svg.datum(record.data)

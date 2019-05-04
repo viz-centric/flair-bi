@@ -52,6 +52,7 @@ function GenerateMap(VisualizationUtils, $rootScope, D3Utils, filterParametersSe
                 var map = flairVisualizations.map()
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
+                    .print(false)
 
 
                 svg.datum(record.data)

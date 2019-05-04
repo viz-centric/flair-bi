@@ -103,6 +103,8 @@ function GenerateClusteredhorizontalbarChart(VisualizationUtils, $rootScope, D3U
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
                     .print(false)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService);
 
                 svg.datum(record.data)
                     .call(clusteredhorizontalbar);

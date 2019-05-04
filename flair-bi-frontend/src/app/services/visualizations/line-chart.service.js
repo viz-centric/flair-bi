@@ -72,7 +72,7 @@ function GenerateLineChart(VisualizationUtils, $rootScope, D3Utils, filterParame
                     result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
                     var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                     result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
-                    result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type'));
+                    result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type').toLowerCase());
                     result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                 }
                 return result;
@@ -103,6 +103,8 @@ function GenerateLineChart(VisualizationUtils, $rootScope, D3Utils, filterParame
                 var line = flairVisualizations.line()
                     .config(getProperties(VisualizationUtils, record))
                     .tooltip(true)
+                    .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
                     .print(false);
 
                 svg.datum(record.data)

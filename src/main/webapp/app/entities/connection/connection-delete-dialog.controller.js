@@ -46,19 +46,12 @@
             vm["is" + entity + "Collapsed"] = !vm["is" + entity + "Collapsed"];
         }
 
-        function deleteDatasources() {
-            Datasources.delete(
-                { connectionName: vm.connection.linkId },
-                function(res) {
-                    $uibModalInstance.close(true);
-                },
-                function(err) {}
-            );
-        }
-
         function confirmDelete(id) {
             Connections.delete(
-                { id: id, serviceId: $stateParams.id }
+                { id: id, serviceId: $stateParams.id },
+                function () {
+                    $uibModalInstance.close();
+                }
             );
         }
     }

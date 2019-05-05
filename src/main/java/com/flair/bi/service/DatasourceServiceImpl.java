@@ -1,13 +1,13 @@
 package com.flair.bi.service;
 
 import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.DatasourceStatus;
+import com.flair.bi.domain.QDatasource;
 import com.flair.bi.repository.DatasourceRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,6 @@ import java.util.List;
 public class DatasourceServiceImpl implements DatasourceService {
 
     private final DatasourceRepository datasourceRepository;
-
-    private final DashboardService dashboardService;
 
     /**
      * Save a datasource.
@@ -49,7 +47,10 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Transactional(readOnly = true)
     public List<Datasource> findAll(Predicate predicate) {
         log.debug("Request to get all Datasource");
-        return (List<Datasource>) datasourceRepository.findAll(predicate);
+        BooleanBuilder b = new BooleanBuilder(predicate);
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
+                .or(QDatasource.datasource.status.isNull()));
+        return (List<Datasource>) datasourceRepository.findAll(b);
     }
 
     /**
@@ -74,9 +75,8 @@ public class DatasourceServiceImpl implements DatasourceService {
     public void delete(Long id) {
         log.debug("Request to delete Datasource : {}", id);
         final Datasource datasource = datasourceRepository.findOne(id);
-        // delete all dashboards
-        datasource.getDashboardSet().forEach(x -> dashboardService.delete(x.getId()));
-        datasourceRepository.delete(datasource);
+        datasource.setStatus(DatasourceStatus.DELETED);
+        datasourceRepository.save(datasource);
     }
 
     @Override
@@ -93,17 +93,20 @@ public class DatasourceServiceImpl implements DatasourceService {
      */
     @Override
     public void delete(Predicate predicate) {
-        final Iterable<Datasource> datasources = datasourceRepository.findAll(predicate);
-        // remove all dashboards before you delete datasource
-        datasources.forEach(x -> x.getDashboardSet().forEach(y -> dashboardService.delete(y.getId())));
-        datasourceRepository.delete(datasources);
+        BooleanBuilder b = new BooleanBuilder(predicate);
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
+                .or(QDatasource.datasource.status.isNull()));
+        final Iterable<Datasource> datasources = datasourceRepository.findAll(b);
+        datasourceRepository.save(datasources);
     }
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Datasource> search(Pageable pageable, Predicate predicate) {
         log.debug("Request to get Seached Datasource");
-        BooleanBuilder booleanBuilder = new BooleanBuilder(predicate);
-        return datasourceRepository.findAll(booleanBuilder,pageable);
+        BooleanBuilder b = new BooleanBuilder(predicate);
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
+                .or(QDatasource.datasource.status.isNull()));
+        return datasourceRepository.findAll(b, pageable);
 	}
 }

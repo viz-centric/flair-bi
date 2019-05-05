@@ -58,10 +58,7 @@
 
         function confirmDelete(id) {
             Connections.delete(
-                { id: id, serviceId: $stateParams.id },
-                function() {
-                    deleteDatasources();
-                }
+                { id: id, serviceId: $stateParams.id }
             );
         }
     }

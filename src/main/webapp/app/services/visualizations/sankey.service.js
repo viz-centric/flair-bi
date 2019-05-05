@@ -63,11 +63,14 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip')
+                      .attr('class', 'custom_tooltip')
 
                     var sankey = flairVisualizations.sankey()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true);
+                        .tooltip(true)
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService)
+                        .print(true);
 
                     svg.datum(record.data)
                         .call(sankey);

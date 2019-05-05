@@ -4884,6 +4884,9 @@ line {
   background-color: rgba(136, 139, 142, 0.5);
   border-radius: 2px; }
 
+.tag {
+  font-size: 12px; }
+
 .test-connection-col {
   display: flex;
   align-items: center; }
@@ -6283,3 +6286,6 @@ input.select2-active {
 
 .common-create-popup md-input-container .md-input {
   border-radius: 0px; }
+
+.viz-bodyBgColour {
+  margin-top: 35px; }

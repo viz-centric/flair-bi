@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>0.0.30-SNAPSHOT</version>
+    <version>0.0.36-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -34,6 +34,7 @@
         </repository>
     </distributionManagement>
     <properties>
+        <all-grpc.version>1.20.0</all-grpc.version>
         <apache-httpclient.version>4.5</apache-httpclient.version>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.9.0</assertj-core.version>
@@ -264,11 +265,29 @@
             <groupId>io.github.lognet</groupId>
             <artifactId>grpc-spring-boot-starter</artifactId>
             <version>3.1.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>grpc-netty</artifactId>
+                    <groupId>io.grpc</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${all-grpc.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-tcnative-boringssl-static</artifactId>
+            <version>2.0.20.Final</version>
+            <classifier>${os.detected.classifier}</classifier>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
@@ -544,6 +563,13 @@
         </repository>
     </repositories>
     <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.5.0.Final</version>
+            </extension>
+        </extensions>
         <defaultGoal>spring-boot:run</defaultGoal>
         <pluginManagement>
             <plugins>

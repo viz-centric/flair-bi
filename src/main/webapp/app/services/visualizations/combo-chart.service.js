@@ -126,7 +126,7 @@
                         var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
                         result['comboChartType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Combo chart type'));
-                        result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type'));
+                        result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type').toLowerCase());
                         result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                     }
 
@@ -162,11 +162,13 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('class', 'tooltip');
+                        .attr('class', 'custom_tooltip');
 
                     var combo = flairVisualizations.combo()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService)
                         .print(false);
 
                     svg.datum(record.data)

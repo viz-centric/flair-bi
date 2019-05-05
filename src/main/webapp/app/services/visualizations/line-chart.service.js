@@ -73,7 +73,7 @@
                         result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
                         var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
-                        result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type'));
+                        result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type').toLowerCase());
                         result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                     }
                     return result;
@@ -99,11 +99,13 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip')
+                      .attr('class', 'custom_tooltip')
 
                     var line = flairVisualizations.line()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService)
                         .print(false);
 
                     svg.datum(record.data)

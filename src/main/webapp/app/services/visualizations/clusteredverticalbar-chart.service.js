@@ -75,7 +75,8 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var clusteredverticalbar = $rootScope.updateWidget[record.id];
-                        clusteredverticalbar.update(record.data);
+                        var filter = clusteredverticalbar.update(record.data);
+                       
                     }
                 } else {
                     d3.select(element[0]).html('')
@@ -92,11 +93,13 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('class', 'tooltip');
+                        .attr('class', 'custom_tooltip');
 
                     var clusteredverticalbar = flairVisualizations.clusteredverticalbar()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService)
                         .print(false);
 
                     svg.datum(record.data)

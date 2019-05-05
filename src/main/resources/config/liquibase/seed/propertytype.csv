@@ -18,7 +18,7 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 617|Show Labels|Boolean to show labels|CHECKBOX|true|null|null|null|flairadmin|null
 618|Colour of labels|Label colours|COLOR_PICKER|null|null|#617c8c|null|flairadmin|null
 619|Field name|A field name|TEXT|null|Field name|null|null|flairadmin|null
-620|Display name|A display name|TEXT|null|Display name|null|null|flairadmin|null
+620|Display name|A display name|TEXT|null|null|null|null|flairadmin|null
 621|Font style|Style of fonts|SELECT|null|null|null|null|flairadmin|STRING
 622|Font weight|Weight of fonts|SELECT|null|null|null|null|flairadmin|STRING
 623|Value on Points|Show value on points|CHECKBOX|false|null|null|null|flairadmin|null

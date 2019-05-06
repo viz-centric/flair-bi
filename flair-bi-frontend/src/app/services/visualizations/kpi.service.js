@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -34,7 +35,10 @@ function GenerateKPI(VisualizationUtils, $rootScope, D3Utils) {
                 result['kpiIconExpression'] = [];
 
                 for (var i = 0; i < measures.length; i++) {
-                    result['kpiDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                    result['kpiDisplayName'].push(
+                        VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
+                        result['dimension'][i]
+                    );
                     result['kpiAlignment'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text alignment'));
                     result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                     result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));

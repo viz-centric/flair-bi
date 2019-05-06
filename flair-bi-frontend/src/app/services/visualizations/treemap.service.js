@@ -18,7 +18,8 @@ function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParamete
 
                 var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                     dimensions = features.dimensions,
-                    measures = features.measures;
+                    measures = features.measures,
+                    colorSet = D3Utils.getDefaultColorset();
 
                 result['maxDim'] = dimensions.length;
                 result['colorPattern'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Color Pattern').toLowerCase().replace(' ', '_');
@@ -41,7 +42,9 @@ function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     result['dimension'].push(dimensions[i].feature.name);
                     result['showLabelForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Show Labels'));
                     result['labelColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Colour of labels'));
-                    result['displayColor'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display colour'));
+                    var displayColor = VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display colour');
+                    result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
+                    //  result['displayColor'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display colour'));
                     result['fontWeightForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font weight'));
                     result['fontStyleForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font style'));
                     result['fontSizeForDimension'].push(parseInt(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font size')));
@@ -70,7 +73,7 @@ function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('class', 'tooltip');
+                    .attr('class', 'custom_tooltip');
 
                 var treemap = flairVisualizations.treemap()
                     .config(getProperties(VisualizationUtils, record))

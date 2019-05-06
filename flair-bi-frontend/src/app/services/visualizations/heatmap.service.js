@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -19,7 +20,7 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                 result['measure'] = D3Utils.getNames(measures);
                 result['maxMes'] = measures.length;
                 result['dimLabelColor'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Colour of labels');
-                result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
+                result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
                 result['fontStyleForDimension'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font style');
                 result['fontWeightForDimension'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font weight');
                 result['fontSizeForDimension'] = parseInt(VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font size'));
@@ -39,7 +40,10 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                 result['numberFormat'] = [];
 
                 for (var i = 0; i < result.maxMes; i++) {
-                    result['displayNameForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                    result['displayNameForMeasure'].push(
+                        VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
+                        result['measure'][i]
+                    );
                     result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
                     result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon'));
                     result['valuePosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Alignment'));
@@ -62,8 +66,7 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     var heatmap = $rootScope.updateWidget[record.id];
                     heatmap.update(record.data);
                 }
-            }
-            else {
+            } else {
 
                 d3.select(element[0]).html('')
 
@@ -80,7 +83,7 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('id', 'tooltip')
+                    .attr('class', 'custom_tooltip')
 
                 var heatmap = flairVisualizations.heatmap()
                     .config(getProperties(VisualizationUtils, record))

@@ -56,13 +56,14 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;   
     
-    @Mock
+    @Inject
     private UserService userService;
     
     public SchedulerDTO createScheduledObject() {
     	SchedulerDTO schedulerDTO = new SchedulerDTO();
     	schedulerDTO.setCron_exp("14 */16 * * *");
     	schedulerDTO.setUserid("flairadmin");
+    	schedulerDTO.setVisualizationid("90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	ReportDTO reportDTO= new ReportDTO();
     	reportDTO.setConnection_name("Transactions");
     	reportDTO.setSource_id("Transactions");
@@ -76,6 +77,8 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	String fields[]= {"State", "COUNT(Price) as Price"};
     	String groupBy[]= {"State"};
     	String orderBy[]= {};
+    	String dimentions[]= {"State"};
+    	String measures[]= {"Price"};
     	reportLineItem.setQuery_name("");
     	reportLineItem.setFields(fields);
     	reportLineItem.setGroup_by(groupBy);
@@ -84,6 +87,8 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	reportLineItem.setTable("Transactions");
     	reportLineItem.setVisualization("pie");
     	reportLineItem.setWhere(null);
+    	reportLineItem.setDimension(dimentions);
+    	reportLineItem.setMeasure(measures);
     	schedulerDTO.setReport_line_item(reportLineItem);
     	
     	AssignReport assignReport= new AssignReport();
@@ -114,7 +119,8 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        SchedulerResource schedulerResource = new SchedulerResource();       
+        SchedulerResource schedulerResource = new SchedulerResource(userService);
+        ReflectionTestUtils.setField(schedulerResource, "userService", userService); 
         this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
                 .setMessageConverters(jacksonMessageConverter).build();

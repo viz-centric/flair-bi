@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -17,13 +18,12 @@ function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
                     dimensions = features.dimensions,
                     measures = features.measures;
 
-                result['dimensions'] = D3Utils.getNames(dimensions);
-                result['measures'] = D3Utils.getNames(measures);
+                result['dimension'] = D3Utils.getNames(dimensions);
+                result['measure'] = D3Utils.getNames(measures);
 
                 result['maxDim'] = dimensions.length;
                 result['maxMes'] = measures.length;
 
-                result["dimension"] = [];
                 result["displayNameForDimension"] = [];
                 result["cellColorForDimension"] = [];
                 result["fontStyleForDimension"] = [];
@@ -34,7 +34,6 @@ function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
                 result["textAlignmentForDimension"] = [];
                 result['isPivoted'] = [];
 
-                result["measure"] = [];
                 result["displayNameForMeasure"] = [];
                 result["cellColorForMeasure"] = [];
                 result["cellColorExpressionForMeasure"] = [];
@@ -51,9 +50,10 @@ function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
                 result["iconPositionForMeasure"] = [];
                 result["iconExpressionForMeasure"] = [];
                 for (var i = 0; i < result.maxDim; i++) {
-
-                    result['dimension'].push(result['dimensions'][i]);
-                    result['displayNameForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display name'));
+                    result['displayNameForDimension'].push(
+                        VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display name') ||
+                        result['dimension'][i]
+                    );
                     result['cellColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Cell colour'));
                     result['fontStyleForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font style'));
                     result['fontWeightForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font weight'));
@@ -66,8 +66,10 @@ function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
                 }
 
                 for (var i = 0; i < result.maxMes; i++) {
-                    result['measure'].push(result['measures'][i]);
-                    result['displayNameForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                    result['displayNameForMeasure'].push(
+                        VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
+                        result['measure'][i]
+                    );
                     result['cellColorForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Cell colour'));
                     result['cellColorExpressionForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Cell colour expression'));
                     result['fontStyleForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));

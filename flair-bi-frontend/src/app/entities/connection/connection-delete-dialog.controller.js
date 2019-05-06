@@ -1,7 +1,11 @@
 import angular from 'angular';
 
-angular.module('flairbiApp')
-    .controller('ConnectionDeleteDialogController', ConnectionDeleteDialogController);
+angular
+    .module("flairbiApp")
+    .controller(
+        "ConnectionDeleteDialogController",
+        ConnectionDeleteDialogController
+    );
 
 ConnectionDeleteDialogController.$inject = [
     "$uibModalInstance",
@@ -41,21 +45,11 @@ function ConnectionDeleteDialogController(
         vm["is" + entity + "Collapsed"] = !vm["is" + entity + "Collapsed"];
     }
 
-    function deleteDatasources() {
-        Datasources.delete(
-            { connectionName: vm.connection.linkId },
-            function (res) {
-                $uibModalInstance.close(true);
-            },
-            function (err) { }
-        );
-    }
-
     function confirmDelete(id) {
         Connections.delete(
             { id: id, serviceId: $stateParams.id },
             function () {
-                deleteDatasources();
+                $uibModalInstance.close();
             }
         );
     }

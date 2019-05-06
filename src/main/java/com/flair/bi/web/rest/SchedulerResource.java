@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import org.json.JSONObject;
@@ -23,18 +24,29 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.codahale.metrics.annotation.Timed;
+import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
+import com.flair.bi.domain.User;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.MailService;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
+import com.flair.bi.service.dto.scheduler.emailsDTO;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.vm.ManagedUserVM;
+
+import lombok.RequiredArgsConstructor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class SchedulerResource {
 
 	@Value("${flair-ai-api.username}")
@@ -66,7 +78,8 @@ public class SchedulerResource {
 	
 	@Value("${flair-ai-api.mail_body}")
 	private String mail_body;
-	
+
+	private final UserService userService;
 	
 
 	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
@@ -78,6 +91,7 @@ public class SchedulerResource {
 			throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
 		schedulerDTO.setUserid(SecurityUtils.getCurrentUserLogin());
+		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
 		schedulerDTO.getReport_line_item().setQuery_name(SecurityUtils.getCurrentUserLogin() + ":" + schedulerDTO.getReport_line_item().getQuery_name());
 		schedulerDTO.getReport().setMail_body(mail_body);
 		schedulerDTO.getReport().setSubject("Report : " + schedulerDTO.getReport().getSubject() + " : " + new Date());
@@ -110,6 +124,19 @@ public class SchedulerResource {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
 		}
 
+	}
+
+	private emailsDTO[] getEmailList(String login) {
+		Optional<User> optionalUser=userService.getUserWithAuthoritiesByLogin(login);
+        User user = null;
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+        }
+    	emailsDTO emailsDTO= new emailsDTO();
+    	emailsDTO.setUser_email(user.getEmail());
+    	emailsDTO.setUser_name(user.getFirstName()+" "+user.getLastName());
+    	emailsDTO emailList[]= {emailsDTO};
+		return emailList;
 	}
 
 	private String authFlairAI(RestTemplate restTemplate) throws Exception {

@@ -3,7 +3,8 @@
 Following technologies are used:
 * AngularJS 1.7
 * Webpack
-* Yarn
+* npm
+* Node 8+
 
 ### Development
 

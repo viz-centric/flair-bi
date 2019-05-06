@@ -63,7 +63,7 @@ function GenerateSankey(VisualizationUtils, $rootScope, D3Utils, filterParameter
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('id', 'tooltip')
+                    .attr('class', 'custom_tooltip')
 
                 var sankey = flairVisualizations.sankey()
                     .config(getProperties(VisualizationUtils, record))

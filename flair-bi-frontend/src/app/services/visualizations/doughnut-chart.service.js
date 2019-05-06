@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -20,8 +21,8 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                 result['dimension'] = D3Utils.getNames(dimension);
                 result['measure'] = D3Utils.getNames(measure);
 
-                result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name');
-                result['measureDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display name');
+                result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name') || result['dimension'][0];
+                result['measureDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display name') || result['measure'][0];
 
                 result['fontSize'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size');
                 result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font style');
@@ -59,7 +60,7 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('class', 'tooltip');
+                    .attr('class', 'custom_tooltip');
 
                 var doughnut = flairVisualizations.doughnut()
                     .config(getProperties(VisualizationUtils, record))

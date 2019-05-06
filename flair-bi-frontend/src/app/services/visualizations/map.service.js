@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 
 angular
@@ -17,7 +18,7 @@ function GenerateMap(VisualizationUtils, $rootScope, D3Utils, filterParametersSe
                     dimension = features.dimensions,
                     measure = features.measures;
 
-                result['dimension'] =  [D3Utils.getNames(dimension)[0]];
+                result['dimension'] = [D3Utils.getNames(dimension)[0]];
                 result['measure'] = [D3Utils.getNames(measure)[0]];
 
                 result['displayColor'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display colour');
@@ -47,7 +48,7 @@ function GenerateMap(VisualizationUtils, $rootScope, D3Utils, filterParametersSe
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('class', 'tooltip');
+                    .attr('class', 'custom_tooltip');
 
                 var map = flairVisualizations.map()
                     .config(getProperties(VisualizationUtils, record))

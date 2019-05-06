@@ -71,7 +71,7 @@ function GenerateBoxplot(
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('id', 'tooltip');
+                    .attr('class', 'custom_tooltip')
 
                 var boxplot = flairVisualizations.boxplot()
                     .config(getProperties(VisualizationUtils, record))

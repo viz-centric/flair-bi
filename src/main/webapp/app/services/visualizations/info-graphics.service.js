@@ -16,14 +16,18 @@
 
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimension = features.dimensions,
-                        measures = features.measures;
+                        measures = features.measures,
+                        colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measures);
                     result['chartType'] = VisualizationUtils.getPropertyValue(record.properties, 'Info graphic Type').toLowerCase();
-                    result['chartDisplayColor'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display colour');
-                    result['chartBorderColor'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Border colour');
-                    result['kpiDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display name');
+                    var displayColor = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display colour');
+                    result['chartDisplayColor'] = (displayColor == null) ? colorSet[0] : displayColor;
+                    var borderColor = VisualizationUtils.getFieldPropertyValue(measures[0], 'Border colour');
+                    result['chartBorderColor'] = (borderColor == null) ? colorSet[1] : borderColor;
+
+                    result['kpiDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display name') || result['dimension'][0];
                     result['kpiAlignment'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Text alignment');
                     result['kpiBackgroundColor'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Background Colour');
                     result['kpiNumberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Number format');
@@ -54,7 +58,7 @@
                         .style('height', element[0].clientHeight + 'px')
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip')
+                        .attr('class', 'custom_tooltip')
 
                     var infographics = flairVisualizations.infographics()
                         .config(getProperties(VisualizationUtils, record))

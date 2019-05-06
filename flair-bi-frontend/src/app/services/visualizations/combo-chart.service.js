@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 'use strict';
 angular
     .module('flairbiApp')
@@ -97,7 +98,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                 result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                 result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
-                result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
+                result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'];
                 result['showValues'] = [];
                 result['displayNameForMeasure'] = [];
                 result['fontStyle'] = [];
@@ -114,7 +115,10 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                 for (var i = 0; i < result.maxMes; i++) {
 
                     result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
-                    result['displayNameForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                    result['displayNameForMeasure'].push(
+                        VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
+                        result['measure'][i]
+                    );
                     result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                     result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                     result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
@@ -161,7 +165,7 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('class', 'tooltip');
+                    .attr('class', 'custom_tooltip');
 
                 var combo = flairVisualizations.combo()
                     .config(getProperties(VisualizationUtils, record))

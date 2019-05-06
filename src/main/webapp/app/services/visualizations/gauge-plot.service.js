@@ -21,7 +21,7 @@
 
                     result['gaugeType'] = VisualizationUtils.getPropertyValue(record.properties, 'Gauge Type').toLowerCase();
 
-                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display name');
+                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display name') || result['measures'][0];
                     result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Font style');
                     result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Font weight');
                     result['showValues'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Value on Points');
@@ -30,7 +30,7 @@
                     result['textColor'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Text colour');
                     result['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Number format');
 
-                    result['targetDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Display name');
+                    result['targetDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Display name') || result['measures'][1];
                     result['targetFontStyle'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Font style');
                     result['targetFontWeight'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Font weight');
                     result['targetShowValues'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Value on Points');
@@ -61,7 +61,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('id', 'tooltip')
+                      .attr('class', 'custom_tooltip')
 
                     var gauge = flairVisualizations.gauge()
                         .config(getProperties(VisualizationUtils, record))

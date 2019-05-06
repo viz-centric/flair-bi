@@ -47,7 +47,7 @@
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
-                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
+                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
                     result['fontStyle'] = [];
@@ -58,9 +58,11 @@
                     result['displayColor'] = [];
                     result['borderColor'] = [];
                     for (var i = 0; i < result.maxMes; i++) {
-
                         result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
-                        result['displayNameForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name'));
+                        result['displayNameForMeasure'].push(
+                            VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
+                            result['measure'][i]
+                            );
                         result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                         result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
@@ -97,7 +99,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('class', 'tooltip');
+                        .attr('class', 'custom_tooltip');
 
                     var stackedhorizontalbar = flairVisualizations.stackedhorizontalbar()
                         .config(getProperties(VisualizationUtils, record))

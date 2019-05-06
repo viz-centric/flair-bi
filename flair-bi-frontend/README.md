@@ -7,8 +7,23 @@ Following technologies are used:
 * Node 8+
 
 ### Development
-
+Install dependencies 
+```
+npm i
+```
 In order to start development server you need to start following command:
 ```
-yarn start
+npm start
+```
+
+### Adding new dependency
+Running:
+```
+npm i <library> --save 
+```
+and importing in "src/vendor.js"
+
+For dev tools
+```
+npm i <library> --save-dev
 ```

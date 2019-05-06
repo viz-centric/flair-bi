@@ -1,7 +1,6 @@
 package com.flair.bi.web.rest;
 
 import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.FlairbiApp;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.repository.DatasourceRepository;
 import com.flair.bi.service.DashboardService;
@@ -10,20 +9,19 @@ import com.flair.bi.service.GrpcConnectionService;
 import com.flair.bi.service.dto.ListTablesResponseDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.flair.bi.web.rest.errors.ExceptionTranslator;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,19 +33,16 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.flair.bi.domain.DatasourceStatus.DELETED;
 import static com.flair.bi.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the DatasourcesResource REST controller.
@@ -234,11 +229,18 @@ public class DatasourceResourceIntTest extends AbstractIntegrationTest {
         // Initialize the database
         datasourceRepository.saveAndFlush(datasource);
 
+        Datasource deletedDataSource = new Datasource().name("ds_name").lastUpdated(DEFAULT_LAST_UPDATED)
+                .connectionName("ds_conn_name").queryPath("");
+        deletedDataSource.setStatus(DELETED);
+        datasourceRepository.saveAndFlush(deletedDataSource);
+
         // Get all the datasourcesList
         restDatasourcesMockMvc.perform(get("/api/datasources")).andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(datasource.getId().intValue())))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(this.datasource.getId().intValue())))
                 .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+                .andExpect(jsonPath("$.[*].status").value(not(hasItem(DELETED.name()))))
                 .andExpect(jsonPath("$.[*].lastUpdated").value(hasItem(sameInstant(DEFAULT_LAST_UPDATED))))
                 .andExpect(jsonPath("$.[*].connectionName").value(hasItem(DEFAULT_CONNECTION_NAME.toString())))
                 .andExpect(jsonPath("$.[*].queryPath").value(hasItem(DEFAULT_QUERY_PATH.toString())));
@@ -325,7 +327,10 @@ public class DatasourceResourceIntTest extends AbstractIntegrationTest {
 
         // Validate the database is empty
         List<Datasource> datasourceList = datasourceRepository.findAll();
-        assertThat(datasourceList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(datasourceList).hasSize(databaseSizeBeforeDelete);
+
+        Datasource deletedDatasource = datasourceRepository.getOne(datasource.getId());
+        Assert.assertEquals(DELETED, deletedDatasource.getStatus());
     }
 
     @Test

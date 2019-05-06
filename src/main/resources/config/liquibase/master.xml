@@ -61,5 +61,6 @@
     
     <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity_constraints.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190505113649_added_datasource_status.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
 <!--@formatter:on-->

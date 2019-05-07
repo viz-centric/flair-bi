@@ -3961,7 +3961,8 @@ jhi-alert .alerts .alert-danger {
       .flairbi-content-header .full-screen-topbar .full-screen-options .settings {
         display: flex; }
         .flairbi-content-header .full-screen-topbar .full-screen-options .settings .settings-item {
-          margin-top: -19px; }
+          margin-top: -15px;
+          width: 50px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .show {
         margin-right: 4%; }
       .flairbi-content-header .full-screen-topbar .full-screen-options menu-component .menu-container .menu {

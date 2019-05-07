@@ -12,13 +12,13 @@ public class SchedulerNotificationDTO {
 	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
 	private Schedule schedule;
-	private Query query;
+	private String query;
 	
 	public SchedulerNotificationDTO(){}
 
 	
 	public SchedulerNotificationDTO(String userid, String cron_exp, String visualizationid, ReportDTO report,
-			ReportLineItem report_line_item, AssignReport assign_report, Schedule schedule, Query query) {
+			ReportLineItem report_line_item, AssignReport assign_report, Schedule schedule, String query) {
 		super();
 		this.userid = userid;
 		this.cron_exp = cron_exp;
@@ -87,11 +87,11 @@ public class SchedulerNotificationDTO {
 		this.schedule = schedule;
 	}
 
-	public Query getQuery() {
+	public String getQuery() {
 		return query;
 	}
 
-	public void setQuery(Query query) {
+	public void setQuery(String query) {
 		this.query = query;
 	}
 

@@ -46,11 +46,6 @@
                 "measure":[]
             },
             "queryDTO":{
-                // "fields": [],
-                // "group_by": [],
-                // "order_by": [],
-                // "conditionExpression": ,
-                // "limit": 5,
             },
             "assign_report": {
                 "channel": "",

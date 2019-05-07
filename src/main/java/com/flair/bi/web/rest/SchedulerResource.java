@@ -49,6 +49,7 @@ import com.flair.bi.view.ViewService;
 import com.flair.bi.view.VisualMetadataService;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
@@ -123,7 +124,7 @@ public class SchedulerResource {
 		schedulerDTO.getReport().setSource_id(datasource.getConnectionName());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
-		Query query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getVisualizationid(), schedulerDTO.getUserid());
+		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getVisualizationid(), schedulerDTO.getUserid());
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getUserid(),schedulerDTO.getCron_exp(),schedulerDTO.getVisualizationid(),
 			schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
@@ -170,8 +171,9 @@ public class SchedulerResource {
 		return emailList;
 	}
 	
-	private Query buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) {
-			
+	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) {
+
+		
 		queryDTO.setSource(datasource.getName());
         
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,datasource.getId());
@@ -194,7 +196,7 @@ public class SchedulerResource {
             visualizationId != null ? visualizationId : "",
             userId);
 		
-        return query;
+        return query.toString();
 	
 	}
 

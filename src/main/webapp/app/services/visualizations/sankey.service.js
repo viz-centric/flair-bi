@@ -70,7 +70,7 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(true);
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(sankey);

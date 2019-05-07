@@ -80,6 +80,7 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var stackedverticalbar = $rootScope.updateWidget[record.id];
+                        stackedverticalbar.isAnimationDisable(record.isLiveEnabled);
                         stackedverticalbar.update(record.data);
                     }
                 } else {

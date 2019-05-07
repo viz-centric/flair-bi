@@ -29,7 +29,6 @@
         vm.removeField = removeField;
         vm.hierarchies = VisualDispatchService.getHierarchies();
 
-
         ////////////////
 
 

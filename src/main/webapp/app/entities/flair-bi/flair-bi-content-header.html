@@ -225,8 +225,8 @@
             </div>
             <div class="line hidden-sm hidden-xs"></div>
             <div class="fs-btn settings item hidden-xs hidden-sm">
-                <div md-color-picker ng-model="vm.headerColor" ng-change="vm.changeHeaderColor(vm.headerColor)" label="Choose a header color" class="settings-item header-color"></div>
-                <div md-color-picker ng-model="vm.containerColor" ng-change="vm.changeContainerColor(vm.containerColor)" label="Choose a container color" class="settings-item container-color" ></div>
+                <div uib-tooltip="change header color" tooltip-placement="bottom" md-color-picker ng-model="vm.headerColor" ng-change="vm.changeHeaderColor(vm.headerColor)" label="Choose a header color" class="settings-item header-color"></div>
+                <div uib-tooltip="change container color" tooltip-placement="bottom"  md-color-picker ng-model="vm.containerColor" ng-change="vm.changeContainerColor(vm.containerColor)" label="Choose a container color" class="settings-item container-color" ></div>
             </div>
             <div class="line hidden-sm hidden-xs"></div>
             <div class="fs-btn exit-screen item hidden-xs hidden-sm" ng-click="vm.exitFullScreen()">

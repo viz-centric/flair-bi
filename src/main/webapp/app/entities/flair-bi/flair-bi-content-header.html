@@ -4,7 +4,7 @@
             <div class="logo" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </div>
-            <div class="line"></div>
+            <div class="line" style="margin-left: -1px;"></div>
             <div class="view-name">
                 <h2>
                     {{vm.view.viewName}}
@@ -128,7 +128,7 @@
             <div class="logo item" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </div>
-            <div class="line"></div>
+            <div class="line" style="margin-left: -6px;"></div>
             <div class="dashboards item hidden-xs hidden-sm ">
                 <div class="fullscreen-dropdowns">
                     <div class="dropdown-options-v5">
@@ -191,7 +191,7 @@
                     <span class="ng-scope">Show</span>
                 </a>
             </div>
-            <div class="item hidden-xs hidden-sm ">
+            <div class="item hidden-xs hidden-sm bookmarks-dropdowns">
                 <div class="fullscreen-dropdowns">
                     <div class="dropdown-options-v5">
                         <a class="dropdown-toggle" type="button" id="dropdownBookMark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -218,15 +218,15 @@
                     </div>
                 </div>
             </div>
-            <div class="fs-btn bookmarks item hidden-xs hidden-sm" ng-click="vm.bookmark()">
+            <div class="fs-btn add-bookmark item hidden-xs hidden-sm" ng-click="vm.bookmark()">
                 <svg class="flaticons-bookmark">
                         <use xlink:href="#bookmark" />
                     </svg>
             </div>
             <div class="line hidden-sm hidden-xs"></div>
             <div class="fs-btn settings item hidden-xs hidden-sm">
-                <div md-color-picker ng-model="vm.headerColor" ng-change="vm.changeHeaderColor(vm.headerColor)" label="Choose a header color" class="settings-item"></div>
-                <div md-color-picker ng-model="vm.containerColor" ng-change="vm.changeContainerColor(vm.containerColor)" label="Choose a container color" class="settings-item"></div>
+                <div md-color-picker ng-model="vm.headerColor" ng-change="vm.changeHeaderColor(vm.headerColor)" label="Choose a header color" class="settings-item header-color"></div>
+                <div md-color-picker ng-model="vm.containerColor" ng-change="vm.changeContainerColor(vm.containerColor)" label="Choose a container color" class="settings-item container-color" ></div>
             </div>
             <div class="line hidden-sm hidden-xs"></div>
             <div class="fs-btn exit-screen item hidden-xs hidden-sm" ng-click="vm.exitFullScreen()">

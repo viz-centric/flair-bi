@@ -2,6 +2,9 @@ import * as angular from 'angular';
 
 import expandArrowSvg from 'content/svgs/expand-arrow.svg';
 import flairLogoNoTextSvg from 'content/svgs/flairbi-logo-no-text.svg';
+import fullScreenSettingsDialogHtml from './full-screen-settings-dialog.html';
+import featureBookmarkDialogHtml from './../feature-bookmark/feature-bookmark-dialog.html';
+
 "use strict";
 
 angular
@@ -167,7 +170,7 @@ function FlairBiContentHeaderController(
 
     function openSettings() {
         $uibModal.open({
-            templateUrl: "app/entities/flair-bi/full-screen-settings-dialog.html",
+            template: fullScreenSettingsDialogHtml,
             controller: "FullScreenSettingsDialogController",
             controllerAs: "vm",
             backdrop: "static",
@@ -339,16 +342,20 @@ function FlairBiContentHeaderController(
         }
         if (width >= 1200 && width < 1400) {
             vm.pageSize = 8;
-        } if (width >= 1400 && width < 1500) {
+        }
+        if (width >= 1400 && width < 1500) {
             vm.pageSize = 9;
-        } if (width >= 1500 && width < 1600) {
+        }
+        if (width >= 1500 && width < 1600) {
             vm.pageSize = 10;
-        } if (width >= 1600 && width < 1824) {
+        }
+        if (width >= 1600 && width < 1824) {
             vm.pageSize = 11;
         }
         if (width > 1824 && width < 1900) {
             vm.pageSize = 13;
-        } if (width >= 1900) {
+        }
+        if (width >= 1900) {
             vm.pageSize = 14;
         } else {
 
@@ -395,8 +402,7 @@ function FlairBiContentHeaderController(
         vm.filtersLength = count;
         if ($rootScope.isFullScreen == false) {
             hideFiltersHeaderAndSideBar();
-        }
-        else {
+        } else {
             hideFullScreenFiltersHeader();
         }
     }
@@ -413,7 +419,7 @@ function FlairBiContentHeaderController(
             list.splice(index, 1);
         }
         vm.filters[key] = list;
-        removeTagInBI({ 'text': val });
+        removeTagInBI({'text': val});
         setNoOfPages();
     }
 
@@ -460,7 +466,7 @@ function FlairBiContentHeaderController(
                     item.featureCriteria.forEach(function (criteria) {
                         filter[
                             criteria.feature.name
-                        ] = criteria.value.split(",");
+                            ] = criteria.value.split(",");
                     });
                     filterParametersService.save(filter);
                     $rootScope.$broadcast(
@@ -510,8 +516,7 @@ function FlairBiContentHeaderController(
 
         $uibModal
             .open({
-                templateUrl:
-                    "app/entities/feature-bookmark/feature-bookmark-dialog.html",
+                template: featureBookmarkDialogHtml,
                 controller: "FeatureBookmarkDialogController",
                 controllerAs: "vm",
                 backdrop: "static",
@@ -523,20 +528,21 @@ function FlairBiContentHeaderController(
                             name: null,
                             featureCriteria: filterCriterias,
                             datasource:
-                                vm.view.viewDashboard.dashboardDatasource
+                            vm.view.viewDashboard.dashboardDatasource
                         };
                     }
                 }
             })
             .result.then(
-                function () {
-                    vm.bookmarks = FeatureBookmark.query({
-                        datasource:
-                            vm.view.viewDashboard.dashboardDatasource.id
-                    });
-                },
-                function () { }
-            );
+            function () {
+                vm.bookmarks = FeatureBookmark.query({
+                    datasource:
+                    vm.view.viewDashboard.dashboardDatasource.id
+                });
+            },
+            function () {
+            }
+        );
     }
 
     function refresh() {
@@ -567,7 +573,8 @@ function FlairBiContentHeaderController(
         $rootScope.$broadcast("FlairBi:saveAllWidgets");
     }
 
-    function onGetData() { }
+    function onGetData() {
+    }
 
     function ngIfResources() {
         return editMode && !$rootScope.exploration;
@@ -596,6 +603,7 @@ function FlairBiContentHeaderController(
     function activeMobileUserOptionNavigation() {
         vm.mobileUserOptionNavigationSlide = !vm.mobileUserOptionNavigationSlide;
     }
+
     function logout() {
         Auth.logout();
         $state.go('login');

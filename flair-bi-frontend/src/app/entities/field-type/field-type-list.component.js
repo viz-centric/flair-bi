@@ -1,8 +1,11 @@
 import * as angular from 'angular';
+
+import fieldTypeListComponentHtml from './field-type-list.component.html';
+
 "use strict";
 
 angular.module("flairbiApp").component("fieldTypeListComponent", {
-    templateUrl: "app/entities/field-type/field-type-list.component.html",
+    template: fieldTypeListComponentHtml,
     controller: fieldTypeListController,
     controllerAs: "vm",
     bindings: {
@@ -19,5 +22,6 @@ function fieldTypeListController($scope) {
 
     ////////////////
 
-    function activate() { }
+    function activate() {
+    }
 }

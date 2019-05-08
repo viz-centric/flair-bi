@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+import csvDialogHtml from './csv-dialoag.html';
 "use strict";
 
 angular.module("flairbiApp").controller("FileUploaderController", FileUploaderController);
@@ -130,7 +131,7 @@ function FileUploaderController($scope, Upload, fileSystemList, uploadFileServic
     function openCSVFile(csvData) {
         $uibModal.open({
             animation: true,
-            templateUrl: "app/admin/file-uploader/csv-dialoag.html",
+            template: csvDialogHtml,
             size: "lg",
             controller: "CSVDialogController",
             controllerAs: "vm",

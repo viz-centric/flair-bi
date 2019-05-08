@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import metricsModalHtml from './metrics.modal.html';
+
 'use strict';
 
 angular
@@ -42,7 +44,7 @@ function JhiMetricsMonitoringController($scope, JhiMetricsService, $uibModal) {
     function refreshThreadDumpData() {
         JhiMetricsService.threadDump().then(function (data) {
             $uibModal.open({
-                templateUrl: 'app/admin/metrics/metrics.modal.html',
+                template: metricsModalHtml,
                 controller: 'JhiMetricsMonitoringModalController',
                 controllerAs: 'vm',
                 size: 'lg',

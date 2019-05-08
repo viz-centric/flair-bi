@@ -1,4 +1,7 @@
 import * as angular from 'angular';
+import hierarchyDialogHtml from './../../hierarchy/hierarchy-dialog.html';
+import featureDialogHtml from './../../feature/feature-dialog.html';
+
 'use strict';
 
 angular
@@ -13,9 +16,9 @@ FlairBiRightNavBarController.$inject = ['Visualizations', '$rootScope',
 ];
 
 function FlairBiRightNavBarController(Visualizations, $rootScope,
-    entity, Features, $uibModal,
-    $state, $scope, featureEntities,
-    Hierarchies, $timeout, filterParametersService, FilterStateManagerService, Visualmetadata, VisualDispatchService, VisualMetadataContainer) {
+                                      entity, Features, $uibModal,
+                                      $state, $scope, featureEntities,
+                                      Hierarchies, $timeout, filterParametersService, FilterStateManagerService, Visualmetadata, VisualDispatchService, VisualMetadataContainer) {
     var vm = this;
     vm.visualizations = [];
     vm.addVisual = addVisual;
@@ -58,7 +61,6 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
     activate();
 
 
-
     ////////////////
 
     function activate() {
@@ -86,6 +88,7 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
     function onDragEnd(item) {
         $rootScope.$broadcast("flairbiApp:onDragEnd", item);
     }
+
     function dropCallback(index, item, external, type) {
         return false;
     }
@@ -160,7 +163,8 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
         vm.isSaving = false;
     }
 
-    function validate() { }
+    function validate() {
+    }
 
     function isRightSideBarOpen() {
         return $('#slider').is(":visible");
@@ -491,7 +495,7 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
 
     function changeHierarchy(hierarchy) {
         $uibModal.open({
-            templateUrl: 'app/entities/hierarchy/hierarchy-dialog.html',
+            template: hierarchyDialogHtml,
             controller: 'HierarchyDialogController',
             controllerAs: 'vm',
             backdrop: 'static',
@@ -516,7 +520,7 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
 
     function changeFeature(feature) {
         $uibModal.open({
-            templateUrl: 'app/entities/feature/feature-dialog.html',
+            template: featureDialogHtml,
             controller: 'FeatureDialogController',
             controllerAs: 'vm',
             backdrop: 'static',
@@ -552,7 +556,7 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
 
     function openDialog(type) {
         $uibModal.open({
-            templateUrl: 'app/entities/feature/feature-dialog.html',
+            template: featureDialogHtml,
             controller: 'FeatureDialogController',
             controllerAs: 'vm',
             backdrop: 'static',
@@ -574,7 +578,7 @@ function FlairBiRightNavBarController(Visualizations, $rootScope,
 
     function hierarchyDialog() {
         $uibModal.open({
-            templateUrl: 'app/entities/hierarchy/hierarchy-dialog.html',
+            template: hierarchyDialogHtml,
             controller: 'HierarchyDialogController',
             controllerAs: 'vm',
             backdrop: 'static',

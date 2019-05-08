@@ -1,4 +1,8 @@
 import * as angular from 'angular';
+import conditionTabComponentHtml from './modal/modal-tabs/condition-tab.component.html';
+import shareDialogHtml from './share-dialog/share-dialog.html';
+import tableDialogHtml from './../../components/shared/table-dialog/table-dialog.html';
+import schedulerDialogHtml from './scheduler/scheduler-dialog.html';
 
 "use strict";
 
@@ -276,8 +280,7 @@ function FlairBiController(
 
     function openDataContraints(v) {
         $uibModal.open({
-            templateUrl:
-                "app/entities/flair-bi/modal/modal-tabs/condition-tab.component.html",
+            template: conditionTabComponentHtml,
             controller: "conditionTabController",
             controllerAs: "vm",
             backdrop: "static",
@@ -746,8 +749,7 @@ function FlairBiController(
         $uibModal
             .open({
                 animation: true,
-                templateUrl:
-                    "app/entities/flair-bi/share-dialog/share-dialog.html",
+                template: shareDialogHtml,
                 size: "md",
                 controller: "ShareDialogController",
                 controllerAs: "vm",
@@ -814,8 +816,7 @@ function FlairBiController(
         $uibModal
             .open({
                 animation: true,
-                templateUrl:
-                    "app/components/shared/table-dialog/table-dialog.html",
+                template: tableDialogHtml,
                 size: "lg",
                 controller: "TableDialogController",
                 controllerAs: "vm",
@@ -1099,7 +1100,7 @@ function FlairBiController(
     function openSchedulerDialog(v) {
         $uibModal.open({
             animation: true,
-            templateUrl: 'app/entities/flair-bi/scheduler/scheduler-dialog.html',
+            template: schedulerDialogHtml,
             size: 'lg',
             controller: 'SchedulerDialogController',
             controllerAs: 'vm',

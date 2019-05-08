@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import wizardDialogHtml from './wizard-dialog.html';
+
 "use strict";
 
 angular
@@ -64,7 +66,7 @@ function ServiceDetailController(
     function openWizard(ct) {
         $uibModal
             .open({
-                templateUrl: "app/entities/service/wizard-dialog.html",
+                template: wizardDialogHtml,
                 controller: "WizardDialogController",
                 controllerAs: "vm",
                 backdrop: "static",
@@ -79,10 +81,11 @@ function ServiceDetailController(
                 }
             })
             .result.then(
-                function () {
-                    $state.reload();
-                },
-                function () { }
-            );
+            function () {
+                $state.reload();
+            },
+            function () {
+            }
+        );
     }
 }

@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import healthModalHtml from './../health/health.modal.html';
+
 'use strict';
 
 angular
@@ -40,7 +42,7 @@ function JhiHealthCheckController(JhiHealthService, $uibModal) {
 
     function showHealth(health) {
         $uibModal.open({
-            templateUrl: 'app/admin/health/health.modal.html',
+            template: healthModalHtml,
             controller: 'HealthModalController',
             controllerAs: 'vm',
             size: 'lg',

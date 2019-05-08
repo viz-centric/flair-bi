@@ -7,6 +7,7 @@
  *
  * Generated at 2017-04-15 17:08:51 -0300
  */
+import angular from 'angular';
 
 var KEYS = {
     backspace: 8,

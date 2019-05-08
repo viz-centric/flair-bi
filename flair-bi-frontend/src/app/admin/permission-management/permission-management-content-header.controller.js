@@ -1,4 +1,6 @@
 import * as angular from 'angular';
+import userGroupDialogHtml from './../../entities/user-group/user-group-dialog.html';
+
 'use strict';
 
 angular
@@ -24,7 +26,8 @@ function PermissionManagementContentHeaderController(
 
     ////////////////
 
-    function activate() { }
+    function activate() {
+    }
 
     function save() {
         $rootScope.$broadcast('flairbiApp:savePermissions');
@@ -41,7 +44,7 @@ function PermissionManagementContentHeaderController(
     function newUserGroup() {
         $uibModal.open({
             animation: true,
-            templateUrl: 'app/entities/user-group/user-group-dialog.html',
+            template: userGroupDialogHtml,
             size: 'md',
             controller: 'UserGroupDialogController',
             controllerAs: 'vm',
@@ -51,7 +54,7 @@ function PermissionManagementContentHeaderController(
                 }
 
             }
-        }).result.then(function (result) {
+        }).result.then(function () {
             reloadUserGroups();
         }, function () {
 

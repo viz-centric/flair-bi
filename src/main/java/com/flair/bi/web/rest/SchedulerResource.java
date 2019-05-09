@@ -1,11 +1,14 @@
 package com.flair.bi.web.rest;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
 import javax.validation.Valid;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +35,7 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
+import com.flair.bi.messages.Query.Builder;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DashboardService;
@@ -49,6 +53,7 @@ import com.flair.bi.view.ViewService;
 import com.flair.bi.view.VisualMetadataService;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
@@ -169,7 +174,7 @@ public class SchedulerResource {
 		return emailList;
 	}
 	
-	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) {
+	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) throws InvalidProtocolBufferException {
 
 		
 		queryDTO.setSource(datasource.getName());
@@ -194,7 +199,11 @@ public class SchedulerResource {
             visualizationId != null ? visualizationId : "",
             userId);
         
-        return query.toString();
+        String jsonQuery=JsonFormat.printer().print(query);
+        
+        log.debug("jsonQuery=="+jsonQuery);
+        
+        return jsonQuery;
 	
 	}
 

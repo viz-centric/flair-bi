@@ -79,22 +79,13 @@
         //report's data
         vm.scheduleObj.visualizationid=visualMetaData.id;
         vm.scheduleObj.datasourceid=datasource.id;
-        //vm.scheduleObj.report.connection_name=datasource.name;
-        //vm.scheduleObj.report.subject=visualMetaData.metadataVisual.name;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);
-        //vm.scheduleObj.report.source_id=datasource.connectionName;
-        //vm.scheduleObj.report.title_name=visualMetaData.titleProperties.titleText;
-
         var queryDTO=buildQueryDTO(visualMetaData);
         vm.scheduleObj.report_line_item.query_name=buildQueryName(visualMetaData.id,datasource.connectionName);
         vm.scheduleObj.queryDTO.fields=queryDTO.fields;
-        vm.scheduleObj.queryDTO.group_by=queryDTO.groupBy;
-        vm.scheduleObj.queryDTO.order_by=queryDTO.orders;
+        vm.scheduleObj.queryDTO.groupBy=queryDTO.groupBy;
+        vm.scheduleObj.queryDTO.orders=queryDTO.orders;
         vm.scheduleObj.queryDTO.limit=queryDTO.limit;
-        //vm.scheduleObj.report_line_item.table=visualMetaData.metadataVisual.name;
-        //vm.scheduleObj.report_line_item.table=datasource.name;
-        //vm.scheduleObj.report_line_item.conditionExpression=visualMetaData.conditionExpression;
-        //vm.scheduleObj.report_line_item.visualization=visualMetaData.metadataVisual.name;
         setDimentionsAndMeasures(visualMetaData.fields);
         
     }

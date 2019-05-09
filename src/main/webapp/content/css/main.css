@@ -4648,7 +4648,7 @@ table.property-information-table tbody tr td {
 #viz_table_wrapper {
   background-color: white; }
   #viz_table_wrapper .table {
-    font-size: 1.1rem;
+    font-size: 0.7rem;
     border-top: 1px solid #d3d4d4;
     border-bottom: 1px solid #d3d4d4; }
     #viz_table_wrapper .table th {
@@ -6286,3 +6286,11 @@ input.select2-active {
 
 .common-create-popup md-input-container .md-input {
   border-radius: 0px; }
+
+
+  .dataTables_length{
+    text-align: left !important;
+
+  }
+
+  

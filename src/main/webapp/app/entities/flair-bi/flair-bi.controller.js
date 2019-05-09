@@ -652,6 +652,7 @@
 
         function registerStateChangeStartEvent() {
             $scope.$on("$stateChangeStart", function(event, next, current) {
+                setDefaultColorFullScreen();
                 if($(window).width()<990){
                     $rootScope.hideHeader = false;
                 }else if(next.name==="home" || next.name==="account"){
@@ -695,6 +696,11 @@
                     });
                 }
             });
+        }
+
+        function setDefaultColorFullScreen(){
+            $('.flairbi-content-header-fullscreen').css('background-color',"#fafafa");
+            $('.page-wrapper-full-screen').css('background-color',"#f1f3f3");            
         }
 
         function disconnectWebSocket() {

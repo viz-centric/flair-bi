@@ -116,11 +116,9 @@ public class SchedulerResource {
 		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
 		schedulerDTO.setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
-		schedulerDTO.getReport_line_item().setQuery_name(SecurityUtils.getCurrentUserLogin() + ":" + schedulerDTO.getReport_line_item().getQuery_name());
 		schedulerDTO.getReport().setMail_body(mail_body);
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setConnection_name(datasource.getName());
-		schedulerDTO.getReport_line_item().setTable(datasource.getName());
 		schedulerDTO.getReport().setSource_id(datasource.getConnectionName());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
@@ -195,7 +193,7 @@ public class SchedulerResource {
         Query query = QueryGrpcUtils.mapToQuery(queryDTO,datasource.getConnectionName(),
             visualizationId != null ? visualizationId : "",
             userId);
-		
+        
         return query.toString();
 	
 	}

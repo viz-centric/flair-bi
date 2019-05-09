@@ -86,6 +86,8 @@
         vm.scheduleObj.queryDTO.groupBy=queryDTO.groupBy;
         vm.scheduleObj.queryDTO.orders=queryDTO.orders;
         vm.scheduleObj.queryDTO.limit=queryDTO.limit;
+        vm.scheduleObj.queryDTO.distinct=queryDTO.distinct;
+        vm.scheduleObj.queryDTO.enableCaching=queryDTO.enableCaching;
         setDimentionsAndMeasures(visualMetaData.fields);
         
     }

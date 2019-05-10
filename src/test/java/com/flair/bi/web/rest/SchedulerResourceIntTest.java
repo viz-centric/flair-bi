@@ -101,12 +101,10 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	List<String> groupBy= new ArrayList<String>();
     	groupBy.add("State");
     	QueryDTO queryDTO= new QueryDTO();
-    	reportLineItem.setQuery_name("");
     	queryDTO.setFields(fields);
     	queryDTO.setGroupBy(groupBy);
     	queryDTO.setLimit(20L);
     	schedulerDTO.setQueryDTO(queryDTO);
-    	reportLineItem.setTable("Transactions");
     	reportLineItem.setVisualization("pie");
     	reportLineItem.setDimension(dimentions);
     	reportLineItem.setMeasure(measures);

@@ -200,9 +200,9 @@ public class SchedulerResource {
             userId);
         
         String jsonQuery=JsonFormat.printer().print(query);
-        
+
         log.debug("jsonQuery=="+jsonQuery);
-        
+
         return jsonQuery;
 	
 	}

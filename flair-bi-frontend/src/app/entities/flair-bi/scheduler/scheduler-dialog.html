@@ -1,20 +1,20 @@
-<div class="inmodal in modal-content common-create-popup">
+<div class="inmodal in modal-content dag-scheduler-modal">
     <form name="editForm" novalidate="" role="form">
         <div class="modal-header flair-model-header">
-            <svg class="common-edit-icon">
+            <svg class="edit-icon">
                 <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
                 Dag Scheduler
             </div>
-            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <svg class="cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
                 <use xlink:href="#cancle" />
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div class="container">
                 <div class="row container">
-                    <div class="col-xs-4" style="display: none;">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="timezoneGroup">Timezone*</label>
                             <ui-select ng-model="vm.scheduleObj.schedule.timezone">
@@ -25,7 +25,7 @@
                             </ui-select>
                         </div>
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="channels">Channels*</label>
                             <ui-select ng-model="vm.scheduleObj.assign_report.channel">
@@ -37,8 +37,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row container" style="display: none;">
-                    <div class="col-xs-8">
+                <div class="row container">
+                    <div class="col-xs-5">
                         <div class="form-group scheduler-tags">
                             <label class="control-label" for="emails">Share Report with Users*</label>
                             <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
@@ -48,9 +48,24 @@
                             </tags-input>
                         </div>
                     </div>
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label class="control-label" for="visualizations">Visualization Type*</label>
+                            <ui-select ng-model="vm.scheduleObj.report_line_item.visualization">
+                                <ui-select-match placeholder="Select Visualization ...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="visualization in vm.visualizations  | filter: $select.search track by visualization">
+                                    <div ng-bind="visualization"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row container">
-                    <div class="col-xs-8">
+                    <div class="col-xs-9">
+                        <!--                         <form name="cronForm">
+                                                    <cron-gen ng-model="cronExpression" ng-disabled="isCronDisabled" options="cronOptions" name="cron">
+                                                    </cron-gen>
+                                                </form> -->
                         <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
                     </div>
                 </div>

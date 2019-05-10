@@ -81,7 +81,7 @@ function GenerateScatterPlot(VisualizationUtils, $rootScope, D3Utils, filterPara
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var scatter = $rootScope.updateWidget[record.id];
-                    scatter.updateChart(record.data);
+                    scatter.update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

@@ -83,6 +83,7 @@ function GenerateClusteredhorizontalbarChart(VisualizationUtils, $rootScope, D3U
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var clusteredhorizontalbar = $rootScope.updateWidget[record.id];
+                    clusteredhorizontalbar.isAnimationDisable(record.isLiveEnabled);
                     clusteredhorizontalbar.update(record.data);
                 }
             } else {

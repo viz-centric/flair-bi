@@ -70,7 +70,7 @@ function GenerateSankey(VisualizationUtils, $rootScope, D3Utils, filterParameter
                     .tooltip(true)
                     .broadcast($rootScope)
                     .filterParameters(filterParametersService)
-                    .print(true);
+                    .print(false);
 
                 svg.datum(record.data)
                     .call(sankey);

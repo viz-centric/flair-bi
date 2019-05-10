@@ -41,7 +41,8 @@ const appModule = angular
         "angular.filter",
         "angularUtils.directives.uiBreadcrumbs",
         "angular-cron-gen",
-        "ngFileUpload"
+        "ngFileUpload",
+        "angular-cron-generator"
     ])
     .config(angularThemingConfig)
     .run(run);
@@ -108,7 +109,7 @@ function run(stateHandler, translationHandler, $rootScope, $window, toastr) {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-top-right",
+        "positionClass": "toast-bottom-right",
         "preventDuplicates": false,
         "onclick": null,
         "showDuration": "300",

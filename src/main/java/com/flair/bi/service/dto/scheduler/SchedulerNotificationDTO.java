@@ -1,34 +1,34 @@
 package com.flair.bi.service.dto.scheduler;
+
+import com.flair.bi.messages.Query;
 import com.project.bi.query.dto.QueryDTO;
 
-public class SchedulerDTO {
+public class SchedulerNotificationDTO {
 
 	private String userid;
 	private String cron_exp;
-	private long datasourceid;
 	private String visualizationid;
 	private ReportDTO report;
 	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
 	private Schedule schedule;
-	private QueryDTO queryDTO;
+	private String query;
 	
-	public SchedulerDTO(){}
+	public SchedulerNotificationDTO(){}
+
 	
-	public SchedulerDTO(String userid, String cron_exp, long datasourceid, String visualizationid, ReportDTO report,
-			ReportLineItem report_line_item, AssignReport assign_report, Schedule schedule, QueryDTO queryDTO) {
+	public SchedulerNotificationDTO(String userid, String cron_exp, String visualizationid, ReportDTO report,
+			ReportLineItem report_line_item, AssignReport assign_report, Schedule schedule, String query) {
 		super();
 		this.userid = userid;
 		this.cron_exp = cron_exp;
-		this.datasourceid = datasourceid;
 		this.visualizationid = visualizationid;
 		this.report = report;
 		this.report_line_item = report_line_item;
 		this.assign_report = assign_report;
 		this.schedule = schedule;
-		this.queryDTO = queryDTO;
+		this.query = query;
 	}
-
 
 
 	public String getUserid() {
@@ -37,6 +37,22 @@ public class SchedulerDTO {
 
 	public void setUserid(String userid) {
 		this.userid = userid;
+	}
+
+	public String getCron_exp() {
+		return cron_exp;
+	}
+
+	public void setCron_exp(String cron_exp) {
+		this.cron_exp = cron_exp;
+	}
+
+	public String getVisualizationid() {
+		return visualizationid;
+	}
+
+	public void setVisualizationid(String visualizationid) {
+		this.visualizationid = visualizationid;
 	}
 
 	public ReportDTO getReport() {
@@ -71,46 +87,21 @@ public class SchedulerDTO {
 		this.schedule = schedule;
 	}
 
-	public String getCron_exp() {
-		return cron_exp;
+	public String getQuery() {
+		return query;
 	}
 
-	public void setCron_exp(String cron_exp) {
-		this.cron_exp = cron_exp;
-	}
-	
-	public String getVisualizationid() {
-		return visualizationid;
-	}
-
-	public void setVisualizationid(String visualizationid) {
-		this.visualizationid = visualizationid;
-	}
-	
-	
-	public long getDatasourceid() {
-		return datasourceid;
-	}
-
-	public void setDatasourceid(long datasourceid) {
-		this.datasourceid = datasourceid;
-	}
-
-	public QueryDTO getQueryDTO() {
-		return queryDTO;
-	}
-
-	public void setQueryDTO(QueryDTO queryDTO) {
-		this.queryDTO = queryDTO;
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 	@Override
 	public String toString() {
-		return "SchedulerDTO [userid=" + userid + ", cron_exp=" + cron_exp + ", datasourceid=" + datasourceid
-				+ ", visualizationid=" + visualizationid + ", report=" + report + ", report_line_item="
-				+ report_line_item + ", assign_report=" + assign_report + ", schedule=" + schedule + ", queryDTO="
-				+ queryDTO + "]";
+		return "SchedulerNotificationDTO [userid=" + userid + ", cron_exp=" + cron_exp + ", visualizationid="
+				+ visualizationid + ", report=" + report + ", report_line_item=" + report_line_item + ", assign_report="
+				+ assign_report + ", schedule=" + schedule + ", query=" + query + "]";
 	}
+	
 	
 	
 }

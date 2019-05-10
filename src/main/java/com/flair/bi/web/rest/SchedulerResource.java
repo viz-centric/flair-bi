@@ -1,6 +1,7 @@
 package com.flair.bi.web.rest;
 
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
@@ -26,18 +27,32 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.messages.Query;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceConstraintService;
+import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
+import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.view.ViewService;
+import com.flair.bi.view.VisualMetadataService;
+import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.protobuf.util.JsonFormat;
+import com.project.bi.query.dto.ConditionExpressionDTO;
+import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.expression.condition.ConditionExpression;
 
 import lombok.RequiredArgsConstructor;
 
@@ -81,6 +96,12 @@ public class SchedulerResource {
 
 	private final UserService userService;
 	
+	private final DatasourceConstraintService datasourceConstraintService;
+	
+	private final VisualMetadataService visualMetadataService;
+	
+	private final DatasourceService datasourceService;
+	
 
 	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
 
@@ -90,11 +111,22 @@ public class SchedulerResource {
 	public ResponseEntity<SchedulerResponse> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
 			throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
+		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getVisualizationid());
+		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
+		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
 		schedulerDTO.setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
 		schedulerDTO.getReport_line_item().setQuery_name(SecurityUtils.getCurrentUserLogin() + ":" + schedulerDTO.getReport_line_item().getQuery_name());
 		schedulerDTO.getReport().setMail_body(mail_body);
-		schedulerDTO.getReport().setSubject("Report : " + schedulerDTO.getReport().getSubject() + " : " + new Date());
+		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
+		schedulerDTO.getReport().setConnection_name(datasource.getName());
+		schedulerDTO.getReport_line_item().setTable(datasource.getName());
+		schedulerDTO.getReport().setSource_id(datasource.getConnectionName());
+		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
+		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
+		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getVisualizationid(), schedulerDTO.getUserid());
+		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getUserid(),schedulerDTO.getCron_exp(),schedulerDTO.getVisualizationid(),
+			schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
 		HttpHeaders headers = new HttpHeaders();
@@ -109,8 +141,8 @@ public class SchedulerResource {
 		//		}
 		//		headers.set("Authorization", Constants.ai_token);
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		log.debug("setChannelCredentials(schedulerDTO)===" + setChannelCredentials(schedulerDTO));
-		HttpEntity<SchedulerDTO> entity = new HttpEntity<SchedulerDTO>(setChannelCredentials(schedulerDTO), headers);
+		log.debug("setChannelCredentials(schedulerDTO)===" + setChannelCredentials(schedulerNotificationDTO));
+		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(setChannelCredentials(schedulerNotificationDTO), headers);
 		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST,
@@ -138,6 +170,35 @@ public class SchedulerResource {
     	emailsDTO emailList[]= {emailsDTO};
 		return emailList;
 	}
+	
+	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) {
+
+		
+		queryDTO.setSource(datasource.getName());
+        
+		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,datasource.getId());
+		
+        Optional.ofNullable(visualMetadata)
+        .map(VisualMetadata::getConditionExpression)
+        .map(x -> {
+            ConditionExpressionDTO dto = new ConditionExpressionDTO();
+            dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
+            dto.setConditionExpression(x);
+            return dto;
+        })
+        .ifPresent(queryDTO.getConditionExpressions()::add);
+
+        Optional.ofNullable(constraint)
+            .map(DatasourceConstraint::build)
+            .ifPresent(queryDTO.getConditionExpressions()::add);
+
+        Query query = QueryGrpcUtils.mapToQuery(queryDTO,datasource.getConnectionName(),
+            visualizationId != null ? visualizationId : "",
+            userId);
+		
+        return query.toString();
+	
+	}
 
 	private String authFlairAI(RestTemplate restTemplate) throws Exception {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(authUrl);
@@ -154,20 +215,18 @@ public class SchedulerResource {
 		return jsonObject.getString("token");
 	}
 	
-	private SchedulerDTO setChannelCredentials(SchedulerDTO schedulerDTO){
-		if(schedulerDTO.getAssign_report().getChannel().equals("slack")){
-			schedulerDTO.getAssign_report().setChannel_id(channel_id);
-			schedulerDTO.getAssign_report().setSlack_API_Token(slack_API_Token);
-		}else if(schedulerDTO.getAssign_report().getChannel().equals("stride")){
-			schedulerDTO.getAssign_report().setStride_API_Token(stride_API_Token);
-			schedulerDTO.getAssign_report().setStride_cloud_id(stride_cloud_id);
-			schedulerDTO.getAssign_report().setStride_conversation_id(stride_conversation_id);
+	private SchedulerNotificationDTO setChannelCredentials(SchedulerNotificationDTO schedulerNotificationDTO){
+		if(schedulerNotificationDTO.getAssign_report().getChannel().equals("slack")){
+			schedulerNotificationDTO.getAssign_report().setChannel_id(channel_id);
+			schedulerNotificationDTO.getAssign_report().setSlack_API_Token(slack_API_Token);
+		}else if(schedulerNotificationDTO.getAssign_report().getChannel().equals("stride")){
+			schedulerNotificationDTO.getAssign_report().setStride_API_Token(stride_API_Token);
+			schedulerNotificationDTO.getAssign_report().setStride_cloud_id(stride_cloud_id);
+			schedulerNotificationDTO.getAssign_report().setStride_conversation_id(stride_conversation_id);
 		} else{
 			
 		}
-		
-		return schedulerDTO;
-		
+		return schedulerNotificationDTO;
 	}
 
 }

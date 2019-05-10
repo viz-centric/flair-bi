@@ -97,6 +97,9 @@ public class DatasourceServiceImpl implements DatasourceService {
         b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
                 .or(QDatasource.datasource.status.isNull()));
         final Iterable<Datasource> datasources = datasourceRepository.findAll(b);
+        for (Datasource datasource : datasources) {
+            datasource.setStatus(DatasourceStatus.DELETED);
+        }
         datasourceRepository.save(datasources);
     }
 

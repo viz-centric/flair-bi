@@ -129,6 +129,9 @@
         vm.mobileUserOptionNavigationSlide=false;
         vm.logout=logout;
         vm.filtersLength=0;
+        vm.changeHeaderColor=changeHeaderColor;
+        vm.changeContainerColor=changeContainerColor;
+
 
         
         Principal.identity().then(function (account) {
@@ -593,6 +596,27 @@
         function logout() {
            Auth.logout();
             $state.go('login');
+        }
+
+        $scope.$watch('headerColor', function() {
+            if($scope.headerColor!=null)
+                $('.flairbi-content-header-fullscreen').css('background-color',$scope.headerColor);
+            //VisualDispatchService.setSettings(vm.settings);
+        });
+
+        $scope.$watch('containerColor', function() {
+            if($scope.containerColor!=undefined)
+                $('.page-wrapper-full-screen').css('background-color',$scope.containerColor)
+        });
+
+        function changeHeaderColor(headerColor){
+            if(headerColor)
+                $('.flairbi-content-header-fullscreen').css('background-color',headerColor);
+        }
+        
+        function changeContainerColor(containerColor){
+            if(containerColor)
+                $('.page-wrapper-full-screen').css('background-color',containerColor)
         }
     }
 })();

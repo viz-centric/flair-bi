@@ -3799,7 +3799,7 @@ jhi-alert .alerts .alert-danger {
         height: 36px; }
     .flairbi-content-header .header-first .line {
       width: 1px;
-      height: 30px;
+      height: 39px;
       background: #e4e4e4;
       float: left;
       margin: 4px 5px 0 5px; }
@@ -3935,7 +3935,7 @@ jhi-alert .alerts .alert-danger {
       justify-content: flex-start; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .line {
         width: 1px;
-        height: 30px;
+        height: 39px;
         background: #e4e4e4;
         float: left;
         margin: 4px 5px 0 5px; }
@@ -3954,8 +3954,26 @@ jhi-alert .alerts .alert-danger {
           position: relative; }
           .flairbi-content-header .full-screen-topbar .full-screen-options .item .fullscreen-dropdowns .dropdown-menu {
             right: 0px; }
-      .flairbi-content-header .full-screen-topbar .full-screen-options .show {
-        margin-right: 4%; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .item md-input-container {
+          display: none; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .item .md-button.md-icon-button md-icon, .flairbi-content-header .full-screen-topbar .full-screen-options .item button.md-button.md-fab md-icon {
+          display: none; }
+      .flairbi-content-header .full-screen-topbar .full-screen-options .bookmarks-dropdowns {
+        margin-left: auto;
+        padding-left: 5px; }
+      .flairbi-content-header .full-screen-topbar .full-screen-options .settings {
+        display: flex; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .settings .settings-item {
+          margin-top: -15px;
+          width: 50px; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .settings .header-color {
+          margin-left: 8%;
+          margin-right: 8%; }
+        .flairbi-content-header .full-screen-topbar .full-screen-options .settings .container-color {
+          margin-right: -15%;
+          margin-left: 10%; }
+      .flairbi-content-header .full-screen-topbar .full-screen-options .add-bookmark {
+        margin-right: 9px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options menu-component .menu-container .menu {
         margin-right: 12px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .fs-btn svg {

@@ -70,8 +70,6 @@
                         .config(getProperties(VisualizationUtils, record))
                         .print(false);
 
-                    record.data[0]["order_item_product_price"] = record.data[0]["order_item_product_price"] * 2
-
                     svg.datum(record.data)
                         .call(gauge)
 

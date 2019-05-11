@@ -170,7 +170,10 @@
             showSideBar();
             vm.propertiesToggled = true;
             vm.sideBarTab = "properties";
-            $('#slider').css('display','block'); 
+            $('#slider').css('display','block');
+            $timeout(function() {
+                 $scope.$broadcast('reCalcViewDimensions');
+            }); 
         }
 
         function registerFilterRefresh() {

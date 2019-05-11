@@ -29,7 +29,7 @@
         }
         .line{
                 width: 1px;
-                height: 30px;
+                height: 39px;
                 background: #e4e4e4;
                 float: left;
                 margin: 4px 5px 0 5px;
@@ -216,7 +216,7 @@
             justify-content: flex-start;
             .line{
                 width: 1px;
-                height: 30px;
+                height: 39px;
                 background: #e4e4e4;
                 float: left;
                 margin: 4px 5px 0 5px;
@@ -242,9 +242,36 @@
                         right: 0px;
                     }
                 }
+                md-input-container {
+                    display:none;
+                }
+                .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {
+                    display: none;
+                }
+            }
+            .bookmarks-dropdowns{
+                margin-left: auto;
+                padding-left: 5px;
+            }
+            .settings{
+                display:flex;
+                .settings-item{
+                    margin-top: -15px;
+                    width: 50px;
+                }
+                .header-color{
+                    margin-left: 8%;
+                    margin-right: 8%;
+                }
+                .container-color{
+                    margin-right: -15%;
+                    margin-left: 10%;
+                }
+            }
+            .add-bookmark{
+                margin-right: 9px;
             }
             .show {
-                margin-right: 4%;
             }
             menu-component {
                .menu-container .menu {
@@ -544,3 +571,9 @@
 .ng-pageslide-body-open{
     overflow: visible !important;
  }
+
+ @media (min-width: 320px) and (max-width: 994px) {
+    .visual-msc{
+      display: none;
+    }
+  }

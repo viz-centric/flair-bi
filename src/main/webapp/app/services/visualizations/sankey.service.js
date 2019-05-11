@@ -16,17 +16,21 @@
 
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
-                        measure = features.measures;
+                        measure = features.measures,
+                        colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimensions);
-                    result['measure'] = D3Utils.getNames(measure)[0];
+                    result['measure'] = D3Utils.getNames(measure);
 
                     result['maxDim'] = dimensions.length;
                     result['maxMes'] = measure.length;
 
                     result['colorPattern'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Color Pattern').toLowerCase().replace(' ', '_');
-                    result['displayColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display colour');
-                    result['borderColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Border colour');
+
+                    var displayColor = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display colour');
+                    result['displayColor'] = (displayColor == null) ? colorSet[0] : displayColor
+                    var borderColor = VisualizationUtils.getFieldPropertyValue(measure[0], 'Border colour');
+                    result['borderColor'] = (borderColor == null) ? colorSet[1] : borderColor
                     result['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Number format');
                     result['showLabels'] = [];
                     result['fontStyle'] = [];
@@ -63,14 +67,14 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                      .attr('class', 'custom_tooltip')
+                        .attr('class', 'custom_tooltip')
 
                     var sankey = flairVisualizations.sankey()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(true);
+                        .print(false);
 
                     svg.datum(record.data)
                         .call(sankey);

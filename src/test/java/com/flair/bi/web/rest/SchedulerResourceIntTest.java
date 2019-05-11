@@ -5,6 +5,8 @@ package com.flair.bi.web.rest;
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.User;
+import com.flair.bi.service.DatasourceConstraintService;
+import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
@@ -12,6 +14,10 @@ import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
+import com.flair.bi.view.VisualMetadataService;
+import com.project.bi.query.dto.QueryDTO;
+
+import org.assertj.core.util.Arrays;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,6 +46,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Ignore
 public class SchedulerResourceIntTest extends AbstractIntegrationTest{
 
@@ -59,6 +68,16 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Inject
     private UserService userService;
     
+    @Inject
+	private  DatasourceConstraintService datasourceConstraintService;
+    
+    @Inject
+	private  VisualMetadataService visualMetadataService;
+    
+    @Inject
+	private  DatasourceService datasourceService;
+	
+    
     public SchedulerDTO createScheduledObject() {
     	SchedulerDTO schedulerDTO = new SchedulerDTO();
     	schedulerDTO.setCron_exp("14 */16 * * *");
@@ -74,19 +93,21 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setReport(reportDTO);
     	
     	ReportLineItem reportLineItem= new ReportLineItem();
-    	String fields[]= {"State", "COUNT(Price) as Price"};
-    	String groupBy[]= {"State"};
-    	String orderBy[]= {};
+    	List<String> fields= new ArrayList<String>();//("State"), "COUNT(Price) as Price"};
+    	fields.add("State");
+    	fields.add("COUNT(Price) as Price");
     	String dimentions[]= {"State"};
     	String measures[]= {"Price"};
+    	List<String> groupBy= new ArrayList<String>();
+    	groupBy.add("State");
+    	QueryDTO queryDTO= new QueryDTO();
     	reportLineItem.setQuery_name("");
-    	reportLineItem.setFields(fields);
-    	reportLineItem.setGroup_by(groupBy);
-    	reportLineItem.setOrder_by(orderBy);
-    	reportLineItem.setLimit(20);
+    	queryDTO.setFields(fields);
+    	queryDTO.setGroupBy(groupBy);
+    	queryDTO.setLimit(20L);
+    	schedulerDTO.setQueryDTO(queryDTO);
     	reportLineItem.setTable("Transactions");
     	reportLineItem.setVisualization("pie");
-    	reportLineItem.setWhere(null);
     	reportLineItem.setDimension(dimentions);
     	reportLineItem.setMeasure(measures);
     	schedulerDTO.setReport_line_item(reportLineItem);
@@ -119,7 +140,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        SchedulerResource schedulerResource = new SchedulerResource(userService);
+        SchedulerResource schedulerResource = new SchedulerResource(userService, datasourceConstraintService, visualMetadataService, datasourceService);
         ReflectionTestUtils.setField(schedulerResource, "userService", userService); 
         this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)

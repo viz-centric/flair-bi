@@ -225,14 +225,20 @@
         }
 
         function connectWebSocket() {
+            console.log('datasource wizard controller connecting web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function(frame) {
-                    console.log('controller connected web socket');
-                    stompClientService.subscribe("/user/exchange/sampleMetaData", onExchangeMetadata.bind(this));
-                    stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError.bind(this));
+                    console.log('datasource wizard controller connected web socket');
+                    stompClientService.subscribe("/user/exchange/sampleMetaData", onExchangeMetadata);
+                    stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
+
+            $scope.$on("$destroy", function (event) {
+                console.log('datasource wizard destorying web socket');
+                stompClientService.disconnect();
+            });
         }
 
         function onExchangeMetadataError(data) {

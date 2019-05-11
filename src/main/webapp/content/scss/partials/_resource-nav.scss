@@ -1,14 +1,14 @@
 #slider {
     box-shadow: 0 0 3px 0 #a8a8a8;
     background: #fafafa;
-    width: 15vw;
+    width: 17vw;
     position: fixed;
     right: 0;
     display: none;
     transition-duration: 0.5s;
     transition-property: top, bottom, left, right;
     z-index: 10;
-    height: calc(100% - 123px);
+    height: calc(100% - 95px);
     overflow-y: auto;
     margin-right: 46px;
     margin-top: 58px;
@@ -81,8 +81,8 @@
                             padding: 10px 15px;
                             .visual-sub-items {
                                 svg {
-                                    height: 28px;
-                                    width: 28px;
+                                    height: 35px;
+                                    width: 35px;
                                     fill: $icons-color;
                                 }
                             }

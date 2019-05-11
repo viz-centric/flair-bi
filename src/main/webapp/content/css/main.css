@@ -1175,14 +1175,14 @@ nav.navbar-static-top {
 #slider {
   box-shadow: 0 0 3px 0 #a8a8a8;
   background: #fafafa;
-  width: 15vw;
+  width: 17vw;
   position: fixed;
   right: 0;
   display: none;
   transition-duration: 0.5s;
   transition-property: top, bottom, left, right;
   z-index: 10;
-  height: calc(100% - 123px);
+  height: calc(100% - 95px);
   overflow-y: auto;
   margin-right: 46px;
   margin-top: 58px; }
@@ -1240,8 +1240,8 @@ nav.navbar-static-top {
             margin-top: 10px;
             padding: 10px 15px; }
             #slider .resource-nav .panel .panel-body .list-group .visualContainer .visual-items .visual-sub-items svg {
-              height: 28px;
-              width: 28px;
+              height: 35px;
+              width: 35px;
               fill: #676a6c; }
         #slider .resource-nav .panel .panel-body .list-group .list-group-item {
           border: none;
@@ -4189,6 +4189,10 @@ jhi-alert .alerts .alert-danger {
 .ng-pageslide-body-open {
   overflow: visible !important; }
 
+@media (min-width: 320px) and (max-width: 994px) {
+  .visual-msc {
+    display: none; } }
+
 #grid-container {
   padding: 0px !important; }
   #grid-container .unselected-vizualization {
@@ -4666,7 +4670,7 @@ table.property-information-table tbody tr td {
 #viz_table_wrapper {
   background-color: white; }
   #viz_table_wrapper .table {
-    font-size: 0.7rem;
+    font-size: 1.1rem;
     border-top: 1px solid #d3d4d4;
     border-bottom: 1px solid #d3d4d4; }
     #viz_table_wrapper .table th {
@@ -4715,14 +4719,14 @@ table.property-information-table tbody tr td {
   .textobject div,
   .kpi div {
     line-height: 2;
-    font-family: 'Fira Sans Extra Condensed', sans-serif; }
+    font-family: "Fira Sans Extra Condensed", sans-serif; }
   .textobject span,
   .kpi span {
     padding: 0px 4px;
     border-radius: 4px; }
 
 text {
-  font: 9px 'Fira Sans Extra Condensed', sans-serif; }
+  font: 9px "Fira Sans Extra Condensed", sans-serif; }
 
 .tooltip_custom {
   background: #ffffff;
@@ -4787,8 +4791,8 @@ text {
   stroke-dasharray: 4, 4; }
 
 .lasso .origin {
-  fill: #3399FF;
-  fill-opacity: .5; }
+  fill: #3399ff;
+  fill-opacity: 0.5; }
 
 .grid line {
   stroke: #dfdfdf;
@@ -4803,7 +4807,7 @@ text {
 #infographics_info {
   width: 100%;
   height: 20%;
-  font-family: 'Fira Sans Extra Condensed', sans-serif; }
+  font-family: "Fira Sans Extra Condensed", sans-serif; }
   #infographics_info span {
     border-radius: 4px; }
 
@@ -4881,7 +4885,7 @@ path {
   stroke-dasharray: 0; }
 
 text {
-  font-family: 'Fira Sans Extra Condensed', sans-serif;
+  font-family: "Fira Sans Extra Condensed", sans-serif;
   font-size: 8pt;
   fill: #787878; }
 
@@ -4902,8 +4906,8 @@ line {
   background-color: rgba(136, 139, 142, 0.5);
   border-radius: 2px; }
 
-.tag {
-  font-size: 12px; }
+.dataTables_length {
+  text-align: left !important; }
 
 .test-connection-col {
   display: flex;
@@ -6304,11 +6308,3 @@ input.select2-active {
 
 .common-create-popup md-input-container .md-input {
   border-radius: 0px; }
-
-
-  .dataTables_length{
-    text-align: left !important;
-
-  }
-
-  

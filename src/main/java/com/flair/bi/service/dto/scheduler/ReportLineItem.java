@@ -2,7 +2,7 @@ package com.flair.bi.service.dto.scheduler;
 import java.util.Arrays;
 
 public class ReportLineItem {
-	
+	private String visualizationid;
 	private String visualization;
 	private String dimension[];
 	private String measure[];
@@ -12,7 +12,6 @@ public class ReportLineItem {
 	public String getVisualization() {
 		return visualization;
 	}
-
 
 	public void setVisualization(String visualization) {
 		this.visualization = visualization;
@@ -37,11 +36,20 @@ public class ReportLineItem {
 	public void setMeasure(String[] measure) {
 		this.measure = measure;
 	}
+	
+
+	public String getVisualizationid() {
+		return visualizationid;
+	}
+
+	public void setVisualizationid(String visualizationid) {
+		this.visualizationid = visualizationid;
+	}
 
 	@Override
 	public String toString() {
-		return "ReportLineItem [visualization=" + visualization + ", dimension=" + Arrays.toString(dimension)
-				+ ", measure=" + Arrays.toString(measure) + "]";
+		return "ReportLineItem [visualizationid=" + visualizationid + ", visualization=" + visualization
+				+ ", dimension=" + Arrays.toString(dimension) + ", measure=" + Arrays.toString(measure) + "]";
 	}
 	
 }

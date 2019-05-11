@@ -1,13 +1,7 @@
 package com.flair.bi.service.dto.scheduler;
 
-import com.flair.bi.messages.Query;
-import com.project.bi.query.dto.QueryDTO;
-
 public class SchedulerNotificationDTO {
 
-	private String userid;
-	private String cron_exp;
-	private String visualizationid;
 	private ReportDTO report;
 	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
@@ -17,42 +11,14 @@ public class SchedulerNotificationDTO {
 	public SchedulerNotificationDTO(){}
 
 	
-	public SchedulerNotificationDTO(String userid, String cron_exp, String visualizationid, ReportDTO report,
+	public SchedulerNotificationDTO(ReportDTO report,
 			ReportLineItem report_line_item, AssignReport assign_report, Schedule schedule, String query) {
 		super();
-		this.userid = userid;
-		this.cron_exp = cron_exp;
-		this.visualizationid = visualizationid;
 		this.report = report;
 		this.report_line_item = report_line_item;
 		this.assign_report = assign_report;
 		this.schedule = schedule;
 		this.query = query;
-	}
-
-
-	public String getUserid() {
-		return userid;
-	}
-
-	public void setUserid(String userid) {
-		this.userid = userid;
-	}
-
-	public String getCron_exp() {
-		return cron_exp;
-	}
-
-	public void setCron_exp(String cron_exp) {
-		this.cron_exp = cron_exp;
-	}
-
-	public String getVisualizationid() {
-		return visualizationid;
-	}
-
-	public void setVisualizationid(String visualizationid) {
-		this.visualizationid = visualizationid;
 	}
 
 	public ReportDTO getReport() {
@@ -97,9 +63,8 @@ public class SchedulerNotificationDTO {
 
 	@Override
 	public String toString() {
-		return "SchedulerNotificationDTO [userid=" + userid + ", cron_exp=" + cron_exp + ", visualizationid="
-				+ visualizationid + ", report=" + report + ", report_line_item=" + report_line_item + ", assign_report="
-				+ assign_report + ", schedule=" + schedule + ", query=" + query + "]";
+		return "SchedulerNotificationDTO [report=" + report + ", report_line_item=" + report_line_item
+				+ ", assign_report=" + assign_report + ", schedule=" + schedule + ", query=" + query + "]";
 	}
 	
 	

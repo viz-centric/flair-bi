@@ -1,7 +1,8 @@
 package com.flair.bi.service.dto.scheduler;
 
 public class ReportDTO {
-	
+
+private String userid;
 private String connection_name;
 private String mail_body;
 private String subject;
@@ -60,10 +61,20 @@ public void setTitle_name(String title_name) {
 	this.title_name = title_name;
 }
 
+
+public String getUserid() {
+	return userid;
+}
+
+public void setUserid(String userid) {
+	this.userid = userid;
+}
+
 @Override
 public String toString() {
-	return "ReportDTO [connection_name=" + connection_name + ", mail_body=" + mail_body + ", subject=" + subject
-			+ ", report_name=" + report_name + ", source_id=" + source_id + ", title_name=" + title_name + "]";
+	return "ReportDTO [userid=" + userid + ", connection_name=" + connection_name + ", mail_body=" + mail_body
+			+ ", subject=" + subject + ", report_name=" + report_name + ", source_id=" + source_id + ", title_name="
+			+ title_name + "]";
 }
 
 }

@@ -31,8 +31,8 @@ public class GrpcConfig {
                 .getNextServerFromEureka(properties.getServer().getServiceName(), false);
 
             final NettyChannelBuilder nettyChannelBuilder =
-                NettyChannelBuilder
-                    .forAddress("localhost",
+                NettyChannelBuilder.forAddress(
+                        properties.getTls().isEnabled() ? instanceInfo.getHostName() : instanceInfo.getIPAddr(),
                         instanceInfo.getPort());
 
             log.info("GRPC config: Hostname {} IP {}", instanceInfo.getHostName(), instanceInfo.getIPAddr());

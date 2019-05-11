@@ -1,14 +1,20 @@
 package com.flair.bi.web.rest;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,6 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,35 +33,30 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.MailService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
-import com.flair.bi.view.ViewService;
 import com.flair.bi.view.VisualMetadataService;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.expression.condition.ConditionExpression;
-
 import lombok.RequiredArgsConstructor;
 
 import org.slf4j.Logger;
@@ -111,22 +114,19 @@ public class SchedulerResource {
 	public ResponseEntity<SchedulerResponse> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
 			throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
-		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getVisualizationid());
+		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
 		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
-		schedulerDTO.setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
-		schedulerDTO.getReport_line_item().setQuery_name(SecurityUtils.getCurrentUserLogin() + ":" + schedulerDTO.getReport_line_item().getQuery_name());
+		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport().setMail_body(mail_body);
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setConnection_name(datasource.getName());
-		schedulerDTO.getReport_line_item().setTable(datasource.getName());
 		schedulerDTO.getReport().setSource_id(datasource.getConnectionName());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
-		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getVisualizationid(), schedulerDTO.getUserid());
-		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getUserid(),schedulerDTO.getCron_exp(),schedulerDTO.getVisualizationid(),
-			schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
+		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
+		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
 		HttpHeaders headers = new HttpHeaders();
@@ -171,7 +171,7 @@ public class SchedulerResource {
 		return emailList;
 	}
 	
-	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) {
+	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) throws InvalidProtocolBufferException {
 
 		
 		queryDTO.setSource(datasource.getName());
@@ -195,8 +195,12 @@ public class SchedulerResource {
         Query query = QueryGrpcUtils.mapToQuery(queryDTO,datasource.getConnectionName(),
             visualizationId != null ? visualizationId : "",
             userId);
-		
-        return query.toString();
+        
+        String jsonQuery=JsonFormat.printer().print(query);
+
+        log.debug("jsonQuery=="+jsonQuery);
+
+        return jsonQuery;
 	
 	}
 
@@ -228,5 +232,19 @@ public class SchedulerResource {
 		}
 		return schedulerNotificationDTO;
 	}
+
+    @GetMapping("/schedule/{pageNo}")
+    @Timed
+    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable int pageNo)
+        throws URISyntaxException {
+    	RestTemplate restTemplate = new RestTemplate();
+    	//let the url be hard code until it is tested
+		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
+		restTemplate.exchange("localhost:8090/api/user/{user}/reports/",
+		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+		},SecurityUtils.getCurrentUserLogin());
+		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
+		return ResponseEntity.status(ResponseEntity.getStatusCode()).body(reports);
+    }
 
 }

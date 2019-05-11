@@ -5,15 +5,14 @@
         .module("flairbiApp")
         .factory("stompClientService", stompClientService);
 
-    stompClientService.$inject = ['StompClient'];
+    stompClientService.$inject = ['StompClientFactory'];
 
-    function stompClientService(StompClient) {
-        var stompClient = StompClient;
+    function stompClientService(StompClientFactory) {
+        var stompClient;
         var messageQueue = [];
 
-        init();
-
         function isConnected() {
+            console.log('stompClient.ws.readyState', stompClient.ws.readyState);
             return stompClient.ws.readyState === 1;
         }
 
@@ -21,7 +20,7 @@
             if (!isConnected()) {
                 addToMessageQueue(url, header, body);
             } else {
-                console.log('STOMP send');
+                console.log('STOMP send', header, body);
                 stompClient.send(url, header, body);
             }
         }
@@ -34,8 +33,13 @@
             });
         }
 
+        function createStompClient() {
+            return StompClientFactory.create();
+        }
+
         function connect(params, connectionHandler) {
-            console.log('STOMP connect');
+            stompClient = createStompClient();
+            console.log('STOMP connect', stompClient);
             stompClient.connect(params, function (data) {
                 console.log('STOMP connected handler');
                 connectionHandler(data);
@@ -70,10 +74,6 @@
                 var message = localMessageQueue[i];
                 send(message.url, message.header, message.body);
             }
-        }
-
-        function init() {
-            stompClient.debug = null;
         }
 
         return {

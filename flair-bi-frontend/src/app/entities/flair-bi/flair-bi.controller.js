@@ -190,6 +190,11 @@ function FlairBiController(
                 stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError.bind(this));
             }
         );
+
+        $scope.$on("$destroy", function (event) {
+            console.log('flair-bi controller destorying web socket');
+            stompClientService.disconnect();
+        });
     }
 
     function onExchangeMetadataError(data) {

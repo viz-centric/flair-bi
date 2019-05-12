@@ -18,15 +18,15 @@ FlairBiFullscreenController.$inject = ['$scope',
 ];
 
 function FlairBiFullscreenController($scope,
-    visualMetadata,
-    VisualWrap,
-    datasource,
-    visualizationRenderService,
-    $stateParams,
-    proxyGrpcService,
-    filterParametersService,
-    stompClientService,
-    AuthServerProvider) {
+                                     visualMetadata,
+                                     VisualWrap,
+                                     datasource,
+                                     visualizationRenderService,
+                                     $stateParams,
+                                     proxyGrpcService,
+                                     filterParametersService,
+                                     stompClientService,
+                                     AuthServerProvider) {
     var vm = this;
 
     vm.visualMetadata = new VisualWrap(visualMetadata);
@@ -40,20 +40,25 @@ function FlairBiFullscreenController($scope,
         proxyGrpcService.forwardCall(vm.datasource.id, {
             queryDTO: vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
             visualMetadata: vm.visualMetadata,
-            type: 'share-link'
+            type:'share-link'
         });
     }
 
     function connectWebSocket() {
-        console.log('controller connect web socket');
+        console.log('flair-bi fullscreen controller connect web socket');
         stompClientService.connect(
             { token: AuthServerProvider.getToken() },
-            function (frame) {
-                console.log('controller connected web socket');
-                stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata.bind(this));
-                stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError.bind(this));
+            function(frame) {
+                console.log('flair-bi fullscreen controller connected web socket');
+                stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
+                stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
             }
         );
+
+        $scope.$on("$destroy", function (event) {
+            console.log('flair-bi fullscreen destorying web socket');
+            stompClientService.disconnect();
+        });
     }
 
     function onExchangeMetadataError(data) {

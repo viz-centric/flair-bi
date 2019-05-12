@@ -14,7 +14,8 @@ function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
                 var result = {};
 
                 var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
-                    measures = features.measures;
+                    measures = features.measures,
+                    colorSet = D3Utils.getDefaultColorset();
 
                 result['measures'] = D3Utils.getNames(measures);
 
@@ -24,7 +25,8 @@ function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
                 result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Font style');
                 result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Font weight');
                 result['showValues'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Value on Points');
-                result['displayColor'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display colour');
+                var displayColor = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display colour');
+                result['displayColor'] = (displayColor == null) ? colorSet[0] : displayColor
                 result['isGradient'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Enable Gradient Color');
                 result['textColor'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Text colour');
                 result['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Number format');
@@ -33,7 +35,8 @@ function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
                 result['targetFontStyle'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Font style');
                 result['targetFontWeight'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Font weight');
                 result['targetShowValues'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Value on Points');
-                result['targetDisplayColor'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Display colour');
+                var targetDisplayColor = VisualizationUtils.getFieldPropertyValue(measures[1], 'Display colour');
+                result['targetDisplayColor'] = (targetDisplayColor == null) ? colorSet[1] : targetDisplayColor
                 result['targetTextColor'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Text colour');
                 result['targetNumberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Number format');
 

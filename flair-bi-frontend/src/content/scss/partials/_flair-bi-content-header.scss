@@ -571,3 +571,9 @@
 .ng-pageslide-body-open{
     overflow: visible !important;
 }
+
+@media (min-width: 320px) and (max-width: 994px) {
+    .visual-msc{
+        display: none;
+    }
+}

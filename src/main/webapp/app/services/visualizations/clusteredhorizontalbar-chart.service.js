@@ -88,6 +88,7 @@
                     }
                 } else {
                     d3.select(element[0]).html('')
+                    
                     var div = d3.select(element[0]).append('div')
                         .attr('id', 'clusteredhorizontalbar-' + element[0].id)
                         .style('width', element[0].clientWidth + 'px')

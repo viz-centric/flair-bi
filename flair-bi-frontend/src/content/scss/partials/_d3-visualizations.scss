@@ -90,7 +90,7 @@
         display: inline-table;
         border-top: 1px solid #d3d4d4;
         border-bottom: 1px solid #d3d4d4;
-        
+
         th {
             font-weight: bold;
             border-bottom: 0px;
@@ -109,7 +109,7 @@
     display: block;
     div {
         line-height: 2;
-        font-family: 'Fira Sans Extra Condensed', sans-serif;
+        font-family: "Fira Sans Extra Condensed", sans-serif;
     }
     span {
         padding: 0px 4px;
@@ -117,11 +117,10 @@
     }
 }
 text {
-    font: 9px 'Fira Sans Extra Condensed', sans-serif;
+    font: 9px "Fira Sans Extra Condensed", sans-serif;
 }
 
 .tooltip_custom {
-
     background: #ffffff;
     box-shadow: 0 0 5px #999999;
     padding: 5px;
@@ -132,16 +131,15 @@ text {
     color: #787878;
     z-index: 10;
     text-align: left;
-    width: fit-content; 
+    width: fit-content;
     td {
         white-space: nowrap;
         padding: 2px;
     }
 }
 
-.tooltip_custom .tooltipData
-{
-    color:#337ab7;
+.tooltip_custom .tooltipData {
+    color: #337ab7;
 }
 
 .group-tick line {
@@ -152,7 +150,7 @@ text {
     fill-opacity: 1;
 }
 
-.KPIData{
+.KPIData {
     align-items: center;
     display: inline-flex;
 }
@@ -206,8 +204,8 @@ text {
 }
 
 .lasso .origin {
-    fill: #3399FF;
-    fill-opacity: .5;
+    fill: #3399ff;
+    fill-opacity: 0.5;
 }
 
 .grid {
@@ -219,14 +217,14 @@ text {
     path {
         stroke: #dfdfdf;
         stroke-opacity: 0.6;
-        stroke-width: 1; 
-    } 
+        stroke-width: 1;
+    }
 }
 
 #infographics_info {
     width: 100%;
     height: 20%;
-    font-family: 'Fira Sans Extra Condensed', sans-serif;
+    font-family: "Fira Sans Extra Condensed", sans-serif;
     span {
         border-radius: 4px;
     }
@@ -260,7 +258,7 @@ text {
     visibility: hidden;
     position: absolute;
     color: white;
-    background-color: rgba(31,33,36,0.8);
+    background-color: rgba(31, 33, 36, 0.8);
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -282,7 +280,7 @@ text {
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid rgba(31,33,36,0.8);
+    border-top: 5px solid rgba(31, 33, 36, 0.8);
 }
 
 /*
@@ -307,8 +305,7 @@ text {
     fill: steelblue;
 }
 
-
-  /*
+/*
   * Area Chart
   */
 .data-line {
@@ -320,10 +317,9 @@ text {
 path {
     stroke-width: 2;
     stroke-dasharray: 0;
-   
 }
 text {
-    font-family: 'Fira Sans Extra Condensed', sans-serif;
+    font-family: "Fira Sans Extra Condensed", sans-serif;
     font-size: 8pt;
     fill: #787878;
 }
@@ -334,21 +330,22 @@ line {
     fill: none;
 }
 
-.dataTables_scrollBody{
+.dataTables_scrollBody {
     display: flex;
 }
 
 .dataTables_scrollBody::-webkit-scrollbar {
     width: 5px;
     height: 5px;
-    border-radius: 5px; 
+    border-radius: 5px;
 }
 
 .dataTables_scrollBody::-webkit-scrollbar-thumb {
     background-color: rgba(136, 139, 142, 0.5);
-    border-radius: 2px; 
+    border-radius: 2px;
 }
 
-.tag{
-    font-size: 12px;
+.dataTables_length{
+    text-align: left !important;
+
 }

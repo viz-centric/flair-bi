@@ -28,8 +28,6 @@
         vm.removed = removed;
         vm.endDateFormat='yyyy-MM-dd';
         vm.scheduleObj={
-            "cron_exp":"",
-            "visualizationid":"",
             "datasourceid":0,
             "report": {
                 "connection_name": "",
@@ -39,8 +37,7 @@
                 "title_name":""
             },
             "report_line_item": {
-                "query_name": "",
-                "table": "",
+                "visualizationid":"",
                 "visualization": "",
                 "dimension":[],
                 "measure":[]
@@ -53,6 +50,7 @@
                 "email_list":[]
             },
             "schedule": {
+                "cron_exp":"",
                 "timezone": "",
                 "start_date": "",
                 "end_date": ""
@@ -77,24 +75,11 @@
 
         function buildScheduleObject(visualMetaData,datasource){
         //report's data
-        vm.scheduleObj.visualizationid=visualMetaData.id;
         vm.scheduleObj.datasourceid=datasource.id;
-        //vm.scheduleObj.report.connection_name=datasource.name;
-        //vm.scheduleObj.report.subject=visualMetaData.metadataVisual.name;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);
-        //vm.scheduleObj.report.source_id=datasource.connectionName;
-        //vm.scheduleObj.report.title_name=visualMetaData.titleProperties.titleText;
-
-        var queryDTO=buildQueryDTO(visualMetaData);
         vm.scheduleObj.report_line_item.query_name=buildQueryName(visualMetaData.id,datasource.connectionName);
-        vm.scheduleObj.queryDTO.fields=queryDTO.fields;
-        vm.scheduleObj.queryDTO.group_by=queryDTO.groupBy;
-        vm.scheduleObj.queryDTO.order_by=queryDTO.orders;
-        vm.scheduleObj.queryDTO.limit=queryDTO.limit;
-        //vm.scheduleObj.report_line_item.table=visualMetaData.metadataVisual.name;
-        //vm.scheduleObj.report_line_item.table=datasource.name;
-        //vm.scheduleObj.report_line_item.conditionExpression=visualMetaData.conditionExpression;
-        //vm.scheduleObj.report_line_item.visualization=visualMetaData.metadataVisual.name;
+        vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
+        vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
         setDimentionsAndMeasures(visualMetaData.fields);
         
     }
@@ -157,7 +142,7 @@
             vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
             vm.scheduleObj.schedule.cronExpression=$scope.cronExpression;
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
-            vm.scheduleObj.cron_exp=$scope.cronExpression;
+            vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
         }
 
         function openCalendar (date) {

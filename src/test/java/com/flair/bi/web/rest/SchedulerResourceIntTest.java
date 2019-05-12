@@ -80,9 +80,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     
     public SchedulerDTO createScheduledObject() {
     	SchedulerDTO schedulerDTO = new SchedulerDTO();
-    	schedulerDTO.setCron_exp("14 */16 * * *");
-    	schedulerDTO.setUserid("flairadmin");
-    	schedulerDTO.setVisualizationid("90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	ReportDTO reportDTO= new ReportDTO();
     	reportDTO.setConnection_name("Transactions");
     	reportDTO.setSource_id("Transactions");
@@ -90,6 +87,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	reportDTO.setReport_name("Clustered-Vertical-Bar-Chart-90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	reportDTO.setSubject("Clustered Vertical Bar Chart Report");
     	reportDTO.setTitle_name("Clustered Vertical Bar Chart");
+    	reportDTO.setUserid("flairadmin");
     	schedulerDTO.setReport(reportDTO);
     	
     	ReportLineItem reportLineItem= new ReportLineItem();
@@ -101,15 +99,14 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	List<String> groupBy= new ArrayList<String>();
     	groupBy.add("State");
     	QueryDTO queryDTO= new QueryDTO();
-    	reportLineItem.setQuery_name("");
     	queryDTO.setFields(fields);
     	queryDTO.setGroupBy(groupBy);
     	queryDTO.setLimit(20L);
     	schedulerDTO.setQueryDTO(queryDTO);
-    	reportLineItem.setTable("Transactions");
     	reportLineItem.setVisualization("pie");
     	reportLineItem.setDimension(dimentions);
     	reportLineItem.setMeasure(measures);
+    	reportLineItem.setVisualizationid("90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	schedulerDTO.setReport_line_item(reportLineItem);
     	
     	AssignReport assignReport= new AssignReport();
@@ -126,6 +123,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedule.setEnd_date("2021-04-15");
     	schedule.setStart_date("2021-04-09 00:00");
     	schedule.setTimezone("Asia/Kolkata");
+    	schedule.setCron_exp("14 */16 * * *");
     	schedulerDTO.setSchedule(schedule);
     	
     	

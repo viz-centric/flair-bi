@@ -1,39 +1,52 @@
-<div class="modal-header">
+<!-- <div class="modal-header">
     <div id="DCLabel" class="header-text">
         Data Constraints
     </div>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
-</div>
-<div class="modal-body">
-    <div class="data-constrains-properties">
-        <div ng-show="!vm.conditionExpression" class="btn btn-primary animate-show-hide" ng-click="vm.addStartingCondition()">
-            Add Condition
+</div> -->
+<div class="inmodal in modal-content common-create-popup">
+    <div class="modal-header flair-model-header">
+        <svg class="common-edit-icon">
+            <use xlink:href="#edit-dashboard" />
+        </svg>
+        <div class="header-text" id="DCLabel">
+            Data Constraints
         </div>
-        <div class="data-constaraint-conditions-container">
-            <form>
-                <condition-component ng-show="vm.conditionExpression" show-add="true" show-delete="true" features="vm.dimensions" condition="vm.conditionExpression" datasource-id="vm.datasource.id"></condition-component>
-            </form>
-            <br/>
-            <div ng-if="vm.queryValidationError" class="alert alert-danger" role="alert">
-                {{vm.queryValidationError}}
+        <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <use xlink:href="#cancle" />
+        </svg>
+    </div>
+    <div class="modal-body">
+        <div class="data-constrains-properties">
+            <div ng-show="!vm.conditionExpression" class="btn btn-primary animate-show-hide" ng-click="vm.addStartingCondition()">
+                Add Condition
             </div>
-            <div ng-show="vm.conditionExpression && vm.query" class="query">
-                <label class="control-label">SQL :  </label> <kbd>{{vm.query}}</kbd>
+            <div class="data-constaraint-conditions-container">
+                <form>
+                    <condition-component ng-show="vm.conditionExpression" show-add="true" show-delete="true" features="vm.dimensions" condition="vm.conditionExpression" datasource-id="vm.datasource.id"></condition-component>
+                </form>
+                <br/>
+                <div ng-if="vm.queryValidationError" class="alert alert-danger" role="alert">
+                    {{vm.queryValidationError}}
+                </div>
+                <div ng-show="vm.conditionExpression && vm.query" class="query">
+                    <label class="control-label">SQL :  </label> <kbd>{{vm.query}}</kbd>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button style="float: left;" type="button" class="btn btn-primary" ng-click="vm.validate()">
-        <span class="glyphicon glyphicon-glass"></span>&nbsp;
-        <span>validate</span>
-    </button>
-    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
-        <span data-translate="entity.action.cancel">Cancel</span>
-    </button>
-    <button type="submit" ng-disabled="vm.isSaving" class="btn btn-primary" ng-click="vm.save()">
-        <span class="glyphicon glyphicon-save"></span>&nbsp;
-        <span data-translate="entity.action.save">Save</span>
-    </button>
+    <div class="modal-footer">
+        <button style="float: left;" type="button" class="btn btn-primary" ng-click="vm.validate()">
+            <span class="glyphicon glyphicon-glass"></span>&nbsp;
+            <span>validate</span>
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="vm.isSaving" class="btn btn-primary" ng-click="vm.save()">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
 </div>

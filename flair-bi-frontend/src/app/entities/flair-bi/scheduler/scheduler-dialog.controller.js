@@ -6,9 +6,9 @@ angular
     .module('flairbiApp')
     .controller('SchedulerDialogController', SchedulerDialogController);
 
-SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_visualizations','scheduler_channels'];
+SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels'];
 
-function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_visualizations,scheduler_channels) {
+function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels) {
     $scope.cronExpression = '10 4 11 * *';
     $scope.cronOptions = {
         hideAdvancedTab: true
@@ -20,7 +20,6 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
     vm.clear = clear;
     vm.schedule = schedule;
     vm.timezoneGroups = TIMEZONES;
-    vm.visualizations=scheduler_visualizations;
     vm.channels=scheduler_channels;
     vm.datePickerOpenStatus = {};
     vm.openCalendar = openCalendar;
@@ -30,7 +29,7 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
     vm.removed = removed;
     vm.endDateFormat='yyyy-MM-dd';
     vm.scheduleObj={
-        "cron_exp":"",
+        "datasourceid":0,
         "report": {
             "connection_name": "",
             "report_name": "",
@@ -39,14 +38,12 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
             "title_name":""
         },
         "report_line_item": {
-            "query_name": "",
-            "fields": [],
-            "group_by": [],
-            "order_by": [],
-            "where": "",
-            "limit": 5,
-            "table": "",
-            "visualization": ""
+            "visualizationid":"",
+            "visualization": "",
+            "dimension":[],
+            "measure":[]
+        },
+        "queryDTO":{
         },
         "assign_report": {
             "channel": "",
@@ -54,6 +51,7 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
             "email_list":[]
         },
         "schedule": {
+            "cron_exp":"",
             "timezone": "",
             "start_date": "",
             "end_date": ""
@@ -78,22 +76,12 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
 
     function buildScheduleObject(visualMetaData,datasource){
         //report's data
-        //vm.scheduleObj.report.connection_id=datasource.connectionName;
-        vm.scheduleObj.report.connection_name=datasource.name;
-        vm.scheduleObj.report.subject=visualMetaData.metadataVisual.name;
+        vm.scheduleObj.datasourceid=datasource.id;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);
-        vm.scheduleObj.report.source_id=datasource.connectionName;
-        vm.scheduleObj.report.title_name=visualMetaData.titleProperties.titleText;
-
-        var queryDTO=buildQueryDTO(visualMetaData);
         vm.scheduleObj.report_line_item.query_name=buildQueryName(visualMetaData.id,datasource.connectionName);
-        vm.scheduleObj.report_line_item.fields=queryDTO.fields;
-        vm.scheduleObj.report_line_item.group_by=queryDTO.groupBy;
-        vm.scheduleObj.report_line_item.order_by=queryDTO.orders;
-        vm.scheduleObj.report_line_item.limit=queryDTO.limit
-        vm.scheduleObj.report_line_item.table=visualMetaData.metadataVisual.name;
-        vm.scheduleObj.report_line_item.table=datasource.name;
-        vm.scheduleObj.report_line_item.where=JSON.stringify(visualMetaData.conditionExpression);
+        vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
+        vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+        setDimentionsAndMeasures(visualMetaData.fields);
 
     }
 
@@ -155,8 +143,7 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
         vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
         vm.scheduleObj.schedule.cronExpression=$scope.cronExpression;
         vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
-        vm.scheduleObj.report_line_item.visualization=vm.scheduleObj.report_line_item.visualization.toLowerCase();
-        vm.scheduleObj.cron_exp=$scope.cronExpression;
+        vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
     }
 
     function openCalendar (date) {
@@ -176,5 +163,15 @@ function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope
         if (index > -1) {
             vm.scheduleObj.assign_report.email_list.splice(index, 1);
         }
+    }
+
+    function setDimentionsAndMeasures(fields){
+        fields.filter(function(item) {
+            if(item.feature.featureType === "DIMENSION"){
+                vm.scheduleObj.report_line_item.dimension.push(item.feature.definition);
+            }else if(item.feature.featureType === "MEASURE"){
+                vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
+            }
+        });
     }
 }

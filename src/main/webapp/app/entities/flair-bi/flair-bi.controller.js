@@ -176,15 +176,20 @@
         }
 
         function connectWebSocket() {
-            console.log('controller connect web socket');
+            console.log('flair-bi controller connect web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function(frame) {
-                    console.log('controller connected web socket');
-                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata.bind(this));
-                    stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError.bind(this));
+                    console.log('flair-bi controller connected web socket');
+                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
+                    stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
+
+            $scope.$on("$destroy", function (event) {
+                console.log('flair-bi controller destorying web socket');
+                stompClientService.disconnect();
+            });
         }
 
         function onExchangeMetadataError(data) {
@@ -652,6 +657,7 @@
 
         function registerStateChangeStartEvent() {
             $scope.$on("$stateChangeStart", function(event, next, current) {
+                setDefaultColorFullScreen();
                 if($(window).width()<990){
                     $rootScope.hideHeader = false;
                 }else if(next.name==="home" || next.name==="account"){
@@ -695,6 +701,11 @@
                     });
                 }
             });
+        }
+
+        function setDefaultColorFullScreen(){
+            $('.flairbi-content-header-fullscreen').css('background-color',"#fafafa");
+            $('.page-wrapper-full-screen').css('background-color',"#f1f3f3");            
         }
 
         function disconnectWebSocket() {

@@ -233,7 +233,14 @@ function DatasourceWizardStepController($scope, Datasources, $rootScope, $transl
                 stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError.bind(this));
             }
         );
+
+        $scope.$on("$destroy", function (event) {
+            console.log('datasource wizard destorying web socket');
+            stompClientService.disconnect();
+        });
     }
+
+
 
     function onExchangeMetadataError(data) {
         var body = JSON.parse(data.body || '{}');

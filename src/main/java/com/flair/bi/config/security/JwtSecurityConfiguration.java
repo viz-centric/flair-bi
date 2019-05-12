@@ -4,8 +4,6 @@ import com.flair.bi.security.Http401UnauthorizedEntryPoint;
 import com.flair.bi.security.UserDetailsService;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,34 +22,25 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.annotation.PostConstruct;
-
 @EnableOAuth2Sso
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Order(1)
 @Profile("!integration")
-@RequiredArgsConstructor
-public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter implements JwtConfiguration {
 
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserDetailsService userDetailsService;
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
-    private final PasswordEncoder passwordEncoder;
 
-    @PostConstruct
-    public void init() {
-        try {
-            authenticationManagerBuilder
+    public JwtSecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter, PasswordEncoder passwordEncoder) throws Exception {
+        this.tokenProvider = tokenProvider;
+        this.corsFilter = corsFilter;
+
+        authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
-        } catch (Exception e) {
-            throw new BeanInitializationException("Security configuration failed", e);
-        }
     }
-
 
     @Bean
     public Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint() {

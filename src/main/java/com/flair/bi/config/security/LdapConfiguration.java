@@ -2,41 +2,36 @@ package com.flair.bi.config.security;
 
 import com.flair.bi.config.JHipsterProperties;
 import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 
-import javax.annotation.PostConstruct;
-
 @Configuration
 @Order(3)
-@RequiredArgsConstructor
 public class LdapConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
-
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
     private final LdapAuthoritiesPopulator ldapAuthoritiesPopulator;
-
     private final LDAPUserDetailsContextMapper ldapUserDetailsContextMapper;
 
-    @PostConstruct
-    public void init() {
-        try {
-            authenticationManagerBuilder
+    public LdapConfiguration(JHipsterProperties jHipsterProperties, AuthenticationManagerBuilder authenticationManagerBuilder, LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
+                             LDAPUserDetailsContextMapper ldapUserDetailsContextMapper, JwtConfiguration jwtConfiguration) throws Exception {
+
+        // jwtConfiguration dependency should stay here to guarantee the order of the beans
+        // created: first JWT, then LDAP
+        this.jHipsterProperties = jHipsterProperties;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.ldapAuthoritiesPopulator = ldapAuthoritiesPopulator;
+        this.ldapUserDetailsContextMapper = ldapUserDetailsContextMapper;
+        authenticationManagerBuilder
                 .ldapAuthentication()
                 .ldapAuthoritiesPopulator(ldapAuthoritiesPopulator)
                 .userDnPatterns("uid={0},ou=people")
                 .userDetailsContextMapper(ldapUserDetailsContextMapper)
                 .contextSource(getLDAPContextSource());
-        } catch (Exception e) {
-            throw new BeanInitializationException("Security configuration failed", e);
-        }
     }
 
     private LdapContextSource getLDAPContextSource() {

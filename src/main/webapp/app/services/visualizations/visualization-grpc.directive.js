@@ -154,7 +154,6 @@
          * @param {Boolean} forceQuery : if querying for data must be done
          */
         function build(forceQuery) {
-            vm.data.loading = true;
             if (forceQuery) {
                 proxyGrpcService.forwardCall(vm.datasource.id, {
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),

@@ -224,7 +224,6 @@
                     data.headers.queryId
                 );
                 if (v) {
-                    v.loading = false;
                     v.cacheDate = cacheDate;
                 }
                 visualizationRenderService.setMetaData(
@@ -233,7 +232,6 @@
                     contentId
                 );
             }
-            $scope.$apply();
         }
 
         function recreateVisual(v) {

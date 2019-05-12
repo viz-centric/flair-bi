@@ -3,6 +3,17 @@
         <div gridstack class="flip-container grid-stack grid1" options="vm.gridStackOptions" on-change="vm.onChange(event,items)" on-drag-start="vm.onDragStart(event,ui)" on-drag-stop="vm.onDragStop(event,ui)" on-resize-start="vm.onResizeStart(event,ui)" on-resize-stop="vm.onResizeStop(event,ui)">
             <div data-gs-min-height="2" data-gs-min-width="3" id="{{v.visualBuildId}}" visual-build-id-resize="{{v.visualBuildId}}" gridstack-item ng-repeat="v in vm.visualmetadata" class="grid-flipper grid-stack-item grid-stack-item-{{v.visualBuildId}}    ng-class:{'flipToFront':v.isCardRevealed, 'flipToBack':!v.isCardRevealed}"
                 gs-item-x="v.xPosition" gs-item-y="v.yPosition" gs-item-width="v.width" gs-item-height="v.height" on-item-added="vm.onItemAdded(item)" on-item-removed="vm.onItemRemoved(item)">
+                <div ng-if="vm.showVizLoader(v.isCardRevealed, v.loading, v.dataReceived)" class="vizualization-loading">
+                    <div class="vizualization-loading-container">
+                        <div class="spinner">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                    </div>
+                </div>
                 <div id="{{v.id}}" container-id="{{v.visualBuildId}}" ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border,
                'opacity': v.bodyProperties.opacity}" class="grid-stack-item-content ui-draggable-handle visualization-card grid-front ng-class:{'face-hidden':!hideBackFace}">
                     <div id="title-{{v.id}}" class="float-e-margins header  grid-stack-item-content print-visibility-hide" style="margin-bottom:0px;">

@@ -9,7 +9,8 @@
 
     function schedulerService($http) {
         var service = {
-            scheduleReport: scheduleReport
+            scheduleReport: scheduleReport,
+            getScheduleReports:getScheduleReports
         };
 
         return service;
@@ -23,7 +24,12 @@
             });
         }
 
-
+        function getScheduleReports(pageNo) {
+            return $http({
+                url: 'api/schedule/reports/'+pageNo,
+                method: 'GET'
+            });
+        }
 
     }
 })();

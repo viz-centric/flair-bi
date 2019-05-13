@@ -3,18 +3,18 @@
 
     angular
         .module('flairbiApp')
-        .component('notificationSetComponent', {
-            templateUrl: 'app/home/notification-set.component.html',
-            controller: notificationSetController,
+        .component('releaseSetComponent', {
+            templateUrl: 'app/home/release-set.component.html',
+            controller: releaseSetController,
             controllerAs: 'vm',
             bindings: {
                 releaseAlert: "="
             }
         });
 
-    notificationSetController.$inject = ['$scope', '$state','alertsService'];
+    releaseSetController.$inject = ['$scope', '$state','alertsService'];
 
-    function notificationSetController($scope, $state,alertsService) {
+    function releaseSetController($scope, $state,alertsService) {
         var vm = this;
         vm.toggleNotifications=toggleNotifications;
         vm.pageSize = 5;

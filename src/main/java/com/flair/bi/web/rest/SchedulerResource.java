@@ -233,18 +233,23 @@ public class SchedulerResource {
 		return schedulerNotificationDTO;
 	}
 
-    @GetMapping("/schedule/{pageNo}")
+    @GetMapping("/schedule/reports/{pageNo}")
     @Timed
-    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable int pageNo)
+    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable Integer pageNo)
         throws URISyntaxException {
     	RestTemplate restTemplate = new RestTemplate();
+    try {
     	//let the url be hard code until it is tested
 		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
-		restTemplate.exchange("localhost:8090/api/user/{user}/reports/",
+		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports/",
 		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
 		},SecurityUtils.getCurrentUserLogin());
 		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
 		return ResponseEntity.status(ResponseEntity.getStatusCode()).body(reports);
+	} catch (Exception e) {
+		log.error("error occured while fetching reports:"+e.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
     }
 
 }

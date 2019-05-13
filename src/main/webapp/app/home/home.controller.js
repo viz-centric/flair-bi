@@ -24,6 +24,8 @@
         vm.openNotifications=openNotifications;
         vm.openReleases=openReleases;
         vm.isTileVisible=isTileVisible;
+        vm.reports=[];
+        vm.allReleaseAlerts=[];
 
         activate();
 
@@ -33,6 +35,7 @@
             }else{
                 $("#notifications-tab").addClass("tab-active");
                 $("#releases-tab").removeClass("tab-active");
+                getScheduledReports();
             }
         }
 
@@ -42,6 +45,7 @@
             }else{
                 $("#releases-tab").addClass("tab-active");
                 $("#notifications-tab").removeClass("tab-active");
+                getReleaseAlerts();
             }
         }
 
@@ -103,11 +107,22 @@
 
             getAccount();
             onRecentlyBox();
-            vm.allReleaseAlerts=alertsService.getAllReleaseAlerts().then(function(result){
-                vm.allReleaseAlerts=result.data;
-            });
             angular.element($("#on-recently-box1")).triggerHandler("click");
             vm.menuItems=adminListService.getHomeList();
+        }
+
+        function getReleaseAlerts() {
+        alertsService.getAllReleaseAlerts().then(function(result){
+                vm.allReleaseAlerts=result.data;
+                vm.reports=[];
+            });
+        }
+
+        function getScheduledReports(){
+            schedulerService.getScheduleReports(1).then(function(result){
+                vm.reports=result.data;
+                vm.allReleaseAlerts=[];
+            });
         }
 
         function register() {

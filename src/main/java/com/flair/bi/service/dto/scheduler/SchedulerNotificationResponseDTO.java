@@ -8,7 +8,7 @@ public class SchedulerNotificationResponseDTO {
 	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
 	private Schedule schedule;
-//	private String query;
+	private String query;
 	
 	public SchedulerNotificationResponseDTO(){}
 
@@ -44,19 +44,19 @@ public class SchedulerNotificationResponseDTO {
 		this.schedule = schedule;
 	}
 	
-//	public String getQuery() {
-//		return query;
-//	}
-//
-//	public void setQuery(String query) {
-//		this.query = query;
-//	}
-//
-//	@Override
-//	public String toString() {
-//		return "SchedulerNotificationResponseDTO [report=" + report + ", report_line_item=" + report_line_item
-//				+ ", assign_report=" + assign_report + ", schedule=" + schedule + ", query=" + query + "]";
-//	}
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+	@Override
+	public String toString() {
+		return "SchedulerNotificationResponseDTO [report=" + report + ", report_line_item=" + report_line_item
+				+ ", assign_report=" + assign_report + ", schedule=" + schedule + ", query=" + query + "]";
+	}
 	
 	
 }

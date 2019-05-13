@@ -232,5 +232,41 @@ public class GrpcQueryService {
         requestObserver.onCompleted();
 
     }
+    
+    public void callGrpcBiDirectionalAndPushInSocket(Query query,String request, String userId) throws InterruptedException {
+        StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
+            @Override
+            public void onNext(QueryResponse queryResponse) {
+                log.debug("Finished trip with===" + queryResponse.toString());
+                fbEngineWebSocketService.pushGRPCMetaDeta(queryResponse, request);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                log.error("callGrpcBiDirectionalAndPushInSocket Failed:", t);
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException statusRuntimeException = (StatusRuntimeException) t;
+                    fbEngineWebSocketService.pushGRPCMetaDataError(userId, statusRuntimeException.getStatus());
+                }
+            }
+
+            @Override
+            public void onCompleted() {
+                log.debug("Finished Request");
+            }
+        };
+
+        StreamObserver<Query> requestObserver = grpcService.getDataStream(responseObserver);
+        try {
+            requestObserver.onNext(query);
+        } catch (RuntimeException e) {
+            // Cancel RPC
+            requestObserver.onError(e);
+            throw e;
+        }
+        // Mark the end of requests
+        requestObserver.onCompleted();
+
+    }
 
 }

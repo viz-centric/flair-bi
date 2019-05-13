@@ -42,6 +42,7 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
@@ -104,6 +105,8 @@ public class SchedulerResource {
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
+	
+	private final GrpcQueryService grpcQueryService;
 	
 
 	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
@@ -245,11 +248,21 @@ public class SchedulerResource {
 		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
 		},SecurityUtils.getCurrentUserLogin());
 		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
+		for(SchedulerNotificationResponseDTO report :reports) {
+			pushToSocket(report.getQuery());
+		}
 		return ResponseEntity.status(ResponseEntity.getStatusCode()).body(reports);
 	} catch (Exception e) {
 		log.error("error occured while fetching reports:"+e.getMessage());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+    }
+    
+    private  void pushToSocket(String queryString) throws InvalidProtocolBufferException, InterruptedException {
+		 Query.Builder builder = Query.newBuilder();
+		 JsonFormat.parser().merge(queryString, builder);
+		 Query query = builder.build();;
+		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(query, "scheduled-report", query.getUserId());
     }
 
 }

@@ -1,6 +1,8 @@
 package com.flair.bi.web.websocket;
 
 import com.flair.bi.messages.QueryResponse;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+
 import io.grpc.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -53,6 +55,26 @@ public class FbEngineWebSocketService {
         header.put("queryId", queryResponse.getQueryId());
         header.put("userId", queryResponse.getUserId());
         messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/sampleMetaData", queryResponse.getData(), header);
+    }
+    
+    /**
+     * Send meta to users subscribed on channel "/user/exchange/metaData".
+     * <p>
+     * The message will be sent only to the user with the given username.
+     *
+     * @param queryResponse query response
+     * @param request request
+     */
+    public void pushGRPCMetaDeta(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO ,QueryResponse queryResponse, String request) {
+    	HashMap<String, Object> header = new HashMap<>();
+        header.put("queryId", queryResponse.getQueryId());
+        header.put("userId", queryResponse.getUserId());
+        header.put("request", request);
+        if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
+            header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
+        }
+        schedulerNotificationResponseDTO.setQueryResponse(queryResponse);
+        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/scheduledReports", queryResponse.getData(), header);
     }
 
 }

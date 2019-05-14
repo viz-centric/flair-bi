@@ -24,9 +24,9 @@
             });
         }
 
-        function getScheduleReports(pageNo) {
-            return $http({
-                url: 'api/schedule/reports/'+pageNo,
+        function getScheduleReports(pageSize,page) {
+            $http({
+                url: 'api/schedule/reports/'+pageSize+'/'+page,
                 method: 'GET'
             });
         }

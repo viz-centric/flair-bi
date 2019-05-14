@@ -9,6 +9,7 @@ public class SchedulerNotificationResponseDTO {
 	private AssignReport assign_report;
 	private Schedule schedule;
 	private String query;
+	private Object queryResponse;
 	
 	public SchedulerNotificationResponseDTO(){}
 
@@ -50,6 +51,14 @@ public class SchedulerNotificationResponseDTO {
 
 	public void setQuery(String query) {
 		this.query = query;
+	}
+	
+	public Object getQueryResponse() {
+		return queryResponse;
+	}
+
+	public void setQueryResponse(Object queryResponse) {
+		this.queryResponse = queryResponse;
 	}
 
 	@Override

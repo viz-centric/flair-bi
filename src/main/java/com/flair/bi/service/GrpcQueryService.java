@@ -9,6 +9,7 @@ import com.flair.bi.messages.QueryResponse;
 import com.flair.bi.messages.QueryValidationResponse;
 import com.flair.bi.messages.RunQueryResponse;
 import com.flair.bi.service.dto.RunQueryResponseDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
@@ -233,12 +234,12 @@ public class GrpcQueryService {
 
     }
     
-    public void callGrpcBiDirectionalAndPushInSocket(Query query,String request, String userId) throws InterruptedException {
+    public void callGrpcBiDirectionalAndPushInSocket(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO,Query query,String request, String userId) throws InterruptedException {
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
             @Override
             public void onNext(QueryResponse queryResponse) {
                 log.debug("Finished trip with===" + queryResponse.toString());
-                fbEngineWebSocketService.pushGRPCMetaDeta(queryResponse, request);
+                fbEngineWebSocketService.pushGRPCMetaDeta(schedulerNotificationResponseDTO,queryResponse, request);
             }
 
             @Override

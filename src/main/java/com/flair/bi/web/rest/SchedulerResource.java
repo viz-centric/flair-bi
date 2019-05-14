@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -236,33 +237,49 @@ public class SchedulerResource {
 		return schedulerNotificationDTO;
 	}
 
-    @GetMapping("/schedule/reports/{pageNo}")
+    @GetMapping("/schedule/reports/{pageSize}/{page}")
     @Timed
-    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable Integer pageNo)
+    public void getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
         throws URISyntaxException {
+    	//ResponseEntity<List<SchedulerNotificationResponseDTO>>
     	RestTemplate restTemplate = new RestTemplate();
     try {
     	//let the url be hard code until it is tested
 		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
-		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports/",
-		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+//		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}",
+//		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+//		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
+		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports",HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
 		},SecurityUtils.getCurrentUserLogin());
 		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
-		for(SchedulerNotificationResponseDTO report :reports) {
-			pushToSocket(report.getQuery());
+		for(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO :reports) {
+			pushToSocket(schedulerNotificationResponseDTO);
 		}
-		return ResponseEntity.status(ResponseEntity.getStatusCode()).body(reports);
 	} catch (Exception e) {
 		log.error("error occured while fetching reports:"+e.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
     }
     
-    private  void pushToSocket(String queryString) throws InvalidProtocolBufferException, InterruptedException {
+    @GetMapping("/schedule/reports/count")
+    @Timed
+    public Integer foo() throws JSONException {
+    	Integer count=0;
+    	RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8090/api/user/{user}/reportCount/", HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
+		}, SecurityUtils.getCurrentUserLogin());
+		log.info("Result - status (" + responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
+		log.info("Response =" + responseEntity.getBody());
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
+		log.info(jsonObject.getString("totalReports"));
+		count=Integer.parseInt(jsonObject.getString("totalReports"));
+        return count;
+    }
+    
+    private  void pushToSocket(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO) throws InvalidProtocolBufferException, InterruptedException {
 		 Query.Builder builder = Query.newBuilder();
-		 JsonFormat.parser().merge(queryString, builder);
+		 JsonFormat.parser().merge(schedulerNotificationResponseDTO.getQuery(), builder);
 		 Query query = builder.build();;
-		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(query, "scheduled-report", query.getUserId());
+		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(schedulerNotificationResponseDTO,query, "scheduled-report", query.getUserId());
     }
 
 }

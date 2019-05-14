@@ -24,8 +24,8 @@
         vm.openNotifications=openNotifications;
         vm.openReleases=openReleases;
         vm.isTileVisible=isTileVisible;
-        vm.reports=[];
         vm.allReleaseAlerts=[];
+        vm.reports=[];
 
         activate();
 
@@ -119,10 +119,7 @@
         }
 
         function getScheduledReports(){
-            schedulerService.getScheduleReports(1).then(function(result){
-                vm.reports=result.data;
-                vm.allReleaseAlerts=[];
-            });
+            schedulerService.getScheduleReports(5,1);
         }
 
         function register() {
@@ -140,5 +137,7 @@
                 return flag==false?'block':'none';
             }
         }
+
+
     }
 })();

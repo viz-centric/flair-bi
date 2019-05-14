@@ -14,13 +14,13 @@
     function notificationSetController($scope, $state,alertsService,stompClientService,AuthServerProvider) {
         var vm = this;
         //vm.toggleNotifications=toggleNotifications;
-        vm.pageSize = 5;
-        vm.setPage = setPage;
-        vm.nextPage = nextPage;
-        vm.prevPage = prevPage;
-        vm.range = range;
-        vm.noOfPages = 1;
-        vm.currentPage = 0;
+        // vm.pageSize = 5;
+        // vm.setPage = setPage;
+        // vm.nextPage = nextPage;
+        // vm.prevPage = prevPage;
+        // vm.range = range;
+        // vm.noOfPages = 1;
+        // vm.currentPage = 0;
         //vm.isMsgVisible=vm.releaseAlert.id==1?true:false;
 
         active();
@@ -29,6 +29,7 @@
             // vm.alerts=vm.releaseAlert.alerts;
             // vm.count=vm.releaseAlert.count;
             // vm.noOfPages=Math.ceil(vm.count/vm.pageSize);
+            connectWebSocket();
         }
         
         // function toggleNotifications(){
@@ -90,11 +91,11 @@
         //     getReleasedAlerts(vm.releaseAlert.id,vm.pageSize*(vm.currentPage+1)-vm.pageSize);
         // };
         function connectWebSocket() {
-            console.log('fnotificationSetController connect web socket');
+            console.log('notificationSetController connect web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function(frame) {
-                    console.log('flair-bi controller connected web socket');
+                    console.log('notificationSetController connected web socket');
                     stompClientService.subscribe("/user/exchange/scheduledReports", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }

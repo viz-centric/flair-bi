@@ -73,8 +73,8 @@ public class FbEngineWebSocketService {
         if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
             header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
         }
-        schedulerNotificationResponseDTO.setQueryResponse(queryResponse);
-        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/scheduledReports", queryResponse.getData(), header);
+        schedulerNotificationResponseDTO.setQueryResponse(queryResponse.getData());
+        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/scheduledReports", schedulerNotificationResponseDTO, header);
     }
 
 }

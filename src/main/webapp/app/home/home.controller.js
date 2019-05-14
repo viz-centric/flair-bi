@@ -119,7 +119,7 @@
         }
 
         function getScheduledReports(){
-            schedulerService.getScheduleReports(5,1);
+            schedulerService.getScheduleReports(5,0);
         }
 
         function register() {

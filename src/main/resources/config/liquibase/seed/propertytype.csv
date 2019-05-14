@@ -52,7 +52,7 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 651|Color Pattern|Color pattern to vizualizations|SELECT|null|null|null|null|flairadmin|STRING
 652|Show Icon|Boolean to show icons|CHECKBOX|true|null|null|null|flairadmin|null
 653|Icon Font weight|Weight of icon fonts|SELECT|null|null|null|null|flairadmin|STRING
-654|Color Coding|Conditional coloring |TEXT|null|null|null|null|flairadmin|null
+654|Display colour expression|Conditional coloring |TEXT|null|null|null|null|flairadmin|null
 655|Axis Colour|Colour of axis|COLOR_PICKER|null|null|#676a6c|null|flairadmin|null
 656|Descriptive|text or html|TEXT|null|Descriptive|null|null|flairadmin|null
 657|Background Colour|Colour of Background|COLOR_PICKER|null|null|#FFFFFF|null|flairadmin|null

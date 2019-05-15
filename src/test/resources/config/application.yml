@@ -125,6 +125,8 @@ flair-ai-api:
   stride_API_Token : uEkHqU5s2tsF6H13zK3p
   stride_cloud_id : 13f8bfc9-8748-4008-8b11-71f22aa84126
   stride_conversation_id : ff15d817-3ab3-417d-8ba6-2490b330a35f
+  get-scheduled-reports-url: http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}
+  get-scheduled-reports-count-url : http://localhost:8090/api/user/{user}/reportCount/
   
 # ===================================================================
 # files location

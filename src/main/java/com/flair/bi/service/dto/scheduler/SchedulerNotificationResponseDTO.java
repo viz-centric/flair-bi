@@ -5,9 +5,11 @@ import com.flair.bi.messages.Query;
 public class SchedulerNotificationResponseDTO {
 
 	private ReportDTO report;
-	private ReportLineItemNotificationResponse report_line_item;
+	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
 	private Schedule schedule;
+	private String query;
+	private Object queryResponse;
 	
 	public SchedulerNotificationResponseDTO(){}
 
@@ -19,11 +21,11 @@ public class SchedulerNotificationResponseDTO {
 		this.report = report;
 	}
 
-	public ReportLineItemNotificationResponse getReport_line_item() {
+	public ReportLineItem getReport_line_item() {
 		return report_line_item;
 	}
 
-	public void setReport_line_item(ReportLineItemNotificationResponse report_line_item) {
+	public void setReport_line_item(ReportLineItem report_line_item) {
 		this.report_line_item = report_line_item;
 	}
 
@@ -42,13 +44,28 @@ public class SchedulerNotificationResponseDTO {
 	public void setSchedule(Schedule schedule) {
 		this.schedule = schedule;
 	}
+	
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+	
+	public Object getQueryResponse() {
+		return queryResponse;
+	}
+
+	public void setQueryResponse(Object queryResponse) {
+		this.queryResponse = queryResponse;
+	}
 
 	@Override
 	public String toString() {
 		return "SchedulerNotificationResponseDTO [report=" + report + ", report_line_item=" + report_line_item
-				+ ", assign_report=" + assign_report + ", schedule=" + schedule + "]";
+				+ ", assign_report=" + assign_report + ", schedule=" + schedule + ", query=" + query + "]";
 	}
-	
 	
 	
 }

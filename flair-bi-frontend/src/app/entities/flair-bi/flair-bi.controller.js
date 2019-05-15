@@ -131,6 +131,7 @@ function FlairBiController(
     vm.openDataContraints = openDataContraints;
     vm.recreateVisual = recreateVisual;
     vm.openSchedulerDialog = openSchedulerDialog;
+    vm.showVizLoader = showVizLoader;
     activate();
 
     ////////////////
@@ -166,6 +167,10 @@ function FlairBiController(
         setVizualizationServiceMode();
         connectWebSocket();
         vm.features = featureEntities;
+    }
+
+    function showVizLoader(isCardRevealed, loading, dataReceived) {
+        return isCardRevealed && loading && !dataReceived;
     }
 
     function setVizualizationServiceMode() {
@@ -230,6 +235,8 @@ function FlairBiController(
             );
             if (v) {
                 v.cacheDate = cacheDate;
+                v.loading = false;
+                v.dataReceived = true;
             }
             visualizationRenderService.setMetaData(
                 v,

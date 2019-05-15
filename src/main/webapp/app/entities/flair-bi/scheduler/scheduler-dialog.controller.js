@@ -67,8 +67,6 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.users=User.query();
-            //console.log("vm.visualMetaData="+vm.visualMetaData);
-            //console.log("vm.datasource=="+vm.datasource);
             buildScheduleObject(vm.visualMetaData,vm.datasource);
             var cronstrue = window.cronstrue;
         }
@@ -77,7 +75,6 @@
         //report's data
         vm.scheduleObj.datasourceid=datasource.id;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);
-        vm.scheduleObj.report_line_item.query_name=buildQueryName(visualMetaData.id,datasource.connectionName);
         vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
         vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
         setDimentionsAndMeasures(visualMetaData.fields);
@@ -110,8 +107,6 @@
         }
 
         function buildQueryDTO(visualMetaData){
-            //var condiEx=filterParametersService.getConditionExpression();
-            //var pars=filterParametersService.get();
             return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
         }
 

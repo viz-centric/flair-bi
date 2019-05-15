@@ -126,6 +126,7 @@
         vm.openDataContraints = openDataContraints;
         vm.recreateVisual = recreateVisual;
         vm.openSchedulerDialog = openSchedulerDialog;
+        vm.showVizLoader = showVizLoader;
         activate();
 
         ////////////////
@@ -161,6 +162,10 @@
             setVizualizationServiceMode();
             connectWebSocket();
             vm.features = featureEntities;
+        }
+
+        function showVizLoader(isCardRevealed, loading, dataReceived) {
+            return isCardRevealed && loading && !dataReceived;
         }
 
         function setVizualizationServiceMode() {
@@ -224,6 +229,8 @@
                     data.headers.queryId
                 );
                 if (v) {
+                    v.loading = false;
+                    v.dataReceived = true;
                     v.cacheDate = cacheDate;
                 }
                 visualizationRenderService.setMetaData(

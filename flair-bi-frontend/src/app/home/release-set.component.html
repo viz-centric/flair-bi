@@ -1,0 +1,37 @@
+<div class="release-set" ng-if="vm.alerts.length>0">
+    <div class="header">
+        <p class="header-title title">{{vm.releaseAlert.name}}</p>
+        <i ng-click="vm.toggleNotifications()" class="fa ng-class:{'fa-angle-down':vm.isMsgVisible==true,'fa-angle-up':vm.isMsgVisible==false}"></i></div>
+    <div class="msg-box-container-{{vm.releaseAlert.id}}" ng-show="vm.isMsgVisible">
+        <div class="msg-box" ng-repeat="alert in vm.alerts">
+            <div class="msg-box-header ng-class:{'msg-box-header-view':alert.releaseType=='VIEW','msg-box-header-dashboard':alert.releaseType=='DASHBOARD'}">
+                <svg class="flaticons-view permission-icon" ng-if="alert.releaseType=='VIEW'">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#view"></use>
+                </svg>
+                <svg class="nav-flaticon-dashboard" ng-if="alert.releaseType=='DASHBOARD'">
+                    <use xlink:href="#nav-dashboard" />
+                </svg>
+                <p class="msg-box-title title flex-item">{{alert.releaseType}}</p>
+                <span class="date flex-item">{{alert.lastModifiedDate | date:'dd/MM/yy HH:mm' }}</span>
+                <i ng-click="vm.clearNotification()" class="icon flex-item fa fa-times-circle"></i>
+            </div>
+            <div class="msg-box-details">
+                <p class="msg-box-details-subject title">{{alert.releaseName}}</p>
+                <p class="msg-box-content title">{{alert.releaseComments}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" ng-show="vm.count > 0 && vm.isMsgVisible==true">
+        <ul class="pagination">
+            <li ng-class="{disabled: vm.currentPage == 0}">
+                <a href="javascript:;" ng-click="vm.prevPage()"><i class="fa fa-angle-double-left"></i></a>
+            </li>
+            <li ng-repeat="n in vm.range(vm.noOfPages)" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
+                <a href="javascript:;" ng-bind="n+1">1</a>
+            </li>
+            <li ng-class="{disabled: vm.currentPage == vm.noOfPages-1}">
+                <a href="javascript:;" ng-click="vm.nextPage()"><i class="fa fa-angle-double-right"></i></a>
+            </li>
+        </ul>
+    </div>
+</div>

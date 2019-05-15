@@ -1,4 +1,5 @@
 import angular from 'angular';
+
 "use strict";
 
 angular
@@ -20,7 +21,7 @@ function stompClientService(StompClientFactory) {
         if (!isConnected()) {
             addToMessageQueue(url, header, body);
         } else {
-            console.log('STOMP send', header, body);
+            console.log('STOMP send', header);
             stompClient.send(url, header, body);
         }
     }

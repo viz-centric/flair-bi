@@ -5,17 +5,13 @@ angular.module('flairbiApp')
     .component('notificationSetComponent', {
         template: notificationSet,
         controller: notificationSetController,
-        controllerAs: 'vm',
-        bindings: {
-            releaseAlert: "="
-        }
+        controllerAs: 'vm'
     });
 
-notificationSetController.$inject = ['alertsService'];
+notificationSetController.$inject = ['$scope', '$state', 'alertsService', 'stompClientService', 'AuthServerProvider', 'schedulerService'];
 
-function notificationSetController(alertsService) {
+function notificationSetController($scope, $state, alertsService, stompClientService, AuthServerProvider, schedulerService) {
     var vm = this;
-    vm.toggleNotifications = toggleNotifications;
     vm.pageSize = 5;
     vm.setPage = setPage;
     vm.nextPage = nextPage;
@@ -23,46 +19,25 @@ function notificationSetController(alertsService) {
     vm.range = range;
     vm.noOfPages = 1;
     vm.currentPage = 0;
+    vm.count = 0;
 
-    this.$onInit = function () {
-        vm.isMsgVisible = vm.releaseAlert && vm.releaseAlert.id;
-        active();
-    };
-
+    active();
 
     function active() {
-        vm.alerts = vm.releaseAlert.alerts;
-        vm.count = vm.releaseAlert.count;
-        vm.noOfPages = Math.ceil(vm.count / vm.pageSize);
+        // vm.alerts=vm.releaseAlert.alerts;
+        // vm.count=vm.releaseAlert.count;
+        connectWebSocket();
+        getScheduledReportsCount();
     }
 
-    function toggleNotifications() {
-        vm.isMsgVisible = !vm.isMsgVisible;
-    }
 
-    function getReleasedAlerts(id, offset) {
-        alertsService.getReleaseAlerts(id, offset).then(function (result) {
-            vm.alerts = result.data;
-        }, onGetReleaseAlertsError);
+    function getScheduleReports(pageSize, page) {
+        schedulerService.getScheduleReports(pageSize, page);
     }
 
     function onGetReleaseAlertsError(error) {
 
     }
-
-    function getReleasedAlertsCount(id) {
-        alertsService.getReleaseAlertsCount(id).then(onGetReleaseAlertsCountSuccess, onGetReleaseAlertsCountError);
-    }
-
-    function onGetReleaseAlertsCountSuccess(result) {
-        vm.count = result.data;
-        vm.noOfPages = Math.ceil(vm.count / vm.pageSize);
-    }
-
-    function onGetReleaseAlertsCountError(error) {
-        console.log("error" + error);
-    }
-
 
     function range(start, end) {
         var ret = [];
@@ -74,24 +49,61 @@ function notificationSetController(alertsService) {
             ret.push(i);
         }
         return ret;
-    }
+    };
 
     function prevPage() {
         if (vm.currentPage > 0) {
             vm.currentPage--;
-            getReleasedAlerts(vm.releaseAlert.id, vm.pageSize * (vm.currentPage + 1) - vm.pageSize);
+            getScheduleReports(vm.pageSize, vm.currentPage);
         }
-    }
+    };
 
     function nextPage() {
         if (vm.currentPage < vm.noOfPages - 1) {
             vm.currentPage++;
-            getReleasedAlerts(vm.releaseAlert.id, vm.pageSize * (vm.currentPage + 1) - vm.pageSize);
+            getScheduleReports(vm.pageSize, vm.currentPage);
         }
-    }
+    };
 
     function setPage(n) {
         vm.currentPage = n;
-        getReleasedAlerts(vm.releaseAlert.id, vm.pageSize * (vm.currentPage + 1) - vm.pageSize);
+        getScheduleReports(vm.pageSize, vm.currentPage);
+    };
+
+    function connectWebSocket() {
+        console.log('notificationSetController connect web socket');
+        stompClientService.connect(
+            {token: AuthServerProvider.getToken()},
+            function (frame) {
+                console.log('notificationSetController connected web socket');
+                stompClientService.subscribe("/user/exchange/scheduledReports", onExchangeMetadata);
+                stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
+            }
+        );
+
+        $scope.$on("$destroy", function (event) {
+            console.log('flair-bi controller destorying web socket');
+            stompClientService.disconnect();
+        });
+    }
+
+    function onExchangeMetadataError(data) {
+        console.log('notificationSetController on metadata error', data);
+    }
+
+    function onExchangeMetadata(data) {
+        console.log('notificationSetController on metadata', data);
+        var metaData = JSON.parse(data.body);
+    }
+
+    function getScheduledReportsCount() {
+        schedulerService.getScheduledReportsCount().then(function (result) {
+            vm.count = result.data;
+            vm.noOfPages = Math.ceil(vm.count / vm.pageSize);
+        }, onGetScheduledReportsCountError);
+    }
+
+    function onGetScheduledReportsCountError(error) {
+
     }
 }

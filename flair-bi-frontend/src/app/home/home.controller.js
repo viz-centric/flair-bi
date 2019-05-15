@@ -18,11 +18,13 @@ angular
     .controller('HomeController', HomeController);
 
 HomeController.$inject = ['$scope', 'Principal', 'LoginService',
-    '$state', 'Information', '$rootScope', 'alertsService', 'screenDetectService', 'adminListService', 'AccountDispatch'
+    '$state', 'Information', '$rootScope', 'alertsService', 'screenDetectService', 'adminListService', 'AccountDispatch',
+    'schedulerService'
 ];
 
 function HomeController($scope, Principal, LoginService,
-                        $state, Information, $rootScope, alertsService, screenDetectService, adminListService, AccountDispatch) {
+                        $state, Information, $rootScope, alertsService, screenDetectService, adminListService, AccountDispatch,
+                        schedulerService) {
     var vm = this;
     // LOGOS
     vm.boxFlag1 = boxFlag1;
@@ -48,7 +50,8 @@ function HomeController($scope, Principal, LoginService,
     vm.openNotifications = openNotifications;
     vm.openReleases = openReleases;
     vm.isTileVisible = isTileVisible;
-
+    vm.allReleaseAlerts = [];
+    vm.reports = [];
     activate();
 
     function openNotifications() {
@@ -57,6 +60,9 @@ function HomeController($scope, Principal, LoginService,
         } else {
             $("#notifications-tab").addClass("tab-active");
             $("#releases-tab").removeClass("tab-active");
+            $("#notification-container").show();
+            $("#release-container").hide();
+            getScheduledReports();
         }
     }
 
@@ -66,6 +72,9 @@ function HomeController($scope, Principal, LoginService,
         } else {
             $("#releases-tab").addClass("tab-active");
             $("#notifications-tab").removeClass("tab-active");
+            $("#release-container").show();
+            $("#notification-container").hide();
+            getReleaseAlerts();
         }
     }
 
@@ -128,11 +137,18 @@ function HomeController($scope, Principal, LoginService,
 
         getAccount();
         onRecentlyBox();
-        vm.allReleaseAlerts = alertsService.getAllReleaseAlerts().then(function (result) {
-            vm.allReleaseAlerts = result.data;
-        });
         angular.element($("#on-recently-box1")).triggerHandler("click");
         vm.menuItems = adminListService.getHomeList();
+    }
+
+    function getReleaseAlerts() {
+        alertsService.getAllReleaseAlerts().then(function (result) {
+            vm.allReleaseAlerts = result.data;
+        });
+    }
+
+    function getScheduledReports() {
+        schedulerService.getScheduleReports(5, 0);
     }
 
     function register() {

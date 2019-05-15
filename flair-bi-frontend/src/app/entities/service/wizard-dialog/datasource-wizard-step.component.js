@@ -16,35 +16,58 @@ angular.module("flairbiApp").component("datasourceWizardStep", {
     }
 });
 
-DatasourceWizardStepController.$inject = ["$scope", "Datasources", "$rootScope", "$translate", "Query", "Connections", "WizardHandler", "$q", "proxyGrpcService", "AuthServerProvider", "stompClientService", "AlertService", "QueryValidationService"];
-function DatasourceWizardStepController($scope, Datasources, $rootScope, $translate, Query, Connections, WizardHandler, $q, proxyGrpcService, AuthServerProvider, stompClientService, AlertService, QueryValidationService) {
+DatasourceWizardStepController.$inject = ["$scope","$timeout", "Datasources","$rootScope","$translate","Query","Connections","WizardHandler","$q","proxyGrpcService","AuthServerProvider","stompClientService","AlertService","QueryValidationService"];
+function DatasourceWizardStepController($scope,$timeout,Datasources,$rootScope,$translate,Query,Connections,WizardHandler,$q,proxyGrpcService,AuthServerProvider,stompClientService,AlertService,QueryValidationService) {
     var vm = this;
+    var delayedSearch;
 
     vm.datePickerOpenStatus = {};
     vm.openCalendar = openCalendar;
     vm.setDataSource = setDataSource;
-    vm.search = search;
-    vm.tables = [];
-    vm.testConnection = testConnection;
-    vm.datasources.name = null;
-    vm.createDataSource = createDataSource;
-    vm.features = [];
-    vm.resetTest = resetTest;
-    vm.showData = showData;
-    vm.sampleData = [];
-    connectWebSocket();
+    vm.onSearchKeyUp = onSearchKeyUp;
+    vm.search=search;
+    vm.tables=[];
+    vm.testConnection=testConnection;
+    vm.datasources.name=null;
+    vm.createDataSource=createDataSource;
+    vm.features=[];
+    vm.resetTest=resetTest;
+    vm.showData=showData;
+    vm.sampleData=[];
 
+    activate();
     ////////////////
 
     vm.$onInit = function () { };
     vm.$onChanges = function (changesObj) { };
     vm.$onDestroy = function () { };
 
+    function activate() {
+        connectWebSocket();
+        $scope.$on('$destroy', function () {
+            clearDelayedSearch();
+        })
+    }
+
     function openCalendar(date) {
         vm.datePickerOpenStatus[date] = true;
     }
     function setDataSource(name) {
         vm.datasources.name = name;
+    }
+
+
+    function clearDelayedSearch() {
+        if (delayedSearch) {
+            $timeout.cancel(delayedSearch);
+        }
+    }
+
+    function onSearchKeyUp(name) {
+        clearDelayedSearch();
+        delayedSearch = $timeout(function () {
+            search(name);
+        }, 1000);
     }
     function search(searchedText) {
         if (searchedText) {

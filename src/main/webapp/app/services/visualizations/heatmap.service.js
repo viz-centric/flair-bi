@@ -14,7 +14,8 @@
                     var result = {};
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
-                        measures = features.measures;
+                        measures = features.measures,
+                        colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = [D3Utils.getNames(dimensions)[0]];
                     result['measure'] = D3Utils.getNames(measures);
@@ -34,6 +35,7 @@
                     result['iconColor'] = [];
                     result['colourCoding'] = [];
                     result['valueTextColour'] = [];
+                    result['displayColor'] = [];
                     result['fontStyleForMeasure'] = [];
                     result['fontWeightForMeasure'] = [];
                     result['fontSizeForMeasure'] = [];
@@ -46,13 +48,14 @@
                             );
                         result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
                         result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon'));
-                        result['valuePosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Alignment'));
+                        result['valuePosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Alignment').toLowerCase());
                         result['iconName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon name'));
                         result['iconFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font weight'));
-                        result['iconPosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon position'));
+                        result['iconPosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon position').toLowerCase());
                         result['iconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
                         result['colourCoding'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Color Coding'));
                         result['valueTextColour'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
+                        result['displayColor'].push(colorSet[i]);
                         result['fontStyleForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                         result['fontWeightForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSizeForMeasure'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));

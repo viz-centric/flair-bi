@@ -2050,36 +2050,36 @@ a {
         background: #EDEDED; }
       .home-container .home-right-container .alerts-tabs .tab-active > .blue-line {
         width: 100% !important; }
-    .home-container .home-right-container .notification-container {
+    .home-container .home-right-container .release-container {
       margin-left: 13px; }
-      .home-container .home-right-container .notification-container .notification-set .title {
+      .home-container .home-right-container .release-container .release-set .title {
         margin: 0; }
-      .home-container .home-right-container .notification-container .notification-set .header {
+      .home-container .home-right-container .release-container .release-set .header {
         display: flex;
         align-items: center;
         margin: 15px; }
-        .home-container .home-right-container .notification-container .notification-set .header .fa {
+        .home-container .home-right-container .release-container .release-set .header .fa {
           font-size: 22px;
           display: block;
           margin-left: auto;
           outline: none; }
-        .home-container .home-right-container .notification-container .notification-set .header .header-title {
+        .home-container .home-right-container .release-container .release-set .header .header-title {
           font-size: 20px; }
-      .home-container .home-right-container .notification-container .notification-set .msg-box {
+      .home-container .home-right-container .release-container .release-set .msg-box {
         border: 1px solid #dee0e0;
         background-color: #fff;
         border-radius: 10px;
         margin-bottom: 10px; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header {
           height: 30px;
           border-radius: 10px 10px 0px 0px;
           display: flex;
           align-items: center; }
-          .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header .msg-box-title {
+          .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header .msg-box-title {
             font-weight: 400;
             text-transform: uppercase;
             color: #ffff; }
-          .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header .icon {
+          .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header .icon {
             outline: none;
             margin-left: auto;
             font-size: 16px;
@@ -2087,35 +2087,35 @@ a {
             -webkit-transition: all .4s ease;
             transition: all .4s ease;
             color: #ffff; }
-          .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header svg {
+          .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header svg {
             width: 20px;
             height: 20px;
             margin-left: 10px;
             fill: #ffff; }
-          .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header .flex-item {
+          .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header .flex-item {
             padding: 10px; }
-          .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header .date {
+          .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header .date {
             display: block;
             margin-left: auto;
             font-size: 14px;
             -webkit-transition: all .4s ease;
             transition: all .4s ease;
             color: #ffff; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header-view {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header-view {
           background: #23C59B; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header-dashboard {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header-dashboard {
           background: #439DD3; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header:hover > .date {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header:hover > .date {
           display: none; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header:hover > .icon {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header:hover > .icon {
           display: block; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header:not(:hover) > .date {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header:not(:hover) > .date {
           display: block; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-header:not(:hover) > .icon {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-header:not(:hover) > .icon {
           display: none; }
-        .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-details {
+        .home-container .home-right-container .release-container .release-set .msg-box .msg-box-details {
           padding: 10px; }
-          .home-container .home-right-container .notification-container .notification-set .msg-box .msg-box-details .msg-box-details-subject {
+          .home-container .home-right-container .release-container .release-set .msg-box .msg-box-details .msg-box-details-subject {
             font-weight: bold; }
   .home-container .tooltip {
     display: none; }

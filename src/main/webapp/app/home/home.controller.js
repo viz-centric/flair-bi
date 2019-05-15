@@ -24,6 +24,8 @@
         vm.openNotifications=openNotifications;
         vm.openReleases=openReleases;
         vm.isTileVisible=isTileVisible;
+        vm.allReleaseAlerts=[];
+        vm.reports=[];
 
         activate();
 
@@ -33,6 +35,9 @@
             }else{
                 $("#notifications-tab").addClass("tab-active");
                 $("#releases-tab").removeClass("tab-active");
+                $("#notification-container").show();
+                $("#release-container").hide();
+                getScheduledReports();
             }
         }
 
@@ -42,6 +47,9 @@
             }else{
                 $("#releases-tab").addClass("tab-active");
                 $("#notifications-tab").removeClass("tab-active");
+                $("#release-container").show();
+                $("#notification-container").hide();
+                getReleaseAlerts();
             }
         }
 
@@ -103,11 +111,18 @@
 
             getAccount();
             onRecentlyBox();
-            vm.allReleaseAlerts=alertsService.getAllReleaseAlerts().then(function(result){
-                vm.allReleaseAlerts=result.data;
-            });
             angular.element($("#on-recently-box1")).triggerHandler("click");
             vm.menuItems=adminListService.getHomeList();
+        }
+
+        function getReleaseAlerts() {
+        alertsService.getAllReleaseAlerts().then(function(result){
+                vm.allReleaseAlerts=result.data;
+            });
+        }
+
+        function getScheduledReports(){
+            schedulerService.getScheduleReports(5,0);
         }
 
         function register() {
@@ -125,5 +140,7 @@
                 return flag==false?'block':'none';
             }
         }
+
+
     }
 })();

@@ -35,6 +35,8 @@
             }else{
                 $("#notifications-tab").addClass("tab-active");
                 $("#releases-tab").removeClass("tab-active");
+                $("#notification-container").show();
+                $("#release-container").hide();
                 getScheduledReports();
             }
         }
@@ -45,6 +47,8 @@
             }else{
                 $("#releases-tab").addClass("tab-active");
                 $("#notifications-tab").removeClass("tab-active");
+                $("#release-container").show();
+                $("#notification-container").hide();
                 getReleaseAlerts();
             }
         }
@@ -114,7 +118,6 @@
         function getReleaseAlerts() {
         alertsService.getAllReleaseAlerts().then(function(result){
                 vm.allReleaseAlerts=result.data;
-                vm.reports=[];
             });
         }
 

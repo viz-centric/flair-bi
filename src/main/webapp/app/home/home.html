@@ -365,10 +365,10 @@
                         <div class="blue-line"></div>
                 </div>
             </div>
-            <div class="release-container" ng-if="vm.allReleaseAlerts.length>0">
+            <div id="release-container" class="release-container" style="display:none;">
                 <release-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts" />
             </div>
-            <div class="notification-container" >
+            <div id="notification-container" class="notification-container" style="display:none;">
                <notification-set-component  />
             </div>
         </div>

@@ -262,7 +262,7 @@ public class SchedulerResource {
     
     @GetMapping("/schedule/reports/count")
     @Timed
-    public Integer foo() throws JSONException {
+    public Integer getScheduledReportsCount() throws JSONException {
     	Integer count=0;
     	RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8090/api/user/{user}/reportCount/", HttpMethod.GET,null,new ParameterizedTypeReference<String>() {

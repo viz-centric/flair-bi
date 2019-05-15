@@ -10,7 +10,8 @@
     function schedulerService($http) {
         var service = {
             scheduleReport: scheduleReport,
-            getScheduleReports:getScheduleReports
+            getScheduleReports:getScheduleReports,
+            getScheduledReportsCount:getScheduledReportsCount
         };
 
         return service;
@@ -27,6 +28,13 @@
         function getScheduleReports(pageSize,page) {
             $http({
                 url: 'api/schedule/reports/'+pageSize+'/'+page,
+                method: 'GET'
+            });
+        }
+
+        function getScheduledReportsCount() {
+            return $http({
+                url: 'api/schedule/reports/count',
                 method: 'GET'
             });
         }

@@ -2,7 +2,7 @@
     <p class="wizard-help-text"> Configure datasource information</p>
     <div class="form-group">
         <label class="control-label" data-translate="flairbiApp.datasources.name" for="field_name">Table Name</label>
-        <ui-select ng-keyup="vm.search($select.search)" id="field_name" name="name" ng-model="vm.datasource" required ng-change="vm.setDataSource($select.selected)">
+        <ui-select ng-keyup="vm.onSearchKeyUp($select.search)" id="field_name" name="name" ng-model="vm.datasource" required ng-change="vm.setDataSource($select.selected)">
             <ui-select-match placeholder="{{ 'flairbiApp.datasources.selectDatasource' | translate }}">{{$select.selected}}</ui-select-match>
             <ui-select-choices repeat="table in vm.tables">
                 <div ng-bind="table"></div>

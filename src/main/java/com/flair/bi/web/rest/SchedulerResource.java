@@ -69,36 +69,42 @@ import org.slf4j.LoggerFactory;
 @RequiredArgsConstructor
 public class SchedulerResource {
 
-	@Value("${flair-ai-api.username}")
+	@Value("${flair-notifications.username}")
 	private String userName;
 
-	@Value("${flair-ai-api.password}")
+	@Value("${flair-notifications.password}")
 	private String password;
 
-	@Value("${flair-ai-api.schedule-report-url}")
+	@Value("${flair-notifications.schedule-report-url}")
 	private String scheduleReportUrl;
 
-	@Value("${flair-ai-api.auth-url}")
+	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
 	
-	@Value("${flair-ai-api.slack_API_Token}")
+	@Value("${flair-notifications.slack_API_Token}")
 	private String slack_API_Token;
 	
-	@Value("${flair-ai-api.channel_id}")
+	@Value("${flair-notifications.channel_id}")
 	private String channel_id;
 	
-	@Value("${flair-ai-api.stride_API_Token}")
+	@Value("${flair-notifications.stride_API_Token}")
 	private String stride_API_Token;
 	
-	@Value("${flair-ai-api.stride_cloud_id}")
+	@Value("${flair-notifications.stride_cloud_id}")
 	private String stride_cloud_id;
 	
-	@Value("${flair-ai-api.stride_conversation_id}")
+	@Value("${flair-notifications.stride_conversation_id}")
 	private String stride_conversation_id;
 	
-	@Value("${flair-ai-api.mail_body}")
+	@Value("${flair-notifications.mail_body}")
 	private String mail_body;
 
+	@Value("${flair-notifications.scheduled-reports-url}")
+	private String scheduledReportsUrl;
+	
+	@Value("${flair-notifications.scheduled-reports-count-url}")
+	private String scheduledReportsCountUrl;
+	
 	private final UserService userService;
 	
 	private final DatasourceConstraintService datasourceConstraintService;
@@ -241,16 +247,21 @@ public class SchedulerResource {
     @Timed
     public void getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
         throws URISyntaxException {
-    	//ResponseEntity<List<SchedulerNotificationResponseDTO>>
     	RestTemplate restTemplate = new RestTemplate();
     try {
-    	//let the url be hard code until it is tested
+    	//let the url be hard code as it will be useful while development
+			/*
+			 * ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
+			 * restTemplate.exchange(
+			 * "http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}",
+			 * HttpMethod.GET, null, new
+			 * ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+			 * },SecurityUtils.getCurrentUserLogin(),pageSize,page);
+			 */
 		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
-//		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}",
-//		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
-//		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
-		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports",HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
-		},SecurityUtils.getCurrentUserLogin());
+		restTemplate.exchange(scheduledReportsUrl,
+		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
 		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
 		for(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO :reports) {
 			pushToSocket(schedulerNotificationResponseDTO);
@@ -265,12 +276,16 @@ public class SchedulerResource {
     public Integer getScheduledReportsCount() throws JSONException {
     	Integer count=0;
     	RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8090/api/user/{user}/reportCount/", HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
+    	//let the url be hard code as it will be useful while development
+		/*
+		 * ResponseEntity<String> responseEntity =
+		 * restTemplate.exchange("http://localhost:8090/api/user/{user}/reportCount/",
+		 * HttpMethod.GET,null,new ParameterizedTypeReference<String>() { },
+		 * SecurityUtils.getCurrentUserLogin());
+		 */
+		ResponseEntity<String> responseEntity = restTemplate.exchange(scheduledReportsCountUrl, HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
 		}, SecurityUtils.getCurrentUserLogin());
-		log.info("Result - status (" + responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
-		log.info("Response =" + responseEntity.getBody());
 		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-		log.info(jsonObject.getString("totalReports"));
 		count=Integer.parseInt(jsonObject.getString("totalReports"));
         return count;
     }

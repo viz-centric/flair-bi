@@ -69,40 +69,40 @@ import org.slf4j.LoggerFactory;
 @RequiredArgsConstructor
 public class SchedulerResource {
 
-	@Value("${flair-ai-api.username}")
+	@Value("${flair-notifications.username}")
 	private String userName;
 
-	@Value("${flair-ai-api.password}")
+	@Value("${flair-notifications.password}")
 	private String password;
 
-	@Value("${flair-ai-api.schedule-report-url}")
+	@Value("${flair-notifications.schedule-report-url}")
 	private String scheduleReportUrl;
 
-	@Value("${flair-ai-api.auth-url}")
+	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
 	
-	@Value("${flair-ai-api.slack_API_Token}")
+	@Value("${flair-notifications.slack_API_Token}")
 	private String slack_API_Token;
 	
-	@Value("${flair-ai-api.channel_id}")
+	@Value("${flair-notifications.channel_id}")
 	private String channel_id;
 	
-	@Value("${flair-ai-api.stride_API_Token}")
+	@Value("${flair-notifications.stride_API_Token}")
 	private String stride_API_Token;
 	
-	@Value("${flair-ai-api.stride_cloud_id}")
+	@Value("${flair-notifications.stride_cloud_id}")
 	private String stride_cloud_id;
 	
-	@Value("${flair-ai-api.stride_conversation_id}")
+	@Value("${flair-notifications.stride_conversation_id}")
 	private String stride_conversation_id;
 	
-	@Value("${flair-ai-api.mail_body}")
+	@Value("${flair-notifications.mail_body}")
 	private String mail_body;
 
-	@Value("${get-scheduled-reports-url}")
+	@Value("${flair-notifications.scheduled-reports-url}")
 	private String scheduledReportsUrl;
 	
-	@Value("${get-scheduled-reports-count-url}")
+	@Value("${flair-notifications.scheduled-reports-count-url}")
 	private String scheduledReportsCountUrl;
 	
 	private final UserService userService;

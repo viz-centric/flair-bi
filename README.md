@@ -1,37 +1,12 @@
-Flair BI UI service
+![Flair BI Logo](./docs/images/fbi-logo.png)
+# Welcome to the **Flair BI** wiki!
 
+## Introduction
+Flair BI is an opensource, cloud-native and scalable application which is build to provide business and operational intelligence insights. Flair reduces data movement, removes the need to keep data sets in sync, leverages the power of the underlying datasources and Flair's built in caching engine to address the need for quick insights on constantly changing data sources.
 
-## Build
+## Resources
+- [Architecture](https://github.com/viz-centric/flair-bi/wiki/Architecture)
+- [Quick start](https://github.com/viz-centric/flair-bi/wiki/Quick-start)
+- [Setting up connectors](https://github.com/viz-centric/flair-bi/wiki/Setting-up-connectors)
 
-To build the application and install in local maven repository use
-
-```
-mvn clean install
-```
-
-## Release
-
-To perform a release you need:
-*  have configured credentials in settings.xml
-
-    ```
-    <settings>  
-        <servers>  
-            <server>
-                <id>github-credentials</id>  
-                <username>myUser</username>  
-                <password>myPassword</password>  
-            </server>
-            <server>
-                <id>docker.io</id>
-                <username>dockerhubUsername</username>
-                <password>dockerhubPassword</username>
-            </server>
-        </servers>
-    </settings>   
-    ```
-* run following command you need to set development version and release version:
-
-   ``` 
-   mvn -DskipTests release:clean release:prepare release:perform -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion}
-   ```
+> **Note**: We are constantly updating our documentation. If there is anything you are looking for in specific, please feel to drop in a mail to [admin@vizcentric.com]() :smiley:

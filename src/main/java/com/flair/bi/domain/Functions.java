@@ -32,6 +32,9 @@ public class Functions implements Serializable {
 
     @Column(name = "measure_use")
     private Boolean measureUse;
+    
+    @Column(name = "test")
+    private String test;
 
     public Long getId() {
         return id;
@@ -105,8 +108,16 @@ public class Functions implements Serializable {
     public void setMeasureUse(Boolean measureUse) {
         this.measureUse = measureUse;
     }
+    
+    public String getTest() {
+		return test;
+	}
 
-    @Override
+	public void setTest(String test) {
+		this.test = test;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

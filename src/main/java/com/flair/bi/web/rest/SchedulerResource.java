@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,7 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
@@ -67,36 +69,42 @@ import org.slf4j.LoggerFactory;
 @RequiredArgsConstructor
 public class SchedulerResource {
 
-	@Value("${flair-ai-api.username}")
+	@Value("${flair-notifications.username}")
 	private String userName;
 
-	@Value("${flair-ai-api.password}")
+	@Value("${flair-notifications.password}")
 	private String password;
 
-	@Value("${flair-ai-api.schedule-report-url}")
+	@Value("${flair-notifications.schedule-report-url}")
 	private String scheduleReportUrl;
 
-	@Value("${flair-ai-api.auth-url}")
+	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
 	
-	@Value("${flair-ai-api.slack_API_Token}")
+	@Value("${flair-notifications.slack_API_Token}")
 	private String slack_API_Token;
 	
-	@Value("${flair-ai-api.channel_id}")
+	@Value("${flair-notifications.channel_id}")
 	private String channel_id;
 	
-	@Value("${flair-ai-api.stride_API_Token}")
+	@Value("${flair-notifications.stride_API_Token}")
 	private String stride_API_Token;
 	
-	@Value("${flair-ai-api.stride_cloud_id}")
+	@Value("${flair-notifications.stride_cloud_id}")
 	private String stride_cloud_id;
 	
-	@Value("${flair-ai-api.stride_conversation_id}")
+	@Value("${flair-notifications.stride_conversation_id}")
 	private String stride_conversation_id;
 	
-	@Value("${flair-ai-api.mail_body}")
+	@Value("${flair-notifications.mail_body}")
 	private String mail_body;
 
+	@Value("${flair-notifications.scheduled-reports-url}")
+	private String scheduledReportsUrl;
+	
+	@Value("${flair-notifications.scheduled-reports-count-url}")
+	private String scheduledReportsCountUrl;
+	
 	private final UserService userService;
 	
 	private final DatasourceConstraintService datasourceConstraintService;
@@ -104,6 +112,8 @@ public class SchedulerResource {
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
+	
+	private final GrpcQueryService grpcQueryService;
 	
 
 	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
@@ -233,23 +243,58 @@ public class SchedulerResource {
 		return schedulerNotificationDTO;
 	}
 
-    @GetMapping("/schedule/reports/{pageNo}")
+    @GetMapping("/schedule/reports/{pageSize}/{page}")
     @Timed
-    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable Integer pageNo)
+    public void getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
         throws URISyntaxException {
     	RestTemplate restTemplate = new RestTemplate();
     try {
-    	//let the url be hard code until it is tested
+    	//let the url be hard code as it will be useful while development
+			/*
+			 * ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
+			 * restTemplate.exchange(
+			 * "http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}",
+			 * HttpMethod.GET, null, new
+			 * ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+			 * },SecurityUtils.getCurrentUserLogin(),pageSize,page);
+			 */
 		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
-		restTemplate.exchange("http://localhost:8090/api/user/{user}/reports/",
+		restTemplate.exchange(scheduledReportsUrl,
 		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
-		},SecurityUtils.getCurrentUserLogin());
+		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
 		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
-		return ResponseEntity.status(ResponseEntity.getStatusCode()).body(reports);
+		for(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO :reports) {
+			pushToSocket(schedulerNotificationResponseDTO);
+		}
 	} catch (Exception e) {
 		log.error("error occured while fetching reports:"+e.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+    }
+    
+    @GetMapping("/schedule/reports/count")
+    @Timed
+    public Integer getScheduledReportsCount() throws JSONException {
+    	Integer count=0;
+    	RestTemplate restTemplate = new RestTemplate();
+    	//let the url be hard code as it will be useful while development
+		/*
+		 * ResponseEntity<String> responseEntity =
+		 * restTemplate.exchange("http://localhost:8090/api/user/{user}/reportCount/",
+		 * HttpMethod.GET,null,new ParameterizedTypeReference<String>() { },
+		 * SecurityUtils.getCurrentUserLogin());
+		 */
+		ResponseEntity<String> responseEntity = restTemplate.exchange(scheduledReportsCountUrl, HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
+		}, SecurityUtils.getCurrentUserLogin());
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
+		count=Integer.parseInt(jsonObject.getString("totalReports"));
+        return count;
+    }
+    
+    private  void pushToSocket(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO) throws InvalidProtocolBufferException, InterruptedException {
+		 Query.Builder builder = Query.newBuilder();
+		 JsonFormat.parser().merge(schedulerNotificationResponseDTO.getQuery(), builder);
+		 Query query = builder.build();;
+		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(schedulerNotificationResponseDTO,query, "scheduled-report", query.getUserId());
     }
 
 }

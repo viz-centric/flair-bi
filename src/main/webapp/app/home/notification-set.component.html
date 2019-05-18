@@ -1,0 +1,13 @@
+<div class="text-center" ng-show="vm.noOfPages > 1">
+    <ul class="pagination">
+        <li ng-class="{disabled: vm.currentPage == 0}">
+            <a href="javascript:;" ng-click="vm.prevPage()"><i class="fa fa-angle-double-left"></i></a>
+        </li>
+        <li ng-repeat="n in vm.range(vm.noOfPages)" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
+            <a href="javascript:;" ng-bind="n+1">1</a>
+        </li>
+        <li ng-class="{disabled: vm.currentPage == vm.noOfPages-1}">
+            <a href="javascript:;" ng-click="vm.nextPage()"><i class="fa fa-angle-double-right"></i></a>
+        </li>
+    </ul>
+</div>

@@ -60,8 +60,9 @@
         if(isTagExist(tag)){
             removed(tag);
             removeTagFromSelectedList(tag);
-            applyFilter();
+            
         }
+        applyFilter();
         }
 
         function processRemoveFilter(filter){

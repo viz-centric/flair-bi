@@ -46,7 +46,7 @@
             }).map(function (item) {
                 var newItem = {};
                 angular.copy(item, newItem);
-                newItem.feature.name = newItem.feature.name.toLowerCase();
+                newItem.feature.name = newItem.feature.selectedName.toLowerCase();
                 return newItem;
             }).sort(function (a, b) {
                 return sortBySequenceNumber(a.fieldType, b.fieldType);

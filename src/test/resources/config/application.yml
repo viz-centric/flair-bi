@@ -127,6 +127,7 @@ flair-notifications:
   stride_conversation_id : ff15d817-3ab3-417d-8ba6-2490b330a35f
   scheduled-reports-url: http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}
   scheduled-reports-count-url : http://localhost:8090/api/user/{user}/reportCount/
+  scheduled-report-url: http://localhost:8090/api/jobSchedule/?visualizationid={visualizationid}
   
 # ===================================================================
 # files location

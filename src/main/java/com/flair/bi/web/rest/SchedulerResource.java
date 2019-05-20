@@ -296,5 +296,23 @@ public class SchedulerResource {
 		 Query query = builder.build();;
 		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(schedulerNotificationResponseDTO,query, "scheduled-report", query.getUserId());
     }
+    
+	@GetMapping("/schedule/{visualizationid}")
+	@Timed
+	public ResponseEntity<SchedulerNotificationResponseDTO> getSchedulerReport(@PathVariable String visualizationid)
+			throws URISyntaxException {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<SchedulerNotificationResponseDTO> responseEntity = null;
+		try {
+			responseEntity = restTemplate.exchange(
+					"http://localhost:8090/api/jobSchedule/?visualizationid={visualizationid}", HttpMethod.GET, null,
+					new ParameterizedTypeReference<SchedulerNotificationResponseDTO>() {
+					}, visualizationid);
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+		} catch (Exception e) {
+			log.error("error occured while fetching report:" + e.getMessage());
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+		}
+	}
 
 }

@@ -6291,7 +6291,8 @@ input.select2-active {
   font-size: 15px; }
 
 .common-create-popup input {
-  border-radius: 10px; }
+  border-radius: 10px;
+  margin-top: 7px; }
 
 .common-create-popup .uploaded-image {
   float: right; }

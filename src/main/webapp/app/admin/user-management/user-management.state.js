@@ -14,7 +14,8 @@
                 url: '/user-management?page&sort',
                 data: {
                     authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
-                    pageTitle: 'userManagement.home.title'
+                    pageTitle: 'userManagement.home.title',
+                    displayName: "User Management"
                 },
                 views: {
                     'content-header@': {
@@ -59,7 +60,8 @@
                 url: '/user/:login',
                 data: {
                     authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
-                    pageTitle: 'user-management.detail.title'
+                    pageTitle: 'user-management.detail.title',
+                    displayName: "User Management Details"
                 },
                 views: {
                     'content-header@': {

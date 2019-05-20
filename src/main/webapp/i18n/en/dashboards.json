@@ -7,12 +7,12 @@
                 "createOrEditLabel": "Create or edit a Dashboards",
                 "search": "Search for Dashboards"
             },
-            "created": "A new Dashboards is created with identifier {{ param }}",
-            "updated": "A Dashboards is updated with identifier {{ param }}",
+            "created": "A new Dashboard is created with identifier {{ param }}",
+            "updated": "A Dashboard is updated with identifier {{ param }}",
             "errorSaving": "Error saving dashboard",
-            "deleted": "A Dashboards is deleted with identifier {{ param }}",
+            "deleted": "A Dashboard is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Dashboards {{ id }}?"
+                "question": "Are you sure you want to delete Dashboard {{ id }}?"
             },
             "errorDeleting": "Error deleting dashboard",
             "detail": {
@@ -25,12 +25,12 @@
             "published": "Published",
             "image": "Image",
             "dashboard_view": "Dashboard View",
-            "dashboardDatasources": "Dashboard Datasources",
+            "dashboardDatasources": "Dashboard Data Sources",
             "searchTitle": "Search result for dashboards",
             "error": {
                 "searched": "Error loading searched dashboards"
             },
-            "selectDatasource": "Search available datasources"
+            "selectDatasource": "Search Available Data Sources"
         }
     }
 }

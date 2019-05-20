@@ -5,7 +5,7 @@
     <div class="col-md-5 col-sm-12 hidden-xs">
         <div class="fbibox permissions-fbibox">
             <div class="fbibox-title">
-                <h2>Permission management</h2>
+                <h2>Permission Management</h2>
             </div>
             <div class="fbibox-content">
                 <div class="row">
@@ -15,7 +15,7 @@
                                 <input type="search" name="search" id="search-input" class="form-control" value="" required="required" title="" ng-model="vm.searchInput">
                             </div>
                             <div ng-class="vm.areUsersToggled ? 'btn-default' : 'btn-primary'" class="btn" ng-click="vm.toggleUsers()"> {{vm.areUsersToggled ? 'Hide' : 'Show'}} Users</div>
-                            <div ng-class="vm.areUserGroupsToggled ? 'btn-default' : 'btn-primary'" class="btn" ng-click="vm.toggleUserGroups()"> {{vm.areUserGroupsToggled ? 'Hide' : 'Show'}} User groups </div>
+                            <div ng-class="vm.areUserGroupsToggled ? 'btn-default' : 'btn-primary'" class="btn" ng-click="vm.toggleUserGroups()"> {{vm.areUserGroupsToggled ? 'Hide' : 'Show'}} User Groups </div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
 
                 <div class="user-segments" ng-show="vm.areUserGroupsToggled">
                     <div class="tree-handle user-tree">
-                        <span class="user-tree-header">User groups</span>
+                        <span class="user-tree-header">User Groups</span>
                     </div>
                     <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === group.name}" ng-repeat="group in vm.userGroups | filter: vm.filterUserGroup">
                         <span>{{group.name}}</span>
@@ -65,7 +65,7 @@
     <div class="col-md-7 col-sm-12 hidden-xs">
         <div class="fbibox permissions-fbibox">
             <div class="fbibox-title">
-                <h2> Permissions for {{vm.selectedEntity}} </h2>
+                <h2> Permissions For {{vm.selectedEntity}} </h2>
             </div>
             <div class="fbibox-content">
                 <p class="text-center" ng-show="vm.dashboards.length ===  0 && vm.selectedEntity">

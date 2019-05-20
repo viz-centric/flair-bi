@@ -29,7 +29,7 @@
                         </span>
                                 <div class="btn-group viz-settings" uib-dropdown is-open="v.status.isopen">
                                     <a href id="dialog-{{v.visualBuildId}}" uib-dropdown-toggle>
-                                        <span uib-tooltip="Options" tooltip-placement="bottom">
+                                        <span uib-tooltip="Tools" tooltip-placement="bottom">
                                     <svg class="settings-button">
                                         <use xlink:href="#settings-button" />
                                     </svg>
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
                                     <a href ng-click="vm.recreateVisual(v)">
-                                        <span uib-tooltip="Duplicate&nbsp;Vizualization" tooltip-placement="top">
+                                        <span uib-tooltip="Duplicate&nbsp;Visualization" tooltip-placement="top">
                                                 <svg class="clone">
                                                     <use xlink:href="#clone" />
                                                 </svg>
@@ -126,7 +126,7 @@
                                 </svg>
                             </span>
                     </a>
-                    <a ng-show="vm.ngIfSettings()" href class="reload-button" ng-click="vm.flipCard(v)" title="Flip Vizualization">
+                    <a ng-show="vm.ngIfSettings()" href class="reload-button" ng-click="vm.flipCard(v)">
                         <span uib-tooltip="Flip" tooltip-placement="bottom">
                                 <i class="reload fa fa-rotate-right"></i>
                             </span>
@@ -150,12 +150,12 @@
                     <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px; background-color: rgb(250, 250, 250); border-bottom: none; color: rgb(103, 106, 108);">
                         <div class="viz-header-content">
                             <div class="viz-title ng-binding">Dimensions and Measures</div>
-                            <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href="" class="reload-button" ng-click="vm.saveFeatures(v)" title="Build Vizualization" ng-disabled="vm.isSaving">
+                            <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href="" class="reload-button" ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
                                 <span uib-tooltip="Build" tooltip-placement="bottom">
                                         <i class="reload fa fa-gavel"></i>
                                     </span>
                             </a>
-                            <a href="" class="reload-button" ng-click="vm.flipCard(v)" title="Flip Vizualization">
+                            <a href="" class="reload-button" ng-click="vm.flipCard(v)">
                                 <span uib-tooltip="Flip" tooltip-placement="bottom">
                                         <i class="reload fa fa-rotate-right"></i>
                                     <span>
@@ -166,14 +166,14 @@
                   </div>
                   <br/>
                   <div class="row">
-                  <div ng-show="v.metadataVisual.name == 'Iframe'">
+                  <div style="width:100%" ng-show="v.metadataVisual.name == 'Iframe'">
                     <div class="form-group"style="margin-left: 20px;">
                       <label for="iframelink">I-Frame Link</label>
                       <input type="text" class="form-control" ng-model="v.metadataVisual.propertyTypes[0].propertyType.defaultValue" style="
                         margin-top: 10px;" id="iframelink" placeholder="I frame link">
                       </div>
                   </div>
-                  <div ng-hide="v.metadataVisual.name == 'Iframe'">
+                  <div style="width:100%" ng-hide="v.metadataVisual.name == 'Iframe'">
                     <div class="feature-box">
                        <ul class="list-group" drop-box={{v.visualBuildId}}>
                           <li class="list-group-item dimension-item active">

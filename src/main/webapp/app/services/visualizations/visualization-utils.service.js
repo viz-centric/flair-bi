@@ -15,7 +15,8 @@
             getFieldPropertyValue: getFieldPropertyValue,
             getPropertyValue: getPropertyValue,
             getDimensionsAndMeasures: getDimensionsAndMeasures,
-            getFormattedNumber: getFormattedNumber
+            getFormattedNumber: getFormattedNumber,
+            getDimensionsAndMeasuresForNotification:getDimensionsAndMeasuresForNotification
         };
 
         function getFormattedNumber(value, format) {
@@ -46,6 +47,35 @@
             }).map(function (item) {
                 var newItem = {};
                 angular.copy(item, newItem);
+                newItem.feature.name = newItem.feature.selectedName.toLowerCase();
+                return newItem;
+            }).sort(function (a, b) {
+                return sortBySequenceNumber(a.fieldType, b.fieldType);
+            });
+
+            var measures = fields.filter(function (item) {
+                return item.feature && item.feature.featureType === 'MEASURE'
+            }).map(function (item) {
+                var newItem = {};
+                angular.copy(item, newItem);
+                newItem.feature.name = newItem.feature.name.toLowerCase();
+                return newItem;
+            })
+                .sort(function (a, b) {
+                    return sortBySequenceNumber(a.fieldType, b.fieldType);
+                });
+            return {
+                measures: measures,
+                dimensions: dimensions
+            };
+        }
+
+        function getDimensionsAndMeasuresForNotification(fields) {
+            var dimensions = fields.filter(function (item) {
+                return item.feature && item.feature.featureType === 'DIMENSION';
+            }).map(function (item) {
+                var newItem = {};
+                angular.copy(item, newItem);
                 newItem.feature.name = newItem.feature.name.toLowerCase();
                 return newItem;
             }).sort(function (a, b) {
@@ -53,13 +83,13 @@
             });
 
             var measures = fields.filter(function (item) {
-                    return item.feature && item.feature.featureType === 'MEASURE'
-                }).map(function (item) {
-                    var newItem = {};
-                    angular.copy(item, newItem);
-                    newItem.feature.name = newItem.feature.name.toLowerCase();
-                    return newItem;
-                })
+                return item.feature && item.feature.featureType === 'MEASURE'
+            }).map(function (item) {
+                var newItem = {};
+                angular.copy(item, newItem);
+                newItem.feature.name = newItem.feature.name.toLowerCase();
+                return newItem;
+            })
                 .sort(function (a, b) {
                     return sortBySequenceNumber(a.fieldType, b.fieldType);
                 });

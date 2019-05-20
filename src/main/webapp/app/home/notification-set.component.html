@@ -1,3 +1,24 @@
+<div class="panel-group" id="notification_accordion" aria-multiselectable="true" ng-show="vm.pagedItems.length > 1">
+    <div class="panel panel-default" ng-repeat="reports in vm.pagedItems">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#notification_accordion" href="#{{reports.visualizationid}}"
+                    class="collapsed" aria-expanded="false">{{reports.title}}
+                </a>
+            </h4>
+        </div>
+        <div id="{{reports.visualizationid}}" class="panel-collapse collapse">
+            <div class="panel-body">
+
+                <svg height='200' width='280' id="svg_{{reports.visualizationid}}"></svg>
+                <div class="custom_tooltip"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="text-center" ng-show="vm.noOfPages > 1">
     <ul class="pagination">
         <li ng-class="{disabled: vm.currentPage == 0}">

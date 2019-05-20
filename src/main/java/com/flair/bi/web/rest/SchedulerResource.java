@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
@@ -105,6 +107,9 @@ public class SchedulerResource {
 	@Value("${flair-notifications.scheduled-reports-count-url}")
 	private String scheduledReportsCountUrl;
 	
+	@Value("${flair-notifications.scheduled-report-url}")
+	private String scheduledReportUrl;
+	
 	private final UserService userService;
 	
 	private final DatasourceConstraintService datasourceConstraintService;
@@ -114,6 +119,8 @@ public class SchedulerResource {
 	private final DatasourceService datasourceService;
 	
 	private final GrpcQueryService grpcQueryService;
+	
+	private final SchedulerService schedulerService;
 	
 
 	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
@@ -305,7 +312,7 @@ public class SchedulerResource {
 		ResponseEntity<SchedulerNotificationResponseDTO> responseEntity = null;
 		try {
 			responseEntity = restTemplate.exchange(
-					"http://localhost:8090/api/jobSchedule/?visualizationid={visualizationid}", HttpMethod.GET, null,
+					scheduledReportUrl, HttpMethod.GET, null,
 					new ParameterizedTypeReference<SchedulerNotificationResponseDTO>() {
 					}, visualizationid);
 			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
@@ -314,5 +321,11 @@ public class SchedulerResource {
 			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 		}
 	}
-
+	
+	@DeleteMapping("/schedule/{visualizationid}")
+	@Timed
+	public String deleteSchedulerReport(@PathVariable String visualizationid)
+			throws URISyntaxException {
+		return schedulerService.deleteScheduledReport(visualizationid);
+	}
 }

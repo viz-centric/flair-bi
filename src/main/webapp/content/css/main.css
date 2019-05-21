@@ -4385,6 +4385,8 @@ jhi-alert .alerts .alert-danger {
             float: right; }
           .grid-back .grid-stack-item .row .feature-box .list-group .active {
             background-color: #439dd3; }
+    .grid-back .grid-stack-item .dim-measure-area {
+      width: 100%; }
 
 .flip-container,
 .grid-front,

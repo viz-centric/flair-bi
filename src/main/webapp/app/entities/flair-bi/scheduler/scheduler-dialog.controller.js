@@ -62,13 +62,26 @@
 
         function activate() {
             vm.visualMetaData = visualMetaData;
+            getScheduleReport(visualMetaData.id);
             vm.datasource= datasource;
             vm.viewName=viewName;
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            vm.users=User.query();
+            //vm.users=User.query();
             buildScheduleObject(vm.visualMetaData,vm.datasource);
             var cronstrue = window.cronstrue;
+        }
+
+        function getScheduleReport(visualizationid){
+             schedulerService.getScheduleReport(visualizationid).then(function (success) {
+
+            }).catch(function (error) {                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            }); 
         }
 
         function buildScheduleObject(visualMetaData,datasource){

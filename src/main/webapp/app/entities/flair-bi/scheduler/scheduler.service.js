@@ -11,7 +11,8 @@
         var service = {
             scheduleReport: scheduleReport,
             getScheduleReports:getScheduleReports,
-            getScheduledReportsCount:getScheduledReportsCount
+            getScheduledReportsCount:getScheduledReportsCount,
+            getScheduleReport:getScheduleReport
         };
 
         return service;
@@ -35,6 +36,13 @@
         function getScheduledReportsCount() {
             return $http({
                 url: 'api/schedule/reports/count',
+                method: 'GET'
+            });
+        }
+
+        function getScheduleReport(visualizationid) {
+            return $http({
+                url: 'api/schedule/'+visualizationid,
                 method: 'GET'
             });
         }

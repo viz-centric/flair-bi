@@ -35,7 +35,7 @@
     </distributionManagement>
     <properties>
         <all-grpc.version>1.20.0</all-grpc.version>
-        <apache-httpclient.version>4.5</apache-httpclient.version>
+        <apache-httpclient.version>4.5.8</apache-httpclient.version>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.9.0</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>

@@ -1042,7 +1042,7 @@
         }
 
         function removeWidget(widget) {
-            swal("Are you sure?", "You want to delete selected visualization", {
+            swal("Are you sure?", "You want to delete selected visualization.It will also delete scheduled report.", {
                 dangerMode: true,
                 buttons: true
             }).then(function(value) {

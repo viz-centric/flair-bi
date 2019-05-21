@@ -2199,6 +2199,11 @@ a {
   margin-left: 15px;
   margin-top: 5px; }
 
+
+#notification_accordion .panel-body{
+  padding: 0px;
+}
+
 tags-input .tags {
   border: 1px solid #e1e3e3;
   padding: 3px;

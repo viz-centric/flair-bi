@@ -54,7 +54,8 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var treemap = $rootScope.updateWidget[record.id];
-                        treemap.update(record.data);
+                        treemap.config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     d3.select(element[0]).html('')

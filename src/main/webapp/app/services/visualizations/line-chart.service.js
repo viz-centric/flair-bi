@@ -65,7 +65,7 @@
                         result['displayNameForMeasure'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
-                            );
+                        );
                         result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                         result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
@@ -84,7 +84,8 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var line = $rootScope.updateWidget[record.id];
-                        line.update(record.data);
+                        line.config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     d3.select(element[0]).html('')
@@ -101,7 +102,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                      .attr('class', 'custom_tooltip')
+                        .attr('class', 'custom_tooltip')
 
                     var line = flairVisualizations.line()
                         .config(getProperties(VisualizationUtils, record))

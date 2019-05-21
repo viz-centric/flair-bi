@@ -115,19 +115,21 @@ MAX_TEXT_MESSAGE_SIZE : 2048000
 # ===================================================================    
 
 flair-notifications:
+  host: http://localhost
+  port: 8090
   username: admin
   password: admin
-  auth-url : http://devsupport-vizcentric.com:9100/api-token-auth/
-  schedule-report-url : http://localhost:8090/api/jobSchedule/
+  auth-url : /api-token-auth/
+  scheduled-report-url : /api/jobSchedule/
   mail_body : This is a test email to check api functionality
   slack_API_Token : xoxp-338558815156-339648235094-401148640099-d844d7552f5b0081546729d997e92f52
   channel_id : C9ZK2705U
   stride_API_Token : uEkHqU5s2tsF6H13zK3p
   stride_cloud_id : 13f8bfc9-8748-4008-8b11-71f22aa84126
   stride_conversation_id : ff15d817-3ab3-417d-8ba6-2490b330a35f
-  scheduled-reports-url: http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}
-  scheduled-reports-count-url : http://localhost:8090/api/user/{user}/reportCount/
-  scheduled-report-url: http://localhost:8090/api/jobSchedule/?visualizationid={visualizationid}
+  scheduled-reports-url: /api/user/{user}/reports?pageSize={pageSize}&page={page}
+  scheduled-reports-count-url : /api/user/{user}/reportCount/
+  scheduled-report-param-url: /api/jobSchedule/?visualizationid={visualizationid}
   
 # ===================================================================
 # files location

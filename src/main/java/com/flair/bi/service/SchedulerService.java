@@ -14,14 +14,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SchedulerService {
 
-	@Value("${flair-notifications.scheduled-report-url}")
-	private String scheduledReportUrl;
+	@Value("${flair-notifications.scheduled-report-param-url}")
+	private String scheduledReportParamUrl;
+	
+	@Value("${flair-notifications.host}")
+	private String host;
+
+	@Value("${flair-notifications.port}")
+	private String port;
 
 	public String deleteScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = null;
 		try {
-			responseEntity = restTemplate.exchange(scheduledReportUrl, HttpMethod.DELETE, null,
+			responseEntity = restTemplate.exchange(buildUrl(host, port, scheduledReportParamUrl), HttpMethod.DELETE, null,
 					new ParameterizedTypeReference<String>() {
 					}, visualizationid);
 			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
@@ -30,6 +36,13 @@ public class SchedulerService {
 			log.error("error occured while fetching report:" + e.getMessage());
 			return "error occured while fetching report:" + e.getMessage();
 		}
+	}
+	
+	
+	public String buildUrl(String host,String port,String apiUrl) {
+		StringBuffer url= new StringBuffer();
+		url.append(host).append(":").append(port).append(apiUrl);
+		return url.toString();
 	}
 
 }

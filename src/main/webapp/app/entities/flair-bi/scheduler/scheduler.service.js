@@ -12,7 +12,8 @@
             scheduleReport: scheduleReport,
             getScheduleReports:getScheduleReports,
             getScheduledReportsCount:getScheduledReportsCount,
-            getScheduleReport:getScheduleReport
+            getScheduleReport:getScheduleReport,
+            cancelScheduleReport:cancelScheduleReport
         };
 
         return service;
@@ -44,6 +45,13 @@
             return $http({
                 url: 'api/schedule/'+visualizationid,
                 method: 'GET'
+            });
+        }
+
+        function cancelScheduleReport(visualizationid) {
+            return $http({
+                url: 'api/schedule/'+visualizationid,
+                method: 'DELETE'
             });
         }
 

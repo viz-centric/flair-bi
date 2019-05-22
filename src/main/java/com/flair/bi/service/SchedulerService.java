@@ -4,9 +4,12 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,18 +26,21 @@ public class SchedulerService {
 	@Value("${flair-notifications.port}")
 	private String port;
 
-	public String deleteScheduledReport(String visualizationid) {
+	public ResponseEntity<SchedulerResponse> deleteScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = null;
+		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
 			responseEntity = restTemplate.exchange(buildUrl(host, port, scheduledReportParamUrl), HttpMethod.DELETE, null,
 					new ParameterizedTypeReference<String>() {
 					}, visualizationid);
 			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			return jsonObject.getString("message");
+			schedulerResponse.setMessage(jsonObject.getString("message"));
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
 		} catch (Exception e) {
-			log.error("error occured while fetching report:" + e.getMessage());
-			return "error occured while fetching report:" + e.getMessage();
+			log.error("error occured while cancelling scheduled report:"+e.getMessage());
+			schedulerResponse.setMessage("error occured while cancelling scheduled report :"+e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
 		}
 	}
 	

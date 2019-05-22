@@ -27,6 +27,7 @@
         vm.added = added;
         vm.removed = removed;
         vm.endDateFormat='yyyy-MM-dd';
+        vm.deleteReport=deleteReport;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -143,7 +144,6 @@
                 }
                 $rootScope.showSuccessToast(info);
             }).catch(function (error) {
-                console.log("error==="+error);
                 vm.isSaving = false;                
                 var info = {
                     text: error.data.message,
@@ -186,6 +186,23 @@
                 }else if(item.feature.featureType === "MEASURE"){
                     vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
                 }
+            });
+        }
+
+        function deleteReport(){
+            schedulerService.cancelScheduleReport(vm.visualMetaData.id).then(function (success) {
+                var info = {
+                    text: success.data.message,
+                    title: "Cancelled"
+                }
+                $rootScope.showSuccessToast(info);
+                vm.clear();
+            }).catch(function (error) {                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
             });
         }
 }

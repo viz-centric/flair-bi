@@ -674,3 +674,8 @@
 #notification_accordion .panel-body{
     padding: 0px;
 }
+
+#notification_accordion .panel-title:hover{
+  background-color: #ededed;
+  border-bottom: solid 1px #439dd3;
+}

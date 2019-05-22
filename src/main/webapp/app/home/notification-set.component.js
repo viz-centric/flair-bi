@@ -137,6 +137,7 @@
                             '<div class="panel-body">' +
 
                             '<svg height="200" width="280" id="svg_' + metaData.report_line_item.visualizationid + '"></svg>' +
+                            '<p>hello</p>'+
                             '<div class="custom_tooltip"></div>' +
 
                             ' </div>' +
@@ -190,7 +191,7 @@
 
                             for (var i = 0; i < measures.length; i++) {
 
-                                result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
+                                result['showValues'].push(false);
                                 result['displayNameForMeasure'].push(
                                     VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                                     metaData.report_line_item.measure[i]
@@ -214,7 +215,7 @@
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
-                                    .print(false);
+                                    .print(true);
 
                                 svg.datum(obj.data)
                                     .call(clusteredverticalbar);
@@ -224,7 +225,7 @@
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
-                                    .print(false);
+                                    .print(true);
 
                                 svg.datum(obj.data)
                                     .call(clusteredhorizontalbar);
@@ -234,7 +235,7 @@
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
-                                    .print(false);
+                                    .print(true);
 
                                 svg.datum(obj.data)
                                     .call(stackedverticalbar);
@@ -244,7 +245,7 @@
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
-                                    .print(false);
+                                    .print(true);
 
                                 svg.datum(obj.data)
                                     .call(stackedhorizontalbar);
@@ -281,7 +282,7 @@
 
                             for (var i = 0; i < measures.length; i++) {
 
-                                result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
+                                result['showValues'].push(false);
                                 result['displayNameForMeasure'].push(
                                     VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                                     metaData.report_line_item.measure[i]
@@ -307,7 +308,7 @@
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
-                                .print(false);
+                                .print(true);
 
                             svg.datum(obj.data)
                                 .call(line);
@@ -343,7 +344,7 @@
 
                             for (var i = 0; i < measures.length; i++) {
 
-                                result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
+                                result['showValues'].push(false);
                                 result['displayNameForMeasure'].push(
                                     VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                                     metaData.report_line_item.measure[i]
@@ -370,7 +371,7 @@
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
-                                .print(false);
+                                .print(true);
 
                             svg.datum(obj.data)
                                 .call(combo);
@@ -391,7 +392,7 @@
                             var pie = flairVisualizations.pie()
                                 .config(obj.config)
                                 .tooltip(true)
-                                .print(false)
+                                .print(true)
 
                             svg.datum(obj.data)
                                 .call(pie);
@@ -421,7 +422,7 @@
                             var doughnut = flairVisualizations.doughnut()
                                 .config(obj.config)
                                 .tooltip(true)
-                                .print(false)
+                                .print(true)
 
                             svg.datum(obj.data)
                                 .call(doughnut);
@@ -458,7 +459,7 @@
                                 .config(obj.config)
                                 .notification(true)
                                 .tooltip(true)
-                                .print(false)
+                                .print(true)
 
                             svg.datum(obj.data)
                                 .call(infographics);
@@ -493,7 +494,7 @@
 
                             for (var i = 0; i < measures.length; i++) {
 
-                                result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
+                                result['showValues'].push(false);
                                 result['displayNameForMeasure'].push(
                                     VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                                     metaData.report_line_item.measure[i]
@@ -517,7 +518,7 @@
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
-                                .print(false);
+                                .print(true);
 
                             svg.datum(obj.data)
                                 .call(scatter);
@@ -552,7 +553,7 @@
 
                             var gauge = flairVisualizations.gauge()
                                 .config(obj.config)
-                                .print(false);
+                                .print(true);
 
                             svg.datum(obj.data)
                                 .call(gauge);

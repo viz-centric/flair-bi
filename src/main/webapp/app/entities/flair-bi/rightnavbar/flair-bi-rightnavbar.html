@@ -399,11 +399,11 @@
                                 <div class="list-group" dnd-list="vm.features" dnd-drop="vm.dropCallback(index, item, external, type)">
                                     <div class="search-box inner-addon left-addon b-b-xs">
                                         <i class="glyphicon glyphicon-search"></i>
-                                        <input type="text" ng-model="searchDimention" class="form-control  rounded-corner" placeholder="Search Dimentions..." /></div>
+                                        <input type="text" ng-model="searchDimention" class="form-control  rounded-corner" placeholder="Search Dimensions..." /></div>
                                     <div class="resource-list" dnd-draggable="vm.getSelectedItem(dimension)"  dnd-moved="vm.features.splice($index, 1)"  dnd-effect-allowed="move"
                                         ng-repeat="dimension in vm.features | filter: {featureType: 'DIMENSION'} | filter: {name: searchDimention} ">
                                         <div class="list-group-item">
-                                            <span uib-tooltip="Drag and Drop into Vizualization" tooltip-placement="right"><i class="fa fa-arrows-alt" ></i></span>
+                                            <span uib-tooltip="Drag and Drop into Visualization" tooltip-placement="right"><i class="fa fa-arrows-alt" ></i></span>
                                             <span class="feature-name" ng-click="vm.changeFeature(dimension)">{{dimension.name}}</span>
                                             <span class="delete" ng-click="vm.deleteFeature(dimension)" aria-hidden="true">
                                         <svg class="flaticon-close">

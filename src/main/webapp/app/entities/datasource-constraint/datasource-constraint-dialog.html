@@ -4,7 +4,7 @@
             <svg class="common-edit-icon">
               <use xlink:href="#edit-dashboard" />
             </svg>
-            <div class="header-text" data-translate="flairbiApp.datasourceConstraint.home.createOrEditLabel">Create or edit a Datasource Constraint</div>
+            <div class="header-text" data-translate="flairbiApp.datasourceConstraint.home.createOrEditLabel">Create or Edit a Data Source Constraint</div>
             <svg class=" common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
               <use xlink:href="#cancle" />
             </svg>
@@ -32,7 +32,7 @@
                 </p>
             </div>
             <div class="form-group">
-                <label data-translate="flairbiApp.datasourceConstraint.datasources" for="field_datasources">Datasources</label>
+                <label data-translate="flairbiApp.datasourceConstraint.datasources" for="field_datasources">Data Sources</label>
                 <ui-select ng-keyup="vm.search($event,$select.search)" id="field_datasources" name="datasources" ng-model="vm.datasourceConstraint.datasource" required ng-change="vm.datasourceChange()">
                     <ui-select-match placeholder="{{ 'flairbiApp.datasourceConstraint.selectDatasource' | translate }}">{{$select.selected.name}}</ui-select-match>
                     <ui-select-choices repeat="datasource in vm.datasources">

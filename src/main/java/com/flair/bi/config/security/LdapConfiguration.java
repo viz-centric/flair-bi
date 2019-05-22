@@ -9,13 +9,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 
 @Configuration
-@Order(3)
 public class LdapConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final LdapAuthoritiesPopulator ldapAuthoritiesPopulator;
-    private final LDAPUserDetailsContextMapper ldapUserDetailsContextMapper;
 
     public LdapConfiguration(JHipsterProperties jHipsterProperties, AuthenticationManagerBuilder authenticationManagerBuilder, LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
                              LDAPUserDetailsContextMapper ldapUserDetailsContextMapper, JwtConfiguration jwtConfiguration) throws Exception {
@@ -23,9 +19,6 @@ public class LdapConfiguration {
         // jwtConfiguration dependency should stay here to guarantee the order of the beans
         // created: first JWT, then LDAP
         this.jHipsterProperties = jHipsterProperties;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.ldapAuthoritiesPopulator = ldapAuthoritiesPopulator;
-        this.ldapUserDetailsContextMapper = ldapUserDetailsContextMapper;
         authenticationManagerBuilder
                 .ldapAuthentication()
                 .ldapAuthoritiesPopulator(ldapAuthoritiesPopulator)

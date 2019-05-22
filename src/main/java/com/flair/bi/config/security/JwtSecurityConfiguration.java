@@ -26,7 +26,6 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Order(1)
 @Profile("!integration")
 public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter implements JwtConfiguration {
 

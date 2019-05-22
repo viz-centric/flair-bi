@@ -150,7 +150,6 @@ public class SchedulerResource {
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
-		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(schedulerService.buildUrl(host, port,scheduledReportUrl));
 		HttpHeaders headers = new HttpHeaders();
 		/* below code is commented until auth api is not built from notification application*/
@@ -168,7 +167,7 @@ public class SchedulerResource {
 		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(setChannelCredentials(schedulerNotificationDTO), headers);
 		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST,
+			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), schedulerDTO.getPutcall()?HttpMethod.PUT:HttpMethod.POST,
 					entity, String.class);
 			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
 			schedulerResponse.setMessage(jsonObject.getString("message"));

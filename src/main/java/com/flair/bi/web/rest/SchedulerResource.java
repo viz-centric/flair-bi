@@ -314,7 +314,7 @@ public class SchedulerResource {
 	
 	@DeleteMapping("/schedule/{visualizationid}")
 	@Timed
-	public String deleteSchedulerReport(@PathVariable String visualizationid)
+	public ResponseEntity<SchedulerResponse> deleteSchedulerReport(@PathVariable String visualizationid)
 			throws URISyntaxException {
 		return schedulerService.deleteScheduledReport(visualizationid);
 	}

@@ -6234,6 +6234,9 @@ input.select2-active {
   .cron-wrap .clearfix .form-group label {
     margin: 5px; }
 
+.cancel-job-icon {
+  color: #ED5565; }
+
 .file-uploader .drop-box-row {
   margin-left: 0;
   margin-right: 0; }

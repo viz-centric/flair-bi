@@ -2,6 +2,7 @@ package com.flair.bi.config.security;
 
 import com.flair.bi.config.JHipsterProperties;
 import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -9,13 +10,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 
 @Configuration
+@Slf4j
 public class LdapConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
 
     public LdapConfiguration(JHipsterProperties jHipsterProperties, AuthenticationManagerBuilder authenticationManagerBuilder, LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
                              LDAPUserDetailsContextMapper ldapUserDetailsContextMapper, JwtConfiguration jwtConfiguration) throws Exception {
-
+        log.info("Creating LDAP configuration - jwt {}", jwtConfiguration);
         // jwtConfiguration dependency should stay here to guarantee the order of the beans
         // created: first JWT, then LDAP
         this.jHipsterProperties = jHipsterProperties;

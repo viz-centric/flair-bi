@@ -4,6 +4,7 @@ import com.flair.bi.security.Http401UnauthorizedEntryPoint;
 import com.flair.bi.security.UserDetailsService;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Slf4j
 @Profile("!integration")
 public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter implements JwtConfiguration {
 
@@ -33,6 +35,7 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter imple
     private final CorsFilter corsFilter;
 
     public JwtSecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter, PasswordEncoder passwordEncoder) throws Exception {
+        log.info("Creating Jwt configuration");
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
 

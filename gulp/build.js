@@ -22,8 +22,7 @@ var config = require('./config');
 var initTask = lazypipe()
     .pipe(sourcemaps.init);
 var jsTask = lazypipe()
-    .pipe(ngAnnotate)
-    .pipe(uglify);
+    .pipe(ngAnnotate);
 var cssTask = lazypipe()
     .pipe(prefix)
     .pipe(cssnano);

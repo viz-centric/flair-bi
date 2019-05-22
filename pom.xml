@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>0.0.56-SNAPSHOT</version>
+    <version>0.0.57-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -1077,7 +1077,7 @@
                                     <goal>gulp</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>build --no-notification</arguments>
+                                    <arguments>build</arguments>
                                 </configuration>
                             </execution>
                             <!-- <execution>

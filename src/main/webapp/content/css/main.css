@@ -2206,6 +2206,11 @@ a {
   background-color: #ededed;
   border-bottom: solid 1px #439dd3; }
 
+#notification_accordion .notification_details {
+  margin-left: 15px;
+  font-weight: bold;
+  color: #439dd3; }
+
 tags-input .tags {
   border: 1px solid #e1e3e3;
   padding: 3px;

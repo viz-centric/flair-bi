@@ -46,14 +46,14 @@
                                             </span>
                                     </a>
                                 </div>
-                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+<!--                                 <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
                                     <a href ng-click="vm.settings(v)">
                                         <span uib-tooltip="Settings" tooltip-placement="top">
                                                 <svg class="flaticons-settings">
                                                     <use xlink:href="#fbi-box-settings" />
                                                 </svg>
                                             </span></a>
-                                </div>
+                                </div> -->
                                 <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
                                     <a href ng-click="vm.openDataContraints(v)">
                                         <span uib-tooltip="Data&nbsp;Constraints" tooltip-placement="top">
@@ -119,16 +119,16 @@
                             </div>
                         </div>
                     </div>
-                    <a href class="reload-button" ng-click="vm.refreshWidget(v)">
+                    <a href class="viz-header-button" ng-click="vm.refreshWidget(v)">
                         <span uib-tooltip="Refresh" tooltip-placement="bottom">
-                                <svg class="reload">
+                                <svg class="viz-header-icon">
                                     <use xlink:href="#reload" />
                                 </svg>
                             </span>
                     </a>
-                    <a ng-show="vm.ngIfSettings()" href class="reload-button" ng-click="vm.flipCard(v)">
+                    <a ng-show="vm.ngIfSettings()" href class="viz-header-button" ng-click="vm.flipCard(v)">
                         <span uib-tooltip="Flip" tooltip-placement="bottom">
-                                <i class="reload fa fa-rotate-right"></i>
+                                <i class="viz-header-icon fa fa-rotate-right"></i>
                             </span>
                     </a>
                 </div>
@@ -150,14 +150,21 @@
                     <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px; background-color: rgb(250, 250, 250); border-bottom: none; color: rgb(103, 106, 108);">
                         <div class="viz-header-content">
                             <div class="viz-title ng-binding">Dimensions and Measures</div>
-                            <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href="" class="reload-button" ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
-                                <span uib-tooltip="Build" tooltip-placement="bottom">
-                                        <i class="reload fa fa-gavel"></i>
-                                    </span>
+                            <a href class="viz-header-button viz-header-flip-settings" ng-click="vm.settings(v)">
+                                <span uib-tooltip="Settings" tooltip-placement="bottom">
+                                    <svg class="viz-header-icon flaticons-settings">
+                                        <use xlink:href="#fbi-box-settings" />
+                                    </svg>
+                                </span>
                             </a>
-                            <a href="" class="reload-button" ng-click="vm.flipCard(v)">
+                            <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href="" class="viz-header-button" ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
+                                <span uib-tooltip="Build" tooltip-placement="bottom">
+                                    <i class="viz-header-icon fa fa-gavel"></i>
+                                </span>
+                            </a>
+                            <a href="" class="viz-header-button" ng-click="vm.flipCard(v)">
                                 <span uib-tooltip="Flip" tooltip-placement="bottom">
-                                        <i class="reload fa fa-rotate-right"></i>
+                                        <i class="viz-header-icon fa fa-rotate-right"></i>
                                     <span>
                                 </a>
                            </div>

@@ -9,7 +9,7 @@ import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 
-@Configuration
+//@Configuration
 @Slf4j
 public class LdapConfiguration {
 

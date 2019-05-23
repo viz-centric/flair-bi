@@ -1,9 +1,11 @@
 package com.flair.bi.config.security;
 
+import com.flair.bi.config.JHipsterProperties;
 import com.flair.bi.security.Http401UnauthorizedEntryPoint;
 import com.flair.bi.security.UserDetailsService;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +23,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
+import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
@@ -33,15 +37,31 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter imple
 
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
+    private final JHipsterProperties jHipsterProperties;
 
-    public JwtSecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter, PasswordEncoder passwordEncoder) throws Exception {
-        log.info("Creating Jwt configuration");
+    public JwtSecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
+                                    UserDetailsService userDetailsService,
+                                    TokenProvider tokenProvider,
+                                    CorsFilter corsFilter,
+                                    PasswordEncoder passwordEncoder,
+                                    JHipsterProperties jHipsterProperties,
+                                    LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
+                                    LDAPUserDetailsContextMapper ldapUserDetailsContextMapper) throws Exception {
+        log.info("Creating Jwt and Ldap configuration");
+
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
+        this.jHipsterProperties = jHipsterProperties;
 
         authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
+        authenticationManagerBuilder
+                .ldapAuthentication()
+                .ldapAuthoritiesPopulator(ldapAuthoritiesPopulator)
+                .userDnPatterns("uid={0},ou=people")
+                .userDetailsContextMapper(ldapUserDetailsContextMapper)
+                .contextSource(getLDAPContextSource());
     }
 
     @Bean
@@ -110,10 +130,15 @@ public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter imple
         return new JWTConfigurer(tokenProvider);
     }
 
-    @Bean
-    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
-        return new SecurityEvaluationContextExtension();
+    private LdapContextSource getLDAPContextSource() {
+        LdapContextSource contextSource = new LdapContextSource();
+        JHipsterProperties.LdapSettings ldapSettings = jHipsterProperties.getLdapsettings();
+        contextSource.setUrl(ldapSettings.getUrl());
+        contextSource.setBase(ldapSettings.getBase());
+        contextSource.setUserDn(ldapSettings.getUserDn());
+        contextSource.setPassword(ldapSettings.getPassword());
+        contextSource.afterPropertiesSet(); // needed otherwise you will have a NullPointerException in spring
+        return contextSource;
     }
-
 
 }

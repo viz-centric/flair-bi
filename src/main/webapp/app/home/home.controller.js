@@ -113,6 +113,7 @@
             onRecentlyBox();
             angular.element($("#on-recently-box1")).triggerHandler("click");
             vm.menuItems=adminListService.getHomeList();
+            openNotifications();
         }
 
         function getReleaseAlerts() {

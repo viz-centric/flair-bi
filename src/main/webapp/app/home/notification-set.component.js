@@ -137,7 +137,7 @@
                             '<div class="panel-body">' +
 
                             '<svg height="200" width="280" id="svg_' + metaData.report_line_item.visualizationid + '"></svg>' +
-                            '<p>hello</p>'+
+                            '<div class="notification_details"><p>See Widget</p><p>See Dashboard</p></div>'+
                             '<div class="custom_tooltip"></div>' +
 
                             ' </div>' +
@@ -175,7 +175,7 @@
                             result['showYaxisLabel'] = false;
                             result['showLegend'] = false;
                             result['legendPosition'] = VisualizationUtils.getPropertyValue(obj.property, 'Legend position').toLowerCase();
-                            result['showGrid'] = VisualizationUtils.getPropertyValue(obj.property, 'Show grid');
+                            result['showGrid'] = false
 
                             result['displayName'] = metaData.report_line_item.dimension[0];
 
@@ -264,7 +264,7 @@
                             result['showYaxisLabel'] = false;
                             result['showLegend'] = false;
                             result['legendPosition'] = VisualizationUtils.getPropertyValue(obj.property, 'Legend position').toLowerCase();
-                            result['showGrid'] = VisualizationUtils.getPropertyValue(obj.property, 'Show grid');
+                            result['showGrid'] = false
 
                             result['displayName'] = metaData.report_line_item.dimension[0];
 
@@ -325,7 +325,7 @@
                             result['showYaxisLabel'] = false;
                             result['showLegend'] = false;
                             result['legendPosition'] = VisualizationUtils.getPropertyValue(obj.property, 'Legend position').toLowerCase();
-                            result['showGrid'] = VisualizationUtils.getPropertyValue(obj.property, 'Show grid');
+                            result['showGrid'] = false
 
                             result['displayName'] = metaData.report_line_item.dimension[0];
 
@@ -392,7 +392,8 @@
                             var pie = flairVisualizations.pie()
                                 .config(obj.config)
                                 .tooltip(true)
-                                .print(true)
+                                .notification(true)
+                                .print(false)
 
                             svg.datum(obj.data)
                                 .call(pie);
@@ -422,7 +423,8 @@
                             var doughnut = flairVisualizations.doughnut()
                                 .config(obj.config)
                                 .tooltip(true)
-                                .print(true)
+                                .notification(true)
+                                .print(false)
 
                             svg.datum(obj.data)
                                 .call(doughnut);
@@ -476,7 +478,7 @@
                             result['showYaxisLabel'] = false;
                             result['showLegend'] = false;
                             result['legendPosition'] = VisualizationUtils.getPropertyValue(obj.property, 'Legend position').toLowerCase();
-                            result['showGrid'] = VisualizationUtils.getPropertyValue(obj.property, 'Show grid');
+                            result['showGrid'] = false
 
                             result['displayName'] = metaData.report_line_item.dimension[0];
 

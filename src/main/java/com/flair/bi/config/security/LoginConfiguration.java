@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,7 +21,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
@@ -33,20 +31,20 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Slf4j
 @Profile("!integration")
-public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter implements JwtConfiguration {
+public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
     private final JHipsterProperties jHipsterProperties;
 
-    public JwtSecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
-                                    UserDetailsService userDetailsService,
-                                    TokenProvider tokenProvider,
-                                    CorsFilter corsFilter,
-                                    PasswordEncoder passwordEncoder,
-                                    JHipsterProperties jHipsterProperties,
-                                    LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
-                                    LDAPUserDetailsContextMapper ldapUserDetailsContextMapper) throws Exception {
+    public LoginConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
+                              UserDetailsService userDetailsService,
+                              TokenProvider tokenProvider,
+                              CorsFilter corsFilter,
+                              PasswordEncoder passwordEncoder,
+                              JHipsterProperties jHipsterProperties,
+                              LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
+                              LDAPUserDetailsContextMapper ldapUserDetailsContextMapper) throws Exception {
         log.info("Creating Jwt and Ldap configuration");
 
         this.tokenProvider = tokenProvider;

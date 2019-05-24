@@ -51,8 +51,18 @@
             </tags-input-grpc>
         </div>
         <div class="col-md-2 field">
-            <div ng-show="vm.showAdd" class="data-constraint-operation-button add-button icon" ng-click="vm.addComposition()"><i class="fa fa-plus-circle fa-2x"></i> </div>
-            <div ng-show="vm.showDelete" class="data-constraint-operation-button remove-button icon" ng-click="vm.removeCondition()"><i class="fa fa-remove fa-2x"></i> </div>
+            <div ng-show="vm.showAdd" class="data-constraint-operation-button add-button icon" ng-click="vm.addComposition()">
+                <svg class="flair-add-icon flair-oprations-icon">
+                     <use xlink:href="#flair-add-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                     </use>
+                </svg>
+            </div>
+            <div ng-show="vm.showDelete" class="data-constraint-operation-button remove-button icon" ng-click="vm.removeCondition()">
+                <svg class="flair-delete-icon flair-oprations-icon">
+                     <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                     </use>
+                </svg>
+            </div>
         </div>
     </div>
 </div>

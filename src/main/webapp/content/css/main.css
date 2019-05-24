@@ -3792,6 +3792,11 @@ jhi-alert .alerts .alert-danger {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg); }
 
+.flair-oprations-icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 12px; }
+
 /* MODAL */
 .modal-header {
   background-color: #fafafa;

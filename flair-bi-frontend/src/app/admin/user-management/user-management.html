@@ -9,7 +9,7 @@
                         <span class="fa fa-sort"></span>
                     </th>
                     <th jh-sort-by="login">
-                        <span data-translate="userManagement.login">Login</span>
+                        <span data-translate="userManagement.login"></span>
                         <span class="fa fa-sort"></span>
                     </th>
                     <th jh-sort-by="email">
@@ -65,18 +65,15 @@
                     <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
-                            <button type="submit" ui-sref="user-management-detail({login:user.login})"
-                                    class="btn btn-default btn-sm">
+                            <button type="submit" ui-sref="user-management-detail({login:user.login})" class="btn btn-default btn-sm">
                                 <span class="fa fa-eye view-icon fa-2x"></span>
                             </button>
                             &nbsp;
-                            <button type="submit" ng-disabled="!vm.canEdit"
-                                    ui-sref="user-management.edit({login:user.login})" class="btn btn-default btn-sm">
+                            <button type="submit" ng-disabled="!vm.canEdit" ui-sref="user-management.edit({login:user.login})" class="btn btn-default btn-sm">
                                 <span class="fa fa-edit edit-icon fa-2x"></span>
                             </button>
                             &nbsp;
-                            <button type="submit" ng-disabled="!vm.canDelete"
-                                    ui-sref="user-management.delete({login:user.login})" class="btn btn-default btn-sm"
+                            <button type="submit" ng-disabled="!vm.canDelete" ui-sref="user-management.delete({login:user.login})" class="btn btn-default btn-sm"
                                     ng-disabled="vm.currentAccount.login==user.login">
                                 <span class="fa fa-trash delete-icon fa-2x"></span>
                             </button>
@@ -88,8 +85,7 @@
         </div>
         <div class="text-center">
             <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page"
-                            ng-change="vm.transition()"></uib-pagination>
+            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
         </div>
     </div>
 </div>

@@ -1,20 +1,20 @@
-<div class="inmodal in modal-content dag-scheduler-modal">
+<div class="inmodal in modal-content common-create-popup">
     <form name="editForm" novalidate="" role="form">
         <div class="modal-header flair-model-header">
-            <svg class="edit-icon">
+            <svg class="common-edit-icon">
                 <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
                 Dag Scheduler
             </div>
-            <svg class="cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
                 <use xlink:href="#cancle" />
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div class="container">
                 <div class="row container">
-                    <div class="col-xs-4">
+                    <div class="col-xs-4" style="display: none;">
                         <div class="form-group">
                             <label class="control-label" for="timezoneGroup">Timezone*</label>
                             <ui-select ng-model="vm.scheduleObj.schedule.timezone">
@@ -25,7 +25,7 @@
                             </ui-select>
                         </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="channels">Channels*</label>
                             <ui-select ng-model="vm.scheduleObj.assign_report.channel">
@@ -37,8 +37,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row container">
-                    <div class="col-xs-5">
+                <div class="row container" style="display: none;">
+                    <div class="col-xs-8">
                         <div class="form-group scheduler-tags">
                             <label class="control-label" for="emails">Share Report with Users*</label>
                             <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
@@ -48,24 +48,9 @@
                             </tags-input>
                         </div>
                     </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="control-label" for="visualizations">Visualization Type*</label>
-                            <ui-select ng-model="vm.scheduleObj.report_line_item.visualization">
-                                <ui-select-match placeholder="Select Visualization ...">{{$select.selected}}</ui-select-match>
-                                <ui-select-choices repeat="visualization in vm.visualizations  | filter: $select.search track by visualization">
-                                    <div ng-bind="visualization"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-                    </div>
                 </div>
                 <div class="row container">
-                    <div class="col-xs-9">
-                        <!--                         <form name="cronForm">
-                                                    <cron-gen ng-model="cronExpression" ng-disabled="isCronDisabled" options="cronOptions" name="cron">
-                                                    </cron-gen>
-                                                </form> -->
+                    <div class="col-xs-8">
                         <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
                     </div>
                 </div>
@@ -86,7 +71,7 @@
                         <div class="form-group">
                             <label class="control-label" for="startDate">Start Date*</label>
                             <div class="input-group">
-                                <input id="startDate" ng-required="vm.startDate == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.startDate" is-open="vm.datePickerOpenStatus.startDate" required />
+                                <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" required />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -99,7 +84,7 @@
                         <div class="form-group">
                             <label class="control-label" for="endDate">End Date*</label>
                             <div class="input-group">
-                                <input id="endDate" ng-required="vm.endDate == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.endDate" is-open="vm.datePickerOpenStatus.endDate" required />
+                                <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" required />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -117,9 +102,13 @@
                 <span class="fa fa-calendar"></span>&nbsp;
                 <span>Schedule</span>
             </button>
+            <button ng-if="vm.scheduleObj.putcall" class="btn btn-default"  data-dismiss="modal" ng-click="vm.deleteReport()" type="button">
+                <span class="cancel-job-icon glyphicon glyphicon-remove"></span>&nbsp;
+                <span data-translate="entity.action.canceljob">Cancel Job</span>
+            </button>
             <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
-                <span data-translate="entity.action.cancel">Cancel</span>
+                <span data-translate="entity.action.close">Close</span>
             </button>
         </div>
     </form>

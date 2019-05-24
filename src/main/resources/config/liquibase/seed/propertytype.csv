@@ -30,7 +30,7 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 629|Icon Expression|An icon expression|TEXT|null|null|null|null|flairadmin|null
 630|Text alignment|Alignment of text|SELECT|null|null|null|null|flairadmin|STRING
 631|Icon position|An icon position|SELECT|null|null|null|null|flairadmin|STRING
-632|Text colour|The text colour|COLOR_PICKER|null|null|#617c8c|null|flairadmin|null
+632|Text colour|The text colour|COLOR_PICKER|null|null|#FFFFFF|null|flairadmin|null
 633|Text colour expression|The text colour expression|TEXT|null|null|null|null|flairadmin|null
 634|Number format|Possible number formats|SELECT|null|null|null|null|flairadmin|STRING
 635|Number of partitions|A number of partitions|NUMBER|null|null|null|4|flairadmin|null

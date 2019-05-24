@@ -18,7 +18,8 @@ function stateConfig($stateProvider) {
             url: '/permission-management?page&sort',
             data: {
                 authorities: [],
-                pageTitle: 'Users'
+                pageTitle: 'Users',
+                displayName: "Permission Management"
             },
             views: {
                 'content-header@': {

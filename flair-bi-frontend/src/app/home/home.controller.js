@@ -54,10 +54,10 @@ function HomeController($scope, Principal, LoginService,
     vm.reports = [];
     activate();
 
-    function openNotifications() {
-        if ($("#notifications-tab").hasClass("tab-active")) {
+    function openNotifications(){
+        if($("#notifications-tab").hasClass("tab-active")){
             $("#notifications-tab").removeClass("tab-active");
-        } else {
+        }else{
             $("#notifications-tab").addClass("tab-active");
             $("#releases-tab").removeClass("tab-active");
             $("#notification-container").show();
@@ -139,6 +139,7 @@ function HomeController($scope, Principal, LoginService,
         onRecentlyBox();
         angular.element($("#on-recently-box1")).triggerHandler("click");
         vm.menuItems = adminListService.getHomeList();
+        openNotifications();
     }
 
     function getReleaseAlerts() {

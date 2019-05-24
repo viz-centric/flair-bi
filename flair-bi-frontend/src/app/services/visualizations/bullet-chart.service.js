@@ -45,7 +45,8 @@ function GenerateBulletChart(VisualizationUtils, $rootScope, D3Utils, filterPara
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var bulletchart = $rootScope.updateWidget[record.id];
-                    bulletchart.update(record.data);
+                    bulletchart.config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

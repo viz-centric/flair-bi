@@ -140,8 +140,9 @@ function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParam
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var combo = $rootScope.updateWidget[record.id];
-                    combo.isAnimationDisable(record.isLiveEnabled);
-                    combo.update(record.data);
+                    combo.isAnimationDisable(record.isLiveEnabled)
+                        .config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

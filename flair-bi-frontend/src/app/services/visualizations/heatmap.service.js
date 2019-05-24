@@ -67,9 +67,11 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var heatmap = $rootScope.updateWidget[record.id];
-                    heatmap.update(record.data);
+                    heatmap.config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
-            } else {
+            }
+            else {
 
                 d3.select(element[0]).html('')
 
@@ -86,7 +88,7 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                     .attr('height', element[0].clientHeight)
 
                 var tooltip = div.append('div')
-                    .attr('class', 'custom_tooltip')
+                    .attr('class', 'custom_tooltip');
 
                 var heatmap = flairVisualizations.heatmap()
                     .config(getProperties(VisualizationUtils, record))
@@ -102,4 +104,5 @@ function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParamete
             }
         }
     }
+
 }

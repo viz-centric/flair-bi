@@ -1,48 +1,48 @@
 <div class="fbibox">
-    <div class="fbibox-title">Configured connections</div>
+    <div class="fbibox-title">Configured Connections</div>
     <div class="fbibox-content">
         <div class="table-responsive">
             <table class="jh-table table table-striped table-bordered flair-table-v1">
                 <thead>
-                    <tr>
-                        <th>
-                            <span data-translate="global.field.id">ID</span>
-                        </th>
-                        <th>
-                            <span>Name</span>
-                        </th>
-                        <th>
-                            <span> Type</span>
-                        </th>
-                        <th>
-                            <span> Actions</span>
-                        </th>
-                    </tr>
+                <tr>
+                    <th>
+                        <span data-translate="global.field.id">ID</span>
+                    </th>
+                    <th>
+                        <span>Name</span>
+                    </th>
+                    <th>
+                        <span> Type</span>
+                    </th>
+                    <th>
+                        <span> Actions</span>
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="connection in vm.connections track by connection.id">
-                        <td>
-                            <a ui-sref="connection-detail({connectionLinkId: connection.linkId})">{{connection.id}}</a>
-                        </td>
-                        <td>{{connection.name}}</td>
-                        <td>{{connection.details['@type']}}</td>
-                        <td class="text-right">
-                            <div class="btn-group flex-btn-group-container">
-                                <button type="submit" ui-sref="connection-detail({connectionLinkId: connection.linkId})"
+                <tr ng-repeat="connection in vm.connections track by connection.id">
+                    <td>
+                        <a ui-sref="connection-detail({connectionLinkId: connection.linkId})">{{connection.id}}</a>
+                    </td>
+                    <td>{{connection.name}}</td>
+                    <td>{{connection.details['@type']}}</td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit" ui-sref="connection-detail({connectionLinkId: connection.linkId})"
                                     class="btn btn-default btn-sm">
-                                    <span class="fa fa-eye view-icon fa-2x"></span>
-                                </button>
-                                &nbsp;
-                                <button type="submit" ui-sref="connection.edit({connectionId:connection.id})" class="btn btn-default btn-sm">
-                                    <span class="fa fa-edit edit-icon fa-2x"></span>
-                                </button>
-                                &nbsp;
-                                <button type="submit" ui-sref="connection.delete({connectionId:connection.id})" class="btn btn-default btn-sm">
-                                    <span class="fa fa-trash delete-icon fa-2x"></span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                                <span class="fa fa-eye view-icon fa-2x"></span>
+                            </button>
+                            &nbsp;
+                            <button type="submit" ui-sref="connection.edit({connectionId:connection.id})" class="btn btn-default btn-sm">
+                                <span class="fa fa-edit edit-icon fa-2x"></span>
+                            </button>
+                            &nbsp;
+                            <button type="submit" ui-sref="connection.delete({connectionId:connection.id})" class="btn btn-default btn-sm">
+                                <span class="fa fa-trash delete-icon fa-2x"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

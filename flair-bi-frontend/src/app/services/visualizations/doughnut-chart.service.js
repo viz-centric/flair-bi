@@ -43,7 +43,8 @@ function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterPa
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var doughnut = $rootScope.updateWidget[record.id];
-                    doughnut.update(record.data);
+                    doughnut.config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

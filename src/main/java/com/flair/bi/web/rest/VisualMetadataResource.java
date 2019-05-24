@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.service.SchedulerService;
 import com.flair.bi.view.VisualMetadataService;
 import com.flair.bi.view.VisualMetadataValidationService;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
@@ -41,6 +42,7 @@ public class VisualMetadataResource {
 
     private final VisualMetadataService visualMetadataService;
     private final VisualMetadataValidationService visualMetadataValidationService;
+    private final SchedulerService schedulerService;
     
     @PostMapping("/visualmetadata/validate")
     @Timed
@@ -148,6 +150,7 @@ public class VisualMetadataResource {
     @PreAuthorize("@accessControlManager.hasAccess('VISUAL-METADATA', 'DELETE', 'APPLICATION')")
     public ResponseEntity<Void> deleteVisualMetadata(@PathVariable String id) {
         log.debug("REST request to delete VisualMetadata : {}", id);
+        schedulerService.deleteScheduledReport(id);
         visualMetadataService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("visualmetadata", id)).build();
     }

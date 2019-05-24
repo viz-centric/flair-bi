@@ -10,7 +10,8 @@
             bindings: {
                 visual: '=',
                 view: '=',
-                features: '='
+                features: '=',
+                hierarchies:'='
             }
         });
 
@@ -27,7 +28,6 @@
         vm.addFieldDimension = addFieldDimension;
         vm.addFieldMeasure = addFieldMeasure;
         vm.removeField = removeField;
-        vm.hierarchies = VisualDispatchService.getHierarchies();
 
         ////////////////
 

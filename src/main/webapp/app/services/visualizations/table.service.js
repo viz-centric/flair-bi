@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('GenerateTable', GenerateTable);
 
-    GenerateTable.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils'];
+    GenerateTable.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
 
-    function GenerateTable(VisualizationUtils, $rootScope, D3Utils) {
+    function GenerateTable(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
 
@@ -53,7 +53,7 @@
                         result['displayNameForDimension'].push(
                             VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display name') ||
                             result['dimension'][i]
-                            );
+                        );
                         result['cellColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Cell colour'));
                         result['fontStyleForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font style'));
                         result['fontWeightForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font weight'));
@@ -67,7 +67,7 @@
                         result['displayNameForMeasure'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
-                            );
+                        );
                         result['cellColorForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Cell colour'));
                         result['cellColorExpressionForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Cell colour expression'));
                         result['fontStyleForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
@@ -85,21 +85,32 @@
                     return result;
                 }
 
-                d3.select(element[0]).html('')
-                var div = d3.select(element[0]).append('div')
-                    .attr('id', 'table-'+element[0].id)
-                    .attr('width', element[0].clientWidth)
-                    .attr('height', element[0].clientHeight)
-                    .style('overflow', 'hidden')
-                    .style('text-align', 'center')
-                    .style('position', 'relative');
+                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                    if ($rootScope.filterSelection.id != record.id) {
+                        var table = $rootScope.updateWidget[record.id];
+                        table.update(record.data);
+                    }
+                } else {
+                    d3.select(element[0]).html('')
+                    var div = d3.select(element[0]).append('div')
+                        .attr('id', 'pivot-' + element[0].id)
+                        .style('width', element[0].clientWidth + 'px')
+                        .style('height', element[0].clientHeight + 'px')
+                        .style('overflow', 'hidden')
+                        .style('text-align', 'center')
+                        .style('position', 'relative');
 
-                var table = flairVisualizations.table()
-                    .config(getProperties(VisualizationUtils, record))
-                    .print(false)
+                    var table = flairVisualizations.table()
+                        .config(getProperties(VisualizationUtils, record))
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService);
 
-                div.datum(record.data)
-                    .call(table);
+
+                    div.datum(record.data)
+                        .call(table);
+
+                    $rootScope.updateWidget[record.id] = table;
+                }
             }
         }
     }

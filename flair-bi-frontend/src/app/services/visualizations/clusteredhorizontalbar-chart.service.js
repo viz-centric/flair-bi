@@ -83,11 +83,13 @@ function GenerateClusteredhorizontalbarChart(VisualizationUtils, $rootScope, D3U
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var clusteredhorizontalbar = $rootScope.updateWidget[record.id];
-                    clusteredhorizontalbar.isAnimationDisable(record.isLiveEnabled);
-                    clusteredhorizontalbar.update(record.data);
+                    clusteredhorizontalbar.isAnimationDisable(record.isLiveEnabled)
+                        .config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')
+
                 var div = d3.select(element[0]).append('div')
                     .attr('id', 'clusteredhorizontalbar-' + element[0].id)
                     .style('width', element[0].clientWidth + 'px')

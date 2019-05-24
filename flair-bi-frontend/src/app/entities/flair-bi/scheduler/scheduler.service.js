@@ -11,7 +11,9 @@ function schedulerService($http) {
     var service = {
         scheduleReport: scheduleReport,
         getScheduleReports:getScheduleReports,
-        getScheduledReportsCount:getScheduledReportsCount
+        getScheduledReportsCount:getScheduledReportsCount,
+        getScheduleReport:getScheduleReport,
+        cancelScheduleReport:cancelScheduleReport
     };
 
     return service;
@@ -36,6 +38,20 @@ function schedulerService($http) {
         return $http({
             url: 'api/schedule/reports/count',
             method: 'GET'
+        });
+    }
+
+    function getScheduleReport(visualizationid) {
+        return $http({
+            url: 'api/schedule/'+visualizationid,
+            method: 'GET'
+        });
+    }
+
+    function cancelScheduleReport(visualizationid) {
+        return $http({
+            url: 'api/schedule/'+visualizationid,
+            method: 'DELETE'
         });
     }
 

@@ -1063,10 +1063,10 @@ function FlairBiController(
     }
 
     function removeWidget(widget) {
-        swal("Are you sure?", "You want to delete selected visualization", {
+        swal("Are you sure?", "You want to delete selected visualization.It will also delete scheduled report.", {
             dangerMode: true,
             buttons: true
-        }).then(function (value) {
+        }).then(function(value) {
             if (value) {
                 delete $rootScope.updateWidget[widget.id];
 
@@ -1075,10 +1075,10 @@ function FlairBiController(
                         {
                             id: widget.id
                         },
-                        function (result) {
+                        function(result) {
                             removeFromView(widget);
                         },
-                        function (error) {
+                        function(error) {
                             swal("Something went wrong");
                         }
                     );

@@ -5,6 +5,7 @@
         .module('flairbiApp')
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         .constant('VERSION', "0.0.38-SNAPSHOT")
 =======
         .constant('VERSION', "0.0.45-SNAPSHOT")
@@ -13,6 +14,10 @@
         .constant('VERSION', "0.0.49-SNAPSHOT")
 >>>>>>> fbfacb18bbfd510dee8bdc5785e75d6559af8f8d
         .constant('DEBUG_INFO_ENABLED', true)
+=======
+        .constant('VERSION', "0.0.58-SNAPSHOT")
+        .constant('DEBUG_INFO_ENABLED', false)
+>>>>>>> 3d21cc6d65d34ebda08053da3aa12f0868665ac6
         .constant('PERMISSION_TYPES', {
 	"APPLICATION": "APPLICATION",
 	"DASHBOARD": "DASHBOARD",

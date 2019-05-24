@@ -3,14 +3,14 @@
         "datasources": {
             "home": {
                 "title": "Datasources",
-                "createLabel": "Create a new Datasources",
-                "createOrEditLabel": "Create or edit a Datasources"
+                "createLabel": "Create a new Data Sources",
+                "createOrEditLabel": "Create or Edit a Data Sources"
             },
-            "created": "A new Datasources is created with identifier {{ param }}",
-            "updated": "A Datasources is updated with identifier {{ param }}",
-            "deleted": "A Datasources is deleted with identifier {{ param }}",
+            "created": "A new Data Source is created with identifier {{ param }}",
+            "updated": "A Data Source is updated with identifier {{ param }}",
+            "deleted": "A Data Source is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Datasources {{ id }}?"
+                "question": "Are you sure you want to delete Data Source {{ id }}?"
             },
             "detail": {
                 "title": "Datasources"
@@ -20,9 +20,9 @@
             "connectionName": "Connection Name",
             "queryPath": "Query Path",
             "service": "Service",
-            "selectDatasource": "Search available datasources",
+            "selectDatasource": "Search Available Data Sources",
             "error": {
-                "datasources.all": "Error loading datasources"
+                "datasources.all": "Error Loading Data Sources"
             }
         }
     }

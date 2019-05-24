@@ -15,9 +15,9 @@ angular
         }
     });
 
-filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService'];
+filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService','$timeout','FilterStateManagerService','$rootScope','$filter','VisualDispatchService','stompClientService'];
 
-function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService) {
+function filterElementGrpcController($scope, proxyGrpcService, filterParametersService,$timeout,FilterStateManagerService,$rootScope,$filter,VisualDispatchService,stompClientService) {
     var vm = this;
 
     vm.$onInit = activate;
@@ -26,7 +26,7 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
     vm.removed = removed;
     vm.datePickerOpenStatus = {};
     vm.openCalendar = openCalendar;
-    vm.metaData = [];
+    vm.metaData=[];
 
 
     ////////////////
@@ -43,11 +43,11 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
     function registerRemoveTag() {
         var unsubscribe = $scope.$on(
             "FlairBi:remove-filter",
-            function (event, filter) {
-                if (filter != undefined) {
-                    if (!isString(filter)) {
+            function(event,filter) {
+                if(filter!=undefined){
+                    if(!isString(filter)){
                         processRemoveTag(filter)
-                    } else {
+                    }else{
                         processRemoveFilter(filter);
                     }
                 }
@@ -57,40 +57,39 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
         $scope.$on("$destroy", unsubscribe);
     }
 
-    function processRemoveTag(tag) {
-        if (isTagExist(tag)) {
+    function processRemoveTag(tag){
+        if(isTagExist(tag)){
             removed(tag);
             removeTagFromSelectedList(tag);
-            applyFilter();
         }
+        applyFilter();
     }
 
-    function processRemoveFilter(filter) {
+    function processRemoveFilter(filter){
         var filterParameters = filterParametersService.get();
-        if (filterParameters[filter] == undefined) {
+        if(filterParameters[filter]==undefined){
             applyFilter();
         }
-        else {
-            if (filterParameters[filter].length != 0) {
-                $filter('filter')(vm.dimensions, { 'name': filter })[0].selected = [];
-                filterParameters[filter] = [];
-                filterParametersService.save(filterParameters);
-                applyFilter();
-            }
+        else{if(filterParameters[filter].length!=0){
+            $filter('filter')(vm.dimensions, {'name':filter})[0].selected=[];
+            filterParameters[filter]=[];
+            filterParametersService.save(filterParameters);
+            applyFilter();
+        }
         }
     }
-    function isString(filter) {
+    function isString(filter){
         return typeof filter === 'string' || filter instanceof String;
     }
 
-    function isTagExist(tag) {
+    function isTagExist(tag){
         var filterParameters = filterParametersService.get();
         var tag = $filter('filter')(filterParameters[vm.dimension.name], tag['text']);
-        return tag == undefined ? false : true;
+        return tag==undefined?false:true;
     }
 
 
-    function applyFilter() {
+    function applyFilter(){
         FilterStateManagerService.add(angular.copy(filterParametersService.get()));
         $rootScope.$broadcast('flairbiApp:filter');
     }
@@ -100,7 +99,7 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
     }
 
     function load(q, dimension) {
-        var vId = dimension.id;
+        var vId=dimension.id;
         var query = {};
         query.fields = [dimension.name];
         if (q) {
@@ -118,14 +117,14 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
         proxyGrpcService.forwardCall(
             vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,
-                vId: vId
+                vId:vId
             }
         );
         // .then(function (result) {
         // var retVal = result.data.data.map(function (item) {
         //         return item[dimensionName.toLowerCase()];
         // });
-        //     return retVal; 
+        //     return retVal;
         // }, function (reason) {
         //     return [];
         // });
@@ -133,7 +132,7 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
 
     function removed(tag) {
         var filterParameters = filterParametersService.get();
-        var array = filterParameters[vm.dimension.name] == undefined ? filterParameters[vm.dimension.name.toLowerCase()] : filterParameters[vm.dimension.name];
+        var array = filterParameters[vm.dimension.name]==undefined?filterParameters[vm.dimension.name.toLowerCase()]:filterParameters[vm.dimension.name];
         var index = array.indexOf(tag['text']);
         if (index > -1) {
             array.splice(index, 1);
@@ -142,9 +141,9 @@ function filterElementGrpcController($scope, proxyGrpcService, filterParametersS
         filterParametersService.save(filterParameters);
     }
 
-    function removeTagFromSelectedList(tag) {
+    function removeTagFromSelectedList(tag){
         var index = -1;
-        vm.dimension.selected.some(function (obj, i) {
+        vm.dimension.selected.some(function(obj, i) {
             return obj.text === tag['text'] ? index = i : false;
         });
         //var index = vm.dimension.selected.indexOf(tag);

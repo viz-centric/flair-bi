@@ -2,8 +2,8 @@
     "userManagement": {
         "home": {
             "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "createLabel": "Add User",
+            "createOrEditLabel": "Create or Edit a User"
         },
         "created": "A new user is created with identifier {{ param }}",
         "updated": "An user is updated with identifier {{ param }}",
@@ -16,18 +16,18 @@
             "title": "User"
         },
         "errorDeleting":"Error deleting user",
-        "login": "Login Id",
-        "firstName": "First name",
-        "lastName": "Last name",
+        "login": "Login ID",
+        "firstName": "First Name",
+        "lastName": "Last Name",
         "email": "Email",
         "activated": "Activated",
         "deactivated": "Deactivated",
         "profiles": "Profiles",
         "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date",
+        "createdBy": "Created By",
+        "createdDate": "Created Date",
+        "lastModifiedBy": "Modified By",
+        "lastModifiedDate": "Modified Date",
         "selectUser": "Select User ...",
         "activatedSuccess":"User has been Activated",
         "deactivatedSuccess":"User has been Dectivated",

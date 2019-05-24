@@ -27,6 +27,7 @@
         vm.added = added;
         vm.removed = removed;
         vm.endDateFormat='yyyy-MM-dd';
+        vm.deleteReport=deleteReport;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -54,7 +55,8 @@
                 "timezone": "",
                 "start_date": "",
                 "end_date": ""
-            }
+            },
+            "putcall":false
           };
         activate();
 
@@ -62,13 +64,33 @@
 
         function activate() {
             vm.visualMetaData = visualMetaData;
+            getScheduleReport(visualMetaData.id);
             vm.datasource= datasource;
             vm.viewName=viewName;
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            vm.users=User.query();
             buildScheduleObject(vm.visualMetaData,vm.datasource);
+            //vm.users=User.query();this will be used in future
             var cronstrue = window.cronstrue;
+        }
+
+        function getScheduleReport(visualizationid){
+            schedulerService.getScheduleReport(visualizationid).then(function (success) {
+                if(success.status==200){
+                    //vm.scheduleObj=success.data;
+                    vm.scheduleObj.assign_report.channel=success.data.assign_report.channel;
+                    $scope.cronExpression=success.data.schedule.cron_exp;
+                    angular.element("#startDate").val(success.data.schedule.start_date);
+                    angular.element("#endDate").val(success.data.schedule.end_date);
+                    vm.scheduleObj.putcall=true;
+                }
+            }).catch(function (error) {                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            }); 
         }
 
         function buildScheduleObject(visualMetaData,datasource){
@@ -122,7 +144,6 @@
                 }
                 $rootScope.showSuccessToast(info);
             }).catch(function (error) {
-                console.log("error==="+error);
                 vm.isSaving = false;                
                 var info = {
                     text: error.data.message,
@@ -135,7 +156,6 @@
         function setScheduledData(){
             vm.scheduleObj.schedule.start_date=angular.element("#startDate").val();
             vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
-            vm.scheduleObj.schedule.cronExpression=$scope.cronExpression;
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
         }
@@ -166,6 +186,23 @@
                 }else if(item.feature.featureType === "MEASURE"){
                     vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
                 }
+            });
+        }
+
+        function deleteReport(){
+            schedulerService.cancelScheduleReport(vm.visualMetaData.id).then(function (success) {
+                var info = {
+                    text: success.data.message,
+                    title: "Cancelled"
+                }
+                $rootScope.showSuccessToast(info);
+                vm.clear();
+            }).catch(function (error) {                
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
             });
         }
 }

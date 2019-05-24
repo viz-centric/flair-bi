@@ -118,7 +118,7 @@
                         result['displayNameForMeasure'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
-                            );
+                        );
                         result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                         result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
@@ -140,8 +140,9 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var combo = $rootScope.updateWidget[record.id];
-                        combo.isAnimationDisable(record.isLiveEnabled);
-                        combo.update(record.data);
+                        combo.isAnimationDisable(record.isLiveEnabled)
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     d3.select(element[0]).html('')

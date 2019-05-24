@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('GeneratePivotTable', GeneratePivotTable);
 
-    GeneratePivotTable.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils'];
+    GeneratePivotTable.$inject = ['VisualizationUtils', '$rootScope', 'D3Utils', 'filterParametersService'];
 
-    function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils) {
+    function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel) {
 
@@ -53,7 +53,7 @@
                         result['displayNameForDimension'].push(
                             VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display name') ||
                             result['dimension'][i]
-                            );
+                        );
                         result['cellColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Cell colour'));
                         result['fontStyleForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font style'));
                         result['fontWeightForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font weight'));
@@ -69,7 +69,7 @@
                         result['displayNameForMeasure'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
-                            );
+                        );
                         result['cellColorForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Cell colour'));
                         result['cellColorExpressionForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Cell colour expression'));
                         result['fontStyleForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
@@ -86,20 +86,32 @@
                     return result;
                 }
 
-                d3.select(element[0]).html('')
-                var div = d3.select(element[0]).append('div')
-                    .attr('id', 'pivot-' + element[0].id)
-                    .style('width', element[0].clientWidth + 'px')
-                    .style('height', element[0].clientHeight + 'px')
-                    .style('overflow', 'hidden')
-                    .style('text-align', 'center')
-                    .style('position', 'relative');
+                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                    if ($rootScope.filterSelection.id != record.id) {
+                        var pivot = $rootScope.updateWidget[record.id];
+                        pivot.update(record.data);
+                    }
+                } else {
+                    d3.select(element[0]).html('')
+                    var div = d3.select(element[0]).append('div')
+                        .attr('id', 'pivot-' + element[0].id)
+                        .style('width', element[0].clientWidth + 'px')
+                        .style('height', element[0].clientHeight + 'px')
+                        .style('overflow', 'hidden')
+                        .style('text-align', 'center')
+                        .style('position', 'relative');
 
-                var pivot = flairVisualizations.pivot()
-                    .config(getProperties(VisualizationUtils, record))
+                    var pivot = flairVisualizations.pivot()
+                        .config(getProperties(VisualizationUtils, record))
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService);
 
-                div.datum(record.data)
-                    .call(pivot);
+
+                    div.datum(record.data)
+                        .call(pivot);
+
+                    $rootScope.updateWidget[record.id] = pivot;
+                }
             }
         }
     }

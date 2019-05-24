@@ -109,7 +109,10 @@
             "save": "Save",
             "view": "View",
             "assign": "Assign",
-            "remove": "Remove"
+            "remove": "Remove",
+            "close": "Close",
+            "cancel": "Cancel",
+            "canceljob":"Cancel Job"
         },
         "detail": {
             "field": "Field",

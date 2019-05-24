@@ -8,6 +8,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
@@ -80,6 +81,9 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     
     @Inject
     private GrpcQueryService grpcQueryService;
+    
+    @Inject
+    private SchedulerService schedulerService;
 	
     
     public SchedulerDTO createScheduledObject() {
@@ -142,7 +146,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        SchedulerResource schedulerResource = new SchedulerResource(userService, datasourceConstraintService, visualMetadataService, datasourceService, grpcQueryService);
+        SchedulerResource schedulerResource = new SchedulerResource(userService, datasourceConstraintService, visualMetadataService, datasourceService, grpcQueryService,schedulerService);
         ReflectionTestUtils.setField(schedulerResource, "userService", userService); 
         this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)

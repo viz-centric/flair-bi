@@ -3,14 +3,14 @@
         "views": {
             "home": {
                 "title": "Views",
-                "createLabel": "Create a new Views",
-                "createOrEditLabel": "Create or edit a Views",
+                "createLabel": "Create a New View",
+                "createOrEditLabel": "Create or Edit a View",
                 "search": "Search for Views"
             },
-            "created": "A new Views is created with identifier {{ param }}",
-            "updated": "A Views is updated with identifier {{ param }}",
+            "created": "A new View is created with identifier {{ param }}",
+            "updated": "A View is updated with identifier {{ param }}",
             "errorSaving": "Error saving view",
-            "deleted": "A Views is deleted with identifier {{ param }}",
+            "deleted": "A View is deleted with identifier {{ param }}",
             "delete": {
                 "question": "Are you sure you want to delete Views {{ id }}?"
             },

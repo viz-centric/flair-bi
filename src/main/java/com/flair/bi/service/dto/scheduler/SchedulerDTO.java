@@ -9,6 +9,7 @@ public class SchedulerDTO {
 	private AssignReport assign_report;
 	private Schedule schedule;
 	private QueryDTO queryDTO;
+	private boolean putcall;
 	
 	public SchedulerDTO(){}
 	
@@ -71,11 +72,19 @@ public class SchedulerDTO {
 		this.queryDTO = queryDTO;
 	}
 
+	public boolean getPutcall() {
+		return putcall;
+	}
+
+	public void setPutcall(boolean putcall) {
+		this.putcall = putcall;
+	}
+
 	@Override
 	public String toString() {
 		return "SchedulerDTO [datasourceid=" + datasourceid + ", report=" + report + ", report_line_item="
 				+ report_line_item + ", assign_report=" + assign_report + ", schedule=" + schedule + ", queryDTO="
-				+ queryDTO + "]";
+				+ queryDTO + ", putcall=" + putcall + "]";
 	}
 	
 }

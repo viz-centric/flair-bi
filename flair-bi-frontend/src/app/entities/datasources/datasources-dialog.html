@@ -1,7 +1,7 @@
 <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header flair-model-header">
-        <div class="header-text">Create or edit a Datasource</div>
+        <div class="header-text">Create or Edit a Data Source</div>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
     </div>
     <div class="modal-body">
@@ -27,7 +27,7 @@
             <label class="control-label" data-translate="flairbiApp.datasources.lastUpdated" for="field_lastUpdated">Last Updated</label>
             <div class="input-group">
                 <input id="field_lastUpdated" type="text" class="form-control" name="lastUpdated" datetime-picker="{{dateformat}}" ng-model="vm.datasources.lastUpdated"
-                    is-open="vm.datePickerOpenStatus.lastUpdated" required/>
+                       is-open="vm.datePickerOpenStatus.lastUpdated" required/>
                 <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('lastUpdated')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -44,7 +44,7 @@
         <div class="form-group">
             <label class="control-label" for="field_connectionName">Connection Link Id</label>
             <input type="text" class="form-control" name="connectionName" id="field_connectionName" ng-model="vm.datasources.connectionName"
-                required/>
+                   required/>
             <div ng-show="editForm.connectionName.$invalid">
                 <p class="help-block" ng-show="editForm.connectionName.$error.required" data-translate="entity.validation.required">
                     This field is required.

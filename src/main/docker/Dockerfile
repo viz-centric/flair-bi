@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:12
 
 # alpine version of openjdk wont work because GRPC under TLS cannot work on minified version of glibc library
 

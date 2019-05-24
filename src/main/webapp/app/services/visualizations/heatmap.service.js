@@ -45,7 +45,7 @@
                         result['displayNameForMeasure'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
-                            );
+                        );
                         result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
                         result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon'));
                         result['valuePosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Alignment').toLowerCase());
@@ -67,7 +67,8 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var heatmap = $rootScope.updateWidget[record.id];
-                        heatmap.update(record.data);
+                        heatmap.config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 }
                 else {
@@ -87,7 +88,7 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                      .attr('class', 'custom_tooltip')
+                        .attr('class', 'custom_tooltip')
 
                     var heatmap = flairVisualizations.heatmap()
                         .config(getProperties(VisualizationUtils, record))

@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
@@ -74,9 +76,15 @@ public class SchedulerResource {
 
 	@Value("${flair-notifications.password}")
 	private String password;
+	
+	@Value("${flair-notifications.host}")
+	private String host;
 
-	@Value("${flair-notifications.schedule-report-url}")
-	private String scheduleReportUrl;
+	@Value("${flair-notifications.port}")
+	private String port;
+
+	@Value("${flair-notifications.scheduled-report-url}")
+	private String scheduledReportUrl;
 
 	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
@@ -105,6 +113,9 @@ public class SchedulerResource {
 	@Value("${flair-notifications.scheduled-reports-count-url}")
 	private String scheduledReportsCountUrl;
 	
+	@Value("${flair-notifications.scheduled-report-param-url}")
+	private String scheduledReportParamUrl;
+	
 	private final UserService userService;
 	
 	private final DatasourceConstraintService datasourceConstraintService;
@@ -114,6 +125,8 @@ public class SchedulerResource {
 	private final DatasourceService datasourceService;
 	
 	private final GrpcQueryService grpcQueryService;
+	
+	private final SchedulerService schedulerService;
 	
 
 	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
@@ -137,8 +150,7 @@ public class SchedulerResource {
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
-		//UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:8090/api/jobSchedule/");
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(scheduleReportUrl);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(schedulerService.buildUrl(host, port,scheduledReportUrl));
 		HttpHeaders headers = new HttpHeaders();
 		/* below code is commented until auth api is not built from notification application*/
 		//		if (Constants.ai_token == null) {
@@ -155,7 +167,7 @@ public class SchedulerResource {
 		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(setChannelCredentials(schedulerNotificationDTO), headers);
 		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST,
+			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), schedulerDTO.getPutcall()?HttpMethod.PUT:HttpMethod.POST,
 					entity, String.class);
 			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
 			schedulerResponse.setMessage(jsonObject.getString("message"));
@@ -167,6 +179,7 @@ public class SchedulerResource {
 		}
 
 	}
+
 
 	private emailsDTO[] getEmailList(String login) {
 		Optional<User> optionalUser=userService.getUserWithAuthoritiesByLogin(login);
@@ -249,17 +262,8 @@ public class SchedulerResource {
         throws URISyntaxException {
     	RestTemplate restTemplate = new RestTemplate();
     try {
-    	//let the url be hard code as it will be useful while development
-			/*
-			 * ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
-			 * restTemplate.exchange(
-			 * "http://localhost:8090/api/user/{user}/reports?pageSize={pageSize}&page={page}",
-			 * HttpMethod.GET, null, new
-			 * ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
-			 * },SecurityUtils.getCurrentUserLogin(),pageSize,page);
-			 */
 		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
-		restTemplate.exchange(scheduledReportsUrl,
+		restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsUrl),
 		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
 		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
 		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
@@ -276,14 +280,7 @@ public class SchedulerResource {
     public Integer getScheduledReportsCount() throws JSONException {
     	Integer count=0;
     	RestTemplate restTemplate = new RestTemplate();
-    	//let the url be hard code as it will be useful while development
-		/*
-		 * ResponseEntity<String> responseEntity =
-		 * restTemplate.exchange("http://localhost:8090/api/user/{user}/reportCount/",
-		 * HttpMethod.GET,null,new ParameterizedTypeReference<String>() { },
-		 * SecurityUtils.getCurrentUserLogin());
-		 */
-		ResponseEntity<String> responseEntity = restTemplate.exchange(scheduledReportsCountUrl, HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
+		ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
 		}, SecurityUtils.getCurrentUserLogin());
 		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
 		count=Integer.parseInt(jsonObject.getString("totalReports"));
@@ -296,5 +293,29 @@ public class SchedulerResource {
 		 Query query = builder.build();;
 		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(schedulerNotificationResponseDTO,query, "scheduled-report", query.getUserId());
     }
-
+    
+	@GetMapping("/schedule/{visualizationid}")
+	@Timed
+	public ResponseEntity<SchedulerNotificationResponseDTO> getSchedulerReport(@PathVariable String visualizationid)
+			throws URISyntaxException {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<SchedulerNotificationResponseDTO> responseEntity = null;
+		try {
+			responseEntity = restTemplate.exchange(
+					schedulerService.buildUrl(host, port,scheduledReportParamUrl), HttpMethod.GET, null,
+					new ParameterizedTypeReference<SchedulerNotificationResponseDTO>() {
+					}, visualizationid);
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+		} catch (Exception e) {
+			log.error("error occured while fetching report:" + e.getMessage());
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+		}
+	}
+	
+	@DeleteMapping("/schedule/{visualizationid}")
+	@Timed
+	public ResponseEntity<SchedulerResponse> deleteSchedulerReport(@PathVariable String visualizationid)
+			throws URISyntaxException {
+		return schedulerService.deleteScheduledReport(visualizationid);
+	}
 }

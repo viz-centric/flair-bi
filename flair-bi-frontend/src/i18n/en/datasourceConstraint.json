@@ -2,27 +2,27 @@
     "flairbiApp": {
         "datasourceConstraint": {
             "home": {
-                "title": "Datasource Constraints",
-                "createLabel": "Create a new Datasource Constraint",
-                "createOrEditLabel": "Create or edit a Datasource Constraint"
+                "title": "Data Source Constraints",
+                "createLabel": "Create a New Data Source Constraint",
+                "createOrEditLabel": "Create or Edit a Data Source Constraint"
             },
-            "created": "A new Datasource Constraint is created with identifier {{ param }}",
-            "updated": "A Datasource Constraint is updated with identifier {{ param }}",
-            "deleted": "A Datasource Constraint is deleted with identifier {{ param }}",
-            "errorSaving":"Error saving Datasource Constraint",
-            "errorDeleting":"Error deleting Datasource Constraint",
+            "created": "A new Data Source Constraint is created with identifier {{ param }}",
+            "updated": "A new Data Source Constraint is updated with identifier {{ param }}",
+            "deleted": "A new Data Source Constraint is deleted with identifier {{ param }}",
+            "errorSaving":"Error saving new Data Source Constraint",
+            "errorDeleting":"Error deleting new Data Source Constraint",
             "delete": {
-                "question": "Are you sure you want to delete Datasource Constraint {{ id }}?"
+                "question": "Are you sure you want to delete new Data Source Constraint {{ id }}?"
             },
             "detail": {
-                "title": "Datasource Constraint"
+                "title": "new Data Source Constraint"
             },
             "errorFetching":"Error fetching Datasource Constraints",
             "constraintDefinition": "Constraint Definition",
             "user": "User",
-            "datasources": "Datasources",
+            "datasources": "Data Sources",
             "selectUser": "Select User ...",
-            "selectDatasource": "Search available datasources"
+            "selectDatasource": "Search Available Data Sources"
         }
     }
 }

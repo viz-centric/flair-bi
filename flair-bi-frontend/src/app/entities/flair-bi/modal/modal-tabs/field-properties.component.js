@@ -11,13 +11,14 @@ angular
         bindings: {
             visual: '=',
             view: '=',
-            features: '='
+            features: '=',
+            hierarchies:'='
         }
     });
 
-fieldPropertiesController.$inject = ['$scope', 'Visualizations', 'Features', 'VisualDispatchService'];
+fieldPropertiesController.$inject = ['$scope', 'Visualizations', 'Features','VisualDispatchService'];
 
-function fieldPropertiesController($scope, Visualizations, Features, VisualDispatchService) {
+function fieldPropertiesController($scope, Visualizations, Features,VisualDispatchService) {
     var vm = this;
 
     vm.selectedField;
@@ -28,13 +29,11 @@ function fieldPropertiesController($scope, Visualizations, Features, VisualDispa
     vm.addFieldDimension = addFieldDimension;
     vm.addFieldMeasure = addFieldMeasure;
     vm.removeField = removeField;
-    vm.hierarchies = VisualDispatchService.getHierarchies();
-
 
     ////////////////
 
 
-    function onInit() { }
+    function onInit() {}
 
     function removeField(field) {
         vm.visual.fields = vm.visual.fields.filter(function (item) {
@@ -70,7 +69,7 @@ function fieldPropertiesController($scope, Visualizations, Features, VisualDispa
                     order: item.order,
                 };
             });
-        }, function (error) { });
+        }, function (error) {});
         vm.visual.fields.push(field);
     }
 
@@ -94,7 +93,7 @@ function fieldPropertiesController($scope, Visualizations, Features, VisualDispa
                     order: item.order,
                 };
             });
-        }, function (error) { });
+        }, function (error) {});
         vm.visual.fields.push(field);
     }
 

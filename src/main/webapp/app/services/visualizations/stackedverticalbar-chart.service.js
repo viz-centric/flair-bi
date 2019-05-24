@@ -62,7 +62,7 @@
                         result['displayNameForMeasure'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
-                            );
+                        );
                         result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                         result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
@@ -80,8 +80,9 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var stackedverticalbar = $rootScope.updateWidget[record.id];
-                        stackedverticalbar.isAnimationDisable(record.isLiveEnabled);
-                        stackedverticalbar.update(record.data);
+                        stackedverticalbar.isAnimationDisable(record.isLiveEnabled)
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
 

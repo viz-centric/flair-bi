@@ -31,7 +31,8 @@ function GeneratePieChart(VisualizationUtils, $rootScope, D3Utils, filterParamet
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var pie = $rootScope.updateWidget[record.id];
-                    pie.update(record.data);
+                    pie.config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

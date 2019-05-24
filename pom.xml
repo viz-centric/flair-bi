@@ -4,12 +4,12 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.5.13.RELEASE</version>
+        <version>1.5.20.RELEASE</version>
         <relativePath />
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>0.0.54-SNAPSHOT</version>
+    <version>0.0.58-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -35,7 +35,7 @@
     </distributionManagement>
     <properties>
         <all-grpc.version>1.20.0</all-grpc.version>
-        <apache-httpclient.version>4.5</apache-httpclient.version>
+        <apache-httpclient.version>4.5.8</apache-httpclient.version>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.9.0</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
@@ -55,13 +55,14 @@
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase.version>3.5.3</liquibase.version>
         <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
-        <lombok.version>1.16.22</lombok.version>
+        <lombok.version>1.18.8</lombok.version>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
-        <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -170,7 +171,7 @@
         <dependency>
             <groupId>com.project.bi</groupId>
             <artifactId>project-bi-common</artifactId>
-            <version>1.3.6</version>
+            <version>1.3.7</version>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
@@ -396,6 +397,16 @@
             <version>${owasp-dependency-check.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
@@ -504,11 +515,13 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
         </dependency>
-        <!-- jhipster-needle-maven-add-dependency -->
-        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-ldap -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -728,7 +741,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -920,7 +933,7 @@
                     <dependency>
                         <groupId>org.javassist</groupId>
                         <artifactId>javassist</artifactId>
-                        <version>3.18.2-GA</version>
+                        <version>3.24.0-GA</version>
                     </dependency>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
@@ -998,6 +1011,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
+                        <version>3.2.2</version>
                         <configuration>
                             <warSourceDirectory>src/main/webapp/</warSourceDirectory>
                         </configuration>
@@ -1065,7 +1079,7 @@
                                     <goal>gulp</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>build --no-notification</arguments>
+                                    <arguments>build</arguments>
                                 </configuration>
                             </execution>
                             <!-- <execution>
@@ -1096,6 +1110,9 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven-javadoc-plugin.version}</version>
+                        <configuration>
+                            <source>8</source>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -1108,6 +1125,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
+                        <version>3.2.2</version>
                         <configuration>
                             <warSourceDirectory>target/www/</warSourceDirectory>
                         </configuration>
@@ -1236,6 +1254,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven-compiler-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>default-compile</id>
@@ -1250,6 +1269,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
+                        <version>3.2.2</version>
                         <configuration>
                             <warSourceDirectory>src/main/webapp/</warSourceDirectory>
                         </configuration>

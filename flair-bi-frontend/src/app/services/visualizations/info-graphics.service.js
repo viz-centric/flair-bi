@@ -46,7 +46,8 @@ function GenerateInfoGraphic(VisualizationUtils, $rootScope, D3Utils) {
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var infographics = $rootScope.updateWidget[record.id];
-                    infographics.update(record.data);
+                    infographics.config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

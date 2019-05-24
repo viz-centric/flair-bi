@@ -28,7 +28,7 @@
         .grid-stack-item-content {
             /* This used to hide and show the  options for viz*/
             .live-label,
-            .reload-button,
+            .viz-header-button,
             .viz-settings,
             md-switch {
                 opacity: 0;
@@ -36,7 +36,7 @@
             }
             &:hover {
                 .live-label,
-                .reload-button,
+                .viz-header-button,
                 .viz-settings,
                 md-switch {
                     opacity: 1 !important;
@@ -123,8 +123,11 @@
                     .live-label {
                         margin-right: 10px;
                     }
-                    .reload-button {
+                    .viz-header-button {
                         margin: 5px 10px;
+                    }
+                    .viz-header-flip-settings {
+                        margin-top:10px;
                     }
                     md-switch {
                         margin: 0px;
@@ -151,7 +154,7 @@
                     i {
                         color: lighten($icons-color, 20%);
                         fill: lighten($icons-color, 20%);
-                        &.reload,
+                        &.viz-header-icon,
                         &.settings-button {
                             width: 12px;
                             height: 12px;
@@ -252,6 +255,9 @@
                     }
                 }
             }
+        }
+        .dim-measure-area{
+           width:100%;
         }
     }
 }

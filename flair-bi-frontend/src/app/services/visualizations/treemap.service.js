@@ -37,6 +37,7 @@ function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParamete
                 result['fontWeightForDimension'] = [];
                 result['fontSizeForDimension'] = [];
                 result['displayColor'] = [];
+                result['colorSet'] = colorSet;
 
                 for (var i = 0, j = ''; i < result.maxDim; i++ , j = i + 1) {
                     result['dimension'].push(dimensions[i].feature.name);
@@ -56,7 +57,8 @@ function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParamete
             if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                 if ($rootScope.filterSelection.id != record.id) {
                     var treemap = $rootScope.updateWidget[record.id];
-                    treemap.update(record.data);
+                    treemap.config(getProperties(VisualizationUtils, record))
+                        .update(record.data);
                 }
             } else {
                 d3.select(element[0]).html('')

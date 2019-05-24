@@ -336,7 +336,7 @@ input[type="search"] {
             background: none;
             width: 77%;
         }
-        
+
         .field-icon-left {
             height: 14px;
             width:25px;
@@ -353,11 +353,11 @@ input[type="search"] {
             cursor: pointer;
         }
         .field-icon-right:focus {
-        outline: none;
+            outline: none;
         }
     }
     .input-box:active {
-        border: 1px solid rgb(67, 157, 211); 
+        border: 1px solid rgb(67, 157, 211);
         box-shadow: transparent 0px 0px 0px;
     }
     .inner-addon {
@@ -785,7 +785,7 @@ input[type="search"] {
 
 /* Connection type component */
 
-.connection-type-img {
+.connection-type-svg {
     border-radius: 20px;
     margin: 5px;
     padding: 5px;
@@ -798,6 +798,10 @@ input[type="search"] {
     }
     &:focus {
         outline: 1px solid transparent;
+    }
+    .connection-icons{
+        height:80px;
+        width:80px;
     }
 }
 
@@ -1346,17 +1350,17 @@ label.error {
 
 @media screen and (max-width: 1200px) {
     .dropdown-options-v5{
-       .input-box {
-        @supports (-moz-appearance:none) {
-            input {
-                margin-right: 0px;
-                border: none;
-                background: none;
-                width: 70%;
+        .input-box {
+            @supports (-moz-appearance:none) {
+                input {
+                    margin-right: 0px;
+                    border: none;
+                    background: none;
+                    width: 70%;
+                }
             }
-          }
 
-       }
+        }
     }
 }
 
@@ -1504,4 +1508,10 @@ jhi-alert {
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+.flair-oprations-icon{
+    width:16px;
+    height:16px;
+    margin-top: 12px;
 }

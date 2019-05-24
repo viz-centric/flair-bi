@@ -15,7 +15,7 @@
 
 .flex-container {
     display: flex;
-    display: -webkit-flex;
+    flex-flow: wrap;
     .f-column {
         -webkit-flex-direction: column;
         flex-direction: column;
@@ -92,5 +92,5 @@ div.featuresList{
     border-radius: 25px;
     border: 1px solid #f1f3f3;
     padding: 11px;
-    height: 59px;    
+    height: 59px;
 }

@@ -785,7 +785,7 @@ input[type="search"] {
 
 /* Connection type component */
 
-.connection-type-img {
+.connection-type-svg {
     border-radius: 20px;
     margin: 5px;
     padding: 5px;
@@ -798,6 +798,10 @@ input[type="search"] {
     }
     &:focus {
         outline: 1px solid transparent;
+    }
+    .connection-icons{
+        height:80px;
+        width:80px;
     }
 }
 

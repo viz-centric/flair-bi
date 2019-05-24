@@ -111,6 +111,7 @@
             "assign": "Assign",
             "remove": "Remove",
             "close": "Close",
+            "cancel": "Cancel",
             "canceljob":"Cancel Job"
         },
         "detail": {

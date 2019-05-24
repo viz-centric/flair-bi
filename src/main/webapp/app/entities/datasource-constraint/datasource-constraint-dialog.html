@@ -72,8 +72,18 @@
                         <input required type="text" placeholder="values delimited with ','" class="form-control" ng-change="vm.createArray(constraint)" ng-model="constraint.stringValues" ng-disabled="!vm.datasourceConstraint.datasource">
                     </div>
                     <div class="col-md-2">
-                        <div ng-disabled="!vm.datasourceConstraint.datasource" ng-show="$index === 0" class="user-data-constraint-operation-button add-button icon" ng-click="vm.addConstraint()"><i class="fa fa-plus-circle fa-2x" aria-hidden="true" /> </div>
-                        <div ng-disabled="!vm.datasourceConstraint.datasource" ng-show="$index !== 0" class="user-data-constraint-operation-button remove-button icon" ng-click="vm.removeConstraint(constraint)"><i class="fa fa-remove fa-2x" aria-hidden="true" /> </div>
+                        <div ng-disabled="!vm.datasourceConstraint.datasource" ng-show="$index === 0" class="user-data-constraint-operation-button add-button icon" ng-click="vm.addConstraint()">
+                            <svg class="flair-add-icon flair-oprations-icon">
+                                 <use xlink:href="#flair-add-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 </use>
+                            </svg>
+                        </div>
+                        <div ng-disabled="!vm.datasourceConstraint.datasource" ng-show="$index !== 0" class="user-data-constraint-operation-button remove-button icon" ng-click="vm.removeConstraint(constraint)">
+                            <svg class="flair-delete-icon flair-oprations-icon">
+                                 <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 </use>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>

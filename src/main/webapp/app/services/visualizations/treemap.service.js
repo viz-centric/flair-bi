@@ -35,6 +35,7 @@
                     result['fontWeightForDimension'] = [];
                     result['fontSizeForDimension'] = [];
                     result['displayColor'] = [];
+                    result['colorSet'] = colorSet;
 
                     for (var i = 0, j = ''; i < result.maxDim; i++ , j = i + 1) {
                         result['dimension'].push(dimensions[i].feature.name);

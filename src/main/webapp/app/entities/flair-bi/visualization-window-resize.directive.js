@@ -15,8 +15,10 @@
     
          function link(scope, element, attrs){
     
-           angular.element($window).bind('resize', function(){
-               VisualDispatchService.reloadGrids();
+           angular.element($window).bind('resize', function(scope, element, attrs){
+                if(!element){
+                    VisualDispatchService.reloadGrids();
+                }
            });  
          } 
     }

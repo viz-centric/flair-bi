@@ -9,15 +9,17 @@
             controllerAs: 'vm',
             bindings: {
                 view: '=',
-                canEdit: '='
+                canEdit: '=',
+                bookmark:'='
             }
         });
 
-    viewController.$inject = ['$scope', 'AccountDispatch', '$stateParams'];
+    viewController.$inject = ['$scope', 'AccountDispatch', '$stateParams','VisualDispatchService','$window'];
 
-    function viewController($scope, AccountDispatch, $stateParams) {
+    function viewController($scope, AccountDispatch, $stateParams,VisualDispatchService,$window) {
         var vm = this;
         vm.$onInit = activate;
+        vm.build=build;
         ////////////////
       
       
@@ -44,5 +46,13 @@
             );
             
         }
+
+        function build(viewId,dashboardId,featureBookmark){
+            if(featureBookmark){
+                VisualDispatchService.addFeatureBookmark(featureBookmark);
+                VisualDispatchService.setApplyBookmark(true);
+            }
+            $window.location.href="#/dashboards/"+dashboardId+"/views/"+viewId+"/build";
+        } 
     }
 })();

@@ -35,7 +35,8 @@
                 "report_name": "",
                 "source_id":"",
                 "subject":"",
-                "title_name":""
+                "title_name":"",
+                "mail_body":null
             },
             "report_line_item": {
                 "visualizationid":"",
@@ -77,11 +78,11 @@
         function getScheduleReport(visualizationid){
             schedulerService.getScheduleReport(visualizationid).then(function (success) {
                 if(success.status==200){
-                    //vm.scheduleObj=success.data;
                     vm.scheduleObj.assign_report.channel=success.data.assign_report.channel;
                     $scope.cronExpression=success.data.schedule.cron_exp;
                     angular.element("#startDate").val(success.data.schedule.start_date);
                     angular.element("#endDate").val(success.data.schedule.end_date);
+                    vm.scheduleObj.report.mail_body=success.data.report.mail_body;
                     vm.scheduleObj.putcall=true;
                 }
             }).catch(function (error) {                

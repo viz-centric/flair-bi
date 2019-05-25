@@ -37,6 +37,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="row container">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Comments
+                            </label>
+                            <textarea ng-required="vm.scheduleObj.report.mail_body==null" class="form-control" ng-model="vm.scheduleObj.report.mail_body" ></textarea>
+                        </div>
+                    </div>
+                </div>
                 <div class="row container" style="display: none;">
                     <div class="col-xs-8">
                         <div class="form-group scheduler-tags">
@@ -51,6 +61,9 @@
                 </div>
                 <div class="row container">
                     <div class="col-xs-8">
+                        <label class="control-label">
+                            Frequency 
+                        </label>
                         <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
                     </div>
                 </div>

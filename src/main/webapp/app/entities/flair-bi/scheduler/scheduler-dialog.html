@@ -5,7 +5,7 @@
               <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
-                Dag Scheduler
+                Scheduler
             </div>
             <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
                 <use xlink:href="#cancle" />
@@ -72,7 +72,7 @@
                             <label class="control-label" for="startDate">Start Date*</label>
                             <div class="input-group">
                                 <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" required />
-                                <span class="input-group-btn">
+                                <span class="input-group-btn scheduler-date-icon">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button>
@@ -85,7 +85,7 @@
                             <label class="control-label" for="endDate">End Date*</label>
                             <div class="input-group">
                                 <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" required />
-                                <span class="input-group-btn">
+                                <span class="input-group-btn scheduler-date-icon">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button>

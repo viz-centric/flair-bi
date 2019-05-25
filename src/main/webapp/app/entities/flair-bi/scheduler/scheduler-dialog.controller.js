@@ -53,8 +53,8 @@
             "schedule": {
                 "cron_exp":"",
                 "timezone": "",
-                "start_date": "",
-                "end_date": ""
+                "start_date": null,
+                "end_date": null
             },
             "putcall":false
           };

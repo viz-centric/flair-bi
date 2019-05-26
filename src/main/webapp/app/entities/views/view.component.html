@@ -60,7 +60,7 @@
                 <h4 class="item">{{vm.view.viewName}} 
                     <span uib-tooltip={{vm.view.description}} tooltip-placement="top"><i class="fa fa-info-circle"></i></span>
                 </h4>
-                <a class="item build" ng-if="vm.canUpdate" ui-sref="flair-bi-build({id:vm.view.id, dashboardId:vm.view.viewDashboard.id})">Build
+                <a class="item build" ng-if="vm.canUpdate" ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
                     <i class="fa fa-angle-right"></i>
                 </a>
             </div>

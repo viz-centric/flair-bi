@@ -142,7 +142,6 @@ public class SchedulerResource {
 		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
 		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
-		schedulerDTO.getReport().setMail_body(mail_body);
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setConnection_name(datasource.getName());
 		schedulerDTO.getReport().setSource_id(datasource.getConnectionName());

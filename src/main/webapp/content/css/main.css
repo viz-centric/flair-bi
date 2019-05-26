@@ -6254,6 +6254,9 @@ input.select2-active {
 .cancel-job-icon {
   color: #ED5565; }
 
+.scheduler-date-icon {
+  vertical-align: bottom; }
+
 .file-uploader .drop-box-row {
   margin-left: 0;
   margin-right: 0; }

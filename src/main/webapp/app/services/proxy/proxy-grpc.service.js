@@ -37,9 +37,18 @@
             ); 
         }
 
+        function queryAll(body){
+            stompClientService.send(
+                "/flair-ws/fbi-engine-grpc/queryAll",
+                {},
+                JSON.stringify(body)
+            );
+        }
+
         return {
             forwardCall: forwardCall,
-            sampleDataCall:sampleDataCall
+            sampleDataCall:sampleDataCall,
+            queryAll: queryAll
         };
     }
 })();

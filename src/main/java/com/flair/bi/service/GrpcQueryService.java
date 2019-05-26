@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
+import com.flair.bi.messages.QueryAllResponse;
 import com.flair.bi.messages.QueryResponse;
 import com.flair.bi.messages.QueryValidationResponse;
 import com.flair.bi.messages.RunQueryResponse;
 import com.flair.bi.service.dto.RunQueryResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
@@ -29,6 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.flair.bi.web.rest.util.QueryGrpcUtils.toProtoConnection;
 
 @Service
 @RequiredArgsConstructor
@@ -150,6 +155,18 @@ public class GrpcQueryService {
     
     public void sendGetDataStream(String sourcesId, String userId, QueryDTO queryDTO) throws InterruptedException {
     	 callGrpcBiDirectionalAndPushInSocket(sourcesId,queryDTO,getVid(userId),userId);
+    }
+
+    public void sendQueryAll(String userId, QueryAllRequestDTO requestDTO) {
+        Query query = QueryGrpcUtils.mapToQuery(requestDTO.getQuery(), null, null, userId);
+        Connection connection = toProtoConnection(requestDTO.getConnection());
+        QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
+
+        fbEngineWebSocketService.pushGRPCMetaDeta(QueryResponse.newBuilder()
+                .setUserId(queryAllResponse.getUserId())
+                .setQueryId(queryAllResponse.getQueryId())
+                .setData(queryAllResponse.getData())
+                .build());
     }
     
     private String getVid(String userId){

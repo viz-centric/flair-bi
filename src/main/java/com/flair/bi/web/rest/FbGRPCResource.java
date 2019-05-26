@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.dto.FbiEngineDTO;
+import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.project.bi.query.dto.QueryDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class FbGRPCResource {
         grpcQueryService.sendGetDataStream(sourcesId,
             headerAccessor.getUser().getName(),
             queryDTO);
+    }
+
+    @MessageMapping("/fbi-engine-grpc/queryAll")
+    public void handleQueryAll(@Payload QueryAllRequestDTO requestDTO, SimpMessageHeaderAccessor headerAccessor) {
+        grpcQueryService.sendQueryAll(headerAccessor.getUser().getName(), requestDTO);
     }
 
 }

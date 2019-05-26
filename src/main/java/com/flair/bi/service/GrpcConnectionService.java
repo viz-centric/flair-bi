@@ -17,6 +17,7 @@ import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.flair.bi.web.rest.dto.ConnectionPropertiesSchemaDTO;
 import com.flair.bi.web.rest.dto.ConnectionPropertyDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
+import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -75,13 +75,13 @@ public class GrpcConnectionService {
     }
 
     public TestConnectionResultDTO testConnection(String connectionLinkId, String datasourceName, ConnectionDTO connection) throws IOException {
-        TestConnectionResponse result = grpcService.testConnection(connectionLinkId, datasourceName, toProtoConnection(connection));
+        TestConnectionResponse result = grpcService.testConnection(connectionLinkId, datasourceName, QueryGrpcUtils.toProtoConnection(connection));
         return new TestConnectionResultDTO()
             .setSuccess(!StringUtils.isEmpty(result.getResult()));
     }
 
     public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection, int maxEntries) {
-        ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries, toProtoConnection(connection));
+        ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries, QueryGrpcUtils.toProtoConnection(connection));
         return new ListTablesResponseDTO()
             .setTableNames(result.getTablesList()
                 .stream()
@@ -90,7 +90,7 @@ public class GrpcConnectionService {
     }
 
     public ConnectionDTO saveConnection(ConnectionDTO connection) {
-        SaveConnectionResponse response = grpcService.saveConnection(toProtoConnection(connection));
+        SaveConnectionResponse response = grpcService.saveConnection(QueryGrpcUtils.toProtoConnection(connection));
         return toDto(response.getConnection());
     }
 
@@ -105,31 +105,8 @@ public class GrpcConnectionService {
     }
 
     public ConnectionDTO updateConnection(ConnectionDTO connection) {
-        UpdateConnectionResponse response = grpcService.updateConnection(toProtoConnection(connection));
+        UpdateConnectionResponse response = grpcService.updateConnection(QueryGrpcUtils.toProtoConnection(connection));
         return toDto(response.getConnection());
-    }
-
-    private Connection toProtoConnection(ConnectionDTO connection) {
-        return Optional.ofNullable(connection)
-            .map(c -> {
-                Connection.Builder builder = Connection.newBuilder()
-                    .setConnectionPassword(c.getConnectionPassword())
-                    .setConnectionUsername(c.getConnectionUsername())
-                    .setConnectionType(c.getConnectionTypeId())
-                    .setName(c.getName())
-                    .putAllDetails(c.getDetails());
-                if (c.getConnectionParameters() != null) {
-                    builder.putAllConnectionParameters(c.getConnectionParameters());
-                }
-                if (c.getId() != null) {
-                    builder.setId(c.getId());
-                }
-                if (c.getLinkId() != null) {
-                    builder.setLinkId(c.getLinkId());
-                }
-                return builder.build();
-            })
-            .orElse(null);
     }
 
     private ConnectionDTO toDto(Connection conn) {

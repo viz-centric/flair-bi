@@ -240,21 +240,29 @@
         }
 
         function showData(){
+            var body = {};
+            if (vm.selectedConnection) {
+                body.connectionLinkId = vm.connection.linkId;
+            } else {
+                body.connection = prepareConnection();
+            }
+
             var query = {};
             query.fields = [];
             query.distinct = true;
             query.limit = 10;
             query.source = vm.datasources.name;
-            proxyGrpcService.sampleDataCall(vm.connection.linkId,query);
+            body.query = query;
+            proxyGrpcService.queryAll(body);
         }
 
         function connectWebSocket() {
             console.log('datasource wizard controller connecting web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
-                function(frame) {
+                function() {
                     console.log('datasource wizard controller connected web socket');
-                    stompClientService.subscribe("/user/exchange/sampleMetaData", onExchangeMetadata);
+                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
@@ -266,6 +274,7 @@
         }
 
         function onExchangeMetadataError(data) {
+            console.log('query all error', data);
             var body = JSON.parse(data.body || '{}');
             var error = QueryValidationService.getQueryValidationError(body.description);
             if (error) {
@@ -274,6 +283,7 @@
         }
 
         function onExchangeMetadata(data) {
+            console.log('query all metadata');
             var metaData = JSON.parse(data.body);
             createHeader(metaData.data[0]);
             addDataInTable(metaData.data);

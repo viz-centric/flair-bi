@@ -13,6 +13,8 @@ import com.flair.bi.messages.GetConnectionResponse;
 import com.flair.bi.messages.ListTablesRequest;
 import com.flair.bi.messages.ListTablesResponse;
 import com.flair.bi.messages.Query;
+import com.flair.bi.messages.QueryAllRequest;
+import com.flair.bi.messages.QueryAllResponse;
 import com.flair.bi.messages.QueryResponse;
 import com.flair.bi.messages.QueryServiceGrpc;
 import com.flair.bi.messages.QueryValidationResponse;
@@ -24,10 +26,12 @@ import com.flair.bi.messages.TestConnectionRequest;
 import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionRequest;
 import com.flair.bi.messages.UpdateConnectionResponse;
+import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -39,15 +43,15 @@ public class GrpcService implements IGrpcService {
 
     private final ManagedChannelFactory managedChannelFactory;
 
-    public QueryServiceGrpc.QueryServiceBlockingStub getQueryStub() {
+    private QueryServiceGrpc.QueryServiceBlockingStub getQueryStub() {
         return QueryServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
     }
 
-    public QueryServiceGrpc.QueryServiceStub getQueryAsyncStub() {
+    private QueryServiceGrpc.QueryServiceStub getQueryAsyncStub() {
         return QueryServiceGrpc.newStub(managedChannelFactory.getInstance());
     }
 
-    public ConnectionServiceGrpc.ConnectionServiceBlockingStub getConnectionStub() {
+    private ConnectionServiceGrpc.ConnectionServiceBlockingStub getConnectionStub() {
         return ConnectionServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
     }
 
@@ -88,6 +92,19 @@ public class GrpcService implements IGrpcService {
         }
 
         return getConnectionStub().testConnection(builder.build());
+    }
+
+    @Override
+    public QueryAllResponse queryAll(String connectionLinkId, Query query, Connection connection) {
+        QueryAllRequest.Builder builder = QueryAllRequest.newBuilder()
+                .setQuery(query);
+        if (StringUtils.isNotEmpty(connectionLinkId)) {
+            builder.setConnectionLinkId(connectionLinkId);
+        }
+        if (connection != null) {
+            builder.setConnection(connection);
+        }
+        return getQueryStub().queryAll(builder.build());
     }
 
     @Override

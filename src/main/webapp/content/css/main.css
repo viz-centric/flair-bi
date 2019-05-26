@@ -1399,6 +1399,8 @@ property-component .control-label-color-picker {
     .viz-properties .form-inline .rzslider {
       width: 67%;
       margin-top: 18px; }
+  .viz-properties .flair-checkbox {
+    margin-top: 7px; }
 
 .properties-sidebar button.btn {
   margin: 1.5vw .5vw; }

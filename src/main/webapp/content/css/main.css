@@ -2019,7 +2019,8 @@ a {
     .home-container .home-right-container .alerts-tabs {
       display: flex;
       position: relative;
-      margin-left: 13px; }
+      margin-left: 13px;
+      z-index: 0; }
       .home-container .home-right-container .alerts-tabs .tab {
         min-width: 0;
         background-color: #fff;

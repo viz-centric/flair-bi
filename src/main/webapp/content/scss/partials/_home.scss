@@ -429,6 +429,7 @@
       display: flex;
       position: relative;
       margin-left: 13px;
+      z-index: 0;
       .tab {
         min-width: 0;
         background-color: #fff;

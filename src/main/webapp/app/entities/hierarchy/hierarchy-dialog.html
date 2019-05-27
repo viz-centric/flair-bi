@@ -25,8 +25,8 @@
                     </div>
                 </div>
             </div>
-            <div ng-repeat="drilldown in vm.hierarchy.drilldown" class="form-group">
-                <label class="control-label col-md-3">Drilldown order: {{$index+1}} </label>
+            <div ng-repeat="drilldown in vm.hierarchy.drilldown " class="form-group">
+                <label class="control-label col-md-3">Drilldown order: {{drilldown.order+1}} </label>
                 <div class="col-md-7">
                     <ui-select ng-model="drilldown.feature" theme="bootstrap">
                         <ui-select-match placeholder="Select Dimension" allow-clear="true">

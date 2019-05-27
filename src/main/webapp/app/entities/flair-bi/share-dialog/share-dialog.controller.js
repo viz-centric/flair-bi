@@ -5,12 +5,13 @@
         .module('flairbiApp')
         .controller('ShareDialogController', ShareDialogController);
 
-    ShareDialogController.$inject = ['$uibModalInstance', 'shareLink'];
+    ShareDialogController.$inject = ['$uibModalInstance', 'shareLink','$rootScope'];
 
-    function ShareDialogController($uibModalInstance, shareLink) {
+    function ShareDialogController($uibModalInstance, shareLink,$rootScope) {
         var vm = this;
         vm.clear = clear;
-        vm.shareLink = '<iframe src="' + shareLink + '" width="100%" height="100%"	>';
+        vm.shareLink = shareLink;
+        vm.copyUrl=copyUrl;
 
         activate();
 
@@ -20,6 +21,17 @@
 
         function clear () {
             $uibModalInstance.dismiss('cancel');
+        }
+
+        function copyUrl(){
+            var copyText = document.getElementById("share-link");
+            copyText.select();
+            document.execCommand("copy");
+            var info = {
+                text: 'Copied to clipboard',
+                title: "Copied"
+            }
+            $rootScope.showSuccessToast(info);
         }
 
     }

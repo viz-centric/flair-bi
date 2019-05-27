@@ -112,7 +112,8 @@
             "remove": "Remove",
             "close": "Close",
             "cancel": "Cancel",
-            "canceljob":"Cancel Job"
+            "canceljob":"Cancel Job",
+            "copy":"Copy"
         },
         "detail": {
             "field": "Field",

@@ -75,4 +75,6 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 674|Number Font size|Number Size of fonts|NUMBER|null|null|null|9|flairadmin|null
 675|Icon Font size|Icon Size of fonts|NUMBER|null|null|null|9|flairadmin|null
 676|I frame link|i frame external link|TEXT|null|null|null|null|flairadmin|null
+677|Text colour|The text colour for KPI|COLOR_PICKER|null|null|#787878|null|flairadmin|null
+
     

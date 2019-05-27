@@ -40,6 +40,7 @@ import 'jquery-toast-plugin'
 import 'jquery-ui'
 import '@claviska/jquery-minicolors'
 import 'popper.js';
+import 'angular-cron-generator/src/angular-cron-generator';
 
 import 'content/js/custom';
 import 'content/js/icheck';

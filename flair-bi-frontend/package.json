@@ -31,7 +31,7 @@
     "angular-cache-buster": "^0.4.3",
     "angular-cookies": "^1.7.8",
     "angular-cron-gen": "^0.0.26",
-    "angular-cron-generator": "github:sarfarazansari/angular-cron-generator#master",
+    "angular-cron-generator": "github:sarfarazansari/angular-cron-generator#v1.0.0",
     "angular-drag-and-drop-lists": "^2.1.0",
     "angular-dynamic-locale": "^0.1.37",
     "angular-filter": "^0.5.17",

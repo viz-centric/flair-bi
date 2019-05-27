@@ -1,4 +1,4 @@
-<div class="inmodal in modal-content">
+<div class="inmodal in modal-content share-link-modal">
     <form name="editForm" role="form" novalidate ng-submit="vm.save()">
         <div class="modal-header">
             <div class="header-text">
@@ -8,8 +8,16 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <input type="text" class="form-control" ng-model="vm.shareLink" readonly>
+                <input type="text" id="share-link" class="form-control" value={{vm.shareLink}} readonly>
             </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-default" ng-click="vm.copyUrl()">
+                <svg class="copy-clipboard clone">
+                    <use xlink:href="#clone" />
+                </svg>&nbsp;
+                <span data-translate="entity.action.copy">Copy</span>
+            </button>
         </div>
     </form>
 </div>

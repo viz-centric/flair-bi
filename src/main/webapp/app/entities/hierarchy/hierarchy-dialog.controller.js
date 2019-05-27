@@ -25,10 +25,11 @@
         vm.clear = clear;
         vm.save = save;
         vm.filterDimensions = filterDimensions;
-        vm.hierarchy = entity;
+        vm.hierarchy=sortedDrilldowns(entity);
         vm.dimensions = dimensions;
         vm.addDrilldown = addDrilldown;
         vm.removeDrilldown = removeDrilldown;
+        vm.sortedDrilldowns=sortedDrilldowns;
 
         vm.validation = validation;
 
@@ -91,6 +92,13 @@
                     return el.feature && el.feature.name === item.name;
                 }).length === 0
             );
+        }
+
+        function sortedDrilldowns(hierarchy){
+            hierarchy.drilldown.sort(function(a, b) {
+                return a.order - b.order;
+            });
+            return hierarchy;
         }
     }
 })();

@@ -6388,3 +6388,8 @@ input.select2-active {
 
 .common-create-popup md-input-container .md-input {
   border-radius: 0px; }
+
+.share-link-modal .copy-clipboard {
+  width: 16px;
+  height: 16px;
+  fill: #439dd3; }

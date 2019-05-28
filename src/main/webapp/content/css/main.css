@@ -1768,7 +1768,7 @@ a {
     position: absolute;
     bottom: 0px;
     left: 0;
-    z-index: 999;
+    z-index: 10;
     transition: 400ms all ease; }
   .home-container .active {
     background: #f0f2f2; }

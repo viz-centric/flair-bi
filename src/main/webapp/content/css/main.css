@@ -1394,13 +1394,19 @@ property-component .control-label-color-picker {
     .viz-properties .form-inline input[type=checkbox] {
       width: 20px;
       height: 20px; }
+    .viz-properties .form-inline input[type=number] {
+      width: 85px;
+      border-radius: 5px; }
+    .viz-properties .form-inline input[type=text], .viz-properties .form-inline select {
+      border-radius: 5px; }
     .viz-properties .form-inline select.legend-position {
       width: 39%; }
     .viz-properties .form-inline .rzslider {
       width: 67%;
       margin-top: 18px; }
   .viz-properties .flair-checkbox {
-    margin-top: 7px; }
+    margin-top: 7px;
+    margin-left: 15px; }
 
 .properties-sidebar button.btn {
   margin: 1.5vw .5vw; }
@@ -4519,8 +4525,20 @@ jhi-alert .alerts .alert-danger {
     height: 20px;
     float: right;
     margin: 0; }
+  .field-properties .field-property-options .form-group input[type=number] {
+    width: 85px;
+    float: right;
+    margin-top: -7px;
+    border-radius: 5px; }
+  .field-properties .field-property-options .form-group input[type=text], .field-properties .field-property-options .form-group select {
+    border-radius: 5px; }
+  .field-properties .field-property-options .form-group .ui-select-toggle {
+    border-radius: 5px; }
   .field-properties .field-property-options div property-component .row .control-label-color-picker {
     margin-left: -0.5vw; }
+  .field-properties .field-property-options .flair-checkbox {
+    float: right;
+    margin-right: 50px; }
 
 .field-properties .add-chart-property-container {
   border-bottom: 1px solid #e1e3e3;

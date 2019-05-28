@@ -22,9 +22,9 @@
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measures);
                     result['chartType'] = VisualizationUtils.getPropertyValue(record.properties, 'Info graphic Type').toLowerCase();
-                    var displayColor = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display colour');
+                    var displayColor = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display colour');
                     result['chartDisplayColor'] = (displayColor == null) ? colorSet[0] : displayColor;
-                    var borderColor = VisualizationUtils.getFieldPropertyValue(measures[0], 'Border colour');
+                    var borderColor = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Border colour');
                     result['chartBorderColor'] = (borderColor == null) ? colorSet[1] : borderColor;
 
                     result['kpiDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display name') || result['dimension'][0];
@@ -48,6 +48,7 @@
                     if ($rootScope.filterSelection.id != record.id) {
                         var infographics = $rootScope.updateWidget[record.id];
                         infographics.config(getProperties(VisualizationUtils, record))
+                            .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
                     }
                 } else {

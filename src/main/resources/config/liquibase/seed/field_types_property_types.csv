@@ -62,7 +62,7 @@ field_type_id|property_type_id|sequence_number
 6|627|9
 #6|628|10
 6|644|11
-7|620|0
+7|620|0 
 7|641|1
 7|650|2
 8|620|0
@@ -71,7 +71,7 @@ field_type_id|property_type_id|sequence_number
 8|621|3
 8|622|4
 8|634|5
-8|632|6
+8|677|6
 #8|633|7
 8|627|8
 #8|628|9
@@ -84,7 +84,7 @@ field_type_id|property_type_id|sequence_number
 9|621|3
 9|622|4
 9|634|5
-9|632|6
+9|677|6
 #9|633|7
 9|627|8
 #9|628|9
@@ -97,7 +97,7 @@ field_type_id|property_type_id|sequence_number
 10|621|3
 10|622|4
 10|634|5
-10|632|6
+10|677|6
 #10|633|7
 10|627|8
 #10|628|9
@@ -110,7 +110,7 @@ field_type_id|property_type_id|sequence_number
 11|621|3
 11|622|4
 11|634|5
-11|632|6
+11|677|6
 #11|633|7
 11|627|8
 #11|628|9
@@ -123,7 +123,7 @@ field_type_id|property_type_id|sequence_number
 12|621|3
 12|622|4
 12|634|5
-12|632|6
+12|677|6
 #12|633|7
 12|627|8
 #12|628|9

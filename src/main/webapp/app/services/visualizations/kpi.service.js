@@ -38,7 +38,7 @@
                         result['kpiDisplayName'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['dimension'][i]
-                            );
+                        );
                         result['kpiAlignment'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text alignment'));
                         result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                         result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
@@ -58,7 +58,8 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var kpi = $rootScope.updateWidget[record.id];
-                        kpi.update(record.data);
+                        kpi.config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     d3.select(element[0]).html('')

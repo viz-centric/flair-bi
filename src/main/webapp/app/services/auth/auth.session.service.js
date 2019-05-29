@@ -36,9 +36,11 @@
         }
 
         function logout() {
+            console.log('logout requested');
             return $http
                 .get("api/logout")
                 .success(function(response) {
+                    console.log('logout successful');
                     delete $localStorage.authenticationToken;
                     return response;
                 });

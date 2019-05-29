@@ -255,22 +255,39 @@ public class SchedulerResource {
 		return schedulerNotificationDTO;
 	}
 
-    @GetMapping("/schedule/reports/{pageSize}/{page}")
+    @GetMapping("/schedule/reports/engine/{pageSize}/{page}")
     @Timed
-    public void getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
+    public void getSchedulerReportsAndEngineData(@PathVariable Integer pageSize,@PathVariable Integer page)
         throws URISyntaxException {
     	RestTemplate restTemplate = new RestTemplate();
     try {
-		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
+		ResponseEntity<List<SchedulerNotificationResponseDTO>> responseEntity =
 		restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsUrl),
 		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
 		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
-		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
+		List<SchedulerNotificationResponseDTO> reports = responseEntity.getBody();
 		for(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO :reports) {
 			pushToSocket(schedulerNotificationResponseDTO);
 		}
 	} catch (Exception e) {
 		log.error("error occured while fetching reports:"+e.getMessage());
+	}
+    }
+    
+    @GetMapping("/schedule/reports/{pageSize}/{page}")
+    @Timed
+    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
+        throws URISyntaxException {
+    	RestTemplate restTemplate = new RestTemplate();
+    try {
+		ResponseEntity<List<SchedulerNotificationResponseDTO>> responseEntity =
+		restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsUrl),
+		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
+		return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+	} catch (Exception e) {
+		log.error("error occured while fetching reports:"+e.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
     }
     

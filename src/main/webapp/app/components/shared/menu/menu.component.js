@@ -19,7 +19,6 @@
 
         function logout() {
             Auth.logout();
-            $state.go('login');
         }
     }
 })();

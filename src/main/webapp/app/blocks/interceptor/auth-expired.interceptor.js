@@ -21,12 +21,10 @@
                 var Auth = $injector.get('Auth');
                 var to = $rootScope.toState;
                 var params = $rootScope.toStateParams;
-                Auth.logout();
                 if (to.name !== 'accessdenied' && to.name !== 'login') {
                     Auth.storePreviousState(to.name, params);
                 }
-                var LoginService = $injector.get('LoginService');
-                LoginService.open();
+                Auth.logout();
             }
             return $q.reject(response);
         }

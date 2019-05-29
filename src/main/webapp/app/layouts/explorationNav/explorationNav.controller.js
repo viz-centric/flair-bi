@@ -133,7 +133,6 @@
         function logout() {
             collapseNavbar();
             Auth.logout();
-            $state.go('home');
         }
 
         function toggleNavbar() {

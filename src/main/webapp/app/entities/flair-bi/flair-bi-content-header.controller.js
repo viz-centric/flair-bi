@@ -595,8 +595,7 @@
             vm.mobileUserOptionNavigationSlide = !vm.mobileUserOptionNavigationSlide;
         }
         function logout() {
-           Auth.logout();
-            $state.go('login');
+            Auth.logout();
         }
 
         function changeHeaderColor(headerColor){

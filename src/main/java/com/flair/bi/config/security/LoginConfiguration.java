@@ -93,6 +93,7 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .logout()
             .logoutUrl("/api/logout")
+            .logoutSuccessUrl("/")
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID")
             .and()

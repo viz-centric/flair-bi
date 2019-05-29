@@ -158,8 +158,11 @@
             if($(window).width()<990){
                 $rootScope.isFullScreen = true;
             }
-            if(VisualDispatchService.getApplyBookmark())
-                applyBookmark(VisualDispatchService.getFeatureBookmark());
+            if(VisualDispatchService.getApplyBookmark()){
+                vm.selectedBookmark=VisualDispatchService.getFeatureBookmark();
+                VisualDispatchService.setFeatureBookmark({});
+                recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id,$stateParams.id);
+            }
         }
 
         function openSettings(){
@@ -442,7 +445,6 @@
         }
 
         function applyBookmark(item) {
-            VisualDispatchService.setApplyBookmark(false);
             if (!item) {
                 clearFilters();
             } else {
@@ -466,7 +468,6 @@
                         $rootScope.$broadcast("flairbiApp:filter");
                         $rootScope.$broadcast('flairbiApp:filter-add');
                         recentBookmarkService.saveRecentBookmark(item.id,$stateParams.id);
-                        VisualDispatchService.addFeatureBookmark({});
                     }
                 );
             }

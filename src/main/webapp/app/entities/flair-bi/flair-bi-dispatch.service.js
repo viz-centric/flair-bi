@@ -10,8 +10,8 @@
         .module("flairbiApp")
         .factory("VisualDispatchService", VisualDispatchService);
 
-    VisualDispatchService.$inject = ['$rootScope'];
-    function VisualDispatchService($rootScope) {
+    VisualDispatchService.$inject = ['$rootScope','FeatureCriteria','filterParametersService','$window'];
+    function VisualDispatchService($rootScope,FeatureCriteria,filterParametersService,$window) {
         var visual = {};
         var filters={};
         var feature={};
@@ -46,7 +46,8 @@
             setApplyBookmark:setApplyBookmark,
             getApplyBookmark:getApplyBookmark,
             saveHierarchies:saveHierarchies,
-            getHierarchies:getHierarchies
+            getHierarchies:getHierarchies,
+            setFeatureBookmark:setFeatureBookmark
         };
 
         function setVisual(v) {
@@ -145,7 +146,28 @@
             }
         }
 
-        function addFeatureBookmark(bookmark){
+        function addFeatureBookmark(viewId,dashboardId,bookmark){
+            FeatureCriteria.query(
+                {
+                    featureBookmark: bookmark.id
+                },
+                function(result) {
+                    bookmark.featureCriteria = result;
+                    var filter = {};
+                    bookmark.featureCriteria.forEach(function(criteria) {
+                        filter[
+                            criteria.feature.name
+                        ] = criteria.value.split(",");
+                    });
+                    filterParametersService.save(filter);
+                    isBookmarkApplied=true;
+                    $window.location.href="#/dashboards/"+dashboardId+"/views/"+viewId+"/build";
+                }
+            );
+            featureBookmark=bookmark;
+        }
+
+        function setFeatureBookmark(bookmark){
             featureBookmark=bookmark;
         }
 

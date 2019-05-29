@@ -595,7 +595,10 @@
             vm.mobileUserOptionNavigationSlide = !vm.mobileUserOptionNavigationSlide;
         }
         function logout() {
-            Auth.logout();
+            Auth.logout()
+                .then(function () {
+                    $state.go('login');
+                });
         }
 
         function changeHeaderColor(headerColor){

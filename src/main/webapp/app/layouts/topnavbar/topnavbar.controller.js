@@ -28,7 +28,10 @@
         getAccount();
 
         function logout() {
-            Auth.logout();
+            Auth.logout()
+                .then(function () {
+                    $state.go('login');
+                });
         }
 
         function getAccount() {

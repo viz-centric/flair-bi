@@ -89,8 +89,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     public SchedulerDTO createScheduledObject() {
     	SchedulerDTO schedulerDTO = new SchedulerDTO();
     	ReportDTO reportDTO= new ReportDTO();
-    	reportDTO.setConnection_name("Transactions");
-    	reportDTO.setSource_id("Transactions");
     	reportDTO.setMail_body("this is a test email");
     	reportDTO.setReport_name("Clustered-Vertical-Bar-Chart-90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	reportDTO.setSubject("Clustered Vertical Bar Chart Report");
@@ -124,7 +122,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	emailsDTO emailList[]= {emailsDTO};
     	assignReport.setEmail_list(emailList);
     	assignReport.setChannel("email");
-    	assignReport.setCondition("test");
     	schedulerDTO.setAssign_report(assignReport);
     	
     	Schedule schedule= new Schedule();

@@ -3,23 +3,15 @@ package com.flair.bi.service.dto.scheduler;
 public class ReportDTO {
 
 private String userid;
-private String connection_name;
 private String mail_body;
 private String subject;
 private String report_name;
-private String source_id;
 private String title_name;
+private String dashboard_name;
+private String view_name;
+private String share_link;
 
 public ReportDTO(){}
-
-public String getConnection_name() {
-	return connection_name;
-}
-
-public void setConnection_name(String connection_name) {
-	this.connection_name = connection_name;
-}
-
 
 public String getMail_body() {
 	return mail_body;
@@ -45,14 +37,6 @@ public void setReport_name(String report_name) {
 	this.report_name = report_name;
 }
 
-public String getSource_id() {
-	return source_id;
-}
-
-public void setSource_id(String source_id) {
-	this.source_id = source_id;
-}
-
 public String getTitle_name() {
 	return title_name;
 }
@@ -70,11 +54,35 @@ public void setUserid(String userid) {
 	this.userid = userid;
 }
 
+public String getDashboard_name() {
+	return dashboard_name;
+}
+
+public void setDashboard_name(String dashboard_name) {
+	this.dashboard_name = dashboard_name;
+}
+
+public String getView_name() {
+	return view_name;
+}
+
+public void setView_name(String view_name) {
+	this.view_name = view_name;
+}
+
+public String getShare_link() {
+	return share_link;
+}
+
+public void setShare_link(String share_link) {
+	this.share_link = share_link;
+}
+
 @Override
 public String toString() {
-	return "ReportDTO [userid=" + userid + ", connection_name=" + connection_name + ", mail_body=" + mail_body
-			+ ", subject=" + subject + ", report_name=" + report_name + ", source_id=" + source_id + ", title_name="
-			+ title_name + "]";
+	return "ReportDTO [userid=" + userid + ", mail_body=" + mail_body + ", subject=" + subject + ", report_name="
+			+ report_name + ", title_name=" + title_name + ", dashboard_name=" + dashboard_name + ", view_name="
+			+ view_name + ", share_link=" + share_link + "]";
 }
 
 }

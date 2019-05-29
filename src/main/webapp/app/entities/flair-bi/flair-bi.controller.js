@@ -1104,6 +1104,17 @@
                     },
                     viewName: function(){
                         return vm.view.viewName;
+                    },
+                    dashboardName: function(){
+                        return vm.view.viewDashboard.dashboardName;
+                    },
+                    viewName: function(){
+                        return vm.view.viewName
+                    },
+                    shareLink: function() {
+                        return ShareLinkService.createLink(
+                            v.getSharePath(vm.datasource)
+                        );
                     }
                 }
             }).result.then(function () { }, function () { });

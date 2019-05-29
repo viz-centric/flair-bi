@@ -254,9 +254,7 @@
 
 
      function build(viewId,dashboardId,featureBookmark){
-        VisualDispatchService.addFeatureBookmark(featureBookmark);
-        VisualDispatchService.setApplyBookmark(true);
-        $window.location.href="#/dashboards/"+dashboardId+"/views/"+viewId+"/build";
+        VisualDispatchService.addFeatureBookmark(viewId,dashboardId,featureBookmark);
      }  
 
     }

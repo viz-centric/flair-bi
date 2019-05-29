@@ -49,10 +49,11 @@
 
         function build(viewId,dashboardId,featureBookmark){
             if(featureBookmark){
-                VisualDispatchService.addFeatureBookmark(featureBookmark);
-                VisualDispatchService.setApplyBookmark(true);
+                VisualDispatchService.addFeatureBookmark(viewId,dashboardId,featureBookmark);
+            }else{
+                $window.location.href="#/dashboards/"+dashboardId+"/views/"+viewId+"/build";
             }
-            $window.location.href="#/dashboards/"+dashboardId+"/views/"+viewId+"/build";
+
         } 
     }
 })();

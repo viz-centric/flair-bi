@@ -34,10 +34,8 @@
             getScheduledReportsCount();
         }
 
-
-        function getScheduleReports(pageSize, page) {
-            vm.pagedItems = [];
-            schedulerService.getScheduleReports(pageSize, page);
+        function getSchedulerReportsAndEngineData(pageSize, page) {
+            schedulerService.getSchedulerReportsAndEngineData(pageSize, page);
         }
 
         function onGetReleaseAlertsError(error) {
@@ -59,46 +57,41 @@
         function prevPage() {
             if (vm.currentPage > 0) {
                 vm.currentPage--;
-                getScheduleReports(vm.pageSize, vm.currentPage);
+                getSchedulerReportsAndEngineData(vm.pageSize, vm.currentPage);
             }
         };
 
         function nextPage() {
             if (vm.currentPage < vm.noOfPages - 1) {
                 vm.currentPage++;
-                getScheduleReports(vm.pageSize, vm.currentPage);
+                getSchedulerReportsAndEngineData(vm.pageSize, vm.currentPage);
             }
         };
 
         function setPage(n) {
             vm.currentPage = n;
-            getScheduleReports(vm.pageSize, vm.currentPage);
+            getSchedulerReportsAndEngineData(vm.pageSize, vm.currentPage);
         };
         function connectWebSocket() {
-            console.log('notificationSetController connect web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function (frame) {
                     vm.pagedItems = [];
-                    console.log('notificationSetController connected web socket');
                     stompClientService.subscribe("/user/exchange/scheduledReports", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
 
             $scope.$on("$destroy", function (event) {
-                console.log('flair-bi controller destorying web socket');
                 vm.pagedItems = [];
                 stompClientService.disconnect();
             });
         }
 
         function onExchangeMetadataError(data) {
-            console.log('notificationSetController on metadata error', data);
         }
 
         function onExchangeMetadata(data) {
-            console.log('notificationSetController on metadata', data);
             var metaData = JSON.parse(data.body);
             var container = d3.select("#notification_accordion");
             $("#notification_accordion").html('');

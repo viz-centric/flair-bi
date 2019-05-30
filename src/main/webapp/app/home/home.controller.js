@@ -21,34 +21,19 @@
         vm.onRecentlyBox1=onRecentlyBox1;
         vm.onRecentlyBox2=onRecentlyBox2;
         vm.expandTile=expandTile;
-        vm.openNotifications=openNotifications;
-        vm.openReleases=openReleases;
+        vm.toggleAlerts=toggleAlerts;
         vm.isTileVisible=isTileVisible;
         vm.allReleaseAlerts=[];
         vm.reports=[];
+        vm.alertTab='';
 
         activate();
 
-        function openNotifications(){
-            if($("#notifications-tab").hasClass("tab-active")){
-                $("#notifications-tab").removeClass("tab-active");
-            }else{
-                $("#notifications-tab").addClass("tab-active");
-                $("#releases-tab").removeClass("tab-active");
-                $("#notification-container").show();
-                $("#release-container").hide();
+        function toggleAlerts(alertTab){
+            vm.alertTab=alertTab;
+            if(vm.alertTab =='notifications'){
                 getScheduledReports();
-            }
-        }
-
-        function openReleases(){
-            if($("#releases-tab").hasClass("tab-active")){
-                $("#releases-tab").removeClass("tab-active");
             }else{
-                $("#releases-tab").addClass("tab-active");
-                $("#notifications-tab").removeClass("tab-active");
-                $("#release-container").show();
-                $("#notification-container").hide();
                 getReleaseAlerts();
             }
         }
@@ -113,7 +98,6 @@
             onRecentlyBox();
             angular.element($("#on-recently-box1")).triggerHandler("click");
             vm.menuItems=adminListService.getHomeList();
-            openNotifications();
         }
 
         function getReleaseAlerts() {

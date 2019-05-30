@@ -79,6 +79,12 @@
                 label: "File Uploader",
                 href: "file-uploader",
                 order: 10
+            },
+            {
+                image: "#new-email-report",
+                label: "Report Management",
+                href: "report-management",
+                order: 11
             }
 
         ];

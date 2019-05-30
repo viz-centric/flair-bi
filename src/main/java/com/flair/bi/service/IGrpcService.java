@@ -7,6 +7,7 @@ import com.flair.bi.messages.DeleteConnectionResponse;
 import com.flair.bi.messages.GetConnectionResponse;
 import com.flair.bi.messages.ListTablesResponse;
 import com.flair.bi.messages.Query;
+import com.flair.bi.messages.QueryAllResponse;
 import com.flair.bi.messages.QueryResponse;
 import com.flair.bi.messages.QueryValidationResponse;
 import com.flair.bi.messages.RunQueryResponse;
@@ -25,6 +26,8 @@ public interface IGrpcService {
     RunQueryResponse runQuery(Query query, boolean metaRetrieved);
 
     TestConnectionResponse testConnection(String connectionLinkId, String datasourceName, Connection connection);
+
+    QueryAllResponse queryAll(String connectionLinkId, Query query, Connection connection);
 
     ConnectionTypesResponses getAllConnectionTypes();
 

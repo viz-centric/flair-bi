@@ -1,6 +1,8 @@
 package com.flair.bi.web.rest.util;
 
+import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
+import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.google.gson.Gson;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
@@ -14,13 +16,15 @@ import com.project.bi.query.expression.condition.impl.NotContainsConditionExpres
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
+
 @Slf4j
 public final class QueryGrpcUtils {
 
     public static Query mapToQuery(QueryDTO queryDTO, String sourceId, String queryId, String userId) {
-        log.info(queryDTO.toString());
+        log.info("Map to query {}", queryDTO.toString());
         Query.Builder builder = Query.newBuilder();
-        builder.setSourceId(sourceId)
+        builder
             .setSource(queryDTO.getSource())
             .setLimit(queryDTO.getLimit())
             .setDistinct(queryDTO.isDistinct())
@@ -29,6 +33,10 @@ public final class QueryGrpcUtils {
 
         if (queryId != null) {
             builder.setQueryId(queryId);
+        }
+
+        if (sourceId != null) {
+            builder.setSourceId(sourceId);
         }
 
         if (userId != null) {
@@ -111,5 +119,28 @@ public final class QueryGrpcUtils {
     public static String getJsonFromConditionExpression(ConditionExpression conditionExpression) {
         Gson gson = new Gson();
         return gson.toJson(conditionExpression);
+    }
+
+    public static Connection toProtoConnection(ConnectionDTO connection) {
+        return Optional.ofNullable(connection)
+            .map(c -> {
+                Connection.Builder builder = Connection.newBuilder()
+                    .setConnectionPassword(c.getConnectionPassword())
+                    .setConnectionUsername(c.getConnectionUsername())
+                    .setConnectionType(c.getConnectionTypeId())
+                    .setName(c.getName())
+                    .putAllDetails(c.getDetails());
+                if (c.getConnectionParameters() != null) {
+                    builder.putAllConnectionParameters(c.getConnectionParameters());
+                }
+                if (c.getId() != null) {
+                    builder.setId(c.getId());
+                }
+                if (c.getLinkId() != null) {
+                    builder.setLinkId(c.getLinkId());
+                }
+                return builder.build();
+            })
+            .orElse(null);
     }
 }

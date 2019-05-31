@@ -11,6 +11,7 @@ import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,7 @@ public class DashboardServiceImpl implements DashboardService {
      * @return the persisted entity
      */
     @Override
-    public Dashboard save(Dashboard dashboard) throws UniqueConstraintsException {
+    public Dashboard save(Dashboard dashboard) {
         log.debug("Request to save Dashboard : {}", dashboard);
 
         try {
@@ -111,18 +112,14 @@ public class DashboardServiceImpl implements DashboardService {
 	            if (!dashboard.getDashboardViews().isEmpty()) {
 	                // if there are also views add them
 	                dashboard.getDashboardViews().forEach(t -> {
-						try {
-							viewService.save(t);
-						} catch (UniqueConstraintsException e) {
-							log.error("error occured while saving view : "+e.getMessage());
-						}
+						viewService.save(t);
 					});
 	            }
 	        }
         }catch(Exception e) {
         	log.error("error occured while saving dashboard : "+e.getMessage());
-        	if(e.getMessage().contains("dashboard_name_unique")) {
-        		throw new UniqueConstraintsException("uniqueError");
+        	if(e.getMessage().contains("[dashboard_name_unique]")) {
+        		throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR,e);
         	}
         }
         return dashboard;
@@ -140,11 +137,7 @@ public class DashboardServiceImpl implements DashboardService {
             .stream()
             .peek(x -> x.setPublished(value))
             .forEach(t -> {
-				try {
-					viewService.save(t);
-				} catch (UniqueConstraintsException e) {
-					log.error("error occured while saving view : "+e.getMessage());
-				}
+				viewService.save(t);
 			});
     }
 

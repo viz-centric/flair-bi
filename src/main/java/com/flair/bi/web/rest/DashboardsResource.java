@@ -7,7 +7,7 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
-import com.flair.bi.exception.UniqueConstraintsException;
+
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.FileUploadService;
@@ -28,12 +28,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -77,12 +79,7 @@ public class DashboardsResource {
         if (dashboard.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", "idexists", "A new dashboard cannot already have an ID")).body(null);
         }
-        Dashboard result;
-		try {
-			result = dashboardService.save(dashboard);
-		} catch (UniqueConstraintsException e) {
-			 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", e.getMessage(), "Dashboard already exists with this name")).body(null);
-		}
+        Dashboard result=dashboardService.save(dashboard);
         try {
             if (dashboard.getImage() != null) {
                 String loc = imageUploadService.uploadedImageAndReturnPath(dashboard.getImage(), result.getId(), dashboard.getImageContentType(), "dashboard");
@@ -124,12 +121,7 @@ public class DashboardsResource {
         } catch (Exception e) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", "imageupload", "image is not uploaded")).body(null);
         }
-        Dashboard result=null;
-		try {
-			result = dashboardService.save(dashboard);
-		} catch (UniqueConstraintsException e) {
-			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", e.getMessage(), "Dashboard already exists with this name")).body(null);
-		}
+        Dashboard result = dashboardService.save(dashboard);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("dashboard", dashboard.getId().toString()))
             .body(result);
@@ -234,12 +226,7 @@ public class DashboardsResource {
                 dashboardRelease.add(viewRelease);
 
             });
-
-        try {
-			return ResponseEntity.ok(service.requestRelease(dashboardRelease));
-		} catch (UniqueConstraintsException e) {
-			 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", e.getMessage(), "Dashboard already exists with this name")).body(null);
-		}
+        return ResponseEntity.ok(service.requestRelease(dashboardRelease));
     }
 
     @GetMapping("/dashboards/{id}/releases")

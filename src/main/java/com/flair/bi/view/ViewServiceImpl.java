@@ -12,6 +12,7 @@ import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.ViewWatchService;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -59,10 +60,10 @@ class ViewServiceImpl implements ViewService {
      *
      * @param views the entity to save
      * @return the persisted entity
-     * @throws UniqueConstraintsException 
      */
     @Override
-    public View save(View views) throws UniqueConstraintsException {
+    @Transactional
+    public View save(View views){
         log.debug("Request to save View : {}", views);
         boolean create = null == views.getId();
         View view = views;
@@ -115,8 +116,8 @@ class ViewServiceImpl implements ViewService {
 	        }
         }catch(Exception e) {
         	log.error("error occured while saving view : "+e.getMessage());
-        	if(e.getMessage().contains("view_name_unique")) {
-        		throw new UniqueConstraintsException("uniqueError");
+        	if(e.getMessage().contains("[view_name_unique]")) {
+        		throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR,e);
         	}
         }
         return v;

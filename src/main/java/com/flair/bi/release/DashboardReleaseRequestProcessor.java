@@ -6,7 +6,7 @@ import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
-import com.flair.bi.exception.UniqueConstraintsException;
+
 import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DashboardService;
@@ -34,7 +34,7 @@ class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<Dashbo
     private final ReleaseRequestRepository requestRepository;
 
     @Override
-    public ReleaseRequest requestRelease(DashboardRelease entity) throws UniqueConstraintsException{
+    public ReleaseRequest requestRelease(DashboardRelease entity){
 
         User user = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElseThrow(RuntimeException::new);
         ReleaseRequest request = new ReleaseRequest();
@@ -67,15 +67,9 @@ class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<Dashbo
 
         request.setRelease(entity);
         ReleaseRequest r = requestRepository.save(request);
-        try {
-			dashboardService.save(dashboard);
-		} 
-        catch (UniqueConstraintsException e) {
-			log.error("error occured while saving dashboard : "+e.getMessage());
-			throw new UniqueConstraintsException("uniqueError");
-		}catch (Exception e) {
-			log.error("error occured while saving dashboard : "+e.getMessage());
-		}
+  
+		dashboardService.save(dashboard);
+	
         return r;
 
     }

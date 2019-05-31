@@ -2,7 +2,7 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
-import com.flair.bi.exception.UniqueConstraintsException;
+
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +16,9 @@ public interface DashboardService {
      * Save a dashboard.
      *
      * @param dashboard the entity to save
-     * @return the persisted entity
-     * @throws UniqueConstraintsException 
+     * @return the persisted entity 
      */
-    Dashboard save(Dashboard dashboard) throws UniqueConstraintsException;
+    Dashboard save(Dashboard dashboard);
 
     /**
      * Get all the dashboards.

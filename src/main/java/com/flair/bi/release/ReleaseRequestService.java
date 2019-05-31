@@ -2,7 +2,7 @@ package com.flair.bi.release;
 
 import com.flair.bi.domain.Release;
 import com.flair.bi.domain.ReleaseRequest;
-import com.flair.bi.exception.UniqueConstraintsException;
+
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
 
 import java.util.Collection;
@@ -49,9 +49,8 @@ public interface ReleaseRequestService {
      *
      * @param release release to be requested
      * @return created request for given release
-     * @throws UniqueConstraintsException 
      */
-    ReleaseRequest requestRelease(Release release) throws UniqueConstraintsException;
+    ReleaseRequest requestRelease(Release release);
     
     
     /**

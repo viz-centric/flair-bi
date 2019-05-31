@@ -8,7 +8,6 @@ import com.flair.bi.domain.Release;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewState;
-import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.dto.CountDTO;
@@ -60,7 +59,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void createDashboards() throws UniqueConstraintsException {
+	public void createDashboards(){
 		Dashboard request = new Dashboard();
 		request.setDashboardName("dashboard name");
 		request.setCategory("category");
@@ -95,7 +94,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void updateDashboard() throws UniqueConstraintsException {
+	public void updateDashboard(){
 		Dashboard request = new Dashboard();
 		request.setDashboardName("dashboard name");
 		request.setId(10L);
@@ -115,7 +114,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void updateDashboardCreatesDashboardIfIdNotProvided() throws UniqueConstraintsException {
+	public void updateDashboardCreatesDashboardIfIdNotProvided(){
 		Dashboard request = new Dashboard();
 		request.setDashboardName("dashboard name");
 		request.setCategory("category");
@@ -231,7 +230,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void requestRelease() throws UniqueConstraintsException {
+	public void requestRelease(){
 		Dashboard dashboard = new Dashboard();
 		dashboard.setId(3L);
 		when(dashboardService.findOne(eq(3L))).thenReturn(dashboard);

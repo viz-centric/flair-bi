@@ -3,7 +3,7 @@ package com.flair.bi.view;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
-import com.flair.bi.exception.UniqueConstraintsException;
+
 import com.querydsl.core.types.Predicate;
 
 import java.util.List;
@@ -17,9 +17,8 @@ public interface ViewService {
      *
      * @param view the entity to save
      * @return the persisted entity
-     * @throws UniqueConstraintsException 
      */
-    View save(View view) throws UniqueConstraintsException;
+    View save(View view);
 
     /**
      * Get all the views.

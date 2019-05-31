@@ -1,6 +1,7 @@
 package com.flair.bi.exception;
 
-public class UniqueConstraintsException extends Exception {
+
+public class UniqueConstraintsException extends RuntimeException {
 	
 	public UniqueConstraintsException(String message) {
 		super(message);

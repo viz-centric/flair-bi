@@ -6,15 +6,11 @@ import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
-
 import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.DashboardServiceImpl;
 import com.flair.bi.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +19,6 @@ import java.util.stream.Collectors;
 
 @Component(value = "dashboardReleaseProcessor")
 @Transactional
-@Slf4j
 @RequiredArgsConstructor
 class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<DashboardRelease> {
 
@@ -67,9 +62,7 @@ class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<Dashbo
 
         request.setRelease(entity);
         ReleaseRequest r = requestRepository.save(request);
-  
-		dashboardService.save(dashboard);
-	
+        dashboardService.save(dashboard);
         return r;
 
     }

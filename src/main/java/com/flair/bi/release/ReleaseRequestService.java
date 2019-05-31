@@ -2,9 +2,7 @@ package com.flair.bi.release;
 
 import com.flair.bi.domain.Release;
 import com.flair.bi.domain.ReleaseRequest;
-
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
-
 import java.util.Collection;
 import java.util.List;
 

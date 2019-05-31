@@ -7,7 +7,6 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
-
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.FileUploadService;

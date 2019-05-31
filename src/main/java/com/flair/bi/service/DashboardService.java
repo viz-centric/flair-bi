@@ -2,7 +2,6 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
-
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

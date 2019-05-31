@@ -6,7 +6,6 @@ import com.flair.bi.domain.Release;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.ViewRelease;
-
 import com.flair.bi.repository.DashboardReleaseRepository;
 import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
@@ -20,7 +19,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

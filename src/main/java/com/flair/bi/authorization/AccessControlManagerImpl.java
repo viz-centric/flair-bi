@@ -434,7 +434,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	        userGroupRepository.save(userGroups);
 	    }catch(Exception e) {
 	    	log.error("error occured while saving view : "+e.getMessage());
-	    	if(e.getMessage().contains("view_name_unique")) {
+	    	if(e.getMessage().contains("[view_name_unique]")) {
 	    		throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR,e);
 	    	}
 	    }

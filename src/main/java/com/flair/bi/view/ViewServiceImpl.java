@@ -62,7 +62,6 @@ class ViewServiceImpl implements ViewService {
      * @return the persisted entity
      */
     @Override
-    @Transactional
     public View save(View views){
         log.debug("Request to save View : {}", views);
         boolean create = null == views.getId();

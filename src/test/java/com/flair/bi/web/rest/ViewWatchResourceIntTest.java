@@ -32,6 +32,7 @@ import com.flair.bi.FlairbiApp;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.ViewWatchService;
@@ -92,7 +93,7 @@ public class ViewWatchResourceIntTest extends AbstractIntegrationTest {
     }
 
     @Before
-    public void initTest() {
+    public void initTest() throws UniqueConstraintsException {
         view = ViewResourceIntTest.createEntity(em, dashboardService);
         user = createUser(userService);
         SecurityContextHolder.getContext()

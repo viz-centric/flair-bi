@@ -120,7 +120,7 @@
             }
         }
 
-        function onSaveError() {
+        function onSaveError(error) {
             vm.isSaving = false;
             $rootScope.showErrorSingleToast({
                 text: $translate.instant('flairbiApp.dashboards.errorSaving')

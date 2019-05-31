@@ -9,6 +9,7 @@ import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
 import com.flair.bi.domain.viewwatch.ViewWatch;
 import com.flair.bi.domain.viewwatch.ViewWatchId;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.ViewRepository;
@@ -78,7 +79,7 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void createViews() {
+	public void createViews() throws UniqueConstraintsException {
 		View request = new View();
 		request.setViewName("view name");
 		request.setPublished(true);
@@ -107,7 +108,7 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void updateViews() {
+	public void updateViews() throws UniqueConstraintsException {
 		View request = new View();
 		request.setId(18L);
 		request.setViewName("view name");
@@ -302,7 +303,7 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void requestRelease() {
+	public void requestRelease() throws UniqueConstraintsException {
 		CreateViewReleaseRequestDTO dto = new CreateViewReleaseRequestDTO();
 		dto.setComment("my comment");
 

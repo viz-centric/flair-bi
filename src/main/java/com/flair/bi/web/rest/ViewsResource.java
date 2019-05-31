@@ -5,6 +5,7 @@ import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.FileUploadService;
@@ -68,7 +69,12 @@ public class ViewsResource {
         if (view.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("view", "idexists", "A new view cannot already have an ID")).body(null);
         }
-        View result = viewService.save(view);
+        View result=null;
+		try {
+			result = viewService.save(view);
+		} catch (UniqueConstraintsException e) {
+			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("view", e.getMessage(), "View already exists with this name")).body(null);
+		}
 		try {
 			if(view.getImage()!=null){
 				String loc = imageUploadService.uploadedImageAndReturnPath(view.getImage(),result.getId(),view.getImageContentType(),"view");
@@ -110,7 +116,12 @@ public class ViewsResource {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("view", "imageupload", "image is not uploaded")).body(null);
 		}
-        View result = viewService.save(view);
+        View result=null;
+		try {
+			result = viewService.save(view);
+		} catch (UniqueConstraintsException e) {
+			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("view", e.getMessage(), "View already exists with this name")).body(null);
+		}
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("view", view.getId().toString()))
             .body(result);
@@ -211,13 +222,15 @@ public class ViewsResource {
     @PreAuthorize("@accessControlManager.hasAccess(#viewId, 'REQUEST_PUBLISH', 'VIEW')")
     public ResponseEntity<ReleaseRequest> requestRelease(@PathVariable Long viewId, @Valid @RequestBody CreateViewReleaseRequestDTO dto) {
         View view = viewService.findOne(viewId);
-
         ViewRelease viewRelease = new ViewRelease();
         viewRelease.setComment(dto.getComment());
         viewRelease.setViewState(view.getCurrentEditingState());
         viewRelease.setView(view);
-
-        return ResponseEntity.ok(releaseRequestService.requestRelease(viewRelease));
+        try {
+			return ResponseEntity.ok(releaseRequestService.requestRelease(viewRelease));
+		} catch (UniqueConstraintsException e) {
+			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("view", e.getMessage(), "View already exists with this name")).body(null);
+		}
     }
 
     @GetMapping("/views/{viewId}/releases")

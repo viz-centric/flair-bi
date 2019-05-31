@@ -7,6 +7,7 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.FileUploadService;
@@ -76,7 +77,12 @@ public class DashboardsResource {
         if (dashboard.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", "idexists", "A new dashboard cannot already have an ID")).body(null);
         }
-        Dashboard result = dashboardService.save(dashboard);
+        Dashboard result;
+		try {
+			result = dashboardService.save(dashboard);
+		} catch (UniqueConstraintsException e) {
+			 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", e.getMessage(), "Dashboard already exists with this name")).body(null);
+		}
         try {
             if (dashboard.getImage() != null) {
                 String loc = imageUploadService.uploadedImageAndReturnPath(dashboard.getImage(), result.getId(), dashboard.getImageContentType(), "dashboard");
@@ -118,7 +124,12 @@ public class DashboardsResource {
         } catch (Exception e) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", "imageupload", "image is not uploaded")).body(null);
         }
-        Dashboard result = dashboardService.save(dashboard);
+        Dashboard result=null;
+		try {
+			result = dashboardService.save(dashboard);
+		} catch (UniqueConstraintsException e) {
+			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", e.getMessage(), "Dashboard already exists with this name")).body(null);
+		}
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("dashboard", dashboard.getId().toString()))
             .body(result);
@@ -224,7 +235,11 @@ public class DashboardsResource {
 
             });
 
-        return ResponseEntity.ok(service.requestRelease(dashboardRelease));
+        try {
+			return ResponseEntity.ok(service.requestRelease(dashboardRelease));
+		} catch (UniqueConstraintsException e) {
+			 return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", e.getMessage(), "Dashboard already exists with this name")).body(null);
+		}
     }
 
     @GetMapping("/dashboards/{id}/releases")

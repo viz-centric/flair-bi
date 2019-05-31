@@ -4,6 +4,7 @@ import com.flair.bi.FlairbiApp;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.View;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.service.DashboardService;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class ViewServiceTests {
     private Long id;
 
     @Before
-    public void setup() {
+    public void setup() throws UniqueConstraintsException {
         Dashboard dashboard = new Dashboard();
         dashboard.setCategory("test");
         dashboard.setDashboardName("name");
@@ -45,9 +46,10 @@ public class ViewServiceTests {
      * Attempt to save valid view
      * <p>
      * expected result: View stored in persistence
+     * @throws UniqueConstraintsException 
      */
     @Test
-    public void saveValidTest() {
+    public void saveValidTest() throws UniqueConstraintsException {
 
         View view = new View();
 
@@ -63,9 +65,10 @@ public class ViewServiceTests {
      * Attempt to save View without view name
      * <p>
      * expected result : {@link ConstraintViolationException}
+     * @throws UniqueConstraintsException 
      */
     @Test(expected = ConstraintViolationException.class)
-    public void saveInvalidTest() {
+    public void saveInvalidTest() throws UniqueConstraintsException {
         View view = new View();
         view.setViewDashboard(dashboardService.findOne(id));
         viewService.save(view);

@@ -33,6 +33,7 @@ import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.UserService;
@@ -97,7 +98,7 @@ public class ReleaseResourceIntTest extends AbstractIntegrationTest {
     }
 
     @Before
-    public void initTest() {
+    public void initTest() throws UniqueConstraintsException {
         view = ViewResourceIntTest.createEntity(em, dashboardService);
         user = createUser(userService);
         SecurityContextHolder.getContext()

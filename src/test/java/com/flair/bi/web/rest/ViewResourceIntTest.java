@@ -12,6 +12,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
@@ -144,8 +145,9 @@ public class ViewResourceIntTest extends AbstractIntegrationTest {
      * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
+     * @throws UniqueConstraintsException 
      */
-    public static View createEntity(EntityManager em, DashboardService dashboardService) {
+    public static View createEntity(EntityManager em, DashboardService dashboardService) throws UniqueConstraintsException {
         View view = new View()
             .viewName(DEFAULT_VIEW_NAME)
             .description(DEFAULT_DESCRIPTION)
@@ -192,7 +194,7 @@ public class ViewResourceIntTest extends AbstractIntegrationTest {
     }
 
     @Before
-    public void initTest() {
+    public void initTest() throws UniqueConstraintsException {
         view = createEntity(em, dashboardService);
         user = createUser(userService);
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("dash-admin", "dash-admin"));

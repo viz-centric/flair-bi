@@ -5,6 +5,7 @@ import com.flair.bi.domain.*;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.ViewReleaseRepository;
 import com.flair.bi.repository.ViewRepository;
@@ -58,65 +59,66 @@ class ViewServiceImpl implements ViewService {
      *
      * @param views the entity to save
      * @return the persisted entity
+     * @throws UniqueConstraintsException 
      */
     @Override
-    public View save(View views) {
+    public View save(View views) throws UniqueConstraintsException {
         log.debug("Request to save View : {}", views);
         boolean create = null == views.getId();
         View view = views;
-
-        if (!create) {
-            view = viewRepository.getOne(views.getId());
-            view.setDescription(views.getDescription());
-            //view.setImage(views.getImage());
-            view.setImageContentType(views.getImageContentType());
-            view.setImageLocation(views.getImageLocation());
-
-            // changes of view being published or not can be only applied by user who has permission to do that
-            if (accessControlManager.hasAccess(view.getId().toString(), Action.TOGGLE_PUBLISH, "VIEW")) {
-                if (views.isPublished() && view.getCurrentRelease() != null) {
-                    view.setPublished(views.isPublished());
-                } else if (!views.isPublished()) {
-                    view.setPublished(views.isPublished());
-                }
-            }
-
-            view.setViewName(views.getViewName());
-            view.setViewDashboard(views.getViewDashboard());
-        } else {
-            // we temporary set the invalid id, because first we want to make sure that saving into couchdb was successfull
-            // and then fully commit on postgres.
-            // Because if error on couchdb occurs it will trigger postgres rollbacking.
-            ViewState vs = new ViewState();
-            vs.setId("temp");
-            view.setCurrentEditingState(vs);
+        View v=null;
+        try {
+	        if (!create) {
+	            view = viewRepository.getOne(views.getId());
+	            view.setDescription(views.getDescription());
+	            //view.setImage(views.getImage());
+	            view.setImageContentType(views.getImageContentType());
+	            view.setImageLocation(views.getImageLocation());
+	            // changes of view being published or not can be only applied by user who has permission to do that
+	            if (accessControlManager.hasAccess(view.getId().toString(), Action.TOGGLE_PUBLISH, "VIEW")) {
+	                if (views.isPublished() && view.getCurrentRelease() != null) {
+	                    view.setPublished(views.isPublished());
+	                } else if (!views.isPublished()) {
+	                    view.setPublished(views.isPublished());
+	                }
+	            }
+	            view.setViewName(views.getViewName());
+	            view.setViewDashboard(views.getViewDashboard());
+	        } else {
+	            // we temporary set the invalid id, because first we want to make sure that saving into couchdb was successfull
+	            // and then fully commit on postgres.
+	            // Because if error on couchdb occurs it will trigger postgres rollbacking.
+	            ViewState vs = new ViewState();
+	            vs.setId("temp");
+	            view.setCurrentEditingState(vs);
+	        }
+	        v = viewRepository.save(view);
+	        if (create) {
+	            Set<Permission> permissions = view.getPermissions();
+	            permissions = new HashSet<>(accessControlManager.addPermissions(permissions));
+	            final View vw = v;
+	            permissions
+	                .forEach(x -> accessControlManager.connectPermissions(x,
+	                    new Permission(vw.getViewDashboard().getId().toString(),
+	                        x.getAction(),
+	                        vw.getViewDashboard().getScope()),
+	                    x.getAction().equals(Action.READ) ||
+	                        x.getAction().equals(Action.REQUEST_PUBLISH) ||
+	                        x.getAction().equals(Action.MANAGE_PUBLISH) ||
+	                        x.getAction().equals(Action.READ_PUBLISHED), true));
+	
+	            ViewState viewState = new ViewState();
+	            viewStateCouchDbRepository.add(viewState);
+	
+	            v.setCurrentEditingState(viewState);
+	            v = viewRepository.save(v);
+	        }
+        }catch(Exception e) {
+        	log.error("error occured while saving view : "+e.getMessage());
+        	if(e.getMessage().contains("view_name_unique")) {
+        		throw new UniqueConstraintsException("uniqueError");
+        	}
         }
-
-        View v = viewRepository.save(view);
-
-
-        if (create) {
-            Set<Permission> permissions = view.getPermissions();
-            permissions = new HashSet<>(accessControlManager.addPermissions(permissions));
-            final View vw = v;
-            permissions
-                .forEach(x -> accessControlManager.connectPermissions(x,
-                    new Permission(vw.getViewDashboard().getId().toString(),
-                        x.getAction(),
-                        vw.getViewDashboard().getScope()),
-                    x.getAction().equals(Action.READ) ||
-                        x.getAction().equals(Action.REQUEST_PUBLISH) ||
-                        x.getAction().equals(Action.MANAGE_PUBLISH) ||
-                        x.getAction().equals(Action.READ_PUBLISHED), true));
-
-            ViewState viewState = new ViewState();
-            viewStateCouchDbRepository.add(viewState);
-
-            v.setCurrentEditingState(viewState);
-            v = viewRepository.save(v);
-        }
-
-
         return v;
     }
 

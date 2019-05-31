@@ -30,7 +30,8 @@
             "error": {
                 "searched": "Error loading searched dashboards"
             },
-            "selectDatasource": "Search Available Data Sources"
+            "selectDatasource": "Search Available Data Sources",
+            "uniqueError" : "Dashboard already exists with this name"
         }
     }
 }

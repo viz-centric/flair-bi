@@ -4,6 +4,7 @@ import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.*;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.DashboardReleaseRepository;
 import com.flair.bi.repository.DashboardRepository;
 import com.flair.bi.repository.UserRepository;
@@ -61,70 +62,69 @@ public class DashboardServiceImpl implements DashboardService {
      * @return the persisted entity
      */
     @Override
-    public Dashboard save(Dashboard dashboard) {
+    public Dashboard save(Dashboard dashboard) throws UniqueConstraintsException {
         log.debug("Request to save Dashboard : {}", dashboard);
 
-        boolean create = dashboard.getId() == null;
-
-
-        if (!create) {
-            Dashboard old = dashboardRepository.findOne(dashboard.getId());
-
-
-            // we want to change the published version in case they are non null and different
-            if (old.getCurrentRelease() != null &&
-                dashboard.getCurrentRelease() != null &&
-                !old.getCurrentRelease().equals(dashboard.getCurrentRelease())) {
-
-                old = this.changeCurrentReleaseVersion(dashboard.getId(),
-                    dashboard.getCurrentRelease().getVersionNumber());
-
-            }
-
-            //change other attributes
-            old.setDashboardName(dashboard.getDashboardName());
-            old.setDescription(dashboard.getDescription());
-            //old.setImage(dashboard.getImage());
-            old.setImageContentType(dashboard.getImageContentType());
-            old.setImageLocation(dashboard.getImageLocation());
-            old.setCategory(dashboard.getCategory());
-            old.setDashboardDatasource(dashboard.getDashboardDatasource());
-
-            // changes of view being published or not can be only applied by user who has permission to do that
-            if (accessControlManager.hasAccess(dashboard.getId().toString(), Action.TOGGLE_PUBLISH, "DASHBOARD")) {
-                if (dashboard.isPublished() && old.getCurrentRelease() != null) {
-                    updatePublishState(old, dashboard.isPublished());
-                } else if (!dashboard.isPublished()) {
-                    updatePublishState(old, dashboard.isPublished());
-                }
-            }
-
-            dashboard = dashboardRepository.save(old);
+        try {
+	        boolean create = dashboard.getId() == null;
+	        if (!create) {
+	            Dashboard old = dashboardRepository.findOne(dashboard.getId());
+	            // we want to change the published version in case they are non null and different
+	            if (old.getCurrentRelease() != null &&
+	                dashboard.getCurrentRelease() != null &&
+	                !old.getCurrentRelease().equals(dashboard.getCurrentRelease())) {
+	                old = this.changeCurrentReleaseVersion(dashboard.getId(),
+	                    dashboard.getCurrentRelease().getVersionNumber());
+	
+	            }
+	            //change other attributes
+	            old.setDashboardName(dashboard.getDashboardName());
+	            old.setDescription(dashboard.getDescription());
+	            //old.setImage(dashboard.getImage());
+	            old.setImageContentType(dashboard.getImageContentType());
+	            old.setImageLocation(dashboard.getImageLocation());
+	            old.setCategory(dashboard.getCategory());
+	            old.setDashboardDatasource(dashboard.getDashboardDatasource());
+	            // changes of view being published or not can be only applied by user who has permission to do that
+	            if (accessControlManager.hasAccess(dashboard.getId().toString(), Action.TOGGLE_PUBLISH, "DASHBOARD")) {
+	                if (dashboard.isPublished() && old.getCurrentRelease() != null) {
+	                    updatePublishState(old, dashboard.isPublished());
+	                } else if (!dashboard.isPublished()) {
+	                    updatePublishState(old, dashboard.isPublished());
+	                }
+	            }
+	            dashboard = dashboardRepository.save(old);
+	        }
+	        if (create) {
+	            dashboard = dashboardRepository.save(dashboard);
+	
+	            final Collection<Permission> savedPerms = accessControlManager.addPermissions(dashboard.getPermissions());
+	            // owner gets all permissions except able to delete published dashboard and managing dashboard release requests
+	            accessControlManager.grantAccess(SecurityUtils.getCurrentUserLogin(), savedPerms
+	                .stream()
+	                .filter(x -> !x.getAction().equals(Action.DELETE_PUBLISHED)
+	                    && !x.getAction().equals(Action.MANAGE_PUBLISH)
+	                    && !x.getAction().equals(Action.TOGGLE_PUBLISH))
+	                .collect(Collectors.toList()));
+	            accessControlManager.assignPermissions(AuthoritiesConstants.ADMIN, savedPerms);
+	
+	            if (!dashboard.getDashboardViews().isEmpty()) {
+	                // if there are also views add them
+	                dashboard.getDashboardViews().forEach(t -> {
+						try {
+							viewService.save(t);
+						} catch (UniqueConstraintsException e) {
+							log.error("error occured while saving view : "+e.getMessage());
+						}
+					});
+	            }
+	        }
+        }catch(Exception e) {
+        	log.error("error occured while saving dashboard : "+e.getMessage());
+        	if(e.getMessage().contains("dashboard_name_unique")) {
+        		throw new UniqueConstraintsException("uniqueError");
+        	}
         }
-
-
-        if (create) {
-            dashboard = dashboardRepository.save(dashboard);
-
-            final Collection<Permission> savedPerms = accessControlManager.addPermissions(dashboard.getPermissions());
-
-
-            // owner gets all permissions except able to delete published dashboard and managing dashboard release requests
-            accessControlManager.grantAccess(SecurityUtils.getCurrentUserLogin(), savedPerms
-                .stream()
-                .filter(x -> !x.getAction().equals(Action.DELETE_PUBLISHED)
-                    && !x.getAction().equals(Action.MANAGE_PUBLISH)
-                    && !x.getAction().equals(Action.TOGGLE_PUBLISH))
-                .collect(Collectors.toList()));
-            accessControlManager.assignPermissions(AuthoritiesConstants.ADMIN, savedPerms);
-
-            if (!dashboard.getDashboardViews().isEmpty()) {
-                // if there are also views add them
-                dashboard.getDashboardViews().forEach(viewService::save);
-            }
-        }
-
-
         return dashboard;
     }
 
@@ -139,7 +139,13 @@ public class DashboardServiceImpl implements DashboardService {
         dashboard.getDashboardViews()
             .stream()
             .peek(x -> x.setPublished(value))
-            .forEach(viewService::save);
+            .forEach(t -> {
+				try {
+					viewService.save(t);
+				} catch (UniqueConstraintsException e) {
+					log.error("error occured while saving view : "+e.getMessage());
+				}
+			});
     }
 
     /**

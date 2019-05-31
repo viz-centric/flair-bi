@@ -6,6 +6,7 @@ import com.flair.bi.domain.Release;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.DashboardReleaseRepository;
 import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
@@ -150,9 +151,10 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
      *
      * @param release release to be requested
      * @return created request for given release
+     * @throws UniqueConstraintsException 
      */
     @Override
-    public ReleaseRequest requestRelease(Release release) {
+    public ReleaseRequest requestRelease(Release release) throws UniqueConstraintsException {
         if (release instanceof DashboardRelease) {
             return dashboardReleaseReleaseRequestProcessor.requestRelease((DashboardRelease) release);
         } else if (release instanceof ViewRelease) {

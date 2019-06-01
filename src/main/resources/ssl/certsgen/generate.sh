@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #mkdir -p ~/tmp/sslcert
 # Changes these CN's to match your hosts in your environment if needed.
-SERVER_CN=engine
-CLIENT_CN=bi # Used when doing mutual TLS
+SERVER_CN=flair-engine-grpc
+CLIENT_CN=flair-bi # Used when doing mutual TLS
 
 echo Generate CA key:
 openssl genrsa -passout pass:1111 -des3 -out ca.key 4096

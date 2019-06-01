@@ -3,6 +3,9 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.VisualizationColorsService;
+import com.flair.bi.service.dto.VisualizationColorsDTO;
+import com.flair.bi.service.dto.VisualizationConfigurationDTO;
 import com.flair.bi.view.VisualMetadataService;
 import com.flair.bi.view.VisualMetadataValidationService;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
@@ -43,6 +46,7 @@ public class VisualMetadataResource {
     private final VisualMetadataService visualMetadataService;
     private final VisualMetadataValidationService visualMetadataValidationService;
     private final SchedulerService schedulerService;
+    private final VisualizationColorsService visualizationColorsService;
     
     @PostMapping("/visualmetadata/validate")
     @Timed
@@ -163,10 +167,9 @@ public class VisualMetadataResource {
      */
     @GetMapping("/external/visualMetaDataById/{id}")
     @Timed
-    public ResponseEntity<VisualMetadata> getVisualMetadataExternal(@PathVariable String id) {
+    public ResponseEntity<VisualizationConfigurationDTO> getVisualMetadataExternal(@PathVariable String id) {
         log.debug("REST request to get VisualMetadata : {}", id);
-        VisualMetadata visualMetadata = visualMetadataService.findOne(id);
-        return Optional.ofNullable(visualMetadata)
+        return Optional.ofNullable(new VisualizationConfigurationDTO(visualMetadataService.findOne(id), visualizationColorsService.findAll()))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))

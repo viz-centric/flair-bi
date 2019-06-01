@@ -49,8 +49,10 @@
 
         function logout() {
             collapseNavbar();
-            Auth.logout();
-            $state.go('login');
+            Auth.logout()
+                .then(function () {
+                    $state.go('login');
+                });
         }
 
         function toggleNavbar() {

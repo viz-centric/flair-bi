@@ -132,9 +132,11 @@
         ////////////////
 
         function activate() {
-            $rootScope.updateWidget={} 
+            $rootScope.updateWidget={}
+            if(!VisualDispatchService.getApplyBookmark()){
+                filterParametersService.clear();
+            }
             VisualMetadataContainer.clear();
-            filterParametersService.clear();
             VisualDispatchService.clearAll();
 
             if (configuration.readOnly) {
@@ -181,7 +183,6 @@
         }
 
         function connectWebSocket() {
-            console.log('flair-bi controller connect web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function(frame) {
@@ -192,13 +193,11 @@
             );
 
             $scope.$on("$destroy", function (event) {
-                console.log('flair-bi controller destorying web socket');
                 stompClientService.disconnect();
             });
         }
 
         function onExchangeMetadataError(data) {
-            console.log('controller on metadata error', data);
             var body = JSON.parse(data.body || '{}');
             if(body.description==="io exception"){
                 var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
@@ -215,7 +214,6 @@
         }
 
         function onExchangeMetadata(data) {
-            console.log('controller on metadata', data);
             var metaData = JSON.parse(data.body);
             if (data.headers.request === "filters") {
                 $rootScope.$broadcast(
@@ -1104,10 +1102,24 @@
                     },
                     viewName: function(){
                         return vm.view.viewName;
+                    },
+                    dashboardName: function(){
+                        return vm.view.viewDashboard.dashboardName;
+                    },
+                    viewName: function(){
+                        return vm.view.viewName
+                    },
+                    shareLink: function() {
+                        return ShareLinkService.createLink(
+                            v.getSharePath(vm.datasource)
+                        );
                     }
                 }
             }).result.then(function () { }, function () { });
 
         }
+        angular.element(document).ready(function () {
+            VisualDispatchService.setApplyBookmark(false);
+        });
     }
 })();

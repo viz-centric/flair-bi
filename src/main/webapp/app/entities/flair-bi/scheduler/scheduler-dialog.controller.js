@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels','dashboardName','shareLink'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels,dashboardName,shareLink) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -36,7 +36,10 @@
                 "source_id":"",
                 "subject":"",
                 "title_name":"",
-                "mail_body":null
+                "mail_body":null,
+                "dashboard_name":"",
+                "view_name":"",
+                "share_link":""
             },
             "report_line_item": {
                 "visualizationid":"",
@@ -48,7 +51,6 @@
             },
             "assign_report": {
                 "channel": "",
-                "condition": "test",
                 "email_list":[]
             },
             "schedule": {
@@ -67,10 +69,9 @@
             vm.visualMetaData = visualMetaData;
             getScheduleReport(visualMetaData.id);
             vm.datasource= datasource;
-            vm.viewName=viewName;
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            buildScheduleObject(vm.visualMetaData,vm.datasource);
+            buildScheduleObject(vm.visualMetaData,vm.datasource,dashboardName,viewName,shareLink);
             //vm.users=User.query();this will be used in future
             var cronstrue = window.cronstrue;
         }
@@ -94,8 +95,11 @@
             }); 
         }
 
-        function buildScheduleObject(visualMetaData,datasource){
+        function buildScheduleObject(visualMetaData,datasource,dashboardName,viewName,shareLink){
         //report's data
+        vm.scheduleObj.report.dashboard_name=dashboardName;
+        vm.scheduleObj.report.view_name=viewName;
+        vm.scheduleObj.report.share_link=shareLink;
         vm.scheduleObj.datasourceid=datasource.id;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);
         vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;

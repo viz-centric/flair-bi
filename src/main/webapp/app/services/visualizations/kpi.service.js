@@ -33,12 +33,12 @@
                     result['kpiIconFontWeight'] = [];
                     result['kpiIconColor'] = [];
                     result['kpiIconExpression'] = [];
-
+                    result['FontSizeforDisplayName'] = [];
                     for (var i = 0; i < measures.length; i++) {
                         result['kpiDisplayName'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
-                            result['dimension'][i]
-                            );
+                            result['measure'][i]
+                        );
                         result['kpiAlignment'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text alignment'));
                         result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                         result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
@@ -51,6 +51,7 @@
                         result['kpiIconFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font weight'));
                         result['kpiIconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon colour'));
                         result['kpiIconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
+                        result['FontSizeforDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size for diplay name'));
                     }
                     return result;
                 }
@@ -58,7 +59,8 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var kpi = $rootScope.updateWidget[record.id];
-                        kpi.update(record.data);
+                        kpi.config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     d3.select(element[0]).html('')

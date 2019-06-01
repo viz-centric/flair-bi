@@ -54,9 +54,9 @@ public class FbEngineWebSocketService {
         HashMap<String, Object> header = new HashMap<>();
         header.put("queryId", queryResponse.getQueryId());
         header.put("userId", queryResponse.getUserId());
-        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/sampleMetaData", queryResponse.getData(), header);
+        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
     }
-    
+
     /**
      * Send meta to users subscribed on channel "/user/exchange/metaData".
      * <p>

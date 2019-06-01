@@ -10,10 +10,11 @@
     function schedulerService($http) {
         var service = {
             scheduleReport: scheduleReport,
-            getScheduleReports:getScheduleReports,
+            getSchedulerReportsAndEngineData:getSchedulerReportsAndEngineData,
             getScheduledReportsCount:getScheduledReportsCount,
             getScheduleReport:getScheduleReport,
-            cancelScheduleReport:cancelScheduleReport
+            cancelScheduleReport:cancelScheduleReport,
+            getSchedulerReports:getSchedulerReports
         };
 
         return service;
@@ -27,8 +28,15 @@
             });
         }
 
-        function getScheduleReports(pageSize,page) {
+        function getSchedulerReportsAndEngineData(pageSize,page) {
             $http({
+                url: 'api/schedule/reports/engine/'+pageSize+'/'+page,
+                method: 'GET'
+            });
+        }
+
+        function getSchedulerReports(pageSize,page) {
+            return $http({
                 url: 'api/schedule/reports/'+pageSize+'/'+page,
                 method: 'GET'
             });

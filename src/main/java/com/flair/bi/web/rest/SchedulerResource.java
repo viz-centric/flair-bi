@@ -143,8 +143,6 @@ public class SchedulerResource {
 		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
-		schedulerDTO.getReport().setConnection_name(datasource.getName());
-		schedulerDTO.getReport().setSource_id(datasource.getConnectionName());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
@@ -255,22 +253,39 @@ public class SchedulerResource {
 		return schedulerNotificationDTO;
 	}
 
-    @GetMapping("/schedule/reports/{pageSize}/{page}")
+    @GetMapping("/schedule/reports/engine/{pageSize}/{page}")
     @Timed
-    public void getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
+    public void getSchedulerReportsAndEngineData(@PathVariable Integer pageSize,@PathVariable Integer page)
         throws URISyntaxException {
     	RestTemplate restTemplate = new RestTemplate();
     try {
-		ResponseEntity<List<SchedulerNotificationResponseDTO>> ResponseEntity =
+		ResponseEntity<List<SchedulerNotificationResponseDTO>> responseEntity =
 		restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsUrl),
 		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
 		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
-		List<SchedulerNotificationResponseDTO> reports = ResponseEntity.getBody();
+		List<SchedulerNotificationResponseDTO> reports = responseEntity.getBody();
 		for(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO :reports) {
 			pushToSocket(schedulerNotificationResponseDTO);
 		}
 	} catch (Exception e) {
 		log.error("error occured while fetching reports:"+e.getMessage());
+	}
+    }
+    
+    @GetMapping("/schedule/reports/{pageSize}/{page}")
+    @Timed
+    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
+        throws URISyntaxException {
+    	RestTemplate restTemplate = new RestTemplate();
+    try {
+		ResponseEntity<List<SchedulerNotificationResponseDTO>> responseEntity =
+		restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsUrl),
+		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
+		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
+		return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+	} catch (Exception e) {
+		log.error("error occured while fetching reports:"+e.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
     }
     

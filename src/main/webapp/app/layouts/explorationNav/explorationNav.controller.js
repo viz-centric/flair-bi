@@ -132,8 +132,10 @@
 
         function logout() {
             collapseNavbar();
-            Auth.logout();
-            $state.go('home');
+            Auth.logout()
+                .then(function () {
+                    $state.go('home');
+                });
         }
 
         function toggleNavbar() {

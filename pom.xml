@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>0.0.58-SNAPSHOT</version>
+    <version>0.0.63-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>com.project.bi</groupId>
             <artifactId>flair-messages</artifactId>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </dependency>
         <dependency>
             <groupId>com.project.bi</groupId>

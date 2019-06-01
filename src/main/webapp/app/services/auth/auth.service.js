@@ -129,8 +129,9 @@
 
 
         function logout() {
-            AuthServerProvider.logout();
+            var promise = AuthServerProvider.logout();
             Principal.authenticate(null);
+            return promise;
         }
 
         function resetPasswordFinish(keyAndPassword, callback) {

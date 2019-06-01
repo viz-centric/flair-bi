@@ -18,8 +18,7 @@
         return service;
 
         function getToken() {
-            var token = $localStorage.authenticationToken;
-            return token;
+            return $localStorage.authenticationToken;
         }
 
         function hasValidToken() {
@@ -37,8 +36,14 @@
         }
 
         function logout() {
-            // logout from the server
-            delete $localStorage.authenticationToken;
+            console.log('logout requested');
+            return $http
+                .get("api/logout")
+                .success(function(response) {
+                    console.log('logout successful');
+                    delete $localStorage.authenticationToken;
+                    return response;
+                });
         }
     }
 })();

@@ -3,21 +3,18 @@ package com.flair.bi.web.rest;
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.QDatasource;
-import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.DeleteInfo;
 import com.flair.bi.service.dto.ListTablesResponseDTO;
-import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.flair.bi.web.rest.dto.DatasourceDTO;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,11 +27,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isNull;
-import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -151,15 +148,20 @@ public class DatasourcesResourceTest extends AbstractIntegrationTest {
 		datasourceWithId.setQueryPath("querypath");
 		datasourceWithId.setId(1L);
 		when(datasourceService.findAll(any(Predicate.class))).thenReturn(Arrays.asList(datasourceWithId));
+		ConnectionDTO connectionDTO = new ConnectionDTO();
+		connectionDTO.setId(77L);
+		connectionDTO.setLinkId("connName");
+		when(grpcConnectionService.getAllConnections(any(ConnectionFilterParamsDTO.class))).thenReturn(Arrays.asList(connectionDTO));
 
-		ResponseEntity<Datasource[]> response = restTemplate
+		ResponseEntity<DatasourceDTO[]> response = restTemplate
 				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/datasources", HttpMethod.GET, new HttpEntity<>(datasourceWithId), Datasource[].class);
+				.exchange(getUrl() + "/api/datasources", HttpMethod.GET, new HttpEntity<>(datasourceWithId), DatasourceDTO[].class);
 
-		Datasource ds = response.getBody()[0];
+		DatasourceDTO ds = response.getBody()[0];
 		assertEquals(1L, (long) ds.getId());
 		assertEquals("dbname", ds.getName());
 		assertEquals("connName", ds.getConnectionName());
+		assertEquals(77L, (long)ds.getConnectionId());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 

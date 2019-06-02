@@ -45,6 +45,49 @@
             <label class="control-label" for="field_connectionPassword"> Password</label>
             <input type="password" class="form-control" name="connectionPassword" id="field_connectionPassword" ng-model="vm.connection.connectionPassword">
         </div>
+
+        <p class="wizard-help-text">Configure cache</p>
+
+        <div class="form-group">
+            <label class="control-label">
+                Enable cache
+            </label>
+            <input name="cacheEnabled-checkbox-input"
+                   ng-model="vm.connection.connectionParameters.cacheEnabled"
+                   class="form-control"
+                   type="checkbox">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Purge after minutes</label>
+            <input ng-disabled="!vm.connection.connectionParameters.cacheEnabled"
+                   name="cachePurgeAfterMinutes-number-input"
+                   ng-model="vm.connection.connectionParameters.cachePurgeAfterMinutes"
+                   class="form-control"
+                   type="number"
+                   string-to-number
+                   ng-required="vm.connection.connectionParameters.cacheEnabled">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Refresh after times read</label>
+            <input ng-disabled="!vm.connection.connectionParameters.cacheEnabled"
+                   name="refreshAfterTimesRead-number-input"
+                   ng-model="vm.connection.connectionParameters.refreshAfterTimesRead"
+                   class="form-control"
+                   type="number"
+                   string-to-number
+                   ng-required="vm.connection.connectionParameters.cacheEnabled">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Refresh after minutes</label>
+            <input ng-disabled="!vm.connection.connectionParameters.cacheEnabled"
+                   name="refreshAfterMinutes-number-input"
+                   ng-model="vm.connection.connectionParameters.refreshAfterMinutes"
+                   class="form-control"
+                   type="number"
+                   string-to-number
+                   ng-required="vm.connection.connectionParameters.cacheEnabled">
+        </div>
+
         <connection-property-component connection="vm.connection" form='connectionForm' c-property="cp" ng-repeat="cp in vm.connection.connectionType.connectionPropertiesSchema.connectionProperties | orderBy: 'order'"></connection-property-component>
 
     </div>

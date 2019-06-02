@@ -20,7 +20,7 @@
         $stateParams
     ) {
         var vm = this;
-        vm.connection = entity;
+        vm.connection = createConnection(entity);
         vm.clear = clear;
         vm.save = save;
 
@@ -29,6 +29,17 @@
         ////////////////
 
         function activate() {}
+
+        function createConnection(connection) {
+            if (!connection) {
+                return connection;
+            }
+            connection = angular.copy(connection);
+            if (connection.connectionParameters) {
+                connection.connectionParameters.cacheEnabled = connection.connectionParameters.cacheEnabled === "true";
+            }
+            return connection;
+        }
 
         function clear() {
             $uibModalInstance.dismiss("cancel");

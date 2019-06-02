@@ -182,6 +182,10 @@
                     <span>Query Path</span>
                     <span class="fa fa-sort"></span>
                 </th>
+                <th jh-sort-by="actions">
+                    <span>Actions</span>
+                    <span class="fa fa-sort"></span>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -192,6 +196,22 @@
                 <td>{{datasource.name}}</td>
                 <td>{{datasource.connectionName}}</td>
                 <td>{{datasource.queryPath}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit" ui-sref="connection-detail({connectionLinkId: datasource.connectionName})"
+                                class="btn btn-default btn-sm">
+                            <span class="fa fa-eye view-icon fa-2x"></span>
+                        </button>
+                        &nbsp;
+                        <button type="submit" ui-sref="connection.edit({connectionId:datasource.connectionId})" class="btn btn-default btn-sm">
+                            <span class="fa fa-edit edit-icon fa-2x"></span>
+                        </button>
+                        &nbsp;
+                        <button type="submit" ui-sref="connection.delete({connectionId:datasource.connectionId})" class="btn btn-default btn-sm">
+                            <span class="fa fa-trash delete-icon fa-2x"></span>
+                        </button>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>

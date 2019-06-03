@@ -92,11 +92,17 @@
             Principal.identity(true);    
         }
 
-        function onSaveError() {
+        function onSaveError(error) {
             vm.isSaving = false;
-            $rootScope.showErrorSingleToast({
-                text: $translate.instant('flairbiApp.views.errorSaving')
-            });
+            if(error.data.message=='uniqueError'){
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('flairbiApp.views.'+error.data.message)
+                });        
+            }else{
+                $rootScope.showErrorSingleToast({
+                    text: $translate.instant('flairbiApp.views.errorSaving')
+                });            
+            }
         }
 
         $scope.moveToOverview = function(info) {

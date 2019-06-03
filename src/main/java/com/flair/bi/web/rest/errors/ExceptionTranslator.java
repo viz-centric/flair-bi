@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.flair.bi.exception.UniqueConstraintsException;
+
 import java.util.List;
 
 /**
@@ -43,6 +45,13 @@ public class ExceptionTranslator {
         List<FieldError> fieldErrors = result.getFieldErrors();
 
         return processFieldErrors(fieldErrors);
+    }
+    
+    @ExceptionHandler(UniqueConstraintsException.class)
+    @ResponseStatus(code = HttpStatus.CONFLICT,reason=ErrorConstants.UNIQUE_CONSTRAINTS_ERROR)
+    @ResponseBody
+    public ErrorVM processValidationError(UniqueConstraintsException ex) {
+    	return new ErrorVM(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR,ex.getMessage());
     }
 
     @ExceptionHandler(CustomParameterizedException.class)

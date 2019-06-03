@@ -27,7 +27,8 @@
             "searchTitle": "Search result for views",
             "error": {
                 "searched": "Error loading searched views"
-            }
+            },
+            "uniqueError" : "View already exists with this name"
         }
     }
 }

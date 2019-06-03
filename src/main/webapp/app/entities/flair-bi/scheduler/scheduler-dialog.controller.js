@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','viewName','scheduler_channels','dashboardName','shareLink'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','shareLink'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,viewName,scheduler_channels,dashboardName,shareLink) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,shareLink) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -39,7 +39,9 @@
                 "mail_body":null,
                 "dashboard_name":"",
                 "view_name":"",
-                "share_link":""
+                "share_link":"",
+                "dashboard_id":0,
+                "view_id":0
             },
             "report_line_item": {
                 "visualizationid":"",
@@ -71,7 +73,7 @@
             vm.datasource= datasource;
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            buildScheduleObject(vm.visualMetaData,vm.datasource,dashboardName,viewName,shareLink);
+            buildScheduleObject(vm.visualMetaData,vm.datasource,dashboard,view,shareLink);
             //vm.users=User.query();this will be used in future
             var cronstrue = window.cronstrue;
         }
@@ -95,10 +97,12 @@
             }); 
         }
 
-        function buildScheduleObject(visualMetaData,datasource,dashboardName,viewName,shareLink){
+        function buildScheduleObject(visualMetaData,datasource,dashboard,view,shareLink){
         //report's data
-        vm.scheduleObj.report.dashboard_name=dashboardName;
-        vm.scheduleObj.report.view_name=viewName;
+        vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
+        vm.scheduleObj.report.view_name=view.viewName;
+        vm.scheduleObj.report.dashboard_id=dashboard.id;
+        vm.scheduleObj.report.view_id=view.id;
         vm.scheduleObj.report.share_link=shareLink;
         vm.scheduleObj.datasourceid=datasource.id;
         vm.scheduleObj.report.report_name=getReportName(visualMetaData);

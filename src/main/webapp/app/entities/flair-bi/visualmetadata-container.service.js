@@ -79,8 +79,6 @@
 
         function addConfigs(widgetNew,widgetOld){
             angular.forEach(widgetNew, function(value, key) {
-                console.log("key="+key);
-                console.log("value="+value);
                 if(key!=='$promise' && key!=='$resolved')
                     widgetOld[key]=value;
             });

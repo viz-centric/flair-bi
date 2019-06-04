@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-md-3">
                         <ui-select required ng-model="constraint.featureName" theme="bootstrap" ng-disabled="!vm.datasourceConstraint.datasource">
-                            <ui-select-match placeholder="Select Feature" allow-clear="true">
+                            <ui-select-match placeholder="Select Fields" allow-clear="true">
                                 {{constraint.featureName}}
                             </ui-select-match>
                             <ui-select-choices repeat="feature.name as feature in vm.features">

@@ -134,6 +134,7 @@
             registerFilterEvent();
             registerResizeWidgetEvent();
             registerUpdateWidgetEvent();
+            registerIdChanges();
 
         }
 
@@ -143,6 +144,19 @@
             }, function (newVal, oldVal) {
                 if (vm.canBuild) {
                     build(true);
+                }
+            });
+        }
+
+
+        function registerIdChanges() {
+            $scope.$watch(function () {
+                return vm.id;
+            }, function (newVal, oldVal) {
+                if(newVal!==oldVal){
+                    vm.id=newVal;
+                    registerResizeWidgetEvent();
+                    registerUpdateWidgetEvent();
                 }
             });
         }

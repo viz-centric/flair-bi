@@ -71,9 +71,19 @@
                 $rootScope.$broadcast("update-widget-content-" + id);
             }else{
                 var w = angular.copy(widget);
-                w.visualBuildId = w.visualBuildId || w.id;               
-                visualMetadataContainer[index]=new VisualWrap(w);
+                w.visualBuildId = w.visualBuildId || w.id;
+                addConfigs(w,visualMetadataContainer[index]);
+                $rootScope.$broadcast("update-widget-content-" + id);
             }
+        }
+
+        function addConfigs(widgetNew,widgetOld){
+            angular.forEach(widgetNew, function(value, key) {
+                console.log("key="+key);
+                console.log("value="+value);
+                if(key!=='$promise' && key!=='$resolved')
+                    widgetOld[key]=value;
+            });
         }
 
         /**

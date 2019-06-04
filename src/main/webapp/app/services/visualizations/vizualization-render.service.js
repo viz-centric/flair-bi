@@ -121,11 +121,13 @@
         }
 
         function setMetaData(v, metadata, contentId) {
-            addWidgets();
-            vm.data = v;
-            vm.data.data = metadata.data;
-            vm.widget = v.metadataVisual.functionname;
-            createWidget(vm.data, contentId);
+            if(v){
+                addWidgets();
+                vm.data = v;
+                vm.data.data = metadata.data;
+                vm.widget = v.metadataVisual.functionname;
+                createWidget(vm.data, contentId);
+            }
         }
 
 

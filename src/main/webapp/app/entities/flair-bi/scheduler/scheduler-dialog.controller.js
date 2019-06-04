@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','shareLink'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','shareLink','ShareLinkService'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,shareLink) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,shareLink,ShareLinkService) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -40,8 +40,7 @@
                 "dashboard_name":"",
                 "view_name":"",
                 "share_link":"",
-                "dashboard_id":0,
-                "view_id":0
+                "build_url":""
             },
             "report_line_item": {
                 "visualizationid":"",
@@ -99,18 +98,27 @@
 
         function buildScheduleObject(visualMetaData,datasource,dashboard,view,shareLink){
         //report's data
-        vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
-        vm.scheduleObj.report.view_name=view.viewName;
-        vm.scheduleObj.report.dashboard_id=dashboard.id;
-        vm.scheduleObj.report.view_id=view.id;
-        vm.scheduleObj.report.share_link=shareLink;
-        vm.scheduleObj.datasourceid=datasource.id;
-        vm.scheduleObj.report.report_name=getReportName(visualMetaData);
-        vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-        vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
-        setDimentionsAndMeasures(visualMetaData.fields);
+            vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
+            vm.scheduleObj.report.view_name=view.viewName;
+            vm.scheduleObj.report.build_url=builUrl(dashboard,view);
+            vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
+            vm.scheduleObj.datasourceid=datasource.id;
+            vm.scheduleObj.report.report_name=getReportName(visualMetaData);
+            vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
+            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            setDimentionsAndMeasures(visualMetaData.fields);
         
-    }
+        }
+
+        function getShareLink(visualMetaData,datasource) {
+            return ShareLinkService.createLink(
+                visualMetaData.getSharePath(datasource)
+            );
+        }
+
+        function builUrl(dashboard,view){
+            return ShareLinkService.createLink("/dashboards/"+dashboard.id+"/views/"+view.id+"/build");
+        }
 
         function getReportName(visualMetaData){
             var reportName= visualMetaData.metadataVisual.name.split(' ').join('-')+'-'+visualMetaData.id;

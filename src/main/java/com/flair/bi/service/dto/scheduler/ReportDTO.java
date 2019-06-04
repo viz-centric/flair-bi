@@ -10,8 +10,7 @@ private String title_name;
 private String dashboard_name;
 private String view_name;
 private String share_link;
-private String dashboard_id;
-private String view_id;
+private String build_url;
 
 public ReportDTO(){}
 
@@ -80,29 +79,19 @@ public void setShare_link(String share_link) {
 	this.share_link = share_link;
 }
 
-
-public String getDashboard_id() {
-	return dashboard_id;
+public String getBuild_url() {
+	return build_url;
 }
 
-public void setDashboard_id(String dashboard_id) {
-	this.dashboard_id = dashboard_id;
-}
-
-public String getView_id() {
-	return view_id;
-}
-
-public void setView_id(String view_id) {
-	this.view_id = view_id;
+public void setBuild_url(String build_url) {
+	this.build_url = build_url;
 }
 
 @Override
 public String toString() {
 	return "ReportDTO [userid=" + userid + ", mail_body=" + mail_body + ", subject=" + subject + ", report_name="
 			+ report_name + ", title_name=" + title_name + ", dashboard_name=" + dashboard_name + ", view_name="
-			+ view_name + ", share_link=" + share_link + ", dashboard_id=" + dashboard_id + ", view_id=" + view_id
-			+ "]";
+			+ view_name + ", share_link=" + share_link + ", build_url=" + build_url + "]";
 }
 
 }

@@ -1100,14 +1100,11 @@
                     datasource: function(){
                         return vm.datasource;
                     },
-                    viewName: function(){
-                        return vm.view.viewName;
+                    view: function(){
+                        return vm.view;
                     },
-                    dashboardName: function(){
-                        return vm.view.viewDashboard.dashboardName;
-                    },
-                    viewName: function(){
-                        return vm.view.viewName
+                    dashboard: function(){
+                        return vm.view.viewDashboard;
                     },
                     shareLink: function() {
                         return ShareLinkService.createLink(

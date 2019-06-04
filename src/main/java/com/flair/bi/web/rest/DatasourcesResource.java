@@ -6,10 +6,12 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.DeleteInfo;
 import com.flair.bi.service.dto.ListTablesResponseDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.flair.bi.web.rest.dto.DatasourceDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
@@ -40,7 +42,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Datasource.
@@ -107,9 +111,30 @@ public class DatasourcesResource {
      */
     @GetMapping("/datasources")
     @Timed
-    public List<Datasource> getAllDatasources(@QuerydslPredicate(root = Datasource.class) Predicate predicate) {
+    public List<DatasourceDTO> getAllDatasources(@QuerydslPredicate(root = Datasource.class) Predicate predicate) {
         log.debug("REST request to get all Datasource");
-        return datasourceService.findAll(predicate);
+        List<Datasource> datasourceList = datasourceService.findAll(predicate);
+        List<ConnectionDTO> connectionServiceAllConnections = grpcConnectionService.getAllConnections(new ConnectionFilterParamsDTO());
+        return datasourceList.stream()
+                .map(datasource -> {
+                    Optional<ConnectionDTO> optionalConnection = connectionServiceAllConnections.stream()
+                            .filter(it -> Objects.equals(it.getLinkId(), datasource.getConnectionName()))
+                            .findFirst();
+                    return DatasourceDTO.builder()
+                            .connectionName(datasource.getConnectionName())
+                            .dashboardSet(datasource.getDashboardSet())
+                            .datasourceConstraints(datasource.getDatasourceConstraints())
+                            .features(datasource.getFeatures())
+                            .hierarchies(datasource.getHierarchies())
+                            .lastUpdated(datasource.getLastUpdated())
+                            .id(datasource.getId())
+                            .name(datasource.getName())
+                            .queryPath(datasource.getQueryPath())
+                            .connectionId(optionalConnection.map(i -> i.getId()).orElse(0L))
+                            .status(datasource.getStatus())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     /**

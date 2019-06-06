@@ -490,4 +490,9 @@ class ViewServiceImpl implements ViewService {
 		return imageLocation;
 	}
 
+	@Override
+	public View findByDashboardIdAndViewName(Long id, String viewName) {
+		return viewRepository.findByDashboardIdAndViewName(id, viewName);
+	}
+
 }

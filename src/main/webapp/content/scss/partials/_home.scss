@@ -681,6 +681,10 @@
   border-bottom: solid 1px #439dd3;
 }
 
+#notification_accordion .notification_details {
+  padding: 15px;
+}
+
 #notification_accordion .notification_details a {
   font-weight: bold;
   color: #439dd3;
@@ -691,7 +695,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;    
+  text-overflow: ellipsis;
   padding-right: 15px;
 }
 

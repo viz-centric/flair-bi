@@ -6,7 +6,7 @@
 
     <changeSet id="20190606130700" author="johib">
 	    <addUniqueConstraint catalogName="datasources"
-	            columnNames="name"
+	            columnNames="name,connection_name"
 	            constraintName="datasource_name_unique"
 	            tableName="datasources
 	            "/>

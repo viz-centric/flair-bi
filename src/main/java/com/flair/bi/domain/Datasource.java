@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -37,7 +38,8 @@ import java.util.stream.Collectors;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(name = "datasources")
+@Table(name = "datasources",uniqueConstraints=@UniqueConstraint(columnNames={"name", "connection_name"})
+)
 public class Datasource implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,7 +51,7 @@ public class Datasource implements Serializable {
 
     @NotNull
     @Size(max = 60)
-    @Column(name = "name", length = 60, nullable = false,unique=true)
+    @Column(name = "name", length = 60, nullable = false)
     private String name;
 
     @NotNull

@@ -37,15 +37,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Override
     public Datasource save(Datasource datasource) {
         log.debug("Request to save Datasource : {}", datasource);
-        try {
-        	return datasourceRepository.save(datasource);
-        }catch(Exception e) {
-			log.error("error occured while saving datasource : " + e.getMessage());
-			if (e.getMessage().contains("[datasource_name_unique]")) {
-				throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR, e);
-			}
-        }
-		return datasource;
+        return datasourceRepository.save(datasource);
     }
 
     /**

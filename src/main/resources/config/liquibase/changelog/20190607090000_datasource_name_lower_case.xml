@@ -6,7 +6,7 @@
  
 	<changeSet author="johib" id="20190607090000">
 	    <update tableName="datasources">
-	        <column name="name" valueComputed="upper(name)"/>
+	        <column name="name" valueComputed="lower(name)"/>
 	    </update>
 	</changeSet>
 	

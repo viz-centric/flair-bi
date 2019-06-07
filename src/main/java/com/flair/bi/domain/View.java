@@ -51,7 +51,7 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
 
     @NotNull
     @Size(max = 60)
-    @Column(name = "view_name", length = 60, nullable = false,unique=true)
+    @Column(name = "view_name", length = 60, nullable = false)
     private String viewName;
 
     @Size(max = 100)

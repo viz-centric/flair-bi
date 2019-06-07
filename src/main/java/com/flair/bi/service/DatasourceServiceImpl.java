@@ -3,7 +3,9 @@ package com.flair.bi.service;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceStatus;
 import com.flair.bi.domain.QDatasource;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.DatasourceRepository;
+import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,15 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Override
     public Datasource save(Datasource datasource) {
         log.debug("Request to save Datasource : {}", datasource);
-        return datasourceRepository.save(datasource);
+        try {
+        	return datasourceRepository.save(datasource);
+        }catch(Exception e) {
+			log.error("error occured while saving datasource : " + e.getMessage());
+			if (e.getMessage().contains("[datasource_name_unique]")) {
+				throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR, e);
+			}
+        }
+		return datasource;
     }
 
     /**

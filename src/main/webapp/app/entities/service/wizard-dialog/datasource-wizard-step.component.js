@@ -178,8 +178,13 @@
                 .then(function () {
                     WizardHandler.wizard().next();
                 })
-                .catch(function (err) {
+                .catch(function (error) {
                     rollbackConnection();
+                    if(error.data.message=='uniqueError'){
+                        $rootScope.showErrorSingleToast({
+                            text: $translate.instant('flairbiApp.datasources.'+error.data.message)
+                        });        
+                    }
                 });
         }
 

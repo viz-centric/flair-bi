@@ -23,7 +23,8 @@
             "selectDatasource": "Search Available Data Sources",
             "error": {
                 "datasources.all": "Error Loading Data Sources"
-            }
+            },
+            "uniqueError":"Datasource already exists with this name"
         }
     }
 }

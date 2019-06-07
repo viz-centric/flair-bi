@@ -23,6 +23,7 @@
         vm.count = 0;
         vm.pagedItems = [];
         vm.visualmetadata = [];
+        var index = 0;
 
         active();
 
@@ -30,11 +31,13 @@
             // vm.alerts=vm.releaseAlert.alerts;
             // vm.count=vm.releaseAlert.count;
             vm.pagedItems = []
+           
             connectWebSocket();
             getScheduledReportsCount();
         }
 
         function getSchedulerReportsAndEngineData(pageSize, page) {
+            index = 0;
             schedulerService.getSchedulerReportsAndEngineData(pageSize, page);
         }
 
@@ -94,6 +97,8 @@
         function onExchangeMetadata(data) {
             var metaData = JSON.parse(data.body);
             var container = d3.select("#notification_accordion");
+
+            var isExpand;
             $("#notification_accordion").html('');
             Visualmetadata.get({
                 id: metaData.report_line_item.visualizationid
@@ -101,7 +106,14 @@
             }).
                 $promise.then(
                     function (response) {
-                        var obj = {}
+                        var obj = {};
+                        index = index + 1
+                        if (parseInt(index) <= 3) {
+                            isExpand = 'panel-collapse collapse in'
+                        }
+                        else {
+                            isExpand = 'panel-collapse collapse'
+                        }
                         obj.data = JSON.parse(metaData.queryResponse).data;
                         obj.title = metaData.report.title_name;
                         obj.property = response.properties;
@@ -125,7 +137,7 @@
                             ' </a>' +
                             '</h4>' +
                             '</div>' +
-                            '<div id="' + metaData.report_line_item.visualizationid + '" class="panel-collapse collapse">' +
+                            '<div id="' + metaData.report_line_item.visualizationid + '" class="' + isExpand + '">' +
                             '<div class="panel-body">' +
 
                             '<svg height="200" width="280" id="svg_' + metaData.report_line_item.visualizationid + '"></svg>' +
@@ -154,7 +166,7 @@
                                 ' </a>' +
                                 '</h4>' +
                                 '</div>' +
-                                '<div id="' + metaData.report_line_item.visualizationid + '" class="panel-collapse collapse">' +
+                                '<div id="' + metaData.report_line_item.visualizationid + '" class="' + isExpand + '">' +
                                 '<div style="width: 280px; height: 200px;" class="panel-body" id=div_' + metaData.report_line_item.visualizationid + '>' +
                                 ' </div>' +
                                 '<div class="notification_details">' +

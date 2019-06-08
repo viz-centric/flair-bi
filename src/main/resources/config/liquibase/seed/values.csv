@@ -11,8 +11,8 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 109|Area|null|null|STRING|612|null
 110|Bar|null|null|STRING|613|613
 111|Line|null|null|STRING|613|null
-112|Pie|null|null|STRING|613|null
-113|Discrete|null|null|STRING|613|null
+#112|Pie|null|null|STRING|613|null
+#113|Discrete|null|null|STRING|613|null
 114|Polygon|null|null|STRING|614|614
 115|Bubble|null|null|STRING|614|null
 116|Half Circle|null|null|STRING|615|615

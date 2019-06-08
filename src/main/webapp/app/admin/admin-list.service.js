@@ -143,7 +143,14 @@
                 label: "Data Connection",
                 href: "connection",
                 order: 11
+            },
+            {
+                image: "#new-email-report",
+                label: "Report Management",
+                href: "report-management",
+                order: 12
             }
+            
         ];
 
         return service;

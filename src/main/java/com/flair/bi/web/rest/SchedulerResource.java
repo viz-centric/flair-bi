@@ -332,4 +332,18 @@ public class SchedulerResource {
 			throws URISyntaxException {
 		return schedulerService.deleteScheduledReport(visualizationid);
 	}
+
+	@GetMapping("/executeImmediate/{visualizationid}")
+	@Timed
+	public ResponseEntity<SchedulerResponse> executeImmediate(@PathVariable String visualizationid)
+			throws URISyntaxException {
+		return schedulerService.executeImmediateScheduledReport(visualizationid);
+	}
+
+	@GetMapping("/schedule/report/logs/{visualizationid}")
+	@Timed
+	public ResponseEntity<String> reportLogs(@PathVariable String visualizationid)
+			throws URISyntaxException {
+		return schedulerService.scheduleReportLogs(visualizationid);
+	}
 }

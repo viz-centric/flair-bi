@@ -1,0 +1,29 @@
+<div class="fbibox">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>No.</span>
+                        </th>
+                        <th>
+                            <span>Status</span>
+                        </th>
+                        <th>
+                            <span>Executed At</span>
+                        </th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="log in vm.logs">
+                        <td>{{$index+1}}</td>
+                        <td>{{log.task_status}}</td>
+                        <td>{{log.task_executed | date : "dd.MM.y" }}</td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,6 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
-import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.web.websocket.FbEngineWebSocketService;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
@@ -44,6 +43,7 @@ public class GrpcQueryService {
     private final DatasourceConstraintService datasourceConstraintService;
     private final FbEngineWebSocketService fbEngineWebSocketService;
     private final IGrpcService grpcService;
+    private final QueryTransformerService queryTransformerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
@@ -52,7 +52,7 @@ public class GrpcQueryService {
         log.debug("Sending run query request for datasource {} id {}",
             queryDTO.getSource(), datasource.getConnectionName());
 
-        Query query = QueryGrpcUtils.mapToQuery(queryDTO, datasource.getConnectionName(), null, null);
+        Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(), null, null);
 
         RunQueryResponse result;
         try {
@@ -102,7 +102,7 @@ public class GrpcQueryService {
 
         queryDTO.setSource(datasource.getName());
 
-        Query query = QueryGrpcUtils.mapToQuery(queryDTO,
+        Query query = queryTransformerService.toQuery(queryDTO,
             datasource.getConnectionName(),
             visualMetadataId != null ? visualMetadataId : "",
             userId);
@@ -158,7 +158,7 @@ public class GrpcQueryService {
     }
 
     public void sendQueryAll(String userId, QueryAllRequestDTO requestDTO) {
-        Query query = QueryGrpcUtils.mapToQuery(requestDTO.getQuery(), null, null, userId);
+        Query query = queryTransformerService.toQuery(requestDTO.getQuery(), null, null, userId);
         Connection connection = toProtoConnection(requestDTO.getConnection());
         QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
 
@@ -177,7 +177,7 @@ public class GrpcQueryService {
     
     
     private  void callGrpcBiDirectionalAndPushInSocket(String sourcesId, QueryDTO queryDTO, String vId, String userId) throws InterruptedException {
-        Query query = QueryGrpcUtils.mapToQuery(queryDTO, sourcesId, vId, userId);
+        Query query = queryTransformerService.toQuery(queryDTO, sourcesId, vId, userId);
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
             @Override
             public void onNext(QueryResponse queryResponse) {
@@ -215,7 +215,7 @@ public class GrpcQueryService {
     
 
     private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, QueryDTO queryDTO, String vId, String request, String userId) throws InterruptedException {
-        Query query = QueryGrpcUtils.mapToQuery(queryDTO, datasource.getConnectionName(), vId, userId);
+        Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(), vId, userId);
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
             @Override
             public void onNext(QueryResponse queryResponse) {

@@ -39,13 +39,15 @@ public class GrpcQueryServiceTest {
     private IGrpcService grpcService;
     @Mock
     private FbEngineWebSocketService fbEngineWebSocketService;
+    @Mock
+    private QueryTransformerService queryTransformerService;
 
     private GrpcQueryService grpcQueryService;
 
     @Before
     public void setUp() {
         grpcQueryService = new GrpcQueryService(datasourceService, datasourceConstraintService,
-                fbEngineWebSocketService, grpcService);
+                fbEngineWebSocketService, grpcService, queryTransformerService);
     }
 
     @Test(expected = EntityNotFoundException.class)

@@ -75,6 +75,7 @@
             registerTogglePropertiesOff();
             loadDimensions();
             registerRightNavBarDataOpen();
+            registerOnPropertiesUpdate();
         }
 
         ////////////////
@@ -134,7 +135,8 @@
                     },
                     function(result){
                         vm.isSaving = false;
-                        $rootScope.$broadcast("update-widget-content-" + result.id);
+                        VisualMetadataContainer.update(vm.visual.id,result,'id');
+                        vm.visual = result;
                         var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:result.id}),title: "Updated"}
                         $rootScope.showSuccessToast(info);
                     },
@@ -157,7 +159,6 @@
                 );
             }
         }
-
 
         function onSaveError(error) {
             vm.isSaving = false;
@@ -240,6 +241,24 @@
                 }
             );
 
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerOnPropertiesUpdate() {
+            var unsubscribe = $scope.$on("flairbiApp:on-properties-update", function(
+                event,
+                updatedField
+            ) {
+            var index = -1;
+            vm.visual.fields.filter(function(field) {
+                if(field.feature.name === updatedField.fieldName){
+                    field.properties.some(function(item, i) {
+                        return item.order === updatedField.property.order ? index = i : false;
+                    });
+                    field.properties[index].value=updatedField.value;
+                }
+            });
+            });
             $scope.$on("$destroy", unsubscribe);
         }
 

@@ -9,13 +9,13 @@
         'entity', 'Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies','$timeout',"filterParametersService","FilterStateManagerService",
-        "Visualmetadata","VisualDispatchService","VisualMetadataContainer"
+        "Visualmetadata","VisualDispatchService","VisualMetadataContainer","$translate"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
         entity, Features, $uibModal,
         $state, $scope, featureEntities,
-        Hierarchies,$timeout,filterParametersService,FilterStateManagerService,Visualmetadata,VisualDispatchService,VisualMetadataContainer) {
+        Hierarchies,$timeout,filterParametersService,FilterStateManagerService,Visualmetadata,VisualDispatchService,VisualMetadataContainer,$translate) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -134,8 +134,9 @@
                     },
                     function(result){
                         vm.isSaving = false;
-                        VisualMetadataContainer.update(vm.visual.id,result,'id');
-                        vm.visual = result;
+                        $rootScope.$broadcast("update-widget-content-" + result.id);
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:result.id}),title: "Updated"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveError
                 );
@@ -149,6 +150,8 @@
                         vm.isSaving = false;
                         VisualMetadataContainer.update(vm.visual.visualBuildId,result,'visualBuildId');
                         vm.visual = result;
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveError
                 );

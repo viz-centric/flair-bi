@@ -47,7 +47,8 @@
             getApplyBookmark:getApplyBookmark,
             saveHierarchies:saveHierarchies,
             getHierarchies:getHierarchies,
-            setFeatureBookmark:setFeatureBookmark
+            setFeatureBookmark:setFeatureBookmark,
+            updateVisual:updateVisual
         };
 
         function setVisual(v) {
@@ -56,6 +57,10 @@
 
         function getVisual() {
             return visual;
+        }
+
+        function updateVisual(visualTemp){
+         visual['visual']=visualTemp; 
         }
 
         function setFilters(f) {

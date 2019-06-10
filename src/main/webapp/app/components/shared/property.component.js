@@ -17,11 +17,12 @@
             }
         });
 
-    propertyController.$inject = ['$scope'];
+    propertyController.$inject = ['$scope','VisualDispatchService','$rootScope'];
 
-    function propertyController($scope) {
+    function propertyController($scope,VisualDispatchService,$rootScope) {
         var vm = this;
         vm.getDisplayName=getDisplayName;
+        vm.setProperty=setProperty;
 
 
 
@@ -38,6 +39,10 @@
             vm.inputClasses = vm.inputClasses || 'form-control';
             vm.labelClasses = vm.labelClasses || 'label-control';
             vm.alignment = vm.alignment || 'default';
+        }
+
+        function setProperty(value){
+            $rootScope.$broadcast("flairbiApp:on-properties-update",{value:value,fieldName:vm.display,property:vm.property});
         }
     }
 })();

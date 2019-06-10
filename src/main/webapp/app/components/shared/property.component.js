@@ -23,6 +23,7 @@
         var vm = this;
         vm.getDisplayName=getDisplayName;
         vm.setProperty=setProperty;
+        vm.setCheckboxProperty=setCheckboxProperty;
 
 
 
@@ -42,6 +43,11 @@
         }
 
         function setProperty(value){
+            $rootScope.$broadcast("flairbiApp:on-properties-update",{value:value,fieldName:vm.display,property:vm.property});
+        }
+
+        function setCheckboxProperty(value){
+            value = !value;
             $rootScope.$broadcast("flairbiApp:on-properties-update",{value:value,fieldName:vm.display,property:vm.property});
         }
     }

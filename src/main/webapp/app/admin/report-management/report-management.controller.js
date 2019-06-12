@@ -15,9 +15,14 @@
        var vm = this;
 
         vm.reports = [];
-        vm.page = 1;
-        vm.totalItems = null;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        
+        vm.pageSize = 5;
+        vm.setPage = setPage;
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        vm.range = range;
+        vm.noOfPages = 1;
+        vm.currentPage = 0;
         
         
         vm.parseCron=parseCron;
@@ -29,16 +34,29 @@
         ///////////////////////////////////////
 
         function activate() {
+            getTotalScheduledReports(); 
             getScheduledReports(); 
             var cronstrue = window.cronstrue;   
         }
 
+        function getTotalScheduledReports(){
+            schedulerService.getScheduledReportsCount().then(
+              function(response) {
+                vm.noOfPages = Math.ceil(response.data / vm.pageSize);     
+              },
+              function(error) {
+                var info = {
+                    text: error.statusText,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+              });
+        }
+
         function getScheduledReports(){
-            schedulerService.getSchedulerReports(vm.itemsPerPage,pagingParams.page - 1).then(
+            schedulerService.getSchedulerReports(vm.pageSize,vm.currentPage).then(
               function(response) {
                 vm.reports=response.data;
-                vm.queryCount = vm.reports.length;
-                vm.page = pagingParams.page;
                 
               },
               function(error) {
@@ -82,6 +100,40 @@
                 $rootScope.showErrorSingleToast(info);
               });
         }
+
+        function setPage(n) {
+            vm.currentPage = n;
+            getScheduledReports();
+        };
+
+
+        function range(start, end) {
+            var ret = [];
+            if (!end) {
+                end = start;
+                start = 0;
+            }
+            for (var i = start; i < end; i++) {
+                ret.push(i);
+            }
+            return ret;
+        };
+
+        function prevPage() {
+            if (vm.currentPage > 0) {
+                vm.currentPage--;
+                getScheduledReports();
+            }
+        };
+
+        function nextPage() {
+            if (vm.currentPage < vm.noOfPages - 1) {
+                vm.currentPage++;
+                getScheduledReports();
+            }
+        };
+
+
 
 
 

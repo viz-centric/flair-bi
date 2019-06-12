@@ -5,19 +5,19 @@
                 <thead>
                     <tr>
                         <th>
-                            <span>No.</span>
+                            <span data-translate="reportManagement.no"></span>
                         </th>
                         <th>
-                            <span>Status</span>
+                            <span data-translate="reportManagement.status"></span>
                         </th>
                         <th>
-                            <span>Executed At</span>
+                            <span data-translate="reportManagement.executedAt"></span>
                         </th> 
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="log in vm.logs">
-                        <td>{{$index+1}}</td>
+                        <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
                         <td>{{log.task_status}}</td>
                         <td>{{log.task_executed | date : "dd.MM.y" }}</td>
                         
@@ -25,5 +25,13 @@
                 </tbody>
             </table>
         </div>
+         
+
+<div class="text-center">
+            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.loadPage(vm.page)"></uib-pagination>
+        </div>
+
+
     </div>
 </div>

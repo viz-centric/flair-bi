@@ -340,10 +340,10 @@ public class SchedulerResource {
 		return schedulerService.executeImmediateScheduledReport(visualizationid);
 	}
 
-	@GetMapping("/schedule/report/logs/{visualizationid}")
+	@GetMapping("/schedule/report/logs/{visualizationid}/{pageSize}/{page}")
 	@Timed
-	public ResponseEntity<String> reportLogs(@PathVariable String visualizationid)
+	public ResponseEntity<String> reportLogs(@PathVariable String visualizationid,@PathVariable Integer pageSize,@PathVariable Integer page)
 			throws URISyntaxException {
-		return schedulerService.scheduleReportLogs(visualizationid);
+		return schedulerService.scheduleReportLogs(visualizationid, pageSize, page);
 	}
 }

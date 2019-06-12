@@ -27,10 +27,12 @@ public class SchedulerService {
 
 	@Value("${flair-notifications.port}")
 	private String port;
-
-	private String executeImmediateUrl="/api/executeImmediate/?visualizationid={visualizationid}";
-
-	private String scheduleReportLogsUrl="/api/jobLogs/?visualizationid={visualizationid}";
+	
+	@Value("${flair-notifications.execute-now-report-param-url}")
+	private String executeImmediateUrl;
+    
+	@Value("${flair-notifications.scheduled-report-logs-param-url}")
+	private String scheduleReportLogsUrl;
 
 	public ResponseEntity<SchedulerResponse> deleteScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();
@@ -67,13 +69,13 @@ public class SchedulerService {
 		}
 	}
 
-	public ResponseEntity<String> scheduleReportLogs(String visualizationid) {
+	public ResponseEntity<String> scheduleReportLogs(String visualizationid,Integer pageSize, Integer page) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = null;
 		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
 			responseEntity = restTemplate.exchange(buildUrl(host, port, scheduleReportLogsUrl), HttpMethod.GET, null,
-					String.class, visualizationid);
+					String.class, visualizationid, pageSize, page);
 			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 		} catch (Exception e) {
 			log.error("error occured while getting scheduled report logs:"+e.getMessage());

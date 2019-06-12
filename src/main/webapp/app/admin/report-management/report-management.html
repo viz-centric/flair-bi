@@ -5,31 +5,31 @@
                 <thead>
                     <tr>
                         <th>
-                            <span>No.</span>
+                            <span data-translate="reportManagement.no"></span>
                         </th>
                         <th>
-                            <span>Report Name</span>
+                            <span data-translate="reportManagement.reportName"></span>
                         </th>
                         <th>
-                            <span>Dashboard Name</span>
+                            <span data-translate="reportManagement.dashboardName"></span>
                         </th>
                         <th>
-                            <span>Subject</span>
+                            <span data-translate="reportManagement.subject"></span>
                         </th>
                         <th>
-                            <span>Run</span>
+                            <span data-translate="reportManagement.run"></span>
                         </th>
                         <th>
-                            <span>Created By</span>
+                            <span data-translate="reportManagement.createdBy"></span>
                         </th>
                          <th>
-                            <span>Action</span>
+                            <span data-translate="reportManagement.action"></span>
                         </th> 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="report in vm.reports">
-                        <td>{{$index+1}}</td>
+                    <tr ng-repeat="report in vm.reports"> 
+                        <td>{{$index+1+ vm.currentPage * vm.pageSize}}</td>
                         <td>{{report.report.report_name}}</td>
                         <td>{{report.report.dashboard_name}}</td>
                         <td>{{report.report.subject}}</td>
@@ -56,9 +56,19 @@
                 </tbody>
             </table>
         </div>
-        <div class="text-center">
-            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
-        </div>
+
+        <div class="text-center" ng-show="vm.noOfPages > 1">
+    <ul class="pagination">
+        <li ng-class="{disabled: vm.currentPage == 0}">
+            <a href="javascript:;" ng-click="vm.prevPage()"><i class="fa fa-angle-double-left"></i></a>
+        </li>
+        <li ng-repeat="n in vm.range(vm.noOfPages)" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
+            <a href="javascript:;" ng-bind="n+1">1</a>
+        </li>
+        <li ng-class="{disabled: vm.currentPage == vm.noOfPages-1}">
+            <a href="javascript:;" ng-click="vm.nextPage()"><i class="fa fa-angle-double-right"></i></a>
+        </li>
+    </ul>
+</div>
     </div>
 </div>

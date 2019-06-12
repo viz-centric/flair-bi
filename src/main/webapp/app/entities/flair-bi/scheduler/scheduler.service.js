@@ -71,9 +71,9 @@
                 method: 'GET'
             });
         }
-        function getScheduleReportLogs(visualizationid){
+        function getScheduleReportLogs(visualizationid,pageSize,page){
             return $http({
-                url: 'api/schedule/report/logs/'+visualizationid,
+                url: 'api/schedule/report/logs/'+visualizationid+'/'+pageSize+'/'+page,
                 method: 'GET'
             });   
         }

@@ -15,7 +15,7 @@
                 data: {
                     authorities: [],
                     pageTitle: 'Reports',
-                    displayName: "report-management"
+                    displayName: "report Management"
                 },
                 params: {
                     page: {
@@ -46,9 +46,15 @@
                             predicate: PaginationUtil.parsePredicate($stateParams.sort),
                             ascending: PaginationUtil.parseAscending($stateParams.sort)
                         };
+                    }],
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('report-management');
+                        return $translate.refresh();
                     }]
 
+
                 }
+
             })
             .state('report-management-log', {
                 parent: 'admin',
@@ -86,6 +92,10 @@
                             predicate: PaginationUtil.parsePredicate($stateParams.sort),
                             ascending: PaginationUtil.parseAscending($stateParams.sort)
                         };
+                    }],
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('report-management');
+                        return $translate.refresh();
                     }]
 
                 }

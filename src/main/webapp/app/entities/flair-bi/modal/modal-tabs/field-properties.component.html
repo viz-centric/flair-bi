@@ -56,11 +56,6 @@
     <!-- end of row  -->
     <div class="row field-property-options">
         <div ng-if="vm.showPropertyTypes()">
-            <!-- <center>
-                <strong>
-                        <h4>{{vm.visual.name}} Properties</h4>
-                    </strong>
-            </center> -->
             <div class="form-group">
                 <label class="control-label" ng-if="vm.selectedField.fieldType.featureType ==='DIMENSION'">Dimension</label>
                 <label class="control-label" ng-if="vm.selectedField.fieldType.featureType ==='MEASURE'">Measure</label>
@@ -84,7 +79,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-            <property-component display="vm.selectedField.feature.name" form-class="form-group" ng-repeat="property in vm.selectedField.properties | orderBy: 'order'" property="property" />
+            <property-component propstype="data" display="vm.selectedField.feature.name" form-class="form-group" ng-repeat="property in vm.selectedField.properties | orderBy: 'order'" property="property" />
         </div>
     </div>
     <!-- end of row  -->

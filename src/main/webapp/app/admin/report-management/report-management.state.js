@@ -5,15 +5,15 @@
         .module('flairbiApp')
         .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+    stateConfig.$inject = ['$stateProvider','PERMISSIONS'];
 
-    function stateConfig($stateProvider) {
+    function stateConfig($stateProvider,PERMISSIONS) {
         $stateProvider
             .state('report-management', {
                 parent: 'admin',
                 url: '/report-management?page&sort',
                 data: {
-                    authorities: [],
+                    authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
                     pageTitle: 'Reports',
                     displayName: "report Management"
                 },

@@ -6,23 +6,24 @@
         .controller('ReportManagementController', ReportManagementController);
 
     ReportManagementController.$inject = ['User','schedulerService',
-        'AlertService','pagingParams','paginationConstants','$location','$rootScope'
+        'AlertService','pagingParams','paginationConstants','$location','$rootScope','$state'
     ];
 
     function ReportManagementController(User,schedulerService,
-        AlertService,pagingParams,paginationConstants,$location,$rootScope) {
+        AlertService,pagingParams,paginationConstants,$location,$rootScope,$state) {
        
        var vm = this;
 
         vm.reports = [];
         
-        vm.pageSize = 5;
-        vm.setPage = setPage;
-        vm.nextPage = nextPage;
-        vm.prevPage = prevPage;
-        vm.range = range;
-        vm.noOfPages = 1;
-        vm.currentPage = 0;
+        vm.page = 1;
+        vm.totalItems = null;
+        vm.links = null;
+        vm.loadPage = loadPage;
+        vm.predicate = pagingParams.predicate;
+        vm.reverse = pagingParams.ascending;
+        vm.itemsPerPage = 5;
+        vm.transition = transition;
         
         
         vm.parseCron=parseCron;
@@ -41,8 +42,10 @@
 
         function getTotalScheduledReports(){
             schedulerService.getScheduledReportsCount().then(
-              function(response) {
-                vm.noOfPages = Math.ceil(response.data / vm.pageSize);     
+              function(response) { 
+                vm.totalItems = response.data;
+                vm.queryCount = vm.totalItems;
+                vm.page = pagingParams.page;     
               },
               function(error) {
                 var info = {
@@ -54,7 +57,7 @@
         }
 
         function getScheduledReports(){
-            schedulerService.getSchedulerReports(vm.pageSize,vm.currentPage).then(
+            schedulerService.getSchedulerReports(vm.itemsPerPage,pagingParams.page - 1).then(
               function(response) {
                 vm.reports=response.data;
                 
@@ -101,41 +104,17 @@
               });
         }
 
-        function setPage(n) {
-            vm.currentPage = n;
-            getScheduledReports();
-        };
+        function loadPage(page) {
+            vm.page = page;
+            vm.transition();
+        }
 
-
-        function range(start, end) {
-            var ret = [];
-            if (!end) {
-                end = start;
-                start = 0;
-            }
-            for (var i = start; i < end; i++) {
-                ret.push(i);
-            }
-            return ret;
-        };
-
-        function prevPage() {
-            if (vm.currentPage > 0) {
-                vm.currentPage--;
-                getScheduledReports();
-            }
-        };
-
-        function nextPage() {
-            if (vm.currentPage < vm.noOfPages - 1) {
-                vm.currentPage++;
-                getScheduledReports();
-            }
-        };
-
-
-
-
+        function transition() {
+            $state.transitionTo($state.$current, {
+                page: vm.page,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+            });
+        }
 
     }
 })();

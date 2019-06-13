@@ -13,7 +13,8 @@
                 inputClasses: '@',
                 alignment: '@',
                 formClass:'@',
-                display:'='
+                display:'=',
+                propstype:'@'
             }
         });
 
@@ -43,12 +44,20 @@
         }
 
         function setProperty(value){
-            $rootScope.$broadcast("flairbiApp:on-properties-update",{value:value,fieldName:vm.display,property:vm.property});
+            if(vm.propstype==='data'){
+                $rootScope.$broadcast("flairbiApp:on-data-properties-update",{value:value,fieldName:vm.display,property:vm.property});
+            }else if(vm.propstype==='chart'){
+                $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
+            }
         }
 
         function setCheckboxProperty(value){
             value = !value;
-            $rootScope.$broadcast("flairbiApp:on-properties-update",{value:value,fieldName:vm.display,property:vm.property});
+            if(vm.propstype==='data'){
+                $rootScope.$broadcast("flairbiApp:on-data-properties-update",{value:value,fieldName:vm.display,property:vm.property});
+            }else if(vm.propstype==='chart'){
+                $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
+            }
         }
     }
 })();

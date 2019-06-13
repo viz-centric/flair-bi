@@ -75,7 +75,8 @@
             registerTogglePropertiesOff();
             loadDimensions();
             registerRightNavBarDataOpen();
-            registerOnPropertiesUpdate();
+            registerOnDataPropertiesUpdate();
+            registerOnChartPropertiesUpdate();
         }
 
         ////////////////
@@ -244,8 +245,8 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function registerOnPropertiesUpdate() {
-            var unsubscribe = $scope.$on("flairbiApp:on-properties-update", function(
+        function registerOnDataPropertiesUpdate() {
+            var unsubscribe = $scope.$on("flairbiApp:on-data-properties-update", function(
                 event,
                 updatedField
             ) {
@@ -262,6 +263,19 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+        function registerOnChartPropertiesUpdate() {
+            var unsubscribe = $scope.$on("flairbiApp:on-chart-properties-update", function(
+                event,
+                updatedChart
+            ) {
+            var index = -1;
+            vm.visual.properties.some(function(item, i) {
+                return item.order === updatedChart.property.order ? index = i : false;
+            });
+            vm.visual.properties[index].value=updatedChart.value;
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
         function ngIfFilters() {
             return showOpt && !$rootScope.exploration;
         }

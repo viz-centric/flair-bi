@@ -121,12 +121,6 @@
                 order: 9
             },
             {
-                image: "#upload-folder",
-                label: "File Uploader",
-                href: "file-uploader",
-                order: 10
-            },
-            {
                 image: "#admin-services",
                 label: "Data Connection",
                 href: "connection",

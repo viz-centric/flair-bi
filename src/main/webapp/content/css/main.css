@@ -4406,6 +4406,10 @@ jhi-alert .alerts .alert-danger {
     margin: 43px 0 10px 0; }
   #grid-container.worksheet-fullscreen {
     margin-top: -10px; }
+  #grid-container.filters-applied {
+    margin-top: 85px; }
+  #grid-container.filters-not-applied {
+    margin-top: 43px; }
 
 .grid-flipper {
   -webkit-perspective: 1000;

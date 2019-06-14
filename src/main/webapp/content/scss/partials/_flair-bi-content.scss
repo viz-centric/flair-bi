@@ -170,6 +170,12 @@
     &.worksheet-fullscreen {
         margin-top: -10px;
     }
+    &.filters-applied {
+        margin-top: 85px;
+    }
+    &.filters-not-applied{
+        margin-top: 43px;
+    }
 }
 
 .grid-flipper {

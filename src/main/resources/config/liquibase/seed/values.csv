@@ -107,6 +107,11 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 208|3|null|null|STRING|661|null
 209|4|null|null|STRING|661|null
 210|5|null|null|STRING|661|null
-
+211|Left|null|null|STRING|681|681
+212|Center|null|null|STRING|681|null
+213|Right|null|null|STRING|681|null
+214|Left|null|null|STRING|682|null
+215|Center|null|null|STRING|682|682
+216|Right|null|null|STRING|682|null
 
 

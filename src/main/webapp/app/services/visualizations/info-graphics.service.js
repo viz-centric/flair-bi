@@ -25,7 +25,7 @@
                     var displayColor = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display colour');
                     result['chartDisplayColor'] = (displayColor == null) ? colorSet[0] : displayColor;
                     var borderColor = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Border colour');
-                    result['chartBorderColor'] = (borderColor == null) ? colorSet[1] : borderColor;
+                    result['chartBorderColor'] = (borderColor == null) ? colorSet[0] : borderColor;
 
                     result['kpiDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Display name') || result['dimension'][0];
                     result['kpiAlignment'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Text alignment');

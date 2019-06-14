@@ -16,7 +16,7 @@
         var menuItems = [
             {
                 image: "#admin-user-management",
-                label: "Users Management",
+                label: "User Management",
                 href: "user-management",
                 order: 0
             },
@@ -74,12 +74,6 @@
                 href: "visualization-colors",
                 order: 9
             },
-            {
-                image: "#upload-folder",
-                label: "File Uploader",
-                href: "file-uploader",
-                order: 10
-            }
 
         ];
 

@@ -15,7 +15,8 @@
             get: get,
             save: save,
             clear: clear,
-            getConditionExpression: getConditionExpression
+            getConditionExpression: getConditionExpression,
+            getFiltersCount:getFiltersCount
         };
 
 
@@ -77,6 +78,14 @@
                 conditionExpression: condition.expression,
                 sourceType: FILTER_TYPES.FILTER
             };
+        }
+
+        function getFiltersCount(){
+            var size = 0, key;
+            for (key in paramObject) {
+                if (paramObject.hasOwnProperty(key)) size++;
+            }
+            return size;
         }
 
     }

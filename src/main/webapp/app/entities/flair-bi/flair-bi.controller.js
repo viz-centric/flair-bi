@@ -127,6 +127,7 @@
         vm.recreateVisual = recreateVisual;
         vm.openSchedulerDialog = openSchedulerDialog;
         vm.showVizLoader = showVizLoader;
+        vm.filtersLength=0;
         activate();
 
         ////////////////
@@ -164,6 +165,7 @@
             setVizualizationServiceMode();
             connectWebSocket();
             vm.features = featureEntities;
+            vm.filtersLength=filterParametersService.getFiltersCount();
         }
 
         function showVizLoader(isCardRevealed, loading, dataReceived) {

@@ -77,4 +77,7 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 676|I frame link|i frame external link|TEXT|null|null|null|null|flairadmin|null
 677|Text colour|The text colour for KPI|COLOR_PICKER|null|null|#787878|null|flairadmin|null
 678|Font size for diplay name|Font size for diplay name|NUMBER|null|null|null|15|flairadmin|null
-    
+679|Font size|Font size for KPI first measure|NUMBER|null|null|null|80|flairadmin|null
+680|Font size|Font size for KPI second measure|NUMBER|null|null|null|60|flairadmin|null
+681|Text alignment|Alignment of text|SELECT|null|null|null|null|flairadmin|STRING
+682|Text alignment|Alignment of text|SELECT|null|null|null|null|flairadmin|STRING

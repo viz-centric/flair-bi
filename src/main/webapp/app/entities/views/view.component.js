@@ -20,6 +20,7 @@
         var vm = this;
         vm.$onInit = activate;
         vm.build=build;
+        vm.getViewName=getViewName;
         ////////////////
       
       
@@ -54,6 +55,18 @@
                 $window.location.href="#/dashboards/"+dashboardId+"/views/"+viewId+"/build";
             }
 
-        } 
+        }
+
+        function getViewName(){
+            return vm.view.viewName + getBookmarkName();
+        }
+
+        function getBookmarkName(){ 
+            if(vm.bookmark){
+                return " "+vm.bookmark.name;
+            }else{
+                return "";
+            }
+        }
     }
 })();

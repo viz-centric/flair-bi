@@ -144,6 +144,12 @@
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID",
+        "feature": {
+            "function_does_not_exist": "Function does not exist. Please choose one of the pre-defined functions.",
+            "definition_null": "Function definition is empty.",
+            "validation_fail": "Function validation did not pass, please check the function format and description for more information.",
+            "feature_null": "Feature is missing."
+        },
         "query": {
             "validation.duplicate": "Query cannot contain multiple conditions for same features \"{{ features }}\"",
             "validation.generic": "Invalid query",

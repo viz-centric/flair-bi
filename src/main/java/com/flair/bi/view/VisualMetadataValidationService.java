@@ -1,6 +1,5 @@
 package com.flair.bi.view;
 
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.project.bi.query.dto.QueryDTO;

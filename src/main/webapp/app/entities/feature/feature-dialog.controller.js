@@ -56,12 +56,13 @@
             vm.isSaving = false;
         }
 
-        function onSaveError() {
+        function onSaveError(data) {
             vm.isSaving = false;
         }
 
-        function copyFunctions(f){
-            vm.feature.definition=f;
+        function copyFunctions(func){
+            vm.feature.definition = func.value;
+            vm.feature.functionId = func.id;
         }
     }
 })();

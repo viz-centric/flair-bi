@@ -1,12 +1,12 @@
 package com.flair.bi.service.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 
-/**
- * A DTO for the Functions entity.
- */
+@Data
 public class FunctionsDTO implements Serializable {
 
     private Long id;
@@ -21,49 +21,7 @@ public class FunctionsDTO implements Serializable {
 
     private Boolean measureUse;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-    public Boolean getDimensionUse() {
-        return dimensionUse;
-    }
-
-    public void setDimensionUse(Boolean dimensionUse) {
-        this.dimensionUse = dimensionUse;
-    }
-    public Boolean getMeasureUse() {
-        return measureUse;
-    }
-
-    public void setMeasureUse(Boolean measureUse) {
-        this.measureUse = measureUse;
-    }
+    private String validation;
 
     @Override
     public boolean equals(Object o) {
@@ -86,15 +44,4 @@ public class FunctionsDTO implements Serializable {
         return Objects.hashCode(id);
     }
 
-    @Override
-    public String toString() {
-        return "FunctionsDTO{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            ", description='" + description + "'" +
-            ", value='" + value + "'" +
-            ", dimensionUse='" + dimensionUse + "'" +
-            ", measureUse='" + measureUse + "'" +
-            '}';
-    }
 }

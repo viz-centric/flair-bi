@@ -141,7 +141,7 @@
                                 '@type': 'Compare',
                                 comparatorType: 'EQ'
                             }
-                        }
+                        };
                         newCurrent.uuid = current.uuid;
                         newCurrent.firstExpression.uuid = CryptoService.UUIDv4();
 

@@ -1,39 +1,5 @@
 package com.flair.bi.web.rest;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import org.apache.commons.io.FileUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Datasource;
@@ -45,6 +11,7 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.QueryTransformerService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
@@ -55,20 +22,42 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.view.VisualMetadataService;
-import com.flair.bi.web.rest.util.QueryGrpcUtils;
-import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.validation.Valid;
+import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Slf4j
 public class SchedulerResource {
 
 	@Value("${flair-notifications.username}")
@@ -127,10 +116,8 @@ public class SchedulerResource {
 	private final GrpcQueryService grpcQueryService;
 	
 	private final SchedulerService schedulerService;
-	
 
-	private final Logger log = LoggerFactory.getLogger(SchedulerResource.class);
-
+	private final QueryTransformerService queryTransformerService;
 
 	@PostMapping("/schedule")
 	@Timed
@@ -212,9 +199,9 @@ public class SchedulerResource {
             .map(DatasourceConstraint::build)
             .ifPresent(queryDTO.getConditionExpressions()::add);
 
-        Query query = QueryGrpcUtils.mapToQuery(queryDTO,datasource.getConnectionName(),
-            visualizationId != null ? visualizationId : "",
-            userId);
+		Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(),
+				visualizationId != null ? visualizationId : "",
+				userId);
         
         String jsonQuery=JsonFormat.printer().print(query);
 

@@ -1,4 +1,5 @@
 package com.flair.bi.service.dto.scheduler;
+
 import com.project.bi.query.dto.QueryDTO;
 
 public class SchedulerDTO {

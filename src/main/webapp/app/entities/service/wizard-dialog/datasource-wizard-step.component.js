@@ -33,7 +33,6 @@
         vm.features=[];
         vm.resetTest=resetTest;
         vm.showData=showData;
-        vm.sampleData=[];
 
         activate();
 
@@ -262,24 +261,20 @@
         }
 
         function connectWebSocket() {
-            console.log('datasource wizard controller connecting web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function() {
-                    console.log('datasource wizard controller connected web socket');
                     stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
 
             $scope.$on("$destroy", function (event) {
-                console.log('datasource wizard destorying web socket');
                 stompClientService.disconnect();
             });
         }
 
         function onExchangeMetadataError(data) {
-            console.log('query all error', data);
             var body = JSON.parse(data.body || '{}');
             var error = QueryValidationService.getQueryValidationError(body.description);
             if (error) {
@@ -288,10 +283,11 @@
         }
 
         function onExchangeMetadata(data) {
-            console.log('query all metadata');
             var metaData = JSON.parse(data.body);
+            toggleSampleData(metaData.data.length);
             createHeader(metaData.data[0]);
             addDataInTable(metaData.data);
+
         }
 
         function createHeader(cols){
@@ -312,6 +308,17 @@
                 });
                 tBody.append(tr);
             });
+        }
+
+        function toggleSampleData(size){
+           if(size>0){
+                angular.element("#sample-data-holder").show();
+           }else{
+                angular.element("#sample-data-holder").hide();
+                var sm = [];
+                sm.title=$translate.instant('flairbiApp.datasources.noDataFound')
+                $rootScope.showWarningToast(sm);
+           }
         }
     }
 })();

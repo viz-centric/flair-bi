@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.project.bi.query.SQLUtil.sanitize;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -47,12 +49,11 @@ public class QueryTransformerService {
                     .collect(Collectors.toMap(item -> item.getName(), item -> item));
 
             fields = transformFieldNames(fields, features);
-            groupBy = transformGroupBy(groupBy, features);
         }
 
         Query.Builder builder = Query.newBuilder();
         builder
-                .setSource(queryDTO.getSource())
+                .setSource(sanitize(queryDTO.getSource()))
                 .setLimit(queryDTO.getLimit())
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(fields)
@@ -63,18 +64,16 @@ public class QueryTransformerService {
         }
 
         if (connectionName != null) {
-            builder.setSourceId(connectionName);
+            builder.setSourceId(sanitize(connectionName));
         }
 
         if (userId != null) {
-            builder.setUserId(userId);
+            builder.setUserId(sanitize(userId));
         }
-
-        builder.setEnableCaching(queryDTO.isEnableCaching());
 
         queryDTO.getOrders().forEach(sortDTO -> builder.addOrders(Query.SortHolder.newBuilder()
                 .setDirectionValue(getDirectionValue(sortDTO.getDirection().ordinal()))
-                .setFeatureName(sortDTO.getFeatureName())
+                .setFeatureName(sanitize(sortDTO.getFeatureName()))
                 .build()
         ));
 
@@ -103,15 +102,6 @@ public class QueryTransformerService {
                 .stream()
                 .map(field -> Optional.ofNullable(features.get(field))
                         .map(item -> item.getDefinition() + " as " + item.getName())
-                        .orElse(field))
-                .collect(Collectors.toList());
-    }
-
-    private List<String> transformGroupBy(List<String> fields, Map<String, Feature> features) {
-        return fields
-                .stream()
-                .map(field -> Optional.ofNullable(features.get(field))
-                        .map(item -> item.getDefinition())
                         .orElse(field))
                 .collect(Collectors.toList());
     }
@@ -171,7 +161,48 @@ public class QueryTransformerService {
 
     private static String getJsonFromConditionExpression(ConditionExpression conditionExpression) {
         Gson gson = new Gson();
-        return gson.toJson(conditionExpression);
+        return gson.toJson(sanitizeConditionalExpression(conditionExpression));
+    }
+
+    private static ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression) {
+        if (conditionExpression instanceof OrConditionExpression) {
+            OrConditionExpression orConditionExpression = (OrConditionExpression) conditionExpression;
+            orConditionExpression.setFirstExpression(sanitizeConditionalExpression(orConditionExpression.getFirstExpression()));
+            orConditionExpression.setSecondExpression(sanitizeConditionalExpression(orConditionExpression.getSecondExpression()));
+        } else if (conditionExpression instanceof BetweenConditionExpression) {
+            BetweenConditionExpression betweenConditionExpression = (BetweenConditionExpression) conditionExpression;
+            betweenConditionExpression.setFeatureName(sanitize(betweenConditionExpression.getFeatureName()));
+            betweenConditionExpression.setValue(sanitize(betweenConditionExpression.getValue()));
+            betweenConditionExpression.setSecondValue(sanitize(betweenConditionExpression.getSecondValue()));
+        } else if (conditionExpression instanceof CompareConditionExpression) {
+            CompareConditionExpression compareConditionExpression = (CompareConditionExpression) conditionExpression;
+            compareConditionExpression.setFeatureName(sanitize(compareConditionExpression.getFeatureName()));
+            compareConditionExpression.setValue(sanitize(compareConditionExpression.getValue()));
+        } else if (conditionExpression instanceof AndConditionExpression) {
+            AndConditionExpression andConditionExpression = (AndConditionExpression) conditionExpression;
+            andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression()));
+            andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression()));
+        } else if (conditionExpression instanceof ContainsConditionExpression) {
+            ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
+            containsConditionExpression.setFeatureName(containsConditionExpression.getFeatureName());
+            containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
+        } else if (conditionExpression instanceof NotContainsConditionExpression) {
+            NotContainsConditionExpression notContainsConditionExpression = (NotContainsConditionExpression) conditionExpression;
+            notContainsConditionExpression.setFeatureName(sanitize(notContainsConditionExpression.getFeatureName()));
+            notContainsConditionExpression.setValues(sanitizeList(notContainsConditionExpression.getValues()));
+        } else if (conditionExpression instanceof LikeConditionExpression) {
+            LikeConditionExpression likeConditionExpression = (LikeConditionExpression) conditionExpression;
+            likeConditionExpression.setValue(sanitize(likeConditionExpression.getValue()));
+            likeConditionExpression.setFeatureName(sanitize(likeConditionExpression.getFeatureName()));
+        }
+        return conditionExpression;
+    }
+
+    private static List<String> sanitizeList(List<String> list) {
+        return list
+                .stream()
+                .map(item -> sanitize(item))
+                .collect(Collectors.toList());
     }
 
 }

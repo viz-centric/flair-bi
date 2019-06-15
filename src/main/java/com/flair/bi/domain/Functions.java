@@ -1,7 +1,12 @@
 package com.flair.bi.domain;
 
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -32,6 +37,8 @@ public class Functions implements Serializable {
 
     @Column(name = "measure_use")
     private Boolean measureUse;
+
+    private String validation;
 
     public Long getId() {
         return id;
@@ -136,5 +143,18 @@ public class Functions implements Serializable {
             ", dimensionUse='" + dimensionUse + "'" +
             ", measureUse='" + measureUse + "'" +
             '}';
+    }
+
+    public String getValidation() {
+        return validation;
+    }
+
+    public void setValidation(String validation) {
+        this.validation = validation;
+    }
+
+    public Functions validation(String validation) {
+        this.validation = validation;
+        return this;
     }
 }

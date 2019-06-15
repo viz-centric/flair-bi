@@ -6,6 +6,7 @@ import com.flair.bi.domain.listeners.FeatureListener;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,6 +37,7 @@ import java.util.Set;
 @Entity
 @EntityListeners(value = {FeatureListener.class})
 @Table(name = "features")
+@ToString
 public class Feature extends AbstractAuditingEntity implements Serializable {
 
     @Id
@@ -51,6 +53,8 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
     @Size(max = 40)
     @Column(name = "type", length = 40, nullable = false)
     private String type;
+
+    private Long functionId;
 
     @NotNull
     @Column(name = "feature_definition", nullable = false)

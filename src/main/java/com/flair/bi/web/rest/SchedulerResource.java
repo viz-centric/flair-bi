@@ -199,9 +199,9 @@ public class SchedulerResource {
             .map(DatasourceConstraint::build)
             .ifPresent(queryDTO.getConditionExpressions()::add);
 
-        Query query = queryTransformerService.toQuery(queryDTO,datasource.getConnectionName(),
-            visualizationId != null ? visualizationId : "",
-            userId);
+		Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(),
+				visualizationId != null ? visualizationId : "",
+				userId);
         
         String jsonQuery=JsonFormat.printer().print(query);
 

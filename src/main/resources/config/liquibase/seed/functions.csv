@@ -1,4 +1,10 @@
-id|name|description|value|dimension_use|measure_use
-1|Year|returns year|Year()|false|true
-2|month|returns month|month()|false|true
-3|Day|returns day|Day()|false|true
+id|name|description|value|dimension_use|measure_use|validation
+1|year|returns year|year()|false|true|year\\(\\w+\\)
+2|month|returns month|month()|false|true|month\\(\\w+\\)
+3|week|returns week|week()|false|true|week\\(\\w+\\)
+4|day|returns day|day()|false|true|day\\(\\w+\\)
+5|yearmonth|returns yearmonth|yearmonth()|false|true|yearmonth\\(\\w+\\)
+6|yearweek|returns yearweek|yearweek()|false|true|yearweek\\(\\w+\\)
+7|quarter|returns quarter|quarter()|false|true|quarter\\(\\w+\\)
+8|yearquarter|returns yearquarter|yearquarter()|false|true|yearquarter\\(\\w+\\)
+9|date|Returns date. Please use the following format only: date(<field name in database>, '<time format>')|date(field_name, 'yyyy-MM-dd')|false|true|date\\(\\w+\\s*,\\s*\\'[A-Za-z0-9-]+\\'\\)

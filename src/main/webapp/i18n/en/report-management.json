@@ -1,0 +1,17 @@
+{
+    "reportManagement": {
+        "home": {
+            "title": "Reports"
+        },
+        "errorDeleting":"Error deleting user",
+        "no": "No.",
+        "reportName": "Report Name",
+        "dashboardName": "Dashboard Name",
+        "subject": "Subject",
+        "run": "Run",
+        "createdBy": "Created By",
+        "action": "Action"  ,
+        "status":"status",
+        "executedAt":"Executed At"
+    }
+}

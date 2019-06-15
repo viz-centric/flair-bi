@@ -53,7 +53,7 @@
                         result['iconFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font weight'));
                         result['iconPosition'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon position').toLowerCase());
                         result['iconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
-                        result['colourCoding'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Color Coding'));
+                        result['colourCoding'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour expression'));
                         result['valueTextColour'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
                         result['displayColor'].push(colorSet[i]);
                         result['fontStyleForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));

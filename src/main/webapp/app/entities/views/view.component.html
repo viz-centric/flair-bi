@@ -5,12 +5,12 @@
                 <a class="menu-link" href id="dialog-{{vm.view.id}}" uib-dropdown-toggle>
                     <span uib-tooltip="Options" tooltip-placement="bottom">
                         <i class="fa fa-ellipsis-v"></i>
-                    <span>
+                        <span>
                 </a>
                 <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.visualBuildId}}">
-                    <div class="items">  
-                        <div class="item" role="menuitem">
-                            <a ng-if="vm.canDelete" 
+                    <div class="items">
+                        <div uib-tooltip="Delete" tooltip-placement="bottom" class="item" role="menuitem">
+                            <a ng-if="vm.canDelete"
                                 ng-style="{ 'cursor' : (!(vm.view.published && vm.deletePublish))? 'not-allowed' : 'pointer' } "
                                 ui-sref="dashboards-overview.view-delete({id: vm.view.viewDashboard.id, viewId:vm.view.id})">
                                 <svg class="delete">
@@ -18,22 +18,25 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="item" role="menuitem">
-                            <a  ui-sref="dashboards-overview.view-detail({id: vm.view.viewDashboard.id,viewId: vm.view.id})">
+                        <div  uib-tooltip="Setting" tooltip-placement="bottom" class="item" role="menuitem">
+                            <a
+                                ui-sref="dashboards-overview.view-detail({id: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="edit">
                                     <use xlink:href="#fbi-box-settings-primary" />
                                 </svg>
                             </a>
                         </div>
-                        <div class="item" role="menuitem">
-                            <a ng-if="vm.requestPublish"  ui-sref="request-view-publish({did: vm.view.viewDashboard.id,viewId: vm.view.id})">
+                        <div  uib-tooltip="Release" tooltip-placement="bottom" class="item" role="menuitem">
+                            <a ng-if="vm.requestPublish"
+                                ui-sref="request-view-publish({did: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="#release-icon">
                                     <use xlink:href="#release-icon" />
                                 </svg>
                             </a>
                         </div>
                         <div class="item" role="menuitem" ng-if="vm.view.published">
-                            <a ng-if="vm.view.published && vm.canReadPublish"  ui-sref="flair-bi-publish({id:vm.view.id, dashboardId:vm.view.viewDashboard.id})">
+                            <a ng-if="vm.view.published && vm.canReadPublish"
+                                ui-sref="flair-bi-publish({id:vm.view.id, dashboardId:vm.view.viewDashboard.id})">
                                 <span uib-tooltip="View&nbsp;Published" tooltip-placement="bottom">
                                     <svg class="#published-icon">
                                         <use xlink:href="#published-icon" />
@@ -46,7 +49,7 @@
                                         <use xlink:href="#published-icon" />
                                     </svg>
                                 </span>
-                            </a> 
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -57,14 +60,15 @@
                 </span>
             </div>
             <div class="card-footer">
-                <h4 class="item">{{vm.view.viewName}} 
-                    <span uib-tooltip={{vm.view.description}} tooltip-placement="top"><i class="fa fa-info-circle"></i></span>
+                <h4 class="item">{{vm.view.viewName}}
+                    <span uib-tooltip={{vm.view.description}} tooltip-placement="top"><i
+                            class="fa fa-info-circle"></i></span>
                 </h4>
-                <a class="item build" ng-if="vm.canUpdate" ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
+                <a class="item build" ng-if="vm.canUpdate"
+                    ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
                     <i class="fa fa-angle-right"></i>
                 </a>
             </div>
         </div>
     </div>
 </div>
-

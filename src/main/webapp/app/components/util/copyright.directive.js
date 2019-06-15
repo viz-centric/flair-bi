@@ -8,7 +8,7 @@
 
     function copyright() {
         return {
-            template: '<strong>Copyright</strong> Flair BI &copy; 2016-2017',
+            template: '<strong>Copyright</strong> Vizcentric Flair BI &copy; 2019',
         };
     }
 

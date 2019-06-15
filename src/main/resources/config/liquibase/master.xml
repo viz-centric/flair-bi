@@ -63,6 +63,8 @@
     <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity_constraints.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190505113649_added_datasource_status.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190530220400_added_unique_constriants_dashboard_name.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190531112500_added_unique_constriants_view_name.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190606130700_added_unique_constriants_datasource_name.xml" relativeToChangelogFile="false" />
+<!--     <include file="config/liquibase/changelog/20190607090000_datasource_name_lower_case.xml" relativeToChangelogFile="false"/> -->
+    
 </databaseChangeLog>
 <!--@formatter:on-->

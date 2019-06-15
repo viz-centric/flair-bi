@@ -28,7 +28,7 @@ public class SchedulerService {
 	@Value("${flair-notifications.port}")
 	private String port;
 	
-	@Value("${flair-notifications.execute-now-report-param-url}")
+	@Value("${flair-notifications.scheduled-execute-now-report-param-url}")
 	private String executeImmediateUrl;
     
 	@Value("${flair-notifications.scheduled-report-logs-param-url}")

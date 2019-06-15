@@ -9,21 +9,21 @@
             <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.dashboard.id}}">
                 <div class="items">  
                     <div class="item" role="menuitem">
-                        <a ng-if="vm.canDeleteDashboard" class="pull-right ng-scope" ui-sref="dashboards.delete({id:vm.dashboard.id})">
+                        <a uib-tooltip="Delete" ng-if="vm.canDeleteDashboard" class="pull-right ng-scope" ui-sref="dashboards.delete({id:vm.dashboard.id})">
                             <svg class="delete">
                                 <use xlink:href="#delete"></use>
                             </svg>
                         </a>
                     </div>
                     <div class="item" role="menuitem">
-                    <a class="pull-right" ui-sref="dashboards-detail({id:vm.dashboard.id})">
+                    <a uib-tooltip="Edit" class="pull-right" ui-sref="dashboards-detail({id:vm.dashboard.id})">
                         <svg class="edit">
                             <use xlink:href="#fbi-box-settings-primary"></use>
                         </svg>
                     </a>
                     </div>
                     <div class="item" role="menuitem">
-                        <a ng-if="vm.canRequestDashboardRelease" class="pull-right ng-scope" ui-sref="request-dashboard-publish({id: vm.dashboard.id})">
+                        <a uib-tooltip="Release" ng-if="vm.canRequestDashboardRelease" class="pull-right ng-scope" ui-sref="request-dashboard-publish({id: vm.dashboard.id})">
                             <svg class="#release-icon">
                                 <use xlink:href="#release-icon"></use>
                             </svg>

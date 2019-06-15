@@ -127,6 +127,7 @@
         vm.recreateVisual = recreateVisual;
         vm.openSchedulerDialog = openSchedulerDialog;
         vm.showVizLoader = showVizLoader;
+        vm.filtersLength=0;
         activate();
 
         ////////////////
@@ -135,6 +136,8 @@
             $rootScope.updateWidget={}
             if(!VisualDispatchService.getApplyBookmark()){
                 filterParametersService.clear();
+            }else{
+                vm.filtersLength=filterParametersService.getFiltersCount();
             }
             VisualMetadataContainer.clear();
             VisualDispatchService.clearAll();
@@ -156,6 +159,7 @@
             registerStateChangeStartEvent();
             registerOnDragEnd();
             registerOnDropEnd();
+            registerFilterCountChanged();
             $timeout(function() {
                 vm.hideFilters = false;
             }, 50);
@@ -164,6 +168,16 @@
             setVizualizationServiceMode();
             connectWebSocket();
             vm.features = featureEntities;
+        }
+
+        function registerFilterCountChanged() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:filter-count-changed",
+                function() {
+                    vm.filtersLength=filterParametersService.getFiltersCount();
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
         }
 
         function showVizLoader(isCardRevealed, loading, dataReceived) {

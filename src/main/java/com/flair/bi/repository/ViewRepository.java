@@ -23,6 +23,9 @@ public interface ViewRepository extends JpaRepository<View, Long>,
 
     @Query(value = "select views from View views where views.viewDashboard.id = :id")
     Stream<View> findByDashboardId(@Param("id") Long id);
+    
+    @Query(value = "select view from View view where view.viewDashboard.id = :id and view.viewName=:viewName")
+    View findByDashboardIdAndViewName(@Param("id") Long id,@Param("viewName") String viewName);
 
     /**
      * Customize the {@link QuerydslBindings} for the given root.

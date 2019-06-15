@@ -49,7 +49,7 @@ public class Datasource implements Serializable {
 
     @NotNull
     @Size(max = 60)
-    @Column(name = "name", length = 60, nullable = false)
+    @Column(name = "name", length = 60, nullable = false,unique=true)
     private String name;
 
     @NotNull

@@ -22,7 +22,7 @@ id|const|visualization_id|feature_type|sequence_number|created_by
 21|OPTIONAL|514|DIMENSION|1|flairadmin
 22|REQUIRED|514|MEASURE|2|flairadmin
 23|OPTIONAL|514|MEASURE|3|flairadmin
-24|REQUIRED|516|DIMENSION|0|flairadmin
+24|REQUIRED|516|DIMENSION|0|flairadmin  
 25|REQUIRED|516|MEASURE|2|flairadmin
 26|REQUIRED|516|MEASURE|3|flairadmin
 27|OPTIONAL|516|MEASURE|4|flairadmin
@@ -117,7 +117,7 @@ id|const|visualization_id|feature_type|sequence_number|created_by
 116|OPTIONAL|530|MEASURE|3|flairadmin
 117|OPTIONAL|530|MEASURE|4|flairadmin
 118|OPTIONAL|530|MEASURE|5|flairadmin 
-119|REQUIRED|531|DIMENSION|0|flairadmin
+119|REQUIRED|531|DIMENSION|0|flairadmin 
 120|REQUIRED|531|MEASURE|1|flairadmin
 121|OPTIONAL|531|MEASURE|2|flairadmin
 122|OPTIONAL|531|MEASURE|3|flairadmin

@@ -235,7 +235,7 @@
      */
     function constructMeasureField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
-        if (agg !== null) {
+        if (agg !== null && agg!=='NONE') {
             return {
                 field: agg + '(' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.name,
                 agg: true
@@ -309,7 +309,8 @@
 
     function getProperty(properties, propertyName, orElse) {
         var props = properties.filter(function (item) {
-            return item.propertyType.name === propertyName;
+            //return item.propertyType.name === propertyName;
+            return item.propertyType.name.indexOf(propertyName) !== -1;
         });
 
         var property = props[0];

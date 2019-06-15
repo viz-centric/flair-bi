@@ -160,6 +160,11 @@
             }
             if(VisualDispatchService.getApplyBookmark()){
                 vm.selectedBookmark=VisualDispatchService.getFeatureBookmark();
+                $rootScope.$broadcast(
+                    "flairbiApp:filter-input-refresh"
+                );
+                $rootScope.$broadcast("flairbiApp:filter");
+                $rootScope.$broadcast('flairbiApp:filter-add');
                 VisualDispatchService.setFeatureBookmark({});
                 recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id,$stateParams.id);
             }
@@ -384,15 +389,9 @@
         }
 
         function setNoOfPages(){
-            var count = 0;
-            for (var k in vm.filters) {
-                //console.log(vm.filters[k].length);
-                if (vm.filters[k].length!=0) {
-                ++count;
-                }
-            }
-            vm.noOfPages=Math.ceil(count/vm.pageSize)-1;
-            vm.filtersLength=count;
+            vm.noOfPages=Math.ceil(filterParametersService.getFiltersCount()/vm.pageSize)-1;
+            vm.filtersLength=filterParametersService.getFiltersCount();
+            $rootScope.$broadcast("flairbiApp:filter-count-changed");
             if($rootScope.isFullScreen ==false){
                 hideFiltersHeaderAndSideBar();
             }

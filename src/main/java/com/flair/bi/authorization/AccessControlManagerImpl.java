@@ -419,26 +419,21 @@ class AccessControlManagerImpl implements AccessControlManager {
      * @param permission permission that extends
      * @param add        if update consist of adding new permissions, if false means that update consists of deleting permissions from user and user groups
      */
-    private void updatePermissionState(final Permission criteria, final Permission permission, boolean add) {
-	    try {
-	        Iterable<User> it = userRepository.findAll(QUser.user.permissions.contains(criteria));
-	        Iterable<UserGroup> userGroups = userGroupRepository.findAll(QUserGroup.userGroup.permissions.contains(criteria));
-	        if (add) {
-	            it.forEach(x -> x.getPermissions().add(permission));
-	            userGroups.forEach(x -> x.getPermissions().add(permission));
-	        } else {
-	            it.forEach(x -> x.getPermissions().remove(permission));
-	            userGroups.forEach(x -> x.getPermissions().remove(permission));
-	        }
-	        userRepository.save(it);
-	        userGroupRepository.save(userGroups);
-	    }catch(Exception e) {
-	    	log.error("error occured while saving view : "+e.getMessage());
-	    	if(e.getMessage().contains("[view_name_unique]")) {
-	    		throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR,e);
-	    	}
-	    }
-    }
+	private void updatePermissionState(final Permission criteria, final Permission permission, boolean add) {
+
+		Iterable<User> it = userRepository.findAll(QUser.user.permissions.contains(criteria));
+		Iterable<UserGroup> userGroups = userGroupRepository
+				.findAll(QUserGroup.userGroup.permissions.contains(criteria));
+		if (add) {
+			it.forEach(x -> x.getPermissions().add(permission));
+			userGroups.forEach(x -> x.getPermissions().add(permission));
+		} else {
+			it.forEach(x -> x.getPermissions().remove(permission));
+			userGroups.forEach(x -> x.getPermissions().remove(permission));
+		}
+		userRepository.save(it);
+		userGroupRepository.save(userGroups);
+	}
 
     /**
      * Remove a connection between two permissions

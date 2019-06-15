@@ -145,6 +145,8 @@ public interface ViewService {
     void updateImageLocation(String imageLocation,Long id);
     
     String getImageLocation(Long id);
+    
+    View findByDashboardIdAndViewName(Long id,String viewName);
 
 
 }

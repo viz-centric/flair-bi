@@ -9,13 +9,13 @@
         'entity', 'Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies','$timeout',"filterParametersService","FilterStateManagerService",
-        "Visualmetadata","VisualDispatchService","VisualMetadataContainer"
+        "Visualmetadata","VisualDispatchService","VisualMetadataContainer","$translate"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
         entity, Features, $uibModal,
         $state, $scope, featureEntities,
-        Hierarchies,$timeout,filterParametersService,FilterStateManagerService,Visualmetadata,VisualDispatchService,VisualMetadataContainer) {
+        Hierarchies,$timeout,filterParametersService,FilterStateManagerService,Visualmetadata,VisualDispatchService,VisualMetadataContainer,$translate) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -75,6 +75,8 @@
             registerTogglePropertiesOff();
             loadDimensions();
             registerRightNavBarDataOpen();
+            registerOnDataPropertiesUpdate();
+            registerOnChartPropertiesUpdate();
         }
 
         ////////////////
@@ -136,6 +138,8 @@
                         vm.isSaving = false;
                         VisualMetadataContainer.update(vm.visual.id,result,'id');
                         vm.visual = result;
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:result.id}),title: "Updated"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveError
                 );
@@ -149,12 +153,13 @@
                         vm.isSaving = false;
                         VisualMetadataContainer.update(vm.visual.visualBuildId,result,'visualBuildId');
                         vm.visual = result;
+                        var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}
+                        $rootScope.showSuccessToast(info);
                     },
                     onSaveError
                 );
             }
         }
-
 
         function onSaveError(error) {
             vm.isSaving = false;
@@ -240,6 +245,37 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+        function registerOnDataPropertiesUpdate() {
+            var unsubscribe = $scope.$on("flairbiApp:on-data-properties-update", function(
+                event,
+                updatedField
+            ) {
+            var index = -1;
+            vm.visual.fields.filter(function(field) {
+                if(field.feature.name === updatedField.fieldName){
+                    field.properties.some(function(item, i) {
+                        return item.order === updatedField.property.order ? index = i : false;
+                    });
+                    field.properties[index].value=updatedField.value;
+                }
+            });
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerOnChartPropertiesUpdate() {
+            var unsubscribe = $scope.$on("flairbiApp:on-chart-properties-update", function(
+                event,
+                updatedChart
+            ) {
+            var index = -1;
+            vm.visual.properties.some(function(item, i) {
+                return item.order === updatedChart.property.order ? index = i : false;
+            });
+            vm.visual.properties[index].value=updatedChart.value;
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
         function ngIfFilters() {
             return showOpt && !$rootScope.exploration;
         }

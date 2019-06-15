@@ -5,6 +5,7 @@ import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
+import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.FileUploadService;
@@ -68,6 +69,9 @@ public class ViewsResource {
         if (view.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("view", "idexists", "A new view cannot already have an ID")).body(null);
         }
+        View viewExist=viewService.findByDashboardIdAndViewName(view.getViewDashboard().getId(), view.getViewName());
+        if(viewExist!=null)
+        	throw new UniqueConstraintsException("View already exists with this name");
         View result = viewService.save(view);
 		try {
 			if(view.getImage()!=null){

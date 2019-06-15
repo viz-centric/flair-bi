@@ -12,9 +12,9 @@ id|name|icon|custom_id|function_name
 515|Table|#table|6|GenerateTable
 528|Pivot Table|#pivot-table|19|GeneratePivotTable
 518|KPI|#kpi|9|GenerateKPI
-519|Info graphic|#info|10|GenerateInfoGraphic
+519|Info-graphic|#info|10|GenerateInfoGraphic
 523|Text Object|#textobject|14|GenerateTextObject
-514|Map|#map|5|GenerateMap
+514|Map|#map|5|GenerateMap 
 520|Tree Map|#treemap|11|GenerateTreemap
 521|Heat Map|#heatmap|12|GenerateHeatmap
 522|Box Plot|#boxplot|13|GenerateBoxplot

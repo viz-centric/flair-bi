@@ -72,7 +72,7 @@
                         </span>
                     </top-nav-button-component>
                     <top-nav-button-component if="vm.ngIfClearFilters()" click="vm.clearFilters()">
-                        <span uib-tooltip="Close" tooltip-placement="bottom">
+                        <span uib-tooltip="Reset" tooltip-placement="bottom">
                             <svg class="flaticons-close">
                                 <use xlink:href="#close" />
                             </svg>
@@ -218,7 +218,7 @@
                     </div>
                 </div>
             </div>
-            <div class="fs-btn add-bookmark item hidden-xs hidden-sm" ng-click="vm.bookmark()">
+            <div uib-tooltip="bookmark" tooltip-placement="bottom" class="fs-btn add-bookmark item hidden-xs hidden-sm" ng-click="vm.bookmark()">
                 <svg class="flaticons-bookmark">
                         <use xlink:href="#bookmark" />
                     </svg>
@@ -229,12 +229,12 @@
                 <div uib-tooltip="change container color" tooltip-placement="bottom"  md-color-picker ng-model="vm.containerColor" ng-change="vm.changeContainerColor(vm.containerColor)" label="Choose a container color" class="settings-item container-color" ></div>
             </div>
             <div class="line hidden-sm hidden-xs"></div>
-            <div class="fs-btn exit-screen item hidden-xs hidden-sm" ng-click="vm.exitFullScreen()">
+            <div uib-tooltip="Exit full screen" tooltip-placement="bottom" class="fs-btn exit-screen item hidden-xs hidden-sm" ng-click="vm.exitFullScreen()">
                 <svg class="flaticons-normal-screen">
                         <use xlink:href="#normal-screen" />
                     </svg>
             </div>
-            <div class="fs-btn filter item" ng-click="vm.toggleFSFilter()">
+            <div uib-tooltip="Filters" tooltip-placement="bottom" class="fs-btn filter item" ng-click="vm.toggleFSFilter()">
                 <svg class="flaticons-filter">
                         <use xlink:href="#filter" />
                     </svg>

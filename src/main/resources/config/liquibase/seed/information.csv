@@ -2,7 +2,7 @@ id|information_name|information_description|information_icon|information_endpoin
 1|Dashboards|Get count of all dashboards you have access to|flag1.svg|api/dashboards/count|count|false|0|flairadmin|background:#337ab7;color:white;border:thick solid#337ab7;|true
 2|Views|Get count of all views you have access to|flag2.svg|api/views/count|count|false|1|flairadmin|background:#64cb64;color:white;border:thick solid #64cb64;|true
 3|Datasources|Get count of all datasources you have access to|flag3.svg|api/datasources/count|count|false|2|flairadmin|background:purple;color:white;border:thick solid purple;|true
-4|Flaire Insights|Get count of all Alerts|flag4.svg|api/audits/authenticationSuccess/count|count|false|3|flairadmin|background:gray;color:white;border:thick solid gray;|true
+4|Flair Insights|Get count of all Alerts|flag4.svg|api/audits/authenticationSuccess/count|count|false|3|flairadmin|background:gray;color:white;border:thick solid gray;|true
 5|Bookmarks|Get count of all recent created bookmarks you have|flag5.svg|api/bookmark-watches/recently-created/count|count|false|4|flairadmin|background:gray;color:white;border:thick solid gray;|true
 6|Recent Dashboards|Get count of all recent  dashboards you have|flag1.svg|api/dashboards/count|count|false|5|flairadmin|background:gray;color:white;border:thick solid gray;|false
 7|Recent Views|Get count of all recent created bookmarks you have|flag2.svg|api/views/count|count|false|6|flairadmin|background:gray;color:white;border:thick solid gray;|false

@@ -7,4 +7,4 @@ id|name|description|value|dimension_use|measure_use|validation
 6|yearweek|returns yearweek|yearweek()|false|true|yearweek\\(\\w+\\)
 7|quarter|returns quarter|quarter()|false|true|quarter\\(\\w+\\)
 8|yearquarter|returns yearquarter|yearquarter()|false|true|yearquarter\\(\\w+\\)
-9|date|Returns date. Please use the following format only: date(<field name in database>, '<time format>')|date(field_name, 'yyyy-MM-dd')|false|true|date\\(\\w+\\s*,\\s*\\'[A-Za-z0-9-]+\\'\\)
+9|date|Returns date. Please use the following format only: datefmt(<field name in database>, '<time format>')|datefmt(field_name, 'yyyy-MM-dd')|false|true|datefmt\\(\\w+\\s*,\\s*\\'[A-Za-z0-9-\\s%]+\\'\\)

@@ -49,6 +49,7 @@ public class QueryTransformerService {
                     .collect(Collectors.toMap(item -> item.getName(), item -> item));
 
             fields = transformFieldNames(fields, features);
+            groupBy = transformGroupBy(groupBy, features);
         }
 
         Query.Builder builder = Query.newBuilder();
@@ -102,6 +103,15 @@ public class QueryTransformerService {
                 .stream()
                 .map(field -> Optional.ofNullable(features.get(field))
                         .map(item -> item.getDefinition() + " as " + item.getName())
+                        .orElse(field))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> transformGroupBy(List<String> fields, Map<String, Feature> features) {
+        return fields
+                .stream()
+                .map(field -> Optional.ofNullable(features.get(field))
+                        .map(item -> item.getDefinition())
                         .orElse(field))
                 .collect(Collectors.toList());
     }

@@ -7,6 +7,7 @@ import com.flair.bi.domain.hierarchy.Hierarchy;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
+@ToString(exclude = {"dashboardSet", "features", "hierarchies", "datasourceConstraints"})
 @Table(name = "datasources")
 public class Datasource implements Serializable {
 

@@ -5572,7 +5572,9 @@ ui-breadcrumbs .breadcrumb {
 
 .feature-dialog-modal .modal-body .feature-detail {
   border: 1px solid #e5e6e7;
-  border-radius: 30px; }
+  border-radius: 30px;
+  height: 326px;
+  overflow-y: scroll; }
 
 .feature-dialog-modal .modal-body .form-group {
   margin-top: 22px; }

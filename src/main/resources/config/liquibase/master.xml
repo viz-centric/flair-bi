@@ -48,9 +48,13 @@
     <include file="config/liquibase/changelog/20170907192607_added_entity_constraints_FeatureBookmark.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170908202540_added_entity_constraints_DatasourceConstraint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180323112601_added_dashboard_view_release_entities_constraints.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity_constraints.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190505113649_added_datasource_status.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190530220400_added_unique_constriants_dashboard_name.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190606130700_added_unique_constriants_datasource_name.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20190612090000_feature_validation.xml" relativeToChangelogFile="false" />
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-
-
 
     <include file="config/liquibase/changelog/20170704132700_added_rbac_model_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170714233800_added_datasource_seed.xml" relativeToChangelogFile="false"/>
@@ -58,13 +62,6 @@
     <include file="config/liquibase/changelog/20170817215500_added_entity_Hierarchy_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170817225500_added_entity_Drilldown_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170908231600_added_DatasourceConstraint_seed.xml" relativeToChangelogFile="false"/>
-    
-    <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20181009110500_added_bookmarkwatch_entity_constraints.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190505113649_added_datasource_status.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190530220400_added_unique_constriants_dashboard_name.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190606130700_added_unique_constriants_datasource_name.xml" relativeToChangelogFile="false" />
-<!--     <include file="config/liquibase/changelog/20190607090000_datasource_name_lower_case.xml" relativeToChangelogFile="false"/> -->
-    
+
 </databaseChangeLog>
 <!--@formatter:on-->

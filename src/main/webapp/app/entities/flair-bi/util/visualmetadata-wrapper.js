@@ -309,7 +309,7 @@
                     featureName: item.feature.selectedName
                 };
             }
-        })
+        });
 
         return query;
     }

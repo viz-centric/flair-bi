@@ -2,16 +2,15 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Feature;
 import com.flair.bi.repository.FeatureRepository;
+import com.flair.bi.service.dto.FunctionsDTO;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -20,6 +19,7 @@ import java.util.List;
 public class FeatureService {
 
     private final FeatureRepository featureRepository;
+    private final FunctionsService functionsService;
 
     @Transactional(readOnly = true)
     public List<Feature> getFeatures(Predicate predicate) {
@@ -42,12 +42,39 @@ public class FeatureService {
         log.debug("Attempt to delete feature with id {}", id);
         featureRepository.delete(id);
     }
-    
-    
+
+    public FeatureValidationResult validate(Feature feature) {
+        log.info("Validating feature {}", feature);
+        if (feature == null) {
+            return FeatureValidationResult.FEATURE_NULL;
+        }
+        if (feature.getDefinition() == null) {
+            return FeatureValidationResult.DEFINITION_NULL;
+        }
+        if (feature.getFunctionId() != null) {
+            FunctionsDTO function = functionsService.findOne(feature.getFunctionId());
+            if (function == null) {
+                return FeatureValidationResult.FUNCTION_DOES_NOT_EXIST;
+            }
+            if (function.getValidation() != null) {
+                boolean matches = feature.getDefinition().matches(function.getValidation());
+                if (!matches) {
+                    return FeatureValidationResult.VALIDATION_FAIL;
+                }
+            }
+        }
+        return FeatureValidationResult.OK;
+    }
+
     public void save(List<Feature> features) {
         log.debug("Saving feature {}", features);
     	featureRepository.save(features);
    }
 
 
+    public List<FeatureValidationResult> validate(List<Feature> features) {
+        return features.stream()
+                .map(f -> validate(f))
+                .collect(Collectors.toList());
+    }
 }

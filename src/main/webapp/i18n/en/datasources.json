@@ -24,7 +24,8 @@
             "error": {
                 "datasources.all": "Error Loading Data Sources"
             },
-            "uniqueError":"Datasource already exists with this name"
+            "uniqueError":"Datasource already exists with this name",
+            "noDataFound":"No data found!!"
         }
     }
 }

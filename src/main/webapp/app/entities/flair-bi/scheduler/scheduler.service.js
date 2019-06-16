@@ -14,7 +14,9 @@
             getScheduledReportsCount:getScheduledReportsCount,
             getScheduleReport:getScheduleReport,
             cancelScheduleReport:cancelScheduleReport,
-            getSchedulerReports:getSchedulerReports
+            getSchedulerReports:getSchedulerReports,
+            executeNow:executeNow,
+            getScheduleReportLogs:getScheduleReportLogs
         };
 
         return service;
@@ -61,6 +63,19 @@
                 url: 'api/schedule/'+visualizationid,
                 method: 'DELETE'
             });
+        }
+
+        function executeNow(visualizationid){
+            return $http({
+                url: 'api/executeImmediate/'+visualizationid,
+                method: 'GET'
+            });
+        }
+        function getScheduleReportLogs(visualizationid,pageSize,page){
+            return $http({
+                url: 'api/schedule/report/logs/'+visualizationid+'/'+pageSize+'/'+page,
+                method: 'GET'
+            });   
         }
 
     }

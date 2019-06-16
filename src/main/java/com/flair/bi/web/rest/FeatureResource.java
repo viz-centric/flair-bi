@@ -7,6 +7,7 @@ import com.flair.bi.domain.QDashboard;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.FeatureService;
+import com.flair.bi.service.FeatureValidationResult;
 import com.flair.bi.service.dto.FeatureDTO;
 import com.flair.bi.service.dto.FeatureListDTO;
 import com.flair.bi.service.mapper.FeatureMapper;
@@ -31,9 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
@@ -49,11 +51,11 @@ public class FeatureResource {
     @Timed
     public ResponseEntity<List<FeatureDTO>> getFeatures(@QuerydslPredicate(root = Feature.class) Predicate predicate, FeatureRequestParams featureRequestParams) {
         Predicate pred = Optional.ofNullable(featureRequestParams.getView())
-            .map(x -> QFeature.feature.datasource.eqAny(JPAExpressions.select(QDashboard.dashboard.dashboardDatasource).from(QDashboard.dashboard)
-                .where(QDashboard.dashboard.dashboardViews.any().id.eq(x))))
-            .map(y -> (Predicate) y.and(predicate))
-            .orElse(predicate
-            );
+                .map(x -> QFeature.feature.datasource.eqAny(JPAExpressions.select(QDashboard.dashboard.dashboardDatasource).from(QDashboard.dashboard)
+                        .where(QDashboard.dashboard.dashboardViews.any().id.eq(x))))
+                .map(y -> (Predicate) y.and(predicate))
+                .orElse(predicate
+                );
         return ResponseEntity.ok(featureMapper.featuresToFeatureDTOs(featureService.getFeatures(pred)));
     }
 
@@ -68,7 +70,7 @@ public class FeatureResource {
      */
     @PutMapping("/features")
     @Timed
-    public ResponseEntity<Feature> updateFeature(@Valid @RequestBody FeatureDTO feature) throws URISyntaxException {
+    public ResponseEntity<?> updateFeature(@Valid @RequestBody FeatureDTO feature) throws URISyntaxException {
         log.debug("REST request to update Feature : {}", feature);
         if (feature.getId() == null) {
             return ResponseEntity.badRequest().body(null);
@@ -84,11 +86,17 @@ public class FeatureResource {
         result.setFeatureType(feature.getFeatureType());
         result.setType(feature.getType());
         result.setName(feature.getName());
+        result.setFunctionId(feature.getFunctionId());
         result = featureService.save(result);
 
+        FeatureValidationResult validate = featureService.validate(result);
+        if (validate != FeatureValidationResult.OK) {
+            return ResponseEntity.badRequest().body(validate);
+        }
+
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("features", feature.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert("features", feature.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -114,44 +122,59 @@ public class FeatureResource {
      */
     @PostMapping("/features")
     @Timed
-    public ResponseEntity<Feature> createFeatures(@Valid @RequestBody Feature feature) throws URISyntaxException {
+    public ResponseEntity<?> createFeatures(@Valid @RequestBody Feature feature) throws URISyntaxException {
         log.debug("REST request to save feature : {}", feature);
         if (feature.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("features  ", "idexists", "A new features cannot already have an ID")).body(null);
         }
+        FeatureValidationResult validate = featureService.validate(feature);
+        if (validate != FeatureValidationResult.OK) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("feature", "feature." + validate.name().toLowerCase(), "Error"))
+                    .body(validate);
+        }
         Feature result = featureService.save(feature);
         return ResponseEntity.created(new URI("/api/features/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("features", result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert("features", result.getId().toString()))
+                .body(result);
     }
-    
+
     /**
      * POST  /features/list : Create a new features.
      *
      * @param featureListDTO the features to create in bulk
-     *
      * @return the ResponseEntity with status 201 (Created) and with body the new features
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/features/list")
     @Timed
-    public ResponseEntity<?>  createFeatures(@Valid @RequestBody FeatureListDTO featureListDTO) throws URISyntaxException {
+    public ResponseEntity<?> createFeatures(@Valid @RequestBody FeatureListDTO featureListDTO) throws URISyntaxException {
         log.debug("REST request to save feature : {}", featureListDTO);
-        Datasource datasource=datasourceService.findOne(featureListDTO.getDatasourceId());	
-        List<FeatureDTO> featureDTOList=featureListDTO.getFeatureList();
-        List<Feature> features= new ArrayList<Feature>();
-        for(FeatureDTO featureDTO :featureDTOList){
-        	Feature feature= new Feature();
-        	if(featureDTO.getIsSelected()){
-        	feature.setFeatureType(featureDTO.getFeatureType());
-        	feature.setDefinition(featureDTO.getName());
-        	feature.setName(featureDTO.getName());
-        	feature.setType(featureDTO.getType());
-        	feature.setDatasource(datasource);
-        	features.add(feature);
-        	}        	
+        Datasource datasource = datasourceService.findOne(featureListDTO.getDatasourceId());
+        List<Feature> features = featureListDTO.getFeatureList()
+                .stream()
+                .filter(item -> item.getIsSelected())
+                .map(featureDTO -> {
+                    Feature feature = new Feature();
+                    feature.setFeatureType(featureDTO.getFeatureType());
+                    feature.setDefinition(featureDTO.getName());
+                    feature.setName(featureDTO.getName());
+                    feature.setType(featureDTO.getType());
+                    feature.setFunctionId(featureDTO.getFunctionId());
+                    feature.setDatasource(datasource);
+                    return feature;
+                })
+                .collect(toList());
+        List<FeatureValidationResult> validate = featureService.validate(features);
+        List<FeatureValidationResult> errorFeatures = validate.stream()
+                .filter(r -> r != FeatureValidationResult.OK)
+                .collect(toList());
+        if (errorFeatures.size() > 0) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("feature", "feature." + errorFeatures.get(0).name().toLowerCase(), "Error"))
+                    .body(validate);
         }
-    	featureService.save(features);
+        featureService.save(features);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 

@@ -4,7 +4,6 @@ import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.dto.FbiEngineDTO;
 import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.project.bi.query.dto.QueryDTO;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

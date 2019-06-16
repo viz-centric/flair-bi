@@ -50,7 +50,12 @@
 
                     <div class="form-group">
                         <label class="control-label">Definition</label>
-                        <input type="text" class="feature-definition form-control" name="definition" id="field_definition" ng-model="vm.feature.definition"
+                        <input type="text"
+                               class="feature-definition form-control"
+                               name="definition"
+                               id="field_definition"
+                               ng-model="vm.feature.definition"
+                               ng-disabled="!vm.feature.functionId"
                             required>
                         <div ng-show="editoForm.definition.$invalid">
                             <p class="help-block" ng-show="editForm.definition.$error.required">
@@ -73,7 +78,7 @@
 
                 <div class="col-md-1"></div>
 
-                <div class="col-md-5 feature-detail">
+                <div class="col-md-5 feature-detail flair-scroll-gray">
 
                     <div class="form-group">
                         <div class="search-box-feature inner-addon left-addon">
@@ -87,7 +92,7 @@
                             <div ng-repeat="function in vm.functions | filter: {name: searchFunction} " class="card">
                                 <div class="card-header" id="hid_{{function.id}}">
                                     <h5 class="mb-0">
-                                        <button type="button" class="btn heading-colour" ng-click="vm.copyFunctions(function.value)">{{function.value}} &nbsp;<span class="badge"><i>fx</i></span></button>
+                                        <button type="button" class="btn heading-colour" ng-click="vm.copyFunctions(function)">{{function.value}} &nbsp;<span class="badge"><i>fx</i></span></button>
                                         <span class="glyphicon glyphicon-info-sign collapsed" data-toggle="collapse" data-target="#fid_{{function.id}}" aria-expanded="false" aria-controls="fid_{{function.id}}"></span>
                                     </h5>
                                 </div>

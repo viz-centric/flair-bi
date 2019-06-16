@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.QDatasource;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcConnectionService;
@@ -75,6 +76,14 @@ public class DatasourcesResource {
         if (datasource.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new datasource cannot already have an ID")).body(null);
         }
+        datasourceService.findAll(QDatasource.datasource.connectionName.eq(datasource.getConnectionName())
+                .and(QDatasource.datasource.name.eq(datasource.getName())))
+                .stream()
+                .findFirst()
+                .ifPresent((existingDatasource) -> {
+                    log.debug("REST request to save Datasource found existing datasource : {}", existingDatasource);
+                    datasource.setId(existingDatasource.getId());
+                });
         Datasource result = datasourceService.save(datasource);
         return ResponseEntity.created(new URI("/api/datasource/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

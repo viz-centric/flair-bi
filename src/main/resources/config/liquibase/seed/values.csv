@@ -55,6 +55,7 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 153|MIN|null|null|STRING|639|null
 154|MAX|null|null|STRING|639|null
 155|SUM|null|null|STRING|639|null
+156|DISTINCT COUNT|null|null|STRING|639|null
 157|NONE|null|null|STRING|640|640
 158|AVG|null|null|STRING|640|null
 159|COUNT|null|null|STRING|640|null

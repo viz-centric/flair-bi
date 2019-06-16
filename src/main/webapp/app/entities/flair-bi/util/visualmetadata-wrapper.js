@@ -86,7 +86,7 @@
      * @return url location of this visual metadata
      */
     function getSharePath(datasource) {
-        return '/visual/' + this.id + "?datasource="+datasource.id;
+        return '/visual/' + this.id + "?datasource=" + datasource.id;
     }
 
     /**
@@ -197,7 +197,7 @@
     function drillDown(drillDownFeature, hierarchy, filters) {
         var filter = filters[drillDownFeature.feature.name] || filters[drillDownFeature.feature.name.toLowerCase()];
         if ((filter &&
-                filter.length > 0) ||
+            filter.length > 0) ||
             haveFilter(drillDownFeature.order, hierarchy.drilldown, filters)) {
             var next = hierarchy.drilldown[drillDownFeature.order + 1];
             if (next) {
@@ -235,7 +235,14 @@
      */
     function constructMeasureField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
-        if (agg !== null && agg!=='NONE') {
+        if (agg === 'DISTINCT COUNT') {
+            //TODO this is temporary plz move this to flair compiler.
+            return {
+                field: 'COUNT(DISTINCT ' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.definition,
+                agg: true
+            };
+        }
+        else if (agg !== null && agg !== 'NONE') {
             return {
                 field: agg + '(' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.name,
                 agg: true

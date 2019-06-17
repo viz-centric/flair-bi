@@ -1,8 +1,6 @@
 package com.flair.bi.service;
 
-import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.Feature;
-import com.flair.bi.domain.QDatasource;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.messages.Query;
 import com.google.gson.Gson;
@@ -33,7 +31,6 @@ import static com.project.bi.query.SQLUtil.sanitize;
 public class QueryTransformerService {
 
     private final FeatureService featureService;
-    private final DatasourceService datasourceService;
 
     public Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId) {
         log.info("Map to query {}", queryDTO.toString());
@@ -42,9 +39,8 @@ public class QueryTransformerService {
         List<String> groupBy = queryDTO.getGroupBy();
 
         if (connectionName != null) {
-            Datasource datasource = getDatasource(connectionName);
-
-            Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.connectionName.eq(datasource.getConnectionName()))
+            Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.connectionName.eq(connectionName)
+                    .and(QFeature.feature.datasource.name.eq(queryDTO.getSource())))
                     .stream()
                     .collect(Collectors.toMap(item -> item.getName(), item -> item));
 
@@ -88,14 +84,6 @@ public class QueryTransformerService {
             );
         });
         return builder.build();
-    }
-
-    private Datasource getDatasource(String connectionName) {
-        List<Datasource> datasources = datasourceService.findAll(QDatasource.datasource.connectionName.eq(connectionName));
-        if (datasources.size() != 1) {
-            throw new RuntimeException("Too many or no datasources found for connection name " + connectionName);
-        }
-        return datasources.get(0);
     }
 
     private List<String> transformFieldNames(List<String> fields, Map<String, Feature> features) {

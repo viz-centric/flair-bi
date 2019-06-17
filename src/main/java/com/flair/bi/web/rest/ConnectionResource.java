@@ -116,12 +116,6 @@ public class ConnectionResource {
     public ResponseEntity<ConnectionDTO> deleteConnection(@PathVariable Long connectionId) {
         log.info("Delete connection {}", connectionId);
 
-        ConnectionDTO connection = grpcConnectionService.getConnection(connectionId);
-        if (connection == null) {
-            log.info("Cannot delete a connection that does not exist {}", connectionId);
-            return ResponseEntity.unprocessableEntity().build();
-        }
-
         boolean success = grpcConnectionService.deleteConnection(connectionId);
 
         log.debug("Deleted connection {} success {}", connectionId, success);
@@ -129,10 +123,6 @@ public class ConnectionResource {
         if (!success) {
             return ResponseEntity.unprocessableEntity().build();
         }
-
-        datasourceService.delete(QDatasource.datasource.connectionName.eq(connection.getLinkId()));
-
-        log.debug("Deleted datasources for connection {}", connection.getLinkId());
 
         return ResponseEntity.ok().build();
     }

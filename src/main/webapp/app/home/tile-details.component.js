@@ -215,11 +215,7 @@
         }
 
         function getRecentAccessedBookmark(){
-            recentBookmarkService.getRecentBookmark({
-                    page: 0,
-                    size: 20,
-                    sort: 'watchTime,desc'
-            }).then(function (result) {
+            recentBookmarkService.getRecentBookmark("?page=0&size=5&sort=watchTime,desc").then(function (result) {
                 vm.bookmarkWatches = result.data;
                 vm.dashboards = [];
                 vm.datasources=[];

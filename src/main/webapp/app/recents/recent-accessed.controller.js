@@ -24,15 +24,16 @@
                 getData: function () {
                 }
             },
-            'overall-most-popular': {
+            'overall-most-popular-views': {
                 getData: function(){
-                    getOverAllMostPopular();
+                    getOverAllMostPopularViews();
                 }
             },
-            'notification-subscriptions': {
-                getData: function () {
+            'overall-most-popular-bookmarks': {
+                getData: function(){
+                    getOverAllMostPopularBookmarks();
                 }
-            }
+            },
         };
         vm.toggleTabs=toggleTabs;
         
@@ -53,7 +54,7 @@
             });
         }
 
-        function getOverAllMostPopular(){
+        function getOverAllMostPopularViews(){
             vm.mostPopularViews =Views.mostPopular({});
         }
 
@@ -76,12 +77,14 @@
         }
 
         function getRecentBookmark(){
-            recentBookmarkService.getRecentBookmark({
-                    page: 0,
-                    size: 5,
-                    sort: 'watchTime,desc'
-            }).then(function (result) {
+            recentBookmarkService.getRecentBookmark("?page=0&size=5&sort=watchTime,desc").then(function (result) {
                 vm.bookmarkWatches = result.data;
+            });
+        }
+
+        function getOverAllMostPopularBookmarks(){
+            recentBookmarkService.getRecentBookmark("?page=0&size=5&sort=watchCount,desc").then(function (result) {
+                vm.mostPopularBookmarks = result.data;
             });
         }
     }

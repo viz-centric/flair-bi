@@ -25,7 +25,7 @@
         //bookmark-watches
         function getRecentBookmark(predicate) {
             return $http({
-                url: 'api/bookmark-watches',
+                url: 'api/bookmark-watches'+predicate,
                 method: 'GET',
                 data :predicate 
             });

@@ -1635,15 +1635,16 @@ a {
     font-size: 1.5em;
     padding: 10px 10px 6px 10px;
     max-height: 200px; }
-    .permissions-fbibox .fbibox-content .tree-handle svg {
-      fill: #676a6c;
-      height: 18px;
-      width: 16px; }
+    .permissions-fbibox .fbibox-content .tree-handle .permission-icon {
+      font-size: 18px;
+      color: #439dd3; }
+    .permissions-fbibox .fbibox-content .tree-handle .square-icon {
+      margin-top: 4px; }
     .permissions-fbibox .fbibox-content .tree-handle span {
       font-size: small;
       font-weight: normal;
       vertical-align: top;
-      margin: 5px; }
+      margin: 3px; }
       .permissions-fbibox .fbibox-content .tree-handle span.user-tree-header {
         font-size: small;
         font-weight: 600; }
@@ -6212,8 +6213,7 @@ input.select2-active {
   justify-content: center;
   flex-flow: wrap; }
   .recent-tabs .tab {
-    min-width: 206px;
-    max-width: 300px;
+    width: 250px;
     background-color: #fff;
     padding: 0px 5px;
     display: flex;

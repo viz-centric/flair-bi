@@ -26,16 +26,10 @@
                     <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === user.login}" ng-repeat="user in vm.users | filter: vm.filterUser">
                         <span>{{user.login}}</span>
                         <button type="submit" ng-click="vm.getUserPermissions(user.login)">
-                            <svg class="flaticon-right-arrow">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#right-arrow"></use>
-                            </svg>
-                            <!-- <span class="hidden-xs hidden-sm"></span> -->
+                            <span class="fa fa-share-square-o permission-icon fa-2x square-icon"></span>
                         </button>
                         <button type="submit" ui-sref="user-management-detail({login:user.login})">
-                            <svg class="flaticon-view">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#view"></use>
-                            </svg>
-                            <!-- <span class="hidden-xs hidden-sm"></span> -->
+                            <span class="fa fa-eye permission-icon fa-2x"></span>
                         </button>
                     </div>
                 </div>
@@ -47,10 +41,7 @@
                     <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === group.name}" ng-repeat="group in vm.userGroups | filter: vm.filterUserGroup">
                         <span>{{group.name}}</span>
                         <button type="submit" ng-click="vm.getUserGroupPermissions(group.name)">
-                            <svg class="flaticon-right-arrow">
-                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#right-arrow"></use>
-                            </svg>
-                            <!-- <span class="hidden-xs hidden-sm"></span> -->
+                            <span class="fa fa-share-square-o permission-icon fa-2x square-icon"></span>
                         </button>
                         <button ng-hide="vm.isPredefinedGroup(group.name)" type="submit" ui-sref="permission-management.user-group-delete({name: group.name})">
                             <svg class="flaticons-close">

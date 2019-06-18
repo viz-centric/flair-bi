@@ -64,10 +64,11 @@
                         .attr('height', element[0].clientHeight)
 
                     var tooltip = div.append('div')
-                        .attr('class', 'custom_tooltip')
+                        .attr('class', 'custom_tooltip');
 
                     var gauge = flairVisualizations.gauge()
                         .config(getProperties(VisualizationUtils, record))
+                        .tooltip(true)
                         .print(false);
 
                     svg.datum(record.data)

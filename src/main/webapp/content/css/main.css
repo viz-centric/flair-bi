@@ -1897,8 +1897,10 @@ a {
     color: #676a6c; }
   .home-container #welcome-message {
     width: 30%;
-    margin-left: 6px;
-    align-self: center; }
+    margin-left: 5px;
+    align-self: center;
+    margin-bottom: 150px;
+    margin-top: 8px; }
   .home-container #welcome-message img {
     transition: 600ms all ease; }
   .home-container #welcome-message p {

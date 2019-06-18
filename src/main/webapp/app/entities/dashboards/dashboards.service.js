@@ -33,7 +33,7 @@
                     method: "GET"
                 },
                 releases: {
-                    url: "api/dashboards/:id/releases",
+                    url: "api/dashboards/:id/releases/list",
                     method: "GET",
                     isArray: true
                 },

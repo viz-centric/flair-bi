@@ -108,6 +108,15 @@ public interface DashboardService {
      * @return collection of view releases
      */
     Collection<DashboardRelease> getDashboardReleases(Long dashboardId);
+    
+    
+    /**
+     * Get all releases for that dashboard
+     *
+     * @param dashboardId id of a view
+     * @return list of view releases
+     */
+    List<DashboardRelease> getDashboardReleasesList(Long dashboardId);
 
 
     /**

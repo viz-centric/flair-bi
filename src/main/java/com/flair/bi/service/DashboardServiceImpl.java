@@ -399,4 +399,9 @@ public class DashboardServiceImpl implements DashboardService {
 		}
 		return imageLocation;
 	}
+
+	@Override
+	public List<DashboardRelease> getDashboardReleasesList(Long dashboardId) {
+		return dashboardReleaseRepository.findByDashboardId(dashboardId);
+	}
 }

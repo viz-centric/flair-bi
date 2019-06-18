@@ -234,6 +234,13 @@ public class DashboardsResource {
         return dashboardService.getDashboardReleases(id);
     }
 
+    @GetMapping("/dashboards/{id}/releases/list")
+    @Timed
+    @PreAuthorize("@accessControlManager.hasAccess(#id, 'READ_PUBLISHED', 'DASHBOARD')")
+    public List<DashboardRelease> getDashboardReleasesList(@PathVariable Long id) {
+        return dashboardService.getDashboardReleasesList(id);
+    }
+
     @GetMapping("/dashboards/{id}/releases/latest")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess(#id, 'READ_PUBLISHED', 'DASHBOARD')")

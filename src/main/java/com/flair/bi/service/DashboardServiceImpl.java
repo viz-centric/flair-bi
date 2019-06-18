@@ -16,8 +16,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -314,7 +312,7 @@ public class DashboardServiceImpl implements DashboardService {
      * @return collection of view releases
      */
     @Override
-    public Collection<DashboardRelease> getDashboardReleases(Long dashboardId) {    	
+    public Collection<DashboardRelease> getDashboardReleases(Long dashboardId) {
         return Optional.ofNullable(dashboardId)
             .map(dashboardRepository::findOne)
             .map(Dashboard::getDashboardReleases)

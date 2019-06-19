@@ -34,6 +34,7 @@
         vm.clear = clear;
         vm.checkIfAnySelected = checkIfAnySelected;
         vm.anySelected = false;
+        vm.selectView=selectView;
         activate();
 
         ////////////////
@@ -72,6 +73,11 @@
                     $rootScope.showSuccessToast(info);
                 }
             );
+        }
+
+        function selectView(view){
+            view.selected=!view.selected;
+            checkIfAnySelected();
         }
     }
 

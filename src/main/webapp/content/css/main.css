@@ -6420,6 +6420,10 @@ input.select2-active {
 .common-create-popup .form-group .img-label {
   margin-bottom: 0px; }
 
+.common-create-popup .form-group .flair-checkbox {
+  vertical-align: top;
+  padding-left: 5px; }
+
 .common-create-popup .form-group .row {
   padding-top: 5px;
   margin-left: 0px;

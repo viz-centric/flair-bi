@@ -19,11 +19,12 @@
                     Select which views you want to be released
                 </label>
                 <div class="m-lg" ng-repeat="view in vm.dashboard.dashboardViews">
-                    <label class="checkbox-container" title="Click Here">
-                        <input class="flair-check-box" ng-model="view.selected" ng-change="vm.checkIfAnySelected()" type="checkbox">
-                        <span class="checkmark"></span>
+                    <label class="flair-checkbox" ng-click="vm.selectView(view)" >
+                        <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':view.selected,'fa-square-o-unchecked':!view.selected} "></i>
+                        <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':view.selected,'fa-check-square-o-unchecked':!view.selected}"></i>
                     </label>
                     <span class="">
+                        &nbsp;
                         {{view.viewName}}
                     </span>
                 </div>

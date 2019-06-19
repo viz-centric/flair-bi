@@ -37,7 +37,11 @@
             </div>
             <div class="form-group" ng-if="vm.dashboards.currentRelease">
                 <label class="control-label" for="published"> Is published </label>
-                <input type="checkbox" ng-model="vm.dashboards.published" />
+                <!-- <input type="checkbox" ng-model="vm.dashboards.published" /> -->
+                <label class="flair-checkbox" ng-click="vm.togglePublish()">
+                    <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.dashboards.published,'fa-square-o-unchecked':!vm.dashboards.published} "></i>
+                    <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.dashboards.published,'fa-check-square-o-unchecked':!vm.dashboards.published}"></i>
+                </label>
             </div>
             <div class="form-group" ng-if="vm.dashboards.currentRelease">
                 <label class="control-label" for="current_release">Release version</label>

@@ -51,6 +51,7 @@
         });
         vm.isInValidImage=false;
         vm.search=search;
+        vm.togglePublish=togglePublish;
 
         active();
 
@@ -165,6 +166,10 @@
                     });
                 });
             }
+        }
+
+        function togglePublish(){
+            vm.dashboards.published=!vm.dashboards.published;
         }
     }
 })();

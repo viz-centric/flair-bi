@@ -31,7 +31,6 @@
         vm.changeDashboard=changeDashboard;
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
-        vm.isEmailReporter=false;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -64,7 +63,8 @@
                 "start_date": null,
                 "end_date": null
             },
-            "putcall":false
+            "putcall":false,
+            "emailReporter":false
           };
         activate();
 
@@ -82,7 +82,7 @@
                 vm.datasource= datasource;
                 buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
             }else{
-                vm.isEmailReporter=true;
+                vm.scheduleObj.emailReporter=true;
                 loadDashboards();
                 vm.users=User.query();
             }

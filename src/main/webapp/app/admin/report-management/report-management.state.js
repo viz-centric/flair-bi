@@ -55,6 +55,48 @@
                 }
 
             })
+            .state("report-management.new", {
+                parent: "report-management",
+                url: "/schedule/new",
+                data: {
+                    displayName: false
+                },
+                onEnter: [
+                    "$stateParams",
+                    "$state",
+                    "$uibModal",
+                    function($stateParams, $state, $uibModal) {
+                        $uibModal
+                            .open({
+                                templateUrl:
+                                    "app/entities/flair-bi/scheduler/scheduler-dialog.html",
+                                controller: "SchedulerDialogController",
+                                controllerAs: "vm",
+                                backdrop: "static",
+                                size: "lg",
+                                resolve: {
+                                    visualMetaData: function () {
+                                        return null;
+                                    },
+                                    datasource: function(){
+                                        return null;
+                                    },
+                                    view: function(){
+                                        return null;
+                                    },
+                                    dashboard: function(){
+                                        return null;
+                                    }
+                                }
+                            })
+                            .result.then(
+                                function() {
+                                    $state.go("report-management");
+                                }
+                            );
+                    }
+                ]
+            })
             .state('report-management-log', {
                 url: '/report/:visualizationid',
                 data: {

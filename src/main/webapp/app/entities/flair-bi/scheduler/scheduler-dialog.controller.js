@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','shareLink','ShareLinkService'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,shareLink,ShareLinkService) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -28,6 +28,10 @@
         vm.removed = removed;
         vm.endDateFormat='yyyy-MM-dd';
         vm.deleteReport=deleteReport;
+        vm.changeDashboard=changeDashboard;
+        vm.changeView=changeView;
+        vm.changeVisualization=changeVisualization;
+        vm.isEmailReporter=false;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -67,14 +71,22 @@
         ////////////////
 
         function activate() {
-            vm.visualMetaData = visualMetaData;
-            getScheduleReport(visualMetaData.id);
-            vm.datasource= datasource;
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            buildScheduleObject(vm.visualMetaData,vm.datasource,dashboard,view,shareLink);
-            //vm.users=User.query();this will be used in future
             var cronstrue = window.cronstrue;
+            if(visualMetaData){
+                vm.visualMetaData = visualMetaData;
+                vm.dashboard=dashboard;
+                vm.view=view;
+                getScheduleReport(visualMetaData.id);
+                vm.datasource= datasource;
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
+            }else{
+                vm.isEmailReporter=true;
+                loadDashboards();
+                vm.users=User.query();
+            }
+
         }
 
         function getScheduleReport(visualizationid){
@@ -96,8 +108,7 @@
             }); 
         }
 
-        function buildScheduleObject(visualMetaData,datasource,dashboard,view,shareLink){
-        //report's data
+        function buildScheduleObject(visualMetaData,datasource,dashboard,view){
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
             vm.scheduleObj.report.view_name=view.viewName;
             vm.scheduleObj.report.build_url=builUrl(dashboard,view);
@@ -221,6 +232,47 @@
                 }
                 $rootScope.showErrorSingleToast(info);
             });
+        }
+
+        function loadDashboards() {
+            Dashboards.query(function(result) {
+                vm.dashboards = result;
+            });
+        }
+
+        function changeDashboard(dashboard){
+            vm.dashboard=dashboard;
+            loadViews(dashboard.id);
+        }
+
+        function loadViews(id) {
+            Views.query(
+                {
+                    viewDashboard:id
+                },
+                function(result) {
+                    vm.views = result;
+                }
+            );
+        }
+
+        function changeView(view){
+            vm.view=view;
+            loadVisualizations(view.id);
+        }
+
+        function loadVisualizations(id){
+            Visualmetadata.query({
+                views:id
+            },function(result){
+                vm.visualizations=result;
+            });
+        }
+
+        function changeVisualization(visualMetaData){
+            vm.visualMetaData = visualMetaData;
+            vm.datasource=vm.dashboard.dashboardDatasource;
+            buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 }
 })();

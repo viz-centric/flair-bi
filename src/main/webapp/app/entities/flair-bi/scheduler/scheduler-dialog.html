@@ -13,6 +13,57 @@
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div class="container">
+                <div class="row container" ng-if="vm.isEmailReporter">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label class="control-label" for="emails">Select Dashboard*</label>
+                            <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)" required>
+                                <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}</ui-select-match>
+                                <ui-select-choices repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
+                                    <div ng-bind="dashboard.dashboardName"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.isEmailReporter">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label class="control-label" for="emails">Select View*</label>
+                            <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)" required>
+                                <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}</ui-select-match>
+                                <ui-select-choices repeat="view in vm.views | filter: $select.search track by view.id">
+                                    <div ng-bind="view.viewName"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.isEmailReporter">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label class="control-label" for="emails">Select Visualization*</label>
+                            <ui-select ng-model="vm.visualMetaData" ng-change="vm.changeVisualization(vm.visualMetaData)" required>
+                                <ui-select-match placeholder="Search Visualization...">{{$select.selected.metadataVisual.name}}</ui-select-match>
+                                <ui-select-choices repeat="visualization in vm.visualizations | filter: $select.search track by visualization.id">
+                                    <div ng-bind="visualization.metadataVisual.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.isEmailReporter">
+                    <div class="col-xs-8">
+                        <div class="form-group scheduler-tags">
+                            <label class="control-label" for="emails">Share Report with Users*</label>
+                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
+                                replace-spaces-with-dashes="false">
+                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
+                                </auto-complete>
+                            </tags-input>
+                        </div>
+                    </div>
+                </div>
                 <div class="row container">
                     <div class="col-xs-4" style="display: none;">
                         <div class="form-group">
@@ -44,18 +95,6 @@
                                 Comments
                             </label>
                             <textarea ng-required="vm.scheduleObj.report.mail_body==null" class="form-control" ng-model="vm.scheduleObj.report.mail_body" ></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row container" style="display: none;">
-                    <div class="col-xs-8">
-                        <div class="form-group scheduler-tags">
-                            <label class="control-label" for="emails">Share Report with Users*</label>
-                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
-                                replace-spaces-with-dashes="false">
-                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
-                                </auto-complete>
-                            </tags-input>
                         </div>
                     </div>
                 </div>

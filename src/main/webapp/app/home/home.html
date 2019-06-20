@@ -37,14 +37,14 @@
                                 <p>New Data Insights</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-data-sou" ui-sref="connection.new" ng-if="vm.isAdmin">
+                            <a class="quick-box new-data-sou" ui-sref="connection.new">
                                 <svg >
                                    <use xlink:href="#new-data-source" ></use>
                                </svg>
                                 <p>New Data Source</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-email">
+                            <a class="quick-box new-email" ui-sref="report-management.new" ng-if="vm.isAdmin">
                                 <svg >
                                    <use xlink:href="#new-email-report"></use>
                                </svg>

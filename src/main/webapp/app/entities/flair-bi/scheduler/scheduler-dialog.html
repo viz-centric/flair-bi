@@ -17,7 +17,7 @@
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Dashboard*</label>
-                            <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)" required>
+                            <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)" ng-required="vm.dashboard==null">
                                 <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}</ui-select-match>
                                 <ui-select-choices repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
                                     <div ng-bind="dashboard.dashboardName"></div>
@@ -30,7 +30,7 @@
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select View*</label>
-                            <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)" required>
+                            <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)" ng-required="vm.view==null">
                                 <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}</ui-select-match>
                                 <ui-select-choices repeat="view in vm.views | filter: $select.search track by view.id">
                                     <div ng-bind="view.viewName"></div>
@@ -43,7 +43,7 @@
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Visualization*</label>
-                            <ui-select ng-model="vm.visualMetaData" ng-change="vm.changeVisualization(vm.visualMetaData)" required>
+                            <ui-select ng-model="vm.visualMetaData" ng-change="vm.changeVisualization(vm.visualMetaData)" ng-required="vm.visualMetaData==null">
                                 <ui-select-match placeholder="Search Visualization...">{{$select.selected.metadataVisual.name}}</ui-select-match>
                                 <ui-select-choices repeat="visualization in vm.visualizations | filter: $select.search track by visualization.id">
                                     <div ng-bind="visualization.metadataVisual.name"></div>

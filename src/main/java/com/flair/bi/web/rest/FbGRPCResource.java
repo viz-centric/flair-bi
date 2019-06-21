@@ -3,7 +3,6 @@ package com.flair.bi.web.rest;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.dto.FbiEngineDTO;
 import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
-import com.project.bi.query.dto.QueryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -27,13 +26,6 @@ public class FbGRPCResource {
             fbiEngineDTO.getType());
     }
     
-    @MessageMapping("/fbi-engine-grpc/{sourcesId}/queryAll")
-    public void mirrorSocketSampleData(@DestinationVariable String sourcesId, @Payload QueryDTO queryDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
-        grpcQueryService.sendGetDataStream(sourcesId,
-            headerAccessor.getUser().getName(),
-            queryDTO);
-    }
-
     @MessageMapping("/fbi-engine-grpc/queryAll")
     public void handleQueryAll(@Payload QueryAllRequestDTO requestDTO, SimpMessageHeaderAccessor headerAccessor) {
         grpcQueryService.sendQueryAll(headerAccessor.getUser().getName(), requestDTO);

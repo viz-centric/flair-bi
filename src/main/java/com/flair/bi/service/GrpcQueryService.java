@@ -52,7 +52,10 @@ public class GrpcQueryService {
         log.debug("Sending run query request for datasource {} id {}",
             queryDTO.getSource(), datasource.getConnectionName());
 
-        Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(), null, null);
+        Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+                .connectionName(datasource.getConnectionName())
+                .datasourceId(datasource.getId())
+                .build());
 
         RunQueryResponse result;
         try {
@@ -102,10 +105,12 @@ public class GrpcQueryService {
 
         queryDTO.setSource(datasource.getName());
 
-        Query query = queryTransformerService.toQuery(queryDTO,
-            datasource.getConnectionName(),
-            visualMetadataId != null ? visualMetadataId : "",
-            userId);
+        Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+                .connectionName(datasource.getConnectionName())
+                .vId(visualMetadataId != null ? visualMetadataId : "")
+                .userId(userId)
+                .datasourceId(datasource.getId())
+                .build());
 
         log.debug("Invoking gRPC query {}", query);
         QueryValidationResponse queryResponse = grpcService.validate(query);
@@ -153,12 +158,11 @@ public class GrpcQueryService {
         }
     }
     
-    public void sendGetDataStream(String sourcesId, String userId, QueryDTO queryDTO) throws InterruptedException {
-    	 callGrpcBiDirectionalAndPushInSocket(sourcesId,queryDTO,getVid(userId),userId);
-    }
-
     public void sendQueryAll(String userId, QueryAllRequestDTO requestDTO) {
-        Query query = queryTransformerService.toQuery(requestDTO.getQuery(), null, null, userId);
+        Query query = queryTransformerService.toQuery(requestDTO.getQuery(), QueryTransformerParams.builder()
+                .userId(userId)
+                .datasourceId(requestDTO.getSourceId())
+                .build());
         Connection connection = toProtoConnection(requestDTO.getConnection());
         QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
 
@@ -176,46 +180,13 @@ public class GrpcQueryService {
     }
     
     
-    private  void callGrpcBiDirectionalAndPushInSocket(String sourcesId, QueryDTO queryDTO, String vId, String userId) throws InterruptedException {
-        Query query = queryTransformerService.toQuery(queryDTO, sourcesId, vId, userId);
-        StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
-            @Override
-            public void onNext(QueryResponse queryResponse) {
-                log.debug("Finished trip with===" + queryResponse.toString());
-                fbEngineWebSocketService.pushGRPCMetaDeta(queryResponse);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                log.error("callGrpcBiDirectionalAndPushInSocket Failed:", t);
-                if (t instanceof StatusRuntimeException) {
-                    StatusRuntimeException statusRuntimeException = (StatusRuntimeException) t;
-                    fbEngineWebSocketService.pushGRPCMetaDataError(userId, statusRuntimeException.getStatus());
-                }
-            }
-
-            @Override
-            public void onCompleted() {
-                log.debug("Finished Request");
-            }
-        };
-
-        StreamObserver<Query> requestObserver = grpcService.getDataStream(responseObserver);
-        try {
-            requestObserver.onNext(query);
-        } catch (RuntimeException e) {
-            // Cancel RPC
-            requestObserver.onError(e);
-            throw e;
-        }
-        // Mark the end of requests
-        requestObserver.onCompleted();
-
-    }
-    
-
     private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, QueryDTO queryDTO, String vId, String request, String userId) throws InterruptedException {
-        Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(), vId, userId);
+        Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+                .datasourceId(datasource.getId())
+                .connectionName(datasource.getConnectionName())
+                .vId(vId)
+                .userId(userId)
+                .build());
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
             @Override
             public void onNext(QueryResponse queryResponse) {

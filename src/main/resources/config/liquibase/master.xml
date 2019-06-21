@@ -55,6 +55,7 @@
     <include file="config/liquibase/changelog/20190606130700_added_unique_constriants_datasource_name.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20190612090000_feature_validation.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20190616130700_remove_unique_constriants_datasource_name.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20190616130700_remove_unique_constriants_datasource_name_and_status.xml" relativeToChangelogFile="false" />
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20170704132700_added_rbac_model_seed.xml" relativeToChangelogFile="false"/>

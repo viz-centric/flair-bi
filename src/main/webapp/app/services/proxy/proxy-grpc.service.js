@@ -27,16 +27,6 @@
             );
         }
 
-        function sampleDataCall(sourceId, body){
-            stompClientService.send(
-                "/flair-ws/fbi-engine-grpc/" +
-                sourceId +
-                "/queryAll",
-                {},
-                JSON.stringify(body)
-            ); 
-        }
-
         function queryAll(body){
             stompClientService.send(
                 "/flair-ws/fbi-engine-grpc/queryAll",
@@ -47,7 +37,6 @@
 
         return {
             forwardCall: forwardCall,
-            sampleDataCall:sampleDataCall,
             queryAll: queryAll
         };
     }

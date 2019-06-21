@@ -257,6 +257,7 @@
             query.limit = 10;
             query.source = vm.datasources.name;
             body.query = query;
+            body.sourceId = vm.datasources.id;
             proxyGrpcService.queryAll(body);
         }
 

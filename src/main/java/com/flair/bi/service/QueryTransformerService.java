@@ -32,15 +32,18 @@ public class QueryTransformerService {
 
     private final FeatureService featureService;
 
-    public Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId) {
-        log.info("Map to query {}", queryDTO.toString());
+    public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) {
+        log.info("Map to query {} params {}", queryDTO.toString(), params);
+        return toQuery(queryDTO, params.getConnectionName(), params.getVId(), params.getUserId(), params.getDatasourceId());
+    }
+
+    private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId, Long datasourceId) {
 
         List<String> fields = queryDTO.getFields();
         List<String> groupBy = queryDTO.getGroupBy();
 
         if (connectionName != null) {
-            Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.connectionName.eq(connectionName)
-                    .and(QFeature.feature.datasource.name.eq(queryDTO.getSource())))
+            Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.id.eq(datasourceId))
                     .stream()
                     .collect(Collectors.toMap(item -> item.getName(), item -> item));
 

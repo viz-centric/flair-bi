@@ -50,29 +50,18 @@
                         gauge.update(record.data);
                     }
                 } else {
-                    d3.select(element[0]).html('')
-                    var div = d3.select(element[0]).append('div')
-                        .attr('id', 'gauge-' + element[0].id)
-                        .style('width', element[0].clientWidth + 'px')
-                        .style('height', element[0].clientHeight + 'px')
-                        .style('overflow', 'hidden')
-                        .style('text-align', 'center')
-                        .style('position', 'relative');
-
-                    var svg = div.append('svg')
-                        .attr('width', element[0].clientWidth)
-                        .attr('height', element[0].clientHeight)
-
-                    var tooltip = div.append('div')
-                        .attr('class', 'custom_tooltip');
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="gauge-' + element[0].id + '" ></div>')
+                    var div = $('#gauge-' + element[0].id)
 
                     var gauge = flairVisualizations.gauge()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
-                        .print(false);
+                       
+                        .print(false)
+                        .data(record.data);
 
-                    svg.datum(record.data)
-                        .call(gauge)
+                    gauge(div[0])
 
                     $rootScope.updateWidget[record.id] = gauge;
                 }

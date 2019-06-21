@@ -24,6 +24,8 @@ public interface DatasourceService {
      */
     List<Datasource> findAll(Predicate predicate);
 
+    List<Datasource> findAllAndDeleted(Predicate predicate);
+
     /**
      * Get one datasources by id.
      *

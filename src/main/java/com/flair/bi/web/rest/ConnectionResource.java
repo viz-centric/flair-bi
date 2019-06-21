@@ -48,8 +48,7 @@ public class ConnectionResource {
     @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
     public ResponseEntity<List<DeleteInfo>> getConnectionDeleteInfo(@PathVariable String connectionLinkId) {
         final List<Datasource> datasource =
-            datasourceService
-                .findAll(QDatasource.datasource.connectionName.eq(connectionLinkId));
+            datasourceService.findAll(QDatasource.datasource.connectionName.eq(connectionLinkId));
 
         final List<DeleteInfo> deleteInfos = new ArrayList<>();
 

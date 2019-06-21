@@ -11,6 +11,7 @@ public class SchedulerDTO {
 	private Schedule schedule;
 	private QueryDTO queryDTO;
 	private boolean putcall;
+	private boolean emailReporter;
 	
 	public SchedulerDTO(){}
 	
@@ -81,11 +82,19 @@ public class SchedulerDTO {
 		this.putcall = putcall;
 	}
 
+	public boolean getEmailReporter() {
+		return emailReporter;
+	}
+
+	public void setEmailReporter(boolean emailReporter) {
+		this.emailReporter = emailReporter;
+	}
+
 	@Override
 	public String toString() {
 		return "SchedulerDTO [datasourceid=" + datasourceid + ", report=" + report + ", report_line_item="
 				+ report_line_item + ", assign_report=" + assign_report + ", schedule=" + schedule + ", queryDTO="
-				+ queryDTO + ", putcall=" + putcall + "]";
+				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + "]";
 	}
 	
 }

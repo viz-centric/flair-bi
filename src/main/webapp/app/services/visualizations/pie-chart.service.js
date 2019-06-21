@@ -21,7 +21,7 @@
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measure);
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
-                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
+                    result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toUpperCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
                     result['valueAsArc'] = VisualizationUtils.getPropertyValue(record.properties, 'Value as Arc');
                     result['valuePosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Value position').toLowerCase();
@@ -35,21 +35,9 @@
                             .update(record.data);
                     }
                 } else {
-                    d3.select(element[0]).html('')
-                    var div = d3.select(element[0]).append('div')
-                        .attr('id', 'pie-' + element[0].id)
-                        .style('width', element[0].clientWidth + 'px')
-                        .style('height', element[0].clientHeight + 'px')
-                        .style('overflow', 'hidden')
-                        .style('text-align', 'center')
-                        .style('position', 'relative');
-
-                    var svg = div.append('svg')
-                        .attr('width', element[0].clientWidth)
-                        .attr('height', element[0].clientHeight)
-
-                    var tooltip = div.append('div')
-                        .attr('class', 'custom_tooltip');
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="pie-' + element[0].id + '" ></div>')
+                    var div = $('#pie-' + element[0].id)
 
                     var pie = flairVisualizations.pie()
                         .config(getProperties(VisualizationUtils, record))
@@ -57,9 +45,9 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(false)
+                        .data(record.data);
 
-                    svg.datum(record.data)
-                        .call(pie);
+                    pie(div[0])
 
                     $rootScope.updateWidget[record.id] = pie;
                 }

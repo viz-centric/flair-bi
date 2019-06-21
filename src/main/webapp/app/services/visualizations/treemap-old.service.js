@@ -618,7 +618,7 @@
                             });
 
                         var t = d3.transition()
-                            .duration(COMMON.DURATION)
+                            .duration(1000)
                             .ease(d3.easeQuadIn)
                             .on('end', afterTransition);
 

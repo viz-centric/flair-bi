@@ -11,6 +11,7 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.QueryTransformerParams;
 import com.flair.bi.service.QueryTransformerService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
@@ -127,7 +128,9 @@ public class SchedulerResource {
 		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
 		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
-		schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
+		if(!schedulerDTO.getEmailReporter()) {
+			schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
+		}
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
@@ -199,10 +202,13 @@ public class SchedulerResource {
             .map(DatasourceConstraint::build)
             .ifPresent(queryDTO.getConditionExpressions()::add);
 
-		Query query = queryTransformerService.toQuery(queryDTO, datasource.getConnectionName(),
-				visualizationId != null ? visualizationId : "",
-				userId);
-        
+		Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+				.datasourceId(datasource.getId())
+				.connectionName(datasource.getConnectionName())
+				.vId(visualizationId != null ? visualizationId : "")
+				.userId(userId)
+				.build());
+
         String jsonQuery=JsonFormat.printer().print(query);
 
         log.debug("jsonQuery=="+jsonQuery);

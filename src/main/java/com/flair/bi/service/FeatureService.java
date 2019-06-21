@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.QFeature;
 import com.flair.bi.repository.FeatureRepository;
 import com.flair.bi.service.dto.FunctionsDTO;
 import com.querydsl.core.types.Predicate;
@@ -62,6 +63,10 @@ public class FeatureService {
                     return FeatureValidationResult.VALIDATION_FAIL;
                 }
             }
+        }
+        List<Feature> existingFeatures = getFeatures(QFeature.feature.datasource.eq(feature.getDatasource()).and(QFeature.feature.name.eq(feature.getName())));
+        if (!existingFeatures.isEmpty()) {
+            return FeatureValidationResult.ALREADY_EXISTS;
         }
         return FeatureValidationResult.OK;
     }

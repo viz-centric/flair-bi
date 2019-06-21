@@ -144,10 +144,12 @@
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID",
+        "idnotexist": "Resource ID should be provided for {{ entityName }}",
         "feature": {
             "function_does_not_exist": "Function does not exist. Please choose one of the pre-defined functions.",
-            "definition_null": "Function definition is empty.",
-            "validation_fail": "Function validation did not pass, please check the function format and description for more information.",
+            "definition_null": "Feature definition is empty.",
+            "already_exists": "Feature with this name already exists.",
+            "validation_fail": "Feature validation did not pass, please check the function format and description for more information.",
             "feature_null": "Feature is missing."
         },
         "query": {

@@ -34,6 +34,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -151,9 +153,14 @@ public class FeatureResource {
     public ResponseEntity<?> createFeatures(@Valid @RequestBody FeatureListDTO featureListDTO) throws URISyntaxException {
         log.debug("REST request to save feature : {}", featureListDTO);
         Datasource datasource = datasourceService.findOne(featureListDTO.getDatasourceId());
+        Set<String> existingFeatureNames = featureService.getFeatures(QFeature.feature.datasource.eq(datasource))
+                .stream()
+                .map(f -> f.getName())
+                .collect(Collectors.toSet());
         List<Feature> features = featureListDTO.getFeatureList()
                 .stream()
                 .filter(item -> item.getIsSelected())
+                .filter(item -> !existingFeatureNames.contains(item.getName()))
                 .map(featureDTO -> {
                     Feature feature = new Feature();
                     feature.setFeatureType(featureDTO.getFeatureType());

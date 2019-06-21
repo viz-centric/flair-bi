@@ -14,7 +14,7 @@
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div class="container">
                 <div class="row container" ng-if="vm.scheduleObj.emailReporter">
-                    <div class="col-xs-8">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Dashboard*</label>
                             <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)" ng-required="vm.dashboard==null">
@@ -25,9 +25,7 @@
                             </ui-select>
                         </div>
                     </div>
-                </div>
-                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
-                    <div class="col-xs-8">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select View*</label>
                             <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)" ng-required="vm.view==null">
@@ -50,6 +48,12 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter && vm.scheduleObj.report.share_link!=null">
+                    <div class="col-xs-8">
+                        <iframe width="730" height="300" src={{vm.scheduleObj.report.share_link}} name={{vm.visualMetaData.metadataVisual.name}}>
+                        </iframe>
                     </div>
                 </div>
                 <div class="row container" ng-if="vm.scheduleObj.emailReporter">

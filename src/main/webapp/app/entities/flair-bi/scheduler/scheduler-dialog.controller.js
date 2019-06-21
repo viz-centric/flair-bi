@@ -42,7 +42,7 @@
                 "mail_body":null,
                 "dashboard_name":"",
                 "view_name":"",
-                "share_link":"",
+                "share_link":null,
                 "build_url":""
             },
             "report_line_item": {

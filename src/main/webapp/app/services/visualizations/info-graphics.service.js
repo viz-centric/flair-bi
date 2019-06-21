@@ -47,6 +47,10 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var infographics = $rootScope.updateWidget[record.id];
+                        for (let index = 0; index < record.data.length; index++) {
+                            record.data[index]["high_tolerance"] = record.data[index]["high_tolerance"] - 10;
+                            // record.data[index]["variance_percent"] = record.data[index]["variance_percent"] - 50;
+                        }
                         infographics.config(getProperties(VisualizationUtils, record))
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);

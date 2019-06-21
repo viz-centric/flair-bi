@@ -11,9 +11,9 @@
         return {
             build: function (record, element, panel) {
 
-                if((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
-                        'display': 'flex', 
+                        'display': 'flex',
                         'align-items': 'center',
                         'justify-content': 'center'
                     });
@@ -51,7 +51,7 @@
 
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name');
 
-                    for(var i=0; i<result.maxMes; i++) {
+                    for (var i = 0; i < result.maxMes; i++) {
                         eachMeasure = {};
                         eachMeasure['measure'] = result['measures'][i];
                         eachMeasure['showValues'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points');
@@ -75,7 +75,7 @@
                     return result;
                 }
 
-                var Helper = (function() {
+                var Helper = (function () {
 
                     var DEFAULT_COLOR = "#bdbdbd";
 
@@ -98,7 +98,7 @@
                         this.measureProp = config.measureProp;
                     }
 
-                    Helper.prototype.getMargin = function() {
+                    Helper.prototype.getMargin = function () {
                         return {
                             top: 0,
                             right: 0,
@@ -107,47 +107,47 @@
                         };
                     }
 
-                    Helper.prototype.getPadding = function() {
+                    Helper.prototype.getPadding = function () {
                         return 20;
                     }
 
-                    Helper.prototype.isLegendVisible = function() {
+                    Helper.prototype.isLegendVisible = function () {
                         return this.showLegend;
                     }
 
-                    Helper.prototype.getLegendPosition = function() {
+                    Helper.prototype.getLegendPosition = function () {
                         return this.legendPosition.toLowerCase();
                     }
 
-                    Helper.prototype.getGridVisibility = function() {
+                    Helper.prototype.getGridVisibility = function () {
                         return this.showGrid ? 'visible' : 'hidden';
                     }
 
-                    Helper.prototype.getXaxisColor = function() {
+                    Helper.prototype.getXaxisColor = function () {
                         return this.xAxisColor;
                     }
 
-                    Helper.prototype.getYaxisColor = function() {
+                    Helper.prototype.getYaxisColor = function () {
                         return this.yAxisColor;
                     }
 
-                    Helper.prototype.getXaxisVisibility = function() {
+                    Helper.prototype.getXaxisVisibility = function () {
                         return this.showXaxis ? 'visible' : 'hidden';
                     }
 
-                    Helper.prototype.getYaxisVisibility = function() {
+                    Helper.prototype.getYaxisVisibility = function () {
                         return this.showYaxis ? 'visible' : 'hidden';
                     }
 
-                    Helper.prototype.getXaxisLabelVisibility = function() {
+                    Helper.prototype.getXaxisLabelVisibility = function () {
                         return this.showXaxisLabel ? 'visible' : 'hidden';
                     }
 
-                    Helper.prototype.getYaxisLabelVisibility = function() {
-                        return this.showYaxisLabel ? 'visible' : 'hidden';   
+                    Helper.prototype.getYaxisLabelVisibility = function () {
+                        return this.showYaxisLabel ? 'visible' : 'hidden';
                     }
 
-                    Helper.prototype.setAxisColor = function(scope) {
+                    Helper.prototype.setAxisColor = function (scope) {
                         var container = d3.select(scope.container);
 
                         var xTicks = container.selectAll('#x_axis .tick'),
@@ -177,15 +177,15 @@
                             .style('fill', this.xAxisColor);
                     }
 
-                    Helper.prototype.getGlobalMinMax = function(data) {
+                    Helper.prototype.getGlobalMinMax = function (data) {
                         var me = this;
 
                         var allValues = [],
                             min,
                             max;
 
-                        data.forEach(function(d) {
-                            me.measures.forEach(function(m) {
+                        data.forEach(function (d) {
+                            me.measures.forEach(function (m) {
                                 allValues.push(d[m] || 0);
                             })
                         });
@@ -198,72 +198,72 @@
                         return [min, max];
                     }
 
-                    Helper.prototype.getXLabels = function(data) {
+                    Helper.prototype.getXLabels = function (data) {
                         var me = this;
-                        return data.map(function(d) { return d[me.dimension[0]]; })
+                        return data.map(function (d) { return d[me.dimension[0]]; })
                     }
 
-                    Helper.prototype.getDimDisplayName = function() {
+                    Helper.prototype.getDimDisplayName = function () {
                         return this.displayName;
                     }
 
-                    Helper.prototype.getMesDisplayName = function(index) {
-                        if(typeof(index) !== 'undefined') {
+                    Helper.prototype.getMesDisplayName = function (index) {
+                        if (typeof (index) !== 'undefined') {
                             return this.measureProp[index]['displayName'];
                         }
 
-                        return this.measureProp.map(function(p) { return p.displayName; }).join(', ');
+                        return this.measureProp.map(function (p) { return p.displayName; }).join(', ');
                     }
 
-                    Helper.prototype.getValueNumberFormat = function(data, index) {
+                    Helper.prototype.getValueNumberFormat = function (data, index) {
                         var si = this.measureProp[index]['numberFormat'],
                             nf = D3Utils.getNumberFormatter(si);
 
                         return nf;
                     }
 
-                    Helper.prototype.getDisplayColor = function(data, index) {
+                    Helper.prototype.getDisplayColor = function (data, index) {
                         return this.measureProp[index]['displayColor'] || DEFAULT_COLOR;
                     }
 
-                    Helper.prototype.getBorderColor = function(data, index) {
+                    Helper.prototype.getBorderColor = function (data, index) {
                         return this.measureProp[index]['borderColor'] || DEFAULT_COLOR;
                     }
 
-                    Helper.prototype.getValueColor = function(data, index) {
+                    Helper.prototype.getValueColor = function (data, index) {
                         return this.measureProp[index]['textColor'] || DEFAULT_COLOR;
                     }
 
-                    Helper.prototype.getValueVisibility = function(data, index) {
+                    Helper.prototype.getValueVisibility = function (data, index) {
                         var isVisible = this.measureProp[index]['showValues'];
-                            
-                        if(isVisible) {
+
+                        if (isVisible) {
                             return 'visible';
                         }
 
                         return 'hidden';
                     }
 
-                    Helper.prototype.getValueFontStyle = function(data, index) {
+                    Helper.prototype.getValueFontStyle = function (data, index) {
                         return this.measureProp[index]['fontStyle'];
                     }
 
-                    Helper.prototype.getValueFontWeight = function(data, index) {
+                    Helper.prototype.getValueFontWeight = function (data, index) {
                         return this.measureProp[index]['fontWeight'];
                     }
 
-                    Helper.prototype.getValueFontSize = function(data, index) {
+                    Helper.prototype.getValueFontSize = function (data, index) {
                         return this.measureProp[index]['fontSize'];
                     }
 
-                    Helper.prototype.getLineType = function(data, index) {
+                    Helper.prototype.getLineType = function (data, index) {
                         return this.measureProp[index]['lineType'].toLowerCase() == "area" ? "visible" : "hidden";
                     }
 
-                    Helper.prototype.getPointType = function(data, index) {
+                    Helper.prototype.getPointType = function (data, index) {
                         var symbol = null;
 
-                        switch(this.measureProp[index]['pointType'].toLowerCase()) {
+                        switch (this.measureProp[index]['pointType'].toLowerCase()) {
                             case "rectrounded":
                                 symbol = d3.symbolDiamond;
                                 break;
@@ -311,11 +311,11 @@
                         return symbol;
                     }
 
-                    Helper.prototype.toggleSortSelection = function(scope, sortType, callback) {
-                        var _onRadioButtonClick = function(event) {
+                    Helper.prototype.toggleSortSelection = function (scope, sortType, callback) {
+                        var _onRadioButtonClick = function (event) {
                             var persistence = $rootScope.persistence[scope.id];
 
-                            if(typeof(persistence) == 'undefined') {
+                            if (typeof (persistence) == 'undefined') {
                                 $rootScope.persistence[scope.id] = {
                                     'sort': {
                                         'type': sortType,
@@ -332,8 +332,8 @@
                             d3.select(scope.container).select('.line-plot').remove();
                             callback.call(scope, D3Utils.sortData(event.data.data, event.data.measure, sortType));
                         }
-                            
-                        return function(d, i) {
+
+                        return function (d, i) {
                             // Prevent firing of svg click event
                             d3.event.stopPropagation();
 
@@ -348,14 +348,14 @@
                             var options,
                                 selected;
 
-                            if(Object.keys($rootScope.persistence).indexOf(scope.id) != -1) {
+                            if (Object.keys($rootScope.persistence).indexOf(scope.id) != -1) {
                                 var sort = $rootScope.persistence[scope.id]['sort'];
-                                if(sort.type == sortType) {
+                                if (sort.type == sortType) {
                                     selected = sort.measure;
                                 }
                             }
 
-                            for(var i=0; i<scope.helper.maxMes; i++) {
+                            for (var i = 0; i < scope.helper.maxMes; i++) {
                                 var _divRadio = $('<div></div>').addClass('radio');
                                 options = '<label><input type="radio" '
                                     + (selected == scope.helper.measures[i] ? 'checked' : '')
@@ -377,22 +377,22 @@
                         }
                     }
 
-                    Helper.prototype.toggleTooltip = function(visibility, scope) {
-                        return function(d, i) {
+                    Helper.prototype.toggleTooltip = function (visibility, scope) {
+                        return function (d, i) {
                             var element = d3.select(this),
-                            si = scope.helper.measureProp[d['index']]['numberFormat'],
-                            nf = D3Utils.getNumberFormatter(si),
-                            displayName=scope.helper.getDimDisplayName(),
-                            dimension=d['data'][scope.helper.dimension],
-                            measures= scope.helper.measures[d['index']] ,
-                            measuresFormate=  D3Utils.getFormattedValue(d['data'][scope.helper.measures[d['index']]], nf);
-                            D3Utils.contentTooltip(visibility, scope,element,displayName,dimension,measures,measuresFormate);
+                                si = scope.helper.measureProp[d['index']]['numberFormat'],
+                                nf = D3Utils.getNumberFormatter(si),
+                                displayName = scope.helper.getDimDisplayName(),
+                                dimension = d['data'][scope.helper.dimension],
+                                measures = scope.helper.measures[d['index']],
+                                measuresFormate = D3Utils.getFormattedValue(d['data'][scope.helper.measures[d['index']]], nf);
+                            D3Utils.contentTooltip(visibility, scope, element, displayName, dimension, measures, measuresFormate);
                         }
                     }
 
-                    Helper.prototype.onLassoStart = function(lasso, scope) {
-                        return function() {
-                            if($rootScope.filterSelection.lasso) {
+                    Helper.prototype.onLassoStart = function (lasso, scope) {
+                        return function () {
+                            if ($rootScope.filterSelection.lasso) {
                                 lasso.items()
                                     .classed('not_possible', true)
                                     .classed('selected', false);
@@ -400,8 +400,8 @@
                         }
                     }
 
-                    Helper.prototype.onLassoDraw = function(lasso, scope) {
-                        return function() {
+                    Helper.prototype.onLassoDraw = function (lasso, scope) {
+                        return function () {
                             $rootScope.filterSelection.lasso = true;
                             lasso.items()
                                 .classed('selected', false);
@@ -416,15 +416,15 @@
                         }
                     }
 
-                    Helper.prototype.onLassoEnd = function(lasso, scope) {
-                        return function() {
+                    Helper.prototype.onLassoEnd = function (lasso, scope) {
+                        return function () {
                             var data = lasso.selectedItems().data();
 
-                            if($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
+                            if ($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
                                 return;
                             }
 
-                            if(!$rootScope.filterSelection.lasso) {
+                            if (!$rootScope.filterSelection.lasso) {
                                 return;
                             }
 
@@ -436,17 +436,17 @@
                                 .classed('selected', true)
 
                             lasso.notSelectedItems();
-                                
+
                             var confirm = d3.select(scope.container).select('.confirm')
                                 .style('visibility', 'visible');
 
                             var filter = {};
                             $rootScope.filterSelection.id = scope.id;
 
-                            data.forEach(function(d) {
-                                if(filter[scope.helper.dimension]) {
+                            data.forEach(function (d) {
+                                if (filter[scope.helper.dimension]) {
                                     var temp = filter[scope.helper.dimension];
-                                    if(temp.indexOf(d['data'][scope.helper.dimension]) < 0) {
+                                    if (temp.indexOf(d['data'][scope.helper.dimension]) < 0) {
                                         temp.push(d['data'][scope.helper.dimension]);
                                     }
                                     filter[scope.helper.dimension] = temp;
@@ -471,7 +471,7 @@
 
                 })();
 
-                var Line = (function() {
+                var Line = (function () {
 
                     function Line(container, record, properties) {
                         this.container = container;
@@ -505,9 +505,9 @@
                         D3Utils.prepareFilterButtons(div, $rootScope, filterParametersService);
                     }
 
-                    Line.prototype.updateChart = function(data) {
+                    Line.prototype.updateChart = function (data) {
                         var me = this;
-                        
+
                         var container = d3.select(this.container);
 
                         this.originalData = data;
@@ -528,7 +528,7 @@
                         var _yTicks = yScale.ticks(),
                             yDiff = _yTicks[1] - _yTicks[0];
 
-                        if((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + (yDiff / 2)) {
+                        if ((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + (yDiff / 2)) {
                             yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + yDiff)])
                         } else {
                             yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + 2 * yDiff)])
@@ -541,10 +541,10 @@
                         cluster.enter().append('g')
                             .attr('class', 'cluster');
 
-                        
+
                     }
 
-                    Line.prototype.renderChart = function() {
+                    Line.prototype.renderChart = function () {
                         var data = this.originalData;
                         var me = this;
 
@@ -555,7 +555,7 @@
                             measures = me.helper.measures;
 
                         var svg = d3.select(this.container).select('svg')
-                            .on('click', function() {
+                            .on('click', function () {
                                 d3.select(me.container).select('.sort_selection')
                                     .style('visibility', 'hidden');
 
@@ -580,18 +580,18 @@
 
                         var contentWidth,
                             contentHeight,
-                            legendBreak=0,
+                            legendBreak = 0,
                             legendBreakCount = 0;
 
                         var labelStack = [];
 
-                        var drawLegend = function(data) {
+                        var drawLegend = function (data) {
                             var me = this;
 
                             var legend = container.append('g')
                                 .attr('class', 'line-legend')
-                                .attr('display', function() {
-                                    if(me.helper.isLegendVisible()) {
+                                .attr('display', function () {
+                                    if (me.helper.isLegendVisible()) {
                                         return 'block';
                                     }
                                     return 'none';
@@ -599,60 +599,60 @@
                                 .selectAll('.item')
                                 .data(measures)
                                 .enter().append('g')
-                                    .attr('class', 'item')
-                                    .attr('id', function(d, i) {
-                                        return 'legend' + i;
-                                    })
-                                    .attr('transform', function(d, i) {
-                                        if(me.helper.getLegendPosition() == 'top') {
-                                            return 'translate(' + i * Math.floor(containerWidth/measures.length) + ', 0)';
-                                        } else if(me.helper.getLegendPosition() == 'bottom') {
-                                            return 'translate(' + i * Math.floor(containerWidth/measures.length) + ', ' + containerHeight + ')';
-                                        } else if(me.helper.getLegendPosition() == 'left') {
-                                            return 'translate(0, ' + i * 20 + ')';
-                                        } else if(me.helper.getLegendPosition() == 'right') {
-                                            return 'translate(' + (4 * containerWidth/5) + ', ' + i * 20 + ')';
-                                        }
-                                    })
-                                    .on('mouseover', function() {
-                                        d3.select(this).attr('cursor', 'pointer')
-                                    })
-                                    .on('mousemove', function() {
-                                        d3.select(this).attr('cursor', 'pointer')
-                                    })
-                                    .on('mouseout', function() {
-                                        d3.select(this).attr('cursor', 'default')
-                                    })
-                                    .on('click', function(d, i) {
-                                        if(labelStack.indexOf(d) < 0) {
-                                            labelStack.push(d);
-                                        } else {
-                                            labelStack.splice(labelStack.indexOf(d), 1);
-                                        }
+                                .attr('class', 'item')
+                                .attr('id', function (d, i) {
+                                    return 'legend' + i;
+                                })
+                                .attr('transform', function (d, i) {
+                                    if (me.helper.getLegendPosition() == 'top') {
+                                        return 'translate(' + i * Math.floor(containerWidth / measures.length) + ', 0)';
+                                    } else if (me.helper.getLegendPosition() == 'bottom') {
+                                        return 'translate(' + i * Math.floor(containerWidth / measures.length) + ', ' + containerHeight + ')';
+                                    } else if (me.helper.getLegendPosition() == 'left') {
+                                        return 'translate(0, ' + i * 20 + ')';
+                                    } else if (me.helper.getLegendPosition() == 'right') {
+                                        return 'translate(' + (4 * containerWidth / 5) + ', ' + i * 20 + ')';
+                                    }
+                                })
+                                .on('mouseover', function () {
+                                    d3.select(this).attr('cursor', 'pointer')
+                                })
+                                .on('mousemove', function () {
+                                    d3.select(this).attr('cursor', 'pointer')
+                                })
+                                .on('mouseout', function () {
+                                    d3.select(this).attr('cursor', 'default')
+                                })
+                                .on('click', function (d, i) {
+                                    if (labelStack.indexOf(d) < 0) {
+                                        labelStack.push(d);
+                                    } else {
+                                        labelStack.splice(labelStack.indexOf(d), 1);
+                                    }
 
-                                        var o = parseInt(d3.select(this).select('rect').style('fill-opacity'));
-                                        if(!o) {
-                                            d3.select(this).select('rect')
-                                                .style('fill-opacity', 1)
-                                                .style('stroke-width', 0);
-                                        } else {
-                                            d3.select(this).select('rect')
-                                                .style('fill-opacity', 0)
-                                                .style('stroke-width', 1);
-                                        }
+                                    var o = parseInt(d3.select(this).select('rect').style('fill-opacity'));
+                                    if (!o) {
+                                        d3.select(this).select('rect')
+                                            .style('fill-opacity', 1)
+                                            .style('stroke-width', 0);
+                                    } else {
+                                        d3.select(this).select('rect')
+                                            .style('fill-opacity', 0)
+                                            .style('stroke-width', 1);
+                                    }
 
-                                        d3.select(me.container).select('.line-plot').remove();
-                                        drawPlot.call(me, data);
-                                    });
+                                    d3.select(me.container).select('.line-plot').remove();
+                                    drawPlot.call(me, data);
+                                });
 
                             legend.append('rect')
                                 .attr('x', 4)
                                 .attr('width', 10)
                                 .attr('height', 10)
-                                .style('fill', function(d, i) {
+                                .style('fill', function (d, i) {
                                     return me.helper.getDisplayColor(d, i);
                                 })
-                                .style('stroke', function(d, i) {
+                                .style('stroke', function (d, i) {
                                     return me.helper.getDisplayColor(d, i);
                                 })
                                 .style('stroke-width', 0);
@@ -660,59 +660,59 @@
                             legend.append('text')
                                 .attr('x', 18)
                                 .attr('y', 5)
-                                .attr('dy', function(d) {
-                                    return d3.select(this).style('font-size').replace('px', '')/2.5;
+                                .attr('dy', function (d) {
+                                    return d3.select(this).style('font-size').replace('px', '') / 2.5;
                                 })
-                                .text(function(d, i) {
+                                .text(function (d, i) {
                                     return me.helper.getMesDisplayName(i);
                                 })
-                                .text(function(d, i) {
-                                    if((me.helper.getLegendPosition() == 'top') || (me.helper.getLegendPosition() == 'bottom')) {
-                                        return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), Math.floor(containerWidth/measures.length), 20);
-                                    } else if((me.helper.getLegendPosition() == 'left') || (me.helper.getLegendPosition() == 'right')) {
-                                        return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), containerWidth/5);
+                                .text(function (d, i) {
+                                    if ((me.helper.getLegendPosition() == 'top') || (me.helper.getLegendPosition() == 'bottom')) {
+                                        return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), Math.floor(containerWidth / measures.length), 20);
+                                    } else if ((me.helper.getLegendPosition() == 'left') || (me.helper.getLegendPosition() == 'right')) {
+                                        return D3Utils.getTruncatedLabel(this, me.helper.getMesDisplayName(i), containerWidth / 5);
                                     }
                                 });
 
-                            if((this.helper.getLegendPosition() == 'top') || (this.helper.getLegendPosition() == 'bottom')) {
-                                legend.attr('transform', function(d, i) {
+                            if ((this.helper.getLegendPosition() == 'top') || (this.helper.getLegendPosition() == 'bottom')) {
+                                legend.attr('transform', function (d, i) {
                                     var count = i,
                                         widthSum = 0
-                                    while(count-- != 0) {
+                                    while (count-- != 0) {
                                         widthSum += d3.select(me.container).select('#legend' + count).node().getBBox().width + me.offsetX;
                                     }
                                     return 'translate(' + widthSum + ', ' + (me.helper.getLegendPosition() == 'top' ? 0 : containerHeight) + ')';
                                 });
                             }
 
-                            if(this.helper.getLegendPosition() == 'top') {
-                                legend.attr('transform', function(d, i) {
-                                    var postition=D3Utils.legendPosition(me,i,legendBreakCount,legendBreak);
-                                    legendBreakCount=postition.split(',')[2];
-                                    legendBreak=postition.split(',')[3];
+                            if (this.helper.getLegendPosition() == 'top') {
+                                legend.attr('transform', function (d, i) {
+                                    var postition = D3Utils.legendPosition(me, i, legendBreakCount, legendBreak);
+                                    legendBreakCount = postition.split(',')[2];
+                                    legendBreak = postition.split(',')[3];
                                     return 'translate(' + postition.split(',')[0] + ', ' + postition.split(',')[1] + ')';
                                 });
-                                containerHeight=containerHeight-(20*legendBreakCount);
+                                containerHeight = containerHeight - (20 * legendBreakCount);
                             }
-                            
-                            if(!me.helper.isLegendVisible()) {
+
+                            if (!me.helper.isLegendVisible()) {
                                 this.legendSpace = 0;
                                 contentWidth = containerWidth - margin.left;
                                 contentHeight = containerHeight - 2 * this.axisLabelSpace;
                             } else {
-                                if((me.helper.getLegendPosition() == 'top') || (me.helper.getLegendPosition() == 'bottom')) {
+                                if ((me.helper.getLegendPosition() == 'top') || (me.helper.getLegendPosition() == 'bottom')) {
                                     contentWidth = containerWidth - margin.left;
                                     contentHeight = containerHeight - 3 * this.axisLabelSpace;
                                     this.legendSpace = 20;
-                                } else if((me.helper.getLegendPosition() == 'left') || (me.helper.getLegendPosition() == 'right')) {
+                                } else if ((me.helper.getLegendPosition() == 'left') || (me.helper.getLegendPosition() == 'right')) {
                                     this.legendSpace = legend.node().parentNode.getBBox().width;
                                     contentWidth = (containerWidth - this.legendSpace) - margin.left - this.axisLabelSpace;
                                     contentHeight = containerHeight - 2 * this.axisLabelSpace;
 
-                                    legend.attr('transform', function(d, i) {
-                                        if(me.helper.getLegendPosition() == 'left') {
+                                    legend.attr('transform', function (d, i) {
+                                        if (me.helper.getLegendPosition() == 'left') {
                                             return 'translate(0, ' + i * 20 + ')';
-                                        } else if(me.helper.getLegendPosition() == 'right') {
+                                        } else if (me.helper.getLegendPosition() == 'right') {
                                             return 'translate(' + (containerWidth - me.legendSpace) + ', ' + i * 20 + ')';
                                         }
                                     });
@@ -720,7 +720,7 @@
                             }
                         }
 
-                        var drawPlot = function(data) {
+                        var drawPlot = function (data) {
                             var me = this;
 
                             var globalMin,
@@ -730,19 +730,19 @@
                             var minMax = this.helper.getGlobalMinMax(data);
                             globalMin = minMax[0];
                             globalMax = minMax[1];
-                            
+
                             xLabels = this.helper.getXLabels(data);
 
                             var chart = container.append('g')
                                 .attr('class', 'line-plot')
-                                .attr('transform', function() {
-                                    if(me.helper.getLegendPosition() == 'top') {
-                                        return 'translate(' + margin.left + ', ' + (parseInt( me.legendSpace) +parseInt(legendBreakCount*20)) + ')';
-                                    } else if(me.helper.getLegendPosition() == 'bottom') {
+                                .attr('transform', function () {
+                                    if (me.helper.getLegendPosition() == 'top') {
+                                        return 'translate(' + margin.left + ', ' + (parseInt(me.legendSpace) + parseInt(legendBreakCount * 20)) + ')';
+                                    } else if (me.helper.getLegendPosition() == 'bottom') {
                                         return 'translate(' + margin.left + ', 0)';
-                                    } else if(me.helper.getLegendPosition() == 'left') {
+                                    } else if (me.helper.getLegendPosition() == 'left') {
                                         return 'translate(' + (me.legendSpace + me.axisLabelSpace + margin.left) + ', 0)';
-                                    } else if(me.helper.getLegendPosition() == 'right') {
+                                    } else if (me.helper.getLegendPosition() == 'right') {
                                         return 'translate(' + margin.left + ', 0)';
                                     }
                                 });
@@ -763,7 +763,7 @@
                             var _yTicks = yScale.ticks(),
                                 yDiff = _yTicks[1] - _yTicks[0];
 
-                            if((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + (yDiff / 2)) {
+                            if ((_yTicks[_yTicks.length - 1] + yDiff) > globalMax + (yDiff / 2)) {
                                 yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + yDiff)])
                             } else {
                                 yScale.domain([globalMin, (_yTicks[_yTicks.length - 1] + 2 * yDiff)])
@@ -797,7 +797,7 @@
                             var crosshair = content.append('g')
                                 .attr('class', 'crosshair')
                                 .style('display', 'none');
-                                
+
                             crosshair.append('line')
                                 .attr('id', 'crosshairLineX')
                                 .attr('class', 'crosshairLine');
@@ -815,20 +815,20 @@
                                 .attr('class', 'overlay')
                                 .attr('width', contentWidth)
                                 .attr('height', contentHeight)
-                                .on('mouseover', function() {
+                                .on('mouseover', function () {
                                     crosshair.style('display', null);
                                 })
-                                .on('mouseout', function() {
+                                .on('mouseout', function () {
                                     crosshair.style('display', 'none');
                                 })
-                                .on('mousemove', function() {
+                                .on('mousemove', function () {
                                     var mouse = d3.mouse(this);
 
-                                    var _measures = measures.filter(function(d) {
+                                    var _measures = measures.filter(function (d) {
                                         return labelStack.indexOf(d) == -1;
                                     });
 
-                                    if(!_measures.length) {
+                                    if (!_measures.length) {
                                         // Implies the legends are turned off
                                         crosshair.style('display', 'none');
                                         return;
@@ -839,17 +839,17 @@
                                         xDomain = xScale.domain(),
                                         xRange = xScale.range(),
                                         xRangePoints = d3.range(xRange[0], xRange[1], xScale.step())
-                                    
-                                    var xVal = xDomain[d3.bisect(xRangePoints, xPos) -1];
+
+                                    var xVal = xDomain[d3.bisect(xRangePoints, xPos) - 1];
 
                                     // finding y-value
                                     var yPos = yScale.invert(mouse[1]),
                                         yDomain = yScale.domain(),
-                                        dataX = data.filter(function(d) { return d[dimension[0]] == xVal; })[0],
+                                        dataX = data.filter(function (d) { return d[dimension[0]] == xVal; })[0],
                                         yVal = dataX[_measures[0]];
-                                    
-                                    _measures.forEach(function(m) {
-                                        if(Math.abs(yPos - dataX[m]) < Math.abs(yPos - yVal)) {
+
+                                    _measures.forEach(function (m) {
+                                        if (Math.abs(yPos - dataX[m]) < Math.abs(yPos - yVal)) {
                                             yVal = dataX[m];
                                         }
                                     });
@@ -878,29 +878,29 @@
 
                             var areaGenerator = d3.area()
                                 .curve(d3.curveMonotoneX)
-                                .x(function(d, i) {
+                                .x(function (d, i) {
                                     return xScale(d['data'][dimension[0]]);
                                 })
                                 .y0(contentHeight)
-                                .y1(function(d) {
+                                .y1(function (d) {
                                     return yScale(d['data'][measures[d['index']]]);
                                 });
 
                             var lineGenerator = d3.line()
                                 .curve(d3.curveMonotoneX)
-                                .x(function(d, i) {
+                                .x(function (d, i) {
                                     return xScale(d['data'][dimension[0]]);
                                 })
-                                .y(function(d, i) {
+                                .y(function (d, i) {
                                     return yScale(d['data'][measures[d['index']]]);
                                 });
 
                             var cluster = content.selectAll('.cluster')
-                                .data(measures.filter(function(d) {
+                                .data(measures.filter(function (d) {
                                     return labelStack.indexOf(d) == -1;
                                 }))
                                 .enter().append('g')
-                                    .attr('class', 'cluster');
+                                .attr('class', 'cluster');
 
                             var t = d3.transition()
                                 .duration(800)
@@ -908,14 +908,14 @@
                                 .on('end', afterTransition);
 
                             var area = cluster.append('path')
-                                .datum(function(m, i) {
-                                    return data.map(function(d) { return { "index": measures.indexOf(m), "data": d }; });
+                                .datum(function (m, i) {
+                                    return data.map(function (d) { return { "index": measures.indexOf(m), "data": d }; });
                                 })
                                 .attr('class', 'area')
-                                .attr('visibility', function(d, i) {
+                                .attr('visibility', function (d, i) {
                                     return me.helper.getLineType(d, d[0]['index']);
                                 })
-                                .attr('fill', function(d, i) {
+                                .attr('fill', function (d, i) {
                                     return me.helper.getDisplayColor(d, d[0]['index']);
                                 })
                                 .style('fill-opacity', 0.5)
@@ -923,12 +923,12 @@
                                 .attr('d', areaGenerator);
 
                             var line = cluster.append('path')
-                                .datum(function(m, i) {
-                                    return data.map(function(d) { return { "index": measures.indexOf(m), "data": d }; });
+                                .datum(function (m, i) {
+                                    return data.map(function (d) { return { "index": measures.indexOf(m), "data": d }; });
                                 })
                                 .attr('class', 'line')
                                 .attr('fill', 'none')
-                                .attr('stroke', function(d, i) {
+                                .attr('stroke', function (d, i) {
                                     return me.helper.getBorderColor(d, d[0]['index']);
                                 })
                                 .attr('stroke-linejoin', 'round')
@@ -940,122 +940,122 @@
                             }
 
                             var point = cluster.selectAll('.point')
-                                .data(function(m, i) {
-                                    return data.map(function(d) { return { "index": measures.indexOf(m), "data": d}; });
+                                .data(function (m, i) {
+                                    return data.map(function (d) { return { "index": measures.indexOf(m), "data": d }; });
                                 })
                                 .enter().append('path')
-                                    .attr('class', 'point')
-                                    .attr('fill', function(d, i) {
-                                        return me.helper.getDisplayColor(d, d['index']);
-                                    })
-                                    .attr('d', function(d, i) {
-                                        return d3.symbol()
-                                            .type(me.helper.getPointType(d, d['index']))
-                                            .size(40)();
-                                    })
-                                    .attr('transform', function(d) {
-                                        return 'translate(' + xScale(d['data'][dimension[0]]) + ',' + yScale(d['data'][measures[d['index']]]) + ')';
-                                    })
-                                    .on('mouseover', this.helper.toggleTooltip('visible', me))
-                                    .on('mousemove', function() {
-                                        var tooltip = d3.select(me.container).select('.tooltip_custom');
+                                .attr('class', 'point')
+                                .attr('fill', function (d, i) {
+                                    return me.helper.getDisplayColor(d, d['index']);
+                                })
+                                .attr('d', function (d, i) {
+                                    return d3.symbol()
+                                        .type(me.helper.getPointType(d, d['index']))
+                                        .size(40)();
+                                })
+                                .attr('transform', function (d) {
+                                    return 'translate(' + xScale(d['data'][dimension[0]]) + ',' + yScale(d['data'][measures[d['index']]]) + ')';
+                                })
+                                .on('mouseover', this.helper.toggleTooltip('visible', me))
+                                .on('mousemove', function () {
+                                    var tooltip = d3.select(me.container).select('.tooltip_custom');
 
-                                        var offset = $(me.container).offset();
-                                        var x = d3.event.pageX - offset.left,
-                                            y = d3.event.pageY - offset.top;
-                            
-                                        tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');
-                                        D3Utils.constrainTooltip(me.container, tooltip.node());
-                                    })
-                                    .on('mouseout', this.helper.toggleTooltip('hidden', me))
-                                    .on('click', function(d, i) {
-                                        if($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
-                                            return;
-                                        }
+                                    var offset = $(me.container).offset();
+                                    var x = d3.event.pageX - offset.left,
+                                        y = d3.event.pageY - offset.top;
 
-                                        $rootScope.filterSelection.lasso = false;
+                                    tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');
+                                    D3Utils.constrainTooltip(me.container, tooltip.node());
+                                })
+                                .on('mouseout', this.helper.toggleTooltip('hidden', me))
+                                .on('click', function (d, i) {
+                                    if ($rootScope.filterSelection.id && $rootScope.filterSelection.id != record.id) {
+                                        return;
+                                    }
 
-                                        var confirm = d3.select(me.container).select('.confirm')
-                                            .style('visibility', 'visible');
+                                    $rootScope.filterSelection.lasso = false;
 
-                                        var filter = {};
+                                    var confirm = d3.select(me.container).select('.confirm')
+                                        .style('visibility', 'visible');
 
-                                        if($rootScope.filterSelection.id) {
-                                            filter = $rootScope.filterSelection.filter;
+                                    var filter = {};
+
+                                    if ($rootScope.filterSelection.id) {
+                                        filter = $rootScope.filterSelection.filter;
+                                    } else {
+                                        $rootScope.filterSelection.id = me.id;
+                                    }
+
+                                    var point = d3.select(this);
+
+                                    if (point.classed('selected')) {
+                                        point.classed('selected', false);
+                                    } else {
+                                        point.classed('selected', true);
+                                    }
+
+                                    var dimension = me.helper.dimension[0];
+
+                                    if (filter[dimension]) {
+                                        var temp = filter[dimension];
+                                        if (temp.indexOf(d['data'][dimension]) < 0) {
+                                            temp.push(d['data'][dimension]);
                                         } else {
-                                            $rootScope.filterSelection.id = me.id;
+                                            temp.splice(temp.indexOf(d['data'][dimension]), 1);
                                         }
+                                        filter[dimension] = temp;
+                                    } else {
+                                        filter[dimension] = [d['data'][dimension]];
+                                    }
 
-                                        var point = d3.select(this);
+                                    // Clear out the updateWidget property
+                                    var idWidget = $rootScope.updateWidget[me.id];
+                                    $rootScope.updateWidget = {};
+                                    $rootScope.updateWidget[me.id] = idWidget;
 
-                                        if(point.classed('selected')) {
-                                            point.classed('selected', false);
-                                        } else {
-                                            point.classed('selected', true);
-                                        }
-
-                                        var dimension = me.helper.dimension[0];
-
-                                        if(filter[dimension]) {
-                                            var temp = filter[dimension];
-                                            if(temp.indexOf(d['data'][dimension]) < 0) {
-                                                temp.push(d['data'][dimension]);
-                                            } else {
-                                                temp.splice(temp.indexOf(d['data'][dimension]), 1);
-                                            }
-                                            filter[dimension] = temp;
-                                        } else {
-                                            filter[dimension] = [d['data'][dimension]];
-                                        }
-
-                                        // Clear out the updateWidget property
-                                        var idWidget = $rootScope.updateWidget[me.id];
-                                        $rootScope.updateWidget = {};
-                                        $rootScope.updateWidget[me.id] = idWidget;
-
-                                        $rootScope.filterSelection.filter = filter;
-                                        filterParametersService.save(filter);
-                                        $rootScope.$broadcast('flairbiApp:filter-input-refresh');
-                                        $rootScope.$broadcast('flairbiApp:filter');
-                                    });
+                                    $rootScope.filterSelection.filter = filter;
+                                    filterParametersService.save(filter);
+                                    $rootScope.$broadcast('flairbiApp:filter-input-refresh');
+                                    $rootScope.$broadcast('flairbiApp:filter');
+                                });
 
                             var text = cluster.selectAll('text')
-                                .data(function(d, i) {
-                                    return data.map(function(d) { return { "index": i, "data": d }; });
+                                .data(function (d, i) {
+                                    return data.map(function (d) { return { "index": i, "data": d }; });
                                 })
                                 .enter().append('text')
-                                    .attr('x', function(d, i) {
-                                        return xScale(d['data'][dimension[0]]);
-                                    })
-                                    .attr('y', function(d, i) {
-                                        return yScale(d['data'][measures[d['index']]]);
-                                    })
-                                    .attr('dy', function(d, i) {
-                                        return -2 * me.offsetY;
-                                    })
-                                    .style('text-anchor', 'middle')
-                                    .text(function(d, i) {
-                                        return D3Utils.getFormattedValue(d['data'][measures[d['index']]], me.helper.getValueNumberFormat(d, d['index']));
-                                    })
-                                    .text(function(d, i) {
-                                        var width = (1 - xScale.padding()) * contentWidth / (xLabels.length - 1);
-                                        return D3Utils.getTruncatedLabel(this, d3.select(this).text(), width);
-                                    })
-                                    .attr('visibility', function(d, i) {
-                                        return me.helper.getValueVisibility(d, d['index']);
-                                    })
-                                    .style('font-style', function(d, i) {
-                                        return me.helper.getValueFontStyle(d, d['index']);
-                                    })
-                                    .style('font-weight', function(d, i) {
-                                        return me.helper.getValueFontWeight(d, d['index']);
-                                    })
-                                    .style('font-size', function(d, i) {
-                                        return me.helper.getValueFontSize(d, d['index']);
-                                    })
-                                    .style('fill', function(d, i) {
-                                        return me.helper.getValueColor(d, d['index']);
-                                    });
+                                .attr('x', function (d, i) {
+                                    return xScale(d['data'][dimension[0]]);
+                                })
+                                .attr('y', function (d, i) {
+                                    return yScale(d['data'][measures[d['index']]]);
+                                })
+                                .attr('dy', function (d, i) {
+                                    return -2 * me.offsetY;
+                                })
+                                .style('text-anchor', 'middle')
+                                .text(function (d, i) {
+                                    return D3Utils.getFormattedValue(d['data'][measures[d['index']]], me.helper.getValueNumberFormat(d, d['index']));
+                                })
+                                .text(function (d, i) {
+                                    var width = (1 - xScale.padding()) * contentWidth / (xLabels.length - 1);
+                                    return D3Utils.getTruncatedLabel(this, d3.select(this).text(), width);
+                                })
+                                .attr('visibility', function (d, i) {
+                                    return me.helper.getValueVisibility(d, d['index']);
+                                })
+                                .style('font-style', function (d, i) {
+                                    return me.helper.getValueFontStyle(d, d['index']);
+                                })
+                                .style('font-weight', function (d, i) {
+                                    return me.helper.getValueFontWeight(d, d['index']);
+                                })
+                                .style('font-size', function (d, i) {
+                                    return me.helper.getValueFontSize(d, d['index']);
+                                })
+                                .style('fill', function (d, i) {
+                                    return me.helper.getValueColor(d, d['index']);
+                                });
 
                             var axisLeftG = chart.append('g')
                                 .attr('class', 'y axis')
@@ -1064,19 +1064,19 @@
 
                             axisLeftG.append('g')
                                 .attr('class', 'label')
-                                .attr('transform', function() {
-                                    return 'translate(' + (-margin.left) + ', ' + (contentHeight/2) + ')';
+                                .attr('transform', function () {
+                                    return 'translate(' + (-margin.left) + ', ' + (contentHeight / 2) + ')';
                                 })
                                 .append('text')
-                                    .attr('text-anchor', 'middle')
-                                    .attr('transform', 'rotate(-90)')
-                                    .style('fill', function() {
-                                        return me.helper.getYaxisColor();
-                                    })
-                                    .style('visibility', me.helper.getYaxisLabelVisibility())
-                                    .text(function() {
-                                        return me.helper.getMesDisplayName();
-                                    });
+                                .attr('text-anchor', 'middle')
+                                .attr('transform', 'rotate(-90)')
+                                .style('fill', function () {
+                                    return me.helper.getYaxisColor();
+                                })
+                                .style('visibility', me.helper.getYaxisLabelVisibility())
+                                .text(function () {
+                                    return me.helper.getMesDisplayName();
+                                });
 
                             var axisBottomG = chart.append('g')
                                 .attr('class', 'x axis')
@@ -1085,39 +1085,39 @@
 
                             axisBottomG.append('g')
                                 .attr('class', 'label')
-                                .attr('transform', 'translate(' + (contentWidth/2) + ', ' + ( 2 * this.axisLabelSpace + 5) + ')')
+                                .attr('transform', 'translate(' + (contentWidth / 2) + ', ' + (2 * this.axisLabelSpace + 5) + ')')
                                 .append('text')
-                                    .style('font-size', 10)
-                                    .style('text-anchor', 'middle')
-                                    .style('fill', function() {
-                                        return me.helper.getXaxisColor();
-                                    })
-                                    .style('visibility', me.helper.getXaxisLabelVisibility())
-                                    .text(function() {
-                                        return me.helper.getDimDisplayName();
-                                    });
-                            var isRotate=false;    
+                                .style('font-size', 10)
+                                .style('text-anchor', 'middle')
+                                .style('fill', function () {
+                                    return me.helper.getXaxisColor();
+                                })
+                                .style('visibility', me.helper.getXaxisLabelVisibility())
+                                .text(function () {
+                                    return me.helper.getDimDisplayName();
+                                });
+                            var isRotate = false;
 
                             var axisBottom = d3.axisBottom(xScale)
-                                .tickFormat(function(d) {
-                                    if(isRotate==false){
-                                        isRotate= D3Utils.getTickRotate(d, (contentWidth)/(xLabels.length-1), tickLength);
+                                .tickFormat(function (d) {
+                                    if (isRotate == false) {
+                                        isRotate = D3Utils.getTickRotate(d, (contentWidth) / (xLabels.length - 1), tickLength);
                                     }
-                                    return D3Utils.getTruncatedTick(d, (contentWidth/(xLabels.length - 1)), tickLength);
+                                    return D3Utils.getTruncatedTick(d, (contentWidth / (xLabels.length - 1)), tickLength);
                                 });
 
                             axisBottomG.append('g')
                                 .attr('id', 'x_axis')
                                 .call(axisBottom);
 
-                            if(isRotate){
+                            if (isRotate) {
                                 d3.select(this.container).selectAll('#x_axis .tick text')
                                     .attr("transform", "rotate(-15)");
                             }
 
                             var axisLeft = d3.axisLeft(yScale)
-                                .tickFormat(function(d) {
-                                    if((contentHeight/yScale.ticks().length) < 11) {
+                                .tickFormat(function (d) {
+                                    if ((contentHeight / yScale.ticks().length) < 11) {
                                         return '';
                                     }
                                     return D3Utils.getTruncatedTick(D3Utils.shortScale(2)(d), margin.left - 8, tickLength);
@@ -1129,20 +1129,20 @@
 
                             var sortButton = container.append('g')
                                 .attr('class', 'line-sort')
-                                .attr('transform', function() {
-                                    return 'translate(0, ' +parseInt((containerHeight - 2 * padding+(legendBreakCount*20))) + ')';
-                                }) 
-                                
+                                .attr('transform', function () {
+                                    return 'translate(0, ' + parseInt((containerHeight - 2 * padding + (legendBreakCount * 20))) + ')';
+                                })
+
                             var ascendingSort = sortButton.append('svg:text')
                                 .attr('fill', '#afafaf')
                                 .attr('cursor', 'pointer')
                                 .style('font-family', 'FontAwesome')
                                 .style('font-size', 12)
-                                .attr('transform', function() {
+                                .attr('transform', function () {
                                     return 'translate(' + (containerWidth - 3 * me.offsetX) + ', ' + 2 * me.axisLabelSpace + ')';
                                 })
                                 .style('text-anchor', 'end')
-                                .text(function() {
+                                .text(function () {
                                     return "\uf161";
                                 })
                                 .on('click', this.helper.toggleSortSelection(me, 'ascending', drawPlot));
@@ -1152,11 +1152,11 @@
                                 .attr('cursor', 'pointer')
                                 .style('font-family', 'FontAwesome')
                                 .style('font-size', 12)
-                                .attr('transform', function() {
+                                .attr('transform', function () {
                                     return 'translate(' + (containerWidth - 1.5 * me.offsetX) + ', ' + 2 * me.axisLabelSpace + ')';
                                 })
                                 .style('text-anchor', 'end')
-                                .text(function() {
+                                .text(function () {
                                     return "\uf160";
                                 })
                                 .on('click', this.helper.toggleSortSelection(me, 'descending', drawPlot));
@@ -1166,14 +1166,14 @@
                                 .attr('cursor', 'pointer')
                                 .style('font-family', 'FontAwesome')
                                 .style('font-size', 12)
-                                .attr('transform', function() {
+                                .attr('transform', function () {
                                     return 'translate(' + containerWidth + ', ' + 2 * me.axisLabelSpace + ')';
                                 })
                                 .style('text-anchor', 'end')
-                                .text(function() {
+                                .text(function () {
                                     return "\uf0c9";
                                 })
-                                .on('click', function() {
+                                .on('click', function () {
                                     d3.select(me.container).select('.line-plot').remove();
                                     drawPlot.call(me, me.originalData);
 
@@ -1195,19 +1195,19 @@
                                 .items(point)
                                 // .targetArea(lasso_area);
                                 .targetArea(svg);
-                            
+
                             lasso.on('start', me.helper.onLassoStart(lasso, me))
                                 .on('draw', me.helper.onLassoDraw(lasso, me))
                                 .on('end', me.helper.onLassoEnd(lasso, me));
-                            
+
                             // content.call(lasso);
                             svg.call(lasso);
                         }
 
                         drawLegend.call(this, data);
 
-                        if((Object.keys($rootScope.persistence).indexOf(this.id) != -1) &&
-                         (Object.keys($rootScope.persistence[this.id]['sort']).length)) {
+                        if ((Object.keys($rootScope.persistence).indexOf(this.id) != -1) &&
+                            (Object.keys($rootScope.persistence[this.id]['sort']).length)) {
                             var sort = $rootScope.persistence[this.id]['sort'];
                             drawPlot.call(this, D3Utils.sortData(data, sort.measure, sort.type));
                         } else {
@@ -1219,8 +1219,8 @@
 
                 })();
 
-                if(Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if($rootScope.filterSelection.id != record.id) {
+                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                    if ($rootScope.filterSelection.id != record.id) {
                         /*var line = $rootScope.updateWidget[record.id];
                         line.updateChart(record.data);*/
 
@@ -1233,6 +1233,11 @@
                         // ---------------*-----------------
                     }
                 } else {
+
+                    for (let index = 0; index < record.data.length; index++) {
+                        record.data[index]["high_tolerance"] = record.data[index]["high_tolerance"] -10
+
+                    }
                     var line = new Line(element[0], record, getProperties(VisualizationUtils, record));
                     line.renderChart();
 

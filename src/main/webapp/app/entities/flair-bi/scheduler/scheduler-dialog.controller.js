@@ -98,6 +98,10 @@
                     vm.scheduleObj.schedule.end_date= new Date(success.data.schedule.end_date);
                     vm.scheduleObj.report.mail_body=success.data.report.mail_body;
                     vm.scheduleObj.putcall=true;
+                    if(vm.scheduleObj.emailReporter){
+                        vm.scheduleObj.assign_report.email_list=success.data.assign_report.email_list;
+                        addEmailList(success.data.assign_report.email_list);
+                    }
                 }
             }).catch(function (error) {                
                 var info = {
@@ -107,6 +111,15 @@
                 $rootScope.showErrorSingleToast(info);
             }); 
         }
+
+        function addEmailList(emails){
+            vm.selectedUsers = emails.map(function (item) {
+                var newItem = {};
+                newItem['text'] = item.user_name+" "+item.user_email;
+                return newItem;
+            });
+        }
+
 
         function buildScheduleObject(visualMetaData,datasource,dashboard,view){
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
@@ -190,8 +203,9 @@
         }
 
         function added(tag) {
-           var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
-           vm.scheduleObj.assign_report.email_list.push(emailObj);
+            console.log("-vm.selectedUser"+vm.selectedUsers);
+            var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
+            vm.scheduleObj.assign_report.email_list.push(emailObj);
         }
 
         function removed(tag){

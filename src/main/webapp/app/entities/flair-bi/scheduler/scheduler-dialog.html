@@ -60,7 +60,7 @@
                     <div class="col-xs-8">
                         <div class="form-group scheduler-tags">
                             <label class="control-label" for="emails">Share Report with Users*</label>
-                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
+                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUsers" ng-required="vm.scheduleObj.assign_report.emails.length==0"
                                 replace-spaces-with-dashes="false">
                                 <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
                                 </auto-complete>

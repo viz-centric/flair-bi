@@ -10,6 +10,7 @@
     function stateConfig($stateProvider,PERMISSIONS) {
         $stateProvider
             .state('report-management', {
+                parent: 'admin',
                 url: '/report-management?page&sort',
                 data: {
                     authorities: [],
@@ -98,6 +99,7 @@
                 ]
             })
             .state('report-management-log', {
+                parent:'report-management',
                 url: '/report/:visualizationid',
                 data: {
                     authorities: [],

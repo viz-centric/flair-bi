@@ -13,6 +13,61 @@
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div class="container">
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label class="control-label" for="emails">Select Dashboard*</label>
+                            <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)" ng-required="vm.dashboard==null">
+                                <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}</ui-select-match>
+                                <ui-select-choices repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
+                                    <div ng-bind="dashboard.dashboardName"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label class="control-label" for="emails">Select View*</label>
+                            <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)" ng-required="vm.view==null">
+                                <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}</ui-select-match>
+                                <ui-select-choices repeat="view in vm.views | filter: $select.search track by view.id">
+                                    <div ng-bind="view.viewName"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label class="control-label" for="emails">Select Visualization*</label>
+                            <ui-select ng-model="vm.visualMetaData" ng-change="vm.changeVisualization(vm.visualMetaData)" ng-required="vm.visualMetaData==null">
+                                <ui-select-match placeholder="Search Visualization...">{{$select.selected.metadataVisual.name}}</ui-select-match>
+                                <ui-select-choices repeat="visualization in vm.visualizations | filter: $select.search track by visualization.id">
+                                    <div ng-bind="visualization.metadataVisual.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter && vm.scheduleObj.report.share_link!=null">
+                    <div class="col-xs-8">
+                        <iframe width="730" height="300" src={{vm.scheduleObj.report.share_link}} name={{vm.visualMetaData.metadataVisual.name}}>
+                        </iframe>
+                    </div>
+                </div>
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
+                    <div class="col-xs-8">
+                        <div class="form-group scheduler-tags">
+                            <label class="control-label" for="emails">Share Report with Users*</label>
+                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUsers" ng-required="vm.scheduleObj.assign_report.emails.length==0"
+                                replace-spaces-with-dashes="false">
+                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
+                                </auto-complete>
+                            </tags-input>
+                        </div>
+                    </div>
+                </div>
                 <div class="row container">
                     <div class="col-xs-4" style="display: none;">
                         <div class="form-group">
@@ -47,18 +102,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row container" style="display: none;">
-                    <div class="col-xs-8">
-                        <div class="form-group scheduler-tags">
-                            <label class="control-label" for="emails">Share Report with Users*</label>
-                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUser" ng-required="vm.scheduleObj.assign_report.emails.length==0"
-                                replace-spaces-with-dashes="false">
-                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
-                                </auto-complete>
-                            </tags-input>
-                        </div>
-                    </div>
-                </div>
                 <div class="row container">
                     <div class="col-xs-8">
                         <label class="control-label">
@@ -84,7 +127,7 @@
                         <div class="form-group">
                             <label class="control-label" for="startDate">Start Date*</label>
                             <div class="input-group">
-                                <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" required />
+                                <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" />
                                 <span class="input-group-btn scheduler-date-icon">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -97,7 +140,7 @@
                         <div class="form-group">
                             <label class="control-label" for="endDate">End Date*</label>
                             <div class="input-group">
-                                <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" required />
+                                <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" />
                                 <span class="input-group-btn scheduler-date-icon">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>

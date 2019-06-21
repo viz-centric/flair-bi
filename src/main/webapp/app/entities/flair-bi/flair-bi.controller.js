@@ -1119,11 +1119,6 @@
                     },
                     dashboard: function(){
                         return vm.view.viewDashboard;
-                    },
-                    shareLink: function() {
-                        return ShareLinkService.createLink(
-                            v.getSharePath(vm.datasource)
-                        );
                     }
                 }
             }).result.then(function () { }, function () { });

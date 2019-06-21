@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','shareLink','ShareLinkService'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,shareLink,ShareLinkService) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -28,6 +28,9 @@
         vm.removed = removed;
         vm.endDateFormat='yyyy-MM-dd';
         vm.deleteReport=deleteReport;
+        vm.changeDashboard=changeDashboard;
+        vm.changeView=changeView;
+        vm.changeVisualization=changeVisualization;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -39,7 +42,7 @@
                 "mail_body":null,
                 "dashboard_name":"",
                 "view_name":"",
-                "share_link":"",
+                "share_link":null,
                 "build_url":""
             },
             "report_line_item": {
@@ -57,24 +60,33 @@
             "schedule": {
                 "cron_exp":"",
                 "timezone": "",
-                "start_date": null,
-                "end_date": null
+                "start_date": new Date(),
+                "end_date": new Date()
             },
-            "putcall":false
+            "putcall":false,
+            "emailReporter":false
           };
         activate();
 
         ////////////////
 
         function activate() {
-            vm.visualMetaData = visualMetaData;
-            getScheduleReport(visualMetaData.id);
-            vm.datasource= datasource;
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            buildScheduleObject(vm.visualMetaData,vm.datasource,dashboard,view,shareLink);
-            //vm.users=User.query();this will be used in future
             var cronstrue = window.cronstrue;
+            if(visualMetaData){
+                vm.visualMetaData = visualMetaData;
+                vm.dashboard=dashboard;
+                vm.view=view;
+                getScheduleReport(visualMetaData.id);
+                vm.datasource= datasource;
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
+            }else{
+                vm.scheduleObj.emailReporter=true;
+                loadDashboards();
+                vm.users=User.query();
+            }
+
         }
 
         function getScheduleReport(visualizationid){
@@ -82,10 +94,14 @@
                 if(success.status==200){
                     vm.scheduleObj.assign_report.channel=success.data.assign_report.channel;
                     $scope.cronExpression=success.data.schedule.cron_exp;
-                    angular.element("#startDate").val(success.data.schedule.start_date);
-                    angular.element("#endDate").val(success.data.schedule.end_date);
+                    vm.scheduleObj.schedule.start_date= new Date(success.data.schedule.start_date);
+                    vm.scheduleObj.schedule.end_date= new Date(success.data.schedule.end_date);
                     vm.scheduleObj.report.mail_body=success.data.report.mail_body;
                     vm.scheduleObj.putcall=true;
+                    if(vm.scheduleObj.emailReporter){
+                        vm.scheduleObj.assign_report.email_list=success.data.assign_report.email_list;
+                        addEmailList(success.data.assign_report.email_list);
+                    }
                 }
             }).catch(function (error) {                
                 var info = {
@@ -96,8 +112,16 @@
             }); 
         }
 
-        function buildScheduleObject(visualMetaData,datasource,dashboard,view,shareLink){
-        //report's data
+        function addEmailList(emails){
+            vm.selectedUsers = emails.map(function (item) {
+                var newItem = {};
+                newItem['text'] = item.user_name+" "+item.user_email;
+                return newItem;
+            });
+        }
+
+
+        function buildScheduleObject(visualMetaData,datasource,dashboard,view){
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
             vm.scheduleObj.report.view_name=view.viewName;
             vm.scheduleObj.report.build_url=builUrl(dashboard,view);
@@ -133,7 +157,6 @@
         }
 
         $scope.$watch('cronExpression', function() {
-            //console.log('hey, cronExpression has changed='+$scope.cronExpression);
             vm.cronstrue=cronstrue.toString($scope.cronExpression);
         });
 
@@ -171,8 +194,6 @@
         }
 
         function setScheduledData(){
-            vm.scheduleObj.schedule.start_date=angular.element("#startDate").val();
-            vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
         }
@@ -182,8 +203,9 @@
         }
 
         function added(tag) {
-           var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
-           vm.scheduleObj.assign_report.email_list.push(emailObj);
+            console.log("-vm.selectedUser"+vm.selectedUsers);
+            var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
+            vm.scheduleObj.assign_report.email_list.push(emailObj);
         }
 
         function removed(tag){
@@ -221,6 +243,48 @@
                 }
                 $rootScope.showErrorSingleToast(info);
             });
+        }
+
+        function loadDashboards() {
+            Dashboards.query(function(result) {
+                vm.dashboards = result;
+            });
+        }
+
+        function changeDashboard(dashboard){
+            vm.dashboard=dashboard;
+            loadViews(dashboard.id);
+        }
+
+        function loadViews(id) {
+            Views.query(
+                {
+                    viewDashboard:id
+                },
+                function(result) {
+                    vm.views = result;
+                }
+            );
+        }
+
+        function changeView(view){
+            vm.view=view;
+            loadVisualizations(view.id);
+        }
+
+        function loadVisualizations(id){
+            Visualmetadata.query({
+                views:id
+            },function(result){
+                vm.visualizations=result;
+            });
+        }
+
+        function changeVisualization(visualMetaData){
+            vm.visualMetaData = new VisualWrap(visualMetaData);
+            vm.datasource=vm.dashboard.dashboardDatasource;
+            getScheduleReport(visualMetaData.id);
+            buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 }
 })();

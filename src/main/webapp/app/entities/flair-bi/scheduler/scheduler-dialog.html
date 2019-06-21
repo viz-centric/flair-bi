@@ -123,7 +123,7 @@
                         <div class="form-group">
                             <label class="control-label" for="startDate">Start Date*</label>
                             <div class="input-group">
-                                <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" required />
+                                <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" />
                                 <span class="input-group-btn scheduler-date-icon">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -136,7 +136,7 @@
                         <div class="form-group">
                             <label class="control-label" for="endDate">End Date*</label>
                             <div class="input-group">
-                                <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" required />
+                                <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" />
                                 <span class="input-group-btn scheduler-date-icon">
                                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDate')">
                                         <i class="glyphicon glyphicon-calendar"></i>

@@ -60,8 +60,8 @@
             "schedule": {
                 "cron_exp":"",
                 "timezone": "",
-                "start_date": null,
-                "end_date": null
+                "start_date": new Date(),
+                "end_date": new Date()
             },
             "putcall":false,
             "emailReporter":false
@@ -94,10 +94,8 @@
                 if(success.status==200){
                     vm.scheduleObj.assign_report.channel=success.data.assign_report.channel;
                     $scope.cronExpression=success.data.schedule.cron_exp;
-                    angular.element("#startDate").val(success.data.schedule.start_date);
-                    angular.element("#endDate").val(success.data.schedule.end_date);
-                    //vm.scheduleObj.schedule.start_date=success.data.schedule.start_date;
-                    //vm.scheduleObj.schedule.end_date=success.data.schedule.end_date;
+                    vm.scheduleObj.schedule.start_date= new Date(success.data.schedule.start_date);
+                    vm.scheduleObj.schedule.end_date= new Date(success.data.schedule.end_date);
                     vm.scheduleObj.report.mail_body=success.data.report.mail_body;
                     vm.scheduleObj.putcall=true;
                 }
@@ -146,7 +144,6 @@
         }
 
         $scope.$watch('cronExpression', function() {
-            //console.log('hey, cronExpression has changed='+$scope.cronExpression);
             vm.cronstrue=cronstrue.toString($scope.cronExpression);
         });
 
@@ -184,8 +181,6 @@
         }
 
         function setScheduledData(){
-            vm.scheduleObj.schedule.start_date=angular.element("#startDate").val();
-            vm.scheduleObj.schedule.end_date=angular.element("#endDate").val();
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
         }

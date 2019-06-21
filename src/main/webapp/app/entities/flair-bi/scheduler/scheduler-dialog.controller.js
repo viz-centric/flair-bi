@@ -96,6 +96,8 @@
                     $scope.cronExpression=success.data.schedule.cron_exp;
                     angular.element("#startDate").val(success.data.schedule.start_date);
                     angular.element("#endDate").val(success.data.schedule.end_date);
+                    //vm.scheduleObj.schedule.start_date=success.data.schedule.start_date;
+                    //vm.scheduleObj.schedule.end_date=success.data.schedule.end_date;
                     vm.scheduleObj.report.mail_body=success.data.report.mail_body;
                     vm.scheduleObj.putcall=true;
                 }
@@ -272,6 +274,7 @@
         function changeVisualization(visualMetaData){
             vm.visualMetaData = visualMetaData;
             vm.datasource=vm.dashboard.dashboardDatasource;
+            getScheduleReport(visualMetaData.id);
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 }

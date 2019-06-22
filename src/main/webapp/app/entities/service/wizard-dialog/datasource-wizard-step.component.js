@@ -16,8 +16,8 @@
         }
     });
 
-    DatasourceWizardStepController.$inject = ["$scope","$timeout", "Datasources","$rootScope","$translate","Query","Connections","WizardHandler","$q","proxyGrpcService","AuthServerProvider","stompClientService","AlertService","QueryValidationService"];
-    function DatasourceWizardStepController($scope,$timeout,Datasources,$rootScope,$translate,Query,Connections,WizardHandler,$q,proxyGrpcService,AuthServerProvider,stompClientService,AlertService,QueryValidationService) {
+    DatasourceWizardStepController.$inject = ["$scope","$timeout", "Datasources","$rootScope","$translate","Query","Connections","WizardHandler","$q","proxyGrpcService","AuthServerProvider","stompClientService","AlertService","QueryValidationService", "$uibModal"];
+    function DatasourceWizardStepController($scope,$timeout,Datasources,$rootScope,$translate,Query,Connections,WizardHandler,$q,proxyGrpcService,AuthServerProvider,stompClientService,AlertService,QueryValidationService, $uibModal) {
         var vm = this;
         var delayedSearch;
 
@@ -164,27 +164,68 @@
             }
         }
 
-        function saveDatasource(connectionLinkId) {
-            vm.datasources.connectionName = connectionLinkId;
-
-            Datasources.save(vm.datasources)
+        function sendSaveDatasource(customAction) {
+            Datasources.save({datasource: vm.datasources, action: customAction})
                 .$promise
                 .then(function (resultData) {
-                    $rootScope.$broadcast('flairbiApp:data-connection:next-page');
-                    vm.datasources["datasourceId"] = resultData.id;
-                    return fetchFeatures(resultData.id)
+                    if (resultData.error === 'SAME_NAME_EXISTS') {
+                        return showDuplicateDatasourceModal(vm.datasources);
+                    } else {
+                        $rootScope.$broadcast('flairbiApp:data-connection:next-page');
+                        vm.datasources["datasourceId"] = resultData.id;
+                        return fetchFeatures(resultData.id)
+                    }
                 })
                 .then(function () {
                     WizardHandler.wizard().next();
                 })
                 .catch(function (error) {
                     rollbackConnection();
-                    if(error.data.message=='uniqueError'){
+                    if (error.data.message == 'uniqueError') {
                         $rootScope.showErrorSingleToast({
-                            text: $translate.instant('flairbiApp.datasources.'+error.data.message)
-                        });        
+                            text: $translate.instant('flairbiApp.datasources.' + error.data.message)
+                        });
                     }
                 });
+        }
+
+        function saveDatasource(connectionLinkId, customAction) {
+            vm.datasources.connectionName = connectionLinkId;
+            sendSaveDatasource(customAction);
+        }
+
+        function showDuplicateDatasourceModal(datasource) {
+            $uibModal
+                .open({
+                    templateUrl:
+                        "app/entities/datasources/datasources-duplicate-dialog.html",
+                    controller: "DatasourcesDuplicateDialogController",
+                    controllerAs: "vm",
+                    backdrop: "static",
+                    size: "lg",
+                    resolve: {
+                        datasource: datasource
+                    }
+                })
+                .result.then(
+                function (result) {
+                    if (result.result === 'edit') {
+                        editDatasource();
+                    } else if (result.result === 'delete') {
+                        deleteDatasource();
+                    }
+                }
+            );
+
+            return $q.defer().promise;
+        }
+
+        function editDatasource() {
+            sendSaveDatasource('EDIT');
+        }
+
+        function deleteDatasource() {
+            sendSaveDatasource('DELETE');
         }
 
         function fetchFeatures(datasourceId) {

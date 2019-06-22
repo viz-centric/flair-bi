@@ -121,4 +121,17 @@ public class DatasourceServiceImpl implements DatasourceService {
                 .or(QDatasource.datasource.status.isNull()));
         return datasourceRepository.findAll(b, pageable);
 	}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName) {
+        return findAll(QDatasource.datasource.connectionName.eq(connectionName)
+                .and(QDatasource.datasource.name.eq(datasourceName)));
+    }
+
+    @Override
+    public void deleteByConnectionAndName(String connectionName, String datasourceName) {
+        delete(QDatasource.datasource.connectionName.eq(connectionName)
+                .and(QDatasource.datasource.name.eq(datasourceName)));
+    }
 }

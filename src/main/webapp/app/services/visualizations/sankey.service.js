@@ -37,6 +37,7 @@
                     result['fontWeight'] = [];
                     result['fontSize'] = [];
                     result['textColor'] = [];
+                    result['colorList'] = colorSet;
                     for (var i = 0; i < result.maxDim; i++) {
                         result['showLabels'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Show Labels'));
                         result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font style'));

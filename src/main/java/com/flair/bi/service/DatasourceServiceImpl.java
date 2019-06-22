@@ -3,9 +3,7 @@ package com.flair.bi.service;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceStatus;
 import com.flair.bi.domain.QDatasource;
-import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.DatasourceRepository;
-import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +53,12 @@ public class DatasourceServiceImpl implements DatasourceService {
         return (List<Datasource>) datasourceRepository.findAll(b);
     }
 
+    @Override
+    public List<Datasource> findAllAndDeleted(Predicate predicate) {
+        log.debug("Request to get all Datasource including deleted");
+        return (List<Datasource>) datasourceRepository.findAll(predicate);
+    }
+
     /**
      * Get one datasources by id.
      *
@@ -85,7 +89,10 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Transactional(readOnly = true)
     public Long getCount(Predicate predicate) {
         log.debug("Request to get Datasource count with predicate {}", predicate);
-        return datasourceRepository.count(predicate);
+        BooleanBuilder b = new BooleanBuilder(predicate);
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
+                .or(QDatasource.datasource.status.isNull()));
+        return datasourceRepository.count(b);
     }
 
      /**
@@ -114,4 +121,17 @@ public class DatasourceServiceImpl implements DatasourceService {
                 .or(QDatasource.datasource.status.isNull()));
         return datasourceRepository.findAll(b, pageable);
 	}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName) {
+        return findAll(QDatasource.datasource.connectionName.eq(connectionName)
+                .and(QDatasource.datasource.name.eq(datasourceName)));
+    }
+
+    @Override
+    public void deleteByConnectionAndName(String connectionName, String datasourceName) {
+        delete(QDatasource.datasource.connectionName.eq(connectionName)
+                .and(QDatasource.datasource.name.eq(datasourceName)));
+    }
 }

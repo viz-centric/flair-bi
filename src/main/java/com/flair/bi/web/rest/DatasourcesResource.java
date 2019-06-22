@@ -3,7 +3,6 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.QDatasource;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcConnectionService;
@@ -18,7 +17,9 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.querydsl.core.types.Predicate;
 import io.swagger.annotations.ApiParam;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -61,29 +62,43 @@ public class DatasourcesResource {
     private final DashboardService dashboardService;
     private final GrpcConnectionService grpcConnectionService;
 
-
     /**
      * POST  /datasource : Create a new datasource.
      *
-     * @param datasource the datasource to create
+     * @param request the datasource to create
      * @return the ResponseEntity with status 201 (Created) and with body the new datasource, or with status 400 (Bad Request) if the datasource has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/datasources")
     @Timed
-    public ResponseEntity<Datasource> createDatasources(@Valid @RequestBody Datasource datasource) throws URISyntaxException {
-        log.debug("REST request to save Datasource : {}", datasource);
+    public ResponseEntity<?> createDatasources(@Valid @RequestBody CreateDatasourceRequest request) throws URISyntaxException {
+        log.debug("REST request to save datasource request {}", request);
+
+        Datasource datasource = request.getDatasource();
         if (datasource.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new datasource cannot already have an ID")).body(null);
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new datasource cannot already have an ID"))
+                    .body(null);
         }
-        datasourceService.findAll(QDatasource.datasource.connectionName.eq(datasource.getConnectionName())
-                .and(QDatasource.datasource.name.eq(datasource.getName())))
+
+        Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
+                datasource.getConnectionName(), datasource.getName())
                 .stream()
-                .findFirst()
-                .ifPresent((existingDatasource) -> {
-                    log.debug("REST request to save Datasource found existing datasource : {}", existingDatasource);
-                    datasource.setId(existingDatasource.getId());
-                });
+                .findFirst();
+
+        if (existingDatasource.isPresent()) {
+            Datasource existing = existingDatasource.get();
+            boolean actionApplied = handleDatasourceCreateAction(datasource, request.getAction(), existing.getId());
+            if (!actionApplied) {
+                log.info("Same datasource already exists for id {} connection {} name {}",
+                        existing.getId(), existing.getConnectionName(), existing.getName());
+                return ResponseEntity.ok(CreateDatasourceResponse.builder()
+                        .error(CreateDatasourceResponse.Error.SAME_NAME_EXISTS)
+                        .datasourceName(existing.getName())
+                        .build());
+            }
+        }
+
         Datasource result = datasourceService.save(datasource);
         return ResponseEntity.created(new URI("/api/datasource/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -93,23 +108,57 @@ public class DatasourcesResource {
     /**
      * PUT  /datasource : Updates an existing datasource.
      *
-     * @param datasource the datasource to update
+     * @param request the datasource to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated datasource,
      * or with status 400 (Bad Request) if the datasource is not valid,
      * or with status 500 (Internal Server Error) if the datasource couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/datasources")
     @Timed
-    public ResponseEntity<Datasource> updateDatasources(@Valid @RequestBody Datasource datasource) throws URISyntaxException {
-        log.debug("REST request to update Datasource : {}", datasource);
+    public ResponseEntity<?> updateDatasources(@Valid @RequestBody CreateDatasourceRequest request) {
+        log.debug("REST request to update Datasource : {}", request);
+        Datasource datasource = request.getDatasource();
         if (datasource.getId() == null) {
-            return createDatasources(datasource);
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idnotexist", "Please provide a resource ID to update the datasource."))
+                    .body(null);
         }
+
+        Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
+                datasource.getConnectionName(), datasource.getName())
+                .stream()
+                .filter(it -> !it.getId().equals(datasource.getId()))
+                .findFirst();
+
+        if (existingDatasource.isPresent()) {
+            Datasource existing = existingDatasource.get();
+            log.warn("Updating datasource but already exists with the same name {} connection {} id {}",
+                    existing.getName(), existing.getConnectionName(), existing.getId());
+
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "flairbiApp.datasources.error.datasources.same_name_connection_already_exists"))
+                    .body(null);
+        }
+
         Datasource result = datasourceService.save(datasource);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, datasource.getId().toString()))
             .body(result);
+    }
+
+    private boolean handleDatasourceCreateAction(Datasource datasource, CreateDatasourceRequest.Action action, Long existingDatasourceId) {
+        if (action == CreateDatasourceRequest.Action.DELETE) {
+            log.info("Update/create datasource and deleting existing with connection {} and table {} existing {}",
+                    datasource.getConnectionName(), datasource.getName(), existingDatasourceId);
+            datasourceService.deleteByConnectionAndName(datasource.getConnectionName(), datasource.getName());
+            return true;
+        } else if (action == CreateDatasourceRequest.Action.EDIT) {
+            log.info("Updating/creating datasource and editing existing with connection {} and table {} existing {}",
+                    datasource.getConnectionName(), datasource.getName(), existingDatasourceId);
+            datasource.setId(existingDatasourceId);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -131,6 +180,7 @@ public class DatasourcesResource {
                             .findFirst();
                     return DatasourceDTO.builder()
                             .connectionName(datasource.getConnectionName())
+                            .connectionReadableName(optionalConnection.map(i -> i.getName()).orElse(""))
                             .dashboardSet(datasource.getDashboardSet())
                             .datasourceConstraints(datasource.getDatasourceConstraints())
                             .features(datasource.getFeatures())
@@ -239,6 +289,26 @@ public class DatasourcesResource {
         @NotEmpty
         String searchTerm;
         ConnectionDTO connection;
+    }
+
+    @Builder
+    @Getter
+    private static class CreateDatasourceResponse {
+        enum Error {
+            OK, SAME_NAME_EXISTS;
+        }
+        private Error error;
+        private String datasourceName;
+    }
+
+    @Data
+    private static class CreateDatasourceRequest {
+        enum Action {
+            EDIT, DELETE;
+        }
+        @NotNull
+        private Datasource datasource;
+        private Action action;
     }
 
 }

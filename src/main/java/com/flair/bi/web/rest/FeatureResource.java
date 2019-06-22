@@ -93,7 +93,9 @@ public class FeatureResource {
 
         FeatureValidationResult validate = featureService.validate(result);
         if (validate != FeatureValidationResult.OK) {
-            return ResponseEntity.badRequest().body(validate);
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("feature", "feature." + validate.name().toLowerCase(), "Error"))
+                    .body(validate);
         }
 
         return ResponseEntity.ok()

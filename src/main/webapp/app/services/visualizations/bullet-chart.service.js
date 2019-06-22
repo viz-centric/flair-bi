@@ -49,33 +49,21 @@
                             .update(record.data);
                     }
                 } else {
-                    d3.select(element[0]).html('')
-                    var div = d3.select(element[0]).append('div')
-                        .attr('id', 'bullet-' + element[0].id)
-                        .style('width', element[0].clientWidth + 'px')
-                        .style('height', element[0].clientHeight + 'px')
-                        .style('overflow', 'hidden')
-                        .style('text-align', 'center')
-                        .style('position', 'relative');
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="bullet-' + element[0].id + '" ></div>')
+                    var div = $('#bullet-' + element[0].id)
 
-                    var svg = div.append('svg')
-                        .attr('width', element[0].clientWidth)
-                        .attr('height', element[0].clientHeight)
-
-                    var tooltip = div.append('div')
-                        .attr('class', 'custom_tooltip')
-
-                    var bulletchart = flairVisualizations.bullet()
+                    var bullet = flairVisualizations.bullet()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(false)
+                        .data(record.data);
 
-                    svg.datum(record.data)
-                        .call(bulletchart);
+                        bullet(div[0])
 
-                    $rootScope.updateWidget[record.id] = bulletchart;
+                    $rootScope.updateWidget[record.id] = bullet;
                 }
             }
         }

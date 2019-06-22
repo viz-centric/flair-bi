@@ -56,23 +56,15 @@
                             .update(record.data);
                     }
                 } else {
-                    d3.select(element[0]).html('')
-                    var div = d3.select(element[0]).append('div')
-                        .attr('id', 'infographics-' + element[0].id)
-                        .attr('class', 'infographics')
-                        .style('width', element[0].clientWidth + 'px')
-                        .style('height', element[0].clientHeight + 'px')
-
-                    var tooltip = div.append('div')
-                        .attr('class', 'custom_tooltip')
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="infographics-' + element[0].id + '" ></div>')
+                    var div = $('#infographics-' + element[0].id)
 
                     var infographics = flairVisualizations.infographics()
                         .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true)
-                        .print(false);
+                        .data(record.data);
 
-                    div.datum(record.data)
-                        .call(infographics);
+                    infographics(div[0])
 
                     $rootScope.updateWidget[record.id] = infographics;
                 }

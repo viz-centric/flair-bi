@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,7 +65,14 @@ public class FeatureService {
                 }
             }
         }
-        List<Feature> existingFeatures = getFeatures(QFeature.feature.datasource.eq(feature.getDatasource()).and(QFeature.feature.name.eq(feature.getName())));
+        List<Feature> existingFeatures = Optional.ofNullable(feature.getId())
+                .map(id -> getFeatures(
+                        QFeature.feature.datasource.eq(feature.getDatasource())
+                                .and(QFeature.feature.name.eq(feature.getName()))
+                                .and(QFeature.feature.id.ne(feature.getId()))))
+                .orElseGet(() -> getFeatures(
+                        QFeature.feature.datasource.eq(feature.getDatasource())
+                                .and(QFeature.feature.name.eq(feature.getName()))));
         if (!existingFeatures.isEmpty()) {
             return FeatureValidationResult.ALREADY_EXISTS;
         }

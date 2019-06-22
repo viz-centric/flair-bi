@@ -86,15 +86,8 @@ public class DatasourcesResource {
 
         if (existingDatasource.isPresent()) {
             Datasource existing = existingDatasource.get();
-            if (request.getAction() == CreateDatasourceRequest.Action.DELETE) {
-                log.info("Creating datasource and deleting existing with connection {} and table {} existing {}",
-                        datasource.getConnectionName(), datasource.getName(), existing.getId());
-                datasourceService.deleteByConnectionAndName(datasource.getConnectionName(), datasource.getName());
-            } else if (request.getAction() == CreateDatasourceRequest.Action.EDIT) {
-                log.info("Creating datasource and editing existing with connection {} and table {} existing {}",
-                        datasource.getConnectionName(), datasource.getName(), existing.getId());
-                datasource.setId(existing.getId());
-            } else {
+            boolean actionApplied = handleDatasourceCreateAction(datasource, request.getAction(), existing.getId());
+            if (!actionApplied) {
                 log.info("Same datasource already exists for id {} connection {} name {}",
                         existing.getId(), existing.getConnectionName(), existing.getName());
                 return ResponseEntity.ok(CreateDatasourceResponse.builder()
@@ -113,25 +106,54 @@ public class DatasourcesResource {
     /**
      * PUT  /datasource : Updates an existing datasource.
      *
-     * @param datasource the datasource to update
+     * @param request the datasource to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated datasource,
      * or with status 400 (Bad Request) if the datasource is not valid,
      * or with status 500 (Internal Server Error) if the datasource couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/datasources")
     @Timed
-    public ResponseEntity<?> updateDatasources(@Valid @RequestBody Datasource datasource) throws URISyntaxException {
-        log.debug("REST request to update Datasource : {}", datasource);
+    public ResponseEntity<?> updateDatasources(@Valid @RequestBody CreateDatasourceRequest request) {
+        log.debug("REST request to update Datasource : {}", request);
+        Datasource datasource = request.getDatasource();
         if (datasource.getId() == null) {
             return ResponseEntity.badRequest()
                     .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idnotexist", "Please provide a resource ID to update the datasource."))
                     .body(null);
         }
+
+        Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
+                datasource.getConnectionName(), datasource.getName());
+
+        if (existingDatasource.isPresent()) {
+            Datasource existing = existingDatasource.get();
+            log.warn("Updating datasource but already exists with the same name {} connection {} id {}",
+                    existing.getName(), existing.getConnectionName(), existing.getId());
+
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "flairbiApp.datasources.error.datasources.same_name_connection_already_exists"))
+                    .body(null);
+        }
+
         Datasource result = datasourceService.save(datasource);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, datasource.getId().toString()))
             .body(result);
+    }
+
+    private boolean handleDatasourceCreateAction(Datasource datasource, CreateDatasourceRequest.Action action, Long existingDatasourceId) {
+        if (action == CreateDatasourceRequest.Action.DELETE) {
+            log.info("Update/create datasource and deleting existing with connection {} and table {} existing {}",
+                    datasource.getConnectionName(), datasource.getName(), existingDatasourceId);
+            datasourceService.deleteByConnectionAndName(datasource.getConnectionName(), datasource.getName());
+            return true;
+        } else if (action == CreateDatasourceRequest.Action.EDIT) {
+            log.info("Updating/creating datasource and editing existing with connection {} and table {} existing {}",
+                    datasource.getConnectionName(), datasource.getName(), existingDatasourceId);
+            datasource.setId(existingDatasourceId);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -153,6 +175,7 @@ public class DatasourcesResource {
                             .findFirst();
                     return DatasourceDTO.builder()
                             .connectionName(datasource.getConnectionName())
+                            .connectionReadableName(optionalConnection.map(i -> i.getName()).orElse(""))
                             .dashboardSet(datasource.getDashboardSet())
                             .datasourceConstraints(datasource.getDatasourceConstraints())
                             .features(datasource.getFeatures())

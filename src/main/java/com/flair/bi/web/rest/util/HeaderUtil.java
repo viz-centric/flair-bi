@@ -1,8 +1,6 @@
 package com.flair.bi.web.rest.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -37,6 +35,14 @@ public final class HeaderUtil {
         log.error("Entity creation failed, {}", defaultMessage);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-flairbiApp-error", "error." + errorKey);
+        headers.add("X-flairbiApp-params", entityName);
+        return headers;
+    }
+
+    public static HttpHeaders createFailureAlert(String entityName, String errorKey) {
+        log.error("Failure alert key {} entity {}", errorKey, entityName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-flairbiApp-error", errorKey);
         headers.add("X-flairbiApp-params", entityName);
         return headers;
     }

@@ -80,9 +80,9 @@
             <div class="form-group">
                 <label data-translate="flairbiApp.dashboards.dashboardDatasources" for="field_dashboardDatasources">Dashboard Datasources</label>
                 <ui-select ng-model="vm.dashboards.dashboardDatasource" name="dashboardDatasources" required ng-keypress="vm.search($select.search)">
-                    <ui-select-match placeholder="{{ 'flairbiApp.dashboards.selectDatasource' | translate }}">{{$select.selected.name}}</ui-select-match>
+                    <ui-select-match placeholder="{{ 'flairbiApp.dashboards.selectDatasource' | translate }}">{{$select.selected.name}} ({{$select.selected.connectionReadableName}})</ui-select-match>
                     <ui-select-choices repeat="datasource in vm.datasources | filter: $select.search track by datasource.id">
-                        <div ng-bind="datasource.name"></div>
+                        <div ng-bind="datasource.name + ' (' + datasource.connectionReadableName + ')'"></div>
                     </ui-select-choices>
                 </ui-select>
             </div>

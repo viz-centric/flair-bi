@@ -19,6 +19,7 @@ public class DatasourceDTO {
     private String name;
     private ZonedDateTime lastUpdated;
     private String connectionName;
+    private String connectionReadableName;
     private Long connectionId;
     private String queryPath;
     private Set<Dashboard> dashboardSet;

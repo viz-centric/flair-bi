@@ -39,9 +39,9 @@
         function save() {
             vm.isSaving = true;
             if (vm.datasources.id !== null) {
-                Datasources.update(vm.datasources, onSaveSuccess, onSaveError);
+                Datasources.update({datasource: vm.datasources}, onSaveSuccess, onSaveError);
             } else {
-                Datasources.save(vm.datasources, onSaveSuccess, onSaveError);
+                Datasources.save({datasource: vm.datasources}, onSaveSuccess, onSaveError);
             }
         }
 

@@ -26,7 +26,8 @@
             "service": "Service",
             "selectDatasource": "Search Available Data Sources",
             "error": {
-                "datasources.all": "Error Loading Data Sources"
+                "datasources.all": "Error Loading Data Sources",
+                "datasources.same_name_connection_already_exists": "A datasource with the same name and connection name combination already exists. Please choose a different name."
             },
             "uniqueError":"Datasource already exists with this name",
             "noDataFound":"No data found!!"

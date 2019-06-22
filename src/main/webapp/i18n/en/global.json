@@ -145,6 +145,7 @@
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID",
         "idnotexist": "Resource ID should be provided for {{ entityName }}",
+        "datasource.alrady": "Resource ID should be provided for {{ entityName }}",
         "feature": {
             "function_does_not_exist": "Function does not exist. Please choose one of the pre-defined functions.",
             "definition_null": "Feature definition is empty.",

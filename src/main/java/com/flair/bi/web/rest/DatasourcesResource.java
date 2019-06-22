@@ -82,7 +82,9 @@ public class DatasourcesResource {
         }
 
         Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
-                datasource.getConnectionName(), datasource.getName());
+                datasource.getConnectionName(), datasource.getName())
+                .stream()
+                .findFirst();
 
         if (existingDatasource.isPresent()) {
             Datasource existing = existingDatasource.get();
@@ -123,7 +125,10 @@ public class DatasourcesResource {
         }
 
         Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
-                datasource.getConnectionName(), datasource.getName());
+                datasource.getConnectionName(), datasource.getName())
+                .stream()
+                .filter(it -> !it.getId().equals(datasource.getId()))
+                .findFirst();
 
         if (existingDatasource.isPresent()) {
             Datasource existing = existingDatasource.get();

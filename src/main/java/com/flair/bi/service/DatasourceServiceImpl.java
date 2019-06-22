@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service Implementation for managing Datasource.
@@ -125,11 +124,9 @@ public class DatasourceServiceImpl implements DatasourceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName) {
+    public List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName) {
         return findAll(QDatasource.datasource.connectionName.eq(connectionName)
-                .and(QDatasource.datasource.name.eq(datasourceName)))
-                .stream()
-                .findFirst();
+                .and(QDatasource.datasource.name.eq(datasourceName)));
     }
 
     @Override

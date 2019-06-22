@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DatasourceService {
     /**
@@ -60,7 +59,7 @@ public interface DatasourceService {
      */
     Page<Datasource> search(Pageable pageable, Predicate predicate);
 
-    Optional<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName);
+    List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName);
 
     void deleteByConnectionAndName(String connectionName, String datasourceName);
 }

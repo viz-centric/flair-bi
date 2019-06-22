@@ -51,7 +51,13 @@ public enum Action {
      */
     ROLLBACK_PUBLISH("ROLLBACK-PUBLISH"),
 
-    UNPUBLISHED("UNPUBLISHED");
+    UNPUBLISHED("UNPUBLISHED"),
+
+    /**
+     * Can Share report
+     */
+    SHARE("SHARE");
+
 
     private final String type;
 

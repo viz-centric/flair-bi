@@ -92,23 +92,18 @@
                         pivot.update(record.data);
                     }
                 } else {
-                    d3.select(element[0]).html('')
-                    var div = d3.select(element[0]).append('div')
-                        .attr('id', 'pivot-' + element[0].id)
-                        .style('width', element[0].clientWidth + 'px')
-                        .style('height', element[0].clientHeight + 'px')
-                        .style('overflow', 'hidden')
-                        .style('text-align', 'center')
-                        .style('position', 'relative');
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="pivot-' + element[0].id + '" ></div>')
+                    var div = $('#pivot-' + element[0].id)
 
                     var pivot = flairVisualizations.pivot()
                         .config(getProperties(VisualizationUtils, record))
                         .broadcast($rootScope)
-                        .filterParameters(filterParametersService);
+                        .filterParameters(filterParametersService)
+                        .print(false)
+                        .data(record.data);
 
-
-                    div.datum(record.data)
-                        .call(pivot);
+                        pivot(div[0])
 
                     $rootScope.updateWidget[record.id] = pivot;
                 }

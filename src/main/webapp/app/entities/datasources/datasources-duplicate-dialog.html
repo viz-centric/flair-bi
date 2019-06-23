@@ -1,0 +1,20 @@
+<div class="modal-header flair-model-header">
+    <div class="header-text" data-translate="flairbiApp.datasources.sameDatasource.exists.header">data source error</div>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.onClose()">&times;</button>
+</div>
+<div class="modal-body">
+    <p translate="flairbiApp.datasources.sameDatasource.exists.body"
+       translate-values="{ name: vm.datasource.name }">
+        Datasource duplicate body text
+    </p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.onEdit()">
+        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+        <span data-translate="flairbiApp.datasources.sameDatasource.exists.edit">edit</span>
+    </button>
+    <button type="button" class="btn btn-danger" ng-click="vm.onDelete()">
+        <span class="glyphicon glyphicon-save"></span>
+        <span data-translate="flairbiApp.datasources.sameDatasource.exists.delete">delete</span>
+    </button>
+</div>

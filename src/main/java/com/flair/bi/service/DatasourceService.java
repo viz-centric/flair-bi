@@ -58,4 +58,8 @@ public interface DatasourceService {
      * @return the list of entities
      */
     Page<Datasource> search(Pageable pageable, Predicate predicate);
+
+    List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName);
+
+    void deleteByConnectionAndName(String connectionName, String datasourceName);
 }

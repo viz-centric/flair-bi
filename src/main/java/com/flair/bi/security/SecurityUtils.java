@@ -68,6 +68,22 @@ public final class SecurityUtils {
                     .equals(AuthoritiesConstants.ANONYMOUS));
     }
     
+    /**
+     * Check if a user is authenticated.
+     *
+     * @return true if the user is authenticated, false otherwise
+     */
+    public static boolean iAdmin() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        return authentication != null
+            && authentication.getAuthorities()
+            .stream()
+            .noneMatch(grantedAuthority ->
+                grantedAuthority.getAuthority()
+                    .equals(AuthoritiesConstants.ADMIN));
+    }
+    
     public static  EnumSet<roles> getPredefinedGroups(){
 		return EnumSet.of(roles.ROLE_ADMIN,roles.ROLE_DEVELOPMENT,roles.ROLE_USER);
     }

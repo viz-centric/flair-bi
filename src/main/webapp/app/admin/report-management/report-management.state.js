@@ -60,7 +60,8 @@
                 parent: "report-management",
                 url: "/schedule/new",
                 data: {
-                    displayName: false
+                    displayName: false,
+                    authorities: [PERMISSIONS.SHARE_SCHEDULED_REPORT]
                 },
                 onEnter: [
                     "$stateParams",
@@ -91,6 +92,11 @@
                                 }
                             })
                             .result.then(
+                                function() {
+                                    $state.go("report-management", null, {
+                                        reload: "report-management"
+                                    });
+                                },
                                 function() {
                                     $state.go("report-management");
                                 }

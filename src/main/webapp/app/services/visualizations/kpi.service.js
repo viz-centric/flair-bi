@@ -63,22 +63,15 @@
                             .update(record.data);
                     }
                 } else {
-                    d3.select(element[0]).html('')
-                    var div = d3.select(element[0]).append('div')
-                        .attr('id', 'kpi-' + element[0].id)
-                        .attr('class', 'kpi')
-                        .style('width', element[0].clientWidth + 'px')
-                        .style('height', element[0].clientHeight + 'px')
-                        .style('padding', '15px')
-
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="kpi-' + element[0].id + '" ></div>')
+                    var div = $('#kpi-' + element[0].id)
 
                     var kpi = flairVisualizations.kpi()
                         .config(getProperties(VisualizationUtils, record))
-                        .print(false);
+                        .data(record.data);
 
-                    div.datum(record.data)
-                        .call(kpi);
-
+                    kpi(div[0])
                     $rootScope.updateWidget[record.id] = kpi;
                 }
             }

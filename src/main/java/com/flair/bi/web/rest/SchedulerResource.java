@@ -128,7 +128,7 @@ public class SchedulerResource {
 		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
 		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
-		if(!schedulerDTO.getEmailReporter()) {
+		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
 			schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());

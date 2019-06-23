@@ -1455,5 +1455,47 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>stag</id>
+            <build>
+                <plugins>
+                   <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>flairbi/${project.artifactId}</name>
+                                    <build>
+                                        <tags>
+                                            <tag>vs${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>flairbi/flair-couchdb</name>
+                                    <build>
+                                        <tags>
+                                            <tag>vs${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>flairbi/flair-pgsql</name>
+                                    <build>
+                                        <tags>
+                                            <tag>vs${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>

@@ -57,11 +57,12 @@
                     }
                 } else {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="infographics-' + element[0].id + '" ></div>')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="infographics-' + element[0].id + '" ></div>')
                     var div = $('#infographics-' + element[0].id)
 
                     var infographics = flairVisualizations.infographics()
                         .config(getProperties(VisualizationUtils, record))
+                        .tooltip(true)
                         .data(record.data);
 
                     infographics(div[0])

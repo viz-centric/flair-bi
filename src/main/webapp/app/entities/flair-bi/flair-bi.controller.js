@@ -1119,6 +1119,9 @@
                     },
                     dashboard: function(){
                         return vm.view.viewDashboard;
+                    },
+                    scheduledObj: function(){
+                        return null;
                     }
                 }
             }).result.then(function () { }, function () { });

@@ -199,7 +199,7 @@
         });
 
         function clear() {
-            $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.close();
         }
 
         function buildQueryName(vId,connectionId){

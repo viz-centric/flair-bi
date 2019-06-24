@@ -13,7 +13,7 @@
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div class="container">
-                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter && !vm.emailReporterEdit">
                     <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Dashboard*</label>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter && !vm.emailReporterEdit">
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Visualization*</label>

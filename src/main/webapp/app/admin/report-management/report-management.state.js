@@ -88,6 +88,9 @@
                                     },
                                     dashboard: function(){
                                         return null;
+                                    },
+                                    scheduledObj: function(){
+                                        return null;
                                     }
                                 }
                             })

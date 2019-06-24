@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -31,6 +31,7 @@
         vm.changeDashboard=changeDashboard;
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
+        vm.emailReporterEdit=false;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -46,7 +47,7 @@
                 "build_url":""
             },
             "report_line_item": {
-                "visualizationid":"",
+                "visualizationid":null,
                 "visualization": "",
                 "dimension":[],
                 "measure":[]
@@ -83,27 +84,34 @@
                 buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
             }else{
                 vm.scheduleObj.emailReporter=true;
-                loadDashboards();
                 vm.users=User.query();
+                if(scheduledObj){
+                    vm.emailReporterEdit=true;
+                    updateScheduledObj(scheduledObj);
+                    getVisualmetadata(scheduledObj);
+                }else{
+                    loadDashboards();     
+                }
+
             }
 
+        }
+
+        function getVisualmetadata(scheduledObj){
+            Visualmetadata.get({
+                id: scheduledObj.report_line_item.visualizationid
+            },function(result){
+                vm.visualMetaData = new VisualWrap(result);
+                buildScheduledObject(scheduledObj,vm.visualMetaData);
+            });
         }
 
         function getScheduleReport(visualizationid){
             schedulerService.getScheduleReport(visualizationid).then(function (success) {
                 if(success.status==200){
-                    vm.scheduleObj.assign_report.channel=success.data.assign_report.channel;
-                    $scope.cronExpression=success.data.schedule.cron_exp;
-                    vm.scheduleObj.schedule.start_date= new Date(success.data.schedule.start_date);
-                    vm.scheduleObj.schedule.end_date= new Date(success.data.schedule.end_date);
-                    vm.scheduleObj.report.mail_body=success.data.report.mail_body;
-                    vm.scheduleObj.putcall=true;
-                    if(vm.scheduleObj.emailReporter){
-                        vm.scheduleObj.assign_report.email_list=success.data.assign_report.email_list;
-                        addEmailList(success.data.assign_report.email_list);
-                    }
+                    updateScheduledObj(success.data);
                 }
-            }).catch(function (error) {                
+            }).catch(function (error) {
                 var info = {
                     text: error.data.message,
                     title: "Error"
@@ -112,12 +120,42 @@
             }); 
         }
 
+        function updateScheduledObj(data){
+            vm.scheduleObj.assign_report.channel=data.assign_report.channel;
+            $scope.cronExpression=data.schedule.cron_exp;
+            vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
+            vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
+            vm.scheduleObj.report.mail_body=data.report.mail_body;
+            vm.scheduleObj.putcall=true;
+            if(vm.scheduleObj.emailReporter){
+                vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
+                addEmailList(data.assign_report.email_list);
+            }
+        }
+
+        function getDatasourceId(share_link){
+            var params = share_link.split('=');
+            return params[params.length-1];
+        }
+
         function addEmailList(emails){
             vm.selectedUsers = emails.map(function (item) {
                 var newItem = {};
                 newItem['text'] = item.user_name+" "+item.user_email;
                 return newItem;
             });
+        }
+
+        function buildScheduledObject(scheduledObj,visualMetaData){
+            vm.scheduleObj.report.dashboard_name=scheduledObj.report.dashboard_name;
+            vm.scheduleObj.report.view_name=scheduledObj.report.view_name;
+            vm.scheduleObj.report.build_url=scheduledObj.report.build_url;
+            vm.scheduleObj.report.share_link=scheduledObj.report.share_link;
+            vm.scheduleObj.datasourceid=getDatasourceId(scheduledObj.report.share_link);
+            vm.scheduleObj.report.report_name=getReportName(visualMetaData);
+            vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
+            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            setDimentionsAndMeasures(visualMetaData.fields);
         }
 
 
@@ -236,7 +274,7 @@
                 }
                 $rootScope.showSuccessToast(info);
                 vm.clear();
-            }).catch(function (error) {                
+            }).catch(function (error) {             
                 var info = {
                     text: error.data.message,
                     title: "Error"

@@ -1,7 +1,8 @@
 {
     "reportManagement": {
         "home": {
-            "title": "Reports"
+            "title": "Reports",
+            "createLabel":"Schedule Report"
         },
         "errorDeleting":"Error deleting user",
         "no": "No.",

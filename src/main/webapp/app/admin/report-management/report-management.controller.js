@@ -6,11 +6,11 @@
         .controller('ReportManagementController', ReportManagementController);
 
     ReportManagementController.$inject = ['User','schedulerService',
-        'AlertService','pagingParams','paginationConstants','$location','$rootScope','$state'
+        'AlertService','pagingParams','paginationConstants','$location','$rootScope','$state','$uibModal'
     ];
 
     function ReportManagementController(User,schedulerService,
-        AlertService,pagingParams,paginationConstants,$location,$rootScope,$state) {
+        AlertService,pagingParams,paginationConstants,$location,$rootScope,$state,$uibModal) {
        
        var vm = this;
 
@@ -30,6 +30,7 @@
         vm.executeNow=executeNow;
         vm.goToBuildPage=goToBuildPage;
         vm.deleteReport=deleteReport;
+        vm.updateReport=updateReport;
 
         activate();
         ///////////////////////////////////////
@@ -113,6 +114,35 @@
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+            });
+        }
+
+        function updateReport(scheduledObj){
+            $uibModal
+            .open({
+                templateUrl:
+                    "app/entities/flair-bi/scheduler/scheduler-dialog.html",
+                controller: "SchedulerDialogController",
+                controllerAs: "vm",
+                backdrop: "static",
+                size: "lg",
+                resolve: {
+                    visualMetaData: function () {
+                        return null;
+                    },
+                    datasource: function(){
+                        return null;
+                    },
+                    view: function(){
+                        return null;
+                    },
+                    dashboard: function(){
+                        return null;
+                    },
+                    scheduledObj: function(){
+                        return scheduledObj;
+                    }
+                }
             });
         }
 

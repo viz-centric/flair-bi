@@ -33,6 +33,8 @@ public class SchedulerService {
     
 	@Value("${flair-notifications.scheduled-report-logs-param-url}")
 	private String scheduleReportLogsUrl;
+	
+	private String searchscheduledReportsURL="/api/jobFilter/?userName={userName}&reportName={reportName}&startDate={startDate}&endDate={endDate}&pageSize={pageSize}&page={page}";
 
 	public ResponseEntity<SchedulerResponse> deleteScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();
@@ -82,7 +84,22 @@ public class SchedulerService {
 			JSONObject jsonObject = new JSONObject();
 			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 		}
-	}	
+	}
+	
+	public ResponseEntity<String> searchScheduledReport(String userName,String reportName,String startDate,String endDate,Integer pageSize, Integer page) {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> responseEntity = null;
+		SchedulerResponse schedulerResponse= new SchedulerResponse();
+		try {
+			responseEntity = restTemplate.exchange(buildUrl(host, port, searchscheduledReportsURL), HttpMethod.GET, null,
+					String.class, userName,reportName,startDate, endDate,pageSize, page);
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+		} catch (Exception e) {
+			log.error("error occured while getting scheduled report logs:"+e.getMessage());
+			JSONObject jsonObject = new JSONObject();
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+		}
+	}
 	
 	public String buildUrl(String host,String port,String apiUrl) {
 		StringBuffer url= new StringBuffer();

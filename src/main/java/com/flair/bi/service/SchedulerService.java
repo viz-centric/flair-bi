@@ -34,7 +34,8 @@ public class SchedulerService {
 	@Value("${flair-notifications.scheduled-report-logs-param-url}")
 	private String scheduleReportLogsUrl;
 	
-	private String searchscheduledReportsURL="/api/jobFilter/?userName={userName}&reportName={reportName}&startDate={startDate}&endDate={endDate}&pageSize={pageSize}&page={page}";
+	@Value("${flair-notifications.scheduled-search-reports-param-url}")
+	private String searchscheduledReportsURL;
 
 	public ResponseEntity<SchedulerResponse> deleteScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();

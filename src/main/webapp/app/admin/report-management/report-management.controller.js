@@ -6,11 +6,12 @@
         .controller('ReportManagementController', ReportManagementController);
 
     ReportManagementController.$inject = ['User','schedulerService',
-        'AlertService','pagingParams','paginationConstants','$location','$rootScope','$state','$uibModal'
+        'AlertService','pagingParams','paginationConstants','$location','$rootScope','$state','$uibModal',
+        'AccountDispatch'
     ];
 
     function ReportManagementController(User,schedulerService,
-        AlertService,pagingParams,paginationConstants,$location,$rootScope,$state,$uibModal) {
+        AlertService,pagingParams,paginationConstants,$location,$rootScope,$state,$uibModal,AccountDispatch) {
        
        var vm = this;
 
@@ -31,36 +32,40 @@
         vm.goToBuildPage=goToBuildPage;
         vm.deleteReport=deleteReport;
         vm.updateReport=updateReport;
+        vm.serchReports=serchReports;
+        vm.searchUser=searchUser;
 
         activate();
         ///////////////////////////////////////
 
         function activate() {
-            getTotalScheduledReports(); 
-            getScheduledReports(); 
-            var cronstrue = window.cronstrue;   
+            getAccount(); 
+            getScheduledReports(vm.account.login,"","",""); 
+            var cronstrue = window.cronstrue; 
+             
+        }
+        
+        function getAccount() {
+            vm.account = AccountDispatch.getAccount();
+            vm.isAdmin =  AccountDispatch.isAdmin();
         }
 
-        function getTotalScheduledReports(){
-            schedulerService.getScheduledReportsCount().then(
-              function(response) { 
-                vm.totalItems = response.data;
-                vm.queryCount = vm.totalItems;
-                vm.page = pagingParams.page;     
-              },
-              function(error) {
-                var info = {
-                    text: error.statusText,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
-              });
-        }
-
-        function getScheduledReports(){
-            schedulerService.getSchedulerReports(vm.itemsPerPage,pagingParams.page - 1).then(
+        function getScheduledReports(userName,reportName,startDate,endDate){
+            schedulerService.filterScheduledReports(userName,reportName,startDate,endDate,vm.itemsPerPage,pagingParams.page - 1).then(
               function(response) {
-                vm.reports=response.data;
+                if(response.data.records){
+                    vm.reports=response.data.records;
+                    vm.totalItems = response.data.totalRecords;
+                    vm.queryCount = vm.totalItems;
+                    vm.page = pagingParams.page;    
+                }
+                else{
+                    var info = {
+                    text: response.data.message,
+                    title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                } 
                 
               },
               function(error) {
@@ -78,10 +83,20 @@
         function executeNow(vizID){
             schedulerService.executeNow(vizID).then(
               function(response) {
-                console.log(response)
+                if (response.status==200){
+                    var info = {
+                    text: response.data.message,
+                    title: "Success"
+                    }
+                    $rootScope.showSuccessToast(info);    
+                }
               },
               function(error) {
-                console.log(error);
+                var info = {
+                    text: error.statusText,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
               });
 
         }
@@ -117,6 +132,15 @@
             });
         }
 
+        function serchReports(){
+            var user = vm.userName ? vm.userName.login : "" ;
+            vm.reportName = vm.reportName ? vm.reportName : "" ;
+            vm.fromDate = vm.fromDate ? vm.fromDate : "" ;
+            vm.toDate = vm.toDate ? vm.toDate : "" ;
+            
+            getScheduledReports(user,vm.reportName,vm.fromDate,vm.toDate);
+        }
+
         function updateReport(scheduledObj){
             $uibModal
             .open({
@@ -144,6 +168,23 @@
                     }
                 }
             });
+        }
+
+        function searchUser(e,searchedText) {
+            e.preventDefault();
+            if (searchedText) {
+                User.search({
+                    page: 0,
+                    size: 10,
+                    login: searchedText
+                }, function (data) {
+                    vm.users = data;
+                }, function () {
+                    $rootScope.showErrorSingleToast({
+                        text: $translate.instant('flairbiApp.userManagement.error.users.all')
+                    });
+                });
+            }
         }
 
     }

@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -338,5 +339,14 @@ public class SchedulerResource {
 	public ResponseEntity<String> reportLogs(@PathVariable String visualizationid,@PathVariable Integer pageSize,@PathVariable Integer page)
 			throws URISyntaxException {
 		return schedulerService.scheduleReportLogs(visualizationid, pageSize, page);
+	}
+	@GetMapping("/schedule/searchReports/")
+	@Timed
+	public ResponseEntity<String> searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page)
+			throws URISyntaxException {
+		if (!SecurityUtils.iAdmin()){
+			userName=SecurityUtils.getCurrentUserLogin();
+		}
+		return schedulerService.searchScheduledReport(userName,reportName,startDate,endDate, pageSize, page);
 	}
 }

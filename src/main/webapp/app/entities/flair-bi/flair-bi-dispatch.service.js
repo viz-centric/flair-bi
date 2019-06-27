@@ -21,6 +21,7 @@
         var featureBookmark={};
         var isBookmarkApplied=false;
         var hierarchies=[];
+        var savePromptMessage="";
 
         return {
             setVisual: setVisual,
@@ -48,7 +49,9 @@
             saveHierarchies:saveHierarchies,
             getHierarchies:getHierarchies,
             setFeatureBookmark:setFeatureBookmark,
-            updateVisual:updateVisual
+            updateVisual:updateVisual,
+            setSavePromptMessage:setSavePromptMessage,
+            getSavePromptMessage:getSavePromptMessage
         };
 
         function setVisual(v) {
@@ -190,6 +193,12 @@
         }
         function getHierarchies(){
             return hierarchies;
+        }
+        function setSavePromptMessage(message){
+            savePromptMessage=message;
+        }
+        function getSavePromptMessage(){
+            return savePromptMessage;
         }
     }
 })();

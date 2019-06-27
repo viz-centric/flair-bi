@@ -600,6 +600,7 @@
                     function(error) {}
                 );
                 viewEditedBeforeSave = true;
+                VisualDispatchService.setSavePromptMessage("new visualization has been created and it has not been saved.Do you want to save?");
             });
             $scope.$on("$destroy", unsub);
         }
@@ -688,7 +689,7 @@
                     event.preventDefault();
                     swal(
                         "Are you sure?",
-                        vm.promptMessage,
+                        VisualDispatchService.getSavePromptMessage(),
                         {
                             buttons: {
                                 dontSave: {
@@ -1033,7 +1034,7 @@
 
         function onResizeStop(event, ui) {
             viewEditedBeforeSave = true;
-            vm.promptMessage="Visualization has been resized and it has not been saved.Do you want to save?"
+            VisualDispatchService.setSavePromptMessage("Visualization has been resized and it has not been saved.Do you want to save?");
             delete $rootScope.updateWidget[ui.element.attr("id")];
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
@@ -1046,7 +1047,7 @@
 
         function onDragStop(event, ui) {
             viewEditedBeforeSave = true;
-            vm.promptMessage="Visualization position has been changed and it has not been saved.Do you want to save?"
+            VisualDispatchService.setSavePromptMessage("Visualization position has been changed and it has not been saved.Do you want to save?");
         }
 
         function onItemAdded(item) {}

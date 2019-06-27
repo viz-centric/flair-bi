@@ -1032,8 +1032,8 @@
         function onResizeStart(event, ui) {}
 
         function onResizeStop(event, ui) {
+            viewEditedBeforeSave = true;
             delete $rootScope.updateWidget[ui.element.attr("id")];
-
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
             );
@@ -1043,7 +1043,9 @@
 
         function onDragStart(event, ui) {}
 
-        function onDragStop(event, ui) {}
+        function onDragStop(event, ui) {
+            viewEditedBeforeSave = true;
+        }
 
         function onItemAdded(item) {}
 

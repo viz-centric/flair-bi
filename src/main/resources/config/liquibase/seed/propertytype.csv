@@ -81,3 +81,4 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 680|Font size|Font size for KPI second measure|NUMBER|null|null|null|60|flairadmin|null
 681|Text alignment|Alignment of text|SELECT|null|null|null|null|flairadmin|STRING
 682|Text alignment|Alignment of text|SELECT|null|null|null|null|flairadmin|STRING
+683|Show Filter Grid|Show Filter Grid|CHECKBOX|false|null|null|null|flairadmin|null

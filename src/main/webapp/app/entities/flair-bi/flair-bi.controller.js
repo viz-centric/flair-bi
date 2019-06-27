@@ -688,7 +688,7 @@
                     event.preventDefault();
                     swal(
                         "Are you sure?",
-                        "Do you want to save the changes you made to this view",
+                        vm.promptMessage,
                         {
                             buttons: {
                                 dontSave: {
@@ -1033,6 +1033,7 @@
 
         function onResizeStop(event, ui) {
             viewEditedBeforeSave = true;
+            vm.promptMessage="Visualization has been resized and it has not been saved.Do you want to save?"
             delete $rootScope.updateWidget[ui.element.attr("id")];
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
@@ -1045,6 +1046,7 @@
 
         function onDragStop(event, ui) {
             viewEditedBeforeSave = true;
+            vm.promptMessage="Visualization position has been changed and it has not been saved.Do you want to save?"
         }
 
         function onItemAdded(item) {}

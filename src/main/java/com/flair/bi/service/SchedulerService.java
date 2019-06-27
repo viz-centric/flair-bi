@@ -96,8 +96,7 @@ public class SchedulerService {
 					String.class, userName,reportName,startDate, endDate,pageSize, page);
 			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 		} catch (Exception e) {
-			log.error("error occured while getting scheduled report logs:"+e.getMessage());
-			JSONObject jsonObject = new JSONObject();
+			log.error("error occured while searching reports:"+e.getMessage());
 			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 		}
 	}

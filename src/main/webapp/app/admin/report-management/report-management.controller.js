@@ -61,7 +61,7 @@
                 }
                 else{
                     var info = {
-                    text: "No Records Found",
+                    text: response.data.message,
                     title: "Error"
                     }
                     $rootScope.showErrorSingleToast(info);
@@ -133,19 +133,12 @@
         }
 
         function serchReports(){
-            if (vm.userName === undefined){
-                vm.userName="";
-            }
-            if (vm.reportName === undefined){
-                vm.reportName="";
-            }
-            if (vm.fromDate === undefined){
-                vm.fromDate="";
-            }
-            if (vm.toDate === undefined){
-                vm.toDate="";
-            }
-            getScheduledReports(vm.userName,vm.reportName,vm.fromDate,vm.toDate);
+            var user = vm.userName ? vm.userName.login : "" ;
+            vm.reportName = vm.reportName ? vm.reportName : "" ;
+            vm.fromDate = vm.fromDate ? vm.fromDate : "" ;
+            vm.toDate = vm.toDate ? vm.toDate : "" ;
+            
+            getScheduledReports(user,vm.reportName,vm.fromDate,vm.toDate);
         }
 
         function updateReport(scheduledObj){

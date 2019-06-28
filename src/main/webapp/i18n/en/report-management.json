@@ -13,6 +13,16 @@
         "createdBy": "Created By",
         "action": "Action"  ,
         "status":"status",
-        "executedAt":"Executed At"
+        "executedAt":"Executed At",
+        "filter": {
+              "filterByDate":{
+                         "title":"Filter By Date",
+                         "from": "From",
+                         "to": "To"
+              },
+              "filterByReportName":"Filter By Report Name",
+              "filterByUser":"Filter By User"
+
+        }
     }
 }

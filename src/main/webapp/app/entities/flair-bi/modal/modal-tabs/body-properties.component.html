@@ -6,9 +6,7 @@
     <div class="p-xxs">
         <div class="form-inline" style="margin-bottom: 5px;">
             <label class="control-label flair-model-pad pull-left">Border</label>
-            <!-- remove textbox and added dropdown for border -->
-            <!-- <input style="width: 9vw;" type="text" class="form-control pull-left" ng-model="vm.visual.bodyProperties.border"> -->
-            <select class="form-control pull-left " ng-model="vm.visual.bodyProperties.border">
+            <select class="form-control pull-left " ng-model="vm.visual.bodyProperties.border" ng-change="vm.changeBodyProperties()">
                 <option value="dotted">Dotted</option>
                 <option value="dashed">Dashed</option>
                 <option value="solid">Solid</option>
@@ -24,13 +22,13 @@
         <div class="form-inline">
             <label class="control-label flair-model-pad pull-left">Opacity</label>
             <rzslider rz-slider-model="vm.slider.value" rz-slider-options="vm.slider.options"></rzslider>
-            <input type="hidden" class="form-control pull-left" ng-model="vm.visual.bodyProperties.opacity">
+            <input type="hidden" class="form-control pull-left" ng-model="vm.visual.bodyProperties.opacity" ng-change="vm.changeBodyProperties()">
         </div>
 
         <div class="row">
             <div class="control-label-color-picker flair-model-pad pull-left">Background Color</div>
             <div class="color-picker-container">
-                <div md-color-picker ng-model="vm.visual.bodyProperties.backgroundColor"></div>
+                <div md-color-picker ng-model="vm.visual.bodyProperties.backgroundColor" ng-change="vm.changeBodyProperties()"></div>
             </div>
         </div>
     </div>

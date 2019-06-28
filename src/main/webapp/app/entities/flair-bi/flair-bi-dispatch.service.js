@@ -22,6 +22,7 @@
         var isBookmarkApplied=false;
         var hierarchies=[];
         var savePromptMessage="";
+        var viewEditedBeforeSave = false;
 
         return {
             setVisual: setVisual,
@@ -51,7 +52,9 @@
             setFeatureBookmark:setFeatureBookmark,
             updateVisual:updateVisual,
             setSavePromptMessage:setSavePromptMessage,
-            getSavePromptMessage:getSavePromptMessage
+            getSavePromptMessage:getSavePromptMessage,
+            setViewEditedBeforeSave:setViewEditedBeforeSave,
+            getViewEditedBeforeSave:getViewEditedBeforeSave
         };
 
         function setVisual(v) {
@@ -199,6 +202,12 @@
         }
         function getSavePromptMessage(){
             return savePromptMessage;
+        }
+        function setViewEditedBeforeSave(viewEditedBeforeSaveTemp){
+            viewEditedBeforeSave=viewEditedBeforeSaveTemp
+        }
+        function getViewEditedBeforeSave(){
+            return viewEditedBeforeSave;
         }
     }
 })();

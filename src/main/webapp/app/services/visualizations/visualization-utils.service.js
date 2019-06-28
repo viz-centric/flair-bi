@@ -47,7 +47,7 @@
             }).map(function (item) {
                 var newItem = {};
                 angular.copy(item, newItem);
-                newItem.feature.name = newItem.feature.selectedName.toLowerCase();
+                newItem.feature.name = newItem.feature.selectedName;
                 return newItem;
             }).sort(function (a, b) {
                 return sortBySequenceNumber(a.fieldType, b.fieldType);
@@ -58,7 +58,7 @@
             }).map(function (item) {
                 var newItem = {};
                 angular.copy(item, newItem);
-                newItem.feature.name = newItem.feature.name.toLowerCase();
+                newItem.feature.name = newItem.feature.name;
                 return newItem;
             })
                 .sort(function (a, b) {
@@ -76,7 +76,7 @@
             }).map(function (item) {
                 var newItem = {};
                 angular.copy(item, newItem);
-                newItem.feature.name = newItem.feature.name.toLowerCase();
+                newItem.feature.name = newItem.feature.name;
                 return newItem;
             }).sort(function (a, b) {
                 return sortBySequenceNumber(a.fieldType, b.fieldType);
@@ -87,7 +87,7 @@
             }).map(function (item) {
                 var newItem = {};
                 angular.copy(item, newItem);
-                newItem.feature.name = newItem.feature.name.toLowerCase();
+                newItem.feature.name = newItem.feature.name;
                 return newItem;
             })
                 .sort(function (a, b) {

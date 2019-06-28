@@ -76,7 +76,6 @@
     ) {
         var vm = this;
         var editMode = false;
-        var viewEditedBeforeSave = false;
         vm.gridStackOptions = {
             cellHeight: 60,
             verticalMargin: 10,
@@ -599,7 +598,8 @@
                     },
                     function(error) {}
                 );
-                viewEditedBeforeSave = true;
+                VisualDispatchService.setViewEditedBeforeSave(true);
+                VisualDispatchService.setSavePromptMessage("new visualization has been created and it has not been saved.Do you want to save?");
             });
             $scope.$on("$destroy", unsub);
         }
@@ -634,7 +634,7 @@
                         title: "Saved"
                     };
                     $rootScope.showSuccessToast(info);
-                    viewEditedBeforeSave = false;
+                    VisualDispatchService.setViewEditedBeforeSave(false);
                 }
             });
             $scope.$on("$destroy", un);
@@ -684,11 +684,11 @@
                 }else{
                     $rootScope.hideHeader = $rootScope.isFullScreen;
                 }
-                if (viewEditedBeforeSave === true) {
+                if (VisualDispatchService.getViewEditedBeforeSave()) {
                     event.preventDefault();
                     swal(
                         "Are you sure?",
-                        "Do you want to save the changes you made to this view",
+                        VisualDispatchService.getSavePromptMessage(),
                         {
                             buttons: {
                                 dontSave: {
@@ -705,7 +705,7 @@
                     ).then(function(value) {
                         switch (value) {
                             case "dontSave":
-                                viewEditedBeforeSave = false;
+                                VisualDispatchService.setViewEditedBeforeSave(false);
                                 $state.go(next);
                                 break;
 
@@ -1032,8 +1032,9 @@
         function onResizeStart(event, ui) {}
 
         function onResizeStop(event, ui) {
+            VisualDispatchService.setViewEditedBeforeSave(true);
+            VisualDispatchService.setSavePromptMessage("Visualization has been resized and it has not been saved.Do you want to save?");
             delete $rootScope.updateWidget[ui.element.attr("id")];
-
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
             );
@@ -1043,7 +1044,10 @@
 
         function onDragStart(event, ui) {}
 
-        function onDragStop(event, ui) {}
+        function onDragStop(event, ui) {
+            VisualDispatchService.setViewEditedBeforeSave(true);
+            VisualDispatchService.setSavePromptMessage("Visualization position has been changed and it has not been saved.Do you want to save?");
+        }
 
         function onItemAdded(item) {}
 

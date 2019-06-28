@@ -6,24 +6,24 @@
     <div class="p-xxs">
         <div class="form-inline">
             <label class="control-label flair-model-pad pull-left">Text</label>
-            <input placeholder="Enter title" type="text" class="form-control pull-left" ng-model="vm.visual.titleProperties.titleText">
+            <input placeholder="Enter title" type="text" class="form-control pull-left" ng-model="vm.visual.titleProperties.titleText" ng-change="vm.changeTitleProperties()">
         </div>
         <div class="form-inline">
             <label class="control-label flair-model-pad pull-left tooltip-left" style="width: 28px;"><span uib-tooltip="Border-Bottom" tooltip-placement="top"><i class="font-size fa fa-underline"></i></label></span>
-            <input placeholder="Enter Border-Bottom" type="text" class="form-control pull-left" ng-model="vm.visual.titleProperties.borderBottom">
+            <input placeholder="Enter Border-Bottom" type="text" class="form-control pull-left" ng-model="vm.visual.titleProperties.borderBottom" ng-change="vm.changeTitleProperties()">
         </div>
 
         <div class="row">
             <div class="control-label-color-picker flair-model-pad pull-left">Background Color</div>
             <div class="color-picker-container">
-                <div md-color-picker ng-model="vm.visual.titleProperties.backgroundColor"></div>
+                <div md-color-picker ng-model="vm.visual.titleProperties.backgroundColor" ng-change="vm.changeTitleProperties()"></div>
             </div>
         </div>
 
         <div class="row">
             <div class="control-label-color-picker flair-model-pad pull-left">Text Color</div>
             <div class="color-picker-container">
-                <div md-color-picker ng-model="vm.visual.titleProperties.color"></div>
+                <div md-color-picker ng-model="vm.visual.titleProperties.color" ng-change="vm.changeTitleProperties()"></div>
             </div>
         </div>
     </div>

@@ -12,10 +12,11 @@
             }
         });
 
-    titlePropertiesController.$inject = ['$scope'];
+    titlePropertiesController.$inject = ['$scope','VisualDispatchService'];
 
-    function titlePropertiesController($scope) {
+    function titlePropertiesController($scope,VisualDispatchService) {
         var vm = this;
+        vm.changeTitleProperties=changeTitleProperties;
 
 
         activate();
@@ -23,5 +24,11 @@
         ////////////////
 
         function activate() {}
+
+        function changeTitleProperties(){
+            VisualDispatchService.setViewEditedBeforeSave(true);
+            VisualDispatchService.setSavePromptMessage("visualization title property has been changed and it has not been saved.Do you want to save?");
+        }
+
     }
 })();

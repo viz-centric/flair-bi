@@ -13,14 +13,20 @@
             }
         });
 
-    BodyPropertiesController.$inject = ['$scope'];
+    BodyPropertiesController.$inject = ['$scope','VisualDispatchService'];
 
-    function BodyPropertiesController($scope) {
+    function BodyPropertiesController($scope,VisualDispatchService) {
         var vm = this;
+        vm.changeBodyProperties=changeBodyProperties;
         activate();
 
         ////////////////
 
         function activate() {}
+
+        function changeBodyProperties(){
+            VisualDispatchService.setViewEditedBeforeSave(true);
+            VisualDispatchService.setSavePromptMessage("visualization body property has been changed and it has not been saved.Do you want to save?");
+        }
     }
 })();

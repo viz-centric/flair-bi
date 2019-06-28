@@ -44,18 +44,24 @@
         }
 
         function setProperty(value){
+            VisualDispatchService.setViewEditedBeforeSave(true);
             if(vm.propstype==='data'){
+                VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-data-properties-update",{value:value,fieldName:vm.display,property:vm.property});
             }else if(vm.propstype==='chart'){
+                VisualDispatchService.setSavePromptMessage("visualization chart property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
             }
         }
 
         function setCheckboxProperty(value){
             value = !value;
+            VisualDispatchService.setViewEditedBeforeSave(true);
             if(vm.propstype==='data'){
+                VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-data-properties-update",{value:value,fieldName:vm.display,property:vm.property});
             }else if(vm.propstype==='chart'){
+                VisualDispatchService.setSavePromptMessage("visualization chart property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
             }
         }

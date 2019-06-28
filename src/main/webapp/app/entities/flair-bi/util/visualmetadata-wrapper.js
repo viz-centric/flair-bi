@@ -235,14 +235,7 @@
      */
     function constructMeasureField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
-        if (agg === 'DISTINCT COUNT') {
-            //TODO this is temporary plz move this to flair compiler.
-            return {
-                field: 'COUNT(DISTINCT ' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.definition,
-                agg: true
-            };
-        }
-        else if (agg !== null && agg !== 'NONE') {
+        if (agg !== null && agg !== 'NONE') {
             return {
                 field: agg + '(' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.name,
                 agg: true

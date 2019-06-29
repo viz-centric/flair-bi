@@ -27,7 +27,6 @@
         vm.onSearchKeyUp = onSearchKeyUp;
         vm.search=search;
         vm.tables=[];
-        vm.testConnection=testConnection;
         vm.datasources.name=null;
         vm.createDataSource=createDataSource;
         vm.features=[];
@@ -109,32 +108,6 @@
         function setInputText(searchedText){
             vm.datasources.name=searchedText;
             vm.datasource=vm.datasources.name;
-        }
-
-        function testConnection() {
-            vm.testResult = "loading";
-            var body = {
-                datasourceName: vm.datasources.name
-            };
-            if (vm.selectedConnection) {
-                body.connectionLinkId = vm.connection.linkId;
-            } else {
-                body.connection = prepareConnection();
-            }
-
-            Query.testConnection(
-                body,
-                function(data) {
-                    if (data.success) {
-                        vm.testResult = "success";
-                    } else {
-                        vm.testResult = "error";
-                    }
-                },
-                function() {
-                    vm.testResult = "error";
-                }
-            );
         }
 
         function createDataSource() {
@@ -280,7 +253,6 @@
         }
 
         function resetTest() {
-            vm.testResult = null;
             $rootScope.$broadcast('flairbiApp:data-connection:previous-page');
         }
 

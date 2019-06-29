@@ -32,7 +32,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -131,22 +130,6 @@ public class GrpcConnectionServiceTest {
     }
 
     @Test
-    public void testConnectionWorksByConnectionLinkId() throws IOException {
-        when(grpcService.testConnection(eq("linkid"), eq("datasource"), isNull(Connection.class)))
-                .thenReturn(TestConnectionResponse.newBuilder().setResult("[]").build());
-        TestConnectionResultDTO result = service.testConnection("linkid", "datasource", null);
-        assertTrue(result.isSuccess());
-    }
-
-    @Test
-    public void testConnectionFailsByConnectionLinkId() throws IOException {
-        when(grpcService.testConnection(eq("linkid"), eq("datasource"), isNull(Connection.class)))
-                .thenReturn(TestConnectionResponse.newBuilder().setResult("").build());
-        TestConnectionResultDTO result = service.testConnection("linkid", "datasource", null);
-        assertFalse(result.isSuccess());
-    }
-
-    @Test
     public void testConnectionWorksByConnection() throws IOException {
         doAnswer(invocationOnMock -> {
             Connection c = invocationOnMock.getArgumentAt(2, Connection.class);
@@ -158,7 +141,7 @@ public class GrpcConnectionServiceTest {
             assertEquals(10L, c.getConnectionType());
             assertEquals("1234", c.getDetailsMap().get("serverIp"));
             return TestConnectionResponse.newBuilder().setResult("[]").build();
-        }).when(grpcService).testConnection(isNull(String.class), eq("datasource"), any(Connection.class));
+        }).when(grpcService).testConnection(any(Connection.class));
 
         ConnectionDTO connectionDTO = new ConnectionDTO();
         connectionDTO.setName("connection name");
@@ -169,14 +152,14 @@ public class GrpcConnectionServiceTest {
         connectionDTO.setConnectionTypeId(10L);
         connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
 
-        TestConnectionResultDTO result = service.testConnection(null, "datasource", connectionDTO);
+        TestConnectionResultDTO result = service.testConnection(connectionDTO);
 
         assertTrue(result.isSuccess());
     }
 
     @Test
     public void testConnectionFailsByConnection() throws IOException {
-        when(grpcService.testConnection(isNull(String.class), eq("datasource"), any(Connection.class)))
+        when(grpcService.testConnection(any(Connection.class)))
                 .thenReturn(TestConnectionResponse.newBuilder().setResult("").build());
 
         ConnectionDTO connectionDTO = new ConnectionDTO();
@@ -188,7 +171,7 @@ public class GrpcConnectionServiceTest {
         connectionDTO.setConnectionTypeId(10L);
         connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
 
-        TestConnectionResultDTO result = service.testConnection(null, "datasource", connectionDTO);
+        TestConnectionResultDTO result = service.testConnection(connectionDTO);
 
         assertFalse(result.isSuccess());
     }

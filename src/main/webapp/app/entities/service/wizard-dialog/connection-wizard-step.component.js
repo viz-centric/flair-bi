@@ -14,13 +14,16 @@
         }
     });
 
-    ConnectionWizardStepController.$inject = ["$scope","$rootScope"];
-    function ConnectionWizardStepController($scope,$rootScope) {
+    ConnectionWizardStepController.$inject = ["$scope","$rootScope", "Query"];
+    function ConnectionWizardStepController($scope,$rootScope, Query) {
         var vm = this;
         vm.nextStep=nextStep;
         vm.previousStep=previousStep;
+        vm.testConnection = testConnection;
 
+        vm.testResult = '';
         vm.connectionSelected = connectionSelected;
+
         ////////////////
 
         vm.$onInit = function() {};
@@ -40,7 +43,40 @@
         }
 
         function previousStep(){
+            vm.testResult = null;
             $rootScope.$broadcast('flairbiApp:data-connection:previous-page');
+        }
+
+        function prepareConnection() {
+            var conn = vm.connection;
+            conn.connectionType = vm.connectionType.name;
+            conn.connectionTypeId = vm.connectionType.id;
+            conn.connectionParameters = vm.connection.connectionParameters;
+            conn.details["@type"] = vm.connectionType.connectionPropertiesSchema.connectionDetailsType;
+            return conn;
+        }
+
+        function testConnection() {
+            vm.testResult = "loading";
+            var body = {};
+
+            body.connection = prepareConnection();
+
+            console.log('body', body);
+
+            Query.testConnection(
+                body,
+                function(data) {
+                    if (data.success) {
+                        vm.testResult = "success";
+                    } else {
+                        vm.testResult = "error";
+                    }
+                },
+                function() {
+                    vm.testResult = "error";
+                }
+            );
         }
     }
 })();

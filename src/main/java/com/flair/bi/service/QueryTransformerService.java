@@ -39,17 +39,12 @@ public class QueryTransformerService {
 
     private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId, Long datasourceId) {
 
-        List<String> fields = queryDTO.getFields();
-        List<String> groupBy = queryDTO.getGroupBy();
+        Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.id.eq(datasourceId))
+                .stream()
+                .collect(Collectors.toMap(item -> item.getName(), item -> item));
 
-        if (connectionName != null) {
-            Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.id.eq(datasourceId))
-                    .stream()
-                    .collect(Collectors.toMap(item -> item.getName(), item -> item));
-
-            fields = transformFieldNames(fields, features);
-            groupBy = transformGroupBy(groupBy, features);
-        }
+        List<String> fields = transformFieldNames(queryDTO.getFields(), features);
+        List<String> groupBy = transformGroupBy(queryDTO.getGroupBy(), features);
 
         Query.Builder builder = Query.newBuilder();
         builder
@@ -82,7 +77,7 @@ public class QueryTransformerService {
                     .setSourceTypeValue(getFilterType(conditionExpressionDTO.getSourceType().ordinal()))
                     .setExpressionTypeValue(getExpressionType(conditionExpressionDTO.getConditionExpression()))
                     .setAndOrExpressionType(getAndOrExpressionType(conditionExpressionDTO.getConditionExpression()))
-                    .setConditionExpression(getJsonFromConditionExpression(conditionExpressionDTO.getConditionExpression()))
+                    .setConditionExpression(getJsonFromConditionExpression(conditionExpressionDTO.getConditionExpression(), features))
                     .build()
             );
         });
@@ -96,6 +91,12 @@ public class QueryTransformerService {
                         .map(item -> item.getDefinition() + " as " + item.getName())
                         .orElse(field))
                 .collect(Collectors.toList());
+    }
+
+    private String transformFieldNameOrSanitize(Map<String, Feature> features, String field) {
+        return Optional.ofNullable(features.get(field))
+                .map(item -> item.getDefinition())
+                .orElseGet(() -> sanitize(field));
     }
 
     private List<String> transformGroupBy(List<String> fields, Map<String, Feature> features) {
@@ -160,41 +161,41 @@ public class QueryTransformerService {
         return builder.build();
     }
 
-    private static String getJsonFromConditionExpression(ConditionExpression conditionExpression) {
+    private String getJsonFromConditionExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {
         Gson gson = new Gson();
-        return gson.toJson(sanitizeConditionalExpression(conditionExpression));
+        return gson.toJson(sanitizeConditionalExpression(conditionExpression, features));
     }
 
-    private static ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression) {
+    private ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {
         if (conditionExpression instanceof OrConditionExpression) {
             OrConditionExpression orConditionExpression = (OrConditionExpression) conditionExpression;
-            orConditionExpression.setFirstExpression(sanitizeConditionalExpression(orConditionExpression.getFirstExpression()));
-            orConditionExpression.setSecondExpression(sanitizeConditionalExpression(orConditionExpression.getSecondExpression()));
+            orConditionExpression.setFirstExpression(sanitizeConditionalExpression(orConditionExpression.getFirstExpression(), features));
+            orConditionExpression.setSecondExpression(sanitizeConditionalExpression(orConditionExpression.getSecondExpression(), features));
         } else if (conditionExpression instanceof BetweenConditionExpression) {
             BetweenConditionExpression betweenConditionExpression = (BetweenConditionExpression) conditionExpression;
-            betweenConditionExpression.setFeatureName(sanitize(betweenConditionExpression.getFeatureName()));
+            betweenConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, betweenConditionExpression.getFeatureName()));
             betweenConditionExpression.setValue(sanitize(betweenConditionExpression.getValue()));
             betweenConditionExpression.setSecondValue(sanitize(betweenConditionExpression.getSecondValue()));
         } else if (conditionExpression instanceof CompareConditionExpression) {
             CompareConditionExpression compareConditionExpression = (CompareConditionExpression) conditionExpression;
-            compareConditionExpression.setFeatureName(sanitize(compareConditionExpression.getFeatureName()));
+            compareConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, compareConditionExpression.getFeatureName()));
             compareConditionExpression.setValue(sanitize(compareConditionExpression.getValue()));
         } else if (conditionExpression instanceof AndConditionExpression) {
             AndConditionExpression andConditionExpression = (AndConditionExpression) conditionExpression;
-            andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression()));
-            andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression()));
+            andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression(), features));
+            andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression(), features));
         } else if (conditionExpression instanceof ContainsConditionExpression) {
             ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
-            containsConditionExpression.setFeatureName(containsConditionExpression.getFeatureName());
+            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, containsConditionExpression.getFeatureName()));
             containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
         } else if (conditionExpression instanceof NotContainsConditionExpression) {
             NotContainsConditionExpression notContainsConditionExpression = (NotContainsConditionExpression) conditionExpression;
-            notContainsConditionExpression.setFeatureName(sanitize(notContainsConditionExpression.getFeatureName()));
+            notContainsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, notContainsConditionExpression.getFeatureName()));
             notContainsConditionExpression.setValues(sanitizeList(notContainsConditionExpression.getValues()));
         } else if (conditionExpression instanceof LikeConditionExpression) {
             LikeConditionExpression likeConditionExpression = (LikeConditionExpression) conditionExpression;
             likeConditionExpression.setValue(sanitize(likeConditionExpression.getValue()));
-            likeConditionExpression.setFeatureName(sanitize(likeConditionExpression.getFeatureName()));
+            likeConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, likeConditionExpression.getFeatureName()));
         }
         return conditionExpression;
     }

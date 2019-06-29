@@ -62,8 +62,6 @@
 
             body.connection = prepareConnection();
 
-            console.log('body', body);
-
             Query.testConnection(
                 body,
                 function(data) {

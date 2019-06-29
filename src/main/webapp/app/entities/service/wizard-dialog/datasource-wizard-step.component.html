@@ -18,13 +18,13 @@
         </div>
     </div>
     <div class="row m-t-md" ng-if="vm.datasources.name!=null">
-        <div>
+        <div class="col-md-12">
             <button ng-disabled="vm.testResult == 'loading'" ng-click="vm.showData()" class="btn btn-primary">Show Data
             </button>
         </div>
     </div>
     <br/>
-    <div class="window-holder"  ng-if="vm.datasources.name!=null" id="sample-data-holder" style="display: none;">
+    <div class="window-holder" ng-if="vm.datasources.name!=null" id="sample-data-holder" style="display: none;">
         <header class="cf">
             <div class="header-title-small">
                 <p>Sample Data</p>
@@ -49,7 +49,7 @@
             <span class="glyphicon glyphicon-circle-arrow-left "></span>
             Back
         </button>
-        <button type="submit" ng-disabled="vm.testResult !== 'success'" class="btn btn-primary" ng-click="vm.createDataSource()" >
+        <button type="submit" ng-disabled="!vm.datasources.name" class="btn btn-primary" ng-click="vm.createDataSource()" >
             <span class="glyphicon glyphicon-check"></span>
             Create Datasource
         </button>

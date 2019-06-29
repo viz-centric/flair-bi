@@ -268,7 +268,7 @@ public class DatasourcesResource {
         ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
             listTablesRequest.getSearchTerm(),
             listTablesRequest.getConnection(),
-            10);
+            50);
 
         return ResponseEntity.ok(response);
     }

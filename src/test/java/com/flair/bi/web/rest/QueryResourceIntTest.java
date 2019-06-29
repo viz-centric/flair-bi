@@ -8,12 +8,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 @Ignore
@@ -23,15 +21,13 @@ public class QueryResourceIntTest extends AbstractIntegrationTest {
     GrpcConnectionService grpcConnectionService;
 
     @Test
-    public void testConnectionWith() throws IOException {
-        when(grpcConnectionService.testConnection(eq("linkid"), eq("sales"), any(ConnectionDTO.class)))
+    public void testConnectionWith() {
+        when(grpcConnectionService.testConnection(any(ConnectionDTO.class)))
             .thenReturn(new TestConnectionResultDTO()
                 .setSuccess(true));
 
 
         HashMap<Object, Object> request = new HashMap<>();
-        request.put("connectionLinkId", "linkid");
-        request.put("datasourceName", "sales");
         request.put("connection", new HashMap<>());
 
         TestConnectionResultDTO result = restTemplate

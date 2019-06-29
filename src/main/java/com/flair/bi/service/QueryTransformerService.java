@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,10 +39,11 @@ public class QueryTransformerService {
     }
 
     private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId, Long datasourceId) {
-
-        Map<String, Feature> features = featureService.getFeatures(QFeature.feature.datasource.id.eq(datasourceId))
-                .stream()
-                .collect(Collectors.toMap(item -> item.getName(), item -> item));
+        Map<String, Feature> features = Optional.ofNullable(datasourceId)
+                .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
+                        .stream()
+                        .collect(Collectors.toMap(item -> item.getName(), item -> item)))
+                .orElseGet(() -> new HashMap<>());
 
         List<String> fields = transformFieldNames(queryDTO.getFields(), features);
         List<String> groupBy = transformGroupBy(queryDTO.getGroupBy(), features);

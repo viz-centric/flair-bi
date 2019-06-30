@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>com.project.bi</groupId>
             <artifactId>flair-messages</artifactId>
-            <version>0.0.7</version>
+            <version>0.0.6</version>
         </dependency>
         <dependency>
             <groupId>com.project.bi</groupId>
@@ -1468,6 +1468,7 @@
                                     <name>flairbi/${project.artifactId}</name>
                                     <build>
                                         <tags>
+                                            <tag>vs-latest</tag>
                                             <tag>vs${project.version}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
@@ -1477,6 +1478,7 @@
                                     <name>flairbi/flair-couchdb</name>
                                     <build>
                                         <tags>
+                                            <tag>vs-latest</tag>
                                             <tag>vs${project.version}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
@@ -1486,6 +1488,7 @@
                                     <name>flairbi/flair-pgsql</name>
                                     <build>
                                         <tags>
+                                            <tag>vs-latest</tag>
                                             <tag>vs${project.version}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>

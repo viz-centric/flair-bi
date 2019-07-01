@@ -31,7 +31,7 @@
             // vm.alerts=vm.releaseAlert.alerts;
             // vm.count=vm.releaseAlert.count;
             vm.pagedItems = []
-           
+
             connectWebSocket();
             getScheduledReportsCount();
         }
@@ -99,7 +99,7 @@
             var container = d3.select("#notification_accordion");
 
             var isExpand;
-            $("#notification_accordion").html('');
+            angular.element("#notification_accordion").html('');
             Visualmetadata.get({
                 id: metaData.report_line_item.visualizationid
 
@@ -108,17 +108,15 @@
                     function (response) {
                         var obj = {};
                         index = index + 1
-                        if (parseInt(index) <= 3) {
-                            isExpand = 'panel-collapse collapse in'
-                        }
-                        else {
-                            isExpand = 'panel-collapse collapse'
-                        }
+
+                        isExpand = 'panel-collapse collapse'
+
                         obj.data = JSON.parse(metaData.queryResponse).data;
                         obj.title = metaData.report.title_name;
                         obj.property = response.properties;
                         obj.visualization = metaData.report_line_item.visualization;
                         obj.visualizationid = metaData.report_line_item.visualizationid;
+                        obj.Comment = metaData.report.mail_body;
                         var features = VisualizationUtils.getDimensionsAndMeasuresForNotification(response.fields),
                             dimensions = features.dimensions,
                             measures = features.measures,
@@ -138,14 +136,13 @@
                             '</h4>' +
                             '</div>' +
                             '<div id="' + metaData.report_line_item.visualizationid + '" class="' + isExpand + '">' +
-                            '<div class="panel-body">' +
-
-                            '<svg height="200" width="280" id="svg_' + metaData.report_line_item.visualizationid + '"></svg>' +
+                            '<div class="panel-body" id="' + metaData.report_line_item.visualizationid + '" height="200" width="200">' +
+                            '<div id="body_' + metaData.report_line_item.visualizationid + '" height="200" width="300"></div>' +
                             '<div class="notification_details">' +
                             '<div >' +
                             '<a role="button" class="btn btn-link"  href="' + metaData.report.share_link
                             + '" target="_blank">View Widget</a>' +
-                            '<a role="button" class="btn btn-link" href="' + metaData.report.build_url + '" target="_blank">View Dashboard</a>' +
+                            '<a role="button" class="btn btn-link" href="' + metaData.report.build_url + '#' + metaData.report_line_item.visualizationid + '" target="_blank">View Dashboard</a>' +
 
                             '</div>' +
                             '<div class="text-truncate" title="' + metaData.report.mail_body + '">' +
@@ -186,10 +183,10 @@
                                 ' </div>' +
                                 '   </div>';
                             '   </div>';
-                            $("#panel_" + metaData.report_line_item.visualizationid).append(title)
+                            angular.element("#panel_" + metaData.report_line_item.visualizationid).append(title)
                         }
                         else {
-                            $("#panel_" + metaData.report_line_item.visualizationid).append(title)
+                            angular.element("#panel_" + metaData.report_line_item.visualizationid).append(title)
                         }
 
 
@@ -238,48 +235,49 @@
                                 result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
                             }
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
+
+                            var div = $('#body_' + obj.visualizationid)
 
                             if (obj.visualization == "Clustered Vertical Bar Chart") {
                                 var clusteredverticalbar = flairVisualizations.clusteredverticalbar()
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
+                                    .data(obj.data)
                                     .print(true);
 
-                                svg.datum(obj.data)
-                                    .call(clusteredverticalbar);
+                                clusteredverticalbar(div[0]);
+                                obj.chartHtml = clusteredverticalbar._getHTML()
                             }
                             else if (obj.visualization == "Clustered Horizontal Bar Chart") {
                                 var clusteredhorizontalbar = flairVisualizations.clusteredhorizontalbar()
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
+                                    .data(obj.data)
                                     .print(true);
 
-                                svg.datum(obj.data)
-                                    .call(clusteredhorizontalbar);
+                                clusteredhorizontalbar(div[0]);
                             }
                             else if (obj.visualization == "Stacked Vertical Bar Chart") {
                                 var stackedverticalbar = flairVisualizations.stackedverticalbar()
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
+                                    .data(obj.data)
                                     .print(true);
 
-                                svg.datum(obj.data)
-                                    .call(stackedverticalbar);
+                                stackedverticalbar(div[0]);
                             }
                             else if (obj.visualization == "Stacked Horizontal Bar Chart") {
                                 var stackedhorizontalbar = flairVisualizations.stackedhorizontalbar()
                                     .config(obj.config)
                                     .tooltip(true)
                                     .notification(true)
+                                    .data(obj.data)
                                     .print(true);
 
-                                svg.datum(obj.data)
-                                    .call(stackedhorizontalbar);
+                                stackedhorizontalbar(div[0]);
                             }
 
                         }
@@ -331,18 +329,17 @@
                                 result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                             }
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
 
+                            var div = $('#body_' + obj.visualizationid)
 
                             var line = flairVisualizations.line()
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
+                                .data(obj.data)
                                 .print(true);
 
-                            svg.datum(obj.data)
-                                .call(line);
+                            line(div[0])
                         }
                         if (obj.visualization == "Combo Chart") {
 
@@ -394,18 +391,16 @@
                                 result['comboChartType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Combo chart type'));
                             }
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
-
+                            var div = $('#body_' + obj.visualizationid)
 
                             var combo = flairVisualizations.combo()
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
+                                .data(obj.data)
                                 .print(true);
 
-                            svg.datum(obj.data)
-                                .call(combo);
+                            combo(div[0]);
                         }
                         if (obj.visualization == "Pie Chart") {
                             result['dimension'] = D3Utils.getNames(dimensions);
@@ -417,17 +412,16 @@
                             result['valuePosition'] = VisualizationUtils.getPropertyValue(obj.property, 'Value position').toLowerCase();
 
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
+                            var div = $('#body_' + obj.visualizationid)
 
                             var pie = flairVisualizations.pie()
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
+                                .data(data)
                                 .print(false)
 
-                            svg.datum(obj.data)
-                                .call(pie);
+                            pie(div[0])
                         }
                         if (obj.visualization == "Doughnut Chart") {
                             result['dimension'] = D3Utils.getNames(dimensions);
@@ -448,17 +442,16 @@
                             result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Colour of labels');
 
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
+                            var div = $('#body_' + obj.visualizationid)
 
                             var doughnut = flairVisualizations.doughnut()
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
+                                .data(data)
                                 .print(false)
 
-                            svg.datum(obj.data)
-                                .call(doughnut);
+                            doughnut(div[0]);
                         }
                         if (obj.visualization == "Info graphic") {
                             result['dimension'] = D3Utils.getNames(dimensions);
@@ -485,17 +478,16 @@
                             result['kpiIconExpression'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Icon Expression');
 
                             obj.config = result;
-                            d3.select('#div_' + obj.visualizationid).html('');
-                            var svg = d3.select('#div_' + obj.visualizationid)
+                            var div = $('#body_' + obj.visualizationid)
 
                             var infographics = flairVisualizations.infographics()
                                 .config(obj.config)
                                 .notification(true)
                                 .tooltip(true)
+                                .data(obj.data)
                                 .print(true)
 
-                            svg.datum(obj.data)
-                                .call(infographics);
+                            infographics(div[0]);
                         }
                         if (obj.visualization == "KPI") {
                             result['measure'] = D3Utils.getNames(measures);
@@ -536,15 +528,14 @@
                             }
 
                             obj.config = result;
-                            d3.select('#div_' + obj.visualizationid).html('');
-                            var svg = d3.select('#div_' + obj.visualizationid)
+                            var div = $('#body_' + obj.visualizationid)
 
-                            var infographics = flairVisualizations.kpi()
+                            var kpi = flairVisualizations.kpi()
                                 .config(obj.config)
+                                .data(obj.data)
                                 .print(true)
 
-                            svg.datum(obj.data)
-                                .call(infographics);
+                            kpi(div[0])
                         }
                         if (obj.visualization == "Scatter plot") {
 
@@ -593,17 +584,16 @@
 
                             }
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
+                            var div = $('#body_' + obj.visualizationid)
 
                             var scatter = flairVisualizations.scatter()
                                 .config(obj.config)
                                 .tooltip(true)
                                 .notification(true)
+                                .data(obj.data)
                                 .print(true);
 
-                            svg.datum(obj.data)
-                                .call(scatter);
+                            scatter(div[0]);
                         }
                         if (obj.visualization == "Gauge plot") {
 
@@ -630,21 +620,19 @@
                             result['targetNumberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Number format');
 
                             obj.config = result;
-                            d3.select('#svg_' + obj.visualizationid).html('');
-                            var svg = d3.select('#svg_' + obj.visualizationid)
+
+                            var div = $('#body_' + obj.visualizationid)
 
                             var gauge = flairVisualizations.gauge()
                                 .config(obj.config)
+                                .data(data)
                                 .print(true);
-
-                            svg.datum(obj.data)
-                                .call(gauge);
+                            gauge(div[0]);
                         }
                         vm.pagedItems.push(obj)
 
-                    },
-                    function (error) { }
-                );
+                    });
+
         }
 
         function getScheduledReportsCount() {

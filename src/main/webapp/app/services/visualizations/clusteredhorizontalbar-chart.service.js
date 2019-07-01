@@ -83,7 +83,7 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var clusteredhorizontalbar = $rootScope.updateWidget[record.id];
-                       
+
                         clusteredhorizontalbar.isAnimationDisable(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
@@ -93,6 +93,12 @@
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="clusteredhorizontalbar-' + element[0].id + '" ></div>')
                     var div = $('#clusteredhorizontalbar-' + element[0].id)
 
+                    for (let index = 0; index < record.data.length; index++) {
+                        record.data[index]["product_price"] = - record.data[index]["product_price"];
+
+                    }
+
+
                     var clusteredhorizontalbar = flairVisualizations.clusteredhorizontalbar()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
@@ -101,7 +107,7 @@
                         .print(false)
                         .data(record.data);
 
-                        clusteredhorizontalbar(div[0])
+                    clusteredhorizontalbar(div[0])
 
                     $rootScope.updateWidget[record.id] = clusteredhorizontalbar;
                 }

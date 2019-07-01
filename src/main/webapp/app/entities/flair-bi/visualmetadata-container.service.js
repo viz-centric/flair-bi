@@ -23,7 +23,8 @@
             getOne: getOne,
             getOneVBuildId:getOneVBuildId,
             clear: clear,
-            update:update
+            update:update,
+            getCount: getCount
         };
 
         /**
@@ -157,6 +158,14 @@
         function clear() {
             visualMetadataContainer = [];
             return visualMetadataContainer;
+        }
+
+        /**
+         * Get container's count
+         *
+         */
+        function getCount() {
+            return visualMetadataContainer.length;
         }
     }
 })();

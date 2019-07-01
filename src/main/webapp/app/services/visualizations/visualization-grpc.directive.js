@@ -168,6 +168,7 @@
          * @param {Boolean} forceQuery : if querying for data must be done
          */
         function build(forceQuery) {
+            angular.element("#loader-spinner").show();
             if (forceQuery) {
                 proxyGrpcService.forwardCall(vm.datasource.id, {
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),

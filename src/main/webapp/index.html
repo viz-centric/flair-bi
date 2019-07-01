@@ -1820,7 +1820,10 @@
 
         </div>
         <!-- End page wrapper-->
-
+        <div class="loader-spinner" id="loader-spinner" style="display: none;">
+            <md-progress-circular ng-disabled="false" class="md-accent md-hue-3" md-diameter="70">
+            </md-progress-circular>
+        </div>
     </div>
     <!-- End wrapper-->
     <!-- Iframe content -->
@@ -2010,6 +2013,8 @@
     <script src="content/js/sweetalert.min.js"></script>
 
     <script src="app/app.module.js"></script>
+
+    <script src="app/services/visualizations/word-cloud-old.service.js"></script>
 
     <script src="app/services/visualizations/word-cloud.service.js"></script>
 

@@ -130,6 +130,7 @@ flair-notifications:
   scheduled-reports-url: /api/user/{user}/reports?pageSize={pageSize}&page={page}
   scheduled-reports-count-url : /api/user/{user}/reportCount/
   scheduled-report-param-url: /api/jobSchedule/?visualizationid={visualizationid}
+  execute-immediate-param-url: /api/executeImmediate/?visualizationid={visualizationid}
   
 # ===================================================================
 # files location

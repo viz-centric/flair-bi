@@ -23,16 +23,36 @@
             ng-required="!vm.selectedConnection">
     </div>
     <connection-property-component connection="vm.connection" disabled="vm.selectedConnection" form='connectionForm' c-property="cp" ng-repeat="cp in vm.connectionType.connectionPropertiesSchema.connectionProperties | orderBy: 'order'"></connection-property-component>
-        <div class="form-group">
-            <label class="control-label">Username</label>
-            <input name="username" ng-disabled="vm.selectedConnection" type="text" ng-model="vm.connection.connectionUsername" class="form-control"
-                ng-required="!vm.selectedConnection">
+    <div class="form-group">
+        <label class="control-label">Username</label>
+        <input name="username" ng-disabled="vm.selectedConnection" type="text" ng-model="vm.connection.connectionUsername" class="form-control"
+            ng-required="!vm.selectedConnection">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Password</label>
+        <input name="password" ng-disabled="vm.selectedConnection" type="password" ng-model="vm.connection.connectionPassword" class="form-control"
+            ng-required="!vm.selectedConnection">
+    </div>
+    <div class="row m-t-md">
+        <div class="col-md-12 test-connection-col">
+            <div class="test-connection-button">
+                <button ng-click="vm.testConnection()"
+                        class="btn btn-primary"
+                        ng-disabled="connectionForm.$invalid">Test connection</button>
+            </div>
+            <div ng-show="vm.testResult === 'loading'" class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <div ng-show="vm.testResult === 'error'" class="test-connection-label alert-danger animate-show-hide">
+                <i class="fa fa-times"></i> Connection Error. Please check configurations </div>
+            <div ng-show="vm.testResult === 'success'" class="test-connection-label alert-success animate-show-hide">
+                <i class="fa fa-check"></i> Connection success </div>
         </div>
-        <div class="form-group">
-            <label class="control-label">Password</label>
-            <input name="password" ng-disabled="vm.selectedConnection" type="password" ng-model="vm.connection.connectionPassword" class="form-control"
-                ng-required="!vm.selectedConnection">
-        </div>
+    </div>
     <div class="wizard-navigate-buttons">
         <button class="btn btn-default" type="button" wz-previous value="Back" ng-click="vm.previousStep()">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>

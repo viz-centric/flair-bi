@@ -21,6 +21,8 @@
         var featureBookmark={};
         var isBookmarkApplied=false;
         var hierarchies=[];
+        var savePromptMessage="";
+        var viewEditedBeforeSave = false;
 
         return {
             setVisual: setVisual,
@@ -48,7 +50,11 @@
             saveHierarchies:saveHierarchies,
             getHierarchies:getHierarchies,
             setFeatureBookmark:setFeatureBookmark,
-            updateVisual:updateVisual
+            updateVisual:updateVisual,
+            setSavePromptMessage:setSavePromptMessage,
+            getSavePromptMessage:getSavePromptMessage,
+            setViewEditedBeforeSave:setViewEditedBeforeSave,
+            getViewEditedBeforeSave:getViewEditedBeforeSave
         };
 
         function setVisual(v) {
@@ -190,6 +196,18 @@
         }
         function getHierarchies(){
             return hierarchies;
+        }
+        function setSavePromptMessage(message){
+            savePromptMessage=message;
+        }
+        function getSavePromptMessage(){
+            return savePromptMessage;
+        }
+        function setViewEditedBeforeSave(viewEditedBeforeSaveTemp){
+            viewEditedBeforeSave=viewEditedBeforeSaveTemp
+        }
+        function getViewEditedBeforeSave(){
+            return viewEditedBeforeSave;
         }
     }
 })();

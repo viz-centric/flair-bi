@@ -99,9 +99,6 @@
                                     $state.go("report-management", null, {
                                         reload: "report-management"
                                     });
-                                },
-                                function() {
-                                    $state.go("report-management");
                                 }
                             );
                     }

@@ -18,30 +18,13 @@
         </div>
     </div>
     <div class="row m-t-md" ng-if="vm.datasources.name!=null">
-        <div class="col-md-12 test-connection-col">
-            <div class="test-connection-button">
-                <button ng-click="vm.testConnection()" class="btn btn-primary">Test connection
-                </button>
-            </div>
-            <div ng-show="vm.testResult === 'loading'" class="spinner">
-                <div class="rect1"></div>
-                <div class="rect2"></div>
-                <div class="rect3"></div>
-                <div class="rect4"></div>
-                <div class="rect5"></div>
-            </div>
-            <div ng-show="vm.testResult === 'error'" class="test-connection-label alert-danger animate-show-hide">
-                <i class="fa fa-times"></i> Connection Error. Please check configurations </div>
-            <div ng-show="vm.testResult === 'success'" class="test-connection-label alert-success animate-show-hide">
-                <i class="fa fa-check"></i> Connection success </div>
-            <div class="show-sample-data">
-                <button ng-disabled="vm.testResult == 'loading'" ng-click="vm.showData()" class="btn btn-primary">Show Data
-                </button>
-            </div>        
+        <div class="col-md-12">
+            <button ng-disabled="vm.testResult == 'loading'" ng-click="vm.showData()" class="btn btn-primary">Show Data
+            </button>
         </div>
     </div>
     <br/>
-    <div class="window-holder"  ng-if="vm.datasources.name!=null" id="sample-data-holder" style="display: none;">
+    <div class="window-holder" ng-if="vm.datasources.name!=null" id="sample-data-holder" style="display: none;">
         <header class="cf">
             <div class="header-title-small">
                 <p>Sample Data</p>
@@ -66,7 +49,7 @@
             <span class="glyphicon glyphicon-circle-arrow-left "></span>
             Back
         </button>
-        <button type="submit" ng-disabled="vm.testResult !== 'success'" class="btn btn-primary" ng-click="vm.createDataSource()" >
+        <button type="submit" ng-disabled="!vm.datasources.name" class="btn btn-primary" ng-click="vm.createDataSource()" >
             <span class="glyphicon glyphicon-check"></span>
             Create Datasource
         </button>

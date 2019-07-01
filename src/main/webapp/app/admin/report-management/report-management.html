@@ -1,6 +1,34 @@
 <div class="fbibox">
     <div class="fbibox-content">
         <div class="table-responsive">
+            <div class="row">
+            <div class="col-md-4">
+                <h4 data-translate="reportManagement.filter.filterByDate.title">Filter by date</h4>
+                <p class="input-group">
+                    <span class="input-group-addon" data-translate="reportManagement.filter.filterByDate.from">from</span>
+                    <input type="date" class="input-sm form-control" name="start" ng-model="vm.fromDate"/>
+                    <span class="input-group-addon" data-translate="reportManagement.filter.filterByDate.to">to</span>
+                    <input type="date" class="input-sm form-control" name="end" ng-model="vm.toDate"/>
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h4 data-translate="reportManagement.filter.filterByReportName">Filter by date</h4>
+                    <input type="text" class="input-sm form-control" name="reportName" ng-model="vm.reportName"/>
+            </div>
+            <div ng-if="vm.isAdmin" class="col-md-3">
+                <h4 data-translate="reportManagement.filter.filterByUser">Filter by User</h4>
+                    <ui-select ng-keyup="vm.searchUser($event,$select.search)" id="field_user" name="userName" ng-model="vm.userName" required>
+                    <ui-select-match placeholder="Select User">{{$select.selected.login}}</ui-select-match>
+                    <ui-select-choices repeat="user in vm.users">
+                        <div ng-bind="user.login "></div>
+                    </ui-select-choices>
+                </ui-select>
+                    <!-- <input type="text" class="input-sm form-control" name="userName" ng-model="vm.userName"/> -->
+            </div>
+            <div class="col-md-2">
+                <button type="button" style="margin-top: 27px;" ng-click="vm.serchReports()" class="btn btn-info">Search</button>
+            </div>
+            </div>
             <table class="table table-striped flair-table-v1">
                 <thead>
                     <tr>

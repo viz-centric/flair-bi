@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -74,10 +73,10 @@ public class GrpcConnectionService {
             .collect(Collectors.toList());
     }
 
-    public TestConnectionResultDTO testConnection(String connectionLinkId, String datasourceName, ConnectionDTO connection) throws IOException {
-        TestConnectionResponse result = grpcService.testConnection(connectionLinkId, datasourceName, QueryGrpcUtils.toProtoConnection(connection));
+    public TestConnectionResultDTO testConnection(ConnectionDTO connection) {
+        TestConnectionResponse result = grpcService.testConnection(QueryGrpcUtils.toProtoConnection(connection));
         return new TestConnectionResultDTO()
-            .setSuccess(!StringUtils.isEmpty(result.getResult()));
+                .setSuccess(!StringUtils.isEmpty(result.getResult()));
     }
 
     public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection, int maxEntries) {

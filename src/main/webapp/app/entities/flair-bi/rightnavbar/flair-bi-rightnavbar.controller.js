@@ -136,6 +136,7 @@
                     },
                     function(result){
                         vm.isSaving = false;
+                        VisualDispatchService.setViewEditedBeforeSave(false);
                         VisualMetadataContainer.update(vm.visual.id,result,'id');
                         vm.visual = result;
                         var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:result.id}),title: "Updated"}
@@ -151,6 +152,7 @@
                     },
                     function(result){
                         vm.isSaving = false;
+                        VisualDispatchService.setViewEditedBeforeSave(false);
                         VisualMetadataContainer.update(vm.visual.visualBuildId,result,'visualBuildId');
                         vm.visual = result;
                         var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}

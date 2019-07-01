@@ -89,7 +89,6 @@ public class FeatureResource {
         result.setType(feature.getType());
         result.setName(feature.getName());
         result.setFunctionId(feature.getFunctionId());
-        result = featureService.save(result);
 
         FeatureValidationResult validate = featureService.validate(result);
         if (validate != FeatureValidationResult.OK) {
@@ -97,6 +96,8 @@ public class FeatureResource {
                     .headers(HeaderUtil.createFailureAlert("feature", "feature." + validate.name().toLowerCase(), "Error"))
                     .body(validate);
         }
+
+        result = featureService.save(result);
 
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert("features", feature.getId().toString()))

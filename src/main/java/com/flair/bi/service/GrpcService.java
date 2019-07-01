@@ -26,7 +26,6 @@ import com.flair.bi.messages.TestConnectionRequest;
 import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionRequest;
 import com.flair.bi.messages.UpdateConnectionResponse;
-import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -79,19 +78,11 @@ public class GrpcService implements IGrpcService {
     }
 
     @Override
-    public TestConnectionResponse testConnection(String connectionLinkId, String datasourceName, Connection connection) {
-        TestConnectionRequest.Builder builder = TestConnectionRequest.newBuilder();
-        builder.setDatasourceName(datasourceName);
-
-        if (connectionLinkId != null) {
-            builder.setConnectionLinkId(connectionLinkId);
-        }
-
-        if (connection != null) {
-            builder.setConnection(connection);
-        }
-
-        return getConnectionStub().testConnection(builder.build());
+    public TestConnectionResponse testConnection(Connection connection) {
+        TestConnectionRequest request = TestConnectionRequest.newBuilder()
+                .setConnection(connection)
+                .build();
+        return getConnectionStub().testConnection(request);
     }
 
     @Override

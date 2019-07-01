@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,20 +28,17 @@ public class QueryResource {
     @PostMapping("/test")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<TestConnectionResultDTO> testConnection(@Valid @RequestBody TestConnectionRequest request) throws IOException {
+    public ResponseEntity<TestConnectionResultDTO> testConnection(@Valid @RequestBody TestConnectionRequest request) {
         log.info("Connection test {}", request);
 
-        TestConnectionResultDTO result = grpcConnectionService.testConnection(request.getConnectionLinkId(), request.getDatasourceName(),
-            request.getConnection());
+        TestConnectionResultDTO result = grpcConnectionService.testConnection(request.getConnection());
 
         return ResponseEntity.ok(result);
     }
 
     @Data
     private static class TestConnectionRequest {
-        String connectionLinkId;
         @NotNull
-        String datasourceName;
         ConnectionDTO connection;
     }
 

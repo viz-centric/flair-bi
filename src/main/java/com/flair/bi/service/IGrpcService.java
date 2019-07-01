@@ -25,7 +25,7 @@ public interface IGrpcService {
 
     RunQueryResponse runQuery(Query query, boolean metaRetrieved);
 
-    TestConnectionResponse testConnection(String connectionLinkId, String datasourceName, Connection connection);
+    TestConnectionResponse testConnection(Connection connection);
 
     QueryAllResponse queryAll(String connectionLinkId, Query query, Connection connection);
 

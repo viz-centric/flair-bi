@@ -15,7 +15,6 @@ import com.flair.bi.messages.SaveConnectionResponse;
 import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionResponse;
 import io.grpc.stub.StreamObserver;
-
 import org.junit.Ignore;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +47,7 @@ public class TestGrpcService implements IGrpcService {
     }
 
     @Override
-    public TestConnectionResponse testConnection(String connectionLinkId, String datasourceName,
-            Connection connection) {
+    public TestConnectionResponse testConnection(Connection connection) {
         return null;
     }
 

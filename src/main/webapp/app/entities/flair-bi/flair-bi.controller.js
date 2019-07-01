@@ -76,6 +76,7 @@
     ) {
         var vm = this;
         var editMode = false;
+        var counter=0;
         vm.gridStackOptions = {
             cellHeight: 60,
             verticalMargin: 10,
@@ -211,6 +212,7 @@
         }
 
         function onExchangeMetadataError(data) {
+            angular.element("#loader-spinner").hide();
             var body = JSON.parse(data.body || '{}');
             if(body.description==="io exception"){
                 var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
@@ -249,6 +251,12 @@
                     metaData,
                     contentId
                 );
+                if((VisualMetadataContainer.getCount()-1)==counter){
+                    angular.element("#loader-spinner").hide();
+                    counter=0;
+                }else{
+                    counter++;
+                }
             }
         }
 

@@ -39,8 +39,6 @@
 
     <link rel="stylesheet" href="bower_components/animate.css/animate.css">
 
-    <link rel="stylesheet" href="bower_components/flair-visualizations/styles/stylesheets/screen.css">
-
     <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css">
 
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">
@@ -58,6 +56,8 @@
     <link rel="stylesheet" href="bower_components/angular-cron-gen/build/cron-gen.min.css">
 
     <link rel="stylesheet" href="bower_components/angular-cron-generator/dist/angular-cron-generator.css">
+
+    <link rel="stylesheet" href="bower_components/flair-visualizations/styles/stylesheets/screen.css">
 
     <!-- endinject -->
     <!-- endbuild -->
@@ -1820,7 +1820,10 @@
 
         </div>
         <!-- End page wrapper-->
-
+        <div class="loader-spinner" id="loader-spinner" style="display: none;">
+            <md-progress-circular ng-disabled="false" class="md-accent md-hue-3" md-diameter="70">
+            </md-progress-circular>
+        </div>
     </div>
     <!-- End wrapper-->
     <!-- Iframe content -->
@@ -1921,8 +1924,6 @@
 
     <script src="bower_components/cronstrue/dist/cronstrue.js"></script>
 
-    <script src="bower_components/flair-visualizations/dist/main.bundle.js"></script>
-
     <script src="bower_components/angular/angular.js"></script>
 
     <script src="bower_components/angular-aria/angular-aria.js"></script>
@@ -2001,6 +2002,8 @@
 
     <script src="bower_components/angular-cron-generator/dist/angular-cron-generator.min.js"></script>
 
+    <script src="bower_components/flair-visualizations/dist/main.bundle.js"></script>
+
     <!-- endinject -->
     <!-- endbuild -->
 
@@ -2010,6 +2013,8 @@
     <script src="content/js/sweetalert.min.js"></script>
 
     <script src="app/app.module.js"></script>
+
+    <script src="app/services/visualizations/word-cloud-old.service.js"></script>
 
     <script src="app/services/visualizations/word-cloud.service.js"></script>
 

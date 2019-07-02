@@ -12,7 +12,7 @@ services:
         - SPRING_PROFILES_ACTIVE=prod
         - POSTGRES_URI=flair-bi-pgsql:5432
         - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=admin
+        - POSTGRES_PASS=admin
         - POSTGRES_DB=flairbi
         ports:
         - 80:80

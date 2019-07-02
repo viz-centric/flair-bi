@@ -24,4 +24,8 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=admin
         - POSTGRES_DB=flairbi
+networks:
+    flair-network:
+        external:
+            name: flair-network
     

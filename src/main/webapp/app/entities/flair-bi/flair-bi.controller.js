@@ -245,17 +245,19 @@
                     v.loading = false;
                     v.dataReceived = true;
                     v.cacheDate = cacheDate;
-                }
-                visualizationRenderService.setMetaData(
-                    v,
-                    metaData,
-                    contentId
-                );
-                if((VisualMetadataContainer.getCount()-1)==counter){
-                    angular.element("#loader-spinner").hide();
-                    counter=0;
+                    visualizationRenderService.setMetaData(
+                        v,
+                        metaData,
+                        contentId
+                    );
+                    if((VisualMetadataContainer.getCount()-1)==counter){
+                        angular.element("#loader-spinner").hide();
+                        counter=0;
+                    }else{
+                        counter++;
+                    }
                 }else{
-                    counter++;
+                    angular.element("#loader-spinner").hide();
                 }
             }
         }

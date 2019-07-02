@@ -46,7 +46,7 @@
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
-
+                    result['isFilterGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Filter Grid');
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
@@ -81,14 +81,14 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var stackedhorizontalbar = $rootScope.updateWidget[record.id];
-                       
+
                         stackedhorizontalbar.isAnimationDisable(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
                     }
                 } else {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="stackedhorizontalbar-' + element[0].id + '" ></div>')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="stackedhorizontalbar-' + element[0].id + '" ></div>')
                     var div = $('#stackedhorizontalbar-' + element[0].id)
 
                     var stackedhorizontalbar = flairVisualizations.stackedhorizontalbar()

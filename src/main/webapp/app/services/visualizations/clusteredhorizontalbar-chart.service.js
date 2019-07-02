@@ -47,7 +47,7 @@
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
-
+                    result['isFilterGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Filter Grid');
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
@@ -92,12 +92,6 @@
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="clusteredhorizontalbar-' + element[0].id + '" ></div>')
                     var div = $('#clusteredhorizontalbar-' + element[0].id)
-
-                    for (let index = 0; index < record.data.length; index++) {
-                        record.data[index]["product_price"] = - record.data[index]["product_price"];
-
-                    }
-
 
                     var clusteredhorizontalbar = flairVisualizations.clusteredhorizontalbar()
                         .config(getProperties(VisualizationUtils, record))

@@ -1,0 +1,27 @@
+version: '2'
+services:
+    flair-bi:
+        networks:
+        - flair-network
+        container_name: flairbi
+        image: flairbi/flairbi:latest
+        links:
+         - flair-bi-pgsql
+        environment:
+        - CONFIG_URI=http://flair-registry:8761
+        - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+        - JHIPSTER_SLEEP=100
+        - SPRING_PROFILES_ACTIVE=prod
+        - POSTGRES_URI=flair-bi-pgsql:5432
+        ports:
+        - 80:80
+        - 5005:5005
+    flair-bi-pgsql:
+        image: flairbi/flair-pgsql:latest
+        ports:
+        - 5432:5432
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=flairbi
+    

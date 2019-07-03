@@ -14,6 +14,7 @@
 
     function VisualMetadataContainer(VisualWrap,$rootScope) {
         var visualMetadataContainer = [];
+        var counter=0;
 
         return {
             add: add,
@@ -24,7 +25,10 @@
             getOneVBuildId:getOneVBuildId,
             clear: clear,
             update:update,
-            getCount: getCount
+            setCounterToLast:setCounterToLast,
+            increamentCounter : increamentCounter,
+            resetCounter : resetCounter,
+            isLastContainer: isLastContainer
         };
 
         /**
@@ -160,12 +164,21 @@
             return visualMetadataContainer;
         }
 
-        /**
-         * Get container's count
-         *
-         */
-        function getCount() {
-            return visualMetadataContainer.length;
+        function setCounterToLast(){
+            counter=visualMetadataContainer.length-1;
+        }
+
+        function increamentCounter(){
+            counter++;
+        }
+
+        function resetCounter(){
+            counter=0;
+            angular.element("#loader-spinner").hide();
+        }
+
+        function isLastContainer(){
+            return visualMetadataContainer.length-1===counter?true:false;
         }
     }
 })();

@@ -249,11 +249,7 @@
                         metaData,
                         contentId
                     );
-                    if(VisualMetadataContainer.isLastContainer()){
-                        VisualMetadataContainer.resetCounter();
-                    }else{
-                        VisualMetadataContainer.increamentCounter();
-                    }
+                    VisualMetadataContainer.isLastContainer()?VisualMetadataContainer.resetCounter():VisualMetadataContainer.increamentCounter();
                 }else{
                     VisualMetadataContainer.resetCounter();
                 }

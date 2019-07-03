@@ -161,6 +161,7 @@
          */
         function clear() {
             visualMetadataContainer = [];
+            counter=0;
             return visualMetadataContainer;
         }
 
@@ -169,7 +170,7 @@
         }
 
         function increamentCounter(){
-            counter++;
+            counter>visualMetadataContainer.length-1?counter=0:counter++;
         }
 
         function resetCounter(){

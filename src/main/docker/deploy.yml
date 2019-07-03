@@ -17,7 +17,7 @@ services:
         - COUCH_USER=couchdb
         - COUCH_PASS=admin
         ports:
-        - 80:80
+        - 8080:8080
         - 5005:5005
     flair-bi-pgsql:
         image: flairbi/flair-pgsql:latest

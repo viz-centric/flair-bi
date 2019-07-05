@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -20,6 +20,7 @@
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
         vm.channels=scheduler_channels;
+        vm.COMPARISIONS=COMPARISIONS;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.loadUsers=loadUsers;
@@ -34,6 +35,7 @@
         vm.emailReporterEdit=false;
         vm.scheduleObj={
             "datasourceid":0,
+            "hasThresholdAlert":false,
             "report": {
                 "connection_name": "",
                 "report_name": "",
@@ -80,6 +82,7 @@
                 vm.dashboard=dashboard;
                 vm.view=view;
                 getScheduleReport(visualMetaData.id);
+                getFeatures(datasource.id);
                 vm.datasource= datasource;
                 buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
             }else{
@@ -94,7 +97,15 @@
                 }
 
             }
+        }
 
+        function getFeatures(datasourceId){
+            Features.query({
+                datasource: datasourceId,
+                featureType: "MEASURE"
+            },function(features){
+                vm.features=features;
+            })
         }
 
         function getVisualmetadata(scheduledObj){
@@ -103,6 +114,7 @@
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 buildScheduledObject(scheduledObj,vm.visualMetaData);
+                getFeatures(vm.scheduleObj.datasourceid);
             });
         }
 
@@ -322,6 +334,7 @@
             vm.visualMetaData = new VisualWrap(visualMetaData);
             vm.datasource=vm.dashboard.dashboardDatasource;
             getScheduleReport(visualMetaData.id);
+            getFeatures(vm.datasource.id);
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 }

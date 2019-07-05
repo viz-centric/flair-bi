@@ -102,6 +102,54 @@
                         </div>
                     </div>
                 </div>
+                <br/>
+                <div class="row container">
+                    <div class="col-xs-8">
+                        <label class="control-label threshold-alert-label">
+                            Threshold Alert 
+                        </label>&nbsp;&nbsp;
+                        <label class="flair-checkbox" ng-click="vm.scheduleObj.hasThresholdAlert=!vm.scheduleObj.hasThresholdAlert">
+                            <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.scheduleObj.hasThresholdAlert,'fa-square-o-unchecked':!vm.scheduleObj.hasThresholdAlert} "></i>
+                            <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.scheduleObj.hasThresholdAlert,'fa-check-square-o-unchecked':!vm.scheduleObj.hasThresholdAlert}"></i>
+                        </label>
+                    </div>
+                </div>
+                <br/>
+                <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.hasThresholdAlert">
+                    <div class="col-xs-3">
+                        <label class="control-label">
+                            Measure 
+                        </label>
+                        <ui-select class="condition-val" ng-model="vm.condition.featureName">
+                            <ui-select-match placeholder="Search Measure">
+                                {{vm.condition.featureName}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="feature.name as feature in vm.features | filter: $select.search track by feature.id">
+                                <div ng-bind="feature.name"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-xs-3">
+                        <label class="control-label">
+                            Compare
+                        </label>
+                        <ui-select  class="condition-val" ng-model="vm.condition.compare" theme="bootstrap">
+                            <ui-select-match placeholder="Compare">
+                                {{vm.condition.compare.value}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="compare in vm.COMPARISIONS">
+                                {{compare.value}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-xs-2">
+                        <label class="control-label">
+                            Threshold
+                        </label>
+                    <input type="text" class="form-control condition-val" ng-model="vm.condition.value" />
+                    </div>
+                </div>
+                <br ng-if="vm.scheduleObj.hasThresholdAlert" />
                 <div class="row container">
                     <div class="col-xs-8">
                         <label class="control-label">

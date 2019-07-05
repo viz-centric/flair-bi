@@ -1,29 +1,43 @@
-.cron-gen-container {
-    .row {
-        margin-right: -8px;
-        margin-left: -8px;
-    }
-}
+.scheduler-modal-body{
 
-.scheduler-tags>tags-input .host {
-    margin-top: 0px;
-}
+	.cron-gen-container {
+	    .row {
+	        margin-right: -8px;
+	        margin-left: -8px;
+	    }
+	}
 
-.cron-wrap{
-	.clearfix{
-		.form-group{
-			display:flex;
-			label{
-			    margin: 5px;
+	.scheduler-tags>tags-input .host {
+	    margin-top: 0px;
+	}
+
+	.cron-wrap{
+		.clearfix{
+			.form-group{
+				display:flex;
+				label{
+				    margin: 5px;
+				}
 			}
 		}
 	}
+
+	.scheduler-date-icon{
+		vertical-align: bottom;
+	}
+
+	.threshold-alert-condition{
+		.condition-val{
+			margin-top:5px;
+		}
+	}
+
+	.threshold-alert-label{
+		vertical-align: middle;
+	}
+
 }
 
 .cancel-job-icon{
 	color:#ED5565;
-}
-
-.scheduler-date-icon{
-	vertical-align: bottom;
 }

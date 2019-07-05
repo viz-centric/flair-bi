@@ -6303,6 +6303,9 @@ input.select2-active {
 .scheduler-modal-body .threshold-alert-label {
   vertical-align: middle; }
 
+.scheduler-modal-body .center {
+  text-align: center; }
+
 .cancel-job-icon {
   color: #ED5565; }
 

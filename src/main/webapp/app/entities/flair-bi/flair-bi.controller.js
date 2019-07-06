@@ -682,6 +682,7 @@
 
         function registerStateChangeStartEvent() {
             $scope.$on("$stateChangeStart", function(event, next, current) {
+                VisualMetadataContainer.resetCounter();
                 $rootScope.isLiveState=false;
                 setDefaultColorFullScreen();
                 if($(window).width()<990){

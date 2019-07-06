@@ -119,7 +119,6 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.DELETE, "/api/users/**").access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'DELETE', 'APPLICATION')")
             .antMatchers("/swagger-ui/index.html").access("@accessControlManager.hasAccess('API', 'READ', 'APPLICATION')")
             .antMatchers("/management/audits/**").access("@accessControlManager.hasAccess('AUDITS', 'READ', 'APPLICATION')")
-            .antMatchers("/management/health/**").access("@accessControlManager.hasAccess('HEALTH-CHECKS', 'READ', 'APPLICATION')")
             .antMatchers("/management/configprops/**").access("@accessControlManager.hasAccess('CONFIGURATION', 'READ', 'APPLICATION')")
             .antMatchers(HttpMethod.GET, "/management/logs/**").access("@accessControlManager.hasAccess('LOGS', 'READ', 'APPLICATION')")
             .antMatchers(HttpMethod.PUT, "/management/logs/**").access("@accessControlManager.hasAccess('LOGS', 'UPDATE', 'APPLICATION')")

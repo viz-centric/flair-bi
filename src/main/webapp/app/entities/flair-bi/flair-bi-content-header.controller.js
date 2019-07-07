@@ -444,6 +444,7 @@
         }
 
         function applyBookmark(item) {
+            VisualMetadataContainer.resetCounter();
             if (!item) {
                 clearFilters();
             } else {
@@ -537,11 +538,13 @@
         }
 
         function refresh() {
+            VisualMetadataContainer.resetCounter();
             vm.nextDisabled = !FilterStateManagerService.hasNext();
             vm.previousDisabled = !FilterStateManagerService.hasPrevious();
         }
 
         function next() {
+            VisualMetadataContainer.resetCounter();
             var next = FilterStateManagerService.next();
             filterParametersService.save(next);
             $rootScope.$broadcast("flairbiApp:filter-input-refresh");
@@ -549,6 +552,7 @@
         }
 
         function previous() {
+            VisualMetadataContainer.resetCounter();
             var previous = FilterStateManagerService.previous();
             filterParametersService.save(previous);
             $rootScope.$broadcast("flairbiApp:filter-input-refresh");
@@ -556,6 +560,7 @@
         }
 
         function clearFilters() {
+            VisualMetadataContainer.resetCounter();
             vm.selectedBookmark=null;
             $rootScope.$broadcast("flairbiApp:clearFilters");
         }

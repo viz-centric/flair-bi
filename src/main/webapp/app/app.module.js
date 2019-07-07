@@ -68,6 +68,7 @@
             lasso: false,
             filter: {}
         };
+        $rootScope.isLiveState=false;
         /* Persistence */
         /*
          *   {

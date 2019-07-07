@@ -76,7 +76,6 @@
     ) {
         var vm = this;
         var editMode = false;
-        var counter=0;
         vm.gridStackOptions = {
             cellHeight: 60,
             verticalMargin: 10,
@@ -212,7 +211,7 @@
         }
 
         function onExchangeMetadataError(data) {
-            angular.element("#loader-spinner").hide();
+            VisualMetadataContainer.resetCounter();
             var body = JSON.parse(data.body || '{}');
             if(body.description==="io exception"){
                 var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
@@ -245,17 +244,14 @@
                     v.loading = false;
                     v.dataReceived = true;
                     v.cacheDate = cacheDate;
-                }
-                visualizationRenderService.setMetaData(
-                    v,
-                    metaData,
-                    contentId
-                );
-                if((VisualMetadataContainer.getCount()-1)==counter){
-                    angular.element("#loader-spinner").hide();
-                    counter=0;
+                    visualizationRenderService.setMetaData(
+                        v,
+                        metaData,
+                        contentId
+                    );
+                    VisualMetadataContainer.isLastContainer()?VisualMetadataContainer.resetCounter():VisualMetadataContainer.increamentCounter();
                 }else{
-                    counter++;
+                    VisualMetadataContainer.resetCounter();
                 }
             }
         }
@@ -288,6 +284,7 @@
                 },
                 function(result){
                     VisualMetadataContainer.add(result);
+                    VisualMetadataContainer.setCounterToLast();
                 },
                 onSaveFeaturesError
             );
@@ -431,6 +428,7 @@
         }
 
         function saveFeatures(v) {
+            VisualMetadataContainer.setCounterToLast();
             v.isCardRevealed = true;
             vm.isSaving = true;
             if (v.id) {
@@ -684,6 +682,8 @@
 
         function registerStateChangeStartEvent() {
             $scope.$on("$stateChangeStart", function(event, next, current) {
+                VisualMetadataContainer.resetCounter();
+                $rootScope.isLiveState=false;
                 setDefaultColorFullScreen();
                 if($(window).width()<990){
                     $rootScope.hideHeader = false;
@@ -759,10 +759,10 @@
                     refreshWidget(v);
                 }, 5000);
                 intervalRegistry[v.visualBuildId] = int;
-                v.isLiveEnabled = true;
+                $rootScope.isLiveState=v.isLiveEnabled = true;
             } else {
                 $interval.cancel(intervalRegistry[v.visualBuildId]);
-                v.isLiveEnabled = false;
+                $rootScope.isLiveState=v.isLiveEnabled = false;
             }
         }
 
@@ -973,6 +973,7 @@
         }
 
         function refreshWidget(v) {
+            VisualMetadataContainer.setCounterToLast();
             $rootScope.$broadcast(
                 "update-widget-content-" + v.id || v.visualBuildId
             );

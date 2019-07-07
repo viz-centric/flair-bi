@@ -131,8 +131,8 @@ public class UserService {
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(ZonedDateTime.now());
-        user.setActivated(false);
-        user.setUserType(managedUserVM.getUserType());
+        user.setActivated(true);
+        user.setUserType(Constants.INTERNAL_USER);
         user = userRepository.save(user);
         log.debug("Created Information for User: {}", user);
         return user;

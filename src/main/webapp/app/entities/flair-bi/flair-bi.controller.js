@@ -211,7 +211,7 @@
         }
 
         function onExchangeMetadataError(data) {
-            VisualMetadataContainer.resetCounter();
+            angular.element("#loader-spinner").hide();
             var body = JSON.parse(data.body || '{}');
             if(body.description==="io exception"){
                 var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
@@ -249,9 +249,9 @@
                         metaData,
                         contentId
                     );
-                    VisualMetadataContainer.isLastContainer()?VisualMetadataContainer.resetCounter():VisualMetadataContainer.increamentCounter();
+                    angular.element("#loader-spinner").hide();
                 }else{
-                    VisualMetadataContainer.resetCounter();
+                    angular.element("#loader-spinner").hide();
                 }
             }
         }
@@ -284,7 +284,6 @@
                 },
                 function(result){
                     VisualMetadataContainer.add(result);
-                    VisualMetadataContainer.setCounterToLast();
                 },
                 onSaveFeaturesError
             );
@@ -428,7 +427,6 @@
         }
 
         function saveFeatures(v) {
-            VisualMetadataContainer.setCounterToLast();
             v.isCardRevealed = true;
             vm.isSaving = true;
             if (v.id) {
@@ -682,7 +680,7 @@
 
         function registerStateChangeStartEvent() {
             $scope.$on("$stateChangeStart", function(event, next, current) {
-                VisualMetadataContainer.resetCounter();
+                angular.element("#loader-spinner").hide();
                 $rootScope.isLiveState=false;
                 setDefaultColorFullScreen();
                 if($(window).width()<990){
@@ -973,7 +971,6 @@
         }
 
         function refreshWidget(v) {
-            VisualMetadataContainer.setCounterToLast();
             $rootScope.$broadcast(
                 "update-widget-content-" + v.id || v.visualBuildId
             );

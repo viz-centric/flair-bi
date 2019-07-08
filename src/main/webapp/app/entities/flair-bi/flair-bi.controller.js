@@ -682,6 +682,8 @@
 
         function registerStateChangeStartEvent() {
             $scope.$on("$stateChangeStart", function(event, next, current) {
+                VisualMetadataContainer.resetCounter();
+                $rootScope.isLiveState=false;
                 setDefaultColorFullScreen();
                 if($(window).width()<990){
                     $rootScope.hideHeader = false;
@@ -757,10 +759,10 @@
                     refreshWidget(v);
                 }, 5000);
                 intervalRegistry[v.visualBuildId] = int;
-                v.isLiveEnabled = true;
+                $rootScope.isLiveState=v.isLiveEnabled = true;
             } else {
                 $interval.cancel(intervalRegistry[v.visualBuildId]);
-                v.isLiveEnabled = false;
+                $rootScope.isLiveState=v.isLiveEnabled = false;
             }
         }
 

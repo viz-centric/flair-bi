@@ -6362,7 +6362,7 @@ input.select2-active {
       #dataSource-holder .window-holder .window-body .datasource-table-holder {
         overflow: scroll;
         max-height: 250px;
-        max-width: 911px; }
+        width: 100%; }
 
 .dataSource-sidebar {
   width: 190px;

@@ -278,8 +278,8 @@
             });
         }
 
-        function deleteReport(){
-            schedulerService.cancelScheduleReport(vm.visualMetaData.id).then(function (success) {
+        function deleteReport(id){
+            schedulerService.cancelScheduleReport(id).then(function (success) {
                 var info = {
                     text: success.data.message,
                     title: "Cancelled"

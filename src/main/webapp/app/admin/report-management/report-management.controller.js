@@ -53,20 +53,10 @@
         function getScheduledReports(userName,reportName,startDate,endDate){
             schedulerService.filterScheduledReports(userName,reportName,startDate,endDate,vm.itemsPerPage,pagingParams.page - 1).then(
               function(response) {
-                if(response.data.records){
                     vm.reports=response.data.records;
                     vm.totalItems = response.data.totalRecords;
                     vm.queryCount = vm.totalItems;
-                    vm.page = pagingParams.page;    
-                }
-                else{
-                    var info = {
-                    text: response.data.message,
-                    title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
-                } 
-                
+                    vm.page = pagingParams.page;
               },
               function(error) {
                 var info = {
@@ -106,18 +96,21 @@
             $location.path(buildPage);
         }
 
-        function deleteReport(vizID){
-            schedulerService.cancelScheduleReport(vizID).then(
-              function(response) {
-                console.log(response)
-              },
-              function(error) {
+        function deleteReport(id){
+            schedulerService.cancelScheduleReport(id).then(function (success) {
                 var info = {
-                    text: error.statusText,
+                    text: success.data.message,
+                    title: "Cancelled"
+                }
+                $rootScope.showSuccessToast(info);
+                getScheduledReports(vm.account.login,"","","");
+            }).catch(function (error) {
+                var info = {
+                    text: error.data.message,
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
-              });
+            });
         }
 
         function loadPage(page) {

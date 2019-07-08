@@ -206,7 +206,7 @@
                 <span class="fa fa-calendar"></span>&nbsp;
                 <span>Schedule</span>
             </button>
-            <button ng-if="vm.scheduleObj.putcall" class="btn btn-default"  data-dismiss="modal" ng-click="vm.deleteReport()" type="button">
+            <button ng-if="vm.scheduleObj.putcall" class="btn btn-default"  data-dismiss="modal" ng-click="vm.deleteReport(vm.scheduleObj.report_line_item.visualizationid)" type="button">
                 <span class="cancel-job-icon glyphicon glyphicon-remove"></span>&nbsp;
                 <span data-translate="entity.action.canceljob">Cancel Job</span>
             </button> 

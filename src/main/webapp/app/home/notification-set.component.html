@@ -1,6 +1,146 @@
-<div class="panel-group" id="notification_accordion" aria-multiselectable="true" ng-show="vm.pagedItems.length > 1">
+<!-- <div class="panel-group" id="notification_accordion" aria-multiselectable="true" ng-show="vm.pagedItems.length > 1">
     
-</div>
+</div> -->
+
+    <div class="panel-group" id="notification_accordion" aria-multiselectable="true" >
+        
+        <div gridstack class="flip-container grid-stack grid1" options="vm.gridStackOptions" on-change="vm.onChange(event,items)" on-drag-start="vm.onDragStart(event,ui)" on-drag-stop="vm.onDragStop(event,ui)" on-resize-start="vm.onResizeStart(event,ui)" on-resize-stop="vm.onResizeStop(event,ui)">
+            <div data-gs-min-height="2" data-gs-min-width="3" id="{{v.visualBuildId}}" visual-build-id-resize="{{v.visualBuildId}}" gridstack-item ng-repeat="v in vm.visualmetadata" class="grid-flipper grid-stack-item grid-stack-item-{{v.visualBuildId}}    ng-class:{'flipToFront':v.isCardRevealed, 'flipToBack':!v.isCardRevealed}"
+                gs-item-x="v.xPosition" gs-item-y="v.yPosition" gs-item-width="v.width" gs-item-height="v.height" on-item-added="vm.onItemAdded(item)" on-item-removed="vm.onItemRemoved(item)">
+                <div ng-if="vm.showVizLoader(v.isCardRevealed, v.loading, v.dataReceived)" class="vizualization-loading">
+                    <div class="vizualization-loading-container">
+                        <div class="spinner">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="{{v.id}}" container-id="{{v.visualBuildId}}" ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border,
+               'opacity': v.bodyProperties.opacity}" class="grid-stack-item-content ui-draggable-handle visualization-card grid-front ng-class:{'face-hidden':!hideBackFace}">
+                    <div id="title-{{v.id}}" class="float-e-margins header  grid-stack-item-content print-visibility-hide" style="margin-bottom:0px;display: none;">
+                        <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px;">
+                            <div class="viz-header-content">
+                                <div class="viz-title">
+                                    <i ng-show="v.isLiveEnabled" class="fa fa-circle text-danger live-icon"></i> {{v.titleProperties.titleText}}
+                                    <i ng-if="v.cacheDate" class="fa fa-circle text-danger live-icon" title="{{(v.cacheDate * 1000) | date:'MMM d, h:mm:ss a'}}"></i>
+                                </div>
+                                <span uib-tooltip="Live" tooltip-placement="bottom">
+                            <md-switch class="md-primary edit hue-3" md-no-ink aria-label="Live button" ng-model="isLive" ng-change="vm.liveState(isLive, v)">
+                            </md-switch>
+                        </span>
+                                <div class="btn-group viz-settings" uib-dropdown is-open="v.status.isopen">
+                                    <a href id="dialog-{{v.visualBuildId}}" uib-dropdown-toggle>
+                                        <span uib-tooltip="Tools" tooltip-placement="bottom">
+                                    <svg class="settings-button">
+                                        <use xlink:href="#settings-button" />
+                                    </svg>
+                                <span>
+                           </a>
+                           <div class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dialog-{{vm.visualBuildId}}">
+                                <div class="items">
+                                    <div class="item" role="menuitem">
+                                        <a href ng-click="vm.printElement(v)">
+                                            <span uib-tooltip="Print" tooltip-placement="top">
+                                                <svg class="flaticons-print">
+                                                    <use xlink:href="#print" />
+                                                </svg>
+                                            </span>
+                                    </a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+                                    <a href ng-click="vm.settings(v)">
+                                        <span uib-tooltip="Settings" tooltip-placement="top">
+                                                <svg class="flaticons-settings">
+                                                    <use xlink:href="#fbi-box-settings" />
+                                                </svg>
+                                            </span></a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+                                    <a href ng-click="vm.openDataContraints(v)">
+                                        <span uib-tooltip="Data&nbsp;Constraints" tooltip-placement="top">
+                                                <svg class="flaticons-data-constraints" >
+                                                    <use xlink:href="#data-constraints" />
+                                                </svg>
+                                            </span></a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="v.data">
+                                    <a href ng-click="vm.exportCSV(v)">
+                                        <span uib-tooltip="Export" tooltip-placement="top">
+                                                <svg class="flaticons-export">
+                                                    <use xlink:href="#export" />
+                                                </svg>
+                                            </span>
+                                    </a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="v.data">
+                                    <a href ng-click="vm.openTableDialog(v)">
+                                        <span uib-tooltip="Data" tooltip-placement="top">
+                                                <svg class="flaticons-excel">
+                                                    <use xlink:href="#excel" />
+                                                </svg>
+                                            </span>
+                                    </a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="v.id">
+                                    <a href ng-click="vm.share(v)">
+                                        <span uib-tooltip="Share" tooltip-placement="top">
+                                                <svg class="flaticons-share">
+                                                    <use xlink:href="#share" />
+                                                </svg>
+                                            </span>
+                                    </a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="vm.ngIfDelete()">
+                                    <a href ng-click="vm.removeWidget(v)">
+                                        <span uib-tooltip="Delete" tooltip-placement="top">
+                                                <svg class="flaticons-delete">
+                                                    <use xlink:href="#delete" />
+                                                </svg>
+                                            </span>
+                                    </a>
+                                </div>
+                                <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
+                                    <a href ng-click="vm.recreateVisual(v)">
+                                        <span uib-tooltip="Duplicate&nbsp;Visualization" tooltip-placement="top">
+                                                <svg class="clone">
+                                                    <use xlink:href="#clone" />
+                                                </svg>
+                                            </span>
+                                    </a>
+                                </div>
+                                <div class="item" role="menuitem">
+                                    <a href ng-click="vm.openSchedulerDialog(v)">
+                                        <span uib-tooltip="Schedule&nbsp;Report" tooltip-placement="top">
+                                            <svg class="calendar">
+                                                    <use xlink:href="#calendar" />
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href class="viz-header-button" ng-click="vm.refreshWidget(v)" style="margin-bottom:0px;display: none;">
+                        <span uib-tooltip="Refresh" tooltip-placement="bottom">
+                                <svg class="viz-header-icon">
+                                    <use xlink:href="#reload" />
+                                </svg>
+                            </span>
+                    </a>
+                    <a ng-show="vm.ngIfSettings()" href class="viz-header-button" ng-click="vm.flipCard(v)" style="margin-bottom:0px;display: none;">
+                        <span uib-tooltip="Flip" tooltip-placement="bottom">
+                                <i class="viz-header-icon fa fa-rotate-right"></i>
+                            </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div notification-visualization-render ng-style="{'opacity': v.bodyProperties.opacity}"  id="content-{{v.id}}" can-build="v.canBuild()" data="v" class="printme content widget-content">
+        </div>
+    </div>
 
 
 <div class="text-center" ng-show="vm.noOfPages > 1">

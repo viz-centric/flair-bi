@@ -3,7 +3,7 @@
 
     angular
         .module('flairbiApp')
-        .constant('COMPARISIONS', [{opt:'==',value:'Equal'},{opt:'!=',value:'Not Equal'},
-        	{opt:'>',value:'Greater Than'},{opt:'<',value:'Less Than'},{opt:'>=',value:'Greater Than or Equal To'},{opt:'<=',value:'Less Than or Equal To'}]
+        .constant('COMPARISIONS', [{opt:'EQ',value:'Equal'},{opt:'NEQ',value:'Not Equal'},
+        	{opt:'GT',value:'Greater Than'},{opt:'LT',value:'Less Than'},{opt:'GTE',value:'Greater Than or Equal To'},{opt:'LTE',value:'Less Than or Equal To'}]
         );
 })();

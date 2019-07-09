@@ -337,6 +337,12 @@
             getFeatures(vm.datasource.id);
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
+
+        function getHavingDTO(){
+            var having= {featureName:vm.condition.featureName,value:vm.condition.featureName,comparatorType:vm.condition.comparatorType};
+            var havings=[];
+            havings.push(having);
+        }
 }
 })();
 

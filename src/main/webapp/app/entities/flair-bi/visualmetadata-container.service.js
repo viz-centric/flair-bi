@@ -14,7 +14,6 @@
 
     function VisualMetadataContainer(VisualWrap,$rootScope) {
         var visualMetadataContainer = [];
-        var counter=0;
 
         return {
             add: add,
@@ -24,11 +23,7 @@
             getOne: getOne,
             getOneVBuildId:getOneVBuildId,
             clear: clear,
-            update:update,
-            setCounterToLast:setCounterToLast,
-            increamentCounter : increamentCounter,
-            resetCounter : resetCounter,
-            isLastContainer: isLastContainer
+            update:update
         };
 
         /**
@@ -161,25 +156,7 @@
          */
         function clear() {
             visualMetadataContainer = [];
-            counter=0;
             return visualMetadataContainer;
-        }
-
-        function setCounterToLast(){
-            counter=visualMetadataContainer.length-1;
-        }
-
-        function increamentCounter(){
-            counter>visualMetadataContainer.length-1?counter=0:counter++;
-        }
-
-        function resetCounter(){
-            counter=0;
-            angular.element("#loader-spinner").hide();
-        }
-
-        function isLastContainer(){
-            return visualMetadataContainer.length-1===counter?true:false;
         }
     }
 })();

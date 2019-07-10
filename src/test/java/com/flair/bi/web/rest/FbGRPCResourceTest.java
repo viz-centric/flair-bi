@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.FbiEngineDTO;
 import com.project.bi.query.dto.QueryDTO;
 import org.junit.Before;
@@ -24,11 +25,14 @@ public class FbGRPCResourceTest {
     @Mock
     private GrpcQueryService grpcQueryService;
 
+    @Mock
+    SchedulerService schedulerService;
+
     private FbGRPCResource resource;
 
     @Before
     public void setUp() {
-        resource = new FbGRPCResource(grpcQueryService);
+        resource = new FbGRPCResource(grpcQueryService,schedulerService);
     }
 
     @Test

@@ -12,9 +12,9 @@
             }
         });
 
-    notificationSetController.$inject = ['$scope', '$state', 'alertsService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'Visualmetadata', 'VisualizationUtils','visualizationRenderService','VisualWrap'];
+    notificationSetController.$inject = ['$scope', '$state', 'alertsService', 'stompClientService', 'AuthServerProvider','schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils','visualizationRenderService','VisualWrap'];
 
-    function notificationSetController($scope, $state, alertsService, stompClientService, AuthServerProvider, schedulerService, Visualmetadata, VisualizationUtils, visualizationRenderService,VisualWrap) {
+    function notificationSetController($scope, $state, alertsService, stompClientService, AuthServerProvider,schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService,VisualWrap) {
         var vm = this;
         vm.pageSize = 5;
         vm.setPage = setPage;
@@ -49,7 +49,7 @@
 
         function getSchedulerReportsAndEngineData(pageSize, page) {
             index = 0;
-            schedulerService.getSchedulerReportsAndEngineData(pageSize, page);
+            proxyGrpcService.getSchedulerReportsAndEngineData(pageSize, page);
         }
 
         function onGetReleaseAlertsError(error) {

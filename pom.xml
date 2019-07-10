@@ -1299,7 +1299,7 @@
                                     <name>flairbi/${project.artifactId}</name>
                                     <build>
                                         <tags>
-                                            <tag>v${project.version}.{revision}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
                                     </build>
@@ -1308,7 +1308,7 @@
                                     <name>flairbi/flair-couchdb</name>
                                     <build>
                                         <tags>
-                                            <tag>v${project.version}.{revision}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
                                     </build>
@@ -1317,7 +1317,7 @@
                                     <name>flairbi/flair-pgsql</name>
                                     <build>
                                         <tags>
-                                            <tag>v${project.version}.{revision}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>
                                     </build>

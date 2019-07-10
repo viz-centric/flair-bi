@@ -1301,6 +1301,7 @@
                                         <tags>
                                             <tag>master-latest</tag>
                                             <tag>v${project.version}</tag>
+                                            <tag>${DOCKER_TAG:latest}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
                                     </build>
@@ -1311,6 +1312,7 @@
                                         <tags>
                                             <tag>master-latest</tag>
                                             <tag>v${project.version}</tag>
+                                            <tag>${DOCKER_TAG:latest}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
                                     </build>
@@ -1321,6 +1323,7 @@
                                         <tags>
                                             <tag>master-latest</tag>
                                             <tag>v${project.version}</tag>
+                                            <tag>${DOCKER_TAG:latest}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>
                                     </build>

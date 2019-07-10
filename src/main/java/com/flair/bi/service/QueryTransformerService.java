@@ -4,6 +4,7 @@ import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.messages.Query;
 import com.google.gson.Gson;
+import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
 import com.project.bi.query.expression.condition.ConditionExpression;
@@ -68,6 +69,10 @@ public class QueryTransformerService {
             builder.setUserId(sanitize(userId));
         }
 
+        if (queryDTO.getHaving().size() > 0) {
+            builder.addAllHaving(toHaving(queryDTO.getHaving(), features));
+        }
+
         queryDTO.getOrders().forEach(sortDTO -> builder.addOrders(Query.SortHolder.newBuilder()
                 .setDirectionValue(getDirectionValue(sortDTO.getDirection().ordinal()))
                 .setFeatureName(sanitize(sortDTO.getFeatureName()))
@@ -84,6 +89,16 @@ public class QueryTransformerService {
             );
         });
         return builder.build();
+    }
+
+    private List<Query.HavingHolder> toHaving(List<HavingDTO> having, Map<String, Feature> features) {
+        return having.stream()
+                .map(h -> Query.HavingHolder.newBuilder()
+                        .setFeatureName(transformFieldNameOrSanitize(features, h.getFeatureName()))
+                        .setValue(sanitize(h.getValue()))
+                        .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     private List<String> transformFieldNames(List<String> fields, Map<String, Feature> features) {

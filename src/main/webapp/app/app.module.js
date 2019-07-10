@@ -99,6 +99,9 @@
         // possible values grpc and http
         $rootScope.vizualizationServiceMode = "grpc";
 
+        $rootScope.isThresholdAlert = false;
+        $rootScope.ThresholdViz = {};
+
         //toaster configurations
         toastr.options = {
           "closeButton": true,

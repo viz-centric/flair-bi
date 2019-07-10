@@ -4,7 +4,7 @@ services:
         networks:
         - flair-network
         container_name: flairbi
-        image: flairbi/flairbi:latest
+        image: flairbi/flairbi:${TAG}
         environment:
         - CONFIG_URI=http://flair-registry:8761
         - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
@@ -20,7 +20,7 @@ services:
         - 8080:8080
         - 5005:5005
     flair-bi-pgsql:
-        image: flairbi/flair-pgsql:latest
+        image: flairbi/flair-pgsql:${TAG}
         ports:
         - 5432:5432
         environment:
@@ -30,7 +30,7 @@ services:
         networks:
         - flair-network
     flair-couchdb:
-        image: flairbi/flair-couchdb
+        image: flairbi/flair-couchdb:${TAG}
         container_name: flair-couchdb
         labels:
             purpose: View store

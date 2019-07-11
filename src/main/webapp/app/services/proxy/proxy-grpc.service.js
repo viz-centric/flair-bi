@@ -35,9 +35,14 @@
             );
         }
 
+        function getSchedulerReportsAndEngineData(pageSize,page) {
+            stompClientService.send('/flair-ws/fbi-engine-grpc/scheduled-reports/'+pageSize+'/'+page,{});
+        }
+
         return {
             forwardCall: forwardCall,
-            queryAll: queryAll
+            queryAll: queryAll,
+            getSchedulerReportsAndEngineData:getSchedulerReportsAndEngineData
         };
     }
 })();

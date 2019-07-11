@@ -26,6 +26,7 @@
         visual.getSharePath = getSharePath;
         visual.nextFieldDimension = nextFieldDimension;
         visual.nextFieldMeasure = nextFieldMeasure;
+        visual.constructMeasureField=constructMeasureField;
         return visual;
     }
 

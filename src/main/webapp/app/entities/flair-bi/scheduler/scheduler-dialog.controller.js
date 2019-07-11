@@ -84,7 +84,7 @@
                 getScheduleReport(visualMetaData.id);
                 getFeatures(datasource.id);
                 vm.datasource= datasource;
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);     
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
@@ -219,11 +219,17 @@
         }
 
         function buildQueryDTO(visualMetaData){
-            return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
+            var query=visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
+            if(vm.scheduleObj.hasThresholdAlert){
+                query.having=getHavingDTO();
+                return query;
+            }else{
+                return query;
+            }
         }
 
         function schedule() {
-            vm.isSaving = true;
+            //vm.isSaving = true;
             setScheduledData();
              schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                 vm.isSaving = false;
@@ -246,6 +252,7 @@
         function setScheduledData(){
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
+            getHavingDTO();
         }
 
         function openCalendar (date) {
@@ -338,11 +345,21 @@
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 
-        function getHavingDTO(){
-            var having= {featureName:vm.condition.featureName,value:vm.condition.featureName,comparatorType:vm.condition.comparatorType};
-            var havings=[];
-            havings.push(having);
-        }
+        // function getHavingDTO(){
+        //     var having=[];
+        //     var havingFuntion=getMeasureField();
+        //     var havingDTO= {featureName:vm.condition.featureName,value:vm.condition.featureName,comparatorType:vm.condition.comparatorType};
+        //     having.push(havingDTO);
+        //     return having;
+        // }
+
+        // function getMeasureField(){
+        //     vm.visualMetaData.filter(function(item) {
+        //     if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
+        //         return vm.visualMetaData.constructMeasureField(item);
+        //     }
+        //     });
+        // }
 }
 })();
 

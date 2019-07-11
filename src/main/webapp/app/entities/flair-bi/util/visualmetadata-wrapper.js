@@ -26,7 +26,7 @@
         visual.getSharePath = getSharePath;
         visual.nextFieldDimension = nextFieldDimension;
         visual.nextFieldMeasure = nextFieldMeasure;
-        visual.constructMeasureField=constructMeasureField;
+        visual.constructHavingField=constructHavingField;
         return visual;
     }
 
@@ -246,6 +246,16 @@
                 field: fieldMeasure.feature.definition,
                 agg: false
             };
+        }
+    }
+
+    function constructHavingField(fieldMeasure){
+        var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
+        if (agg !== null && agg !== 'NONE') {
+            return agg + '(' + fieldMeasure.feature.definition + ')';
+        } else {
+
+            return null;
         }
     }
 

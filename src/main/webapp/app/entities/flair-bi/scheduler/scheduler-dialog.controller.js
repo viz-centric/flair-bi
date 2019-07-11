@@ -229,9 +229,9 @@
         }
 
         function schedule() {
-            //vm.isSaving = true;
+            vm.isSaving = true;
             setScheduledData();
-             schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
+            schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                 vm.isSaving = false;
                 var info = {
                     text: success.data.message,
@@ -252,7 +252,7 @@
         function setScheduledData(){
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
-            getHavingDTO();
+            vm.scheduleObj.queryDTO.having=getHavingDTO();
         }
 
         function openCalendar (date) {
@@ -345,21 +345,23 @@
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 
-        // function getHavingDTO(){
-        //     var having=[];
-        //     var havingFuntion=getMeasureField();
-        //     var havingDTO= {featureName:vm.condition.featureName,value:vm.condition.featureName,comparatorType:vm.condition.comparatorType};
-        //     having.push(havingDTO);
-        //     return having;
-        // }
+        function getHavingDTO(){
+            var having=[];
+            var havingFuntion=getMeasureField();
+            var havingDTO= {featureName:havingFuntion,value:vm.condition.value,comparatorType:vm.condition.compare.opt};
+            having.push(havingDTO);
+            return having;
+        }
 
-        // function getMeasureField(){
-        //     vm.visualMetaData.filter(function(item) {
-        //     if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
-        //         return vm.visualMetaData.constructMeasureField(item);
-        //     }
-        //     });
-        // }
+        function getMeasureField(){
+            var aggFunctionField={};
+            vm.visualMetaData.fields.filter(function(item) {
+                if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
+                    aggFunctionField=vm.visualMetaData.constructHavingField(item);
+                }
+            });
+            return aggFunctionField;
+        }
 }
 })();
 

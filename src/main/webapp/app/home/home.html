@@ -366,7 +366,7 @@
             <div id="release-container" class="release-container" ng-show="vm.alertTab =='releases'">
                 <release-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts" />
             </div>
-            <div id="notification-container" class="notification-container" ng-show="vm.alertTab =='notifications'">
+            <div id="notification-container" class="notification-container" alert="vm.alertTab" ng-show="vm.alertTab =='notifications'">
                <notification-set-component  />
             </div>
         </div>

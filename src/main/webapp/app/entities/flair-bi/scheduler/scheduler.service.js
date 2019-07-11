@@ -10,7 +10,6 @@
     function schedulerService($http) {
         var service = {
             scheduleReport: scheduleReport,
-            getSchedulerReportsAndEngineData:getSchedulerReportsAndEngineData,
             getScheduledReportsCount:getScheduledReportsCount,
             getScheduleReport:getScheduleReport,
             cancelScheduleReport:cancelScheduleReport,
@@ -28,13 +27,6 @@
                 url: 'api/schedule',
                 method: 'POST',
                 data: body
-            });
-        }
-
-        function getSchedulerReportsAndEngineData(pageSize,page) {
-            $http({
-                url: 'api/schedule/reports/engine/'+pageSize+'/'+page,
-                method: 'GET'
             });
         }
 

@@ -66,7 +66,8 @@
             visualizationRenderService.setMetaData(
                 vm.data,
                 vm.data.data,
-                contentId
+                contentId,
+                true
             );
         }
     }

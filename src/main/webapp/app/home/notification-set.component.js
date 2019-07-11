@@ -12,11 +12,11 @@
             }
         });
 
-    notificationSetController.$inject = ['$scope', '$state', 'alertsService', 'stompClientService', 'AuthServerProvider','schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils','visualizationRenderService','VisualWrap'];
+    notificationSetController.$inject = ['$scope', '$state', 'alertsService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
 
-    function notificationSetController($scope, $state, alertsService, stompClientService, AuthServerProvider,schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService,VisualWrap) {
+    function notificationSetController($scope, $state, alertsService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
         var vm = this;
-        vm.pageSize = 5;
+        vm.pageSize = 3;
         vm.setPage = setPage;
         vm.nextPage = nextPage;
         vm.prevPage = prevPage;
@@ -90,7 +90,6 @@
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function (frame) {
-                    vm.pagedItems = [];
                     stompClientService.subscribe("/user/exchange/scheduledReports", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
@@ -106,16 +105,21 @@
         }
 
         function onExchangeMetadata(data) {
+            vm.visualmetadata = [];
             var metaData = JSON.parse(data.body);
             Visualmetadata.get({
                 id: metaData.report_line_item.visualizationid
-            },function(v){
-                v.data=JSON.parse(metaData.queryResponse);
+            }, function (v) {
+                v.data = JSON.parse(metaData.queryResponse);
+                v.build_url = metaData.report.build_url;
+                v.share_link = metaData.report.share_link;
+                v.comment = metaData.report.mail_body
+
                 vm.visualmetadata.push(new VisualWrap(v));
             });
 
         }
-
+    
 
         function getScheduledReportsCount() {
             schedulerService.getScheduledReportsCount().then(function (result) {

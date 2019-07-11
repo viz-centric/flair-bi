@@ -107,7 +107,7 @@
         }
 
         function getScheduledReports(){
-            proxyGrpcService.getSchedulerReportsAndEngineData(5,0);
+            proxyGrpcService.getSchedulerReportsAndEngineData(3,0);
         }
 
         function register() {

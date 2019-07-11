@@ -21,8 +21,8 @@ services:
         - 5005:5005
     flair-bi-pgsql:
         image: flairbi/flair-pgsql:${TAG}
-        ports:
-        - 5432:5432
+        # ports:
+        # - 5432:5432
         environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=admin

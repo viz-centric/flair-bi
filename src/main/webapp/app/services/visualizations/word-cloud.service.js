@@ -9,7 +9,7 @@
 
     function GenerateWordCloud(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
@@ -49,7 +49,7 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
                         .data(record.data);
 
                     wordcloud(div[0])

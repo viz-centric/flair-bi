@@ -9,7 +9,7 @@
 
     function GenerateTable(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
@@ -99,7 +99,7 @@
                         .config(getProperties(VisualizationUtils, record))
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
                         .data(record.data);
 
                     table(div[0])

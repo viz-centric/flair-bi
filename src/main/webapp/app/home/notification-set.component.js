@@ -6,7 +6,10 @@
         .component('notificationSetComponent', {
             templateUrl: 'app/home/notification-set.component.html',
             controller: notificationSetController,
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            bindings: {
+                alert: "="
+            }
         });
 
     notificationSetController.$inject = ['$scope', '$state', 'alertsService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
@@ -24,11 +27,22 @@
         vm.pagedItems = [];
         vm.visualmetadata = [];
         var index = 0;
-
+        vm.gridStackOptions = {
+            cellHeight: 60,
+            verticalMargin: 10,
+            disableOneColumnMode: true,
+            animate: true,
+            disableDrag: true,
+            disableResize: true
+        };
+        vm.notificationSupportCharts = ['Pie Chart', 'Line Chart', 'Clustered Vertical Bar Chart', 'Clustered Horizontal Bar Chart',
+            'Stacked Vertical Bar Chart', 'Stacked Horizontal Bar Chart', 'Heat Map', 'Combo Chart', 'Tree Map',
+            'Info-graphic', 'Bullet Chart', 'Doughnut Chart', 'KPI', 'Scatter plot']
         active();
 
         function active() {
             // vm.alerts=vm.releaseAlert.alerts;
+
             // vm.count=vm.releaseAlert.count;
             vm.pagedItems = []
 
@@ -96,23 +110,18 @@
         function onExchangeMetadata(data) {
             vm.visualmetadata = [];
             var metaData = JSON.parse(data.body);
-            var container = d3.select("#notification_accordion");
-
-            var isExpand;
-            angular.element("#notification_accordion").html('');
             Visualmetadata.get({
                 id: metaData.report_line_item.visualizationid
             }, function (v) {
-                v.data = JSON.parse(metaData.queryResponse);
-                v.build_url = metaData.report.build_url;
-                v.share_link = metaData.report.share_link;
-                v.comment = metaData.report.mail_body
-
-                vm.visualmetadata.push(new VisualWrap(v));
+                if (vm.notificationSupportCharts.indexOf(metaData.report_line_item.visualization) >= 0) {
+                    v.data = JSON.parse(metaData.queryResponse);
+                    v.build_url = metaData.report.build_url;
+                    v.share_link = metaData.report.share_link;
+                    v.comment = metaData.report.mail_body
+                    vm.visualmetadata.push(new VisualWrap(v));
+                }
             });
-
         }
-    
 
         function getScheduledReportsCount() {
             schedulerService.getScheduledReportsCount().then(function (result) {

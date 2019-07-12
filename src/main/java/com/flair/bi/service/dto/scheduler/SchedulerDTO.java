@@ -2,6 +2,7 @@ package com.flair.bi.service.dto.scheduler;
 
 import com.project.bi.query.dto.QueryDTO;
 
+
 public class SchedulerDTO {
 
 	private long datasourceid;
@@ -12,11 +13,13 @@ public class SchedulerDTO {
 	private QueryDTO queryDTO;
 	private boolean putcall;
 	private boolean emailReporter;
+	private boolean thresholdAlert;
 	
 	public SchedulerDTO(){}
 	
-	public SchedulerDTO(long datasourceid, ReportDTO report,
-			ReportLineItem report_line_item, AssignReport assign_report, Schedule schedule, QueryDTO queryDTO) {
+	public SchedulerDTO(long datasourceid, ReportDTO report, ReportLineItem report_line_item,
+			AssignReport assign_report, Schedule schedule, QueryDTO queryDTO, boolean putcall, boolean emailReporter,
+			boolean thresholdAlert) {
 		super();
 		this.datasourceid = datasourceid;
 		this.report = report;
@@ -24,6 +27,9 @@ public class SchedulerDTO {
 		this.assign_report = assign_report;
 		this.schedule = schedule;
 		this.queryDTO = queryDTO;
+		this.putcall = putcall;
+		this.emailReporter = emailReporter;
+		this.thresholdAlert = thresholdAlert;
 	}
 
 	public ReportDTO getReport() {
@@ -90,11 +96,20 @@ public class SchedulerDTO {
 		this.emailReporter = emailReporter;
 	}
 
+	public boolean getThresholdAlert() {
+		return thresholdAlert;
+	}
+
+	public void setThresholdAlert(boolean thresholdAlert) {
+		this.thresholdAlert = thresholdAlert;
+	}
+
 	@Override
 	public String toString() {
 		return "SchedulerDTO [datasourceid=" + datasourceid + ", report=" + report + ", report_line_item="
 				+ report_line_item + ", assign_report=" + assign_report + ", schedule=" + schedule + ", queryDTO="
-				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + "]";
+				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + ", thresholdAlert="
+				+ thresholdAlert + "]";
 	}
 	
 }

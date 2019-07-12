@@ -35,7 +35,6 @@
         vm.emailReporterEdit=false;
         vm.scheduleObj={
             "datasourceid":0,
-            "hasThresholdAlert":false,
             "report": {
                 "connection_name": "",
                 "report_name": "",
@@ -67,7 +66,8 @@
                 "end_date": new Date()
             },
             "putcall":false,
-            "emailReporter":false
+            "emailReporter":false,
+            "thresholdAlert":false
           };
         activate();
 
@@ -220,7 +220,7 @@
 
         function buildQueryDTO(visualMetaData){
             var query=visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
-            if(vm.scheduleObj.hasThresholdAlert){
+            if(vm.scheduleObj.thresholdAlert){
                 query.having=getHavingDTO();
                 return query;
             }else{

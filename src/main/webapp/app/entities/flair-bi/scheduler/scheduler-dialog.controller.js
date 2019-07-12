@@ -33,6 +33,12 @@
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
         vm.emailReporterEdit=false;
+        vm.condition={
+            "value":0,
+            "compare":"",
+            "featureName":""
+
+        }
         vm.scheduleObj={
             "datasourceid":0,
             "hasThresholdAlert":false,
@@ -84,6 +90,11 @@
                 getScheduleReport(visualMetaData.id);
                 getFeatures(datasource.id);
                 vm.datasource= datasource;
+                if($rootScope.isThresholdAlert){
+                    vm.scheduleObj.hasThresholdAlert=true;
+                    vm.condition.value=$rootScope.ThresholdViz.measureValue;
+                    vm.condition.featureName=$rootScope.ThresholdViz.measure;
+                }
                 buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
             }else{
                 vm.scheduleObj.emailReporter=true;
@@ -175,11 +186,11 @@
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
             vm.scheduleObj.report.view_name=view.viewName;
             vm.scheduleObj.report.build_url=builUrl(dashboard,view);
-            vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
+          //  vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+          //  vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
             setDimentionsAndMeasures(visualMetaData.fields);
         
         }

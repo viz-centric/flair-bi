@@ -132,7 +132,7 @@
         vm.filtersLength=0;
         vm.changeHeaderColor=changeHeaderColor;
         vm.changeContainerColor=changeContainerColor;
-
+        vm.isThresholdAlert=$rootScope.isThresholdAlert;
 
         
         Principal.identity().then(function (account) {
@@ -436,9 +436,11 @@
             $rootScope.$broadcast("FlairBi:button-toggle", toggleValue);
         }
 
-        function thresholdAlert(toggleValue) {
-            $rootScope.$broadcast("FlairBi:threshold-alert", toggleValue);
+        function thresholdAlert(toggleValue){
+            $rootScope.isThresholdAlert=!toggleValue;
+            vm.isThresholdAlert=!toggleValue;
         }
+
 
         function printAllWidgets() {
             PrintService.printWidgets(

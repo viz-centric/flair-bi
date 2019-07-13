@@ -219,13 +219,13 @@
         }
 
         function buildQueryDTO(visualMetaData){
-            var query=visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
-            if(vm.scheduleObj.thresholdAlert){
-                query.having=getHavingDTO();
-                return query;
-            }else{
-                return query;
-            }
+            return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
+            // if(vm.scheduleObj.thresholdAlert){
+            //     query.having=getHavingDTO();
+            //     return query;
+            // }else{
+            //     return query;
+            // }
         }
 
         function schedule() {
@@ -252,7 +252,8 @@
         function setScheduledData(){
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
-            vm.scheduleObj.queryDTO.having=getHavingDTO();
+            if(vm.scheduleObj.thresholdAlert)
+                vm.scheduleObj.queryDTO.having=getHavingDTO();
         }
 
         function openCalendar (date) {

@@ -18,5 +18,5 @@ public class SchedulerNotificationDTO {
 	private Schedule schedule;
 	private String query;
 	private String queryHaving;
-	private boolean hasThresholdAlert;
+	private boolean thresholdAlert;
 }

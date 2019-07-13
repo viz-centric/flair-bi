@@ -33,6 +33,7 @@
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
         vm.emailReporterEdit=false;
+        vm.condition={};
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -139,9 +140,24 @@
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
+            setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
                 addEmailList(data.assign_report.email_list);
+            }
+        }
+
+        function setHavingDTO(query){
+            if(query.having){
+                vm.scheduleObj.thresholdAlert=true;
+                var feature=vm.features.filter(function(item) {
+                    return query.having[0].featureName.indexOf(item.name)>-1;
+                })[0];
+                vm.condition.featureName=feature.name;
+                vm.condition.value=query.having[0].value;
+                vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
+                    return item.opt===query.having[0].comparatorType;
+                })[0];
             }
         }
 

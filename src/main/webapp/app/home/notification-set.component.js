@@ -52,7 +52,7 @@
 
         function getSchedulerReportsAndEngineData(pageSize, page) {
             index = 0;
-            schedulerService.getSchedulerReportsAndEngineData(pageSize, page);
+            proxyGrpcService.getSchedulerReportsAndEngineData(pageSize, page);
         }
 
         function onGetReleaseAlertsError(error) {
@@ -122,6 +122,7 @@
                 }
             });
         }
+    
 
         function getScheduledReportsCount() {
             schedulerService.getScheduledReportsCount().then(function (result) {

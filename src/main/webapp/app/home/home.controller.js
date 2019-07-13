@@ -6,11 +6,11 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = ['$scope', 'Principal', 'LoginService',
-        '$state', 'Information', 'ViewWatches', 'Views', 'Dashboards','$rootScope','alertsService','screenDetectService','adminListService','AccountDispatch','schedulerService'
+        '$state', 'Information', 'ViewWatches', 'Views', 'Dashboards','$rootScope','alertsService','screenDetectService','adminListService','AccountDispatch','proxyGrpcService'
     ];
 
     function HomeController($scope, Principal, LoginService,
-        $state, Information, ViewWatches, Views, Dashboards,$rootScope,alertsService,screenDetectService,adminListService,AccountDispatch,schedulerService) {
+        $state, Information, ViewWatches, Views, Dashboards,$rootScope,alertsService,screenDetectService,adminListService,AccountDispatch,proxyGrpcService) {
         var vm = this;
 
         vm.account = null;

@@ -95,6 +95,7 @@
         vm.printAllWidgets = printAllWidgets;
 
         vm.editState = editState;
+        vm.thresholdAlert = thresholdAlert;
         vm.filters={};
         vm.toggleFilters=toggleFilters;
         vm.removeFilterTag=removeFilterTag;
@@ -433,6 +434,10 @@
 
         function editState(toggleValue) {
             $rootScope.$broadcast("FlairBi:button-toggle", toggleValue);
+        }
+
+        function thresholdAlert(toggleValue) {
+            $rootScope.$broadcast("FlairBi:threshold-alert", toggleValue);
         }
 
         function printAllWidgets() {

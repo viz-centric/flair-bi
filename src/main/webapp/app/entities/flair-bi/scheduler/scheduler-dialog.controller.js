@@ -91,7 +91,6 @@
                 vm.users=User.query();
                 if(scheduledObj){
                     vm.emailReporterEdit=true;
-                    updateScheduledObj(scheduledObj);
                     getVisualmetadata(scheduledObj);
                 }else{
                     loadDashboards();     
@@ -106,6 +105,9 @@
                 featureType: "MEASURE"
             },function(features){
                 vm.features=features;
+                if(scheduledObj){
+                    updateScheduledObj(scheduledObj);
+                }
             })
         }
 
@@ -115,7 +117,7 @@
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 buildScheduledObject(scheduledObj,vm.visualMetaData);
-                getFeatures(vm.scheduleObj.datasourceid);
+                getFeatures(getDatasourceId(scheduledObj.report.share_link));
             });
         }
 
@@ -236,12 +238,6 @@
 
         function buildQueryDTO(visualMetaData){
             return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
-            // if(vm.scheduleObj.thresholdAlert){
-            //     query.having=getHavingDTO();
-            //     return query;
-            // }else{
-            //     return query;
-            // }
         }
 
         function schedule() {

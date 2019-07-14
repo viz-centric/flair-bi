@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 public class GrpcConnectionServiceTest {
 
     @Mock
-    IGrpcService grpcService;
+    IEngineGrpcService grpcService;
 
     private GrpcConnectionService service;
 

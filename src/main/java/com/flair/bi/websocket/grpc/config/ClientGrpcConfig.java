@@ -20,45 +20,70 @@ import java.util.function.Supplier;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class GrpcConfig {
+public class ClientGrpcConfig {
 
     private final GrpcProperties properties;
 
     private final EurekaClient eurekaClient;
 
-    @Bean
-    public ManagedChannelFactory establishChannel() {
+    @Bean(name = "engineChannelFactory")
+    public ManagedChannelFactory engineChannelFactory() {
+        return createManagedChannelFactory(
+                properties.getServer().getEngineServiceName(),
+                properties.getTls().isEnabled(),
+                properties.getTls().getTrustCertCollectionFile(),
+                properties.getTls().getClientCertChainFile(),
+                properties.getTls().getClientPrivateKeyFile()
+        );
+    }
+
+    @Bean(name = "notificationsChannelFactory")
+    public ManagedChannelFactory notificationsChannelFactory() {
+        return createManagedChannelFactory(
+                properties.getServer().getNotificationsServiceName(),
+                properties.getTls().isEnabled(),
+                properties.getTls().getNotificationsTrustCertCollectionFile(),
+                properties.getTls().getNotificationsClientCertChainFile(),
+                properties.getTls().getNotificationsClientPrivateKeyFile()
+        );
+    }
+
+    private ManagedChannelFactory createManagedChannelFactory(String serviceName,
+                                                              boolean tlsEnabled,
+                                                              String trustCertCollectionFile,
+                                                              String clientCertChainFile,
+                                                              String clientPrivateKeyFile) {
         Supplier<ManagedChannel> dynamicManagedChannel = () -> {
-            log.info("GRPC config: Configuring GRPC message channel {}", properties);
+            log.info("GRPC client config: Configuring GRPC message channel serviceName {} tlsEnabled {} trustCertCollectionFile {} clientCertChainFile {} clientPrivateKeyFile {}",
+                    serviceName, tlsEnabled, trustCertCollectionFile, clientCertChainFile, clientPrivateKeyFile);
 
             final InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka(
-                    properties.getServer().getServiceName(),
-                    false
-            );
+                    serviceName,
+                    false);
 
             final NettyChannelBuilder nettyChannelBuilder = NettyChannelBuilder.forAddress(
-                    properties.getTls().isEnabled() ? instanceInfo.getHostName() : instanceInfo.getIPAddr(),
+                    tlsEnabled ? instanceInfo.getHostName() : instanceInfo.getIPAddr(),
                     instanceInfo.getPort()
             );
 
-            log.info("GRPC config: Hostname {} IP {} port {} secure port {} secure vip {}",
+            log.info("GRPC client config: Hostname {} IP {} port {} secure port {} secure vip {}",
                     instanceInfo.getHostName(), instanceInfo.getIPAddr(), instanceInfo.getPort(), instanceInfo.getSecurePort(),
                     instanceInfo.getSecureVipAddress());
 
-            if (properties.getTls().isEnabled()) {
+            if (tlsEnabled) {
 
                 nettyChannelBuilder.negotiationType(NegotiationType.TLS);
 
-                log.info("GRPC config: GRPC TLS enabled");
+                log.info("GRPC client config: GRPC TLS enabled");
 
                 try {
                     nettyChannelBuilder.sslContext(buildSslContext(
-                            properties.getTls().getTrustCertCollectionFile(),
-                            properties.getTls().getClientCertChainFile(),
-                            properties.getTls().getClientPrivateKeyFile()
+                            trustCertCollectionFile,
+                            clientCertChainFile,
+                            clientPrivateKeyFile
                     ));
                 } catch (SSLException e) {
-                    log.error("GRPC config: error", e);
+                    log.error("GRPC client config: error", e);
                 }
             } else {
                 nettyChannelBuilder.usePlaintext();

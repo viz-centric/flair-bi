@@ -13,7 +13,10 @@ public class GrpcProperties {
 
     @Data
     public static class Server {
+        @Deprecated
         private String serviceName;
+        private String engineServiceName;
+        private String notificationsServiceName;
     }
 
     @Data
@@ -23,6 +26,9 @@ public class GrpcProperties {
         private String clientCertChainFile;
         private String clientPrivateKeyFile;
         private String trustCertCollectionFile;
+        private String notificationsClientCertChainFile;
+        private String notificationsClientPrivateKeyFile;
+        private String notificationsTrustCertCollectionFile;
     }
 
 }

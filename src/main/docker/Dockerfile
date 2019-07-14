@@ -22,6 +22,9 @@ COPY ssl/cert/ca/ca.pem /app/ca.crt
 COPY ssl/certsgen/client.crt /app/clientCertChainFile.crt
 COPY ssl/certsgen/client.pem /app/clientPrivateKeyFile.pem
 COPY ssl/certsgen/ca.crt /app/trustCertCollectionFile.crt
+COPY ssl/notificationscertsgen/client.crt /app/notificationsClientCertChainFile.crt
+COPY ssl/notificationscertsgen/client.pem /app/notificationsClientPrivateKeyFile.pem
+COPY ssl/notificationscertsgen/ca.crt /app/notificationsTrustCertCollectionFile.crt
 
 COPY *.war /app/app.war
 

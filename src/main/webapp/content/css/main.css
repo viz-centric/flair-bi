@@ -2260,9 +2260,47 @@ a:hover, a:focus {
   font-size: 14px;
 }
 
-.permissions-fbibox .fbibox-content .permission-tree .angular-ui-tree-nodes .angular-ui-tree-nodes {
-  padding: 0;
-}
+.notification .comment {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 15px; }
+
+.notification .title {
+  border-bottom: 2px #e1e3e3 solid;
+  padding: 5px;
+  color: #337ab7;
+  background-color: #ededed;
+  font-size: 15px; }
+
+.notification {
+  border: 1px #e1e3e3 solid; }
+
+tags-input .tags {
+  border: 1px solid #e1e3e3;
+  padding: 3px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -webkit-appearance: none; }
+  tags-input .tags.focused {
+    border: 1px solid #439dd3;
+    box-shadow: none;
+    -webkit-box-shadow: none; }
+  tags-input .tags .tag-item {
+    background: #439dd3;
+    border-radius: 13px;
+    border-color: transparent;
+    color: white; }
+    tags-input .tags .tag-item a {
+      color: white !important; }
+    tags-input .tags .tag-item.selected {
+      background: #ED5565; }
+  tags-input .tags .input {
+    font: 13px "open sans"; }
+  tags-input .tags input {
+    width: auto !important; }
 
 .permissions-fbibox .fbibox-content .permission-tree .angular-ui-tree-nodes.first-level>.angular-ui-tree-node {
   margin-bottom: 20px;

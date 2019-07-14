@@ -9,7 +9,7 @@
 
     function GenerateIframe(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
                     var iframeLink=record.metadataVisual.propertyTypes[0].propertyType.defaultValue;
                     d3.select(element[0]).html('')
                     var div = d3.select(element[0]).append('iframe')

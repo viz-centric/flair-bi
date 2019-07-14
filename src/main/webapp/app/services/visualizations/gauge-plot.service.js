@@ -9,7 +9,7 @@
 
     function GenerateGaugePlot(VisualizationUtils, $rootScope, D3Utils) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
@@ -58,7 +58,7 @@
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
                        
-                        .print(false)
+                        .print(isNotification == true ? true : false)
                         .data(record.data);
 
                     gauge(div[0])

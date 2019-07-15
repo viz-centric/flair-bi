@@ -91,7 +91,9 @@
                 vm.users=User.query();
                 if(scheduledObj){
                     vm.emailReporterEdit=true;
+                    getFeatures(getDatasourceId(scheduledObj.report.share_link));
                     getVisualmetadata(scheduledObj);
+                    updateScheduledObj(scheduledObj);
                 }else{
                     loadDashboards();     
                 }
@@ -105,9 +107,6 @@
                 featureType: "MEASURE"
             },function(features){
                 vm.features=features;
-                if(scheduledObj){
-                    updateScheduledObj(scheduledObj);
-                }
             })
         }
 
@@ -117,7 +116,6 @@
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 buildScheduledObject(scheduledObj,vm.visualMetaData);
-                getFeatures(getDatasourceId(scheduledObj.report.share_link));
             });
         }
 
@@ -152,10 +150,7 @@
         function setHavingDTO(query){
             if(query.having){
                 vm.scheduleObj.thresholdAlert=true;
-                var feature=vm.features.filter(function(item) {
-                    return query.having[0].featureName.indexOf(item.name)>-1;
-                })[0];
-                vm.condition.featureName=feature.name;
+                vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
                     return item.opt===query.having[0].comparatorType;

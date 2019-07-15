@@ -752,7 +752,7 @@
 
         /** This should be removed once toggle button is changed to material design */
         function liveState(isLive, v) {
-            if (isLive) {
+            if (!isLive) {
                 var int = $interval(function() {
                     refreshWidget(v);
                 }, 5000);

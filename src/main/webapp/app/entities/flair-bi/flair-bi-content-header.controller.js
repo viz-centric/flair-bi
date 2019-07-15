@@ -432,6 +432,7 @@
         }
 
         function editState(toggleValue) {
+            vm.canEdit=!toggleValue;
             $rootScope.$broadcast("FlairBi:button-toggle", toggleValue);
         }
 

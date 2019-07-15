@@ -188,11 +188,11 @@
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
             vm.scheduleObj.report.view_name=view.viewName;
             vm.scheduleObj.report.build_url=builUrl(dashboard,view);
-            vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
+          //  vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+          //  vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
             setDimentionsAndMeasures(visualMetaData.fields);
         
         }

@@ -92,18 +92,14 @@
             </div>
             <div class="col-md-1 hidden-sm hidden-xs visual-edit">
                 <div class="options-2" ng-if="!vm.configuration.readOnly">
-                    <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
-                        <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
-                            <svg class="alarm-icon-on">
-                                <use xlink:href="#alarm" />
-                            </svg>
-                        </span>
-                        <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="!vm.isThresholdAlert">
-                            <svg class="alarm-icon-off">
-                                <use xlink:href="#alarm" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
+                    <div class="viz-edit-button" uib-tooltip="Threshold Alert" tooltip-placement="bottom">
+                        <md-switch class="md-primary edit" ng-if="vm.canEdit" md-no-ink aria-label="Edit button"
+                            ng-model="thresholdAlert" ng-change="vm.thresholdAlert(thresholdAlert)">
+                        </md-switch>
+                        <md-switch class="md-primary edit" ng-if="!vm.canEdit" disabled md-no-ink
+                            aria-label="Edit button">
+                        </md-switch>
+                    </div>
                 </div>
             </div>
             <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">

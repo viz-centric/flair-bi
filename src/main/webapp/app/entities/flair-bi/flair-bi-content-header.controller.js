@@ -132,8 +132,6 @@
         vm.filtersLength=0;
         vm.changeHeaderColor=changeHeaderColor;
         vm.changeContainerColor=changeContainerColor;
-        vm.isThresholdAlert=$rootScope.isThresholdAlert;
-
         
         Principal.identity().then(function (account) {
                 vm.account = account;
@@ -402,8 +400,7 @@
         }
 
         function toggleFilters($event){
-            $event.stopPropagation();
-            $($event.currentTarget).children( ".filter-drop-downs" ).show();
+            $rootScope.$broadcast("FlairBi:threshold-alert", toggleValue);
         }
 
         function removeFilterTag($event,val,list,key){

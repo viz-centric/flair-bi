@@ -4103,12 +4103,6 @@ jhi-alert .alerts .alert-danger {
       text-align: center; }
     .flairbi-content-header .apply-bookmarks {
       justify-content: center; } }
-  .flairbi-content-header .alarm-icon-off {
-    fill: #676a6c !important;
-    stroke: #676a6c !important; }
-  .flairbi-content-header .alarm-icon-on {
-    fill: #439dd3 !important;
-    stroke: #439dd3 !important; }
 
 .flairbi-content-header-fullscreen {
   padding: 0;

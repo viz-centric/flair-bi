@@ -105,9 +105,9 @@
                 <br/>
                 <div class="row container center">
                     <div class="col-xs-8">
-                        <label class="flair-checkbox" ng-click="vm.scheduleObj.hasThresholdAlert=!vm.scheduleObj.hasThresholdAlert">
-                            <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.scheduleObj.hasThresholdAlert,'fa-square-o-unchecked':!vm.scheduleObj.hasThresholdAlert} "></i>
-                            <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.scheduleObj.hasThresholdAlert,'fa-check-square-o-unchecked':!vm.scheduleObj.hasThresholdAlert}"></i>
+                        <label class="flair-checkbox" ng-click="vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert">
+                            <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.scheduleObj.thresholdAlert,'fa-square-o-unchecked':!vm.scheduleObj.thresholdAlert} "></i>
+                            <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.scheduleObj.thresholdAlert,'fa-check-square-o-unchecked':!vm.scheduleObj.thresholdAlert}"></i>
                         </label>
                         <label class="control-label threshold-alert-label">
                             &nbsp;&nbsp;Threshold Alert 
@@ -115,7 +115,7 @@
                     </div>
                 </div>
                 <br/>
-                <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.hasThresholdAlert">
+                <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.thresholdAlert">
                     <div class="col-xs-3">
                         <label class="control-label">
                             Measure 
@@ -149,7 +149,7 @@
                     <input type="text" class="form-control condition-val" ng-model="vm.condition.value" />
                     </div>
                 </div>
-                <br ng-if="vm.scheduleObj.hasThresholdAlert" />
+                <br ng-if="vm.scheduleObj.thresholdAlert" />
                 <div class="row container">
                     <div class="col-xs-8">
                         <label class="control-label">

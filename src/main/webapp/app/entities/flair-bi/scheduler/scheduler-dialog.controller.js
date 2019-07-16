@@ -95,7 +95,7 @@
                     getVisualmetadata(scheduledObj);
                     updateScheduledObj(scheduledObj);
                 }else{
-                    loadDashboards();     
+                    loadDashboards(); 
                 }
 
             }

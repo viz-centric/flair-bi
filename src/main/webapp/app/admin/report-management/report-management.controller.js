@@ -134,7 +134,7 @@
             getScheduledReports(user,vm.reportName,vm.fromDate,vm.toDate);
         }
 
-        function updateReport(scheduledObj){
+        function openScheduledReport(scheduledObj){
             $uibModal
             .open({
                 templateUrl:
@@ -161,6 +161,20 @@
                     }
                 }
             });
+        }
+
+        function updateReport(visualizationid){
+            schedulerService.getScheduleReport(visualizationid).then(function (success) {
+                if(success.status==200){
+                    openScheduledReport(success.data);
+                }
+            }).catch(function (error) {
+                var info = {
+                    text: error.data.message,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            }); 
         }
 
         function searchUser(e,searchedText) {

@@ -9,8 +9,8 @@
 
     function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
-                function getProperties(VisualizationUtils, record) {
+            build: function (record, element, panel, isNotification) {
+                function getProperties(VisualizationUtils, record, isNotification) {
                     var result = {};
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
@@ -81,12 +81,14 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
                         .data(record.data);
 
-                        heatmap(div[0])
+                    heatmap(div[0])
+                    if (!isNotification) {
+                        $rootScope.updateWidget[record.id] = heatmap;
+                    }
 
-                    $rootScope.updateWidget[record.id] = heatmap;
                 }
             }
         }

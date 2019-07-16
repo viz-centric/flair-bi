@@ -127,7 +127,6 @@
         }
 
         function save() {
-            VisualMetadataContainer.setCounterToLast();
             vm.isSaving = true;
             if (vm.visual.id) {
                 Visualmetadata.update(

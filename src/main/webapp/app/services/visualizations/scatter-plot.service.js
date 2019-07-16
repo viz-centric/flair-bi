@@ -9,7 +9,7 @@
 
     function GenerateScatterPlot(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
@@ -93,7 +93,7 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
                         .data(record.data);
 
                     scatter(div[0])

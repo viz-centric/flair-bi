@@ -105,7 +105,7 @@
         }
 
 
-        function createWidget(visualMetadata,contentId) {
+        function createWidget(visualMetadata,contentId,isNotification) {
             var widgetId = '#' + contentId;
             var el = $(widgetId);
             var width = el.width(),
@@ -116,17 +116,18 @@
             widgets[vm.widget].build(
                 visualMetadata,
                 el,
-                panel
+                panel,
+                isNotification
             );
         }
 
-        function setMetaData(v, metadata, contentId) {
+        function setMetaData(v, metadata, contentId,isNotification) {
             if(v){
                 addWidgets();
                 vm.data = v;
                 vm.data.data = metadata.data;
                 vm.widget = v.metadataVisual.functionname;
-                createWidget(vm.data, contentId);
+                createWidget(vm.data, contentId,isNotification);
             }
         }
 

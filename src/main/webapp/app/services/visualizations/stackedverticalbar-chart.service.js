@@ -9,7 +9,7 @@
 
     function GenerateStackedverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
@@ -73,6 +73,15 @@
                         var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
                     }
+                    if (isNotification) {
+                        result['showXaxis'] = false;
+                        result['showYaxis'] = false;
+                        result['isFilterGrid'] = false;
+                        result['showLegend'] = false;
+                        result['showGrid'] = false;
+                        result['showXaxisLabel'] = false;
+                        result['showYaxisLabel'] = false;
+                    }
                     return result;
                 }
 
@@ -96,12 +105,14 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     stackedverticalbar(div[0])
-
-                    $rootScope.updateWidget[record.id] = stackedverticalbar;
+                    if (!isNotification) {
+                        $rootScope.updateWidget[record.id] = stackedverticalbar;
+                    }
                 }
             }
         }

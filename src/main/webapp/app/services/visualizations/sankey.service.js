@@ -51,7 +51,9 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var sankey = $rootScope.updateWidget[record.id];
-                        sankey.update(record.data);
+                        sankey
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     $(element[0]).html('')

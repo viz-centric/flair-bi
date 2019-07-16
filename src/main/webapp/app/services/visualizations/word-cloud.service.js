@@ -37,7 +37,9 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var wordcloud = $rootScope.updateWidget[record.id];
-                        wordcloud.update(record.data);
+                        wordcloud
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     $(element[0]).html('')

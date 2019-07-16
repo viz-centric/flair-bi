@@ -124,8 +124,8 @@
                             <ui-select-match placeholder="Search Measure">
                                 {{vm.condition.featureName}}
                             </ui-select-match>
-                            <ui-select-choices repeat="feature.name as feature in vm.features | filter: $select.search track by feature.id">
-                                <div ng-bind="feature.name"></div>
+                            <ui-select-choices repeat="feature in vm.features | filter: $select.search track by feature">
+                                <div ng-bind="feature"></div>
                             </ui-select-choices>
                         </ui-select>
                     </div>

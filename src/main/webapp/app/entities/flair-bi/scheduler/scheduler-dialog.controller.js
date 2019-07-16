@@ -35,6 +35,7 @@
         vm.emailReporterEdit=false;
         vm.toggleThresholdAlert=toggleThresholdAlert;
         vm.condition={};
+        vm.features=[];
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -84,7 +85,7 @@
                 vm.dashboard=dashboard;
                 vm.view=view;
                 getScheduleReport(visualMetaData.id);
-                getFeatures(datasource.id);
+                getThresholdMeasureList(visualMetaData.fields);
                 vm.datasource= datasource;
                 buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);     
             }else{
@@ -92,7 +93,6 @@
                 vm.users=User.query();
                 if(scheduledObj){
                     vm.emailReporterEdit=true;
-                    getFeatures(getDatasourceId(scheduledObj.report.share_link));
                     getVisualmetadata(scheduledObj);
                     updateScheduledObj(scheduledObj);
                 }else{
@@ -102,20 +102,12 @@
             }
         }
 
-        function getFeatures(datasourceId){
-            Features.query({
-                datasource: datasourceId,
-                featureType: "MEASURE"
-            },function(features){
-                vm.features=features;
-            })
-        }
-
         function getVisualmetadata(scheduledObj){
             Visualmetadata.get({
                 id: scheduledObj.report_line_item.visualizationid
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
+                getThresholdMeasureList(vm.visualMetaData.fields);
                 buildScheduledObject(scheduledObj,vm.visualMetaData);
             });
         }
@@ -350,7 +342,7 @@
             vm.visualMetaData = new VisualWrap(visualMetaData);
             vm.datasource=vm.dashboard.dashboardDatasource;
             getScheduleReport(visualMetaData.id);
-            getFeatures(vm.datasource.id);
+            getThresholdMeasureList(visualMetaData.fields);
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
         }
 
@@ -375,6 +367,15 @@
         function toggleThresholdAlert(){
             vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
             vm.condition={};
+        }
+
+        function getThresholdMeasureList(fields){
+            fields.filter(function(item) {
+                if(item.feature.featureType === "MEASURE"){
+                    vm.features.push(item.feature.definition);
+                }
+            });
+            return vm.features;
         }
 }
 })();

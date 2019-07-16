@@ -96,7 +96,7 @@
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label">
-                                Comments
+                                Comments*
                             </label>
                             <textarea ng-required="vm.scheduleObj.report.mail_body==null" class="form-control" ng-model="vm.scheduleObj.report.mail_body" ></textarea>
                         </div>
@@ -105,7 +105,7 @@
                 <br/>
                 <div class="row container center">
                     <div class="col-xs-8">
-                        <label class="flair-checkbox" ng-click="vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert">
+                        <label class="flair-checkbox" ng-click="vm.toggleThresholdAlert()">
                             <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.scheduleObj.thresholdAlert,'fa-square-o-unchecked':!vm.scheduleObj.thresholdAlert} "></i>
                             <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.scheduleObj.thresholdAlert,'fa-check-square-o-unchecked':!vm.scheduleObj.thresholdAlert}"></i>
                         </label>
@@ -118,9 +118,9 @@
                 <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.thresholdAlert">
                     <div class="col-xs-3">
                         <label class="control-label">
-                            Measure 
+                            Measure*
                         </label>
-                        <ui-select class="condition-val" ng-model="vm.condition.featureName">
+                        <ui-select class="condition-val" ng-required="vm.scheduleObj.thresholdAlert && !vm.condition.featureName" ng-model="vm.condition.featureName">
                             <ui-select-match placeholder="Search Measure">
                                 {{vm.condition.featureName}}
                             </ui-select-match>
@@ -131,9 +131,9 @@
                     </div>
                     <div class="col-xs-3">
                         <label class="control-label">
-                            Compare
+                            Compare*
                         </label>
-                        <ui-select  class="condition-val" ng-model="vm.condition.compare" theme="bootstrap">
+                        <ui-select ng-required="vm.scheduleObj.thresholdAlert && !vm.condition.compare.opt" class="condition-val" ng-model="vm.condition.compare" theme="bootstrap">
                             <ui-select-match placeholder="Compare">
                                 {{vm.condition.compare.value}}
                             </ui-select-match>
@@ -144,16 +144,16 @@
                     </div>
                     <div class="col-xs-2">
                         <label class="control-label">
-                            Threshold
+                            Threshold*
                         </label>
-                    <input type="text" class="form-control condition-val" ng-model="vm.condition.value" />
+                    <input ng-required="vm.scheduleObj.thresholdAlert && !vm.condition.value" type="text" class="form-control condition-val" ng-model="vm.condition.value" />
                     </div>
                 </div>
                 <br ng-if="vm.scheduleObj.thresholdAlert" />
                 <div class="row container">
                     <div class="col-xs-8">
                         <label class="control-label">
-                            Frequency 
+                            Frequency*
                         </label>
                         <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
                     </div>

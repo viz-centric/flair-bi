@@ -33,6 +33,7 @@
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
         vm.emailReporterEdit=false;
+        vm.toggleThresholdAlert=toggleThresholdAlert;
         vm.condition={};
         vm.scheduleObj={
             "datasourceid":0,
@@ -369,6 +370,11 @@
                 }
             });
             return aggFunctionField;
+        }
+
+        function toggleThresholdAlert(){
+            vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
+            vm.condition={};
         }
 }
 })();

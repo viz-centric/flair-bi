@@ -149,8 +149,8 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
-            registerThresholdAlert();
             openSchedulerDialogForThreshold();
+            registerThresholdAlert();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
             loadDimensions();
@@ -590,7 +590,6 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-
         function registerThresholdAlert() {
             var unsubscribe = $scope.$on("FlairBi:threshold-alert", function (
                 event,
@@ -607,7 +606,7 @@
             });
             $scope.$on("$destroy", unsubscribe);
         }
-
+        
         function openSchedulerDialogForThreshold() {
             var unsubscribe = $scope.$on("FlairBi:threshold-dialog", function (
                 event,

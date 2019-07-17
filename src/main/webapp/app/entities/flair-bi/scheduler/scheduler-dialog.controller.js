@@ -229,31 +229,46 @@
         }
 
         function schedule() {
-            vm.isSaving = true;
-            setScheduledData();
-            schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
-                vm.isSaving = false;
+            if(validateAndSetHaving()){
+                vm.isSaving = true;
+                setScheduledData();
+                schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
+                    vm.isSaving = false;
+                    var info = {
+                        text: success.data.message,
+                        title: "Saved"
+                    }
+                    $rootScope.showSuccessToast(info);
+                    $uibModalInstance.close(vm.scheduleObj);
+                }).catch(function (error) {
+                    vm.isSaving = false;
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+            }else{
                 var info = {
-                    text: success.data.message,
-                    title: "Saved"
-                }
-                $rootScope.showSuccessToast(info);
-                $uibModalInstance.close(vm.scheduleObj);
-            }).catch(function (error) {
-                vm.isSaving = false;                
-                var info = {
-                    text: error.data.message,
+                    text: "Please select aggregate function from settings",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
-            });
+            }
         }
 
         function setScheduledData(){
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
-            if(vm.scheduleObj.thresholdAlert)
+        }
+
+        function validateAndSetHaving(){
+            var flag=true;
+            if(vm.scheduleObj.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
+                vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
+            }
+            return flag;
         }
 
         function openCalendar (date) {

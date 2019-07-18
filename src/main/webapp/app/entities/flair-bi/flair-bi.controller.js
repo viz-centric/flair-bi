@@ -150,7 +150,6 @@
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
             openSchedulerDialogForThreshold();
-            registerThresholdAlert();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
             loadDimensions();
@@ -590,23 +589,6 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function registerThresholdAlert() {
-            var unsubscribe = $scope.$on("FlairBi:threshold-alert", function (
-                event,
-                result
-            ) {
-                editMode = result;
-                if (editMode) {
-                    $(".grid-stack-item").css('opacity', 0.6)
-                    $rootScope.isThresholdAlert = true;
-                } else {
-                    $(".grid-stack-item").css('opacity', 1)
-                    $rootScope.isThresholdAlert = false;
-                }
-            });
-            $scope.$on("$destroy", unsubscribe);
-        }
-        
         function openSchedulerDialogForThreshold() {
             var unsubscribe = $scope.$on("FlairBi:threshold-dialog", function (
                 event,

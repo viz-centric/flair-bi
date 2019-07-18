@@ -132,6 +132,8 @@
         vm.filtersLength=0;
         vm.changeHeaderColor=changeHeaderColor;
         vm.changeContainerColor=changeContainerColor;
+        vm.isThresholdAlert=$rootScope.isThresholdAlert;
+
         
         Principal.identity().then(function (account) {
                 vm.account = account;

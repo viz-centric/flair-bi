@@ -87,7 +87,12 @@
                 getScheduleReport(visualMetaData.id);
                 getThresholdMeasureList(visualMetaData.fields);
                 vm.datasource= datasource;
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);     
+                if($rootScope.isThresholdAlert){
+                    vm.scheduleObj.hasThresholdAlert=true;
+                    vm.condition.value=$rootScope.ThresholdViz.measureValue;
+                    vm.condition.featureName=$rootScope.ThresholdViz.measure;
+                }
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
@@ -185,7 +190,7 @@
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-           vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
             setDimentionsAndMeasures(visualMetaData.fields);
         
         }

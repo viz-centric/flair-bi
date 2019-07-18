@@ -90,7 +90,22 @@
                     </div>
                 </div>
             </div>
-           
+            <div class="col-md-1 hidden-sm hidden-xs visual-edit">
+                <div class="options-2" ng-if="!vm.configuration.readOnly">
+                    <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
+                        <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
+                            <svg class="alarm-icon-on">
+                                <use xlink:href="#alarm" />
+                            </svg>
+                        </span>
+                        <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="!vm.isThresholdAlert">
+                            <svg class="alarm-icon-off">
+                                <use xlink:href="#alarm" />
+                            </svg>
+                        </span>
+                    </top-nav-button-component>
+                </div>
+            </div>
             <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">
                 <div class="options-3">
                     <top-nav-button-component click="vm.bookmark()" class="options-3-item">

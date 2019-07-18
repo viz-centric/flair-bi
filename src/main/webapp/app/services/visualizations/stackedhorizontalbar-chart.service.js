@@ -88,7 +88,7 @@
                     }
                 } else {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="stackedhorizontalbar-' + element[0].id + '" ></div>')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" vizID=' + record.id + ' id="stackedhorizontalbar-' + element[0].id + '" ></div>')
                     var div = $('#stackedhorizontalbar-' + element[0].id)
 
                     var stackedhorizontalbar = flairVisualizations.stackedhorizontalbar()

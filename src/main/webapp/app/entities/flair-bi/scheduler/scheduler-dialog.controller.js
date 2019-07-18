@@ -88,7 +88,7 @@
                 getThresholdMeasureList(visualMetaData.fields);
                 vm.datasource= datasource;
                 if($rootScope.isThresholdAlert){
-                    vm.scheduleObj.hasThresholdAlert=true;
+                    vm.scheduleObj.thresholdAlert=true;
                     vm.condition.value=$rootScope.ThresholdViz.measureValue;
                     vm.condition.featureName=$rootScope.ThresholdViz.measure;
                 }

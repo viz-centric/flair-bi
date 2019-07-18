@@ -90,7 +90,7 @@
                     }
                 } else {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="clusteredhorizontalbar-' + element[0].id + '" ></div>')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" vizID=' + record.id + ' id="clusteredhorizontalbar-' + element[0].id + '" ></div>')
                     var div = $('#clusteredhorizontalbar-' + element[0].id)
 
                     var clusteredhorizontalbar = flairVisualizations.clusteredhorizontalbar()

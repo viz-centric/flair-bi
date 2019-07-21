@@ -158,23 +158,13 @@ public class SchedulerResource {
     		return ResponseEntity.status(200).body(new CountDTO(Long.valueOf(count)));
     	}
     }
-    
+
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerNotificationResponseDTO> getSchedulerReport(@PathVariable String visualizationid)
-			throws URISyntaxException {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<SchedulerNotificationResponseDTO> responseEntity = null;
-		try {
-			responseEntity = restTemplate.exchange(
-					schedulerService.buildUrl(host, port,scheduledReportParamUrl), HttpMethod.GET, null,
-					new ParameterizedTypeReference<SchedulerNotificationResponseDTO>() {
-					}, visualizationid);
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		} catch (Exception e) {
-			log.error("error occured while fetching report:" + e.getMessage());
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		}
+	public ResponseEntity<SchedulerNotificationResponseDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	    log.info("Get scheduled report {}", visualizationid);
+		SchedulerNotificationResponseDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+		return ResponseEntity.ok(responseDTO);
 	}
 	
 	@DeleteMapping("/schedule/{visualizationid}")

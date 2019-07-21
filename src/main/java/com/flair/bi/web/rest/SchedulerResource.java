@@ -8,6 +8,10 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.dto.scheduler.AuthAIDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
@@ -67,7 +71,7 @@ public class SchedulerResource {
 
 	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
-	
+
 	@Value("${flair-notifications.mail_body}")
 	private String mail_body;
 
@@ -79,7 +83,7 @@ public class SchedulerResource {
 	
 	@Value("${flair-notifications.scheduled-report-param-url}")
 	private String scheduledReportParamUrl;
-	
+
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
@@ -161,9 +165,11 @@ public class SchedulerResource {
 
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerNotificationResponseDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
 	    log.info("Get scheduled report {}", visualizationid);
-		SchedulerNotificationResponseDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+
+		log.info("Get scheduled report {} found", visualizationid);
 		return ResponseEntity.ok(responseDTO);
 	}
 	

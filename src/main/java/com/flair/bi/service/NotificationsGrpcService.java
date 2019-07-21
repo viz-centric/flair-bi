@@ -1,13 +1,15 @@
 package com.flair.bi.service;
 
+import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
 import com.flair.bi.messages.report.ReportServiceGrpc;
 import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,17 +38,22 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public SchedulerNotificationResponseDTO getSchedulerReport(String visualizationId) {
-        ScheduleReportResponse response = getReportStub().getScheduledReport(
-                GetScheduledReportRequest.newBuilder()
-                        .setVisualizationId(visualizationId)
-                        .build()
-        );
-        return toDto(response);
+    public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
+        GetScheduledReportRequest request = GetScheduledReportRequest.newBuilder()
+                .setVisualizationId(visualizationId)
+                .build();
+        ScheduleReportResponse response = getReportStub().getScheduledReport(request);
+        return GetSchedulerReportDTO.builder()
+                .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
+                .report(toReportDTO(response))
+                .build();
     }
 
-    private SchedulerNotificationResponseDTO toDto(ScheduleReportResponse response) {
-        SchedulerNotificationResponseDTO responseDTO = new SchedulerNotificationResponseDTO();
+    private SchedulerNotificationDTO toReportDTO(ScheduleReportResponse response) {
+        if (!response.hasReport()) {
+            return null;
+        }
+        SchedulerNotificationDTO responseDTO = new SchedulerNotificationDTO();
         ReportDTO report = new ReportDTO();
         report.setDashboard_name(response.getReport().getReport().getDashboardName());
         report.setBuild_url(response.getReport().getReport().getBuildUrl());
@@ -69,12 +77,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         assignReport.setChannel_id(response.getReport().getAssignReport().getChannelId());
         assignReport.setEmail_list(response.getReport().getAssignReport().getEmailListList()
                 .stream()
-                .map(item -> {
-                    emailsDTO emailsDTO = new emailsDTO();
-                    emailsDTO.setUser_email(item.getUserEmail());
-                    emailsDTO.setUser_name(item.getUserName());
-                    return emailsDTO;
-                })
+                .map(item -> toEmailDto(item))
                 .collect(toList()).toArray(new emailsDTO[]{}));
         assignReport.setSlack_API_Token(response.getReport().getAssignReport().getSlackAPIToken());
         assignReport.setStride_API_Token(response.getReport().getAssignReport().getStrideAPIToken());
@@ -88,5 +91,12 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         schedule.setTimezone(response.getReport().getSchedule().getTimezone());
         responseDTO.setSchedule(schedule);
         return responseDTO;
+    }
+
+    private emailsDTO toEmailDto(Email item) {
+        emailsDTO emailsDTO = new emailsDTO();
+        emailsDTO.setUser_email(item.getUserEmail());
+        emailsDTO.setUser_name(item.getUserName());
+        return emailsDTO;
     }
 }

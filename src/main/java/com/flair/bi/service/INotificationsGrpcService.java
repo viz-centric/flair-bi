@@ -1,9 +1,9 @@
 package com.flair.bi.service;
 
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 
 public interface INotificationsGrpcService {
 
-    SchedulerNotificationResponseDTO getSchedulerReport(String visualizationId);
+    GetSchedulerReportDTO getSchedulerReport(String visualizationId);
 
 }

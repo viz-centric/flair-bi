@@ -8,6 +8,7 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;

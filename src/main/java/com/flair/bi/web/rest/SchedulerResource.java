@@ -8,6 +8,10 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.dto.scheduler.AuthAIDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
@@ -80,7 +84,7 @@ public class SchedulerResource {
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
-	
+
 	private final SchedulerService schedulerService;
 
 	@PostMapping("/schedule")

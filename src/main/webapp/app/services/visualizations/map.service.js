@@ -9,7 +9,7 @@
 
     function GenerateMap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -52,7 +52,7 @@
                     var map = flairVisualizations.map()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
 
 
                     svg.datum(record.data)

@@ -9,7 +9,7 @@
 
     function GenerateClusteredverticalbarChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, widgets) {
+            build: function (record, element, panel, isNotification) {
 
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
@@ -74,6 +74,16 @@
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
                     }
 
+                    if (isNotification) {
+                        result['showXaxis'] = false;
+                        result['showYaxis'] = false;
+                        result['isFilterGrid'] = false;
+                        result['showLegend'] = false;
+                        result['showGrid'] = false;
+                        result['showXaxisLabel'] = false;
+                        result['showYaxisLabel'] = false;
+                    }
+
                     return result;
                 }
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
@@ -95,12 +105,15 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     clusteredverticalbar(div[0])
 
-                    $rootScope.updateWidget[record.id] = clusteredverticalbar;
+                    if (!isNotification) {
+                        $rootScope.updateWidget[record.id] = clusteredverticalbar;
+                    }
                 }
             }
         }

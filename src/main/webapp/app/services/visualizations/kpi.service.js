@@ -9,7 +9,7 @@
 
     function GenerateKPI(VisualizationUtils, $rootScope, D3Utils) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 function getProperties(VisualizationUtils, record) {
                     var result = {};

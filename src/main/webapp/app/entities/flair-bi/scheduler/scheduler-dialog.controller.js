@@ -247,19 +247,20 @@
                 setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    var info = {
+                    if (success.data.message) {
+                      $rootScope.showErrorSingleToast({
                         text: success.data.message,
-                        title: "Saved"
+                        title: "Error"
+                      });
+                    } else {
+                      $uibModalInstance.close(vm.scheduleObj);
                     }
-                    $rootScope.showSuccessToast(info);
-                    $uibModalInstance.close(vm.scheduleObj);
                 }).catch(function (error) {
                     vm.isSaving = false;
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
+                    $rootScope.showErrorSingleToast({
+                      text: error.data.message,
+                      title: "Error"
+                    });
                 });
             }else{
                 var info = {

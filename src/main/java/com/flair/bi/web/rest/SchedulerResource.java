@@ -10,11 +10,11 @@ import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.RequiredArgsConstructor;
@@ -91,10 +91,9 @@ public class SchedulerResource {
 	@Timed
 	public ResponseEntity<SchedulerResponse> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
 			throws Exception {
-		RestTemplate restTemplate = new RestTemplate();
+		log.info("Creating schedule report {}", schedulerDTO);
 		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
-		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
 		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
 			schedulerDTO.getAssign_report().setEmail_list(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
@@ -104,24 +103,23 @@ public class SchedulerResource {
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid(),schedulerDTO.getReport().getThresholdAlert());
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(schedulerService.buildUrl(host, port,scheduledReportUrl));
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerService.setChannelCredentials(schedulerNotificationDTO));
-		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(schedulerService.setChannelCredentials(schedulerNotificationDTO), headers);
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), schedulerDTO.getPutcall()?HttpMethod.PUT:HttpMethod.POST,
-					entity, String.class);
-			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			schedulerResponse.setMessage(jsonObject.getString("message"));
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
-		} catch (Exception e) {
-			log.error("error occured while scheduling report:"+e.getMessage());
-			schedulerResponse.setMessage("error occured while accessing end point :"+e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
-		}
 
+		setChannelCredentials(schedulerNotificationDTO);
+        log.info("Sending schedule report {}", schedulerNotificationDTO);
+
+        SchedulerReportDTO schedulerReportDTO;
+        if (schedulerDTO.getPutcall()) {
+            schedulerReportDTO = schedulerService.updateSchedulerReport(schedulerNotificationDTO);
+        } else {
+            schedulerReportDTO = schedulerService.createSchedulerReport(schedulerNotificationDTO);
+        }
+
+		log.info("Receiving schedule report {}", schedulerReportDTO);
+
+		SchedulerResponse response = new SchedulerResponse();
+		response.setMessage(schedulerReportDTO.getMessage());
+
+		return ResponseEntity.ok(response);
 	}
 
 
@@ -160,9 +158,9 @@ public class SchedulerResource {
 
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	public ResponseEntity<SchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
 	    log.info("Get scheduled report {}", visualizationid);
-		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+		SchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
 
 		log.info("Get scheduled report {} found", visualizationid);
 		return ResponseEntity.ok(responseDTO);

@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -147,7 +148,7 @@ public class SchedulerService {
 		return url.toString();
 	}
 
-	public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
+	public SchedulerReportDTO getSchedulerReport(String visualizationId) {
 		return notificationsGrpcService.getSchedulerReport(visualizationId);
 	}
 

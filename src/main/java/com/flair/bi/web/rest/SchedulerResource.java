@@ -8,13 +8,13 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AuthAIDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.RequiredArgsConstructor;
@@ -154,9 +154,9 @@ public class SchedulerResource {
 
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	public ResponseEntity<SchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
 	    log.info("Get scheduled report {}", visualizationid);
-		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+		SchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
 
 		log.info("Get scheduled report {} found", visualizationid);
 		return ResponseEntity.ok(responseDTO);

@@ -78,24 +78,6 @@ public class SchedulerService {
 
 	private final UserService userService;
 
-	public ResponseEntity<SchedulerResponse> deleteScheduledReport(String visualizationid) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = null;
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			responseEntity = restTemplate.exchange(buildUrl(host, port, scheduledReportParamUrl), HttpMethod.DELETE, null,
-					new ParameterizedTypeReference<String>() {
-					}, visualizationid);
-			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			schedulerResponse.setMessage(jsonObject.getString("message"));
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
-		} catch (Exception e) {
-			log.error("error occured while cancelling scheduled report:"+e.getMessage());
-			schedulerResponse.setMessage("error occured while cancelling scheduled report :"+e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
-		}
-	}
-    
     public ResponseEntity<SchedulerResponse> executeImmediateScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = null;
@@ -152,7 +134,7 @@ public class SchedulerService {
 		return notificationsGrpcService.getSchedulerReport(visualizationId);
 	}
 
-	public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+	public SchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
 		return notificationsGrpcService.createSchedulerReport(schedulerNotificationDTO);
 	}
 

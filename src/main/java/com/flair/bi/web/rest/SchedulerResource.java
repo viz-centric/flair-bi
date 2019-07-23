@@ -158,15 +158,18 @@ public class SchedulerResource {
 	    log.info("Get scheduled report {}", visualizationid);
 		SchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
 
-		log.info("Get scheduled report {} found", visualizationid);
+		log.info("Get scheduled report {} finished", visualizationid);
 		return ResponseEntity.ok(responseDTO);
 	}
 	
 	@DeleteMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerResponse> deleteSchedulerReport(@PathVariable String visualizationid)
-			throws URISyntaxException {
-		return schedulerService.deleteScheduledReport(visualizationid);
+	public ResponseEntity<SchedulerReportDTO> deleteSchedulerReport(@PathVariable String visualizationid) {
+		log.info("Delete scheduled report {}", visualizationid);
+		SchedulerReportDTO responseDTO = schedulerService.deleteSchedulerReport(visualizationid);
+
+		log.info("Delete scheduled report {} finished {}", visualizationid, responseDTO);
+		return ResponseEntity.ok(responseDTO);
 	}
 
 	@GetMapping("/executeImmediate/{visualizationid}")

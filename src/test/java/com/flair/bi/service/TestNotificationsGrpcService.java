@@ -22,4 +22,9 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
         return null;
     }
+
+    @Override
+    public SchedulerReportDTO deleteSchedulerReport(String visualizationId) {
+        return null;
+    }
 }

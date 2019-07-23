@@ -1,5 +1,6 @@
 package com.flair.bi.service;
 
+import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
 import com.flair.bi.messages.report.Report;
@@ -64,6 +65,14 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
         ScheduleReportResponse response = getReportStub().updateScheduledReport(ScheduleReportRequest.newBuilder()
                 .setReport(toReportProto(schedulerNotificationDTO))
+                .build());
+        return createSchedulerReportDto(response);
+    }
+
+    @Override
+    public SchedulerReportDTO deleteSchedulerReport(String visualizationId) {
+        ScheduleReportResponse response = getReportStub().deleteScheduledReport(DeleteScheduledReportRequest.newBuilder()
+                .setVisualizationId(visualizationId)
                 .build());
         return createSchedulerReportDto(response);
     }

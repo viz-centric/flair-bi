@@ -5,6 +5,8 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import org.junit.Ignore;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Ignore
 @Service
 public class TestNotificationsGrpcService implements INotificationsGrpcService {
@@ -20,6 +22,11 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 
     @Override
     public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+        return null;
+    }
+
+    @Override
+    public List<SchedulerNotificationDTO> getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
         return null;
     }
 

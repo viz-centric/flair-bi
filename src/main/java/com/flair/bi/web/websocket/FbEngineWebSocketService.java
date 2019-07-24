@@ -1,8 +1,10 @@
 package com.flair.bi.web.websocket;
 
 import com.flair.bi.messages.QueryResponse;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import io.grpc.Status;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -65,7 +67,7 @@ public class FbEngineWebSocketService {
      * @param queryResponse queryResponse
      * @param request request
      */
-    public void pushGRPCMetaDeta(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO ,QueryResponse queryResponse, String request) {
+    public void pushGRPCMetaDeta(SchedulerNotificationDTO schedulerNotificationResponseDTO , QueryResponse queryResponse, String request) {
     	HashMap<String, Object> header = new HashMap<>();
         header.put("queryId", queryResponse.getQueryId());
         header.put("userId", queryResponse.getUserId());
@@ -73,8 +75,17 @@ public class FbEngineWebSocketService {
         if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
             header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
         }
-        schedulerNotificationResponseDTO.setQueryResponse(queryResponse.getData());
-        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/scheduledReports", schedulerNotificationResponseDTO, header);
+        SchedulerNotificationResponseDTO dto = SchedulerNotificationResponseDTO.builder()
+                .notification(schedulerNotificationResponseDTO)
+                .queryResponse(queryResponse.getData())
+                .build();
+        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/scheduledReports", dto, header);
     }
 
+    @Data
+    @Builder
+    private static class SchedulerNotificationResponseDTO {
+        private SchedulerNotificationDTO notification;
+        private String queryResponse;
+    }
 }

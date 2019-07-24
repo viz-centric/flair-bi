@@ -3,6 +3,8 @@ package com.flair.bi.service;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
+import com.flair.bi.messages.report.RepUserReq;
+import com.flair.bi.messages.report.RepUserResp;
 import com.flair.bi.messages.report.Report;
 import com.flair.bi.messages.report.ReportServiceGrpc;
 import com.flair.bi.messages.report.ScheduleReport;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
 import static java.util.stream.Collectors.toList;
@@ -70,6 +73,19 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
+    public List<SchedulerNotificationDTO> getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
+        RepUserResp response = getReportStub().getAllScheduledReportsByUser(RepUserReq.newBuilder()
+                        .setUsername(username)
+                        .setPage(page)
+                        .setPageSize(pageSize)
+                        .build());
+        return response.getReportsList()
+                .stream()
+                .map(r -> createSchedulerNotificationDTO(r))
+                .collect(toList());
+    }
+
+    @Override
     public SchedulerReportDTO deleteSchedulerReport(String visualizationId) {
         ScheduleReportResponse response = getReportStub().deleteScheduledReport(DeleteScheduledReportRequest.newBuilder()
                 .setVisualizationId(visualizationId)
@@ -80,7 +96,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
         return GetSchedulerReportDTO.builder()
                 .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
-                .report(toReportDTO(response))
+                .report(createSchedulerNotificationDTO(response.getReport()))
                 .build();
     }
 
@@ -136,46 +152,43 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .build();
     }
 
-    private SchedulerNotificationDTO toReportDTO(ScheduleReportResponse response) {
-        if (!response.hasReport()) {
-            return null;
-        }
+    private SchedulerNotificationDTO createSchedulerNotificationDTO(ScheduleReport scheduleReport) {
         SchedulerNotificationDTO responseDTO = new SchedulerNotificationDTO();
         ReportDTO report = new ReportDTO();
-        report.setDashboard_name(response.getReport().getReport().getDashboardName());
-        report.setBuild_url(response.getReport().getReport().getBuildUrl());
-        report.setMail_body(response.getReport().getReport().getMailBody());
-        report.setReport_name(response.getReport().getReport().getReportName());
-        report.setShare_link(response.getReport().getReport().getShareLink());
-        report.setSubject(response.getReport().getReport().getSubject());
-        report.setTitle_name(response.getReport().getReport().getTitleName());
-        report.setUserid(response.getReport().getReport().getUserid());
-        report.setView_name(response.getReport().getReport().getViewName());
+        report.setDashboard_name(scheduleReport.getReport().getDashboardName());
+        report.setBuild_url(scheduleReport.getReport().getBuildUrl());
+        report.setMail_body(scheduleReport.getReport().getMailBody());
+        report.setReport_name(scheduleReport.getReport().getReportName());
+        report.setShare_link(scheduleReport.getReport().getShareLink());
+        report.setSubject(scheduleReport.getReport().getSubject());
+        report.setTitle_name(scheduleReport.getReport().getTitleName());
+        report.setUserid(scheduleReport.getReport().getUserid());
+        report.setView_name(scheduleReport.getReport().getViewName());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();
-        reportLineItem.setDimension(response.getReport().getReportLineItem().getDimensionList().toArray(new String[]{}));
-        reportLineItem.setMeasure(response.getReport().getReportLineItem().getMeasureList().toArray(new String[]{}));
-        reportLineItem.setVisualization(response.getReport().getReportLineItem().getVisualization());
-        reportLineItem.setVisualizationid(response.getReport().getReportLineItem().getVisualizationid());
+        reportLineItem.setDimension(scheduleReport.getReportLineItem().getDimensionList().toArray(new String[]{}));
+        reportLineItem.setMeasure(scheduleReport.getReportLineItem().getMeasureList().toArray(new String[]{}));
+        reportLineItem.setVisualization(scheduleReport.getReportLineItem().getVisualization());
+        reportLineItem.setVisualizationid(scheduleReport.getReportLineItem().getVisualizationid());
         responseDTO.setReport_line_item(reportLineItem);
-        responseDTO.setQuery(response.getReport().getQuery());
+        responseDTO.setQuery(scheduleReport.getQuery());
         AssignReport assignReport = new AssignReport();
-        assignReport.setChannel(response.getReport().getAssignReport().getChannel());
-        assignReport.setChannel_id(response.getReport().getAssignReport().getChannelId());
-        assignReport.setEmail_list(response.getReport().getAssignReport().getEmailListList()
+        assignReport.setChannel(scheduleReport.getAssignReport().getChannel());
+        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId());
+        assignReport.setEmail_list(scheduleReport.getAssignReport().getEmailListList()
                 .stream()
                 .map(item -> toEmailDto(item))
                 .collect(toList()).toArray(new emailsDTO[]{}));
-        assignReport.setSlack_API_Token(response.getReport().getAssignReport().getSlackAPIToken());
-        assignReport.setStride_API_Token(response.getReport().getAssignReport().getStrideAPIToken());
-        assignReport.setStride_cloud_id(response.getReport().getAssignReport().getStrideCloudId());
-        assignReport.setStride_conversation_id(response.getReport().getAssignReport().getStrideConversationId());
+        assignReport.setSlack_API_Token(scheduleReport.getAssignReport().getSlackAPIToken());
+        assignReport.setStride_API_Token(scheduleReport.getAssignReport().getStrideAPIToken());
+        assignReport.setStride_cloud_id(scheduleReport.getAssignReport().getStrideCloudId());
+        assignReport.setStride_conversation_id(scheduleReport.getAssignReport().getStrideConversationId());
         responseDTO.setAssign_report(assignReport);
         Schedule schedule = new Schedule();
-        schedule.setCron_exp(response.getReport().getSchedule().getCronExp());
-        schedule.setEnd_date(response.getReport().getSchedule().getEndDate());
-        schedule.setStart_date(response.getReport().getSchedule().getStartDate());
-        schedule.setTimezone(response.getReport().getSchedule().getTimezone());
+        schedule.setCron_exp(scheduleReport.getSchedule().getCronExp());
+        schedule.setEnd_date(scheduleReport.getSchedule().getEndDate());
+        schedule.setStart_date(scheduleReport.getSchedule().getStartDate());
+        schedule.setTimezone(scheduleReport.getSchedule().getTimezone());
         responseDTO.setSchedule(schedule);
         return responseDTO;
     }

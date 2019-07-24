@@ -5,27 +5,20 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.FbiEngineDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URISyntaxException;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -61,24 +54,19 @@ public class FbGRPCResource {
     }
 
 	@MessageMapping("fbi-engine-grpc/scheduled-reports/{pageSize}/{page}")
-	public void getSchedulerReportsAndEngineData(@DestinationVariable Integer pageSize,
-			@DestinationVariable Integer page) throws URISyntaxException {
-		RestTemplate restTemplate = new RestTemplate();
+	public void getSchedulerReportsAndEngineData(@DestinationVariable Integer pageSize, @DestinationVariable Integer page) {
 		try {
-			ResponseEntity<List<SchedulerNotificationResponseDTO>> responseEntity = restTemplate.exchange(
-					schedulerService.buildUrl(host, port, scheduledReportsUrl), HttpMethod.GET, null,
-					new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
-					}, SecurityUtils.getCurrentUserLogin(), pageSize, page);
-			List<SchedulerNotificationResponseDTO> reports = responseEntity.getBody();
-			for (SchedulerNotificationResponseDTO schedulerNotificationResponseDTO : reports) {
+			List<SchedulerNotificationDTO> reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
+			for (SchedulerNotificationDTO schedulerNotificationResponseDTO : reports) {
 				pushToSocket(schedulerNotificationResponseDTO);
 			}
 		} catch (Exception e) {
-			log.error("error occured while fetching reports:" + e.getMessage());
+			log.error("error occured while fetching reports:" + e.getMessage(), e);
+            throw new IllegalStateException("Cannot get scheduled reporst for user", e);
 		}
 	}
 
-	private void pushToSocket(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO)
+	private void pushToSocket(SchedulerNotificationDTO schedulerNotificationResponseDTO)
 			throws InvalidProtocolBufferException, InterruptedException {
 		Query.Builder builder = Query.newBuilder();
 		JsonFormat.parser().merge(schedulerNotificationResponseDTO.getQuery(), builder);

@@ -13,7 +13,6 @@ import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
@@ -24,6 +23,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -121,35 +121,22 @@ public class SchedulerResource {
 
     @GetMapping("/schedule/reports/{pageSize}/{page}")
     @Timed
-    public ResponseEntity<List<SchedulerNotificationResponseDTO>> getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
+    public ResponseEntity<List<SchedulerNotificationDTO>> getSchedulerReports(@PathVariable Integer pageSize, @PathVariable Integer page)
         throws URISyntaxException {
-    	RestTemplate restTemplate = new RestTemplate();
-    try {
-		ResponseEntity<List<SchedulerNotificationResponseDTO>> responseEntity =
-		restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsUrl),
-		HttpMethod.GET, null, new ParameterizedTypeReference<List<SchedulerNotificationResponseDTO>>() {
-		},SecurityUtils.getCurrentUserLogin(),pageSize,page);
-		return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-	} catch (Exception e) {
-		log.error("error occured while fetching reports:"+e.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	}
+		List<SchedulerNotificationDTO> reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
+		return ResponseEntity.ok(reports);
     }
     
     @GetMapping("/schedule/reports/count")
     @Timed
     public  ResponseEntity<CountDTO> getScheduledReportsCount() throws JSONException {
     	Integer count=0;
-    	try {
-	    	RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
-			}, SecurityUtils.getCurrentUserLogin());
-			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			count=Integer.parseInt(jsonObject.getString("totalReports"));
-			return ResponseEntity.status(200).body(new CountDTO(Long.valueOf(count)));
-    	}catch(Exception e) {
-    		return ResponseEntity.status(200).body(new CountDTO(Long.valueOf(count)));
-    	}
+    	RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
+		}, SecurityUtils.getCurrentUserLogin());
+		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
+		count=Integer.parseInt(jsonObject.getString("totalReports"));
+        return count;
     }
 
 	@GetMapping("/schedule/{visualizationid}")

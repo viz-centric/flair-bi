@@ -30,6 +30,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -140,6 +142,10 @@ public class SchedulerService {
 
 	public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
 		return notificationsGrpcService.updateSchedulerReport(schedulerNotificationDTO);
+	}
+
+	public List<SchedulerNotificationDTO> getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
+		return notificationsGrpcService.getScheduledReportsByUser(username, pageSize, page);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

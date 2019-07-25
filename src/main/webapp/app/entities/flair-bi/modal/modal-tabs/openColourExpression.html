@@ -1,0 +1,69 @@
+<div class="inmodal in modal-content common-create-popup">
+    <div class="modal-header flair-model-header">
+        <svg class="common-edit-icon">
+            <use xlink:href="#edit-dashboard" />
+        </svg>
+        <div class="header-text" id="DCLabel">
+            Colour Expression
+        </div>
+        <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+            <use xlink:href="#cancle" />
+        </svg>
+    </div>
+    <div class="modal-body">
+        <div class="data-constrains-properties">
+            <div class="btn btn-primary animate-show-hide" ng-click="vm.addStartingCondition()">
+                Add Condition
+            </div>
+            <div class="data-constaraint-conditions-container">
+                <form>
+                    <div class="fields">
+                        <div ng-repeat="condition in vm.conditionExpression">
+                            <div class="row condition">
+                                <div class="col-md-3 field">
+                                    <select ng-model="condition.expression" class="form-control expression" placeholder="Select Condition">
+                                        <option>upto</option>
+                                        <option>above</option>
+                                        <option>below</option>
+                                        <option>default</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 field">
+                                    <input type="number" placeholder="Enter value" value="{{condition.value}}"
+                                        class="form-control value" />
+                                </div>
+                                <div class="col-md-3 field"
+                                    ng-show="vm.features.property.propertyType.name === 'Icon Expression'">
+                                    <input type="text" placeholder="Enter icon name" value="{{condition.icon}}"
+                                        class="form-control icon" />
+                                </div>
+                                <div class="col-md-2 field">
+                                    <input type="color" value="{{condition.color}}" placeholder="Enter colour code"
+                                        class="form-control color" />
+                                </div>
+                                <div class="col-md-1 field">
+                                    <svg class="flair-delete-icon flair-oprations-icon"
+                                        ng-click="vm.removeCondition($index)">
+                                        <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        </use>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="vm.isSaving" class="btn btn-primary" ng-click="vm.save()">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;
+            <span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</div>

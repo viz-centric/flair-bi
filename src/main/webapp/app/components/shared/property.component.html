@@ -1,8 +1,11 @@
-<div class="{{vm.formClass}}" ng-if="vm.property.type !== 'COLOR_PICKER'">
-    <label class="{{vm.labelClasses}}"
+<div class="{{vm.formClass}}" ng-if="vm.property.type !== 'COLOR_PICKER' &&  vm.property.propertyType.name !=='Text colour expression' && vm.property.propertyType.name !=='Cell colour expression' && vm.property.propertyType.name !=='Icon Expression'">
+
+    <label class="{{vm.labelClasses}}"  
         for="propertyType_{{vm.property.propertyType.name}}">{{vm.property.propertyType.name}}</label>
+
     <input ng-keyup="vm.setProperty(vm.property.value)" ng-model="vm.property.value" ng-if="vm.property.type === 'TEXT'" type="text" class="{{vm.inputClasses}}"
         name="{{vm.property.propertyType.name}}" id="propertyType_{{vm.property.propertyType.name}}" />
+
     <select ng-click="vm.setProperty(vm.property.value)" ng-class="{'legend-position': vm.property.propertyType.name=='Legend position'}"
         ng-if="vm.property.type === 'SELECT' && vm.property.propertyType.name!='Font weight'"
         ng-model="vm.property.value"
@@ -30,5 +33,17 @@
     <div class="control-label-color-picker flair-model-pad pull-left">{{vm.property.propertyType.name}}</div>
     <div class="color-picker-container">
         <div ng-change="vm.setProperty(vm.property.value)" md-color-picker ng-model="vm.property.value"></div>
+    </div>
+</div>
+<div ng-if="vm.property.propertyType.name === 'Text colour expression' || vm.property.propertyType.name === 'Cell colour expression' || vm.property.propertyType.name ==='Icon Expression'" class="row">
+    <div class="control-label-color-picker flair-model-pad pull-left">{{vm.property.propertyType.name}}</div>
+    <div class="color-picker-container">
+        <!-- <input  ng-click="vm.openIconExpression(vm)" type="button" value="set condition"> -->
+        
+
+        <svg class="colorCondition" ng-click="vm.openIconExpression(vm)">
+            <use xlink:href="#visualization-colors" />
+        </svg>
+            
     </div>
 </div>

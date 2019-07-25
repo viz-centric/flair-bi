@@ -88,7 +88,9 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var table = $rootScope.updateWidget[record.id];
-                        table.update(record.data);
+                        table
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     $(element[0]).html('')

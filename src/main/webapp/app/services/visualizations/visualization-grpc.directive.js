@@ -37,7 +37,7 @@
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
-      
+
         'GenerateClusteredhorizontalbarChart',
         'GenerateLineChart',
         'GeneratePieChart',
@@ -58,6 +58,7 @@
         'GenerateWordCloud',
         'GenerateSankey',
         'GeneratePivotTable',
+        'GenerateDateRange',
         'proxyGrpcService',
         'filterParametersService',
         '$log',
@@ -70,7 +71,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
-       
+
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -91,6 +92,7 @@
         GenerateWordCloud,
         GenerateSankey,
         GeneratePivotTable,
+        GenerateDateRange,
         proxyGrpcService,
         filterParametersService,
         $log,
@@ -108,7 +110,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
-           
+
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -129,7 +131,7 @@
             widgets.GenerateWordCloud = GenerateWordCloud;
             widgets.GenerateSankey = GenerateSankey;
             widgets.GeneratePivotTable = GeneratePivotTable;
-
+            widgets.GenerateDateRange = GenerateDateRange;
             registerCanBuildChange();
             registerFilterEvent();
             registerResizeWidgetEvent();
@@ -153,8 +155,8 @@
             $scope.$watch(function () {
                 return vm.id;
             }, function (newVal, oldVal) {
-                if(newVal!==oldVal){
-                    vm.id=newVal;
+                if (newVal !== oldVal) {
+                    vm.id = newVal;
                     registerResizeWidgetEvent();
                     registerUpdateWidgetEvent();
                 }
@@ -177,8 +179,8 @@
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                            queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                            visualmetadata: vm.data
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                        visualmetadata: vm.data
                     });
                 } else {
                     createWidget(vm.data);

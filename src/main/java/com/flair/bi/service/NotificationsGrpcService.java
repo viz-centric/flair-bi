@@ -16,6 +16,8 @@ import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -73,16 +75,21 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public List<SchedulerNotificationDTO> getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
+    public SchedulerReportsDTO getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
         RepUserResp response = getReportStub().getAllScheduledReportsByUser(RepUserReq.newBuilder()
                         .setUsername(username)
                         .setPage(page)
                         .setPageSize(pageSize)
                         .build());
-        return response.getReportsList()
+        List<SchedulerNotificationDTO> dtos = response.getReportsList()
                 .stream()
                 .map(r -> createSchedulerNotificationDTO(r))
                 .collect(toList());
+
+        return SchedulerReportsDTO.builder()
+                .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
+                .report(dtos)
+                .build();
     }
 
     @Override

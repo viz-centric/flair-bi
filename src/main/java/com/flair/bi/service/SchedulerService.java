@@ -2,6 +2,7 @@ package com.flair.bi.service;
 
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -144,7 +145,7 @@ public class SchedulerService {
 		return notificationsGrpcService.updateSchedulerReport(schedulerNotificationDTO);
 	}
 
-	public List<SchedulerNotificationDTO> getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
+	public SchedulerReportsDTO getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
 		return notificationsGrpcService.getScheduledReportsByUser(username, pageSize, page);
 	}
 

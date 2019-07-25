@@ -6,6 +6,7 @@ import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.FbiEngineDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
@@ -17,8 +18,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -56,8 +55,12 @@ public class FbGRPCResource {
 	@MessageMapping("fbi-engine-grpc/scheduled-reports/{pageSize}/{page}")
 	public void getSchedulerReportsAndEngineData(@DestinationVariable Integer pageSize, @DestinationVariable Integer page) {
 		try {
-			List<SchedulerNotificationDTO> reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
-			for (SchedulerNotificationDTO schedulerNotificationResponseDTO : reports) {
+			SchedulerReportsDTO reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
+			if (reports.getMessage() != null) {
+				log.error("error returned while fetching reports {}", reports.getMessage());
+				throw new IllegalStateException("Cannot get scheduled reporst for user " + reports.getMessage());
+			}
+			for (SchedulerNotificationDTO schedulerNotificationResponseDTO : reports.getReport()) {
 				pushToSocket(schedulerNotificationResponseDTO);
 			}
 		} catch (Exception e) {

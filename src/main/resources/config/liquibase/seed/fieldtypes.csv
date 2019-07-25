@@ -121,3 +121,5 @@ id|const|visualization_id|feature_type|sequence_number|created_by
 128|OPTIONAL|532|MEASURE|3|flairadmin
 129|OPTIONAL|532|MEASURE|4|flairadmin
 130|OPTIONAL|532|MEASURE|5|flairadmin
+131|REQUIRED|534|DIMENSION|0|flairadmin
+132|REQUIRED|534|MEASURE|1|flairadmin

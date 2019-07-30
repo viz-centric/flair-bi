@@ -37,7 +37,8 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = ColorPickerProperty.class, name = "COLOR_PICKER"),
         @JsonSubTypes.Type(value = NumberProperty.class, name = "NUMBER"),
         @JsonSubTypes.Type(value = SelectProperty.class, name = "SELECT"),
-        @JsonSubTypes.Type(value = TextProperty.class, name = "TEXT")})
+        @JsonSubTypes.Type(value = TextProperty.class, name = "TEXT"),
+        @JsonSubTypes.Type(value = TextProperty.class, name = "CONDITION")})
 
 @Getter
 @Setter

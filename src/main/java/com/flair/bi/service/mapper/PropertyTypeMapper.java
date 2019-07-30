@@ -34,6 +34,8 @@ public interface PropertyTypeMapper {
                 break;
             case CHECKBOX:
                 propertyType = new CheckboxPropertyType();
+            case CONDITION:
+            	propertyType = new ConditionPropertyType();
             default:
                 throw new IllegalArgumentException();
         }

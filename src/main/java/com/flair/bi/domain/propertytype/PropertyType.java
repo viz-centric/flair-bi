@@ -38,7 +38,8 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = ColorPickerPropertyType.class, name = "COLOR_PICKER"),
         @JsonSubTypes.Type(value = NumberPropertyType.class, name = "NUMBER"),
         @JsonSubTypes.Type(value = SelectPropertyType.class, name = "SELECT"),
-        @JsonSubTypes.Type(value = TextPropertyType.class, name = "TEXT")})
+        @JsonSubTypes.Type(value = TextPropertyType.class, name = "TEXT"),
+        @JsonSubTypes.Type(value = TextPropertyType.class, name = "CONDITION")})
 public abstract class PropertyType extends AbstractAuditingEntity implements Serializable {
 
     @Id

@@ -5,7 +5,8 @@ public enum InputType {
     NUMBER("NUMBER"),
     COLOR_PICKER("COLOR_PICKER"),
     CHECKBOX("CHECKBOX"),
-    SELECT("SELECT");
+    SELECT("SELECT"),
+    CONDITION("CONDITION");
 
     private final String value;
 

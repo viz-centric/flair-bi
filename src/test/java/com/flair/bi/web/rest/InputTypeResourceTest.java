@@ -18,6 +18,7 @@ import static com.flair.bi.domain.enumeration.InputType.COLOR_PICKER;
 import static com.flair.bi.domain.enumeration.InputType.NUMBER;
 import static com.flair.bi.domain.enumeration.InputType.SELECT;
 import static com.flair.bi.domain.enumeration.InputType.TEXT;
+import static com.flair.bi.domain.enumeration.InputType.CONDITION;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -41,6 +42,7 @@ public class InputTypeResourceTest extends AbstractIntegrationTest {
 		assertTrue(Arrays.asList(response.getBody()).contains(COLOR_PICKER.getValue()));
 		assertTrue(Arrays.asList(response.getBody()).contains(CHECKBOX.getValue()));
 		assertTrue(Arrays.asList(response.getBody()).contains(SELECT.getValue()));
+		assertTrue(Arrays.asList(response.getBody()).contains(CONDITION.getValue()));
 
 	}
 }

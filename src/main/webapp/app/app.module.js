@@ -96,6 +96,8 @@
             "maxDataFileSize": "0",
             "maxImageSize": "0"
         };
+
+        $rootScope.dateRange = {}
         // possible values grpc and http
         $rootScope.vizualizationServiceMode = "grpc";
 

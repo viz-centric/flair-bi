@@ -69,6 +69,7 @@
 
                 var rangefilter = flairVisualizations.rangefilter()
                     .config(getProperties(VisualizationUtils, record))
+                    .broadcast($rootScope)
                     .print(isNotification == true ? true : false)
                     .data(record.data);
 

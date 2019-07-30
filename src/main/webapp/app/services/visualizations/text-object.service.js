@@ -22,146 +22,55 @@
                         eachMeasure,
                         allMeasures = [];
 
+                    result['measure'] = D3Utils.getNames(measures);
+
                     result['descriptive'] = VisualizationUtils.getPropertyValue(record.properties, 'Descriptive');
                     result['alignment'] = VisualizationUtils.getPropertyValue(record.properties, 'Alignment');
+                    result['textFormat'] = VisualizationUtils.getPropertyValue(record.properties, 'Text format');
+                    result['value'] = [];
+                    result['backgroundColor'] = [];
+                    result['textColor'] = [];
+                    result['underline'] = [];
+                    result['fontStyle'] = [];
+                    result['fontWeight'] = [];
+                    result['fontSize'] = [];
+                    result['icon'] = [];
+                    result['numberFormat'] = [];
+                    result['displayNameForMeasure'] = [];
+                    result['iconExpression'] = [];
+                    result['textColorExpression'] = [];
 
-                    for(var i=0; i<measures.length; i++) {
-                        eachMeasure = {};
-                        eachMeasure['value'] = data[measures[i]['feature']['name']];
-                        eachMeasure['backgroundColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour');
-                        eachMeasure['textColor'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour');
-                        eachMeasure['underline'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Underline');
-                        eachMeasure['fontStyle'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style');
-                        eachMeasure['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight');
-                        eachMeasure['fontSize'] = parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size'));
-                        eachMeasure['icon'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon name');
-                        eachMeasure['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'); 
-                        allMeasures.push(eachMeasure);
+                    for (var i = 0; i < measures.length; i++) {
+                        result['displayNameForMeasure'].push(
+                            VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
+                            result['measure'][i]
+                        );
+                        result['value'].push(data[measures[i]['feature']['name']]);
+                        result['backgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
+                        result['textColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
+                        result['underline'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Underline'));
+                        result['fontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
+                        result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
+                        result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
+                        result['icon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon name'));
+                        result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
+                        result['iconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
+                        result['textColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour expression'));
                     }
-
-                    result['measures'] = allMeasures;
-
                     return result;
                 }
 
-                var Helper = (function() {
+                $(element[0]).html('')
+                $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="textobject-' + element[0].id + '" ></div>')
+                var div = $('#textobject-' + element[0].id)
 
-                    var escapeRegExp = function(str) {
-                        return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-                    }
+                var textobject = flairVisualizations.textobject()
+                    .config(getProperties(VisualizationUtils, record))
+                    .print(isNotification == true ? true : false)
 
-                    var escapeSubstitute = function(str) {
-                        return str.replace(/\$/g, '$$$$');
-                    }
+                textobject(div[0])
 
-                    var replace = function(target, placeHolder, replacement) {
-                        var re = new RegExp(escapeRegExp(placeHolder), 'g');
-                        return target.replace(re, escapeSubstitute(replacement));
-                    }
-
-                    function Helper(config) {
-                        this.config = config;
-                        this.alignment = config.alignment;
-                        this.descriptive = config.descriptive;
-                        this.measures = config.measures;
-                    }
-
-                    Helper.prototype.getAlignment = function() {
-                        return this.alignment;
-                    }
-
-                    Helper.prototype.formatMeasure = function(measure) {
-                        var result = "<span style=\"" 
-                            + "background-color: " + (measure.backgroundColor ? measure.backgroundColor : "inherit") + ";"
-                            + "color: " + measure.textColor + ";"
-                            + "font-style: " + measure.fontStyle + ";"
-                            + "font-weight: " + measure.fontWeight + ";"
-                            + "font-size: " + measure.fontSize + ";"
-                            + "\">"
-                            + "<i class=\"" + measure.icon + "\" aria-hidden=\"true\"></i>&nbsp;";
-
-                        var nf = D3Utils.getNumberFormatter(measure.numberFormat);
-                        var value = nf(measure.value);
-
-                        if(value.indexOf("G") != -1) {
-                            value = value.slice(0, -1) + "B";
-                        }
-
-                        if(measure.underline) {
-                            result += "<u>" + value + "</u></span>";
-                        } else {
-                            result += value + "</span>";
-                        }
-
-                        return result;
-                    }
-
-                    Helper.prototype.processTemplate = function(data) {
-                        var me = this;
-                        var placeHolder = "",
-                            result = data;
-
-                        this.measures.forEach(function(m, i) {
-                            placeHolder = "{{" + i + "}}";
-                            result = replace(result, placeHolder, me.formatMeasure(m));
-                        });
-
-                        return result;
-                    }
-
-                    return Helper;
-
-                })();
-
-                var Textobject = (function() {
-
-                    function Textobject(container, record, properties) {
-                        this.container = container;
-                        this.id = record.id;
-                        this.originalData = properties.descriptive;
-                        this.helper = new Helper(properties);
-
-                        $('#textobject-' + this.id).remove();
-
-                        var div = d3.select(container).append('div')
-                            .attr('id', 'textobject-' + this.id)
-                            .attr('class', 'textobject');
-                    }
-
-                    Textobject.prototype.renderChart = function() {
-                        var data = this.originalData;
-                        var me = this;
-
-                        var width = this.container.clientWidth;
-                        var height = this.container.clientHeight;
-
-                        $('#textobject-' + this.id).css('width', width)
-                            .css('height', height);
-
-                        var textobject = d3.select('#textobject-' + this.id);
-
-                        textobject.append('div')
-                            .style('text-align', me.helper.getAlignment())
-                            .style('line-height', 1.3)
-                            .style('padding', '10px')
-                            .html(me.helper.processTemplate(data))
-                            .transition()
-                            .duration(400)
-                            .ease(d3.easeQuadIn)
-                            .styleTween('font-size', function() {
-                                var i = d3.interpolateNumber(0, me.helper.measures.fontSize);
-                                return function(t) {
-                                    return i(t) + "px";
-                                };
-                            });
-                    }
-
-                    return Textobject;
-
-                })();
-
-                var textObject = new Textobject(element[0], record, getProperties(VisualizationUtils, record));
-                textObject.renderChart();
+                textobject._getHTML()
 
             }
         }

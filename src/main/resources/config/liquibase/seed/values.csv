@@ -114,5 +114,7 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 214|Left|null|null|STRING|682|null
 215|Center|null|null|STRING|682|682
 216|Right|null|null|STRING|682|null
+217|Order List|null|null|STRING|684|684
+218|Unorder List|null|null|STRING|684|null
 
 

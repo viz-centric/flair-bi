@@ -19,7 +19,7 @@ id|name|icon|custom_id|function_name
 522|Box Plot|#boxplot|13|GenerateBoxplot
 523|Text Object|#textobject|14|GenerateTextObject
 524|Bullet Chart|#bulletchart|15|GenerateBulletChart
-525|Chord Diagram|#sankey|16|GenerateChordDiagram
+525|Chord Diagram|#chord|16|GenerateChordDiagram
 526|Word Cloud|#wordcloud|17|GenerateWordCloud
 527|Sankey|#sankey|18|GenerateSankey
 533|Iframe|#iframe|19|GenerateIframe

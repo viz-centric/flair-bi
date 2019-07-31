@@ -149,6 +149,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerDateRangeFilterEvent()
             registerAddVisual();
             registerSaveAllWidgetsEvent();
             loadDimensions();
@@ -584,6 +585,17 @@
                         .data("gridstack")
                         .disable();
                 }
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerDateRangeFilterEvent() {
+            var unsubscribe = $scope.$on("FlairBi:date-range", function(
+                event,
+                result
+            ) {
+                editMode = result;
+                console.log($rootScope.dateRange)
             });
             $scope.$on("$destroy", unsubscribe);
         }

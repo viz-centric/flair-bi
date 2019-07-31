@@ -36,7 +36,8 @@
         'GeneratePivotTable',
         'proxyService',
         'filterParametersService',
-        'GenerateIframe'
+        'GenerateIframe',
+        'GenerateDateRange'
         //,'stompClientService'
     ];
 
@@ -44,7 +45,7 @@
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
-     
+
         GenerateClusteredhorizontalbarChart,
         GenerateLineChart,
         GeneratePieChart,
@@ -67,7 +68,8 @@
         GeneratePivotTable,
         proxyService,
         filterParametersService,
-        GenerateIframe) {
+        GenerateIframe,
+        GenerateDateRange) {
 
         var vm = this;
         var widgets = [];
@@ -80,7 +82,7 @@
             widgets.GenerateStackedverticalbarChart = GenerateStackedverticalbarChart;
             widgets.GenerateStackedhorizontalbarChart = GenerateStackedhorizontalbarChart;
             widgets.GenerateClusteredverticalbarChart = GenerateClusteredverticalbarChart;
-           
+
             widgets.GenerateClusteredhorizontalbarChart = GenerateClusteredhorizontalbarChart;
             widgets.GenerateLineChart = GenerateLineChart;
             widgets.GeneratePieChart = GeneratePieChart;
@@ -102,10 +104,11 @@
             widgets.GenerateSankey = GenerateSankey;
             widgets.GeneratePivotTable = GeneratePivotTable;
             widgets.GenerateIframe = GenerateIframe;
+            widgets.GenerateDateRange = GenerateDateRange;
         }
 
 
-        function createWidget(visualMetadata,contentId,isNotification) {
+        function createWidget(visualMetadata, contentId, isNotification) {
             var widgetId = '#' + contentId;
             var el = $(widgetId);
             var width = el.width(),
@@ -121,13 +124,13 @@
             );
         }
 
-        function setMetaData(v, metadata, contentId,isNotification) {
-            if(v){
+        function setMetaData(v, metadata, contentId, isNotification) {
+            if (v) {
                 addWidgets();
                 vm.data = v;
                 vm.data.data = metadata.data;
                 vm.widget = v.metadataVisual.functionname;
-                createWidget(vm.data, contentId,isNotification);
+                createWidget(vm.data, contentId, isNotification);
             }
         }
 

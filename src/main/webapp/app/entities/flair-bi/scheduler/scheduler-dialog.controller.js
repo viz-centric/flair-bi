@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -20,6 +20,7 @@
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
         vm.channels=scheduler_channels;
+        vm.COMPARISIONS=COMPARISIONS;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.loadUsers=loadUsers;
@@ -32,6 +33,9 @@
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
         vm.emailReporterEdit=false;
+        vm.toggleThresholdAlert=toggleThresholdAlert;
+        vm.condition={};
+        vm.features=[];
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -65,7 +69,8 @@
                 "end_date": new Date()
             },
             "putcall":false,
-            "emailReporter":false
+            "emailReporter":false,
+            "thresholdAlert":false
           };
         activate();
 
@@ -80,21 +85,21 @@
                 vm.dashboard=dashboard;
                 vm.view=view;
                 getScheduleReport(visualMetaData.id);
+                getThresholdMeasureList(visualMetaData.fields);
                 vm.datasource= datasource;
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);        
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);     
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
                 if(scheduledObj){
                     vm.emailReporterEdit=true;
-                    updateScheduledObj(scheduledObj);
                     getVisualmetadata(scheduledObj);
+                    updateScheduledObj(scheduledObj);
                 }else{
-                    loadDashboards();     
+                    loadDashboards(); 
                 }
 
             }
-
         }
 
         function getVisualmetadata(scheduledObj){
@@ -102,6 +107,7 @@
                 id: scheduledObj.report_line_item.visualizationid
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
+                getThresholdMeasureList(vm.visualMetaData.fields);
                 buildScheduledObject(scheduledObj,vm.visualMetaData);
             });
         }
@@ -127,9 +133,21 @@
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
+            setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
                 addEmailList(data.assign_report.email_list);
+            }
+        }
+
+        function setHavingDTO(query){
+            if(query.having){
+                vm.scheduleObj.thresholdAlert=true;
+                vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
+                vm.condition.value=query.having[0].value;
+                vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
+                    return item.opt===query.having[0].comparatorType;
+                })[0];
             }
         }
 
@@ -167,7 +185,7 @@
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+           vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
             setDimentionsAndMeasures(visualMetaData.fields);
         
         }
@@ -211,29 +229,46 @@
         }
 
         function schedule() {
-            vm.isSaving = true;
-            setScheduledData();
-             schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
-                vm.isSaving = false;
+            if(validateAndSetHaving()){
+                vm.isSaving = true;
+                setScheduledData();
+                schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
+                    vm.isSaving = false;
+                    var info = {
+                        text: success.data.message,
+                        title: "Saved"
+                    }
+                    $rootScope.showSuccessToast(info);
+                    $uibModalInstance.close(vm.scheduleObj);
+                }).catch(function (error) {
+                    vm.isSaving = false;
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+            }else{
                 var info = {
-                    text: success.data.message,
-                    title: "Saved"
-                }
-                $rootScope.showSuccessToast(info);
-                $uibModalInstance.close(vm.scheduleObj);
-            }).catch(function (error) {
-                vm.isSaving = false;                
-                var info = {
-                    text: error.data.message,
+                    text: "Please select aggregate function from settings",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
-            });
+            }
         }
 
         function setScheduledData(){
             vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
+        }
+
+        function validateAndSetHaving(){
+            var flag=true;
+            if(vm.scheduleObj.thresholdAlert){
+                vm.scheduleObj.queryDTO.having=getHavingDTO();
+                vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
+            }
+            return flag;
         }
 
         function openCalendar (date) {
@@ -322,7 +357,40 @@
             vm.visualMetaData = new VisualWrap(visualMetaData);
             vm.datasource=vm.dashboard.dashboardDatasource;
             getScheduleReport(visualMetaData.id);
+            getThresholdMeasureList(visualMetaData.fields);
             buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+        }
+
+        function getHavingDTO(){
+            var having=[];
+            var havingFuntion=getMeasureField();
+            var havingDTO= {featureName:havingFuntion,value:vm.condition.value,comparatorType:vm.condition.compare.opt};
+            having.push(havingDTO);
+            return having;
+        }
+
+        function getMeasureField(){
+            var aggFunctionField={};
+            vm.visualMetaData.fields.filter(function(item) {
+                if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
+                    aggFunctionField=vm.visualMetaData.constructHavingField(item);
+                }
+            });
+            return aggFunctionField;
+        }
+
+        function toggleThresholdAlert(){
+            vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
+            vm.condition={};
+        }
+
+        function getThresholdMeasureList(fields){
+            fields.filter(function(item) {
+                if(item.feature.featureType === "MEASURE"){
+                    vm.features.push(item.feature.definition);
+                }
+            });
+            return vm.features;
         }
 }
 })();

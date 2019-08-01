@@ -60,9 +60,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     private UserService userService;
     
     @Inject
-	private  DatasourceConstraintService datasourceConstraintService;
-    
-    @Inject
 	private  VisualMetadataService visualMetadataService;
     
     @Inject
@@ -73,10 +70,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     
     @Inject
     private SchedulerService schedulerService;
-
-	@Inject
-	private QueryTransformerService queryTransformerService;
-	
     
     public SchedulerDTO createScheduledObject() {
     	SchedulerDTO schedulerDTO = new SchedulerDTO();
@@ -135,14 +128,13 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-		SchedulerResource schedulerResource = new SchedulerResource(userService, datasourceConstraintService, visualMetadataService, datasourceService,
-				grpcQueryService, schedulerService, queryTransformerService);
-        ReflectionTestUtils.setField(schedulerResource, "userService", userService); 
+		SchedulerResource schedulerResource = new SchedulerResource(visualMetadataService, datasourceService,
+				grpcQueryService,schedulerService);
         this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
                 .setMessageConverters(jacksonMessageConverter).build();
     }
-    
+
     @Before
     public void initTest() {
     	schedulerDTO = createScheduledObject();

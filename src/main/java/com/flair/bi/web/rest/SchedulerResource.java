@@ -1,32 +1,20 @@
 package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.DatasourceConstraint;
-import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
-import com.flair.bi.service.QueryTransformerParams;
-import com.flair.bi.service.QueryTransformerService;
 import com.flair.bi.service.SchedulerService;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.dto.scheduler.AuthAIDTO;
-import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
-import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.view.VisualMetadataService;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
-import com.project.bi.query.dto.ConditionExpressionDTO;
-import com.project.bi.query.dto.QueryDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -54,7 +42,6 @@ import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -80,21 +67,6 @@ public class SchedulerResource {
 	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
 	
-	@Value("${flair-notifications.slack_API_Token}")
-	private String slack_API_Token;
-	
-	@Value("${flair-notifications.channel_id}")
-	private String channel_id;
-	
-	@Value("${flair-notifications.stride_API_Token}")
-	private String stride_API_Token;
-	
-	@Value("${flair-notifications.stride_cloud_id}")
-	private String stride_cloud_id;
-	
-	@Value("${flair-notifications.stride_conversation_id}")
-	private String stride_conversation_id;
-	
 	@Value("${flair-notifications.mail_body}")
 	private String mail_body;
 
@@ -107,10 +79,6 @@ public class SchedulerResource {
 	@Value("${flair-notifications.scheduled-report-param-url}")
 	private String scheduledReportParamUrl;
 	
-	private final UserService userService;
-	
-	private final DatasourceConstraintService datasourceConstraintService;
-	
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
@@ -118,8 +86,6 @@ public class SchedulerResource {
 	private final GrpcQueryService grpcQueryService;
 	
 	private final SchedulerService schedulerService;
-
-	private final QueryTransformerService queryTransformerService;
 
 	@PostMapping("/schedule")
 	@Timed
@@ -130,29 +96,19 @@ public class SchedulerResource {
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
 		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
 		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
-			schedulerDTO.getAssign_report().setEmail_list(getEmailList(SecurityUtils.getCurrentUserLogin()));
+			schedulerDTO.getAssign_report().setEmail_list(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
-		String query=buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
-		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
+		String[] queries=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid(),schedulerDTO.getThresholdAlert());
+		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),queries[0],queries[1],schedulerDTO.getThresholdAlert());
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(schedulerService.buildUrl(host, port,scheduledReportUrl));
 		HttpHeaders headers = new HttpHeaders();
-		/* below code is commented until auth api is not built from notification application*/
-		//		if (Constants.ai_token == null) {
-		//			try {
-		//				authFlairAI(restTemplate);
-		//			} catch (Exception e) {
-		//				log.error("error occured while fetching token=", e.getMessage());
-		//				e.printStackTrace();
-		//			}
-		//		}
-		//		headers.set("Authorization", Constants.ai_token);
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		log.debug("setChannelCredentials(schedulerDTO)===" + setChannelCredentials(schedulerNotificationDTO));
-		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(setChannelCredentials(schedulerNotificationDTO), headers);
+		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerService.setChannelCredentials(schedulerNotificationDTO));
+		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(schedulerService.setChannelCredentials(schedulerNotificationDTO), headers);
 		SchedulerResponse schedulerResponse= new SchedulerResponse();
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), schedulerDTO.getPutcall()?HttpMethod.PUT:HttpMethod.POST,
@@ -168,84 +124,6 @@ public class SchedulerResource {
 
 	}
 
-
-	private emailsDTO[] getEmailList(String login) {
-		Optional<User> optionalUser=userService.getUserWithAuthoritiesByLogin(login);
-        User user = null;
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-        }
-    	emailsDTO emailsDTO= new emailsDTO();
-    	emailsDTO.setUser_email(user.getEmail());
-    	emailsDTO.setUser_name(user.getFirstName()+" "+user.getLastName());
-    	emailsDTO emailList[]= {emailsDTO};
-		return emailList;
-	}
-	
-	private String buildQuery(QueryDTO queryDTO,VisualMetadata visualMetadata,Datasource datasource,ReportLineItem reportLineItem,String visualizationId,String userId) throws InvalidProtocolBufferException {
-
-		
-		queryDTO.setSource(datasource.getName());
-        
-		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,datasource.getId());
-		
-        Optional.ofNullable(visualMetadata)
-        .map(VisualMetadata::getConditionExpression)
-        .map(x -> {
-            ConditionExpressionDTO dto = new ConditionExpressionDTO();
-            dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
-            dto.setConditionExpression(x);
-            return dto;
-        })
-        .ifPresent(queryDTO.getConditionExpressions()::add);
-
-        Optional.ofNullable(constraint)
-            .map(DatasourceConstraint::build)
-            .ifPresent(queryDTO.getConditionExpressions()::add);
-
-		Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-				.datasourceId(datasource.getId())
-				.connectionName(datasource.getConnectionName())
-				.vId(visualizationId != null ? visualizationId : "")
-				.userId(userId)
-				.build());
-
-        String jsonQuery=JsonFormat.printer().print(query);
-
-        log.debug("jsonQuery=="+jsonQuery);
-
-        return jsonQuery;
-	
-	}
-
-	private String authFlairAI(RestTemplate restTemplate) throws Exception {
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(authUrl);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		AuthAIDTO authAIDTO = new AuthAIDTO(userName, password);
-		HttpEntity<AuthAIDTO> entity = new HttpEntity<AuthAIDTO>(authAIDTO, headers);
-		ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.POST,entity, String.class);
-		log.info("Result - status (" + responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
-		log.info("Response =" + responseEntity.getBody());
-		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-		log.info(jsonObject.getString("token"));
-		Constants.ai_token = jsonObject.getString("token");
-		return jsonObject.getString("token");
-	}
-	
-	private SchedulerNotificationDTO setChannelCredentials(SchedulerNotificationDTO schedulerNotificationDTO){
-		if(schedulerNotificationDTO.getAssign_report().getChannel().equals("slack")){
-			schedulerNotificationDTO.getAssign_report().setChannel_id(channel_id);
-			schedulerNotificationDTO.getAssign_report().setSlack_API_Token(slack_API_Token);
-		}else if(schedulerNotificationDTO.getAssign_report().getChannel().equals("stride")){
-			schedulerNotificationDTO.getAssign_report().setStride_API_Token(stride_API_Token);
-			schedulerNotificationDTO.getAssign_report().setStride_cloud_id(stride_cloud_id);
-			schedulerNotificationDTO.getAssign_report().setStride_conversation_id(stride_conversation_id);
-		} else{
-			
-		}
-		return schedulerNotificationDTO;
-	}
 
     @GetMapping("/schedule/reports/{pageSize}/{page}")
     @Timed

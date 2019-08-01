@@ -149,6 +149,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerDateRangeFilterEvent();
             openSchedulerDialogForThreshold();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
@@ -599,7 +600,6 @@
                 }, function (v) {
                     openSchedulerDialog(v)
                 });
-
             });
             $scope.$on("$destroy", unsubscribe);
         }

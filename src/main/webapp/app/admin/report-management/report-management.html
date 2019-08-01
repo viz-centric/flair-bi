@@ -74,7 +74,7 @@
                                 <button type="submit" uib-tooltip="Logs" ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})" class="btn btn-default btn-sm">
                                     <span class="fa fa-history fa-2x"></span>
                                 </button>
-                                <button uib-tooltip="Edit" ng-click="vm.updateReport(report)" class="btn btn-default btn-sm">
+                                <button uib-tooltip="Edit" ng-click="vm.updateReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
                                     <span class="fa fa-edit edit-icon fa-2x"></span>
                                 </button>
                                 <button uib-tooltip="Delete" ng-click="vm.deleteReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">

@@ -95,6 +95,7 @@
         vm.printAllWidgets = printAllWidgets;
 
         vm.editState = editState;
+        vm.thresholdAlert = thresholdAlert;
         vm.filters={};
         vm.toggleFilters=toggleFilters;
         vm.removeFilterTag=removeFilterTag;
@@ -131,8 +132,6 @@
         vm.filtersLength=0;
         vm.changeHeaderColor=changeHeaderColor;
         vm.changeContainerColor=changeContainerColor;
-
-
         
         Principal.identity().then(function (account) {
                 vm.account = account;
@@ -401,8 +400,7 @@
         }
 
         function toggleFilters($event){
-            $event.stopPropagation();
-            $($event.currentTarget).children( ".filter-drop-downs" ).show();
+            $rootScope.$broadcast("FlairBi:threshold-alert", toggleValue);
         }
 
         function removeFilterTag($event,val,list,key){
@@ -434,6 +432,12 @@
         function editState(toggleValue) {
             $rootScope.$broadcast("FlairBi:button-toggle", toggleValue);
         }
+
+        function thresholdAlert(toggleValue){
+            $rootScope.isThresholdAlert=!toggleValue;
+            vm.isThresholdAlert=!toggleValue;
+        }
+
 
         function printAllWidgets() {
             PrintService.printWidgets(

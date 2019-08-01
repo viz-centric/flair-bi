@@ -149,6 +149,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerDateRangeFilterEvent();
             openSchedulerDialogForThreshold();
             registerThresholdAlert();
             registerAddVisual();
@@ -590,12 +591,16 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+
+        function registerDateRangeFilterEvent() {
+            var unsubscribe = $scope.$on("FlairBi:date-range", function(
         function registerThresholdAlert() {
             var unsubscribe = $scope.$on("FlairBi:threshold-alert", function (
                 event,
                 result
             ) {
                 editMode = result;
+                console.log($rootScope.dateRange)
                 if (editMode) {
                     $(".grid-stack-item").css('opacity', 0.6)
                     $rootScope.isThresholdAlert = true;
@@ -617,7 +622,6 @@
                 }, function (v) {
                     openSchedulerDialog(v)
                 });
-
             });
             $scope.$on("$destroy", unsubscribe);
         }

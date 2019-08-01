@@ -9,7 +9,7 @@
 
     function GenerateComboChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
@@ -132,7 +132,15 @@
                         result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type').toLowerCase());
                         result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                     }
-
+                    if (isNotification) {
+                        result['showXaxis'] = false;
+                        result['showYaxis'] = false;
+                        result['isFilterGrid'] = false;
+                        result['showLegend'] = false;
+                        result['showGrid'] = false;
+                        result['showXaxisLabel'] = false;
+                        result['showYaxisLabel'] = false;
+                    }
                     return result;
                 }
 
@@ -156,11 +164,14 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(false)
+                        .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     combo(div[0])
-                    $rootScope.updateWidget[record.id] = combo;
+                    if (!isNotification) {
+                        $rootScope.updateWidget[record.id] = combo;
+                    }
                 }
             }
         }

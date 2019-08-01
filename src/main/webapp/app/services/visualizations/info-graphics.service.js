@@ -9,7 +9,7 @@
 
     function GenerateInfoGraphic(VisualizationUtils, $rootScope, D3Utils) {
         return {
-            build: function (record, element, panel) {
+            build: function (record, element, panel, isNotification) {
 
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
@@ -47,10 +47,7 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var infographics = $rootScope.updateWidget[record.id];
-                        for (let index = 0; index < record.data.length; index++) {
-                            record.data[index]["high_tolerance"] = record.data[index]["high_tolerance"] - 10;
-                            // record.data[index]["variance_percent"] = record.data[index]["variance_percent"] - 50;
-                        }
+
                         infographics.config(getProperties(VisualizationUtils, record))
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
@@ -63,9 +60,12 @@
                     var infographics = flairVisualizations.infographics()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .print(isNotification == true ? true : false)
                         .data(record.data);
-
-                    infographics(div[0])
+                        
+                    if (!isNotification) {
+                        infographics(div[0])
+                    }
 
                     $rootScope.updateWidget[record.id] = infographics;
                 }

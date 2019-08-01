@@ -25,7 +25,8 @@
         "GenerateLineChart",
         "GenerateMap",
         "GenerateKPI",
-        "GenerateInfoGraphic"
+        "GenerateInfoGraphic",
+        "GenerateDateRange"
     ];
 
     function flairIntegrationController(
@@ -48,7 +49,8 @@
         GenerateLineChart,
         GenerateMap,
         GenerateKPI,
-        GenerateInfoGraphic
+        GenerateInfoGraphic,
+        GenerateDateRange
     ) {
         var vm = this;
 

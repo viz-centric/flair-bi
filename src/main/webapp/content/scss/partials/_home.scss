@@ -703,3 +703,23 @@
 #notification_accordion .notification_details .btn-link {
   padding-left: 0px;
 }
+.notification .comment {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 15px;
+}
+
+.notification .title {
+  border-bottom: 2px #e1e3e3 solid;
+  padding: 5px;
+  color: #337ab7;
+  background-color: #ededed ;
+  font-size: 15px;
+}
+
+.notification {
+  border: 1px #e1e3e3 solid;
+}

@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>
@@ -1299,8 +1299,7 @@
                                     <name>flairbi/${project.artifactId}</name>
                                     <build>
                                         <tags>
-                                            <tag>latest</tag>
-                                            <tag>v${project.version}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
                                     </build>
@@ -1309,8 +1308,7 @@
                                     <name>flairbi/flair-couchdb</name>
                                     <build>
                                         <tags>
-                                            <tag>latest</tag>
-                                            <tag>v${project.version}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
                                     </build>
@@ -1319,8 +1317,7 @@
                                     <name>flairbi/flair-pgsql</name>
                                     <build>
                                         <tags>
-                                            <tag>latest</tag>
-                                            <tag>v${project.version}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>
                                     </build>

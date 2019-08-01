@@ -18,15 +18,14 @@
             }
         });
 
-    propertyController.$inject = ['$scope','VisualDispatchService','$rootScope'];
+    propertyController.$inject = ['$scope','VisualDispatchService','$rootScope','$uibModal'];
 
-    function propertyController($scope,VisualDispatchService,$rootScope) {
+    function propertyController($scope,VisualDispatchService, $rootScope,$uibModal) {
         var vm = this;
         vm.getDisplayName=getDisplayName;
         vm.setProperty=setProperty;
         vm.setCheckboxProperty=setCheckboxProperty;
-
-
+        vm.openIconExpression=openIconExpression;
 
         function getDisplayName(value){
             return value;
@@ -64,6 +63,23 @@
                 VisualDispatchService.setSavePromptMessage("visualization chart property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
             }
+        }
+
+        function openIconExpression(v) {
+            
+            $uibModal.open({
+                templateUrl:
+                    "app/entities/flair-bi/modal/modal-tabs/openColourExpression.html",
+                controller: "openColourExpression",
+                controllerAs: "vm",
+                backdrop: 'static',
+                size: "lg",
+                resolve: {
+                    data: function () {
+                        return v;
+                    }
+                }
+            });
         }
     }
 })();

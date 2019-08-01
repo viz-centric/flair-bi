@@ -151,7 +151,6 @@
             registerButtonToggleEvent();
             registerDateRangeFilterEvent();
             openSchedulerDialogForThreshold();
-            registerThresholdAlert();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
             loadDimensions();
@@ -594,24 +593,15 @@
 
         function registerDateRangeFilterEvent() {
             var unsubscribe = $scope.$on("FlairBi:date-range", function(
-        function registerThresholdAlert() {
-            var unsubscribe = $scope.$on("FlairBi:threshold-alert", function (
                 event,
                 result
             ) {
                 editMode = result;
                 console.log($rootScope.dateRange)
-                if (editMode) {
-                    $(".grid-stack-item").css('opacity', 0.6)
-                    $rootScope.isThresholdAlert = true;
-                } else {
-                    $(".grid-stack-item").css('opacity', 1)
-                    $rootScope.isThresholdAlert = false;
-                }
             });
             $scope.$on("$destroy", unsubscribe);
         }
-        
+                
         function openSchedulerDialogForThreshold() {
             var unsubscribe = $scope.$on("FlairBi:threshold-dialog", function (
                 event,

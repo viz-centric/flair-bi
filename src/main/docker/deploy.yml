@@ -1,0 +1,47 @@
+version: '2'
+services:
+    flair-bi:
+        networks:
+        - flair-network
+        container_name: flairbi
+        image: flairbi/flairbi:${TAG}
+        environment:
+        - CONFIG_URI=http://flair-registry:8761
+        - EUREKA_URL=http://admin:admin@flair-registry:8761/eureka
+        - JHIPSTER_SLEEP=150
+        - SPRING_PROFILES_ACTIVE=prod
+        - POSTGRES_URI=flair-bi-pgsql:5432
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASS=admin
+        - POSTGRES_DB=flairbi
+        - COUCH_USER=couchdb
+        - COUCH_PASS=admin
+        ports:
+        - 8080:8080
+        - 5005:5005
+    flair-bi-pgsql:
+        image: flairbi/flair-pgsql:${TAG}
+        # ports:
+        # - 5432:5432
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=flairbi
+        networks:
+        - flair-network
+    flair-couchdb:
+        image: flairbi/flair-couchdb:${TAG}
+        container_name: flair-couchdb
+        labels:
+            purpose: View store
+            environment: development
+        environment:
+            - COUCHDB_USER=couchdb
+            - COUCHDB_PASSWORD=admin
+        networks:
+            - flair-network
+networks:
+    flair-network:
+        external:
+            name: flair-network
+    

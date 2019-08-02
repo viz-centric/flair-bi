@@ -149,6 +149,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerDateRangeFilterEvent();
             openSchedulerDialogForThreshold();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
@@ -588,7 +589,7 @@
             });
             $scope.$on("$destroy", unsubscribe);
         }
-                
+
         function openSchedulerDialogForThreshold() {
             var unsubscribe = $scope.$on("FlairBi:threshold-dialog", function (
                 event,
@@ -599,7 +600,6 @@
                 }, function (v) {
                     openSchedulerDialog(new VisualWrap(v));
                 });
-
             });
             $scope.$on("$destroy", unsubscribe);
         }

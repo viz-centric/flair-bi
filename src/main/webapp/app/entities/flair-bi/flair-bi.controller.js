@@ -597,9 +597,8 @@
                 Visualmetadata.get({
                     id: $rootScope.ThresholdViz.ID
                 }, function (v) {
-                    openSchedulerDialog(v)
+                    openSchedulerDialog(new VisualWrap(v))
                 });
-
             });
             $scope.$on("$destroy", unsubscribe);
         }

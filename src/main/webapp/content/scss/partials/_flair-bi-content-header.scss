@@ -310,7 +310,7 @@
                 }
             }
         }
-    }
+    } 
     .full-screen-topbar-filter-toggled {
         height: 50px;
     }
@@ -331,7 +331,14 @@
         }
     }
 }
-
+.alarm-icon-off{
+    fill:#676a6c !important;
+    stroke:#676a6c !important; 
+}
+.alarm-icon-on{
+    fill:#439dd3 !important;
+    stroke:#439dd3 !important;
+}
 .flairbi-content-header-fullscreen {
     padding: 0;
     padding-top: 6px;

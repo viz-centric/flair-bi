@@ -85,7 +85,12 @@
                 getScheduleReport(visualMetaData.id);
                 getFeatures(datasource.id);
                 vm.datasource= datasource;
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);     
+                if($rootScope.isThresholdAlert){
+                    vm.scheduleObj.thresholdAlert=true;
+                    vm.condition.value=$rootScope.ThresholdViz.measureValue;
+                    vm.condition.featureName=$rootScope.ThresholdViz.measure;
+                }
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);    
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();

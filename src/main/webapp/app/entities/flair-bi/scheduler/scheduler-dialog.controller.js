@@ -139,6 +139,7 @@
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
+            vm.scheduleObj.report.thresholdAlert=data.report.thresholdAlert;
             setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
@@ -148,7 +149,7 @@
 
         function setHavingDTO(query){
             if(query.having){
-                vm.scheduleObj.report.thresholdAlert=true;
+                //vm.scheduleObj.report.thresholdAlert=true;
                 vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {

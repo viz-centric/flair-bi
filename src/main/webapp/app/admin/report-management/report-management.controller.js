@@ -158,6 +158,9 @@
                     },
                     scheduledObj: function(){
                         return scheduledObj;
+                    },
+                    thresholdAlert: function(){
+                        return scheduledObj.report.thresholdAlert;
                     }
                 }
             });

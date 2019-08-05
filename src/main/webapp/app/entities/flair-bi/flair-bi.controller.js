@@ -149,7 +149,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
-            registerDateRangeFilterEvent();
+            //registerDateRangeFilterEvent();
             openSchedulerDialogForThreshold();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
@@ -1126,7 +1126,7 @@
             vm.gridStackOptions.disableResize = mode;
         }
 
-        function openSchedulerDialog(v){
+        function openSchedulerDialog(v,thresholdAlert){
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/entities/flair-bi/scheduler/scheduler-dialog.html',
@@ -1148,6 +1148,9 @@
                     },
                     scheduledObj: function(){
                         return null;
+                    },
+                    thresholdAlert: function(){
+                        return thresholdAlert;
                     }
                 }
             }).result.then(function () { }, function () { });

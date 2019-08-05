@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS','thresholdAlert'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS,thresholdAlert) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -33,7 +33,8 @@
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
         vm.emailReporterEdit=false;
-        vm.toggleThresholdAlert=toggleThresholdAlert;
+        vm.thresholdAlert=thresholdAlert;
+        vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
         vm.condition={};
         vm.features=[];
         vm.scheduleObj={
@@ -48,7 +49,8 @@
                 "dashboard_name":"",
                 "view_name":"",
                 "share_link":null,
-                "build_url":""
+                "build_url":"",
+                "thresholdAlert":thresholdAlert
             },
             "report_line_item": {
                 "visualizationid":null,
@@ -69,8 +71,7 @@
                 "end_date": new Date()
             },
             "putcall":false,
-            "emailReporter":false,
-            "thresholdAlert":false
+            "emailReporter":false
           };
         activate();
 
@@ -88,7 +89,7 @@
                 getThresholdMeasureList(visualMetaData.fields);
                 vm.datasource= datasource;
                 if($rootScope.isThresholdAlert){
-                    vm.scheduleObj.thresholdAlert=true;
+                    vm.scheduleObj.report.thresholdAlert=true;
                     vm.condition.value=$rootScope.ThresholdViz.measureValue;
                     vm.condition.featureName=$rootScope.ThresholdViz.measure;
                 }
@@ -147,7 +148,7 @@
 
         function setHavingDTO(query){
             if(query.having){
-                vm.scheduleObj.thresholdAlert=true;
+                vm.scheduleObj.report.thresholdAlert=true;
                 vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
@@ -269,7 +270,7 @@
 
         function validateAndSetHaving(){
             var flag=true;
-            if(vm.scheduleObj.thresholdAlert){
+            if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
                 vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
             }
@@ -384,10 +385,10 @@
             return aggFunctionField;
         }
 
-        function toggleThresholdAlert(){
-            vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
-            vm.condition={};
-        }
+        // function toggleThresholdAlert(){
+        //     vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
+        //     vm.condition={};
+        // }
 
         function getThresholdMeasureList(fields){
             fields.filter(function(item) {

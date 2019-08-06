@@ -13,13 +13,11 @@ public class SchedulerDTO {
 	private QueryDTO queryDTO;
 	private boolean putcall;
 	private boolean emailReporter;
-	private boolean thresholdAlert;
 	
 	public SchedulerDTO(){}
 	
 	public SchedulerDTO(long datasourceid, ReportDTO report, ReportLineItem report_line_item,
-			AssignReport assign_report, Schedule schedule, QueryDTO queryDTO, boolean putcall, boolean emailReporter,
-			boolean thresholdAlert) {
+			AssignReport assign_report, Schedule schedule, QueryDTO queryDTO, boolean putcall, boolean emailReporter) {
 		super();
 		this.datasourceid = datasourceid;
 		this.report = report;
@@ -29,7 +27,6 @@ public class SchedulerDTO {
 		this.queryDTO = queryDTO;
 		this.putcall = putcall;
 		this.emailReporter = emailReporter;
-		this.thresholdAlert = thresholdAlert;
 	}
 
 	public ReportDTO getReport() {
@@ -92,24 +89,11 @@ public class SchedulerDTO {
 		return emailReporter;
 	}
 
-	public void setEmailReporter(boolean emailReporter) {
-		this.emailReporter = emailReporter;
-	}
-
-	public boolean getThresholdAlert() {
-		return thresholdAlert;
-	}
-
-	public void setThresholdAlert(boolean thresholdAlert) {
-		this.thresholdAlert = thresholdAlert;
-	}
-
 	@Override
 	public String toString() {
 		return "SchedulerDTO [datasourceid=" + datasourceid + ", report=" + report + ", report_line_item="
 				+ report_line_item + ", assign_report=" + assign_report + ", schedule=" + schedule + ", queryDTO="
-				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + ", thresholdAlert="
-				+ thresholdAlert + "]";
+				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + "]";
 	}
 	
 }

@@ -37,6 +37,7 @@
         vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
         vm.condition={};
         vm.features=[];
+        vm.vizIdPrefix='threshold_alert_:';
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -110,7 +111,7 @@
 
         function getVisualmetadata(scheduledObj){
             Visualmetadata.get({
-                id: scheduledObj.report_line_item.visualizationid
+                id: removePrefix(scheduledObj.report_line_item.visualizationid)
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 getThresholdMeasureList(vm.visualMetaData.fields);
@@ -118,8 +119,9 @@
             });
         }
 
+
         function getScheduleReport(visualizationid){
-            schedulerService.getScheduleReport(visualizationid).then(function (success) {
+            schedulerService.getScheduleReport(addPrefix(visualizationid)).then(function (success) {
                 if(success.status==200){
                     updateScheduledObj(success.data);
                 }
@@ -140,7 +142,8 @@
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
             vm.scheduleObj.report.thresholdAlert=data.report.thresholdAlert;
-            setHavingDTO(JSON.parse(data.query));
+            if(vm.scheduleObj.report.thresholdAlert)
+                setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
                 addEmailList(data.assign_report.email_list);
@@ -149,7 +152,6 @@
 
         function setHavingDTO(query){
             if(query.having){
-                //vm.scheduleObj.report.thresholdAlert=true;
                 vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
@@ -192,7 +194,7 @@
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-           vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
             setDimentionsAndMeasures(visualMetaData.fields);
         
         }
@@ -309,7 +311,7 @@
         }
 
         function deleteReport(id){
-            schedulerService.cancelScheduleReport(id).then(function (success) {
+            schedulerService.cancelScheduleReport(addPrefix(id)).then(function (success) {
                 var info = {
                     text: success.data.message,
                     title: "Cancelled"
@@ -386,10 +388,6 @@
             return aggFunctionField;
         }
 
-        // function toggleThresholdAlert(){
-        //     vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
-        //     vm.condition={};
-        // }
 
         function getThresholdMeasureList(fields){
             fields.filter(function(item) {
@@ -398,6 +396,14 @@
                 }
             });
             return vm.features;
+        }
+
+        function addPrefix(vizId){
+           return vm.scheduleObj.report.thresholdAlert?vm.vizIdPrefix+vizId:vizId;
+        }
+
+        function removePrefix(vizId){
+            return vm.scheduleObj.report.thresholdAlert?vizId.split(":")[1]:vizId;
         }
 }
 })();

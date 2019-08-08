@@ -11,6 +11,7 @@ private String dashboard_name;
 private String view_name;
 private String share_link;
 private String build_url;
+private boolean thresholdAlert;
 
 public ReportDTO(){}
 
@@ -87,11 +88,20 @@ public void setBuild_url(String build_url) {
 	this.build_url = build_url;
 }
 
+public boolean getThresholdAlert() {
+	return thresholdAlert;
+}
+
+public void setThresholdAlert(boolean thresholdAlert) {
+	this.thresholdAlert = thresholdAlert;
+}
+
 @Override
 public String toString() {
 	return "ReportDTO [userid=" + userid + ", mail_body=" + mail_body + ", subject=" + subject + ", report_name="
 			+ report_name + ", title_name=" + title_name + ", dashboard_name=" + dashboard_name + ", view_name="
-			+ view_name + ", share_link=" + share_link + ", build_url=" + build_url + "]";
+			+ view_name + ", share_link=" + share_link + ", build_url=" + build_url + ", thresholdAlert="
+			+ thresholdAlert + "]";
 }
 
 }

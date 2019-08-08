@@ -102,8 +102,8 @@ public class SchedulerResource {
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
-		String[] queries=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid(),schedulerDTO.getThresholdAlert());
-		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),queries[0],queries[1],schedulerDTO.getThresholdAlert());
+		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid(),schedulerDTO.getReport().getThresholdAlert());
+		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(schedulerService.buildUrl(host, port,scheduledReportUrl));
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -152,13 +152,6 @@ public class SchedulerResource {
 		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
 		count=Integer.parseInt(jsonObject.getString("totalReports"));
         return count;
-    }
-    
-    private  void pushToSocket(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO) throws InvalidProtocolBufferException, InterruptedException {
-		 Query.Builder builder = Query.newBuilder();
-		 JsonFormat.parser().merge(schedulerNotificationResponseDTO.getQuery(), builder);
-		 Query query = builder.build();;
-		 grpcQueryService.callGrpcBiDirectionalAndPushInSocket(schedulerNotificationResponseDTO,query, "scheduled-report", query.getUserId());
     }
     
 	@GetMapping("/schedule/{visualizationid}")

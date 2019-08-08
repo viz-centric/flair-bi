@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS','thresholdAlert'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS,thresholdAlert) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -33,9 +33,11 @@
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
         vm.emailReporterEdit=false;
-        vm.toggleThresholdAlert=toggleThresholdAlert;
+        vm.thresholdAlert=thresholdAlert;
+        vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
         vm.condition={};
         vm.features=[];
+        vm.vizIdPrefix='threshold_alert_:';
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -48,7 +50,8 @@
                 "dashboard_name":"",
                 "view_name":"",
                 "share_link":null,
-                "build_url":""
+                "build_url":"",
+                "thresholdAlert":thresholdAlert
             },
             "report_line_item": {
                 "visualizationid":null,
@@ -69,8 +72,7 @@
                 "end_date": new Date()
             },
             "putcall":false,
-            "emailReporter":false,
-            "thresholdAlert":false
+            "emailReporter":false
           };
         activate();
 
@@ -87,7 +89,12 @@
                 getScheduleReport(visualMetaData.id);
                 getThresholdMeasureList(visualMetaData.fields);
                 vm.datasource= datasource;
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);     
+                if($rootScope.isThresholdAlert){
+                    vm.scheduleObj.report.thresholdAlert=true;
+                    vm.condition.value=$rootScope.ThresholdViz.measureValue;
+                    vm.condition.featureName=$rootScope.ThresholdViz.measure;
+                }
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view); 
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
@@ -104,7 +111,7 @@
 
         function getVisualmetadata(scheduledObj){
             Visualmetadata.get({
-                id: scheduledObj.report_line_item.visualizationid
+                id: removePrefix(scheduledObj.report_line_item.visualizationid)
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 getThresholdMeasureList(vm.visualMetaData.fields);
@@ -112,8 +119,9 @@
             });
         }
 
+
         function getScheduleReport(visualizationid){
-            schedulerService.getScheduleReport(visualizationid).then(function (success) {
+            schedulerService.getScheduleReport(addPrefix(visualizationid)).then(function (success) {
                 if(success.status==200){
                     updateScheduledObj(success.data);
                 }
@@ -133,7 +141,9 @@
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
-            setHavingDTO(JSON.parse(data.query));
+            vm.scheduleObj.report.thresholdAlert=data.report.thresholdAlert;
+            if(vm.scheduleObj.report.thresholdAlert)
+                setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
                 addEmailList(data.assign_report.email_list);
@@ -142,7 +152,6 @@
 
         function setHavingDTO(query){
             if(query.having){
-                vm.scheduleObj.thresholdAlert=true;
                 vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
@@ -185,7 +194,7 @@
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
-           vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
             setDimentionsAndMeasures(visualMetaData.fields);
         
         }
@@ -264,7 +273,7 @@
 
         function validateAndSetHaving(){
             var flag=true;
-            if(vm.scheduleObj.thresholdAlert){
+            if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
                 vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
             }
@@ -302,7 +311,7 @@
         }
 
         function deleteReport(id){
-            schedulerService.cancelScheduleReport(id).then(function (success) {
+            schedulerService.cancelScheduleReport(addPrefix(id)).then(function (success) {
                 var info = {
                     text: success.data.message,
                     title: "Cancelled"
@@ -379,10 +388,6 @@
             return aggFunctionField;
         }
 
-        function toggleThresholdAlert(){
-            vm.scheduleObj.thresholdAlert=!vm.scheduleObj.thresholdAlert;
-            vm.condition={};
-        }
 
         function getThresholdMeasureList(fields){
             fields.filter(function(item) {
@@ -391,6 +396,14 @@
                 }
             });
             return vm.features;
+        }
+
+        function addPrefix(vizId){
+           return vm.scheduleObj.report.thresholdAlert?vm.vizIdPrefix+vizId:vizId;
+        }
+
+        function removePrefix(vizId){
+            return vm.scheduleObj.report.thresholdAlert?vizId.split(":")[1]:vizId;
         }
 }
 })();

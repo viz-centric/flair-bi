@@ -91,6 +91,9 @@
                                     },
                                     scheduledObj: function(){
                                         return null;
+                                    },
+                                    thresholdAlert: function(){
+                                        return false;
                                     }
                                 }
                             })

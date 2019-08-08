@@ -149,7 +149,6 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
-            registerDateRangeFilterEvent();
             openSchedulerDialogForThreshold();
             registerAddVisual();
             registerSaveAllWidgetsEvent();
@@ -590,18 +589,6 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-
-        function registerDateRangeFilterEvent() {
-            var unsubscribe = $scope.$on("FlairBi:date-range", function(
-                event,
-                result
-            ) {
-                editMode = result;
-                console.log($rootScope.dateRange)
-            });
-            $scope.$on("$destroy", unsubscribe);
-        }
-                
         function openSchedulerDialogForThreshold() {
             var unsubscribe = $scope.$on("FlairBi:threshold-dialog", function (
                 event,
@@ -610,7 +597,7 @@
                 Visualmetadata.get({
                     id: $rootScope.ThresholdViz.ID
                 }, function (v) {
-                    openSchedulerDialog(v)
+                    openSchedulerDialog(new VisualWrap(v));
                 });
             });
             $scope.$on("$destroy", unsubscribe);
@@ -1138,7 +1125,7 @@
             vm.gridStackOptions.disableResize = mode;
         }
 
-        function openSchedulerDialog(v){
+        function openSchedulerDialog(v,thresholdAlert){
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/entities/flair-bi/scheduler/scheduler-dialog.html',
@@ -1160,6 +1147,9 @@
                     },
                     scheduledObj: function(){
                         return null;
+                    },
+                    thresholdAlert: function(){
+                        return thresholdAlert;
                     }
                 }
             }).result.then(function () { }, function () { });

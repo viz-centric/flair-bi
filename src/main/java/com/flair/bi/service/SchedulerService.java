@@ -144,11 +144,9 @@ public class SchedulerService {
 		return url.toString();
 	}
 
-	public String[] buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
+	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 			ReportLineItem reportLineItem, String visualizationId, String userId, boolean thresholdAlert)
 			throws InvalidProtocolBufferException {
-
-		String queries[] = new String[2];
 		queryDTO.setSource(datasource.getName());
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
@@ -169,19 +167,19 @@ public class SchedulerService {
 						.connectionName(datasource.getConnectionName())
 						.vId(visualizationId != null ? visualizationId : "").userId(userId).build());
 		String jsonQuery = JsonFormat.printer().print(query);
-		queries[0] = thresholdAlert ? queryWithoutHaving(query) : jsonQuery;
-		queries[1] = thresholdAlert ? jsonQuery : null;
-		log.debug("jsonQuery==" + jsonQuery + "  queryWithoutHaving==" + queryWithoutHaving(query));
-		return queries;
-
-	}
-
-	private String queryWithoutHaving(Query query) throws InvalidProtocolBufferException {
-		Query.Builder builder = query.toBuilder();
-		Query querywithoutHaving = builder.clearHaving().build();
-		String jsonQuery = JsonFormat.printer().print(querywithoutHaving);
+//		queries[0] = thresholdAlert ? queryWithoutHaving(query) : jsonQuery;
+//		queries[1] = thresholdAlert ? jsonQuery : null;
+		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
+
 	}
+
+//	private String queryWithoutHaving(Query query) throws InvalidProtocolBufferException {
+//		Query.Builder builder = query.toBuilder();
+//		Query querywithoutHaving = builder.clearHaving().build();
+//		String jsonQuery = JsonFormat.printer().print(querywithoutHaving);
+//		return jsonQuery;
+//	}
 
 	public emailsDTO[] getEmailList(String login) {
 		Optional<User> optionalUser = userService.getUserWithAuthoritiesByLogin(login);

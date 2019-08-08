@@ -111,7 +111,7 @@
             vm.visualmetadata = [];
             var metaData = JSON.parse(data.body);
             Visualmetadata.get({
-                id: metaData.report_line_item.visualizationid
+                id: removePrefix(metaData.report.thresholdAlert,metaData.report_line_item.visualizationid)
             }, function (v) {
                 if (vm.notificationSupportCharts.indexOf(metaData.report_line_item.visualization) >= 0) {
                     v.data = JSON.parse(metaData.queryResponse);
@@ -133,6 +133,10 @@
 
         function onGetScheduledReportsCountError(error) {
 
+        }
+
+        function removePrefix(thresholdAlert,vizId){
+            return thresholdAlert?vizId.split(":")[1]:vizId;
         }
     }
 })();

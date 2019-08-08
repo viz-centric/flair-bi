@@ -59,6 +59,8 @@
         'GenerateSankey',
         'GeneratePivotTable',
         'GenerateDateRange',
+        'GeneratePieGridChart',
+        'GenerateNumberGridChart',
         'proxyGrpcService',
         'filterParametersService',
         '$log',
@@ -93,6 +95,8 @@
         GenerateSankey,
         GeneratePivotTable,
         GenerateDateRange,
+        GeneratePieGridChart,
+        GenerateNumberGridChart,
         proxyGrpcService,
         filterParametersService,
         $log,
@@ -132,6 +136,8 @@
             widgets.GenerateSankey = GenerateSankey;
             widgets.GeneratePivotTable = GeneratePivotTable;
             widgets.GenerateDateRange = GenerateDateRange;
+            widgets.GeneratePieGridChart = GeneratePieGridChart;
+            widgets.GenerateNumberGridChart = GenerateNumberGridChart;
             registerCanBuildChange();
             registerFilterEvent();
             registerResizeWidgetEvent();

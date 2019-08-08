@@ -26,7 +26,9 @@
         "GenerateMap",
         "GenerateKPI",
         "GenerateInfoGraphic",
-        "GenerateDateRange"
+        "GenerateDateRange",
+        "GeneratePieGridChart",
+        "GenerateNumberGridChart"
     ];
 
     function flairIntegrationController(
@@ -50,7 +52,9 @@
         GenerateMap,
         GenerateKPI,
         GenerateInfoGraphic,
-        GenerateDateRange
+        GenerateDateRange,
+        GeneratePieGridChart,
+        GenerateNumberGridChart
     ) {
         var vm = this;
 
@@ -79,6 +83,8 @@
         vm.visualLibrary["GenerateMap"] = GenerateMap;
         vm.visualLibrary["GenerateKPI"] = GenerateKPI;
         vm.visualLibrary["GenerateInfoGraphic"] = GenerateInfoGraphic;
+        vm.visualLibrary["GeneratePieGridChart"] = GeneratePieGridChart;
+        vm.visualLibrary["GenerateNumberGridChart"] = GenerateNumberGridChart;
         /* rendering */
         $scope.inTransformMetadata = function(data) {
             var elementInfo = [];

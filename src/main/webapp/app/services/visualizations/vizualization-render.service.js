@@ -37,7 +37,9 @@
         'proxyService',
         'filterParametersService',
         'GenerateIframe',
-        'GenerateDateRange'
+        'GenerateDateRange',
+        'GeneratePieGridChart',
+        'GenerateNumberGridChart'
         //,'stompClientService'
     ];
 
@@ -69,7 +71,9 @@
         proxyService,
         filterParametersService,
         GenerateIframe,
-        GenerateDateRange) {
+        GenerateDateRange,
+        GeneratePieGridChart,
+        GenerateNumberGridChart) {
 
         var vm = this;
         var widgets = [];
@@ -105,6 +109,8 @@
             widgets.GeneratePivotTable = GeneratePivotTable;
             widgets.GenerateIframe = GenerateIframe;
             widgets.GenerateDateRange = GenerateDateRange;
+            widgets.GeneratePieGridChart = GeneratePieGridChart;
+            widgets.GenerateNumberGridChart = GenerateNumberGridChart;
         }
 
 

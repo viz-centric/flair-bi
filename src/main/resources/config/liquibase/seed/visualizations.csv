@@ -24,3 +24,5 @@ id|name|icon|custom_id|function_name
 527|Sankey|#sankey|18|GenerateSankey
 533|Iframe|#iframe|19|GenerateIframe
 534|Date Range|#iframe|20|GenerateDateRange
+535|Pie Grid|#pie-grid|21|GeneratePieGridChart
+536|Number Grid|#number-grid|22|GenerateNumberGridChart

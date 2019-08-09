@@ -37,11 +37,11 @@
 </div>
 <div ng-if="vm.property.propertyType.name === 'Text colour expression' || vm.property.propertyType.name === 'Cell colour expression' || vm.property.propertyType.name ==='Icon Expression'" class="row">
     <div class="control-label-color-picker flair-model-pad pull-left">{{vm.property.propertyType.name}}</div>
-    <div class="color-picker-container">
+    <div class="color-picker-container" uib-tooltip="Set Conditional Expressions" tooltip-placement="top" >
         <!-- <input  ng-click="vm.openIconExpression(vm)" type="button" value="set condition"> -->
         
 
-        <svg class="colorCondition" ng-click="vm.openIconExpression(vm)">
+        <svg  class="colorCondition" ng-click="vm.openIconExpression(vm)">
             <use xlink:href="#visualization-colors" />
         </svg>
             

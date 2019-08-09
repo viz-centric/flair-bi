@@ -400,7 +400,8 @@
         }
 
         function toggleFilters($event){
-            $rootScope.$broadcast("FlairBi:threshold-alert", toggleValue);
+            $event.stopPropagation();
+            $($event.currentTarget).children( ".filter-drop-downs" ).show();
         }
 
         function removeFilterTag($event,val,list,key){

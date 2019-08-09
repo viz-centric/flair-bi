@@ -8,6 +8,7 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
@@ -144,14 +145,18 @@ public class SchedulerResource {
     
     @GetMapping("/schedule/reports/count")
     @Timed
-    public Integer getScheduledReportsCount() throws JSONException {
+    public  ResponseEntity<CountDTO> getScheduledReportsCount() throws JSONException {
     	Integer count=0;
-    	RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
-		}, SecurityUtils.getCurrentUserLogin());
-		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-		count=Integer.parseInt(jsonObject.getString("totalReports"));
-        return count;
+    	try {
+	    	RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
+			}, SecurityUtils.getCurrentUserLogin());
+			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
+			count=Integer.parseInt(jsonObject.getString("totalReports"));
+			return ResponseEntity.status(200).body(new CountDTO(Long.valueOf(count)));
+    	}catch(Exception e) {
+    		return ResponseEntity.status(200).body(new CountDTO(Long.valueOf(count)));
+    	}
     }
     
 	@GetMapping("/schedule/{visualizationid}")

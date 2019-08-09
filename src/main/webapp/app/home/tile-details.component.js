@@ -13,9 +13,9 @@
             }
         });
 
-    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService'];
+    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService','schedulerService'];
 
-    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService) {
+    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService,schedulerService) {
         var vm = this;
         vm.build=build;
 
@@ -132,8 +132,9 @@
             }
             else if (tileId == "4") {
                 activeTile(tileId);
+                getScheduledReports(vm.account.login,"","","");
                 toggle4Boxes(tileId);
-                $("#box-area").show();
+                //$("#box-area").show();
             }
             else if (tileId == "5") {
                 activeTile(tileId);
@@ -232,6 +233,31 @@
                 sort: 'watchTime,desc'
             });
             vm.bookmarkWatches=[];
+        }
+
+        function serchReports(){
+            vm.reportName = vm.reportName ? vm.reportName : "" ;            
+            getScheduledReports(vm.account.login,vm.reportName);
+        }
+
+        function getScheduledReports(userName,reportName){
+            schedulerService.filterScheduledReports(userName,reportName,"","",5,0).then(
+            function(response) {
+            vm.reports=response.data.records;
+            vm.dashboards = [];
+            vm.datasources=[];
+            vm.views=[];
+            vm.viewWatches=[];
+            vm.bookmarkWatches=[];
+            vm.groupToPages(response.data.records);
+            },
+            function(error) {
+            var info = {
+                text: error.statusText,
+                title: "Error"
+            }
+            $rootScope.showErrorSingleToast(info);
+            });
         }
 
         function registerOnClickTile() {

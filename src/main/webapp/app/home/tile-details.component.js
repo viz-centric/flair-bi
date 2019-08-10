@@ -13,9 +13,9 @@
             }
         });
 
-    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService','schedulerService'];
+    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService','schedulerService','ReportManagementUtilsService'];
 
-    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService,schedulerService) {
+    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService,schedulerService,ReportManagementUtilsService) {
         var vm = this;
         vm.build=build;
 
@@ -40,7 +40,9 @@
         vm.toggleTables={'tile-1':false,'tile-2':false,'tile-3':false,'tile-4':false,'tile-5':false}
         vm.isDesktop=isDesktop;
         vm.filterBookmarks=filterBookmarks;
-        // functions have been describe process the data for display
+        vm.updateReport=updateReport;
+        vm.executeNow=executeNow;
+        vm.goToBuildPage=goToBuildPage;
 
 
         //function to search element 
@@ -277,7 +279,19 @@
 
      function build(viewId,dashboardId,featureBookmark){
         VisualDispatchService.addFeatureBookmark(viewId,dashboardId,featureBookmark);
-     }  
+     }
+
+     function updateReport(id){
+        ReportManagementUtilsService.updateReport(id);
+     }
+
+     function goToBuildPage(build_url){
+        ReportManagementUtilsService.goToBuildPage(build_url);
+     }
+
+     function executeNow(id){
+        ReportManagementUtilsService.executeNow(id);
+     }
 
     }
 })();

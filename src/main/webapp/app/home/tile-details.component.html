@@ -233,7 +233,8 @@
 <div class="table-responsive tile-area-table flairInsightsTable" ng-show="vm.toggleTables['tile-4']">
     <div class="search-box inner-addon left-addon b-b-xs">
         <i class="glyphicon glyphicon-search"></i>
-        <input type="text" ng-model="vm.reportName" name="reportName" class="form-control" placeholder="Search Report..." />
+        <input type="text" ng-model="vm.reportName" name="reportName" class="form-control" placeholder="Enter Report..." />
+        <button type="button" ng-click="vm.serchReports()" class="btn btn-default btn-sm new-datasource">Search</button>
     </div>
     <br/>
     <table class="table table-striped flair-table-v1">
@@ -283,9 +284,6 @@
                         </button>
                         <button uib-tooltip="Edit" ng-click="vm.updateReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
                             <span class="fa fa-edit edit-icon fa-2x"></span>
-                        </button>
-                        <button uib-tooltip="Delete" ng-click="vm.deleteReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
-                            <span class="fa fa-trash delete-icon fa-2x"></span>
                         </button>
                     </div>
                 </td>  

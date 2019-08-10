@@ -43,6 +43,7 @@
         vm.updateReport=updateReport;
         vm.executeNow=executeNow;
         vm.goToBuildPage=goToBuildPage;
+        vm.serchReports=serchReports;
 
 
         //function to search element 

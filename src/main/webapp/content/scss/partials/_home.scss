@@ -409,6 +409,14 @@
         color: $primary-color;
       }
     }
+    .search-btn{
+      color:#fff;
+      position: absolute;
+      right: 0px;
+      top: 1px;
+      border: none;
+      background-color: $primary-color;
+    }
     .new-datasource:hover {
       color: #676a6c;
       background-color: #d9dee1;

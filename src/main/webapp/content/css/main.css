@@ -2018,6 +2018,13 @@ a {
       .home-container .tile-area-table .new-datasource .edit-icon {
         font-size: 1.5em;
         color: #439dd3; }
+    .home-container .tile-area-table .search-btn {
+      color: #fff;
+      position: absolute;
+      right: 0px;
+      top: 1px;
+      border: none;
+      background-color: #439dd3; }
     .home-container .tile-area-table .new-datasource:hover {
       color: #676a6c;
       background-color: #d9dee1;
@@ -4125,6 +4132,14 @@ jhi-alert .alerts .alert-danger {
       text-align: center; }
     .flairbi-content-header .apply-bookmarks {
       justify-content: center; } }
+
+.alarm-icon-off {
+  fill: #676a6c !important;
+  stroke: #676a6c !important; }
+
+.alarm-icon-on {
+  fill: #439dd3 !important;
+  stroke: #439dd3 !important; }
 
 .flairbi-content-header-fullscreen {
   padding: 0;

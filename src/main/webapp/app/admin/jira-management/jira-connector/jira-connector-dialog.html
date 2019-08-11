@@ -1,0 +1,39 @@
+<div class="inmodal in modal-content common-create-popup">
+    <form name="editForm" novalidate="" role="form">
+        <div class="modal-header flair-model-header">
+            <svg class="common-edit-icon">
+              <use xlink:href="#edit-dashboard" />
+            </svg>
+            <div class="header-text"
+                 data-translate="jiraManagement.new.createTitle">
+                _Create new title
+            </div>
+            <svg class="common-cancle-icon"
+                 data-dismiss="modal"
+                 ng-click="vm.close()">
+                <use xlink:href="#cancle" />
+            </svg>
+        </div>
+        <div class="modal-body flair-remove-padding scheduler-modal-body">
+            <div class="container">
+                <div class="row">
+                    _dummy content
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary"
+                    ng-click="vm.submit()"
+                    ng-disabled="editForm.$invalid || vm.isSaving">
+                <span class="fa fa-calendar"></span>&nbsp;
+                <span data-translate="jiraManagement.new.submit">_Create</span>
+            </button>
+            <button class="btn btn-default"
+                    data-dismiss="modal"
+                    ng-click="vm.close()" type="button">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                <span data-translate="jiraManagement.new.cancel">_Cancel</span>
+            </button>
+        </div>
+    </form>
+</div>

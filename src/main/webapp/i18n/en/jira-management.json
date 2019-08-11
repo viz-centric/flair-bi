@@ -1,0 +1,18 @@
+{
+    "jiraManagement": {
+        "home": {
+            "title": "3rd Party Integrations",
+            "connectorName": "Integration name",
+            "dateCreated": "Created at",
+            "action": "Actions",
+            "no": "Number",
+            "create": "Create",
+            "headerTitle": "3rd Party Integrations"
+        },
+        "new": {
+            "createTitle": "Add new integration",
+            "submit": "Create",
+            "cancel": "Cancel"
+        }
+    }
+}

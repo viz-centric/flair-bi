@@ -78,6 +78,12 @@
                 image: "#new-email-report",
                 label: "Report Management",
                 href: "report-management",
+                order: 10
+            },
+            {
+                image: "#new-email-report",
+                label: "3rd Party Integrations",
+                href: "third-party-integrations",
                 order: 11
             }
 
@@ -130,12 +136,18 @@
                 image: "#admin-services",
                 label: "Data Connection",
                 href: "connection",
-                order: 11
+                order: 10
             },
             {
                 image: "#new-email-report",
                 label: "Report Management",
                 href: "report-management",
+                order: 11
+            },
+            {
+                image: "#new-email-report",
+                label: "3rd Party Integrations",
+                href: "third-party-integrations",
                 order: 12
             }
             

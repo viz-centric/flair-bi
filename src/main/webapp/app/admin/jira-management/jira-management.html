@@ -1,0 +1,50 @@
+<div class="fbibox">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                <tr>
+                    <th>
+                        <span data-translate="jiraManagement.home.no"></span>
+                    </th>
+                    <th>
+                        <span data-translate="jiraManagement.home.connectorName">_Connector name</span>
+                    </th>
+                    <th>
+                        <span data-translate="jiraManagement.home.dateCreated">_Date created</span>
+                    </th>
+                    <th>
+                        <span data-translate="jiraManagement.home.action">_Actions</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="integration in vm.integrations">
+                    <td>{{$index+1}}</td>
+                    <td>{{integration.name}}</td>
+                    <td>{{integration.dateCreated}}</td>
+                    <td>
+                        <div class="btn-group flex-btn-group-container">
+                            <button uib-tooltip="View integration"
+                                    ng-click="vm.viewIntegration(integration)"
+                                    class="btn btn-default btn-sm">
+                                <span class="fa fa-eye fa-2x"></span>
+                            </button>
+                            <button uib-tooltip="Edit"
+                                    ng-click="vm.editIntegration(integration)"
+                                    class="btn btn-default btn-sm">
+                                <span class="fa fa-edit edit-icon fa-2x"></span>
+                            </button>
+                            <button uib-tooltip="Delete"
+                                    ng-click="vm.deleteIntegration(integration)"
+                                    class="btn btn-default btn-sm">
+                                <span class="fa fa-trash delete-icon fa-2x"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

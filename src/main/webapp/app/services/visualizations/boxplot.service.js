@@ -26,8 +26,8 @@
                         eachMeasure,
                         allMeasures = [];
 
-                    result["dimension"] = ['country']//D3Utils.getNames(dimensions)[0];
-                    result["measure"] = ['low', '1Q', 'median', '3Q', 'high']//D3Utils.getNames(measures);
+                    result["dimension"] = D3Utils.getNames(dimensions)[0];
+                    result["measure"] = D3Utils.getNames(measures);
 
                     result["maxMes"] = measures.length;
 

@@ -14,6 +14,7 @@
         "action": "Action"  ,
         "status":"status",
         "executedAt":"Executed At",
+        "isThresholdAlert":"Threshold Alert",
         "filter": {
               "filterByDate":{
                          "title":"Filter By Date",

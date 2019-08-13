@@ -126,7 +126,7 @@
 
         function getScheduledReportsCount() {
             schedulerService.getScheduledReportsCount().then(function (result) {
-                vm.count = result.data;
+                vm.count = result.data.count;
                 vm.noOfPages = Math.ceil(vm.count / vm.pageSize);
             }, onGetScheduledReportsCountError);
         }

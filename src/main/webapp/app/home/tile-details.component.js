@@ -13,9 +13,9 @@
             }
         });
 
-    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService'];
+    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService','schedulerService','ReportManagementUtilsService'];
 
-    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService) {
+    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService,schedulerService,ReportManagementUtilsService) {
         var vm = this;
         vm.build=build;
 
@@ -40,7 +40,10 @@
         vm.toggleTables={'tile-1':false,'tile-2':false,'tile-3':false,'tile-4':false,'tile-5':false}
         vm.isDesktop=isDesktop;
         vm.filterBookmarks=filterBookmarks;
-        // functions have been describe process the data for display
+        vm.updateReport=updateReport;
+        vm.executeNow=executeNow;
+        vm.goToBuildPage=goToBuildPage;
+        vm.serchReports=serchReports;
 
 
         //function to search element 
@@ -132,8 +135,9 @@
             }
             else if (tileId == "4") {
                 activeTile(tileId);
+                getScheduledReports(vm.account.login,"","","");
                 toggle4Boxes(tileId);
-                $("#box-area").show();
+                //$("#box-area").show();
             }
             else if (tileId == "5") {
                 activeTile(tileId);
@@ -234,6 +238,31 @@
             vm.bookmarkWatches=[];
         }
 
+        function serchReports(){
+            vm.reportName = vm.reportName ? vm.reportName : "" ;            
+            getScheduledReports(vm.account.login,vm.reportName);
+        }
+
+        function getScheduledReports(userName,reportName){
+            schedulerService.filterScheduledReports(userName,reportName,"","",5,0).then(
+            function(response) {
+            vm.reports=response.data.records;
+            vm.dashboards = [];
+            vm.datasources=[];
+            vm.views=[];
+            vm.viewWatches=[];
+            vm.bookmarkWatches=[];
+            vm.groupToPages(response.data.records);
+            },
+            function(error) {
+            var info = {
+                text: error.statusText,
+                title: "Error"
+            }
+            $rootScope.showErrorSingleToast(info);
+            });
+        }
+
         function registerOnClickTile() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:onClickTile",
@@ -251,7 +280,19 @@
 
      function build(viewId,dashboardId,featureBookmark){
         VisualDispatchService.addFeatureBookmark(viewId,dashboardId,featureBookmark);
-     }  
+     }
+
+     function updateReport(id){
+        ReportManagementUtilsService.updateReport(id);
+     }
+
+     function goToBuildPage(build_url){
+        ReportManagementUtilsService.goToBuildPage(build_url);
+     }
+
+     function executeNow(id){
+        ReportManagementUtilsService.executeNow(id);
+     }
 
     }
 })();

@@ -29,6 +29,7 @@
             resolve: {
                 mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('home');
+                    $translatePartialLoader.addPart('report-management');
                     return $translate.refresh();
                 }]
             }

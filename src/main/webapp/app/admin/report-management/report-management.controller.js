@@ -6,12 +6,12 @@
         .controller('ReportManagementController', ReportManagementController);
 
     ReportManagementController.$inject = ['User','schedulerService',
-        'AlertService','pagingParams','paginationConstants','$location','$rootScope','$state','$uibModal',
-        'AccountDispatch'
+        'AlertService','pagingParams','paginationConstants','$rootScope','$state',
+        'AccountDispatch','ReportManagementUtilsService'
     ];
 
     function ReportManagementController(User,schedulerService,
-        AlertService,pagingParams,paginationConstants,$location,$rootScope,$state,$uibModal,AccountDispatch) {
+        AlertService,pagingParams,paginationConstants,$rootScope,$state,AccountDispatch,ReportManagementUtilsService) {
        
        var vm = this;
 
@@ -71,29 +71,11 @@
             return cronstrue.toString(cronExp);
         }
         function executeNow(vizID){
-            schedulerService.executeNow(vizID).then(
-              function(response) {
-                if (response.status==200){
-                    var info = {
-                    text: response.data.message,
-                    title: "Success"
-                    }
-                    $rootScope.showSuccessToast(info);    
-                }
-              },
-              function(error) {
-                var info = {
-                    text: error.statusText,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
-              });
-
+            ReportManagementUtilsService.executeNow(vizID);
         }
 
         function goToBuildPage(build_url){
-            var buildPage=build_url.split("#")[1];
-            $location.path(buildPage);
+            ReportManagementUtilsService.goToBuildPage(build_url);
         }
 
         function deleteReport(id){
@@ -134,50 +116,8 @@
             getScheduledReports(user,vm.reportName,vm.fromDate,vm.toDate);
         }
 
-        function openScheduledReport(scheduledObj){
-            $uibModal
-            .open({
-                templateUrl:
-                    "app/entities/flair-bi/scheduler/scheduler-dialog.html",
-                controller: "SchedulerDialogController",
-                controllerAs: "vm",
-                backdrop: "static",
-                size: "lg",
-                resolve: {
-                    visualMetaData: function () {
-                        return null;
-                    },
-                    datasource: function(){
-                        return null;
-                    },
-                    view: function(){
-                        return null;
-                    },
-                    dashboard: function(){
-                        return null;
-                    },
-                    scheduledObj: function(){
-                        return scheduledObj;
-                    },
-                    thresholdAlert: function(){
-                        return scheduledObj.report.thresholdAlert;
-                    }
-                }
-            });
-        }
-
         function updateReport(visualizationid){
-            schedulerService.getScheduleReport(visualizationid).then(function (success) {
-                if(success.status==200){
-                    openScheduledReport(success.data);
-                }
-            }).catch(function (error) {
-                var info = {
-                    text: error.data.message,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
-            }); 
+            ReportManagementUtilsService.updateReport(visualizationid);
         }
 
         function searchUser(e,searchedText) {

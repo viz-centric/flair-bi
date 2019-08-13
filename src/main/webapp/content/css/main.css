@@ -2018,6 +2018,13 @@ a {
       .home-container .tile-area-table .new-datasource .edit-icon {
         font-size: 1.5em;
         color: #439dd3; }
+    .home-container .tile-area-table .search-btn {
+      color: #fff;
+      position: absolute;
+      right: 0px;
+      top: 1px;
+      border: none;
+      background-color: #439dd3; }
     .home-container .tile-area-table .new-datasource:hover {
       color: #676a6c;
       background-color: #d9dee1;

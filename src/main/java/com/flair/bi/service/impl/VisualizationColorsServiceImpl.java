@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -52,7 +53,8 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
     @Transactional(readOnly = true) 
     public List<VisualizationColorsDTO> findAll() {
         log.debug("Request to get all VisualizationColors");
-        List<VisualizationColorsDTO> result = visualizationColorsRepository.findAll().stream()
+        final Sort sort = new Sort(Sort.Direction.ASC, "id");
+        List<VisualizationColorsDTO> result = visualizationColorsRepository.findAll(sort).stream()
             .map(visualizationColorsMapper::visualizationColorsToVisualizationColorsDTO)
             .collect(Collectors.toCollection(LinkedList::new));
 

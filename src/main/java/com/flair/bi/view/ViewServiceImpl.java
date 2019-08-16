@@ -42,15 +42,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class ViewServiceImpl implements ViewService {
 
-    private final ViewRepository viewRepository;
+	private final ViewRepository viewRepository;
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    private final ViewStateCouchDbRepository viewStateCouchDbRepository;
+	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
-    private final AccessControlManager accessControlManager;
+	private final AccessControlManager accessControlManager;
 
-    private final ViewWatchService viewWatchService;
+	private final ViewWatchService viewWatchService;
 
 	private final JdbcTemplate jdbcTemplate;
 

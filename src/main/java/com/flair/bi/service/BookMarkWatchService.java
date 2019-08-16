@@ -116,4 +116,21 @@ public class BookMarkWatchService {
 		} 
 		return count;
 	}
+
+	public void deleteBookmarkWatchesByViewId(Long viewId) {
+		try {
+			jdbcTemplate.update("delete from bookmark_watches where view_id=?", viewId);
+		} catch (Exception e) {
+			log.error("error occured while deleting bookmark watches" + e.getMessage());
+		}
+	}
+
+	public void deleteBookmarkWatchesByBookmarkId(Long bookmarkId) {
+		try {
+			jdbcTemplate.update("delete from bookmark_watches where bookmark_id=?", bookmarkId);
+		} catch (Exception e) {
+			log.error("error occured while deleting bookmark watches" + e.getMessage());
+		}
+	}
+
 }

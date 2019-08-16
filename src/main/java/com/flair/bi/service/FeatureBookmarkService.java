@@ -29,6 +29,8 @@ public class FeatureBookmarkService {
 
     private final UserRepository userRepository;
 
+    private final BookMarkWatchService bookMarkWatchService;
+
     /**
      * Save a featureBookmark.
      *
@@ -97,6 +99,7 @@ public class FeatureBookmarkService {
      */
     public void delete(Long id) {
         log.debug("Request to delete FeatureBookmark : {}", id);
+        bookMarkWatchService.deleteBookmarkWatchesByBookmarkId(id);
         featureBookmarkRepository.delete(id);
     }
 }

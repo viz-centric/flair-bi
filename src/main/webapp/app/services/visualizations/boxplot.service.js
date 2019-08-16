@@ -26,26 +26,17 @@
                         eachMeasure,
                         allMeasures = [];
 
-                    result["dimension"] = D3Utils.getNames(dimensions)[0];
+                    result["dimension"] = [D3Utils.getNames(dimensions)[0]];
                     result["measure"] = D3Utils.getNames(measures);
-
                     result["maxMes"] = measures.length;
-
                     result["showXaxis"] = VisualizationUtils.getPropertyValue(record.properties, "Show X Axis");
                     result["showYaxis"] = VisualizationUtils.getPropertyValue(record.properties, "Show Y Axis");
                     result["axisColor"] = VisualizationUtils.getPropertyValue(record.properties, "Axis Colour");
                     result["colorPattern"] = VisualizationUtils.getPropertyValue(record.properties, "Color Pattern");
-
-                    result["showLabels"] = VisualizationUtils.getFieldPropertyValue(dimensions[0], "Show Labels");
-                    result["labelColor"] = VisualizationUtils.getFieldPropertyValue(dimensions[0], "Colour of labels");
                     result["numberFormat"] = VisualizationUtils.getFieldPropertyValue(dimensions[0], "Number format");
-                    result["displayColor"] = [];
-                    for (var i = 0; i < result.maxMes; i++) {
-                        result["displayColor"].push(VisualizationUtils.getFieldPropertyValue(measures[i], "Display colour"));
-                    }
                     return result;
                 }
-
+               
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
 
                     if ($rootScope.filterSelection.id != record.id) {

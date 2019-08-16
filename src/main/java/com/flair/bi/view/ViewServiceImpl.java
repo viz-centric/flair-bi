@@ -9,6 +9,7 @@ import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.ViewReleaseRepository;
 import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.BookMarkWatchService;
 import com.flair.bi.service.ViewWatchService;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.types.Predicate;
@@ -41,17 +42,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class ViewServiceImpl implements ViewService {
 
-    private final ViewRepository viewRepository;
+	private final ViewRepository viewRepository;
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    private final ViewStateCouchDbRepository viewStateCouchDbRepository;
+	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
-    private final AccessControlManager accessControlManager;
+	private final AccessControlManager accessControlManager;
 
-    private final ViewWatchService viewWatchService;
+	private final ViewWatchService viewWatchService;
 
-    private final JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
+
+	private final BookMarkWatchService bookMarkWatchService;
 
     /**
      * Save a views.
@@ -214,48 +217,33 @@ class ViewServiceImpl implements ViewService {
      *
      * @param id the id of the entity
      */
-    @Override
-    public void delete(Long id) {
-        log.debug("Request to delete View : {}", id);
-        final View view = viewRepository.findOne(id);
+	@Override
+	public void delete(Long id) {
+		log.debug("Request to delete View : {}", id);
+		try {
+			final View view = viewRepository.findOne(id);
+			if (view.isPublished() && !accessControlManager.hasAccess(id.toString(), Action.DELETE_PUBLISHED, "VIEW")) {
+				throw new AccessDeniedException("User does not have a priviledge");
+			}
+			// delete view permissions and connections
+			Set<Permission> permissions = view.getPermissions();
+			permissions.forEach(x -> accessControlManager.disconnectPermissions(x, new Permission(
+					view.getViewDashboard().getId().toString(), x.getAction(), view.getViewDashboard().getScope())));
+			// remove permissions
+			accessControlManager.removePermissions(permissions);
+			// remove bookmark watches
+			bookMarkWatchService.deleteBookmarkWatchesByViewId(id);
+			viewRepository.delete(view);
+			// if the document is already deleted we ignore the error
+			// remove view
+			viewStateCouchDbRepository.remove(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
+			view.getReleases().stream().map(ViewRelease::getViewState).map(ViewState::getId)
+					.map(viewStateCouchDbRepository::get).forEach(viewStateCouchDbRepository::remove);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 
-        if (view.isPublished() &&
-            !accessControlManager.hasAccess(id.toString(), Action.DELETE_PUBLISHED, "VIEW")) {
-            throw new AccessDeniedException("User does not have a priviledge");
-        }
-
-        //delete view permissions and connections
-        Set<Permission> permissions = view.getPermissions();
-        permissions
-            .forEach(x -> accessControlManager
-                .disconnectPermissions(x,
-                    new Permission(view.getViewDashboard().getId().toString(),
-                        x.getAction(),
-                        view.getViewDashboard().getScope())));
-
-        //remove permissions
-        accessControlManager.removePermissions(permissions);
-
-        viewRepository.delete(view);
-
-
-        // if the document is already deleted we ignore the error
-        try {
-            //remove view
-            viewStateCouchDbRepository.remove(viewStateCouchDbRepository
-                .get(view.getCurrentEditingState().getId()));
-
-            view.getReleases()
-                .stream()
-                .map(ViewRelease::getViewState)
-                .map(ViewState::getId)
-                .map(viewStateCouchDbRepository::get)
-                .forEach(viewStateCouchDbRepository::remove);
-        } catch (DocumentNotFoundException e) {
-            log.error(e.getMessage());
-        }
-
-    }
+	}
 
     @Override
     @Transactional(readOnly = true)

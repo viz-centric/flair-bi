@@ -1,34 +1,49 @@
-<div class="fbibox">
+<div class="fbibox report-management">
     <div class="fbibox-content">
-        <div class="table-responsive">
-            <div class="row">
-            <div class="col-md-4">
-                <h4 data-translate="reportManagement.filter.filterByDate.title">Filter by date</h4>
-                <p class="input-group">
-                    <span class="input-group-addon" data-translate="reportManagement.filter.filterByDate.from">from</span>
-                    <input type="date" class="input-sm form-control" name="start" ng-model="vm.fromDate"/>
-                    <span class="input-group-addon" data-translate="reportManagement.filter.filterByDate.to">to</span>
-                    <input type="date" class="input-sm form-control" name="end" ng-model="vm.toDate"/>
-                </p>
+        <div class="row filters">
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <h4 class="control-label" data-translate="reportManagement.filters.fromDate" for="fromDate">From Date</h4>
+                    <input  type="text" class="form-control" name="fromDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.fromDate" is-open="vm.datePickerOpenStatus.fromDate" />
+                    <span class="input-group-btn scheduler-date-icon">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('fromDate')">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
             </div>
-            <div class="col-md-3">
-                <h4 data-translate="reportManagement.filter.filterByReportName">Filter by date</h4>
-                    <input type="text" class="input-sm form-control" name="reportName" ng-model="vm.reportName"/>
+            <div class="col-xs-3">
+                <div class="input-group">
+                <h4 class="control-label" data-translate="reportManagement.filters.toDate" for="toDate">To Date</h4>
+                    <input  type="text" class="form-control" name="toDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.toDate" is-open="vm.datePickerOpenStatus.toDate" />
+                    <span class="input-group-btn scheduler-date-icon">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('toDate')">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="input-group">
+                <h4  class="control-label" data-translate="reportManagement.filters.reportName">Report Name</h4>
+                    <input type="text" class="report-name input-sm form-control" name="reportName" ng-model="vm.reportName"/>
+                </div>
             </div>
             <div ng-if="vm.isAdmin" class="col-md-3">
-                <h4 data-translate="reportManagement.filter.filterByUser">Filter by User</h4>
-                    <ui-select ng-keyup="vm.searchUser($event,$select.search)" id="field_user" name="userName" ng-model="vm.userName" required>
+                <h4  class="control-label" data-translate="reportManagement.filters.user">User</h4>
+                <ui-select ng-keyup="vm.searchUser($event,$select.search)" id="field_user" name="userName" ng-model="vm.userName" required>
                     <ui-select-match placeholder="Select User">{{$select.selected.login}}</ui-select-match>
                     <ui-select-choices repeat="user in vm.users">
                         <div ng-bind="user.login "></div>
                     </ui-select-choices>
                 </ui-select>
-                    <!-- <input type="text" class="input-sm form-control" name="userName" ng-model="vm.userName"/> -->
             </div>
-            <div class="col-md-2">
-                <button type="button" style="margin-top: 27px;" ng-click="vm.serchReports()" class="btn btn-info">Search</button>
+            <div class="col-xs-1">
+                <button data-translate="reportManagement.filters.search" type="button" ng-click="vm.serchReports()" class="btn btn-info search-btn">Search</button>
             </div>
-            </div>
+        </div>
+        <br/>
+        <div class="table-responsive">
             <table class="table table-striped flair-table-v1">
                 <thead>
                     <tr>

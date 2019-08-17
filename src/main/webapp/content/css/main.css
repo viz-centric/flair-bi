@@ -6511,3 +6511,13 @@ input.select2-active {
   left: 0;
   bottom: 0;
   right: 0; }
+
+.report-management {
+  display: flex;
+  flex-wrap: wrap; }
+  .report-management .filters .scheduler-date-icon {
+    vertical-align: bottom; }
+  .report-management .filters .report-name {
+    height: 35px; }
+  .report-management .filters .search-btn {
+    margin-top: 30px; }

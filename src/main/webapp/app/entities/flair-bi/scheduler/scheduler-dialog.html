@@ -197,7 +197,11 @@
             <button ng-if="vm.scheduleObj.putcall" class="btn btn-default"  data-dismiss="modal" ng-click="vm.deleteReport(vm.scheduleObj.report_line_item.visualizationid)" type="button">
                 <span class="cancel-job-icon glyphicon glyphicon-remove"></span>&nbsp;
                 <span data-translate="entity.action.canceljob">Cancel Job</span>
-            </button> 
+            </button>
+            <button ng-if="vm.scheduleObj.putcall" class="btn btn-primary"  data-dismiss="modal" ng-click="vm.executeNow(vm.scheduleObj.report_line_item.visualizationid)" type="button">
+                <span class="fa fa-bolt"></span>&nbsp;
+                <span data-translate="entity.action.runNow">Run Now</span>
+            </button>
             <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
                 <span data-translate="entity.action.close">Close</span>

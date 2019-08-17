@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS','thresholdAlert'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS','thresholdAlert','ReportManagementUtilsService'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS,thresholdAlert) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS,thresholdAlert,ReportManagementUtilsService) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -32,6 +32,7 @@
         vm.changeDashboard=changeDashboard;
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
+        vm.executeNow=executeNow;
         vm.emailReporterEdit=false;
         vm.thresholdAlert=thresholdAlert;
         vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
@@ -404,6 +405,10 @@
 
         function removePrefix(vizId){
             return vm.scheduleObj.report.thresholdAlert?vizId.split(":")[1]:vizId;
+        }
+
+        function executeNow(id){
+            ReportManagementUtilsService.executeNow(addPrefix(id));
         }
 }
 })();

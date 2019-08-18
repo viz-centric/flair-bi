@@ -3,23 +3,16 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.dto.scheduler.AuthAIDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
-import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -87,8 +80,6 @@ public class SchedulerResource {
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
-	
-	private final GrpcQueryService grpcQueryService;
 	
 	private final SchedulerService schedulerService;
 

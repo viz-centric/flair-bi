@@ -16,7 +16,7 @@ import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionResponse;
 import io.grpc.stub.StreamObserver;
 
-public interface IGrpcService {
+public interface IEngineGrpcService {
     QueryValidationResponse validate(Query query);
 
     StreamObserver<Query> getDataStream(StreamObserver<QueryResponse> responseObserver);

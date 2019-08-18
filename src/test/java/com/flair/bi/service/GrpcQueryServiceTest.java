@@ -36,7 +36,7 @@ public class GrpcQueryServiceTest {
     @Mock
     private DatasourceConstraintService datasourceConstraintService;
     @Mock
-    private IGrpcService grpcService;
+    private IEngineGrpcService grpcService;
     @Mock
     private FbEngineWebSocketService fbEngineWebSocketService;
     @Mock

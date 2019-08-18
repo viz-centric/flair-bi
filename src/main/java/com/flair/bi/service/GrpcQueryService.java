@@ -42,7 +42,7 @@ public class GrpcQueryService {
     private final DatasourceService datasourceService;
     private final DatasourceConstraintService datasourceConstraintService;
     private final FbEngineWebSocketService fbEngineWebSocketService;
-    private final IGrpcService grpcService;
+    private final IEngineGrpcService grpcService;
     private final QueryTransformerService queryTransformerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 

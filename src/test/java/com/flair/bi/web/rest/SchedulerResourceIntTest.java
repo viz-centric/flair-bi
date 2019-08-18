@@ -4,10 +4,8 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.User;
-import com.flair.bi.service.DatasourceConstraintService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
-import com.flair.bi.service.QueryTransformerService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AssignReport;
@@ -28,7 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -129,7 +126,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     public void setup() {
         MockitoAnnotations.initMocks(this);
 		SchedulerResource schedulerResource = new SchedulerResource(visualMetadataService, datasourceService,
-				grpcQueryService,schedulerService);
+				schedulerService);
         this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
                 .setMessageConverters(jacksonMessageConverter).build();

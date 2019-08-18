@@ -95,7 +95,7 @@
                     vm.condition.value=$rootScope.ThresholdViz.measureValue;
                     vm.condition.featureName=$rootScope.ThresholdViz.measure;
                 }
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view); 
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
@@ -104,7 +104,7 @@
                     getVisualmetadata(scheduledObj);
                     updateScheduledObj(scheduledObj);
                 }else{
-                    loadDashboards(); 
+                    loadDashboards();
                 }
 
             }
@@ -120,19 +120,21 @@
             });
         }
 
-
-        function getScheduleReport(visualizationid){
-            schedulerService.getScheduleReport(addPrefix(visualizationid)).then(function (success) {
-                if(success.status==200){
-                    updateScheduledObj(success.data);
-                }
-            }).catch(function (error) {
-                var info = {
-                    text: error.data.message,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
-            }); 
+        function getScheduleReport(visualizationid) {
+            schedulerService
+                .getScheduleReport(addPrefix(visualizationid))
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        updateScheduledObj(report);
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+            }   );
         }
 
         function updateScheduledObj(data){

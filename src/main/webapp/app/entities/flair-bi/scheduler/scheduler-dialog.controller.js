@@ -83,6 +83,7 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             var cronstrue = window.cronstrue;
+            vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;

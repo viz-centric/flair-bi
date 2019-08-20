@@ -79,15 +79,19 @@
                         <td>{{report.schedule.cron_exp | CronParser}}</td>
                         <td>{{report.report.userid}}</td>
                         <td>
-                            <div class="btn-group flex-btn-group-container">
+                            <div class="btn-group flex-btn-group-container report-actions">
                                 <button uib-tooltip="Run Now" ng-click="vm.executeNow(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
-                                    <span class="fa fa-bolt fa-2x"></span>
+                                    <svg >
+                                       <use xlink:href="#execute-now"></use>
+                                    </svg>
                                 </button>
                                 <button uib-tooltip="Go to View" ng-click="vm.goToBuildPage(report.report.build_url)" class="btn btn-default btn-sm">
                                     <span class="fa fa-eye fa-2x"></span>
                                 </button>
                                 <button type="submit" uib-tooltip="Logs" ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})" class="btn btn-default btn-sm">
-                                    <span class="fa fa-history fa-2x"></span>
+                                    <svg >
+                                       <use xlink:href="#admin-logs"></use>
+                                    </svg>
                                 </button>
                                 <button uib-tooltip="Edit" ng-click="vm.updateReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
                                     <span class="fa fa-edit edit-icon fa-2x"></span>

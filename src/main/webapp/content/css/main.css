@@ -6521,3 +6521,7 @@ input.select2-active {
     height: 35px; }
   .report-management .filters .search-btn {
     margin-top: 30px; }
+  .report-management .report-actions svg {
+    width: 19px;
+    height: 19px;
+    fill: #439dd3; }

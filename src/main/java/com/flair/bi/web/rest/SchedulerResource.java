@@ -8,13 +8,9 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.dto.scheduler.AuthAIDTO;
-import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
@@ -104,10 +96,10 @@ public class SchedulerResource {
 		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid(),schedulerDTO.getReport().getThresholdAlert());
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 
-		setChannelCredentials(schedulerNotificationDTO);
+		schedulerService.setChannelCredentials(schedulerNotificationDTO);
         log.info("Sending schedule report {}", schedulerNotificationDTO);
 
-        SchedulerReportDTO schedulerReportDTO;
+        GetSchedulerReportDTO schedulerReportDTO;
         if (schedulerDTO.getPutcall()) {
             schedulerReportDTO = schedulerService.updateSchedulerReport(schedulerNotificationDTO);
         } else {
@@ -158,9 +150,9 @@ public class SchedulerResource {
 
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
 	    log.info("Get scheduled report {}", visualizationid);
-		SchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
 
 		log.info("Get scheduled report {} found", visualizationid);
 		return ResponseEntity.ok(responseDTO);

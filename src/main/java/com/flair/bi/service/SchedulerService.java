@@ -8,9 +8,6 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -146,15 +143,15 @@ public class SchedulerService {
 		return url.toString();
 	}
 
-	public SchedulerReportDTO getSchedulerReport(String visualizationId) {
+	public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
 		return notificationsGrpcService.getSchedulerReport(visualizationId);
 	}
 
-	public SchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+	public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
 		return notificationsGrpcService.createSchedulerReport(schedulerNotificationDTO);
 	}
 
-	public SchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+	public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
 		return notificationsGrpcService.updateSchedulerReport(schedulerNotificationDTO);
 	}
 

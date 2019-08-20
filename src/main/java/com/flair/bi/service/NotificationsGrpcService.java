@@ -8,11 +8,11 @@ import com.flair.bi.messages.report.ScheduleReport;
 import com.flair.bi.messages.report.ScheduleReportRequest;
 import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public SchedulerReportDTO getSchedulerReport(String visualizationId) {
+    public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
         GetScheduledReportRequest request = GetScheduledReportRequest.newBuilder()
                 .setVisualizationId(visualizationId)
                 .build();
@@ -53,7 +53,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public SchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+    public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
         ScheduleReportResponse response = getReportStub().scheduleReport(ScheduleReportRequest.newBuilder()
                 .setReport(toReportProto(schedulerNotificationDTO))
                 .build());
@@ -61,15 +61,15 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public SchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+    public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
         ScheduleReportResponse response = getReportStub().updateScheduledReport(ScheduleReportRequest.newBuilder()
                 .setReport(toReportProto(schedulerNotificationDTO))
                 .build());
         return createSchedulerReportDto(response);
     }
 
-    private SchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
-        return SchedulerReportDTO.builder()
+    private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
+        return GetSchedulerReportDTO.builder()
                 .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
                 .report(toReportDTO(response))
                 .build();
@@ -88,6 +88,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                                 .setSubject(orEmpty(dto.getReport().getSubject()))
                                 .setReportName(orEmpty(dto.getReport().getReport_name()))
                                 .setTitleName(orEmpty(dto.getReport().getTitle_name()))
+                                .setThresholdAlert(dto.getReport().getThresholdAlert())
                                 .build()
                 )
                 .setReportLineItem(

@@ -60,7 +60,7 @@ public class FbGRPCResource {
 				log.error("error returned while fetching reports {}", reports.getMessage());
 				throw new IllegalStateException("Cannot get scheduled reporst for user " + reports.getMessage());
 			}
-			for (SchedulerNotificationDTO schedulerNotificationResponseDTO : reports.getReport()) {
+			for (SchedulerNotificationDTO schedulerNotificationResponseDTO : reports.getReports()) {
 				pushToSocket(schedulerNotificationResponseDTO);
 			}
 		} catch (Exception e) {

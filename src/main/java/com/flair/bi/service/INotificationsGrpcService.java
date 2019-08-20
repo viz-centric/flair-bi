@@ -2,10 +2,7 @@ package com.flair.bi.service;
 
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
-
-import java.util.List;
 
 public interface INotificationsGrpcService {
 

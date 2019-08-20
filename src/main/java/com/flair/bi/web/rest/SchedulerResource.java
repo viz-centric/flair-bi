@@ -6,14 +6,11 @@ import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.SchedulerService;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.dto.scheduler.AuthAIDTO;
-import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +20,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -123,27 +118,26 @@ public class SchedulerResource {
     @Timed
     public ResponseEntity<List<SchedulerNotificationDTO>> getSchedulerReports(@PathVariable Integer pageSize, @PathVariable Integer page)
         throws URISyntaxException {
-		List<SchedulerNotificationDTO> reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
-		return ResponseEntity.ok(reports);
+		SchedulerReportsDTO reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
+		return ResponseEntity.ok(reports.getReports());
     }
     
     @GetMapping("/schedule/reports/count")
     @Timed
-    public  ResponseEntity<CountDTO> getScheduledReportsCount() throws JSONException {
-    	Integer count=0;
+    public CountDTO getScheduledReportsCount() throws JSONException {
     	RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
 		}, SecurityUtils.getCurrentUserLogin());
 		JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-		count=Integer.parseInt(jsonObject.getString("totalReports"));
-        return count;
+		Long count = Long.parseLong(jsonObject.getString("totalReports"));
+        return new CountDTO(count);
     }
 
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
 	    log.info("Get scheduled report {}", visualizationid);
-		SchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
 
 		log.info("Get scheduled report {} finished", visualizationid);
 		return ResponseEntity.ok(responseDTO);
@@ -151,9 +145,9 @@ public class SchedulerResource {
 	
 	@DeleteMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerReportDTO> deleteSchedulerReport(@PathVariable String visualizationid) {
+	public ResponseEntity<GetSchedulerReportDTO> deleteSchedulerReport(@PathVariable String visualizationid) {
 		log.info("Delete scheduled report {}", visualizationid);
-		SchedulerReportDTO responseDTO = schedulerService.deleteSchedulerReport(visualizationid);
+		GetSchedulerReportDTO responseDTO = schedulerService.deleteSchedulerReport(visualizationid);
 
 		log.info("Delete scheduled report {} finished {}", visualizationid, responseDTO);
 		return ResponseEntity.ok(responseDTO);

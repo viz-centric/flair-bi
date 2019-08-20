@@ -16,7 +16,6 @@ import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
@@ -88,12 +87,12 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
         return SchedulerReportsDTO.builder()
                 .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
-                .report(dtos)
+                .reports(dtos)
                 .build();
     }
 
     @Override
-    public SchedulerReportDTO deleteSchedulerReport(String visualizationId) {
+    public GetSchedulerReportDTO deleteSchedulerReport(String visualizationId) {
         ScheduleReportResponse response = getReportStub().deleteScheduledReport(DeleteScheduledReportRequest.newBuilder()
                 .setVisualizationId(visualizationId)
                 .build());

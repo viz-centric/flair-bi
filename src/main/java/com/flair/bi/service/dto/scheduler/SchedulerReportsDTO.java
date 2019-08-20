@@ -11,5 +11,5 @@ import java.util.List;
 @ToString
 public class SchedulerReportsDTO {
     private final String message;
-    private final List<SchedulerNotificationDTO> report;
+    private final List<SchedulerNotificationDTO> reports;
 }

@@ -2,7 +2,10 @@ package com.flair.bi.service;
 
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
+import com.flair.bi.messages.report.Report;
 import com.flair.bi.messages.report.ReportServiceGrpc;
+import com.flair.bi.messages.report.ScheduleReport;
+import com.flair.bi.messages.report.ScheduleReportRequest;
 import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
@@ -19,6 +22,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+
+import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -43,9 +49,81 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .setVisualizationId(visualizationId)
                 .build();
         ScheduleReportResponse response = getReportStub().getScheduledReport(request);
+        return createSchedulerReportDto(response);
+    }
+
+    @Override
+    public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+        ScheduleReportResponse response = getReportStub().scheduleReport(ScheduleReportRequest.newBuilder()
+                .setReport(toReportProto(schedulerNotificationDTO))
+                .build());
+        return createSchedulerReportDto(response);
+    }
+
+    @Override
+    public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+        ScheduleReportResponse response = getReportStub().updateScheduledReport(ScheduleReportRequest.newBuilder()
+                .setReport(toReportProto(schedulerNotificationDTO))
+                .build());
+        return createSchedulerReportDto(response);
+    }
+
+    private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
         return GetSchedulerReportDTO.builder()
                 .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
                 .report(toReportDTO(response))
+                .build();
+    }
+
+    private ScheduleReport toReportProto(SchedulerNotificationDTO dto) {
+        return ScheduleReport.newBuilder()
+                .setReport(
+                        Report.newBuilder()
+                                .setUserid(orEmpty(dto.getReport().getUserid()))
+                                .setDashboardName(orEmpty(dto.getReport().getDashboard_name()))
+                                .setViewName(orEmpty(dto.getReport().getView_name()))
+                                .setShareLink(orEmpty(dto.getReport().getShare_link()))
+                                .setBuildUrl(orEmpty(dto.getReport().getBuild_url()))
+                                .setMailBody(orEmpty(dto.getReport().getMail_body()))
+                                .setSubject(orEmpty(dto.getReport().getSubject()))
+                                .setReportName(orEmpty(dto.getReport().getReport_name()))
+                                .setTitleName(orEmpty(dto.getReport().getTitle_name()))
+                                .setThresholdAlert(dto.getReport().getThresholdAlert())
+                                .build()
+                )
+                .setReportLineItem(
+                        com.flair.bi.messages.report.ReportLineItem.newBuilder()
+                                .setVisualizationid(orEmpty(dto.getReport_line_item().getVisualizationid()))
+                                .addAllDimension(Arrays.asList(dto.getReport_line_item().getDimension()))
+                                .addAllMeasure(Arrays.asList(dto.getReport_line_item().getMeasure()))
+                                .setVisualization(orEmpty(dto.getReport_line_item().getVisualization()))
+                                .build()
+                )
+                .setAssignReport(
+                        com.flair.bi.messages.report.AssignReport.newBuilder()
+                                .setChannel(orEmpty(dto.getAssign_report().getChannel()))
+                                .setSlackAPIToken(orEmpty(dto.getAssign_report().getSlack_API_Token()))
+                                .setChannelId(orEmpty(dto.getAssign_report().getChannel_id()))
+                                .setStrideAPIToken(orEmpty(dto.getAssign_report().getStride_API_Token()))
+                                .setStrideCloudId(orEmpty(dto.getAssign_report().getStride_cloud_id()))
+                                .setStrideConversationId(orEmpty(dto.getAssign_report().getStride_conversation_id()))
+                                .addAllEmailList(Arrays.stream(dto.getAssign_report().getEmail_list())
+                                        .map(i -> Email.newBuilder()
+                                                .setUserEmail(orEmpty(i.getUser_email()))
+                                                .setUserName(orEmpty(i.getUser_name()))
+                                                .build())
+                                        .collect(toList()))
+                                .build()
+                )
+                .setSchedule(
+                        com.flair.bi.messages.report.Schedule.newBuilder()
+                                .setCronExp(orEmpty(dto.getSchedule().getCron_exp()))
+                                .setTimezone(orEmpty(dto.getSchedule().getTimezone()))
+                                .setStartDate(orEmpty(dto.getSchedule().getStart_date()))
+                                .setEndDate(orEmpty(dto.getSchedule().getEnd_date()))
+                                .build()
+                )
+                .setQuery(dto.getQuery())
                 .build();
     }
 

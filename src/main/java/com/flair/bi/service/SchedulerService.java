@@ -147,6 +147,14 @@ public class SchedulerService {
 		return notificationsGrpcService.getSchedulerReport(visualizationId);
 	}
 
+	public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+		return notificationsGrpcService.createSchedulerReport(schedulerNotificationDTO);
+	}
+
+	public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+		return notificationsGrpcService.updateSchedulerReport(schedulerNotificationDTO);
+	}
+
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 			ReportLineItem reportLineItem, String visualizationId, String userId, boolean thresholdAlert)
 			throws InvalidProtocolBufferException {

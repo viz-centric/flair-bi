@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS','thresholdAlert'];
+        SchedulerDialogController.$inject = ['$uibModalInstance','$scope','TIMEZONES','$rootScope','visualMetaData','filterParametersService','schedulerService','User','datasource','view','scheduler_channels','dashboard','ShareLinkService','Dashboards','Views','Visualmetadata','VisualWrap','scheduledObj','$state','Features','COMPARISIONS','thresholdAlert','ReportManagementUtilsService'];
 
-    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS,thresholdAlert) {
+    function SchedulerDialogController($uibModalInstance,$scope,TIMEZONES,$rootScope,visualMetaData,filterParametersService,schedulerService,User,datasource,view,scheduler_channels,dashboard,ShareLinkService,Dashboards,Views,Visualmetadata,VisualWrap,scheduledObj,$state,Features,COMPARISIONS,thresholdAlert,ReportManagementUtilsService) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -32,6 +32,7 @@
         vm.changeDashboard=changeDashboard;
         vm.changeView=changeView;
         vm.changeVisualization=changeVisualization;
+        vm.executeNow=executeNow;
         vm.emailReporterEdit=false;
         vm.thresholdAlert=thresholdAlert;
         vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
@@ -82,6 +83,7 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             var cronstrue = window.cronstrue;
+            vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;
@@ -94,7 +96,7 @@
                     vm.condition.value=$rootScope.ThresholdViz.measureValue;
                     vm.condition.featureName=$rootScope.ThresholdViz.measure;
                 }
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view); 
+                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
@@ -103,7 +105,7 @@
                     getVisualmetadata(scheduledObj);
                     updateScheduledObj(scheduledObj);
                 }else{
-                    loadDashboards(); 
+                    loadDashboards();
                 }
 
             }
@@ -119,19 +121,21 @@
             });
         }
 
-
-        function getScheduleReport(visualizationid){
-            schedulerService.getScheduleReport(addPrefix(visualizationid)).then(function (success) {
-                if(success.status==200){
-                    updateScheduledObj(success.data);
-                }
-            }).catch(function (error) {
-                var info = {
-                    text: error.data.message,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
-            }); 
+        function getScheduleReport(visualizationid) {
+            schedulerService
+                .getScheduleReport(addPrefix(visualizationid))
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        updateScheduledObj(report);
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+            }   );
         }
 
         function updateScheduledObj(data){
@@ -243,19 +247,20 @@
                 setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    var info = {
+                    if (success.data.message) {
+                      $rootScope.showErrorSingleToast({
                         text: success.data.message,
-                        title: "Saved"
+                        title: "Error"
+                      });
+                    } else {
+                      $uibModalInstance.close(vm.scheduleObj);
                     }
-                    $rootScope.showSuccessToast(info);
-                    $uibModalInstance.close(vm.scheduleObj);
                 }).catch(function (error) {
                     vm.isSaving = false;
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
+                    $rootScope.showErrorSingleToast({
+                      text: error.data.message,
+                      title: "Error"
+                    });
                 });
             }else{
                 var info = {
@@ -404,6 +409,10 @@
 
         function removePrefix(vizId){
             return vm.scheduleObj.report.thresholdAlert?vizId.split(":")[1]:vizId;
+        }
+
+        function executeNow(id){
+            ReportManagementUtilsService.executeNow(addPrefix(id));
         }
 }
 })();

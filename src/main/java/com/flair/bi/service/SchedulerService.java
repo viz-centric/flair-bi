@@ -1,9 +1,21 @@
 package com.flair.bi.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.DatasourceConstraint;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.messages.Query;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.ReportLineItem;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerResponse;
+import com.flair.bi.service.dto.scheduler.emailsDTO;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
+import com.project.bi.query.dto.ConditionExpressionDTO;
+import com.project.bi.query.dto.QueryDTO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,22 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.DatasourceConstraint;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.messages.Query;
-import com.flair.bi.service.dto.scheduler.ReportLineItem;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerResponse;
-import com.flair.bi.service.dto.scheduler.emailsDTO;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
-import com.project.bi.query.dto.ConditionExpressionDTO;
-import com.project.bi.query.dto.QueryDTO;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -52,6 +49,8 @@ public class SchedulerService {
 	
 	@Value("${flair-notifications.scheduled-search-reports-param-url}")
 	private String searchscheduledReportsURL;
+
+	private final INotificationsGrpcService notificationsGrpcService;
 
 	@Value("${flair-notifications.slack_API_Token}")
 	private String slack_API_Token;
@@ -142,6 +141,18 @@ public class SchedulerService {
 		StringBuffer url= new StringBuffer();
 		url.append(host).append(":").append(port).append(apiUrl);
 		return url.toString();
+	}
+
+	public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
+		return notificationsGrpcService.getSchedulerReport(visualizationId);
+	}
+
+	public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+		return notificationsGrpcService.createSchedulerReport(schedulerNotificationDTO);
+	}
+
+	public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+		return notificationsGrpcService.updateSchedulerReport(schedulerNotificationDTO);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

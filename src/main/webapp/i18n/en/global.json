@@ -113,6 +113,7 @@
             "close": "Close",
             "cancel": "Cancel",
             "canceljob":"Cancel Job",
+            "runNow":"Run Now",
             "copy":"Copy"
         },
         "detail": {

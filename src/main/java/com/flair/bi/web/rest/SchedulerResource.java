@@ -3,30 +3,24 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.util.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
@@ -67,7 +60,7 @@ public class SchedulerResource {
 
 	@Value("${flair-notifications.auth-url}")
 	private String authUrl;
-	
+
 	@Value("${flair-notifications.mail_body}")
 	private String mail_body;
 
@@ -79,23 +72,20 @@ public class SchedulerResource {
 	
 	@Value("${flair-notifications.scheduled-report-param-url}")
 	private String scheduledReportParamUrl;
-	
+
 	private final VisualMetadataService visualMetadataService;
 	
 	private final DatasourceService datasourceService;
-	
-	private final GrpcQueryService grpcQueryService;
-	
+
 	private final SchedulerService schedulerService;
 
 	@PostMapping("/schedule")
 	@Timed
 	public ResponseEntity<SchedulerResponse> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
 			throws Exception {
-		RestTemplate restTemplate = new RestTemplate();
+		log.info("Creating schedule report {}", schedulerDTO);
 		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
-		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerDTO);
 		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
 			schedulerDTO.getAssign_report().setEmail_list(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
@@ -105,24 +95,23 @@ public class SchedulerResource {
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item(), schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid(),schedulerDTO.getReport().getThresholdAlert());
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(schedulerService.buildUrl(host, port,scheduledReportUrl));
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		log.debug("setChannelCredentials(schedulerDTO)===" + schedulerService.setChannelCredentials(schedulerNotificationDTO));
-		HttpEntity<SchedulerNotificationDTO> entity = new HttpEntity<SchedulerNotificationDTO>(schedulerService.setChannelCredentials(schedulerNotificationDTO), headers);
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(builder.build().toUri(), schedulerDTO.getPutcall()?HttpMethod.PUT:HttpMethod.POST,
-					entity, String.class);
-			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			schedulerResponse.setMessage(jsonObject.getString("message"));
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
-		} catch (Exception e) {
-			log.error("error occured while scheduling report:"+e.getMessage());
-			schedulerResponse.setMessage("error occured while accessing end point :"+e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
-		}
 
+		schedulerService.setChannelCredentials(schedulerNotificationDTO);
+        log.info("Sending schedule report {}", schedulerNotificationDTO);
+
+        GetSchedulerReportDTO schedulerReportDTO;
+        if (schedulerDTO.getPutcall()) {
+            schedulerReportDTO = schedulerService.updateSchedulerReport(schedulerNotificationDTO);
+        } else {
+            schedulerReportDTO = schedulerService.createSchedulerReport(schedulerNotificationDTO);
+        }
+
+		log.info("Receiving schedule report {}", schedulerReportDTO);
+
+		SchedulerResponse response = new SchedulerResponse();
+		response.setMessage(schedulerReportDTO.getMessage());
+
+		return ResponseEntity.ok(response);
 	}
 
 
@@ -158,23 +147,15 @@ public class SchedulerResource {
     		return ResponseEntity.status(200).body(new CountDTO(Long.valueOf(count)));
     	}
     }
-    
+
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerNotificationResponseDTO> getSchedulerReport(@PathVariable String visualizationid)
-			throws URISyntaxException {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<SchedulerNotificationResponseDTO> responseEntity = null;
-		try {
-			responseEntity = restTemplate.exchange(
-					schedulerService.buildUrl(host, port,scheduledReportParamUrl), HttpMethod.GET, null,
-					new ParameterizedTypeReference<SchedulerNotificationResponseDTO>() {
-					}, visualizationid);
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		} catch (Exception e) {
-			log.error("error occured while fetching report:" + e.getMessage());
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		}
+	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
+	    log.info("Get scheduled report {}", visualizationid);
+		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
+
+		log.info("Get scheduled report {} found", visualizationid);
+		return ResponseEntity.ok(responseDTO);
 	}
 	
 	@DeleteMapping("/schedule/{visualizationid}")

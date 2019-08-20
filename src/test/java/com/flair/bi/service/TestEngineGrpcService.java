@@ -22,7 +22,7 @@ import javax.annotation.PostConstruct;
 
 @Ignore
 @Service
-public class TestGrpcService implements IGrpcService {
+public class TestEngineGrpcService implements IEngineGrpcService {
 
     @PostConstruct
     public void init() {

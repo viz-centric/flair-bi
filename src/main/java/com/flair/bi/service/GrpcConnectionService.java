@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GrpcConnectionService {
 
-    private final IGrpcService grpcService;
+    private final IEngineGrpcService grpcService;
 
     public List<ConnectionTypeDTO> getAllConnectionTypes() {
         ConnectionTypesResponses connectionTypes = grpcService.getAllConnectionTypes();

@@ -2,7 +2,6 @@ package com.flair.bi.web.websocket;
 
 import com.flair.bi.messages.QueryResponse;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationResponseDTO;
-
 import io.grpc.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -62,7 +61,8 @@ public class FbEngineWebSocketService {
      * <p>
      * The message will be sent only to the user with the given username.
      *
-     * @param queryResponse query response
+     * @param schedulerNotificationResponseDTO schedulerNotificationResponseDTO
+     * @param queryResponse queryResponse
      * @param request request
      */
     public void pushGRPCMetaDeta(SchedulerNotificationResponseDTO schedulerNotificationResponseDTO ,QueryResponse queryResponse, String request) {

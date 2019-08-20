@@ -15,15 +15,12 @@
         "status":"status",
         "executedAt":"Executed At",
         "isThresholdAlert":"Threshold Alert",
-        "filter": {
-              "filterByDate":{
-                         "title":"Filter By Date",
-                         "from": "From",
-                         "to": "To"
-              },
-              "filterByReportName":"Filter By Report Name",
-              "filterByUser":"Filter By User"
-
+        "filters": {
+              "fromDate": "From Date",
+              "toDate": "To Date",
+              "reportName":"Report Name",
+              "user":"User",
+              "search":"Search"
         }
     }
 }

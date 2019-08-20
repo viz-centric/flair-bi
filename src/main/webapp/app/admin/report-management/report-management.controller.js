@@ -34,6 +34,11 @@
         vm.updateReport=updateReport;
         vm.serchReports=serchReports;
         vm.searchUser=searchUser;
+        vm.openCalendar=openCalendar;
+        vm.datePickerOpenStatus={};
+        vm.datePickerOpenStatus.fromDate = false;
+        vm.datePickerOpenStatus.toDate = false;
+        vm.dateFormat='yyyy-MM-dd';
 
         activate();
         ///////////////////////////////////////
@@ -135,6 +140,10 @@
                     });
                 });
             }
+        }
+
+        function openCalendar (date) {
+            vm.datePickerOpenStatus[date] = true;
         }
 
     }

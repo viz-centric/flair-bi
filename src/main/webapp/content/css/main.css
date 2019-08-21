@@ -6348,8 +6348,14 @@ input.select2-active {
 .scheduler-modal-body .center {
   text-align: center; }
 
-.cancel-job-icon {
+.scheduler-footer .cancel-job-icon {
   color: #ED5565; }
+
+.scheduler-footer .execute-now-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+  fill: #FFF; }
 
 .file-uploader .drop-box-row {
   margin-left: 0;
@@ -6533,4 +6539,9 @@ input.select2-active {
   fill: #439dd3; }
 
 .report-actions .views-icon {
-  color: #23c59b; }
+  color: #439dd3; }
+
+.report-actions .execute-now {
+  width: 16px;
+  height: 16px;
+  vertical-align: -2px; }

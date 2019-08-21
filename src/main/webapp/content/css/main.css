@@ -5176,6 +5176,11 @@ div.featuresList {
       height: 65px;
       float: left;
       margin-left: -21px; }
+    .information-card .information-card-body svg {
+      width: 56px;
+      height: 56px;
+      float: left;
+      margin-left: -18px; }
     .information-card .information-card-body .stats-widget .stats-widget-header {
       margin-bottom: 10px; }
       .information-card .information-card-body .stats-widget .stats-widget-header svg {

@@ -41,7 +41,14 @@
 	}
 
 }
-
-.cancel-job-icon{
-	color:#ED5565;
+.scheduler-footer{
+	.cancel-job-icon{
+		color:#ED5565;
+	}
+	.execute-now-icon{
+		width: 16px;
+	    height: 16px;
+	    vertical-align: -3px;
+	    fill: #FFF;
+	}	
 }

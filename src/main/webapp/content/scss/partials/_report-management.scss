@@ -12,14 +12,14 @@
 			margin-top: 30px;
 		}
 	}
-	.report-actions{
-		svg{
-			width: 19px;
-		    height: 19px;
-		    fill : $primary-color;
-		}
-		.views-icon{
-			color:$views-color;
-		}
+}
+.report-actions{
+	svg{
+		width: 19px;
+	    height: 19px;
+	    fill : $primary-color;
+	}
+	.views-icon{
+		color:$views-color;
 	}
 }

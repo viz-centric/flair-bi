@@ -142,6 +142,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         report.setTitle_name(response.getReport().getReport().getTitleName());
         report.setUserid(response.getReport().getReport().getUserid());
         report.setView_name(response.getReport().getReport().getViewName());
+        report.setThresholdAlert(response.getReport().getReport().getThresholdAlert());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();
         reportLineItem.setDimension(response.getReport().getReportLineItem().getDimensionList().toArray(new String[]{}));

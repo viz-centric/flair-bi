@@ -189,7 +189,7 @@
 
             </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer scheduler-footer">
             <button class="btn btn-primary" ng-click="vm.schedule()" ng-disabled="editForm.$invalid || vm.isSaving">
                 <span class="fa fa-calendar"></span>&nbsp;
                 <span>Schedule</span>
@@ -199,7 +199,9 @@
                 <span data-translate="entity.action.canceljob">Cancel Job</span>
             </button>
             <button ng-if="vm.scheduleObj.putcall" class="btn btn-primary"  data-dismiss="modal" ng-click="vm.executeNow(vm.scheduleObj.report_line_item.visualizationid)" type="button">
-                <span class="fa fa-bolt"></span>&nbsp;
+                <svg class="execute-now-icon">
+                   <use xlink:href="#execute-now"></use>
+                </svg>
                 <span data-translate="entity.action.runNow">Run Now</span>
             </button>
             <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">

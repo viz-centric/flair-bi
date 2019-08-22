@@ -5175,6 +5175,11 @@ div.featuresList {
       height: 65px;
       float: left;
       margin-left: -21px; }
+    .information-card .information-card-body svg {
+      width: 56px;
+      height: 56px;
+      float: left;
+      margin-left: -18px; }
     .information-card .information-card-body .stats-widget .stats-widget-header {
       margin-bottom: 10px; }
       .information-card .information-card-body .stats-widget .stats-widget-header svg {
@@ -6342,8 +6347,14 @@ input.select2-active {
 .scheduler-modal-body .center {
   text-align: center; }
 
-.cancel-job-icon {
+.scheduler-footer .cancel-job-icon {
   color: #ED5565; }
+
+.scheduler-footer .execute-now-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+  fill: #FFF; }
 
 .file-uploader .drop-box-row {
   margin-left: 0;
@@ -6520,3 +6531,16 @@ input.select2-active {
     height: 35px; }
   .report-management .filters .search-btn {
     margin-top: 30px; }
+
+.report-actions svg {
+  width: 19px;
+  height: 19px;
+  fill: #439dd3; }
+
+.report-actions .views-icon {
+  color: #439dd3; }
+
+.report-actions .execute-now {
+  width: 16px;
+  height: 16px;
+  vertical-align: -2px; }

@@ -13,3 +13,18 @@
 		}
 	}
 }
+.report-actions{
+	svg{
+		width: 19px;
+	    height: 19px;
+	    fill : $primary-color;
+	}
+	.views-icon{
+		color:$primary-color;
+	}
+	.execute-now{
+	    width: 16px;
+	    height: 16px;
+	    vertical-align: -2px;
+	}
+}

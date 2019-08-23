@@ -33,4 +33,9 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     public GetSchedulerReportDTO deleteSchedulerReport(String visualizationId) {
         return null;
     }
+
+    @Override
+    public Integer getScheduledReportsCount(String username) {
+        return null;
+    }
 }

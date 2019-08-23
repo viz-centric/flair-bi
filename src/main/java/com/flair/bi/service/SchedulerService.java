@@ -8,6 +8,7 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -73,24 +74,6 @@ public class SchedulerService {
 
 	private final UserService userService;
 
-	public ResponseEntity<SchedulerResponse> deleteScheduledReport(String visualizationid) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = null;
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			responseEntity = restTemplate.exchange(buildUrl(host, port, scheduledReportParamUrl), HttpMethod.DELETE, null,
-					new ParameterizedTypeReference<String>() {
-					}, visualizationid);
-			JSONObject jsonObject = new JSONObject(responseEntity.getBody().toString());
-			schedulerResponse.setMessage(jsonObject.getString("message"));
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
-		} catch (Exception e) {
-			log.error("error occured while cancelling scheduled report:"+e.getMessage());
-			schedulerResponse.setMessage("error occured while cancelling scheduled report :"+e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
-		}
-	}
-    
     public ResponseEntity<SchedulerResponse> executeImmediateScheduledReport(String visualizationid) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> responseEntity = null;
@@ -153,6 +136,14 @@ public class SchedulerService {
 
 	public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
 		return notificationsGrpcService.updateSchedulerReport(schedulerNotificationDTO);
+	}
+
+	public GetSchedulerReportDTO deleteSchedulerReport(String visualizationId) {
+		return notificationsGrpcService.deleteSchedulerReport(visualizationId);
+	}
+
+	public SchedulerReportsDTO getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
+		return notificationsGrpcService.getScheduledReportsByUser(username, pageSize, page);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

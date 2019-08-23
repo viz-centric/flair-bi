@@ -54,11 +54,10 @@
         }
 
         function updateReport(visualizationid){
-            //$location.path(buildPage);
              $state.go('report-management');
             schedulerService.getScheduleReport(visualizationid).then(function (success) {
                 if(success.status==200){
-                    openScheduledReport(success.data);
+                    openScheduledReport(success.data.report);
                 }
             }).catch(function (error) {
                 var info = {

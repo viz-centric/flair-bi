@@ -18,7 +18,7 @@
         vm.reports = [];
         
         vm.page = 1;
-        vm.totalItems = null;
+        vm.totalItems = 0;
         vm.links = null;
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;

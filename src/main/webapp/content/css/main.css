@@ -776,6 +776,9 @@ body.modal-open .animated {
     color: #439dd3;
     display: inline; }
 
+.flair-date-icon {
+  vertical-align: bottom; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -6336,9 +6339,6 @@ input.select2-active {
   .scheduler-modal-body .cron-wrap .clearfix .form-group label {
     margin: 5px; }
 
-.scheduler-modal-body .scheduler-date-icon {
-  vertical-align: bottom; }
-
 .scheduler-modal-body .threshold-alert-condition .condition-val {
   margin-top: 5px; }
 
@@ -6522,9 +6522,6 @@ input.select2-active {
   left: 0;
   bottom: 0;
   right: 0; }
-
-.report-management .filters .scheduler-date-icon {
-  vertical-align: bottom; }
 
 .report-management .filters .report-name {
   height: 35px; }

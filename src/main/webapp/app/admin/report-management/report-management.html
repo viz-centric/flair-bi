@@ -5,7 +5,7 @@
                 <div class="input-group">
                     <h4 class="control-label" data-translate="reportManagement.filters.fromDate" for="fromDate">From Date</h4>
                     <input  type="text" class="form-control" name="fromDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.fromDate" is-open="vm.datePickerOpenStatus.fromDate" />
-                    <span class="input-group-btn scheduler-date-icon">
+                    <span class="input-group-btn flair-date-icon">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('fromDate')">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </button>
@@ -16,7 +16,7 @@
                 <div class="input-group">
                 <h4 class="control-label" data-translate="reportManagement.filters.toDate" for="toDate">To Date</h4>
                     <input  type="text" class="form-control" name="toDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.toDate" is-open="vm.datePickerOpenStatus.toDate" />
-                    <span class="input-group-btn scheduler-date-icon">
+                    <span class="input-group-btn flair-date-icon">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('toDate')">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </button>

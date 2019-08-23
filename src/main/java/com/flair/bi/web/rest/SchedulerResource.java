@@ -15,11 +15,7 @@ import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
@@ -124,13 +119,9 @@ public class SchedulerResource {
     
     @GetMapping("/schedule/reports/count")
     @Timed
-    public CountDTO getScheduledReportsCount() throws JSONException {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = restTemplate.exchange(schedulerService.buildUrl(host, port,scheduledReportsCountUrl), HttpMethod.GET,null,new ParameterizedTypeReference<String>() {
-		}, SecurityUtils.getCurrentUserLogin());
-		JSONObject jsonObject = new JSONObject(responseEntity.getBody());
-		Long count = Long.parseLong(jsonObject.getString("totalReports"));
-		return new CountDTO(count);
+    public CountDTO getScheduledReportsCount() {
+		Integer count = schedulerService.getScheduledReportsCount(SecurityUtils.getCurrentUserLogin());
+		return new CountDTO(new Long(count));
     }
 
 	@GetMapping("/schedule/{visualizationid}")

@@ -146,6 +146,10 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduledReportsByUser(username, pageSize, page);
 	}
 
+	public Integer getScheduledReportsCount(String username) {
+		return notificationsGrpcService.getScheduledReportsCount(username);
+	}
+
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 			ReportLineItem reportLineItem, String visualizationId, String userId, boolean thresholdAlert)
 			throws InvalidProtocolBufferException {

@@ -43,7 +43,7 @@
             </div>
         </div>
         <br/>
-        <div class="table-responsive">
+        <div class="table-responsive" ng-if="vm.reports.length>0">
             <table class="table table-striped flair-table-v1">
                 <thead>
                     <tr>
@@ -106,7 +106,7 @@
             </table>
         </div>
 
-      <div class="text-center">
+      <div class="text-center" ng-if="vm.totalItems>0">
             <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
             <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.loadPage(vm.page)" items-per-page="vm.itemsPerPage"></uib-pagination>
         </div>

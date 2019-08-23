@@ -102,7 +102,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
         return GetSchedulerReportDTO.builder()
                 .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
-                .report(createSchedulerNotificationDTO(response.getReport()))
+                .report(createSchedulerNotificationDTO(response))
                 .build();
     }
 
@@ -156,6 +156,13 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 )
                 .setQuery(dto.getQuery())
                 .build();
+    }
+
+    private SchedulerNotificationDTO createSchedulerNotificationDTO(ScheduleReportResponse response) {
+        if (!response.hasReport()) {
+            return null;
+        }
+        return createSchedulerNotificationDTO(response.getReport());
     }
 
     private SchedulerNotificationDTO createSchedulerNotificationDTO(ScheduleReport scheduleReport) {

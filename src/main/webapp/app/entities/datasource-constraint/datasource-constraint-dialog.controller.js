@@ -19,7 +19,8 @@
         "Datasources",
         "Features",
         "$translate",
-        "$rootScope"
+        "$rootScope",
+        "ComponentDataService"
     ];
 
     function DatasourceConstraintDialogController(
@@ -33,7 +34,8 @@
         Datasources,
         Features,
         $translate,
-        $rootScope
+        $rootScope,
+        ComponentDataService
     ) {
         var vm = this;
 
@@ -47,7 +49,6 @@
         vm.createArray = createArray;
         vm.features = [];
         vm.search=search;
-        vm.searchUser=searchUser;
 
         activate();
 
@@ -118,6 +119,7 @@
 
         function save() {
             vm.isSaving = true;
+            vm.datasourceConstraint.user=ComponentDataService.getUser();
             if (vm.datasourceConstraint.id !== null) {
                 DatasourceConstraint.update(
                     vm.datasourceConstraint,
@@ -171,23 +173,6 @@
                 }, function () {
                     $rootScope.showErrorSingleToast({
                         text: $translate.instant('flairbiApp.datasources.error.datasources.all')
-                    });
-                });
-            }
-        }
-
-        function searchUser(e,searchedText) {
-            e.preventDefault();
-            if (searchedText) {
-                User.search({
-                    page: 0,
-                    size: 10,
-                    login: searchedText
-                }, function (data) {
-                    vm.users = data;
-                }, function () {
-                    $rootScope.showErrorSingleToast({
-                        text: $translate.instant('flairbiApp.userManagement.error.users.all')
                     });
                 });
             }

@@ -8,6 +8,7 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
@@ -154,9 +155,14 @@ public class SchedulerResource {
 
 	@GetMapping("/schedule/report/logs/{visualizationid}/{pageSize}/{page}")
 	@Timed
-	public ResponseEntity<String> reportLogs(@PathVariable String visualizationid,@PathVariable Integer pageSize,@PathVariable Integer page)
-			throws URISyntaxException {
-		return schedulerService.scheduleReportLogs(visualizationid, pageSize, page);
+	public ResponseEntity<GetSchedulerReportLogsDTO> reportLogs(@PathVariable String visualizationid, @PathVariable Integer pageSize, @PathVariable Integer page) {
+		log.info("Get report logs for vis {} page size {} page {}", visualizationid, pageSize, page);
+		GetSchedulerReportLogsDTO result = schedulerService.scheduleReportLogs(visualizationid, pageSize, page);
+		log.info("Get report logs result {}", result);
+		if (result.getMessage() != null) {
+			return ResponseEntity.unprocessableEntity().build();
+		}
+		return ResponseEntity.ok(result);
 	}
 	@GetMapping("/schedule/searchReports/")
 	@Timed

@@ -38,20 +38,19 @@
         }
 
         function getScheduledReportsLogs(visualizationid){
-            schedulerService.getScheduleReportLogs(visualizationid,vm.itemsPerPage,pagingParams.page - 1).then(
-              function(response) {
-                vm.logs=response.data.SchedulerLogs;
-                vm.totalItems = response.data.totalRecords;
-                vm.queryCount = vm.totalItems;
-                vm.page = pagingParams.page; 
-              },
-              function(error) {
-                var info = {
-                    text: error.statusText,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
+          schedulerService.getScheduleReportLogs(visualizationid, vm.itemsPerPage, pagingParams.page - 1).then(
+            function (response) {
+              vm.logs = response.data.schedulerLogs;
+              vm.totalItems = response.data.totalRecords;
+              vm.queryCount = vm.totalItems;
+              vm.page = pagingParams.page;
+            },
+            function (error) {
+              $rootScope.showErrorSingleToast({
+                text: 'Error loading report logs',
+                title: "Error"
               });
+            });
         }
 
         function sort() {

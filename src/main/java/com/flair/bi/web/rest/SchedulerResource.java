@@ -146,9 +146,10 @@ public class SchedulerResource {
 
 	@GetMapping("/executeImmediate/{visualizationid}")
 	@Timed
-	public ResponseEntity<SchedulerResponse> executeImmediate(@PathVariable String visualizationid)
-			throws URISyntaxException {
-		return schedulerService.executeImmediateScheduledReport(visualizationid);
+	public ResponseEntity<?> executeImmediate(@PathVariable String visualizationid) {
+		log.info("Executing report {}", visualizationid);
+		schedulerService.executeImmediateScheduledReport(visualizationid);
+		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/schedule/report/logs/{visualizationid}/{pageSize}/{page}")

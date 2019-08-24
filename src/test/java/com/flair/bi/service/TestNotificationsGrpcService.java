@@ -38,4 +38,9 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     public Integer getScheduledReportsCount(String username) {
         return null;
     }
+
+    @Override
+    public void executeImmediateScheduledReport(String visualizationId) {
+
+    }
 }

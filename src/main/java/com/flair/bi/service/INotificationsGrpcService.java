@@ -17,4 +17,6 @@ public interface INotificationsGrpcService {
     GetSchedulerReportDTO deleteSchedulerReport(String visualizationId);
 
     Integer getScheduledReportsCount(String username);
+
+    void executeImmediateScheduledReport(String visualizationId);
 }

@@ -19,9 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -74,21 +72,8 @@ public class SchedulerService {
 
 	private final UserService userService;
 
-    public ResponseEntity<SchedulerResponse> executeImmediateScheduledReport(String visualizationid) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = null;
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			responseEntity = restTemplate.exchange(buildUrl(host, port, executeImmediateUrl), HttpMethod.GET, null,
-					new ParameterizedTypeReference<String>() {
-					}, visualizationid);
-			schedulerResponse.setMessage("Report will be execute now");
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(schedulerResponse);
-		} catch (Exception e) {
-			log.error("error occured while cancelling scheduled report:"+e.getMessage());
-			schedulerResponse.setMessage("error occured while cancelling scheduled report :"+e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(schedulerResponse);
-		}
+    public void executeImmediateScheduledReport(String visualizationid) {
+		notificationsGrpcService.executeImmediateScheduledReport(visualizationid);
 	}
 
 	public ResponseEntity<String> scheduleReportLogs(String visualizationid,Integer pageSize, Integer page) {

@@ -2,6 +2,8 @@ package com.flair.bi.service;
 
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
+import com.flair.bi.messages.report.ExecuteReportRequest;
+import com.flair.bi.messages.report.ExecuteReportResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
 import com.flair.bi.messages.report.RepUserCountReq;
 import com.flair.bi.messages.report.RepUserCountResp;
@@ -107,6 +109,13 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .setUsername(username)
                 .build());
         return response.getTotalReports();
+    }
+
+    @Override
+    public void executeImmediateScheduledReport(String visualizationId) {
+        ExecuteReportResponse response = getReportStub().executeReport(ExecuteReportRequest.newBuilder()
+                .setVisualizationId(visualizationId)
+                .build());
     }
 
     private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {

@@ -7,11 +7,11 @@
 
     ReportManagementController.$inject = ['User','schedulerService',
         'AlertService','pagingParams','paginationConstants','$rootScope','$state',
-        'AccountDispatch','ReportManagementUtilsService'
+        'AccountDispatch','ReportManagementUtilsService','ComponentDataService'
     ];
 
     function ReportManagementController(User,schedulerService,
-        AlertService,pagingParams,paginationConstants,$rootScope,$state,AccountDispatch,ReportManagementUtilsService) {
+        AlertService,pagingParams,paginationConstants,$rootScope,$state,AccountDispatch,ReportManagementUtilsService,ComponentDataService) {
        
        var vm = this;
 
@@ -33,7 +33,6 @@
         vm.deleteReport=deleteReport;
         vm.updateReport=updateReport;
         vm.serchReports=serchReports;
-        vm.searchUser=searchUser;
         vm.openCalendar=openCalendar;
         vm.datePickerOpenStatus={};
         vm.datePickerOpenStatus.fromDate = false;
@@ -113,7 +112,7 @@
         }
 
         function serchReports(){
-            var user = vm.userName ? vm.userName.login : "" ;
+            var user = ComponentDataService.getUserLogin();
             vm.reportName = vm.reportName ? vm.reportName : "" ;
             vm.fromDate = vm.fromDate ? vm.fromDate : "" ;
             vm.toDate = vm.toDate ? vm.toDate : "" ;
@@ -123,23 +122,6 @@
 
         function updateReport(visualizationid){
             ReportManagementUtilsService.updateReport(visualizationid);
-        }
-
-        function searchUser(e,searchedText) {
-            e.preventDefault();
-            if (searchedText) {
-                User.search({
-                    page: 0,
-                    size: 10,
-                    login: searchedText
-                }, function (data) {
-                    vm.users = data;
-                }, function () {
-                    $rootScope.showErrorSingleToast({
-                        text: $translate.instant('flairbiApp.userManagement.error.users.all')
-                    });
-                });
-            }
         }
 
         function openCalendar (date) {

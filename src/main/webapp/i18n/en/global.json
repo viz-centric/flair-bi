@@ -160,5 +160,9 @@
             "failed": "Query validation request failed. Please try again later."
         }
     },
+    "component":{
+        "user":"User",
+        "selectUser":"Select User"
+    },
     "footer": "This is your footer"
 }

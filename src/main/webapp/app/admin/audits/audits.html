@@ -1,16 +1,33 @@
 <div class="fbibox">
     <div class="fbibox-content">
         <div class="row">
-            <div class="col-md-5">
-                <h4 data-translate="audits.filter.title">Filter by date</h4>
-                <p class="input-group">
-                    <span class="input-group-addon" data-translate="audits.filter.from">from</span>
-                    <input type="date" class="input-sm form-control" name="start" ng-model="vm.fromDate" ng-change="vm.onChangeDate()" required/>
-                    <span class="input-group-addon" data-translate="audits.filter.to">to</span>
-                    <input type="date" class="input-sm form-control" name="end" ng-model="vm.toDate" ng-change="vm.onChangeDate()" required/>
-                </p>
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <h4 class="control-label" data-translate="audits.filter.from" for="fromDate">From Date</h4>
+                    <input  type="text" class="form-control" name="fromDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.fromDate" is-open="vm.datePickerOpenStatus.fromDate" ng-change="vm.onChangeDate()" required/>
+                    <span class="input-group-btn flair-date-icon">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('fromDate')">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <h4 class="control-label" data-translate="audits.filter.to" for="toDate">To Date</h4>
+                    <input  type="text" class="form-control" name="toDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.toDate" is-open="vm.datePickerOpenStatus.toDate" ng-change="vm.onChangeDate()" required/>
+                    <span class="input-group-btn flair-date-icon">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('toDate')">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <user-search-component />         
             </div>
         </div>
+        <br/>
         <table class="table table-condensed table-striped table-bordered table-responsive">
             <thead>
                 <tr>

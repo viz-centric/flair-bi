@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('AuditsController', AuditsController);
 
-    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks'];
+    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks','ComponentDataService'];
 
-    function AuditsController($filter, AuditsService, ParseLinks) {
+    function AuditsController($filter, AuditsService, ParseLinks,ComponentDataService) {
         var vm = this;
 
         vm.audits = null;
@@ -17,18 +17,22 @@
         vm.onChangeDate = onChangeDate;
         vm.page = 1;
         vm.previousMonth = previousMonth;
-        vm.toDate = null;
+        vm.dateFormat='yyyy-MM-dd';
+        vm.toDate = new Date();
+        vm.fromDate = new Date();
         vm.today = today;
         vm.totalItems = null;
-
         vm.today();
         vm.previousMonth();
         vm.onChangeDate();
+        vm.openCalendar=openCalendar;
+        vm.datePickerOpenStatus={};
+        vm.datePickerOpenStatus.fromDate = false;
+        vm.datePickerOpenStatus.toDate = false;
 
         function onChangeDate() {
-            var dateFormat = 'yyyy-MM-dd';
-            var fromDate = $filter('date')(vm.fromDate, dateFormat);
-            var toDate = $filter('date')(vm.toDate, dateFormat);
+            var fromDate = $filter('date')(vm.fromDate, vm.dateFormat);
+            var toDate = $filter('date')(vm.toDate, vm.dateFormat);
 
             AuditsService.query({
                 page: vm.page - 1,
@@ -46,7 +50,8 @@
         function today() {
             // Today + 1 day - needed if the current day must be included
             var today = new Date();
-            vm.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            //vm.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            vm.toDate.setDate(today.getDate()+1);
         }
 
         function previousMonth() {
@@ -64,5 +69,11 @@
             vm.page = page;
             vm.onChangeDate();
         }
+
+        function openCalendar (date) {
+            vm.datePickerOpenStatus[date] = true;
+        }
+
+
     }
 })();

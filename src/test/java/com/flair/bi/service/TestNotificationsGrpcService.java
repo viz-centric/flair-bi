@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import org.junit.Ignore;
@@ -42,5 +43,10 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     @Override
     public void executeImmediateScheduledReport(String visualizationId) {
 
+    }
+
+    @Override
+    public GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page) {
+        return null;
     }
 }

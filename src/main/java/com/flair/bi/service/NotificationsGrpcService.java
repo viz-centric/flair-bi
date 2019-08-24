@@ -4,18 +4,22 @@ import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
+import com.flair.bi.messages.report.GetScheduleReportLogsRequest;
+import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
 import com.flair.bi.messages.report.RepUserCountReq;
 import com.flair.bi.messages.report.RepUserCountResp;
 import com.flair.bi.messages.report.RepUserReq;
 import com.flair.bi.messages.report.RepUserResp;
 import com.flair.bi.messages.report.Report;
+import com.flair.bi.messages.report.ReportLog;
 import com.flair.bi.messages.report.ReportServiceGrpc;
 import com.flair.bi.messages.report.ScheduleReport;
 import com.flair.bi.messages.report.ScheduleReportRequest;
 import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -116,6 +120,30 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         ExecuteReportResponse response = getReportStub().executeReport(ExecuteReportRequest.newBuilder()
                 .setVisualizationId(visualizationId)
                 .build());
+    }
+
+    @Override
+    public GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page) {
+        GetScheduleReportLogsResponse result = getReportStub().getScheduleReportLogs(
+                GetScheduleReportLogsRequest.newBuilder()
+                        .setVisualizationId(visualizationid)
+                        .setPageSize(pageSize)
+                        .setPage(page)
+                        .build()
+        );
+        return GetSchedulerReportLogsDTO.builder()
+                .message(StringUtils.isEmpty(result.getMessage()) ? null : result.getMessage())
+                .schedulerLogs(toLogs(result.getSchedulerLogsList()))
+                .build();
+    }
+
+    private List<GetSchedulerReportLogsDTO.SchedulerLog> toLogs(List<ReportLog> list) {
+        return list.stream()
+                .map(item -> GetSchedulerReportLogsDTO.SchedulerLog.builder()
+                        .taskExecuted(item.getTaskExecuted())
+                        .taskStatus(item.getTaskStatus())
+                        .build())
+                .collect(toList());
     }
 
     private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {

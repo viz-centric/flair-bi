@@ -6,6 +6,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
@@ -17,7 +18,6 @@ import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -76,19 +76,8 @@ public class SchedulerService {
 		notificationsGrpcService.executeImmediateScheduledReport(visualizationid);
 	}
 
-	public ResponseEntity<String> scheduleReportLogs(String visualizationid,Integer pageSize, Integer page) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = null;
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			responseEntity = restTemplate.exchange(buildUrl(host, port, scheduleReportLogsUrl), HttpMethod.GET, null,
-					String.class, visualizationid, pageSize, page);
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		} catch (Exception e) {
-			log.error("error occured while getting scheduled report logs:"+e.getMessage());
-			JSONObject jsonObject = new JSONObject();
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		}
+	public GetSchedulerReportLogsDTO scheduleReportLogs(String visualizationid, Integer pageSize, Integer page) {
+		return notificationsGrpcService.getScheduleReportLogs(visualizationid, pageSize, page);
 	}
 	
 	public ResponseEntity<String> searchScheduledReport(String userName,String reportName,String startDate,String endDate,Integer pageSize, Integer page) {

@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 
@@ -19,4 +20,6 @@ public interface INotificationsGrpcService {
     Integer getScheduledReportsCount(String username);
 
     void executeImmediateScheduledReport(String visualizationId);
+
+    GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page);
 }

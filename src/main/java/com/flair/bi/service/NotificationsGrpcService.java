@@ -17,9 +17,12 @@ import com.flair.bi.messages.report.ReportServiceGrpc;
 import com.flair.bi.messages.report.ScheduleReport;
 import com.flair.bi.messages.report.ScheduleReportRequest;
 import com.flair.bi.messages.report.ScheduleReportResponse;
+import com.flair.bi.messages.report.SearchReportsRequest;
+import com.flair.bi.messages.report.SearchReportsResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
+import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -135,6 +138,30 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .message(StringUtils.isEmpty(result.getMessage()) ? null : result.getMessage())
                 .schedulerLogs(toLogs(result.getSchedulerLogsList()))
                 .build();
+    }
+
+    @Override
+    public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
+        SearchReportsResponse result = getReportStub().searchReports(
+                SearchReportsRequest.newBuilder()
+                        .setUsername(username)
+                        .setReportName(reportName)
+                        .setStartDate(startDate)
+                        .setEndDate(endDate)
+                        .setPageSize(pageSize)
+                        .setPage(page)
+                        .build()
+        );
+        return GetSearchReportsDTO.builder()
+                .totalRecords(result.getTotalRecords())
+                .reports(toReportsDto(result.getRecordsList()))
+                .build();
+    }
+
+    private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
+        return list.stream()
+                .map(item -> createSchedulerNotificationDTO(item))
+                .collect(toList());
     }
 
     private List<GetSchedulerReportLogsDTO.SchedulerLog> toLogs(List<ReportLog> list) {

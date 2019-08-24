@@ -7,21 +7,21 @@
         .factory('ComponentDataService', ComponentDataService);
 
     function ComponentDataService() {
-        var userLogin = "";
+        var user = null;
 
         var service = {
-            setUserLogin: setUserLogin,
-            getUserLogin: getUserLogin
+            setUser: setUser,
+            getUser: getUser
         };
 
         return service;
 
-        function setUserLogin(login){
-            userLogin=login;            
+        function setUser(userTemp){
+            user=userTemp;
         }
 
-        function getUserLogin(){
-            return userLogin;
+        function getUser(){
+            return user;
         } 
     }
 })();

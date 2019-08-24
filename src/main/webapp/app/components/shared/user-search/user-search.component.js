@@ -7,6 +7,9 @@
             templateUrl: 'app/components/shared/user-search/user-search.component.html',
             controller: UserSearchController,
             controllerAs: 'vm',
+            bindings: {
+                user: '=',
+            }
         });
 
     UserSearchController.$inject = ['$scope','User','$rootScope','ComponentDataService'];
@@ -20,7 +23,7 @@
         ////////////////
 
         function activate() {
-            ComponentDataService.setUserLogin("");
+            ComponentDataService.setUser(null);
         }
 
         function searchUser(e,searchedText) {
@@ -41,7 +44,7 @@
         }
 
         function onChangeUser(){
-            ComponentDataService.setUserLogin(vm.userName.login);
+            ComponentDataService.setUser(vm.user);
         }
     }
 })();

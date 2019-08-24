@@ -15,16 +15,8 @@
                 <label for="id" data-translate="global.field.id">ID</label>
                 <input type="text" class="form-control" id="id" name="id" ng-model="vm.datasourceConstraint.id" readonly />
             </div>
-
-
             <div class="form-group">
-                <label data-translate="flairbiApp.datasourceConstraint.user" for="field_user">User</label>
-                <ui-select ng-keyup="vm.searchUser($event,$select.search)" id="field_user" name="user" ng-model="vm.datasourceConstraint.user" required>
-                    <ui-select-match placeholder="{{ 'flairbiApp.datasourceConstraint.selectUser' | translate }}">{{$select.selected.login}}</ui-select-match>
-                    <ui-select-choices repeat="user in vm.users">
-                        <div ng-bind="user.login "></div>
-                    </ui-select-choices>
-                </ui-select>
+                <user-search-component  user="vm.datasourceConstraint.user"/>
             </div>
             <div ng-show="editForm.user.$invalid">
                 <p class="help-block" ng-show="editForm.user.$error.required" data-translate="entity.validation.required">

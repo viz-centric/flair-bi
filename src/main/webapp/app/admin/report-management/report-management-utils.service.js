@@ -68,23 +68,21 @@
             }); 
         }
 
-        function executeNow(vizID){
+        function executeNow(vizID) {
             schedulerService.executeNow(vizID).then(
-              function(response) {
-                if (response.status==200){
-                    var info = {
-                    text: response.data.message,
-                    title: "Success"
-                    }
-                    $rootScope.showSuccessToast(info);    
-                }
+              function (response) {
+                  var info = {
+                      text: 'Report will be execute now',
+                      title: 'Success'
+                  };
+                  $rootScope.showSuccessToast(info);
               },
-              function(error) {
-                var info = {
-                    text: error.statusText,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
+              function (error) {
+                  var info = {
+                      text: 'error occured while cancelling scheduled report',
+                      title: "Error"
+                  };
+                  $rootScope.showErrorSingleToast(info);
               });
         }
     }

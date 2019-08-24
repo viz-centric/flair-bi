@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('AuditsController', AuditsController);
 
-    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks'];
+    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks','ComponentDataService'];
 
-    function AuditsController($filter, AuditsService, ParseLinks) {
+    function AuditsController($filter, AuditsService, ParseLinks,ComponentDataService) {
         var vm = this;
 
         vm.audits = null;
@@ -73,6 +73,7 @@
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
+
 
     }
 })();

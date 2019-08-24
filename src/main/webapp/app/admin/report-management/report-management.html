@@ -30,13 +30,7 @@
                 </div>
             </div>
             <div ng-if="vm.isAdmin" class="col-md-3">
-                <h4  class="control-label" data-translate="reportManagement.filters.user">User</h4>
-                <ui-select ng-keyup="vm.searchUser($event,$select.search)" id="field_user" name="userName" ng-model="vm.userName" required>
-                    <ui-select-match placeholder="Select User">{{$select.selected.login}}</ui-select-match>
-                    <ui-select-choices repeat="user in vm.users">
-                        <div ng-bind="user.login "></div>
-                    </ui-select-choices>
-                </ui-select>
+                <user-search-component />
             </div>
             <div class="col-xs-1">
                 <button data-translate="reportManagement.filters.search" type="button" ng-click="vm.serchReports()" class="btn btn-info search-btn">Search</button>

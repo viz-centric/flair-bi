@@ -7,10 +7,10 @@ import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
+import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
@@ -19,10 +19,7 @@ import com.project.bi.query.dto.QueryDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -80,18 +77,8 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduleReportLogs(visualizationid, pageSize, page);
 	}
 	
-	public ResponseEntity<String> searchScheduledReport(String userName,String reportName,String startDate,String endDate,Integer pageSize, Integer page) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> responseEntity = null;
-		SchedulerResponse schedulerResponse= new SchedulerResponse();
-		try {
-			responseEntity = restTemplate.exchange(buildUrl(host, port, searchscheduledReportsURL), HttpMethod.GET, null,
-					String.class, userName,reportName,startDate, endDate,pageSize, page);
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		} catch (Exception e) {
-			log.error("error occured while searching reports:"+e.getMessage());
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-		}
+	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
+		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page);
 	}
 	
 	public String buildUrl(String host,String port,String apiUrl) {

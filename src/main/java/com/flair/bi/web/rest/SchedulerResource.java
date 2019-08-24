@@ -9,6 +9,7 @@ import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
+import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
@@ -166,11 +167,14 @@ public class SchedulerResource {
 	}
 	@GetMapping("/schedule/searchReports/")
 	@Timed
-	public ResponseEntity<String> searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page)
-			throws URISyntaxException {
-		if (!SecurityUtils.iAdmin()){
-			userName=SecurityUtils.getCurrentUserLogin();
+	public GetSearchReportsDTO searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page) {
+		log.info("Search reports username {} report {} start date {} end date {} page size {} page {}",
+				userName, reportName, startDate, endDate, pageSize, page);
+		if (!SecurityUtils.iAdmin()) {
+			userName = SecurityUtils.getCurrentUserLogin();
 		}
-		return schedulerService.searchScheduledReport(userName,reportName,startDate,endDate, pageSize, page);
+		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate, pageSize, page);
+		log.info("Search reports result {}", result);
+		return result;
 	}
 }

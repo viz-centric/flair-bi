@@ -113,7 +113,10 @@
 
             getNames: function (arr) {
                 return arr.map(function (item) {
-                    return item.feature.definition;
+                    if (item.feature.name)
+                        return item.feature.name
+                    else
+                        return item.feature.definition
                 });
             },
 

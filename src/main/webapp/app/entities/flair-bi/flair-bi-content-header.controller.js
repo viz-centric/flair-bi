@@ -443,9 +443,12 @@
         function printAllWidgets() {
             PrintService.printWidgets(
                 VisualMetadataContainer.getAll().map(function(item) {
+                    console.log(vm)
                     return "content-" + item.visualBuildId || item.id;
                 })
-            );
+            ,vm.selectedDashboard.dashboardName
+            ,vm.selectedView.viewName,
+            $window.location.href);
         }
 
         function applyBookmark(item) {

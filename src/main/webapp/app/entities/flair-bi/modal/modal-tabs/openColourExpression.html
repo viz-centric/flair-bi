@@ -12,23 +12,37 @@
     </div>
     <div class="modal-body">
         <div class="data-constrains-properties">
-            <div class="btn btn-primary animate-show-hide" ng-click="vm.addStartingCondition()">
-                Add Condition
+            <div class="row">
+                <div class="btn btn-primary animate-show-hide" ng-click="vm.addStartingCondition()">
+                    Add Condition
+                </div>
+                <div class="btn btn-link">
+                    <label>
+                        <a target="_blank" href="https://www.w3schools.com/icons/fontawesome_icons_webapp.asp">Search for Icons <i
+                                class="fa fa-question-circle fa-4" aria-hidden="true"></i></a>
+                    </label>
+                </div>
             </div>
+
+
             <div class="data-constaraint-conditions-container">
                 <form>
                     <div class="fields">
                         <div ng-repeat="condition in vm.conditionExpression">
                             <div class="row condition">
-                                <div class="col-md-3 field">
-                                    <select ng-model="condition.expression" class="form-control expression" placeholder="Select Condition">
+                                <div class="col-md-2 field">
+                                    <label for="exampleInputEmail1">{{vm.features.display}}</label>
+                                </div>
+                                <div class="col-md-2 field">
+                                    <select ng-model="condition.expression" class="form-control expression"
+                                        placeholder="Select Condition">
                                         <option>upto</option>
                                         <option>above</option>
                                         <option>below</option>
                                         <option>default</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3 field">
+                                <div class="col-md-2 field">
                                     <input type="number" placeholder="Enter value" value="{{condition.value}}"
                                         class="form-control value" />
                                 </div>

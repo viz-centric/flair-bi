@@ -37,7 +37,8 @@
         "AuthServerProvider",
         "AlertService",
         "QueryValidationService",
-        "$translate"
+        "$translate",
+        "$window"
     ];
 
     function FlairBiController(
@@ -72,7 +73,8 @@
         AuthServerProvider,
         AlertService,
         QueryValidationService,
-        $translate
+        $translate,
+        $window
     ) {
         var vm = this;
         var editMode = false;
@@ -564,7 +566,7 @@
         }
 
         function printElement(w) {
-            PrintService.printWidgets(["content-" + w.visualBuildId]);
+            PrintService.printWidgets(["content-" + w.visualBuildId],vm.datasource.name,vm.view.viewName, $window.location.href);
         }
 
         function registerButtonToggleEvent() {
@@ -597,7 +599,7 @@
                 Visualmetadata.get({
                     id: $rootScope.ThresholdViz.ID
                 }, function (v) {
-                    openSchedulerDialog(new VisualWrap(v));
+                    openSchedulerDialog(new VisualWrap(v),true);
                 });
             });
             $scope.$on("$destroy", unsubscribe);

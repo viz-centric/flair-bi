@@ -114,7 +114,8 @@
             "cancel": "Cancel",
             "canceljob":"Cancel Job",
             "runNow":"Run Now",
-            "copy":"Copy"
+            "copy":"Copy",
+            "search":"Search"
         },
         "detail": {
             "field": "Field",

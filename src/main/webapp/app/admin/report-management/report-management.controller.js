@@ -32,7 +32,7 @@
         vm.goToBuildPage=goToBuildPage;
         vm.deleteReport=deleteReport;
         vm.updateReport=updateReport;
-        vm.serchReports=serchReports;
+        vm.searchReports=searchReports;
         vm.openCalendar=openCalendar;
         vm.datePickerOpenStatus={};
         vm.datePickerOpenStatus.fromDate = false;
@@ -111,7 +111,7 @@
             });
         }
 
-        function serchReports(){
+        function searchReports(){
             var user = ComponentDataService.getUser().login;
             vm.reportName = vm.reportName ? vm.reportName : "" ;
             vm.fromDate = vm.fromDate ? vm.fromDate : "" ;

@@ -30,10 +30,10 @@
                 </div>
             </div>
             <div ng-if="vm.isAdmin" class="col-md-3">
-                <user-search-component />
+                <user-search-component user={}/>
             </div>
             <div class="col-xs-1">
-                <button data-translate="reportManagement.filters.search" type="button" ng-click="vm.serchReports()" class="btn btn-info search-btn">Search</button>
+                <button data-translate="entity.action.search" type="button" ng-click="vm.searchReports()" class="btn btn-info search-btn">Search</button>
             </div>
         </div>
         <br/>

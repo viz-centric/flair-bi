@@ -112,7 +112,7 @@
         }
 
         function searchReports(){
-            var user = ComponentDataService.getUser().login;
+            var user = ComponentDataService.getUser()?ComponentDataService.getUser().login:"";
             vm.reportName = vm.reportName ? vm.reportName : "" ;
             vm.fromDate = vm.fromDate ? vm.fromDate : "" ;
             vm.toDate = vm.toDate ? vm.toDate : "" ;

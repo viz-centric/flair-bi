@@ -66,11 +66,12 @@
         }
 
         function search(){
+            //var principal=ComponentDataService.getUser?
             AuditsService.query(
             {   page: vm.page - 1,
                 size:20,fromDate:$filter('date')(vm.fromDate, vm.dateFormat),
                 toDate:$filter('date')(vm.toDate, vm.dateFormat),
-                principal:ComponentDataService.getUser().login
+                principal:ComponentDataService.getUser()?ComponentDataService.getUser().login:null
             },function(result,headers){
                 setAuditsData(result,headers);
             });

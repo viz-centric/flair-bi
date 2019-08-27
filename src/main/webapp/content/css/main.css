@@ -3931,7 +3931,6 @@ jhi-alert .alerts .alert-danger {
   .flairbi-content-header h2 {
     margin: 0px;
     line-height: 39px; }
-  
   .flairbi-content-header .configuration-options .visual-edit {
     width: 5%; }
   .flairbi-content-header .configuration-options .visual-arrow {
@@ -6466,7 +6465,7 @@ input.select2-active {
   margin-top: 7px;
   font-size: 15px; }
 
-.common-create-popup input ,.common-create-popup select,.common-create-popup label{
+.common-create-popup input, .common-create-popup select, .common-create-popup label {
   border-radius: 10px;
   margin-top: 7px; }
 

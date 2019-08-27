@@ -239,6 +239,15 @@
                         <use xlink:href="#bookmark" />
                     </svg>
             </div>
+
+            <div uib-tooltip="Reset" tooltip-placement="bottom" class="fs-btn  item hidden-xs hidden-sm"  if="vm.ngIfClearFilters()" ng-click="vm.clearFilters()">
+                <span uib-tooltip="Reset" tooltip-placement="bottom">
+                    <svg class="flaticons-close">
+                        <use xlink:href="#close" />
+                    </svg>
+                </span>
+            </div>
+
             <div class="line hidden-sm hidden-xs"></div>
             <div class="fs-btn settings item hidden-xs hidden-sm">
                 <div uib-tooltip="change header color" tooltip-placement="bottom" md-color-picker ng-model="vm.headerColor" ng-change="vm.changeHeaderColor(vm.headerColor)" label="Choose a header color" class="settings-item header-color"></div>

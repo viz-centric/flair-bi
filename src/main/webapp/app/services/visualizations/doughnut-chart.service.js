@@ -29,7 +29,8 @@
                     result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font weight');
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
                     result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
-
+                    result["numberFormat"] = VisualizationUtils.getFieldPropertyValue(measure[0], "Number format");
+                    
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();

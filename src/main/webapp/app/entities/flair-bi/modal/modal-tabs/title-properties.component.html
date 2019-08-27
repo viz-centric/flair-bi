@@ -10,7 +10,21 @@
         </div>
         <div class="form-inline">
             <label class="control-label flair-model-pad pull-left tooltip-left" style="width: 28px;"><span uib-tooltip="Border-Bottom" tooltip-placement="top"><i class="font-size fa fa-underline"></i></label></span>
-            <input placeholder="Enter Border-Bottom" type="text" class="form-control pull-left" ng-model="vm.visual.titleProperties.borderBottom" ng-change="vm.changeTitleProperties()">
+            <!-- <input placeholder="Enter Border-Bottom" type="text" class="form-control pull-left" ng-model="vm.visual.titleProperties.borderBottom" ng-change="vm.changeTitleProperties()"> -->
+
+            <select  class="form-control pull-left" ng-model="vm.visual.titleProperties.borderBottom" ng-change="vm.changeTitleProperties()">
+                <option value="dotted">Dotted</option>
+                <option value="dashed">Dashed</option>
+                <option value="solid">Solid</option>
+                <option value="double">Double</option>
+                <option value="groove">Groove</option>
+                <option value="ridge">Ridge</option>
+                <option value="inset">Inset</option>
+                <option value="outset">Outset</option>
+                <option value="none">None</option>
+                <option value="hidden">Hidden</option>
+            </select>
+
         </div>
 
         <div class="row">

@@ -47,6 +47,7 @@
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
+                    
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
                     result['fontStyle'] = [];

@@ -36,10 +36,17 @@ public class AuditEventService {
             .map(auditEventConverter::convertToAuditEvent);
     }
 
-    public Page<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {
-        return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
-            .map(auditEventConverter::convertToAuditEvent);
-    }
+	public Page<AuditEvent> findByDatesAndPrincipal(LocalDateTime fromDate, LocalDateTime toDate, String principal,
+			Pageable pageable) {
+		return persistenceAuditEventRepository
+				.findAllByAuditEventDateBetweenAndPrincipal(fromDate, toDate, principal, pageable)
+				.map(auditEventConverter::convertToAuditEvent);
+	}
+
+	public Page<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {
+		return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
+				.map(auditEventConverter::convertToAuditEvent);
+	}
 
     public Optional<AuditEvent> find(Long id) {
         return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map

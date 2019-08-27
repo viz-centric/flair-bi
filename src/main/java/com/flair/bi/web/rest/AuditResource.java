@@ -55,9 +55,14 @@ public class AuditResource {
     public ResponseEntity<List<AuditEvent>> getByDates(
         @RequestParam(value = "fromDate") LocalDate fromDate,
         @RequestParam(value = "toDate") LocalDate toDate,
+        @RequestParam(value = "principal",required = false) String principal,
         @ApiParam Pageable pageable) throws URISyntaxException {
-
-        Page<AuditEvent> page = auditEventService.findByDates(fromDate.atTime(0, 0), toDate.atTime(23, 59), pageable);
+    	Page<AuditEvent> page=null;
+    	if(principal!=null) {
+    		page = auditEventService.findByDatesAndPrincipal(fromDate.atTime(0, 0), toDate.atTime(23, 59),principal, pageable);
+    	}else {
+    		page = auditEventService.findByDates(fromDate.atTime(0, 0), toDate.atTime(23, 59), pageable);	
+    	}
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/management/audits");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

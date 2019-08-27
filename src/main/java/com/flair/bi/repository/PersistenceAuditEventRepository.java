@@ -22,5 +22,7 @@ public interface PersistenceAuditEventRepository extends JpaRepository<Persisten
 
     List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principle, LocalDateTime after, String type);
 
+    Page<PersistentAuditEvent> findAllByAuditEventDateBetweenAndPrincipal(LocalDateTime fromDate, LocalDateTime toDate,String principal, Pageable pageable);
+
     Page<PersistentAuditEvent> findAllByAuditEventDateBetween(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable);
 }

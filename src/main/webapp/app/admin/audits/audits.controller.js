@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('AuditsController', AuditsController);
 
-    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks','ComponentDataService'];
+    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks','ComponentDataService','AuditsUtilsService'];
 
-    function AuditsController($filter, AuditsService, ParseLinks,ComponentDataService) {
+    function AuditsController($filter, AuditsService, ParseLinks,ComponentDataService,AuditsUtilsService) {
         var vm = this;
 
         vm.audits = null;
@@ -29,40 +29,31 @@
         vm.datePickerOpenStatus={};
         vm.datePickerOpenStatus.fromDate = false;
         vm.datePickerOpenStatus.toDate = false;
+        vm.search=search;
 
         function onChangeDate() {
-            var fromDate = $filter('date')(vm.fromDate, vm.dateFormat);
-            var toDate = $filter('date')(vm.toDate, vm.dateFormat);
-
-            AuditsService.query({
-                page: vm.page - 1,
-                size: 20,
-                fromDate: fromDate,
-                toDate: toDate
-            }, function (result, headers) {
-                vm.audits = result;
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
+            AuditsService.query(
+            {   page: vm.page - 1,size:20,
+                fromDate:$filter('date')(vm.fromDate, vm.dateFormat),
+                toDate:$filter('date')(vm.toDate, vm.dateFormat)
+            },function(result,headers){
+                setAuditsData(result,headers);
             });
+        }
+
+        function setAuditsData(result,headers){
+            vm.audits = result;
+            vm.links = ParseLinks.parse(headers('link'));
+            vm.totalItems = headers('X-Total-Count');             
         }
 
         // Date picker configuration
         function today() {
-            // Today + 1 day - needed if the current day must be included
-            var today = new Date();
-            //vm.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-            vm.toDate.setDate(today.getDate()+1);
+            vm.toDate=AuditsUtilsService.today();
         }
 
         function previousMonth() {
-            var fromDate = new Date();
-            if (fromDate.getMonth() === 0) {
-                fromDate = new Date(fromDate.getFullYear() - 1, 11, fromDate.getDate());
-            } else {
-                fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
-            }
-
-            vm.fromDate = fromDate;
+            vm.fromDate=AuditsUtilsService.previousMonth();
         }
 
         function loadPage(page) {
@@ -72,6 +63,17 @@
 
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
+        }
+
+        function search(){
+            AuditsService.query(
+            {   page: vm.page - 1,
+                size:20,fromDate:$filter('date')(vm.fromDate, vm.dateFormat),
+                toDate:$filter('date')(vm.toDate, vm.dateFormat),
+                principal:ComponentDataService.getUser().login
+            },function(result,headers){
+                setAuditsData(result,headers);
+            });
         }
 
 

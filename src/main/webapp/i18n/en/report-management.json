@@ -19,8 +19,7 @@
               "fromDate": "From Date",
               "toDate": "To Date",
               "reportName":"Report Name",
-              "user":"User",
-              "search":"Search"
+              "user":"User"
         }
     }
 }

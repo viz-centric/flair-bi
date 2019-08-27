@@ -66,7 +66,6 @@
         }
 
         function search(){
-            //var principal=ComponentDataService.getUser?
             AuditsService.query(
             {   page: vm.page - 1,
                 size:20,fromDate:$filter('date')(vm.fromDate, vm.dateFormat),

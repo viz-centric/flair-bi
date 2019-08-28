@@ -443,8 +443,11 @@
         function printAllWidgets() {
             PrintService.printWidgets(
                 VisualMetadataContainer.getAll().map(function(item) {
-                    console.log(vm)
-                    return "content-" + item.visualBuildId || item.id;
+
+                    return {
+                        widgetsID :  "content-" + item.visualBuildId || item.id,
+                        widgetsTitle : item.titleProperties.titleText
+                    }
                 })
             ,vm.selectedDashboard.dashboardName
             ,vm.selectedView.viewName,

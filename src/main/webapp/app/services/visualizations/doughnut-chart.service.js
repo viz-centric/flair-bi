@@ -34,9 +34,6 @@
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
-                    result['valueAsArc'] = VisualizationUtils.getPropertyValue(record.properties, 'Value as Arc');
-                    result['valuePosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Value position').toLowerCase();
-
                     return result;
                 }
 

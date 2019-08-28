@@ -566,7 +566,13 @@
         }
 
         function printElement(w) {
-            PrintService.printWidgets(["content-" + w.visualBuildId],vm.datasource.name,vm.view.viewName, $window.location.href);
+            PrintService.printWidgets(
+                [{
+                    widgetsID :  "content-" +  w.visualBuildId,
+                    widgetsTitle : w.titleProperties.titleText
+                }],
+                vm.view.viewName, 
+                $window.location.href);
         }
 
         function registerButtonToggleEvent() {

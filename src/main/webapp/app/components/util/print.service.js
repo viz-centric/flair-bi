@@ -29,16 +29,24 @@
 
             widgetIds.forEach(function (item) {
 
-                promises.push(domtoimage.toPng($('#' + item)[0])
+                promises.push(domtoimage.toPng($('#' + item.widgetsID)[0])
                     .then(function (dataUrl) {
                         var img = new Image();
                         img.src = dataUrl;
+                        
                         docDefinition.content.push({
-                            image: item,
+                            text: item.widgetsTitle,
+                            margin: 10,
+                            bold: true
+                        });
+
+                        docDefinition.content.push({
+                            image: item.widgetsID,
                             width: 520,
                             margin: 10,
                         });
-                        docDefinition.images[item] = dataUrl;
+
+                        docDefinition.images[item.widgetsID] = dataUrl;
                     })
                     .catch(function (error) {
                         console.error('oops, something went wrong!', error);

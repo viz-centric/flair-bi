@@ -152,6 +152,7 @@
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
             openSchedulerDialogForThreshold();
+            registerDateRangeFilterEvent()
             registerAddVisual();
             registerSaveAllWidgetsEvent();
             loadDimensions();
@@ -566,7 +567,13 @@
         }
 
         function printElement(w) {
-            PrintService.printWidgets(["content-" + w.visualBuildId],vm.datasource.name,vm.view.viewName, $window.location.href);
+            PrintService.printWidgets(
+                [{
+                    widgetsID :  "content-" +  w.visualBuildId,
+                    widgetsTitle : w.titleProperties.titleText
+                }],
+                vm.view.viewName, 
+                $window.location.href);
         }
 
         function registerButtonToggleEvent() {
@@ -601,6 +608,16 @@
                 }, function (v) {
                     openSchedulerDialog(new VisualWrap(v),true);
                 });
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerDateRangeFilterEvent() {
+            var unsubscribe = $scope.$on("FlairBi:date-range", function(
+                event,
+                result
+            ) {
+                console.log(JSON.stringify($rootScope.dateRange))
             });
             $scope.$on("$destroy", unsubscribe);
         }

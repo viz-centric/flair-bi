@@ -74,6 +74,8 @@
                     .data(record.data);
 
                 rangefilter(div[0])
+
+                $rootScope.updateWidget[record.id] = rangefilter;
             }
         }
     }

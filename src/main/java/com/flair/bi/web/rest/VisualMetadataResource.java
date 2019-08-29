@@ -153,8 +153,12 @@ public class VisualMetadataResource {
     @PreAuthorize("@accessControlManager.hasAccess('VISUAL-METADATA', 'DELETE', 'APPLICATION')")
     public ResponseEntity<Void> deleteVisualMetadata(@PathVariable String id) {
         log.debug("REST request to delete VisualMetadata : {}", id);
-        schedulerService.deleteSchedulerReport(id);
-        visualMetadataService.delete(id);
+        try {
+            visualMetadataService.delete(id);
+            schedulerService.deleteSchedulerReport(id);
+        }catch(Exception e) {
+        	log.error("error occured while deleting visualization : "+e.getMessage());
+        }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("visualmetadata", id)).build();
     }
     

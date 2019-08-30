@@ -42,6 +42,8 @@
                     result['textColor'] = [];
                     result['displayColor'] = [];
                     result['borderColor'] = [];
+                    result['dateFormat'] = dimensions[0].feature.definition.substring(0,dimensions[0].feature.definition.indexOf('('))
+
                     for (var i = 0; i < result.maxMes; i++) {
 
                         result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
@@ -70,6 +72,7 @@
                 var rangefilter = flairVisualizations.rangefilter()
                     .config(getProperties(VisualizationUtils, record))
                     .broadcast($rootScope)
+                    .filterParameters(filterParametersService)
                     .print(isNotification == true ? true : false)
                     .data(record.data);
 

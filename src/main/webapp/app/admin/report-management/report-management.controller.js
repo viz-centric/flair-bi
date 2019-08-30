@@ -57,7 +57,7 @@
         function getScheduledReports(userName,reportName,startDate,endDate){
             schedulerService.filterScheduledReports(userName,reportName,startDate,endDate,vm.itemsPerPage,pagingParams.page - 1).then(
               function(response) {
-                    vm.reports=response.data.records;
+                    vm.reports=response.data.reports;
                     vm.totalItems = response.data.totalRecords;
                     vm.queryCount = vm.totalItems;
                     vm.page = pagingParams.page;

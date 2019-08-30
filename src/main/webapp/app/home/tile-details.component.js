@@ -246,13 +246,13 @@
         function getScheduledReports(userName,reportName){
             schedulerService.filterScheduledReports(userName,reportName,"","",5,0).then(
             function(response) {
-            vm.reports=response.data.records;
+            vm.reports=response.data.reports;
             vm.dashboards = [];
             vm.datasources=[];
             vm.views=[];
             vm.viewWatches=[];
             vm.bookmarkWatches=[];
-            vm.groupToPages(response.data.records);
+            vm.groupToPages(response.data.reports);
             },
             function(error) {
             var info = {

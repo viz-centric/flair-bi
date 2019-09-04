@@ -42,7 +42,7 @@
                     result['textColor'] = [];
                     result['displayColor'] = [];
                     result['borderColor'] = [];
-                    result['dateFormat'] = dimensions[0].feature.definition.substring(0,dimensions[0].feature.definition.indexOf('('))
+                    result['dateFormat'] = dimensions[0].feature.definition.substring(0, dimensions[0].feature.definition.indexOf('('))
 
                     for (var i = 0; i < result.maxMes; i++) {
 
@@ -65,20 +65,22 @@
                     return result;
                 }
 
-                $(element[0]).html('')
-                $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="rangefilter-' + element[0].id + '" ></div>')
-                var div = $('#rangefilter-' + element[0].id)
+                if ($rootScope.filterSelection.id == null) {
+                    $(element[0]).html('')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="rangefilter-' + element[0].id + '" ></div>')
+                    var div = $('#rangefilter-' + element[0].id)
 
-                var rangefilter = flairVisualizations.rangefilter()
-                    .config(getProperties(VisualizationUtils, record))
-                    .broadcast($rootScope)
-                    .filterParameters(filterParametersService)
-                    .print(isNotification == true ? true : false)
-                    .data(record.data);
+                    var rangefilter = flairVisualizations.rangefilter()
+                        .config(getProperties(VisualizationUtils, record))
+                        .broadcast($rootScope)
+                        .filterParameters(filterParametersService)
+                        .print(isNotification == true ? true : false)
+                        .data(record.data);
 
-                rangefilter(div[0])
+                    rangefilter(div[0])
 
-                $rootScope.updateWidget[record.id] = rangefilter;
+                    $rootScope.updateWidget[record.id] = rangefilter;
+                }
             }
         }
     }

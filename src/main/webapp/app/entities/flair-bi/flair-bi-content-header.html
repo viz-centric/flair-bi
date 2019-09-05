@@ -430,10 +430,10 @@
         </div>
         <ul class="list-inline filter-list ng-class:{'item':$root.isFullScreen == true}">
             <li ng-if="value.length > 0" ng-show="vm.currentPage==vm.getFloor($index)" style="outline:none;" ng-click="vm.toggleFilters($event)" class="list-inline-item" ng-repeat="(key, value) in vm.filters track by $index">
-                <a class="btn btn-info btn-sm filter" title="{{key}}">
-                    <span class="filter-name">{{key}}</span><span ng-click="vm.removeFilter($event,key)" class="remove glyphicon glyphicon-remove-sign glyphicon-white"></span>
+                <a class="btn btn-info btn-sm filter" title="{{vm.getKeyName(key)}}">
+                    <span class="filter-name">{{vm.getKeyName(key)}}</span><span ng-click="vm.removeFilter($event,key)" class="remove glyphicon glyphicon-remove-sign glyphicon-white"></span>
                 </a>
-                <ul class="list-group filter-drop-downs">
+                <ul class="list-group filter-drop-downs" ng-if="!vm.isDateRange(key)">
                     <li class="list-group-item" ng-repeat="val in value" style="outline:none;">
                         <span class="tag">{{val}}</span>
                         <svg class="flaticon-close" ng-click="vm.removeFilterTag($event,val,value,key)">

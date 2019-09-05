@@ -10,13 +10,15 @@
     function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES) {
 
         var paramObject = {};
+        var dateRangePrefix='data-range';
 
         var service = {
             get: get,
             save: save,
             clear: clear,
             getConditionExpression: getConditionExpression,
-            getFiltersCount:getFiltersCount
+            getFiltersCount:getFiltersCount,
+            getDateRangePrefix:getDateRangePrefix
         };
 
 
@@ -58,7 +60,14 @@
                 if (paramObject.hasOwnProperty(name) &&
                     paramObject[name] &&
                     paramObject[name].length > 0) {
-                    if (!condition.expression) {
+                    if (!condition.expression && name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                        condition = new ConditionExpression(CryptoService.UUIDv4, {
+                            '@type': 'Between',
+                            value: changeDateFormat(paramObject[name][0]),
+                            secondValue:changeDateFormat(paramObject[name][1]),
+                            featureName: name.split('|')[1]
+                        });
+                    }else if(!condition.expression && name.lastIndexOf(dateRangePrefix, 0) !== 0) {
                         condition = new ConditionExpression(CryptoService.UUIDv4, {
                             '@type': 'Contains',
                             values: paramObject[name],
@@ -88,5 +97,18 @@
             return size;
         }
 
+        function changeDateFormat(date){
+        return [ (date.getFullYear()),
+                    date.getMonth()+1,
+                    date.getDate()].join('-')+
+                    ' ' +
+                  [ date.getHours(),
+                    date.getMinutes(),
+                    date.getSeconds()].join(':');
+        }
+
+        function getDateRangePrefix(){
+            return dateRangePrefix;
+        }
     }
 })();

@@ -132,6 +132,8 @@
         vm.filtersLength=0;
         vm.changeHeaderColor=changeHeaderColor;
         vm.changeContainerColor=changeContainerColor;
+        vm.getKeyName=getKeyName;
+        vm.isDateRange=isDateRange;
         
         Principal.identity().then(function (account) {
                 vm.account = account;
@@ -387,6 +389,14 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+        function getKeyName(name){
+            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0?name.split('|')[1]:name;
+        }
+
+        function isDateRange(name){
+            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0?true:false;
+        }
+
         function setNoOfPages(){
             vm.noOfPages=Math.ceil(filterParametersService.getFiltersCount()/vm.pageSize)-1;
             vm.filtersLength=filterParametersService.getFiltersCount();
@@ -417,13 +427,18 @@
 
         function removeFilter($event,key){
             $event.preventDefault();
-
+            if(isDateRange(key)){
+                var filterParameters = filterParametersService.get();
+                delete filterParameters[key];
+                FilterStateManagerService.add(angular.copy(filterParametersService.get()));
+                $rootScope.$broadcast('flairbiApp:filter');
+            }else{
+                removeTagInBI(key);
+            }
             // Remove entry from rootScope filterSelection property
             delete $rootScope.filterSelection.filter[key];
-
-            removeTagInBI(key);
             vm.filters[key]=[];
-             setNoOfPages();
+            setNoOfPages();
         }
 
         function removeTagInBI(filter) {

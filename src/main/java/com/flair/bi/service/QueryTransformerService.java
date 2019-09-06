@@ -1,9 +1,9 @@
 package com.flair.bi.service;
 
+import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.messages.Query;
-import com.google.gson.Gson;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
@@ -179,8 +179,7 @@ public class QueryTransformerService {
     }
 
     private String getJsonFromConditionExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {
-        Gson gson = new Gson();
-        return gson.toJson(sanitizeConditionalExpression(conditionExpression, features));
+        return JacksonUtil.toString(sanitizeConditionalExpression(conditionExpression, features));
     }
 
     private ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {

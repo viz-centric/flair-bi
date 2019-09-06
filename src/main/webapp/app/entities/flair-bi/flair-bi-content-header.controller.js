@@ -134,6 +134,7 @@
         vm.changeContainerColor=changeContainerColor;
         vm.getKeyName=getKeyName;
         vm.isDateRange=isDateRange;
+        vm.getFiltersToolTipName=getFiltersToolTipName;
         
         Principal.identity().then(function (account) {
                 vm.account = account;
@@ -390,7 +391,17 @@
         }
 
         function getKeyName(name){
-            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0?name.split('|')[1]:name;
+            return isDateRange(name)?name.split('|')[1]:name;
+        }
+
+        function getFiltersToolTipName(name){
+            if(isDateRange(name)){
+            var filters=filterParametersService.get();
+            var toolTipText="Date Range : "+filterParametersService.changeDateFormat(filters[name][0])+" AND "+filterParametersService.changeDateFormat(filters[name][1]);
+                return toolTipText;
+            }else{
+                return name;
+            }
         }
 
         function isDateRange(name){
@@ -482,8 +493,9 @@
                         item.featureCriteria = result;
                         var filter = {};
                         item.featureCriteria.forEach(function(criteria) {
+                        var featureName=item.dateRange? filterParametersService.getDateRangePrefix()+"|"+criteria.feature.name:criteria.feature.name;
                             filter[
-                                criteria.feature.name
+                                featureName
                             ] = criteria.value.split(",");
                         });
                         filterParametersService.save(filter);
@@ -518,14 +530,25 @@
         function bookmark() {
             var params = filterParametersService.get();
             var filterCriterias = [];
-          
+            var dateRange=false;
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
                     var param = params[key];
+                    if(isDateRange(key)){
+                        params[key][0]=filterParametersService.changeDateFormat(params[key][0]);
+                        params[key][1]=filterParametersService.changeDateFormat(params[key][1]);
+                    }
                     filterCriterias.push({
                         value: params[key].join(),
                         feature: vm.features.filter(function(item) {
-                            return item.name.toLowerCase() === key.toLowerCase();
+                            var featureName="";
+                            if(isDateRange(key)){
+                                dateRange=true;
+                                featureName=key.split('|')[1].toLowerCase();
+                            }else{
+                                featureName=key.toLowerCase();
+                            }
+                            return item.name.toLowerCase() === featureName;
                         })[0]
                     });
                 }
@@ -545,8 +568,8 @@
                                 id: null,
                                 name: null,
                                 featureCriteria: filterCriterias,
-                                datasource:
-                                    vm.view.viewDashboard.dashboardDatasource
+                                datasource:vm.view.viewDashboard.dashboardDatasource,
+                                dateRange:dateRange
                             };
                         }
                     }

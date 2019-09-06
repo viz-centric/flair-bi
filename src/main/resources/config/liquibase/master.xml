@@ -64,6 +64,7 @@
     <include file="config/liquibase/changelog/20170817215500_added_entity_Hierarchy_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170817225500_added_entity_Drilldown_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170908231600_added_DatasourceConstraint_seed.xml" relativeToChangelogFile="false"/>
+	<include file="config/liquibase/changelog/20190906113649_added_feature_bookmark_daterange.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
 <!--@formatter:on-->

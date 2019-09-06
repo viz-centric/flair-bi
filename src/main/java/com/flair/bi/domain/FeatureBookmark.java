@@ -37,6 +37,9 @@ public class FeatureBookmark implements Serializable {
     @NotNull
     private Datasource datasource;
 
+    @Column(name = "date_range")
+    private boolean dateRange;
+
     @PreRemove
     public void preRemove() {
         this.datasource = null;
@@ -115,7 +118,15 @@ public class FeatureBookmark implements Serializable {
         return this;
     }
 
-    @Override
+	public boolean getDateRange() {
+		return dateRange;
+	}
+
+	public void setDateRange(boolean dateRange) {
+		this.dateRange = dateRange;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

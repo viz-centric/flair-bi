@@ -18,7 +18,8 @@
             clear: clear,
             getConditionExpression: getConditionExpression,
             getFiltersCount:getFiltersCount,
-            getDateRangePrefix:getDateRangePrefix
+            getDateRangePrefix:getDateRangePrefix,
+            changeDateFormat:changeDateFormat
         };
 
 
@@ -98,13 +99,17 @@
         }
 
         function changeDateFormat(date){
-        return [ (date.getFullYear()),
-                    date.getMonth()+1,
-                    date.getDate()].join('-')+
-                    ' ' +
-                  [ date.getHours(),
-                    date.getMinutes(),
-                    date.getSeconds()].join(':');
+        if((typeof date)=='string'){
+            return date;
+        }else{
+            return [ (date.getFullYear()),
+                        date.getMonth()+1,
+                        date.getDate()].join('-')+
+                        ' ' +
+                      [ date.getHours(),
+                        date.getMinutes(),
+                        date.getSeconds()].join(':');
+            }
         }
 
         function getDateRangePrefix(){

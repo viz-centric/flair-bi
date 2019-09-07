@@ -44,7 +44,7 @@
         function onUpdateSuccess(result) {
             vm.isSaving = false;
             $uibModalInstance.close(result);
-            var info = {text:$translate.instant('userManagement.updated',{param:vm.user.login}),title: "Updated"}
+            var info = {text:$translate.instant('userManagement.updated',{param:vm.user.id}),title: "Updated"}
             $rootScope.showSuccessToast(info);
         }
 

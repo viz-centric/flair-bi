@@ -3,7 +3,7 @@
         "service" : {
             "home": {
                 "title": "Services",
-                "createLabel": "Create Service",
+                "createLabel": "Create new datasource",
                 "createOrEditLabel": "Create or edit a Service"
             },
             "created": "A new Service is created with identifier {{ param }}",

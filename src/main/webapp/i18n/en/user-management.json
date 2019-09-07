@@ -5,8 +5,8 @@
             "createLabel": "Add User",
             "createOrEditLabel": "Create or Edit a User"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
+        "created": "A new user is created with login ID {{ param }}",
+        "updated": "User is updated with identifier {{ param }}",
         "deleted": "An user is deleted with identifier {{ param }}",
         "errorSaving":"Error saving user",
         "delete": {

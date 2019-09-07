@@ -10,7 +10,7 @@
     function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES) {
 
         var paramObject = {};
-        var dateRangePrefix='data-range';
+        var dateRangePrefix='date-range';
 
         var service = {
             get: get,

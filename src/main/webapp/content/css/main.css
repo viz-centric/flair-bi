@@ -4629,7 +4629,7 @@ jhi-alert .alerts .alert-danger {
   padding-left: 0px; }
   .data-constrains-properties .property-header .property-title {
     font-weight: 700; }
-
+ 
 .data-constrains-properties .data-constaraint-conditions-container {
   /**min-height: 200px;**/
   height: 425px;
@@ -4661,6 +4661,8 @@ jhi-alert .alerts .alert-danger {
     .data-constrains-properties .data-constaraint-conditions-container .data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
+      .data-constrains-properties .data-constaraint-conditions-container .featuresName {
+        margin-top: 20px; }
 
 /* TABLES */
 .table-bordered {

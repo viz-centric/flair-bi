@@ -437,11 +437,13 @@
         }
 
         function removeFilter($event,key){
+            
             $event.preventDefault();
             if(isDateRange(key)){
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));
+                $rootScope.filterSelection.id=null
                 $rootScope.$broadcast('flairbiApp:filter');
             }else{
                 removeTagInBI(key);

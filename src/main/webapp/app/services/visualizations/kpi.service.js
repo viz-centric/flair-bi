@@ -35,6 +35,7 @@
                     result['kpiIconExpression'] = [];
                     result['FontSizeforDisplayName'] = [];
                     result['showIcon'] = [];
+                    result['iconSize'] = [];
                     for (var i = 0; i < measures.length; i++) {
                         result['kpiDisplayName'].push(
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
@@ -49,7 +50,10 @@
                         result['kpiColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
                         result['kpiColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour expression'));
                         result['kpiIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon name'));
-                        result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon')); result['kpiIconFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font weight'));
+                        result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon')); 
+                        result['kpiIconFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font weight'));
+                        result['iconSize'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font size')); 
+                       
                         result['kpiIconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon colour'));
                         result['kpiIconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
                         result['FontSizeforDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size for diplay name'));

@@ -59,6 +59,7 @@
         function floatSearch(){
             $(".search-right-icon").addClass("search-right-icon-active");
             $(".home-header-search-box").show();
+            $(".home-header-search-box input").focus(); 
             $(".search-right-icon").hide();
         }
 

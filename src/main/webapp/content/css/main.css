@@ -1647,6 +1647,9 @@ a {
       color: #439dd3; }
     .permissions-fbibox .fbibox-content .tree-handle .square-icon {
       margin-top: 4px; }
+    .permissions-fbibox .fbibox-content .tree-handle .close-icon {
+      width: 18px;
+      height: 15px; }
     .permissions-fbibox .fbibox-content .tree-handle span {
       font-size: small;
       font-weight: normal;
@@ -6476,7 +6479,7 @@ input.select2-active {
   margin-bottom: 0px; }
 
 .common-create-popup .form-group .flair-checkbox {
-  vertical-align: top;
+  vertical-align: middle;
   padding-left: 5px; }
 
 .common-create-popup .form-group .row {

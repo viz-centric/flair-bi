@@ -8,7 +8,6 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
-import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
@@ -82,9 +81,7 @@ public class SchedulerService {
 	}
 	
 	public String buildUrl(String host,String port,String apiUrl) {
-		StringBuffer url= new StringBuffer();
-		url.append(host).append(":").append(port).append(apiUrl);
-		return url.toString();
+		return host + ":" + port + apiUrl;
 	}
 
 	public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
@@ -112,7 +109,7 @@ public class SchedulerService {
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
-			ReportLineItem reportLineItem, String visualizationId, String userId, boolean thresholdAlert)
+							 String visualizationId, String userId)
 			throws InvalidProtocolBufferException {
 		queryDTO.setSource(datasource.getName());
 
@@ -134,34 +131,25 @@ public class SchedulerService {
 						.connectionName(datasource.getConnectionName())
 						.vId(visualizationId != null ? visualizationId : "").userId(userId).build());
 		String jsonQuery = JsonFormat.printer().print(query);
-//		queries[0] = thresholdAlert ? queryWithoutHaving(query) : jsonQuery;
-//		queries[1] = thresholdAlert ? jsonQuery : null;
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
 
 	}
 
-//	private String queryWithoutHaving(Query query) throws InvalidProtocolBufferException {
-//		Query.Builder builder = query.toBuilder();
-//		Query querywithoutHaving = builder.clearHaving().build();
-//		String jsonQuery = JsonFormat.printer().print(querywithoutHaving);
-//		return jsonQuery;
-//	}
-
 	public emailsDTO[] getEmailList(String login) {
 		Optional<User> optionalUser = userService.getUserWithAuthoritiesByLogin(login);
-		User user = null;
-		if (optionalUser.isPresent()) {
-			user = optionalUser.get();
-		}
-		emailsDTO emailsDTO = new emailsDTO();
-		emailsDTO.setUser_email(user.getEmail());
-		emailsDTO.setUser_name(user.getFirstName() + " " + user.getLastName());
-		emailsDTO emailList[] = { emailsDTO };
-		return emailList;
+		return optionalUser
+				.map(user -> {
+					emailsDTO emailsDTO = new emailsDTO();
+					emailsDTO.setUser_email(user.getEmail());
+					emailsDTO.setUser_name(user.getFirstName() + " " + user.getLastName());
+					return emailsDTO;
+				})
+				.map(emails -> new emailsDTO[]{emails})
+				.orElseGet(() -> new emailsDTO[]{new emailsDTO()});
 	}
 
-	public SchedulerNotificationDTO setChannelCredentials(SchedulerNotificationDTO schedulerNotificationDTO) {
+	public void setChannelCredentials(SchedulerNotificationDTO schedulerNotificationDTO) {
 		if (schedulerNotificationDTO.getAssign_report().getChannel().equals("slack")) {
 			schedulerNotificationDTO.getAssign_report().setChannel_id(channel_id);
 			schedulerNotificationDTO.getAssign_report().setSlack_API_Token(slack_API_Token);
@@ -169,10 +157,7 @@ public class SchedulerService {
 			schedulerNotificationDTO.getAssign_report().setStride_API_Token(stride_API_Token);
 			schedulerNotificationDTO.getAssign_report().setStride_cloud_id(stride_cloud_id);
 			schedulerNotificationDTO.getAssign_report().setStride_conversation_id(stride_conversation_id);
-		} else {
-
 		}
-		return schedulerNotificationDTO;
 	}
 
 }

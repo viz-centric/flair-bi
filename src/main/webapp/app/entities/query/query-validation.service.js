@@ -15,7 +15,7 @@
                 return null;
             }
 
-            var errorObject = JSON.parse(error || '{}');
+            var errorObject = JSON.parse(error);
             if (errorObject.errorCode) {
                 var features = errorObject.features || [];
                 return {

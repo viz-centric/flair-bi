@@ -9,6 +9,7 @@ import com.flair.bi.domain.AbstractAuditingEntity;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.ektorp.http.HttpClient;
 import org.ektorp.impl.StdCouchDbConnector;
 import org.ektorp.impl.StdCouchDbInstance;
@@ -28,6 +29,7 @@ import static org.apache.http.conn.ssl.SSLSocketFactory.BROWSER_COMPATIBLE_HOSTN
  * Couch Db configuration
  */
 @Configuration
+@Slf4j
 @RequiredArgsConstructor
 public class CouchDbConfiguration {
 
@@ -77,7 +79,7 @@ public class CouchDbConfiguration {
                     BROWSER_COMPATIBLE_HOSTNAME_VERIFIER
                 ));
             } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                log.error("Error setting ssl socket factory", e);
             }
         }
 

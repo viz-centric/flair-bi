@@ -84,11 +84,7 @@
 
             getPieChartBackgroundColors: function (record) {
                 var backgroundColors = new Array;
-                if (0) {
-                    backgroundColors = utils.getDisplayColorsByExpression(record);
-                } else {
-                    backgroundColors.push('#ff7473', '#9055A2', '#47b8e0', '#34314c', '#F68657', '#ef5285', '#60c5ba', '#feee7d', '#a5d296', '#AF4034');
-                }
+                backgroundColors.push('#ff7473', '#9055A2', '#47b8e0', '#34314c', '#F68657', '#ef5285', '#60c5ba', '#feee7d', '#a5d296', '#AF4034');
                 return backgroundColors;
             },
 

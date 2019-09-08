@@ -2,8 +2,6 @@ package com.flair.bi.ssl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.ssl.SSLContextBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -71,11 +69,8 @@ public class FlairBIPgSqlSSLSocketFactory extends SSLSocketFactory {
         checkFileRequirements(confFile);
 
         Properties prop = new Properties();
-        InputStream input = null;
 
-        try {
-
-            input = new FileInputStream(confFile);
+        try (InputStream input = new FileInputStream(confFile)) {
 
             // load a properties file
             prop.load(input);
@@ -113,15 +108,7 @@ public class FlairBIPgSqlSSLSocketFactory extends SSLSocketFactory {
 
             return sslContext.getSocketFactory();
         } catch (IOException | KeyManagementException | KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException | CertificateException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+           log.error("Error creating ssl socket context", ex);
         }
         return null;
     }
@@ -179,8 +166,7 @@ public class FlairBIPgSqlSSLSocketFactory extends SSLSocketFactory {
 
             return sslContext.getSocketFactory();
         } catch (NoSuchAlgorithmException | KeyStoreException | IOException | CertificateException | UnrecoverableKeyException | KeyManagementException e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.error("Error creating a socket factory", e);
         }
         return null;
     }

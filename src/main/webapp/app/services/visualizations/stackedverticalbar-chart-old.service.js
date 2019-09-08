@@ -1210,7 +1210,6 @@
                                 })
                                 .attr('visibility', function (d, i) {
                                     return "visible";
-                                    return me.helper.getValueVisibility(d, measures.indexOf(d.key));
                                 })
                                 .style('font-style', function (d, i) {
                                     return me.helper.getValueFontStyle(d, measures.indexOf(d.key));

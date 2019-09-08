@@ -169,9 +169,10 @@
                             } else if (parent.secondExpression && parent.secondExpression.uuid === condition.uuid) {
                                 newParent = angular.copy(parent.firstExpression);
                             }
-                            newParent.uuid = parent.uuid;
-
-                            changes.push(newParent);
+                            if (newParent) {
+                                newParent.uuid = parent.uuid;
+                                changes.push(newParent);
+                            }
                         }
                     });
                     vm.conditionExpression = applyChanges(vm.conditionExpression, changes);

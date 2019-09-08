@@ -5,6 +5,8 @@ import com.flair.bi.domain.QFeatureBookmark;
 import com.flair.bi.repository.FeatureBookmarkRepository;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.dto.FeatureBookmarkDTO;
+import com.flair.bi.service.mapper.FeatureBookmarkMapper;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -30,6 +32,8 @@ public class FeatureBookmarkService {
     private final UserRepository userRepository;
 
     private final BookMarkWatchService bookMarkWatchService;
+
+    private final FeatureBookmarkMapper featureBookmarkMapper;
 
     /**
      * Save a featureBookmark.
@@ -101,5 +105,11 @@ public class FeatureBookmarkService {
         log.debug("Request to delete FeatureBookmark : {}", id);
         bookMarkWatchService.deleteBookmarkWatchesByBookmarkId(id);
         featureBookmarkRepository.delete(id);
+    }
+
+    public FeatureBookmarkDTO save(FeatureBookmarkDTO featureBookmarkDTO) {
+        FeatureBookmark featureBookmark = featureBookmarkMapper.featureBookmarkDTOtoFeatureBookmark(featureBookmarkDTO);
+        FeatureBookmark saved = save(featureBookmark);
+        return featureBookmarkMapper.featureBookmarkToFeatureBookmarkDTO(saved);
     }
 }

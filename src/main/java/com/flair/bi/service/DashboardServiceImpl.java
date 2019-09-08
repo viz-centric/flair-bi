@@ -1,7 +1,13 @@
 package com.flair.bi.service;
 
 import com.flair.bi.authorization.AccessControlManager;
-import com.flair.bi.domain.*;
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.DashboardRelease;
+import com.flair.bi.domain.QDashboard;
+import com.flair.bi.domain.Release;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.exception.UniqueConstraintsException;
@@ -10,15 +16,14 @@ import com.flair.bi.repository.DashboardRepository;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.dto.DashboardDTO;
+import com.flair.bi.service.mapper.DashboardMapper;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,12 +32,15 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +63,8 @@ public class DashboardServiceImpl implements DashboardService {
     private final DashboardReleaseRepository dashboardReleaseRepository;
     
     private final JdbcTemplate jdbcTemplate;
+
+    private final DashboardMapper dashboardMapper;
 
     /**
      * Save a dashboard.
@@ -400,7 +410,14 @@ public class DashboardServiceImpl implements DashboardService {
 		return imageLocation;
 	}
 
-	@Override
+    @Override
+    public DashboardDTO save(DashboardDTO dashboardDTO) {
+        Dashboard dashboard = dashboardMapper.dashboardDTOtoDashboard(dashboardDTO);
+        Dashboard saved = save(dashboard);
+        return dashboardMapper.dashboardToDashboardDTO(saved);
+    }
+
+    @Override
 	public List<DashboardRelease> getDashboardReleasesList(Long dashboardId) {
 		return dashboardReleaseRepository.findByDashboardId(dashboardId);
 	}

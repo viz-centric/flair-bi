@@ -4,7 +4,8 @@ import com.flair.bi.domain.listeners.PropertyTypeListener;
 import com.flair.bi.domain.propertytype.PropertyType;
 import com.flair.bi.domain.propertytype.SelectPropertyType;
 import com.flair.bi.repository.PropertyTypeRepository;
-import com.flair.bi.repository.ValueRepository;
+import com.flair.bi.service.dto.PropertyTypeDTO;
+import com.flair.bi.service.mapper.PropertyTypeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PropertyTypeServiceImpl implements PropertyTypeService {
 
     private final PropertyTypeRepository propertyTypeRepository;
+    private final PropertyTypeMapper propertyTypeMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,5 +47,12 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
     @Override
     public void delete(long id) {
         propertyTypeRepository.delete(id);
+    }
+
+    @Override
+    public PropertyTypeDTO save(PropertyTypeDTO propertyTypeDTO) {
+        PropertyType propertyType = propertyTypeMapper.propertyTypeDTOToPropertyType(propertyTypeDTO);
+        PropertyType saved = save(propertyType);
+        return propertyTypeMapper.propertyTypeToPropertyTypeDTO(saved);
     }
 }

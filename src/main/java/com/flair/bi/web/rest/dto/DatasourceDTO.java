@@ -5,13 +5,17 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.DatasourceStatus;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.hierarchy.Hierarchy;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class DatasourceDTO {
 

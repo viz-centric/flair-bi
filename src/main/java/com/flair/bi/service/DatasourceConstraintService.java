@@ -2,6 +2,8 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.repository.DatasourceConstraintRepository;
+import com.flair.bi.service.dto.DatasourceConstraintDTO;
+import com.flair.bi.service.mapper.DatasourceConstraintMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.List;
 public class DatasourceConstraintService {
 
     private final DatasourceConstraintRepository datasourceConstraintRepository;
+    private final DatasourceConstraintMapper datasourceConstraintMapper;
 
     /**
      * Save a datasourceConstraint.
@@ -69,5 +72,11 @@ public class DatasourceConstraintService {
     @Transactional(readOnly = true)
     public DatasourceConstraint findByUserAndDatasource(String login, Long datasourceId) {
         return datasourceConstraintRepository.findByUserLoginAndDatasourceId(login, datasourceId);
+    }
+
+    public DatasourceConstraintDTO save(DatasourceConstraintDTO datasourceConstraintDTO) {
+        DatasourceConstraint datasourceConstraint = datasourceConstraintMapper.datasourceConstraintDTOtoDatasourceConstraint(datasourceConstraintDTO);
+        DatasourceConstraint saved = save(datasourceConstraint);
+        return datasourceConstraintMapper.datasourceConstraintToDatasourceConstraintDTO(saved);
     }
 }

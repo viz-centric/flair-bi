@@ -2,6 +2,7 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
+import com.flair.bi.service.dto.DashboardDTO;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -132,5 +133,5 @@ public interface DashboardService {
     
     String getImageLocation(Long id);
 
-
+    DashboardDTO save(DashboardDTO dashboard);
 }

@@ -127,7 +127,7 @@ public class FeatureResource {
      */
     @PostMapping("/features")
     @Timed
-    public ResponseEntity<?> createFeatures(@Valid @RequestBody Feature feature) throws URISyntaxException {
+    public ResponseEntity<?> createFeatures(@Valid @RequestBody FeatureDTO feature) throws URISyntaxException {
         log.debug("REST request to save feature : {}", feature);
         if (feature.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("features  ", "idexists", "A new features cannot already have an ID")).body(null);
@@ -138,7 +138,7 @@ public class FeatureResource {
                     .headers(HeaderUtil.createFailureAlert("feature", "feature." + validate.name().toLowerCase(), "Error"))
                     .body(validate);
         }
-        Feature result = featureService.save(feature);
+        FeatureDTO result = featureService.save(feature);
         return ResponseEntity.created(new URI("/api/features/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("features", result.getId().toString()))
                 .body(result);

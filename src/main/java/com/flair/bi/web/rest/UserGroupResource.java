@@ -7,6 +7,7 @@ import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.dto.UserGroupDTO;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.util.HeaderUtil;
@@ -61,7 +62,7 @@ public class UserGroupResource {
      */
     @PostMapping("/userGroups")
     @Timed
-    public ResponseEntity<UserGroup> createUserGroup(@Valid @RequestBody UserGroup userGroup) throws URISyntaxException {
+    public ResponseEntity<UserGroupDTO> createUserGroup(@Valid @RequestBody UserGroupDTO userGroup) throws URISyntaxException {
 
         if (null != userGroupService.findOne(userGroup.getName())) {
             return ResponseEntity.badRequest()
@@ -72,7 +73,7 @@ public class UserGroupResource {
                 .body(null);
         }
 
-        UserGroup result = userGroupService.save(userGroup);
+        UserGroupDTO result = userGroupService.save(userGroup);
         return ResponseEntity.created(new URI("/api/userGroups/" + result.getName()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getName()))
             .body(result);
@@ -86,8 +87,8 @@ public class UserGroupResource {
      */
     @PutMapping("/userGroups")
     @Timed
-    public ResponseEntity<UserGroup> updateUserGroup(@Valid @RequestBody UserGroup userGroup) {
-        final UserGroup result = userGroupService.save(userGroup);
+    public ResponseEntity<UserGroupDTO> updateUserGroup(@Valid @RequestBody UserGroupDTO userGroup) {
+        final UserGroupDTO result = userGroupService.save(userGroup);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, userGroup.getName()))
             .body(result);

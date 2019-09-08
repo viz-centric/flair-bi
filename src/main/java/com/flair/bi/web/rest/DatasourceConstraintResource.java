@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.service.DatasourceConstraintService;
+import com.flair.bi.service.dto.DatasourceConstraintDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.querydsl.core.types.Predicate;
@@ -46,12 +47,12 @@ public class DatasourceConstraintResource {
      */
     @PostMapping("/datasource-constraints")
     @Timed
-    public ResponseEntity<DatasourceConstraint> createDatasourceConstraint(@Valid @RequestBody DatasourceConstraint datasourceConstraint) throws URISyntaxException {
+    public ResponseEntity<DatasourceConstraintDTO> createDatasourceConstraint(@Valid @RequestBody DatasourceConstraintDTO datasourceConstraint) throws URISyntaxException {
         log.debug("REST request to save DatasourceConstraint : {}", datasourceConstraint);
         if (datasourceConstraint.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new datasourceConstraint cannot already have an ID")).body(null);
         }
-        DatasourceConstraint result = datasourceConstraintService.save(datasourceConstraint);
+        DatasourceConstraintDTO result = datasourceConstraintService.save(datasourceConstraint);
         return ResponseEntity.created(new URI("/api/datasource-constraints/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +69,12 @@ public class DatasourceConstraintResource {
      */
     @PutMapping("/datasource-constraints")
     @Timed
-    public ResponseEntity<DatasourceConstraint> updateDatasourceConstraint(@Valid @RequestBody DatasourceConstraint datasourceConstraint) throws URISyntaxException {
+    public ResponseEntity<DatasourceConstraintDTO> updateDatasourceConstraint(@Valid @RequestBody DatasourceConstraintDTO datasourceConstraint) throws URISyntaxException {
         log.debug("REST request to update DatasourceConstraint : {}", datasourceConstraint);
         if (datasourceConstraint.getId() == null) {
             return createDatasourceConstraint(datasourceConstraint);
         }
-        DatasourceConstraint result = datasourceConstraintService.save(datasourceConstraint);
+        DatasourceConstraintDTO result = datasourceConstraintService.save(datasourceConstraint);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, datasourceConstraint.getId().toString()))
             .body(result);

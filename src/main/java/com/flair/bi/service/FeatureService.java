@@ -3,7 +3,9 @@ package com.flair.bi.service;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.repository.FeatureRepository;
+import com.flair.bi.service.dto.FeatureDTO;
 import com.flair.bi.service.dto.FunctionsDTO;
+import com.flair.bi.service.mapper.FeatureMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class FeatureService {
 
     private final FeatureRepository featureRepository;
     private final FunctionsService functionsService;
+    private final FeatureMapper featureMapper;
 
     @Transactional(readOnly = true)
     public List<Feature> getFeatures(Predicate predicate) {
@@ -89,5 +92,16 @@ public class FeatureService {
         return features.stream()
                 .map(f -> validate(f))
                 .collect(Collectors.toList());
+    }
+
+    public FeatureValidationResult validate(FeatureDTO featureDTO) {
+        Feature feature = featureMapper.featureDTOtoFeature(featureDTO);
+        return validate(feature);
+    }
+
+    public FeatureDTO save(FeatureDTO featureDTO) {
+        Feature feature = featureMapper.featureDTOtoFeature(featureDTO);
+        Feature saved = save(feature);
+        return featureMapper.featureToFeatureDTO(saved);
     }
 }

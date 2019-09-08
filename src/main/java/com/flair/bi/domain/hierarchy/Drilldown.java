@@ -5,7 +5,12 @@ import com.flair.bi.domain.Feature;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -48,7 +53,6 @@ public class Drilldown implements Serializable {
 
     @PreRemove
     public void preRemove() {
-        this.feature = null;
     }
 
     @Override

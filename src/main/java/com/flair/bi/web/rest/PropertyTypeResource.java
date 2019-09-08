@@ -83,12 +83,12 @@ public class PropertyTypeResource {
      */
     @PostMapping("/propertyTypes")
     @Timed
-    public ResponseEntity<PropertyType> insertPropertyType(@Valid @RequestBody PropertyType propertyType) throws URISyntaxException {
+    public ResponseEntity<PropertyTypeDTO> insertPropertyType(@Valid @RequestBody PropertyTypeDTO propertyType) throws URISyntaxException {
         log.debug("REST request to insert Property type : {}", propertyType);
         if (propertyType.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("propertyTypes", "idexists", "A new property type cannot already have an ID")).body(null);
         }
-        PropertyType result = propertyTypeService.save(propertyType);
+        PropertyTypeDTO result = propertyTypeService.save(propertyType);
         return ResponseEntity.created(new URI("/api/propertyTypes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("propertyTypes", result.getId().toString()))
             .body(result);
@@ -106,12 +106,12 @@ public class PropertyTypeResource {
      */
     @PutMapping("/propertyTypes")
     @Timed
-    public ResponseEntity<PropertyType> updateDatasources(@Valid @RequestBody PropertyType propertyType) throws URISyntaxException {
+    public ResponseEntity<PropertyTypeDTO> updateDatasources(@Valid @RequestBody PropertyTypeDTO propertyType) throws URISyntaxException {
         log.debug("REST request to update Property type : {}", propertyType);
         if (propertyType.getId() == null) {
             return insertPropertyType(propertyType);
         }
-        PropertyType result = propertyTypeService.save(propertyType);
+        PropertyTypeDTO result = propertyTypeService.save(propertyType);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("datasources", propertyType.getId().toString()))
             .body(result);

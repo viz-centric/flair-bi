@@ -7,6 +7,8 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.dto.UserGroupDTO;
+import com.flair.bi.service.mapper.UserGroupMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ public class UserGroupService {
     private final UserGroupRepository userGroupRepository;
 
     private final PermissionRepository permissionRepository;
+
+    private final UserGroupMapper userGroupMapper;
 
     public List<UserGroup> findAll() {
         log.debug("Request to get all UserGroups");
@@ -110,5 +114,11 @@ public class UserGroupService {
      */
     public boolean isNotPredefinedGroup(String name){
     	return !isPredefinedGroup(name);
+    }
+
+    public UserGroupDTO save(UserGroupDTO userGroupDTO) {
+        UserGroup userGroup = userGroupMapper.userGroupDTOtoUserGroup(userGroupDTO);
+        UserGroup saved = save(userGroup);
+        return userGroupMapper.userGroupToUserGroupDTO(saved);
     }
 }

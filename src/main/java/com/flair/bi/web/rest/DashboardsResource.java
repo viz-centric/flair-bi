@@ -11,6 +11,7 @@ import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.FileUploadService;
 import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.DashboardDTO;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
@@ -71,12 +72,12 @@ public class DashboardsResource {
     @PostMapping("/dashboards")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('DASHBOARDS', 'WRITE', 'APPLICATION')")
-    public ResponseEntity<Dashboard> createDashboards(@Valid @RequestBody Dashboard dashboard) throws URISyntaxException {
+    public ResponseEntity<DashboardDTO> createDashboards(@Valid @RequestBody DashboardDTO dashboard) throws URISyntaxException {
         log.debug("REST request to save Dashboard : {}", dashboard);
         if (dashboard.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", "idexists", "A new dashboard cannot already have an ID")).body(null);
         }
-        Dashboard result = dashboardService.save(dashboard);
+        DashboardDTO result = dashboardService.save(dashboard);
         try {
             if (dashboard.getImage() != null) {
                 String loc = imageUploadService.uploadedImageAndReturnPath(dashboard.getImage(), result.getId(), dashboard.getImageContentType(), "dashboard");
@@ -103,7 +104,7 @@ public class DashboardsResource {
     @PutMapping("/dashboards")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess(#dashboard.id, 'UPDATE', 'DASHBOARD')")
-    public ResponseEntity<Dashboard> updateDashboards(@Valid @RequestBody Dashboard dashboard) throws URISyntaxException {
+    public ResponseEntity<DashboardDTO> updateDashboards(@Valid @RequestBody DashboardDTO dashboard) throws URISyntaxException {
         log.debug("REST request to update Dashboard : {}", dashboard);
         if (dashboard.getId() == null) {
             return createDashboards(dashboard);
@@ -118,7 +119,7 @@ public class DashboardsResource {
         } catch (Exception e) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("dashboard", "imageupload", "image is not uploaded")).body(null);
         }
-        Dashboard result = dashboardService.save(dashboard);
+        DashboardDTO result = dashboardService.save(dashboard);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("dashboard", dashboard.getId().toString()))
             .body(result);

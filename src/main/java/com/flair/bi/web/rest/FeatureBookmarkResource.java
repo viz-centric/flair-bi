@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.service.FeatureBookmarkService;
+import com.flair.bi.service.dto.FeatureBookmarkDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.querydsl.core.types.Predicate;
@@ -46,12 +47,12 @@ public class FeatureBookmarkResource {
      */
     @PostMapping("/feature-bookmarks")
     @Timed
-    public ResponseEntity<FeatureBookmark> createFeatureBookmark(@Valid @RequestBody FeatureBookmark featureBookmark) throws URISyntaxException {
+    public ResponseEntity<FeatureBookmarkDTO> createFeatureBookmark(@Valid @RequestBody FeatureBookmarkDTO featureBookmark) throws URISyntaxException {
         log.debug("REST request to save FeatureBookmark : {}", featureBookmark);
         if (featureBookmark.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new featureBookmark cannot already have an ID")).body(null);
         }
-        FeatureBookmark result = featureBookmarkService.save(featureBookmark);
+        FeatureBookmarkDTO result = featureBookmarkService.save(featureBookmark);
         return ResponseEntity.created(new URI("/api/feature-bookmarks/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,12 +69,12 @@ public class FeatureBookmarkResource {
      */
     @PutMapping("/feature-bookmarks")
     @Timed
-    public ResponseEntity<FeatureBookmark> updateFeatureBookmark(@Valid @RequestBody FeatureBookmark featureBookmark) throws URISyntaxException {
+    public ResponseEntity<FeatureBookmarkDTO> updateFeatureBookmark(@Valid @RequestBody FeatureBookmarkDTO featureBookmark) throws URISyntaxException {
         log.debug("REST request to update FeatureBookmark : {}", featureBookmark);
         if (featureBookmark.getId() == null) {
             return createFeatureBookmark(featureBookmark);
         }
-        FeatureBookmark result = featureBookmarkService.save(featureBookmark);
+        FeatureBookmarkDTO result = featureBookmarkService.save(featureBookmark);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, featureBookmark.getId().toString()))
             .body(result);

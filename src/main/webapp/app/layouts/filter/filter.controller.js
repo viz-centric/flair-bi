@@ -93,7 +93,9 @@
                                         $scope.$broadcast('dataloaded');
                                     }
 
-                                    vm.fieldList.push(pField.toUpperCase().replace(" ", ""));
+                                    if (pField) {
+                                        vm.fieldList.push(pField.toUpperCase().replace(" ", ""));
+                                    }
                                     vm.filterData.push([]);
 
                                 }

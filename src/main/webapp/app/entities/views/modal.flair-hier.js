@@ -374,7 +374,6 @@
                 );
             } else {
                 $scope.currentHierarchy.splice(rElem, 1);
-                $scope.editProperty != null;
                 $scope.showEditProperties = false;
                 $scope.innerRecord = [];
                 savedLines += 1;

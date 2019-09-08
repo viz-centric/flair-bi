@@ -120,13 +120,11 @@
     }
 
     function doesPropertyExists(propertyName) {
-        var prop = getProperty(this.properties, propertyName);
-        return prop && prop !== null;
+        return !!getProperty(this.properties, propertyName);
     }
 
     function fieldPropertyExists(fieldOrder, propertyName) {
-        var prop = this.getFieldPropertyValue(fieldOrder, propertyName);
-        return prop && prop !== null;
+        return !!this.getFieldPropertyValue(fieldOrder, propertyName);
     }
 
     function getFieldPropertyValue(fieldOrder, propertyName, orElse) {

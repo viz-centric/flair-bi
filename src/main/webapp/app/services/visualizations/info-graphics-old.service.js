@@ -662,7 +662,7 @@
                             .duration(transitionDuration)
                             .style('opacity', 1)
                             .attr("transform", function (d, i) {
-                                return "translate(" + x(d[me.helper.dimension]) + "," + y(d[me.helper.measures[0]]); + ")";
+                                return "translate(" + x(d[me.helper.dimension]) + "," + y(d[me.helper.measures[0]]);
                             });
 
                         dataLines.exit()

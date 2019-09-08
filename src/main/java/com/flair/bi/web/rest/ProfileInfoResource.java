@@ -2,13 +2,13 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.config.DefaultProfileUtil;
 import com.flair.bi.config.JHipsterProperties;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,14 +48,10 @@ public class ProfileInfoResource {
         return null;
     }
 
-    class ProfileInfoResponse {
-
-        public String[] activeProfiles;
-        public String ribbonEnv;
-
-        ProfileInfoResponse(String[] activeProfiles, String ribbonEnv) {
-            this.activeProfiles = activeProfiles;
-            this.ribbonEnv = ribbonEnv;
-        }
+    @Data
+    @RequiredArgsConstructor
+    private static class ProfileInfoResponse {
+        private final String[] activeProfiles;
+        private final String ribbonEnv;
     }
 }

@@ -1,19 +1,23 @@
 package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
 import com.flair.bi.service.dto.ReleasesAlertsFinalDTO;
 import com.flair.bi.service.handler.AlertHandler;
-import com.flair.bi.service.mapper.ReleaseRequestMapper;
-import com.flair.bi.web.rest.dto.ReleaseRequestDTO;
+import com.flair.bi.service.handler.LastWeeksAlertHandler;
+import com.flair.bi.service.handler.OlderAlertHandler;
+import com.flair.bi.service.handler.ThisWeeksAlertHandler;
+import com.flair.bi.service.handler.TodaysAlertHandler;
+import com.flair.bi.service.handler.YesterdaysAlertHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +26,21 @@ import java.util.Map;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class AlertsResource {
-	
+
+    private static final Map<Integer,AlertHandler> commandReleaseAlerts = new HashMap<Integer, AlertHandler>(){
+        private static final long serialVersionUID = 1L;
+    {
+           put(1,new TodaysAlertHandler()); put(2,new YesterdaysAlertHandler());
+           put(3,new ThisWeeksAlertHandler()); put(4,new LastWeeksAlertHandler());
+           put(5,new OlderAlertHandler());
+    }};
+
     private final ReleaseRequestService releaseRequestService;
 
     @GetMapping("/release-alerts/{id}/{offset}")
     @Timed
     public ResponseEntity<List<ReleasesAlertsDTO>> getReleaseAlerts(@PathVariable int id,@PathVariable int offset) {
-        AlertHandler alertHandler=AlertHandler.commandReleaseAlerts.get(id);
+        AlertHandler alertHandler= commandReleaseAlerts.get(id);
     	List<ReleasesAlertsDTO> releaseAlerts=alertHandler.getReleaseAlerts(offset,releaseRequestService);
 		return ResponseEntity.ok(releaseAlerts);
     

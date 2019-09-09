@@ -119,7 +119,6 @@
 
         function save() {
             vm.isSaving = true;
-            vm.datasourceConstraint.user=ComponentDataService.getUser();
             if (vm.datasourceConstraint.id !== null) {
                 DatasourceConstraint.update(
                     vm.datasourceConstraint,
@@ -127,6 +126,7 @@
                     onSaveError
                 );
             } else {
+                vm.datasourceConstraint.user = ComponentDataService.getUser();
                 DatasourceConstraint.save(
                     vm.datasourceConstraint,
                     onSaveSuccess,

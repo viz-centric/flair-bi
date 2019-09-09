@@ -30,6 +30,7 @@
                     result['showIcon'] = [];
                     result['valuePosition'] = [];
                     result['iconName'] = [];
+                    result['iconExpression'] = [];
                     result['iconFontWeight'] = [];
                     result['iconPosition'] = [];
                     result['iconColor'] = [];
@@ -60,6 +61,7 @@
                         result['fontWeightForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSizeForMeasure'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
                         result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
+                        result['iconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
                     }
                     return result;
                 }

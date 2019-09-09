@@ -89,7 +89,9 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var pivot = $rootScope.updateWidget[record.id];
-                        pivot.update(record.data);
+                        pivot
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
                     }
                 } else {
                     $(element[0]).html('')
@@ -103,7 +105,7 @@
                         .print(isNotification == true ? true : false)
                         .data(record.data);
 
-                        pivot(div[0])
+                    pivot(div[0])
 
                     $rootScope.updateWidget[record.id] = pivot;
                 }

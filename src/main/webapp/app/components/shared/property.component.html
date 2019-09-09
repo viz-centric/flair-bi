@@ -1,4 +1,4 @@
-<div class="{{vm.formClass}}" ng-if="vm.property.type !== 'COLOR_PICKER' &&  vm.property.propertyType.name !=='Text colour expression' && vm.property.propertyType.name !=='Cell colour expression' && vm.property.propertyType.name !=='Icon Expression'">
+<div class="{{vm.formClass}}" ng-if="vm.property.type !== 'COLOR_PICKER' &&  vm.property.propertyType.name !=='Text colour expression' && vm.property.propertyType.name !=='Cell colour expression' && vm.property.propertyType.name !=='Icon Expression' && vm.property.propertyType.name !=='Display colour expression'">
 
     <label class="{{vm.labelClasses}}"  
         for="propertyType_{{vm.property.propertyType.name}}">{{vm.property.propertyType.name}}</label>
@@ -35,7 +35,7 @@
         <div ng-change="vm.setProperty(vm.property.value)" md-color-picker ng-model="vm.property.value"></div>
     </div>
 </div>
-<div ng-if="vm.property.propertyType.name === 'Text colour expression' || vm.property.propertyType.name === 'Cell colour expression' || vm.property.propertyType.name ==='Icon Expression'" class="row">
+<div ng-if="vm.property.propertyType.name === 'Text colour expression' || vm.property.propertyType.name === 'Cell colour expression' || vm.property.propertyType.name ==='Icon Expression' || vm.property.propertyType.name ==='Display colour expression'" class="row">
     <div class="control-label-color-picker flair-model-pad pull-left">{{vm.property.propertyType.name}}</div>
     <div class="color-picker-container" uib-tooltip="Set Conditional Expressions" tooltip-placement="top" >
         <!-- <input  ng-click="vm.openIconExpression(vm)" type="button" value="set condition"> -->

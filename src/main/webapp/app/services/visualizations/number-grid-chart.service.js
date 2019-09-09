@@ -29,7 +29,7 @@
                     result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font weight');
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
                     result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
-                    result['fontSizeforDisplayName'] = VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size for diplay name');
+                    result['fontSizeforDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size for diplay name');
 
                     return result;
                 }

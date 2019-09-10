@@ -59,6 +59,8 @@
                     result['textColor'] = [];
                     result['displayColor'] = [];
                     result['borderColor'] = [];
+                    result['displayColorExpression'] = [];
+                    result['textColorExpression'] = [];
                     for (var i = 0; i < result.maxMes; i++) {
 
                         result['showValues'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Value on Points'));
@@ -75,6 +77,8 @@
                         result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
                         var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
+                        result['displayColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour expression'));
+                        result['textColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour expression'));
                     }
                     if (isNotification) {
                         result['showXaxis'] = false;

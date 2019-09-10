@@ -16,11 +16,12 @@
 
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimension = features.dimensions,
-                        measure = features.measures;
+                        measure = features.measures,
+                        colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measure);
-
+                    result['colorSet'] = colorSet;
                     result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name') || result['dimension'][0];
                     result['measureDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display name') || result['measure'][0];
 

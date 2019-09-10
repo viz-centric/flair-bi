@@ -59,6 +59,8 @@
                     result['textColor'] = [];
                     result['displayColor'] = [];
                     result['borderColor'] = [];
+                    result['displayColorExpression'] = [];
+                    result['textColorExpression'] = [];
                     result['lineType'] = [];
                     result['pointType'] = [];
                     for (var i = 0; i < result.maxMes; i++) {
@@ -76,6 +78,8 @@
                         result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
                         var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
+                        result['displayColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour expression'));
+                        result['textColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour expression'));
                         result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type').toLowerCase());
                         result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));
                     }

@@ -109,6 +109,8 @@
                     result['textColor'] = [];
                     result['displayColor'] = [];
                     result['borderColor'] = [];
+                    result['displayColorExpression'] = [];
+                    result['textColorExpression'] = [];
                     result['comboChartType'] = [];
                     result['lineType'] = [];
                     result['pointType'] = [];
@@ -129,6 +131,8 @@
                         result['displayColor'].push((displayColor == null) ? colorSet[i] : displayColor);
                         var borderColor = VisualizationUtils.getFieldPropertyValue(measures[i], 'Border colour');
                         result['borderColor'].push((borderColor == null) ? colorSet[i] : borderColor);
+                        result['displayColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour expression'));
+                        result['textColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour expression'));
                         result['comboChartType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Combo chart type'));
                         result['lineType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Type').toLowerCase());
                         result['pointType'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Line Chart Point type'));

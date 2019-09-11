@@ -116,6 +116,7 @@
                             $translatePartialLoader.addPart("views");
                             $translatePartialLoader.addPart("dimensions");
                             $translatePartialLoader.addPart("drilldown");
+                            $translatePartialLoader.addPart("feature");
                             $translatePartialLoader.addPart("featureBookmark");
                             $translatePartialLoader.addPart("visualmetadata");
                             return $translate.refresh();

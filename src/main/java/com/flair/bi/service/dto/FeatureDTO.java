@@ -4,6 +4,7 @@ import com.flair.bi.domain.enumeration.FeatureType;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
@@ -13,6 +14,7 @@ public class FeatureDTO {
 
     @NotNull
     @Size(max = 40)
+    @Pattern(regexp = "[a-z_0-9]+")
     private String name;
 
     @NotNull
@@ -23,7 +25,7 @@ public class FeatureDTO {
     private String definition;
     @NotNull
     private FeatureType featureType;
-    
+
     private Boolean isSelected;
 
     private Long functionId;

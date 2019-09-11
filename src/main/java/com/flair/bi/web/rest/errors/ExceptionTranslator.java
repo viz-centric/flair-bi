@@ -1,5 +1,6 @@
 package com.flair.bi.web.rest.errors;
 
+import com.flair.bi.exception.UniqueConstraintsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.flair.bi.exception.UniqueConstraintsException;
 
 import java.util.List;
 
@@ -72,7 +71,7 @@ public class ExceptionTranslator {
         ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
 
         for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
+            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode(), fieldError.getDefaultMessage());
         }
 
         return dto;

@@ -20,8 +20,9 @@
 
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measures);
+                    result['kpiAlignment'] = VisualizationUtils.getPropertyValue(record.properties, 'Text alignment');
                     result['kpiDisplayName'] = [];
-                    result['kpiAlignment'] = [];
+                  
                     result['kpiBackgroundColor'] = [];
                     result['kpiNumberFormat'] = [];
                     result['kpiFontStyle'] = [];
@@ -41,7 +42,7 @@
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
                         );
-                        result['kpiAlignment'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text alignment'));
+                       
                         result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                         result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                         result['kpiFontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));

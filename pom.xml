@@ -82,7 +82,7 @@
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <prometheus-simpleclient.version>0.2.0</prometheus-simpleclient.version>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
         <sonar.exclusions>src/main/webapp/content/**/*.*, src/main/webapp/bower_components/**/*.*,
             src/main/webapp/i18n/*.js, target/www/**/*.*</sonar.exclusions>
         <sonar.issue.ignore.multicriteria>S3437,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
@@ -1299,6 +1299,76 @@
                                     <name>flairbi/${project.artifactId}</name>
                                     <build>
                                         <tags>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>flairbi/flair-couchdb</name>
+                                    <build>
+                                        <tags>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/fb-couchdb</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>flairbi/flair-pgsql</name>
+                                    <build>
+                                        <tags>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/fb-psql</dockerFileDir>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>INFO</logback.loglevel>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jenkins</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>build-dockerfile</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-images</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>flairbi/${project.artifactId}</name>
+                                    <build>
+                                        <tags>
                                             <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
@@ -1327,18 +1397,6 @@
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <!-- log configuration -->
-                <logback.loglevel>INFO</logback.loglevel>
-                <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
         <profile>
             <!--
@@ -1456,7 +1514,7 @@
             <id>stag</id>
             <build>
                 <plugins>
-                   <plugin>
+                    <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
                         <configuration>

@@ -116,5 +116,6 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 216|Right|null|null|STRING|682|null
 217|Order List|null|null|STRING|684|684
 218|Unorder List|null|null|STRING|684|null
-
+219|Ascending|null|null|STRING|686|686
+220|Descending|null|null|STRING|686|null
 

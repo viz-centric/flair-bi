@@ -84,3 +84,4 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 683|Show Filter Grid|Show Filter Grid|CHECKBOX|false|null|null|null|flairadmin|null
 684|Text format|Format of text|SELECT|null|null|null|null|flairadmin|STRING
 685|Allow Sorting|Allow Sorting|CHECKBOX|true|null|null|null|flairadmin|null
+686|Sort|Sorting of the data|SELECT|null|null|null|null|flairadmin|STRING

@@ -36,7 +36,7 @@
         vm.previousState = previousState.name;
         vm.byteSize = DataUtils.byteSize;
         vm.openFile = DataUtils.openFile;
-        vm.dashboardId=$stateParams.did;
+        vm.dashboardId=$stateParams.id;
 
         var unsubscribe = $rootScope.$on("flairbiApp:viewsUpdate", function(
             event,

@@ -162,5 +162,10 @@
         .featuresName{
             margin-top: 20px;
         }
+        .featuresName label{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 }

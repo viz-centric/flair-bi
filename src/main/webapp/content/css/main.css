@@ -4661,8 +4661,12 @@ jhi-alert .alerts .alert-danger {
     .data-constrains-properties .data-constaraint-conditions-container .data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
-  .data-constrains-properties .data-constaraint-conditions-container .featuresName {
-    margin-top: 20px; }
+      .data-constrains-properties .data-constaraint-conditions-container .featuresName {
+        margin-top: 20px; }
+        .data-constrains-properties .data-constaraint-conditions-container .featuresName label{
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis; }
 
 /* TABLES */
 .table-bordered {

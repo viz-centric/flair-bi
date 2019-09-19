@@ -18,6 +18,7 @@
         var vm = this;
         vm.searchUser=searchUser;
         vm.onChangeUser=onChangeUser;
+        vm.user=vm.user?vm.user:{};
         activate();
 
         ////////////////

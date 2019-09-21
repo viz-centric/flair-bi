@@ -59,9 +59,9 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     private ReportServiceGrpc.ReportServiceBlockingStub getReportStub() {
-        if (reportServiceBlockingStub == null) {
+        if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
             synchronized (this) {
-                if (reportServiceBlockingStub == null) {
+                if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
                     reportServiceBlockingStub = ReportServiceGrpc.newBlockingStub(getChannel());
                 }
             }

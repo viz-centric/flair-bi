@@ -53,9 +53,9 @@ public class EngineGrpcService implements IEngineGrpcService {
     }
 
     private QueryServiceGrpc.QueryServiceBlockingStub getQueryStub() {
-        if (queryServiceBlockingStub == null) {
+        if (queryServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
             synchronized (this) {
-                if (queryServiceBlockingStub == null) {
+                if (queryServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
                     queryServiceBlockingStub = QueryServiceGrpc.newBlockingStub(getChannel());
                 }
             }
@@ -64,9 +64,9 @@ public class EngineGrpcService implements IEngineGrpcService {
     }
 
     private QueryServiceGrpc.QueryServiceStub getQueryAsyncStub() {
-        if (queryServiceStub == null) {
+        if (queryServiceStub == null || (channel != null && channel.isShutdown())) {
             synchronized (this) {
-                if (queryServiceStub == null) {
+                if (queryServiceStub == null || (channel != null && channel.isShutdown())) {
                     queryServiceStub = QueryServiceGrpc.newStub(getChannel());
                 }
             }
@@ -75,9 +75,9 @@ public class EngineGrpcService implements IEngineGrpcService {
     }
 
     private ConnectionServiceGrpc.ConnectionServiceBlockingStub getConnectionStub() {
-        if (connectionServiceBlockingStub == null) {
+        if (connectionServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
             synchronized (this) {
-                if (connectionServiceBlockingStub == null) {
+                if (connectionServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
                     connectionServiceBlockingStub = ConnectionServiceGrpc.newBlockingStub(getChannel());
                 }
             }

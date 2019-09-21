@@ -1,10 +1,7 @@
 package com.flair.bi.web.rest.errors;
 
-import lombok.RequiredArgsConstructor;
-
 import java.io.Serializable;
 
-@RequiredArgsConstructor
 public class FieldErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,6 +11,19 @@ public class FieldErrorVM implements Serializable {
     private final String field;
 
     private final String message;
+
+    private final String key;
+
+    public FieldErrorVM(String objectName, String field, String message) {
+        this(objectName, field, message, null);
+    }
+
+    public FieldErrorVM(String objectName, String field, String message, String key) {
+        this.objectName = objectName;
+        this.field = field;
+        this.message = message;
+        this.key = key;
+    }
 
     public String getObjectName() {
         return objectName;
@@ -27,4 +37,7 @@ public class FieldErrorVM implements Serializable {
         return message;
     }
 
+    public String getKey() {
+        return key;
+    }
 }

@@ -1,0 +1,16 @@
+{
+    "flairbiApp": {
+        "featureDTO" : {
+            "name": "Feature name",
+            "error": {
+                "name.Pattern": "Feature name should contain only lowercase characters and numbers and underscores."
+            }
+        },
+        "feature" : {
+            "name": "Feature name",
+            "error": {
+                "name.Pattern": "Feature name should contain only lowercase characters and numbers and underscores."
+            }
+        }
+    }
+}

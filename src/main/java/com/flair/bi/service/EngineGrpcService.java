@@ -27,6 +27,7 @@ import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionRequest;
 import com.flair.bi.messages.UpdateConnectionResponse;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
+import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +42,10 @@ import org.springframework.stereotype.Service;
 public class EngineGrpcService implements IEngineGrpcService {
 
     private final ManagedChannelFactory managedChannelFactory;
+    private volatile QueryServiceGrpc.QueryServiceBlockingStub queryServiceBlockingStub;
+    private volatile QueryServiceGrpc.QueryServiceStub queryServiceStub;
+    private volatile ConnectionServiceGrpc.ConnectionServiceBlockingStub connectionServiceBlockingStub;
+    private volatile ManagedChannel channel;
 
     @Autowired
     public EngineGrpcService(@Qualifier("engineChannelFactory") ManagedChannelFactory managedChannelFactory) {
@@ -48,15 +53,47 @@ public class EngineGrpcService implements IEngineGrpcService {
     }
 
     private QueryServiceGrpc.QueryServiceBlockingStub getQueryStub() {
-        return QueryServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
+        if (queryServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+            synchronized (this) {
+                if (queryServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+                    queryServiceBlockingStub = QueryServiceGrpc.newBlockingStub(getChannel());
+                }
+            }
+        }
+        return queryServiceBlockingStub;
     }
 
     private QueryServiceGrpc.QueryServiceStub getQueryAsyncStub() {
-        return QueryServiceGrpc.newStub(managedChannelFactory.getInstance());
+        if (queryServiceStub == null || (channel != null && channel.isShutdown())) {
+            synchronized (this) {
+                if (queryServiceStub == null || (channel != null && channel.isShutdown())) {
+                    queryServiceStub = QueryServiceGrpc.newStub(getChannel());
+                }
+            }
+        }
+        return queryServiceStub;
     }
 
     private ConnectionServiceGrpc.ConnectionServiceBlockingStub getConnectionStub() {
-        return ConnectionServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
+        if (connectionServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+            synchronized (this) {
+                if (connectionServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+                    connectionServiceBlockingStub = ConnectionServiceGrpc.newBlockingStub(getChannel());
+                }
+            }
+        }
+        return connectionServiceBlockingStub;
+    }
+
+    private ManagedChannel getChannel() {
+        if (channel == null || channel.isShutdown()) {
+            synchronized (this) {
+                if (channel == null || channel.isShutdown()) {
+                    channel = managedChannelFactory.getInstance();
+                }
+            }
+        }
+        return channel;
     }
 
     @Override

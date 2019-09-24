@@ -38,7 +38,7 @@
         vm.datePickerOpenStatus.fromDate = false;
         vm.datePickerOpenStatus.toDate = false;
         vm.dateFormat='yyyy-MM-dd';
-        vm.user={};
+        vm.user=null;
 
         activate();
         ///////////////////////////////////////

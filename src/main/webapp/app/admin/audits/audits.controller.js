@@ -30,6 +30,7 @@
         vm.datePickerOpenStatus.fromDate = false;
         vm.datePickerOpenStatus.toDate = false;
         vm.search=search;
+        vm.user=null;
 
         function onChangeDate() {
             AuditsService.query(

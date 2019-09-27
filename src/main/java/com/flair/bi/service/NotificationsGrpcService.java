@@ -30,6 +30,7 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
+import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,6 +50,8 @@ import static java.util.stream.Collectors.toList;
 public class NotificationsGrpcService implements INotificationsGrpcService {
 
     private final ManagedChannelFactory managedChannelFactory;
+    private volatile ReportServiceGrpc.ReportServiceBlockingStub reportServiceBlockingStub;
+    private volatile ManagedChannel channel;
 
     @Autowired
     public NotificationsGrpcService(@Qualifier("notificationsChannelFactory") ManagedChannelFactory managedChannelFactory) {
@@ -56,7 +59,25 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     private ReportServiceGrpc.ReportServiceBlockingStub getReportStub() {
-        return ReportServiceGrpc.newBlockingStub(managedChannelFactory.getInstance());
+        if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+            synchronized (this) {
+                if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+                    reportServiceBlockingStub = ReportServiceGrpc.newBlockingStub(getChannel());
+                }
+            }
+        }
+        return reportServiceBlockingStub;
+    }
+
+    private ManagedChannel getChannel() {
+        if (channel == null || channel.isShutdown()) {
+            synchronized (this) {
+                if (channel == null || channel.isShutdown()) {
+                    channel = managedChannelFactory.getInstance();
+                }
+            }
+        }
+        return channel;
     }
 
     @Override

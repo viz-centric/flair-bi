@@ -34,7 +34,7 @@
         </repository>
     </distributionManagement>
     <properties>
-        <all-grpc.version>1.20.0</all-grpc.version>
+        <all-grpc.version>1.23.0</all-grpc.version>
         <apache-httpclient.version>4.5.8</apache-httpclient.version>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.9.0</assertj-core.version>
@@ -265,7 +265,7 @@
         <dependency>
             <groupId>io.github.lognet</groupId>
             <artifactId>grpc-spring-boot-starter</artifactId>
-            <version>3.1.0</version>
+            <version>3.4.1</version>
             <exclusions>
                 <exclusion>
                     <artifactId>grpc-netty</artifactId>

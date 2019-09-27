@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(max = 40)
+    @Pattern(regexp = "[a-z_0-9]+")
     @Column(name = "name", length = 40, nullable = false)
     private String name;
 

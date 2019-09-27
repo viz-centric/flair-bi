@@ -31,11 +31,11 @@ public class ErrorVM implements Serializable {
         this.fieldErrors = fieldErrors;
     }
 
-    public void add(String objectName, String field, String message) {
+    public void add(String objectName, String field, String message, String key) {
         if (fieldErrors == null) {
             fieldErrors = new ArrayList<>();
         }
-        fieldErrors.add(new FieldErrorVM(objectName, field, message));
+        fieldErrors.add(new FieldErrorVM(objectName, field, message, key));
     }
 
     public String getMessage() {

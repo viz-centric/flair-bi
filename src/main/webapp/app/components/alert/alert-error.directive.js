@@ -53,7 +53,7 @@
                     }).sort();
                     var errorHeader = httpResponse.headers(headers[0]);
                     var entityKey = httpResponse.headers(headers[1]);
-                    if (errorHeader) {
+                    if (errorHeader && typeof entityKey === 'string') {
                         var entityName = $translate.instant('global.menu.entities.' + entityKey);
                         addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
                     } else if (httpResponse.data && httpResponse.data.fieldErrors) {
@@ -62,7 +62,13 @@
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                             var convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
                             var fieldName = $translate.instant('flairbiApp.' + fieldError.objectName + '.' + convertedField);
-                            addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
+                            var defaultMessage = 'Field ' + fieldName + ' cannot be empty';
+                            var featureSpecificText = 'flairbiApp.' + fieldError.objectName + '.error.' + convertedField + '.' + fieldError.message;
+                            var errorKey = 'error.' + fieldError.message;
+                            if ($translate.instant(featureSpecificText)) {
+                                errorKey = featureSpecificText;
+                            }
+                            addErrorAlert(defaultMessage, errorKey, {fieldName: fieldName});
                         }
                     } else if (httpResponse.data && httpResponse.data.message) {
                         addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);

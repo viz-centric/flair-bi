@@ -110,11 +110,11 @@
         function onExchangeMetadata(data) {
             vm.visualmetadata = [];
             var metaData = JSON.parse(data.body);
+            var notification = metaData.notification;
+            var queryResponse = metaData.queryResponse;
             Visualmetadata.get({
-                id: removePrefix(metaData.report.thresholdAlert,metaData.report_line_item.visualizationid)
+                id: removePrefix(notification.report.thresholdAlert, notification.report_line_item.visualizationid)
             }, function (v) {
-                var notification = metaData.notification;
-                var queryResponse = metaData.queryResponse;
                 if (vm.notificationSupportCharts.indexOf(notification.report_line_item.visualization) >= 0) {
                     v.data = JSON.parse(queryResponse);
                     v.build_url = notification.report.build_url;

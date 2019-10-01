@@ -51,6 +51,9 @@
                             <span data-translate="reportManagement.dashboardName"></span>
                         </th>
                         <th>
+                            <span data-translate="reportManagement.isThresholdAlert"></span>
+                        </th>
+                        <th>
                             <span data-translate="reportManagement.subject"></span>
                         </th>
                         <th>
@@ -67,8 +70,10 @@
                 <tbody>
                     <tr ng-repeat="report in vm.reports"> 
                         <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
-                        <td>{{report.report.report_name}}</td>
+                        <td>{{report.report.title_name}}</td>
                         <td>{{report.report.dashboard_name}}</td>
+                        <td>{{report.report.thresholdAlert?'Yes':'No'}}</td>
+                       
                         <td>{{report.report.subject}}</td>
                         <td>{{report.schedule.cron_exp | CronParser}}</td>
                         <td>{{report.report.userid}}</td>

@@ -1085,8 +1085,9 @@
         function onDragStart(event, ui) {}
 
         function onDragStop(event, ui) {
+            debugger
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("Visualization position has been changed and it has not been saved.Do you want to save?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
         }
 
         function onItemAdded(item) {}
@@ -1098,7 +1099,7 @@
         }
 
         function removeWidget(widget) {
-            swal("Are you sure?", "Are you sure want to delete this visualization? It will also delete its schedule report", {
+            swal("Delete Visual from dashboard", "Your'e about to delete visualization from this dashboard. Deleting this visualization will impact any scheduled reports", {
                 dangerMode: true,
                 buttons: true
             }).then(function(value) {

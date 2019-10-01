@@ -8,6 +8,7 @@
         "no": "No.",
         "reportName": "Report Name",
         "dashboardName": "Dashboard Name",
+        "thresholdAlert": "Is threshold Report",
         "subject": "Subject",
         "run": "Run",
         "createdBy": "Created By",

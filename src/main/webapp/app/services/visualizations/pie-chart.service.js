@@ -23,8 +23,12 @@
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toUpperCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
+                    if (isNotification) {
+                        result['legend'] = false;
+                    }
                     return result;
                 }
+              
 
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
@@ -42,12 +46,14 @@
                         .tooltip(true)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
+                        .print( false)
                         .data(record.data);
 
                     pie(div[0])
-
-                    $rootScope.updateWidget[record.id] = pie;
+                    if (!isNotification) {
+                        $rootScope.updateWidget[record.id] = pie;
+                    }
                 }
             }
         }

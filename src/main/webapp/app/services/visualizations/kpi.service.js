@@ -75,6 +75,7 @@
 
                     var kpi = flairVisualizations.kpi()
                         .config(getProperties(VisualizationUtils, record))
+                        .print(false)
                         .data(record.data);
 
                     kpi(div[0])

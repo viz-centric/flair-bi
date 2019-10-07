@@ -727,7 +727,7 @@
                 if (VisualDispatchService.getViewEditedBeforeSave()) {
                     event.preventDefault();
                     swal(
-                        "Are you sure?",
+                        "Unsaved Changes",
                         VisualDispatchService.getSavePromptMessage(),
                         {
                             buttons: {
@@ -1085,7 +1085,6 @@
         function onDragStart(event, ui) {}
 
         function onDragStop(event, ui) {
-            debugger
             VisualDispatchService.setViewEditedBeforeSave(true);
             VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
         }

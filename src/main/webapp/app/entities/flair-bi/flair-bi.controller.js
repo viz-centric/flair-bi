@@ -1073,7 +1073,7 @@
 
         function onResizeStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("Visualization has been resized and it has not been saved.Do you want to save?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
             delete $rootScope.updateWidget[ui.element.attr("id")];
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")

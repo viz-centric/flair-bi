@@ -77,6 +77,7 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 177|RectRot|null|null|STRING|645|null
 178|Star|null|null|STRING|645|null
 179|Triangle|null|null|STRING|645|null
+221|None|null|null|STRING|645|null
 180|Line|null|null|STRING|646|null
 181|Bar|null|null|STRING|646|646
 182|Label|null|null|STRING|647|647

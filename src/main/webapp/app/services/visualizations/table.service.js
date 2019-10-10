@@ -23,7 +23,7 @@
 
                     result['maxDim'] = dimensions.length;
                     result['maxMes'] = measures.length;
-
+                    result['showTotal'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Total');
                     result["displayNameForDimension"] = [];
                     result["cellColorForDimension"] = [];
                     result["fontStyleForDimension"] = [];

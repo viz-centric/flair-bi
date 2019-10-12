@@ -73,6 +73,10 @@ public class QueryTransformerService {
             builder.addAllHaving(toHaving(queryDTO.getHaving(), features));
         }
 
+        if (queryDTO.getOffset() != null) {
+            builder.setOffset(queryDTO.getOffset());
+        }
+
         queryDTO.getOrders().forEach(sortDTO -> builder.addOrders(Query.SortHolder.newBuilder()
                 .setDirectionValue(getDirectionValue(sortDTO.getDirection().ordinal()))
                 .setFeatureName(sanitize(sortDTO.getFeatureName()))

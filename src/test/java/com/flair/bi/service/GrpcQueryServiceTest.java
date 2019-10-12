@@ -71,6 +71,7 @@ public class GrpcQueryServiceTest {
 
         QueryDTO queryDTO = new QueryDTO();
         queryDTO.setLimit(10L);
+        queryDTO.setOffset(53L);
         queryDTO.setDistinct(false);
         queryDTO.setFields(new ArrayList<>());
         queryDTO.setGroupBy(new ArrayList<>());
@@ -98,6 +99,7 @@ public class GrpcQueryServiceTest {
 
         QueryDTO queryDTO = new QueryDTO();
         queryDTO.setLimit(10L);
+        queryDTO.setOffset(53L);
         queryDTO.setDistinct(false);
         queryDTO.setFields(new ArrayList<>());
         queryDTO.setGroupBy(new ArrayList<>());
@@ -119,6 +121,7 @@ public class GrpcQueryServiceTest {
 
         QueryDTO queryDTO = new QueryDTO();
         queryDTO.setLimit(10L);
+        queryDTO.setOffset(53L);
         queryDTO.setMetaRetrieved(true);
         queryDTO.setDistinct(false);
         queryDTO.setFields(new ArrayList<>());
@@ -141,6 +144,7 @@ public class GrpcQueryServiceTest {
 
         QueryDTO queryDTO = new QueryDTO();
         queryDTO.setLimit(10L);
+        queryDTO.setOffset(53L);
         queryDTO.setMetaRetrieved(true);
         queryDTO.setDistinct(false);
         queryDTO.setFields(new ArrayList<>());

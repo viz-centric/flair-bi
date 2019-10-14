@@ -5,12 +5,13 @@
         .module('flairbiApp')
         .controller('TableDialogController', TableDialogController);
 
-    TableDialogController.$inject = ['$uibModalInstance', 'data', 'ExportService'];
+    TableDialogController.$inject = ['$uibModalInstance', 'data','fileName', 'ExportService'];
 
-    function TableDialogController($uibModalInstance, data, ExportService) {
+    function TableDialogController($uibModalInstance, data, fileName, ExportService) {
         var vm = this;
         vm.clear = clear;
         vm.exportExcel = exportExcel;
+        vm.fifileName = fileName;
         activate();
 
         ////////////////
@@ -24,7 +25,7 @@
         }
 
         function exportExcel() {
-            ExportService.exportCSV('export.csv', vm.data);
+            ExportService.exportCSV( vm.fifileName , vm.data);
         }
     }
 })();

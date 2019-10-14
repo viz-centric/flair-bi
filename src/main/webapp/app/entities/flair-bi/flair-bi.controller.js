@@ -883,6 +883,9 @@
                         data: function() {
                             var data=applyToDigitDecimals(v);
                             return transformToCsv(data);
+                        },
+                        fileName: function () {
+                            return v.titleProperties.titleText+".csv";
                         }
                     }
                 })

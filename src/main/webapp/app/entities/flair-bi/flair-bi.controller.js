@@ -38,7 +38,9 @@
         "AlertService",
         "QueryValidationService",
         "$translate",
-        "$window"
+        "$window",
+        "VisualizationUtils",
+        "D3Utils"
     ];
 
     function FlairBiController(
@@ -74,7 +76,9 @@
         AlertService,
         QueryValidationService,
         $translate,
-        $window
+        $window,
+        VisualizationUtils,
+        D3Utils
     ) {
         var vm = this;
         var editMode = false;
@@ -866,6 +870,7 @@
         }
 
         function openTableDialog(v) {
+            debugger
             $uibModal
                 .open({
                     animation: true,
@@ -876,7 +881,8 @@
                     controllerAs: "vm",
                     resolve: {
                         data: function() {
-                            return transformToCsv(v.data);
+                            var data=applyToDigitDecimals(v);
+                            return transformToCsv(data);
                         }
                     }
                 })
@@ -890,7 +896,23 @@
          */
         function exportCSV(visualMetadata) {
             var csv = transformToCsv(visualMetadata.data);
-            ExportService.exportCSV("export.csv", csv);
+            ExportService.exportCSV(visualMetadata.titleProperties.titleText+".csv", csv);
+        }
+
+        function applyToDigitDecimals(v) {
+            var features = VisualizationUtils.getDimensionsAndMeasures(v.fields),
+            measures = features.measures,
+            measure= D3Utils.getNames(measures);
+            var data=[];
+            v.data.forEach(function(item,index){
+                measure.forEach(function(d,i){
+                    if(! Number.isInteger(item[measure[i]])){
+                        item[measure[i]]=parseFloat( item[measure[i]]).toFixed(2)
+                    }
+                })
+                data.push(item)
+            })  
+            return data
         }
 
         function save(visual, index, array) {

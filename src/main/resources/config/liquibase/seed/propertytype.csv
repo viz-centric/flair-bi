@@ -86,3 +86,4 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 685|Allow Sorting|Allow Sorting|CHECKBOX|true|null|null|null|flairadmin|null
 686|Sort|Sorting of the data|SELECT|null|null|null|null|flairadmin|STRING
 687|Show Total|Show Total|CHECKBOX|true|null|null|null|flairadmin|STRING
+688|Show Animation|Show Animation|CHECKBOX|false|null|null|null|flairadmin|STRING

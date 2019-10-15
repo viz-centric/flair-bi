@@ -17,7 +17,6 @@ id|const|visualization_id|feature_type|sequence_number|created_by
 16|OPTIONAL|518|MEASURE|1|flairadmin
 17|REQUIRED|519|DIMENSION|0|flairadmin
 18|REQUIRED|519|MEASURE|1|flairadmin
-19|OPTIONAL|519|MEASURE|2|flairadmin
 20|REQUIRED|514|DIMENSION|0|flairadmin
 21|OPTIONAL|514|DIMENSION|1|flairadmin
 22|REQUIRED|514|MEASURE|2|flairadmin

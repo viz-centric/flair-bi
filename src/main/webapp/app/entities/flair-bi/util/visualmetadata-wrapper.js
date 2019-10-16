@@ -298,24 +298,6 @@
             query.conditionExpressions = [conditionExpression];
         }
 
-        dimensions.filter(function (item) {
-            var property = getProperty(item.properties, 'Sort', null);
-            return property !== null && property !== 'None';
-        }).map(function (item) {
-            var property = getProperty(item.properties, 'Sort', null);
-            if (property === 'Ascending') {
-                ordersList.push({
-                    direction: 'ASC',
-                    featureName: item.feature.selectedName
-                })
-            } else {
-                ordersList.push({
-                    direction: 'DESC',
-                    featureName: item.feature.selectedName
-                })
-            }
-        });
-
         measures.filter(function (item) {
             var property = getProperty(item.properties, 'Sort', null);
             return property !== null && property !== 'None';
@@ -330,6 +312,24 @@
                 ordersList.push({
                     direction: 'DESC',
                     featureName: item.feature.name
+                })
+            }
+        });
+
+        dimensions.filter(function (item) {
+            var property = getProperty(item.properties, 'Sort', null);
+            return property !== null && property !== 'None';
+        }).map(function (item) {
+            var property = getProperty(item.properties, 'Sort', null);
+            if (property === 'Ascending') {
+                ordersList.push({
+                    direction: 'ASC',
+                    featureName: item.feature.selectedName
+                })
+            } else {
+                ordersList.push({
+                    direction: 'DESC',
+                    featureName: item.feature.selectedName
                 })
             }
         });

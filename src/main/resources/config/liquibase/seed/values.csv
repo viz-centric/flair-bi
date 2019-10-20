@@ -77,6 +77,7 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 177|RectRot|null|null|STRING|645|null
 178|Star|null|null|STRING|645|null
 179|Triangle|null|null|STRING|645|null
+221|None|null|null|STRING|645|null
 180|Line|null|null|STRING|646|null
 181|Bar|null|null|STRING|646|646
 182|Label|null|null|STRING|647|647
@@ -84,9 +85,9 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 184|Value|null|null|STRING|647|null
 185|Border|null|null|STRING|649|649
 186|Outside|null|null|STRING|649|null
-187|None|null|null|STRING|650|650
+187|None|null|null|STRING|650|null
 188|Ascending|null|null|STRING|650|null
-189|Descending|null|null|STRING|650|null
+189|Descending|null|null|STRING|650|650
 190|Single Color|null|null|STRING|651|651
 191|Unique Color|null|null|STRING|651|null
 192|Gradient Color|null|null|STRING|651|null
@@ -118,4 +119,3 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 218|Unorder List|null|null|STRING|684|null
 219|Ascending|null|null|STRING|686|686
 220|Descending|null|null|STRING|686|null
-

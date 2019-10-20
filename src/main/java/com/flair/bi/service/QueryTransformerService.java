@@ -32,6 +32,7 @@ import static com.project.bi.query.SQLUtil.sanitize;
 @RequiredArgsConstructor
 public class QueryTransformerService {
 
+    public static final long MAX_LIMIT = 1000L;
     private final FeatureService featureService;
 
     public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) {
@@ -52,7 +53,7 @@ public class QueryTransformerService {
         Query.Builder builder = Query.newBuilder();
         builder
                 .setSource(sanitize(queryDTO.getSource()))
-                .setLimit(queryDTO.getLimit())
+                .setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT))
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(fields)
                 .addAllGroupBy(groupBy);
@@ -71,6 +72,10 @@ public class QueryTransformerService {
 
         if (queryDTO.getHaving().size() > 0) {
             builder.addAllHaving(toHaving(queryDTO.getHaving(), features));
+        }
+
+        if (queryDTO.getOffset() != null) {
+            builder.setOffset(queryDTO.getOffset());
         }
 
         queryDTO.getOrders().forEach(sortDTO -> builder.addOrders(Query.SortHolder.newBuilder()

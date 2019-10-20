@@ -26,7 +26,7 @@
         visual.getSharePath = getSharePath;
         visual.nextFieldDimension = nextFieldDimension;
         visual.nextFieldMeasure = nextFieldMeasure;
-        visual.constructHavingField=constructHavingField;
+        visual.constructHavingField = constructHavingField;
         return visual;
     }
 
@@ -247,7 +247,7 @@
         }
     }
 
-    function constructHavingField(fieldMeasure){
+    function constructHavingField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
         if (agg !== null && agg !== 'NONE') {
             return agg + '(' + fieldMeasure.feature.definition + ')';
@@ -262,10 +262,13 @@
         var query = {};
         var self = this;
         var aggExists = false;
-
+        var ordersList = [];
 
         var dimensions = this.fields
             .filter(isDimension);
+
+        var measures = this.fields
+            .filter(isMeasure);
 
         var dimensionFields = dimensions
             .map(function (item) {
@@ -295,23 +298,43 @@
             query.conditionExpressions = [conditionExpression];
         }
 
-        query.orders = dimensions.filter(function (item) {
+        measures.filter(function (item) {
             var property = getProperty(item.properties, 'Sort', null);
             return property !== null && property !== 'None';
         }).map(function (item) {
             var property = getProperty(item.properties, 'Sort', null);
             if (property === 'Ascending') {
-                return {
+                ordersList.push({
                     direction: 'ASC',
-                    featureName: item.feature.selectedName
-                };
+                    featureName: item.feature.name
+                })
             } else {
-                return {
+                ordersList.push({
                     direction: 'DESC',
-                    featureName: item.feature.selectedName
-                };
+                    featureName: item.feature.name
+                })
             }
         });
+
+        dimensions.filter(function (item) {
+            var property = getProperty(item.properties, 'Sort', null);
+            return property !== null && property !== 'None';
+        }).map(function (item) {
+            var property = getProperty(item.properties, 'Sort', null);
+            if (property === 'Ascending') {
+                ordersList.push({
+                    direction: 'ASC',
+                    featureName: item.feature.selectedName
+                })
+            } else {
+                ordersList.push({
+                    direction: 'DESC',
+                    featureName: item.feature.selectedName
+                })
+            }
+        });
+
+        query.orders = ordersList;
 
         return query;
     }

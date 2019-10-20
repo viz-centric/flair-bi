@@ -38,7 +38,9 @@
         "AlertService",
         "QueryValidationService",
         "$translate",
-        "$window"
+        "$window",
+        "VisualizationUtils",
+        "D3Utils"
     ];
 
     function FlairBiController(
@@ -74,7 +76,9 @@
         AlertService,
         QueryValidationService,
         $translate,
-        $window
+        $window,
+        VisualizationUtils,
+        D3Utils
     ) {
         var vm = this;
         var editMode = false;
@@ -727,7 +731,7 @@
                 if (VisualDispatchService.getViewEditedBeforeSave()) {
                     event.preventDefault();
                     swal(
-                        "Are you sure?",
+                        "Unsaved Changes",
                         VisualDispatchService.getSavePromptMessage(),
                         {
                             buttons: {
@@ -866,6 +870,7 @@
         }
 
         function openTableDialog(v) {
+            debugger
             $uibModal
                 .open({
                     animation: true,
@@ -876,7 +881,11 @@
                     controllerAs: "vm",
                     resolve: {
                         data: function() {
-                            return transformToCsv(v.data);
+                            var data=applyToDigitDecimals(v);
+                            return transformToCsv(data);
+                        },
+                        fileName: function () {
+                            return v.titleProperties.titleText+".csv";
                         }
                     }
                 })
@@ -890,7 +899,23 @@
          */
         function exportCSV(visualMetadata) {
             var csv = transformToCsv(visualMetadata.data);
-            ExportService.exportCSV("export.csv", csv);
+            ExportService.exportCSV(visualMetadata.titleProperties.titleText+".csv", csv);
+        }
+
+        function applyToDigitDecimals(v) {
+            var features = VisualizationUtils.getDimensionsAndMeasures(v.fields),
+            measures = features.measures,
+            measure= D3Utils.getNames(measures);
+            var data=[];
+            v.data.forEach(function(item,index){
+                measure.forEach(function(d,i){
+                    if(! Number.isInteger(item[measure[i]])){
+                        item[measure[i]]=parseFloat( item[measure[i]]).toFixed(2)
+                    }
+                })
+                data.push(item)
+            })  
+            return data
         }
 
         function save(visual, index, array) {
@@ -1073,7 +1098,7 @@
 
         function onResizeStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("Visualization has been resized and it has not been saved.Do you want to save?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
             delete $rootScope.updateWidget[ui.element.attr("id")];
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
@@ -1086,7 +1111,7 @@
 
         function onDragStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("Visualization position has been changed and it has not been saved.Do you want to save?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
         }
 
         function onItemAdded(item) {}
@@ -1098,7 +1123,7 @@
         }
 
         function removeWidget(widget) {
-            swal("Are you sure?", "Are you sure want to delete this visualization? It will also delete its schedule report", {
+            swal("Delete Visual from dashboard", "Your'e about to delete visualization from this dashboard. Deleting this visualization will impact any scheduled reports", {
                 dangerMode: true,
                 buttons: true
             }).then(function(value) {

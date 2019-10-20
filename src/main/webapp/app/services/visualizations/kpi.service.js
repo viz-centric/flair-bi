@@ -21,8 +21,9 @@
                     result['dimension'] = D3Utils.getNames(dimension);
                     result['measure'] = D3Utils.getNames(measures);
                     result['kpiAlignment'] = VisualizationUtils.getPropertyValue(record.properties, 'Text alignment');
+                    result['isAnimation'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Animation');
                     result['kpiDisplayName'] = [];
-                  
+
                     result['kpiBackgroundColor'] = [];
                     result['kpiNumberFormat'] = [];
                     result['kpiFontStyle'] = [];
@@ -42,7 +43,7 @@
                             VisualizationUtils.getFieldPropertyValue(measures[i], 'Display name') ||
                             result['measure'][i]
                         );
-                       
+
                         result['kpiBackgroundColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Background Colour'));
                         result['kpiNumberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                         result['kpiFontStyle'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
@@ -51,10 +52,10 @@
                         result['kpiColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
                         result['kpiColorExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour expression'));
                         result['kpiIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon name'));
-                        result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon')); 
+                        result['showIcon'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Show Icon'));
                         result['kpiIconFontWeight'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font weight'));
-                        result['iconSize'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font size')); 
-                       
+                        result['iconSize'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Font size'));
+
                         result['kpiIconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon colour'));
                         result['kpiIconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
                         result['FontSizeforDisplayName'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size for diplay name'));
@@ -75,6 +76,7 @@
 
                     var kpi = flairVisualizations.kpi()
                         .config(getProperties(VisualizationUtils, record))
+                        .print(false)
                         .data(record.data);
 
                     kpi(div[0])

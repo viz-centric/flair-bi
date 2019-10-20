@@ -90,6 +90,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	queryDTO.setFields(fields);
     	queryDTO.setGroupBy(groupBy);
     	queryDTO.setLimit(20L);
+    	queryDTO.setOffset(53L);
     	schedulerDTO.setQueryDTO(queryDTO);
     	reportLineItem.setVisualization("pie");
     	reportLineItem.setDimension(dimentions);

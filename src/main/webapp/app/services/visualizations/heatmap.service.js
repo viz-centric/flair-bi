@@ -25,6 +25,11 @@
                     result['fontStyleForDimension'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font style');
                     result['fontWeightForDimension'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font weight');
                     result['fontSizeForDimension'] = parseInt(VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Font size'));
+                    result["colorPattern"] = VisualizationUtils.getPropertyValue(record.properties, "Color Pattern").toLowerCase().replace(' ', '_');
+
+                    var displayColor = VisualizationUtils.getPropertyValue(record.properties, 'Display colour');
+                    result['displayColor'] = (displayColor == null) ? colorSet[0] : displayColor;
+
                     result['displayNameForMeasure'] = [];
                     result['showValues'] = [];
                     result['showIcon'] = [];
@@ -36,7 +41,7 @@
                     result['iconColor'] = [];
                     result['colourCoding'] = [];
                     result['valueTextColour'] = [];
-                    result['displayColor'] = [];
+                    result['displayColorMeasure'] = [];
                     result['fontStyleForMeasure'] = [];
                     result['fontWeightForMeasure'] = [];
                     result['fontSizeForMeasure'] = [];
@@ -56,7 +61,7 @@
                         result['iconColor'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
                         result['colourCoding'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Display colour expression'));
                         result['valueTextColour'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Text colour'));
-                        result['displayColor'].push(colorSet[i]);
+                        result['displayColorMeasure'].push(colorSet[i]);
                         result['fontStyleForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font style'));
                         result['fontWeightForMeasure'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font weight'));
                         result['fontSizeForMeasure'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));

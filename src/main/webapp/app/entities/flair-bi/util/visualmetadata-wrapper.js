@@ -258,7 +258,7 @@
     }
 
 
-    function getQueryParameters(filters, conditionExpression) {
+    function getQueryParameters(filters, conditionExpression,offset) {
         var query = {};
         var self = this;
         var aggExists = false;
@@ -269,6 +269,10 @@
 
         var measures = this.fields
             .filter(isMeasure);
+        if (this.metadataVisual.name == "Table") {
+            query.offset= this.getChartPropertyValue('Limit', 20)*offset
+
+        }
 
         var dimensionFields = dimensions
             .map(function (item) {

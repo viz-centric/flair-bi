@@ -103,6 +103,10 @@
 
         $rootScope.isThresholdAlert = false;
         $rootScope.ThresholdViz = {};
+        $rootScope.activePage = {
+            visualizationID:'',
+            activePageNo:1
+        };
 
         //toaster configurations
         toastr.options = {

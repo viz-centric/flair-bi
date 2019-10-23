@@ -34,6 +34,7 @@
 
     VisualizationRenderGrpcController.$inject = [
         '$scope',
+        '$rootScope',
         'GenerateStackedverticalbarChart',
         'GenerateStackedhorizontalbarChart',
         'GenerateClusteredverticalbarChart',
@@ -70,6 +71,7 @@
     /* @ngInject */
     function VisualizationRenderGrpcController(
         $scope,
+        $rootScope,
         GenerateStackedverticalbarChart,
         GenerateStackedhorizontalbarChart,
         GenerateClusteredverticalbarChart,
@@ -179,13 +181,13 @@
             if (forceQuery) {
                 angular.element("#loader-spinner").show();
                 proxyGrpcService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
                     visualMetadata: vm.data
                 });
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
                         visualmetadata: vm.data
                     });
                 } else {

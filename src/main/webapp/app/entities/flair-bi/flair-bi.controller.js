@@ -886,7 +886,6 @@
         }
 
         function openTableDialog(v) {
-            
             $uibModal
                 .open({
                     animation: true,

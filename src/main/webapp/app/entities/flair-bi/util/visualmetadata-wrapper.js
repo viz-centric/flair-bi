@@ -269,6 +269,7 @@
 
         var measures = this.fields
             .filter(isMeasure);
+      
         if (this.metadataVisual.name == "Table") {
             query.offset= this.getChartPropertyValue('Limit', 20)*offset
 

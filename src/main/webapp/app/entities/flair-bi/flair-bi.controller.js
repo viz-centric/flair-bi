@@ -156,6 +156,7 @@
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
             openSchedulerDialogForThreshold();
+            updateTableChart();
             registerDateRangeFilterEvent()
             registerAddVisual();
             registerSaveAllWidgetsEvent();
@@ -616,6 +617,21 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+
+        function updateTableChart() {
+            var unsubscribe = $scope.$on("FlairBi:update-table", function (
+                event,
+                result
+            ) {
+                 Visualmetadata.get({
+                    id: $rootScope.activePage.visualizationID
+                }, function (v) {
+                    refreshWidget(v);
+                });
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
+
         function registerDateRangeFilterEvent() {
             var unsubscribe = $scope.$on("FlairBi:date-range", function(
                 event,
@@ -870,7 +886,6 @@
         }
 
         function openTableDialog(v) {
-            debugger
             $uibModal
                 .open({
                     animation: true,

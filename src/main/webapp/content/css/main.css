@@ -4161,9 +4161,14 @@ jhi-alert .alerts .alert-danger {
     border: 2px #439dd3 dotted;
     width: 25px;
     height: 25px;
-    margin: 14px 5px; }
+    padding-right: 9px;
+    padding-left: 0px;
+    margin: 7px 7px;
+    margin-left:12px;
+    display: flex;
+    align-items: center;}
     .dashboard-filter-header .clear-all .clear-all-icon {
-      padding: 12px;
+      padding: 5px;
       font-size: 12px;
       color: #439dd3;
       outline: 0; }

@@ -47,7 +47,7 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(max = 40)
-    @Pattern(regexp = "[a-z_0-9]+")
+    @Pattern(regexp = "[a-zA-Z_0-9]+")
     @Column(name = "name", length = 40, nullable = false)
     private String name;
 

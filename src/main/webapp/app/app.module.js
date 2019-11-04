@@ -105,7 +105,7 @@
         $rootScope.ThresholdViz = {};
         $rootScope.activePage = {
             visualizationID:'',
-            activePageNo:1
+            activePageNo:0
         };
 
         //toaster configurations

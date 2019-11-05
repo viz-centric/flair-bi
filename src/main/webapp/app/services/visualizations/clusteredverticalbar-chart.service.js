@@ -41,6 +41,7 @@
                     result['yAxisColor'] = VisualizationUtils.getPropertyValue(record.properties, 'Y Axis Colour');
                     result['showXaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
                     result['showYaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
+                    result['axisScaleLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Y Axis Scale Label');
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');

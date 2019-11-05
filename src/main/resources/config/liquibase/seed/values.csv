@@ -119,3 +119,5 @@ id|string_value|integer_value|decimal_value|d_type|property_type_id|default_sele
 218|Unorder List|null|null|STRING|684|null
 219|Ascending|null|null|STRING|686|686
 220|Descending|null|null|STRING|686|null
+222|Formated|null|null|STRING|692|692
+223|Actual|null|null|STRING|692|null

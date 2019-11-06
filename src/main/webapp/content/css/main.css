@@ -779,6 +779,23 @@ body.modal-open .animated {
 .flair-date-icon {
   vertical-align: bottom; }
 
+  ::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 5px;
+  }
+   
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: rgba(136, 139, 142, 0.5); 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(136, 139, 142);
+  }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1186,7 +1203,7 @@ nav.navbar-static-top {
   transition-property: top, bottom, left, right;
   z-index: 10;
   height: calc(100% - 95px);
-  overflow-y: auto;
+  overflow-y: hidden;
   margin-right: 46px;
   margin-top: 58px; }
   #slider .row {

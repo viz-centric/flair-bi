@@ -9,7 +9,7 @@
     transition-property: top, bottom, left, right;
     z-index: 10;
     height: calc(100% - 95px);
-    overflow-y: auto;
+    overflow-y: hidden;
     margin-right: 46px;
     margin-top: 58px;
     .row {

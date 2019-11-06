@@ -179,7 +179,7 @@
             vm.sideBarTab = "properties";
             vm.propTab = "viz-properties";
             $('#slider').css('display','block');
-            $('#slider').scrollTop(0)
+            $('#properties').scrollTop(0)
             $timeout(function() {
                  $scope.$broadcast('reCalcViewDimensions');
             }); 

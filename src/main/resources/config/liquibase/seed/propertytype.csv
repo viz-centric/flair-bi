@@ -90,4 +90,4 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 689|Show Icon|Boolean to show icons|CHECKBOX|false|null|null|null|flairadmin|null
 690|Icon Font size|Icon Size of fonts|NUMBER|null|null|null|80|flairadmin|null
 691|Value on Points|Show value on points|CHECKBOX|true|null|null|null|flairadmin|null
-692|Y Axis Scale Label|Y Axis Scale Label|SELECT|null|null|null|null|flairadmin|STRING
+692|Axis Scale Label|Axis Scale Label|SELECT|null|null|null|null|flairadmin|STRING

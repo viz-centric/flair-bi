@@ -779,22 +779,30 @@ body.modal-open .animated {
 .flair-date-icon {
   vertical-align: bottom; }
 
-  ::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 5px;
-  }
-   
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-  }
-   
-  ::-webkit-scrollbar-thumb {
-    background: rgba(136, 139, 142, 0.5); 
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(136, 139, 142);
-  }
+::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 5px; }
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; }
+
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 139, 142, 0.5); }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #888b8e; }
+
+/* CSS used here will be applied after bootstrap.css */
+.modal {
+  display: block !important; }
+
+.modal-dialog {
+  overflow-y: initial !important; }
+
+.modal-body {
+  max-height: calc(100vh - 212px);
+  overflow-y: auto;
+  overflow-x: hidden; }
 
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
@@ -1291,6 +1299,11 @@ nav.navbar-static-top {
             color: #353738; }
   #slider label {
     font-weight: 600; }
+  #slider #right-nav-footer button {
+    margin: 0 10px; }
+  #slider #properties {
+    height: calc(100vh - 200px);
+    overflow-y: auto; }
 
 .right-nav-option-tabs .first-tab .tooltip {
   left: 0px !important; }
@@ -4181,9 +4194,9 @@ jhi-alert .alerts .alert-danger {
     padding-right: 9px;
     padding-left: 0px;
     margin: 7px 7px;
-    margin-left:12px;
+    margin-left: 12px;
     display: flex;
-    align-items: center;}
+    align-items: center; }
     .dashboard-filter-header .clear-all .clear-all-icon {
       padding: 5px;
       font-size: 12px;
@@ -4683,12 +4696,12 @@ jhi-alert .alerts .alert-danger {
     .data-constrains-properties .data-constaraint-conditions-container .data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
-      .data-constrains-properties .data-constaraint-conditions-container .featuresName {
-        margin-top: 20px; }
-        .data-constrains-properties .data-constaraint-conditions-container .featuresName label{
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis; }
+  .data-constrains-properties .data-constaraint-conditions-container .featuresName {
+    margin-top: 20px; }
+  .data-constrains-properties .data-constaraint-conditions-container .featuresName label {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
 
 /* TABLES */
 .table-bordered {

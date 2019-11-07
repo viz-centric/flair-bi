@@ -565,7 +565,7 @@
                         </a>
                     </li>
                 </ul>
-                <div id="properties" style="height:calc(100vh - 200px);overflow-y: auto;">
+                <div id="properties">
                     <div ng-show="vm.propTab == 'viz-properties'">
                         <title-properties-component visual="vm.visual"></title-properties-component>
                         <body-properties-component visual="vm.visual" slider="vm.slider"></body-properties-component>
@@ -585,13 +585,15 @@
                     </div>
                 </div>
 
+                <div id="right-nav-footer">
+                    <button class="btn btn-primary" ng-click="vm.validate()" ng-if="validator"
+                        type="button">Validate</button>
+                    <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="vm.isSaving" type="submit">
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;
+                        <span data-translate="entity.action.save">Save</span>
+                    </button>
+                </div>
 
-                <button class="btn btn-primary" ng-click="vm.validate()" ng-if="validator"
-                    type="button">Validate</button>
-                <button class="btn btn-primary" ng-click="vm.save()" ng-disabled="vm.isSaving" type="submit">
-                    <span class="glyphicon glyphicon-save"></span>&nbsp;
-                    <span data-translate="entity.action.save">Save</span>
-                </button>
             </div>
 
         </div>

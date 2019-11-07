@@ -129,6 +129,13 @@
     label {
         font-weight: 600;
     }
+    #right-nav-footer button{
+        margin: 0 10px; 
+    }
+    #properties{
+        height:calc(100vh - 200px);
+        overflow-y: auto;
+    }
 }
 
 .right-nav-option-tabs {

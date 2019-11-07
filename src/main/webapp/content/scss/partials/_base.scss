@@ -903,8 +903,6 @@ body.modal-open .animated {
     vertical-align: bottom;
 }
 
-
-
   ::-webkit-scrollbar {
     width: 5px;
     border-radius: 5px;
@@ -920,5 +918,19 @@ body.modal-open .animated {
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(136, 139, 142);
+    background: rgb(136, 139, 142); 
   }
+
+/* CSS used here will be applied after bootstrap.css */
+
+.modal{
+    display: block !important;
+}
+.modal-dialog{
+      overflow-y: initial !important
+}
+.modal-body{
+  max-height: calc(100vh - 212px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}

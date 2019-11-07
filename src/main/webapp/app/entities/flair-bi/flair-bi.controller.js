@@ -577,6 +577,7 @@
                     widgetsID :  "content-" +  w.visualBuildId,
                     widgetsTitle : w.titleProperties.titleText
                 }],
+                vm.view.viewDashboard.dashboardName,
                 vm.view.viewName, 
                 $window.location.href);
         }

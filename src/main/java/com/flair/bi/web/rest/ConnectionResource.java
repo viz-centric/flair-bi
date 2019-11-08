@@ -165,7 +165,7 @@ public class ConnectionResource {
 
         RunQueryResponseDTO result = grpcQueryService.sendRunQuery(query, datasource);
 
-        log.info("Fetch features result {}", result);
+        log.debug("Fetch features result {}", result);
 
         if (result.getResult() == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

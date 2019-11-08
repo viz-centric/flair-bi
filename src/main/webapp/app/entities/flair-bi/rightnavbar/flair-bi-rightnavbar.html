@@ -361,7 +361,7 @@
                                         <input type="text" ng-model="searchVisual" class="form-control  rounded-corner"
                                             placeholder="Search Visualizations..." />
                                     </div>
-                                    <div class="visualContainer">
+                                    <div class="visualContainer properties">
                                         <div uib-tooltip={{visual.name}} tooltip-placement="auto" class="visual-items"
                                             ng-repeat="visual in vm.visualizations  | filter: {name: searchVisual} track by visual.id"
                                             ng-click="vm.addVisual(visual)">
@@ -429,7 +429,7 @@
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel"
                             aria-labelledby="headingTwo">
-                            <div class="panel-body">
+                            <div class="panel-body properties">
                                 <div class="list-group" dnd-list="vm.features"
                                     dnd-drop="vm.dropCallback(index, item, external, type)">
                                     <div class="search-box inner-addon left-addon b-b-xs">
@@ -565,7 +565,7 @@
                         </a>
                     </li>
                 </ul>
-                <div id="properties">
+                <div class="properties">
                     <div ng-show="vm.propTab == 'viz-properties'">
                         <title-properties-component visual="vm.visual"></title-properties-component>
                         <body-properties-component visual="vm.visual" slider="vm.slider"></body-properties-component>

@@ -1301,7 +1301,7 @@ nav.navbar-static-top {
     font-weight: 600; }
   #slider #right-nav-footer button {
     margin: 0 10px; }
-  #slider #properties {
+  #slider .properties {
     height: calc(100vh - 200px);
     overflow-y: auto; }
 
@@ -2757,7 +2757,9 @@ input[type="search"] {
 
 .ui-select-bootstrap > .ui-select-choices {
   margin-top: 0px;
-  border-radius: 0; }
+  border-radius: 0;
+  position: relative;
+  z-index: 999; }
   .ui-select-bootstrap > .ui-select-choices .ui-select-choices-row span.ui-select-choices-row-inner {
     padding: 10px; }
 

@@ -45,6 +45,8 @@ input[type="search"] {
     >.ui-select-choices {
         margin-top: 0px;
         border-radius: 0;
+        position: relative;
+        z-index: 999;
         .ui-select-choices-row {
             span.ui-select-choices-row-inner {
                 padding: 10px;

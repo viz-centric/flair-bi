@@ -11,6 +11,7 @@
 
         var paramObject = {};
         var dateRangePrefix='date-range';
+        var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
 
         var service = {
             get: get,
@@ -39,6 +40,7 @@
         }
 
         function save(newValue) {
+            console.log('save() saving filter', newValue);
             paramObject = newValue;
             $rootScope.$broadcast('filterParametersService:filter-changed', paramObject);
         }
@@ -53,33 +55,66 @@
             };
         }
 
+        function createBetweenExpressionBody(value, secondValue, featureName) {
+            return {
+                '@type': 'Between',
+                value: value,
+                secondValue: secondValue,
+                featureName: featureName
+            };
+        }
+
+        function createContainsExpressionBody(values, featureName) {
+            return {
+                '@type': 'Contains',
+                values: values,
+                featureName: featureName
+            };
+        }
+
+        function createCompareExpressionBody(value, featureName) {
+            return {
+                '@type': 'Compare',
+                comparatorType: 'GTE',
+                value: value,
+                featureName: featureName
+            };
+        }
+
+        function createBodyExpr(values, name) {
+            var meta = values._meta || {};
+            var dataType = meta.dataType || '';
+            if (COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1) {
+                console.log('getConditionExpression() timestamp expression added!');
+                return createCompareExpressionBody(values[0], name);
+            } else {
+                return createContainsExpressionBody(values, name);
+            }
+        }
+
         function getConditionExpression() {
+            var body;
             var condition = {
                 expression: null
             };
             for (var name in paramObject) {
-                if (paramObject.hasOwnProperty(name) &&
-                    paramObject[name] &&
-                    paramObject[name].length > 0) {
-                    if (!condition.expression && name.lastIndexOf(dateRangePrefix, 0) === 0) {
-                        condition = new ConditionExpression(CryptoService.UUIDv4, {
-                            '@type': 'Between',
-                            value: changeDateFormat(paramObject[name][0]),
-                            secondValue:changeDateFormat(paramObject[name][1]),
-                            featureName: name.split('|')[1]
-                        });
-                    }else if(!condition.expression && name.lastIndexOf(dateRangePrefix, 0) !== 0) {
-                        condition = new ConditionExpression(CryptoService.UUIDv4, {
-                            '@type': 'Contains',
-                            values: paramObject[name],
-                            featureName: name
-                        });
+                if (paramObject.hasOwnProperty(name)
+                  && paramObject[name]
+                  && paramObject[name].length > 0) {
+                    var values = paramObject[name];
+                    console.log('getConditionExpression() filter name', name, values);
+                    if (!condition.expression) {
+                        if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                            body = createBetweenExpressionBody(changeDateFormat(values[0]),
+                              changeDateFormat(values[1]),
+                              name.split('|')[1]);
+                        } else {
+                            body = createBodyExpr(values, name);
+                        }
+                        condition = new ConditionExpression(CryptoService.UUIDv4, body);
                     } else {
-                        condition.addNewExpression({
-                            '@type': 'Contains',
-                            values: paramObject[name],
-                            featureName: name
-                        });
+                        body = createBodyExpr(values, name);
+                        condition.addNewExpression(body);
                     }
                 }
             }

@@ -1,8 +1,84 @@
 <div class="filter-element form-group">
     <label class="control-label">{{vm.dimension.name}}</label>
-    <tags-input-grpc placeholder="Add a {{vm.dimension.name}}" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input"
-        add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
-        <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)" min-length="0
+    <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)"
+        style="padding: 0 6px 0 6px">
+        <div class="btn-group btn-group-sm"
+             role="group"
+             aria-label="Date range">
+            <button type="button" class="btn btn-default"
+                    ng-click="vm.onDateRangeClick(0)">Day</button>
+            <button type="button" class="btn btn-default"
+                    ng-click="vm.onDateRangeClick(1)">Range</button>
+            <button type="button" class="btn btn-default"
+                    ng-click="vm.onDateRangeClick(2)">Dynamic</button>
+        </div>
+        <div class="form-group"
+             ng-if="vm.dateRangeTab === 0">
+            <label class="control-label" for="startDate">Since:</label>
+            <div class="input-group">
+                <input id="startDate"
+                       readonly
+                       type="text"
+                       class="form-control"
+                       name="startDate"
+                       datetime-picker="yyyy-MM-dd"
+                       ng-model="vm.dimension.selected"
+                       ng-change="vm.onInputChange()"
+                       enable-time="false"
+                       when-closed="vm.onCalendarClose(args)"
+                       is-open="vm.datePickerOpenStatus.startDate" />
+                <span class="input-group-btn flair-date-icon">
+                    <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group"
+             ng-if="vm.dateRangeTab === 1">
+            <label class="control-label" for="startDate">Date:</label>
+            <div class="input-group">
+                <input id="startDate"
+                       readonly
+                       type="text"
+                       class="form-control"
+                       name="startDate"
+                       datetime-picker="yyyy-MM-dd"
+                       ng-model="vm.dimension.selected"
+                       ng-change="vm.onInputChange()"
+                       enable-time="false"
+                       is-open="vm.datePickerOpenStatus.startDate" />
+                <span class="input-group-btn flair-date-icon">
+                    <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+            <label class="control-label" for="endDate">End date:</label>
+            <div class="input-group">
+                <input id="endDate"
+                       readonly
+                       type="text"
+                       class="form-control"
+                       name="endDate"
+                       datetime-picker="yyyy-MM-dd"
+                       ng-model="vm.dimension.selected2"
+                       ng-change="vm.onInputChange()"
+                       enable-time="false"
+                       is-open="vm.datePickerOpenStatus.endDate" />
+                <span class="input-group-btn flair-date-icon">
+                    <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'endDate')">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">
+        <tags-input-grpc placeholder="Add a {{vm.dimension.name}}" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input"
+                         add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
+            <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)" min-length="0
         " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
-    </tags-input-grpc>
+        </tags-input-grpc>
+    </div>
 </div>

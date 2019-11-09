@@ -1302,7 +1302,7 @@ nav.navbar-static-top {
   #slider #right-nav-footer button {
     margin: 0 10px; }
   #slider .properties {
-    height: calc(100vh - 200px);
+    max-height: calc(100vh - 200px);
     overflow-y: auto; }
 
 .right-nav-option-tabs .first-tab .tooltip {

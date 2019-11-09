@@ -133,7 +133,7 @@
         margin: 0 10px; 
     }
     .properties{
-        height:calc(100vh - 200px);
+        max-height:calc(100vh - 200px);
         overflow-y: auto;
     }
 }

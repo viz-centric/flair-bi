@@ -52,16 +52,31 @@
             vm.dateRangeTab = tabIndex;
         }
 
-        function onInputChange() {
+        function refreshForDay() {
             var startDate = vm.dimension.selected;
-            var endDate = vm.dimension.selected2;
-            console.log('start date input changed', startDate, endDate);
+            console.log('refresh for day', startDate);
             removeFilter(vm.dimension.name);
             if (startDate) {
                 added({text: startDate});
             }
-            if (endDate && vm.dateRangeTab === TAB_RANGE) {
+        }
+
+        function refreshForRange() {
+            var startDate = vm.dimension.selected;
+            var endDate = vm.dimension.selected2;
+            console.log('refresh for range', startDate, '-', endDate);
+            removeFilter(vm.dimension.name);
+            if (startDate && endDate) {
+                added({text: startDate});
                 added({text: endDate});
+            }
+        }
+
+        function onInputChange() {
+            if (vm.dateRangeTab === TAB_DAY) {
+                refreshForDay();
+            } else if (vm.dateRangeTab === TAB_RANGE) {
+                refreshForRange();
             }
         }
 
@@ -179,7 +194,6 @@
             vm.dimension.selected.some(function (obj, i) {
                 return obj.text === tag['text'] ? index = i : false;
             });
-            //var index = vm.dimension.selected.indexOf(tag);
             if (index > -1) {
                 vm.dimension.selected.splice(index, 1);
             }
@@ -195,6 +209,7 @@
                 });
             } else {
                 vm.dimension.selected = [];
+                vm.dimension.selected2 = [];
             }
         }
 

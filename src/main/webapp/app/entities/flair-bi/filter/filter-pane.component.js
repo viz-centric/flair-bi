@@ -45,9 +45,8 @@
         function clear() {
             $rootScope.updateWidget = {};            
             vm.dimensions.forEach(function (item) {
-                if (item.selected) {
-                    item.selected = null;
-                }
+                item.selected = null;
+                item.selected2 = null;
             });
             filterParametersService.clear();
             filter();

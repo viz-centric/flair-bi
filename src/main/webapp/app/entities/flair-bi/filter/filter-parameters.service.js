@@ -85,8 +85,12 @@
             var meta = values._meta || {};
             var dataType = meta.dataType || '';
             if (COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1) {
-                console.log('getConditionExpression() timestamp expression added!');
-                return createCompareExpressionBody(values[0], name);
+                console.log('getConditionExpression() comparable data types', dataType, 'for values', values);
+                if (values.length === 2) {
+                    return createBetweenExpressionBody(values[0], values[1], name);
+                } else {
+                    return createCompareExpressionBody(values[0], name);
+                }
             } else {
                 return createContainsExpressionBody(values, name);
             }

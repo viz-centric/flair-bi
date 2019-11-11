@@ -99,7 +99,7 @@
                     if ($rootScope.filterSelection.id != record.id) {
                         var clusteredhorizontalbar = $rootScope.updateWidget[record.id];
 
-                        clusteredhorizontalbar.isAnimationDisable(record.isLiveEnabled)
+                        clusteredhorizontalbar.isLiveEnabled(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
                     }

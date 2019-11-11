@@ -22,10 +22,13 @@
                                     <i ng-show="v.isLiveEnabled" class="fa fa-circle text-danger live-icon"></i> {{v.titleProperties.titleText}}
                                     <i ng-if="v.cacheDate" class="fa fa-circle text-danger live-icon" title="{{(v.cacheDate * 1000) | date:'MMM d, h:mm:ss a'}}"></i>
                                 </div>
-                                <span uib-tooltip="Live" tooltip-placement="bottom">
-                            <md-switch class="md-primary edit hue-3" md-no-ink aria-label="Live button" ng-model="isLive" ng-change="vm.liveState(isLive, v)">
-                            </md-switch>
-                        </span>
+                              
+                        <a href class="viz-header-button live" ng-click="vm.liveState(v.isLiveEnabled, v)">
+                               
+                            <img ng-show="!v.isLiveEnabled"  class="vizEditButton"  uib-tooltip="Live" src="../../../content/svgs/headers/live-off.svg" alt="edit off"  tooltip-placement="bottom">
+                            <img ng-show="v.isLiveEnabled"  class="vizEditButton"  uib-tooltip="Live" src="../../../content/svgs/headers/live-on.svg" alt="edit off"  tooltip-placement="bottom">
+                       
+                       </a>
                                 <div class="btn-group viz-settings" uib-dropdown is-open="v.status.isopen">
                                     <a href id="dialog-{{v.visualBuildId}}" uib-dropdown-toggle>
                                         <span uib-tooltip="Tools" tooltip-placement="bottom">

@@ -156,7 +156,7 @@
                     if ($rootScope.filterSelection.id != record.id) {
                         var combo = $rootScope.updateWidget[record.id];
 
-                        combo.isAnimationDisable(record.isLiveEnabled)
+                        combo.isLiveEnabled(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
 

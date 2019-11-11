@@ -934,3 +934,12 @@ body.modal-open .animated {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.swal-icon{
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .swal-icon--warning__body{
+    height: 25px !important;
+  }

@@ -94,8 +94,7 @@
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                     if ($rootScope.filterSelection.id != record.id) {
                         var clusteredverticalbar = $rootScope.updateWidget[record.id];
-
-                        clusteredverticalbar.isAnimationDisable(record.isLiveEnabled)
+                        clusteredverticalbar.isLiveEnabled(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
 

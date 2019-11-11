@@ -96,7 +96,7 @@
                     if ($rootScope.filterSelection.id != record.id) {
                         var stackedverticalbar = $rootScope.updateWidget[record.id];
 
-                        stackedverticalbar.isAnimationDisable(record.isLiveEnabled)
+                        stackedverticalbar.isLiveEnabled(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
                     }

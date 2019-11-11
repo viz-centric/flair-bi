@@ -23,9 +23,11 @@
         vm.load = load;
         vm.added = added;
         vm.removed = removed;
+        vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.datePickerOpenStatus = {};
-        vm.openCalendar = openCalendar;
+        vm.toggleCalendar = toggleCalendar;
         vm.metaData=[];
+        vm.fromDate=null;
 
 
         ////////////////
@@ -37,6 +39,10 @@
 
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
+        }
+
+        function canDisplayDateRangeControls(dimension) {
+            return vm.dimension && vm.dimension.type && vm.dimension.type.toLowerCase() === 'timestamp';
         }
 
         function registerRemoveTag() {
@@ -93,8 +99,10 @@
             $rootScope.$broadcast('flairbiApp:filter');
         }
 
-        function openCalendar(date) {
-            vm.datePickerOpenStatus[date] = true;
+        function toggleCalendar(e, date) {
+            e.preventDefault();
+            e.stopPropagation();
+            vm.datePickerOpenStatus[date] = !vm.datePickerOpenStatus[date];
         }
 
         function load(q, dimension) {

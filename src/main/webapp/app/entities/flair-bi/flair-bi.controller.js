@@ -156,6 +156,7 @@
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
             openSchedulerDialogForThreshold();
+            openLiveModeDialog();
             updateTableChart();
             registerDateRangeFilterEvent()
             registerAddVisual();
@@ -618,6 +619,39 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+        function openLiveModeDialog() {
+            var unsubscribe = $scope.$on("FlairBi:livemode-dialog", function (
+                event,
+                result
+            ) {
+                swal(
+                    "",
+                    "Disable live mode to make selection on this visualization",
+                    "warning",
+                    {
+                        buttons: {
+                            Okay: {
+                                text: "Okay",
+                                value: "Okay"
+                            },
+                            cancel: "Cancel"
+                        }
+                    }
+                ).then(function(value) {
+                    switch (value) {
+                        case "Okay":
+                            $rootScope.$broadcast("FlairBi:saveAllWidgets");
+                            $state.go(next);
+                            break;
+
+                        default:
+                            return;
+                    }
+                });
+            });
+            $scope.$on("$destroy", unsubscribe);
+        }
+
 
         function updateTableChart() {
             var unsubscribe = $scope.$on("FlairBi:update-table", function (
@@ -807,15 +841,22 @@
 
         /** This should be removed once toggle button is changed to material design */
         function liveState(isLive, v) {
-            if (isLive) {
+            if (!isLive) {
+                var visualization = $rootScope.updateWidget[v.id];
+                if(visualization){
+                    visualization.isLiveEnabled(true);
+                }
                 var int = $interval(function() {
                     refreshWidget(v);
                 }, 5000);
                 intervalRegistry[v.visualBuildId] = int;
                 $rootScope.isLiveState=v.isLiveEnabled = true;
+                
             } else {
                 $interval.cancel(intervalRegistry[v.visualBuildId]);
                 $rootScope.isLiveState=v.isLiveEnabled = false;
+                var visualization = $rootScope.updateWidget[v.id];
+                visualization.isLiveEnabled(false);
             }
         }
 

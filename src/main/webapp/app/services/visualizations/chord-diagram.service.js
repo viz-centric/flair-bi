@@ -37,7 +37,7 @@
                     if ($rootScope.filterSelection.id != record.id) {
                         var chorddiagram = $rootScope.updateWidget[record.id];
 
-                        chorddiagram.isAnimationDisable(record.isLiveEnabled)
+                        chorddiagram.isLiveEnabled(record.isLiveEnabled)
                             .config(getProperties(VisualizationUtils, record))
                             .update(record.data);
                     }

@@ -82,12 +82,11 @@
             </div>
             <div class="col-md-1 hidden-sm hidden-xs visual-edit">
                 <div class="options-2" ng-if="!vm.configuration.readOnly">
-                    <div class="viz-edit-button" uib-tooltip="Edit" tooltip-placement="bottom">
-                        <md-switch class="md-primary edit" ng-if="vm.canEdit" md-no-ink aria-label="Edit button" ng-model="editState" ng-change="vm.editState(editState)">
-                        </md-switch>
-                        <md-switch class="md-primary edit" ng-if="!vm.canEdit" disabled md-no-ink aria-label="Edit button">
-                        </md-switch>
-                    </div>
+                        <top-nav-button-component click="vm.editState(vm.canEdit)">
+                            <img class="vizEditButton md-primary edit" ng-if="vm.canEdit" uib-tooltip="Edit" src="../../../content/svgs/edit-off.svg" alt="edit off"  tooltip-placement="bottom">
+                            <img class="vizEditButton md-primary edit" ng-if="!vm.canEdit" uib-tooltip="Edit" src="../../../content/svgs/edit-on.svg" alt="edit on"  tooltip-placement="bottom">
+                        </top-nav-button-component>
+                    
                 </div>
             </div>
             <div class="col-md-1 hidden-sm hidden-xs visual-edit">

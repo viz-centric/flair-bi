@@ -328,6 +328,12 @@
             justify-content: center;
         }
     }
+    .vizEditButton{
+        width: 38px;
+        height: 38px;
+        padding: 0 8px;
+        margin-top: 3px;
+    }
 }
 .alarm-icon-off{
     fill:#676a6c !important; 
@@ -337,6 +343,7 @@
     fill:#439dd3 !important; 
     stroke:#439dd3 !important; 
 }
+
 .flairbi-content-header-fullscreen {
     padding: 0;
     padding-top: 6px;

@@ -47,89 +47,91 @@
 
                 </div>
             </div>
-            
-            <div class="col-md-2 col-sm-6 col-xs-4 visual-arrow">
-                <div class="options-1">
-                    <top-nav-button-component is-disabled="!vm.ngIfSave()" click="vm.onWriteToPg()">
-                        <span uib-tooltip="Save" tooltip-placement="bottom">
-                            <svg class="flaticons-save-button">
-                                <use xlink:href="#save-button" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                    <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()">
-                        <span uib-tooltip="Previous" tooltip-placement="bottom">
-                            <svg class="flaticons-left-arrow">
-                                <use xlink:href="#left-arrow" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                    <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()">
-                        <span uib-tooltip="Next" tooltip-placement="bottom">
-                            <svg class="flaticons-right-arrow">
-                                <use xlink:href="#right-arrow" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                    <top-nav-button-component if="vm.ngIfClearFilters()" click="vm.clearFilters()">
-                        <span uib-tooltip="Reset" tooltip-placement="bottom">
-                            <svg class="flaticons-close">
-                                <use xlink:href="#close" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                </div>
-            </div>
-            <div class="col-md-1 hidden-sm hidden-xs visual-edit">
-                <div class="options-2" ng-if="!vm.configuration.readOnly">
-                        <top-nav-button-component click="vm.editState(vm.canEdit)">
-                            <img class="vizEditButton md-primary edit" ng-if="vm.canEdit" uib-tooltip="Edit" src="../../../content/svgs/edit-off.svg" alt="edit off"  tooltip-placement="bottom">
-                            <img class="vizEditButton md-primary edit" ng-if="!vm.canEdit" uib-tooltip="Edit" src="../../../content/svgs/edit-on.svg" alt="edit on"  tooltip-placement="bottom">
+            <div>
+                <div class="col-md-2 col-sm-6 col-xs-4 visual-arrow">
+                    <div class="options-1">
+                        <top-nav-button-component is-disabled="!vm.ngIfSave()" click="vm.onWriteToPg()">
+                            <span uib-tooltip="Save" tooltip-placement="bottom">
+                                <svg class="flaticons-save-button">
+                                    <use xlink:href="#save-button" />
+                                </svg>
+                            </span>
                         </top-nav-button-component>
-                    
+                        <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()">
+                            <span uib-tooltip="Previous" tooltip-placement="bottom">
+                                <svg class="flaticons-left-arrow">
+                                    <use xlink:href="#left-arrow" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                        <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()">
+                            <span uib-tooltip="Next" tooltip-placement="bottom">
+                                <svg class="flaticons-right-arrow">
+                                    <use xlink:href="#right-arrow" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                        <top-nav-button-component if="vm.ngIfClearFilters()" click="vm.clearFilters()">
+                            <span uib-tooltip="Reset" tooltip-placement="bottom">
+                                <svg class="flaticons-close">
+                                    <use xlink:href="#close" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                    </div>
+                </div>
+                <div class="col-md-1 hidden-sm hidden-xs visual-edit">
+                    <div class="options-2" ng-if="!vm.configuration.readOnly">
+                            <top-nav-button-component click="vm.editState(vm.canEdit)">
+                                <img class="vizEditButton md-primary edit" ng-if="vm.canEdit" uib-tooltip="Edit" src="../../../content/svgs/edit-off.svg" alt="edit off"  tooltip-placement="bottom">
+                                <img class="vizEditButton md-primary edit" ng-if="!vm.canEdit" uib-tooltip="Edit" src="../../../content/svgs/edit-on.svg" alt="edit on"  tooltip-placement="bottom">
+                            </top-nav-button-component>
+                        
+                    </div>
+                </div>
+                <div class="col-md-1 hidden-sm hidden-xs visual-edit">
+                    <div class="options-2" ng-if="!vm.configuration.readOnly">
+                        <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
+                            <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
+                                <svg class="alarm-icon-on">
+                                    <use xlink:href="#alarm" />
+                                </svg>
+                            </span>
+                            <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="!vm.isThresholdAlert">
+                                <svg class="alarm-icon-off">
+                                    <use xlink:href="#alarm" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">
+                    <div class="options-3">
+                        <top-nav-button-component click="vm.bookmark()" class="options-3-item">
+                            <span uib-tooltip="Bookmark" tooltip-placement="bottom">
+                                <svg class="flaticons-bookmark">
+                                    <use xlink:href="#bookmark" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                        <top-nav-button-component click="vm.printAllWidgets()" class="options-3-item">
+                            <span uib-tooltip="Print" tooltip-placement="bottom">
+                                <svg class="flaticons-print">
+                                    <use xlink:href="#print" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()">
+                            <span uib-tooltip="Full Screen" tooltip-placement="bottom">
+                                <svg class="full-screen">
+                                    <use xlink:href="#full-screen" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-1 hidden-sm hidden-xs visual-edit">
-                <div class="options-2" ng-if="!vm.configuration.readOnly">
-                    <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
-                        <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
-                            <svg class="alarm-icon-on">
-                                <use xlink:href="#alarm" />
-                            </svg>
-                        </span>
-                        <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="!vm.isThresholdAlert">
-                            <svg class="alarm-icon-off">
-                                <use xlink:href="#alarm" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">
-                <div class="options-3">
-                    <top-nav-button-component click="vm.bookmark()" class="options-3-item">
-                        <span uib-tooltip="Bookmark" tooltip-placement="bottom">
-                            <svg class="flaticons-bookmark">
-                                <use xlink:href="#bookmark" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                    <top-nav-button-component click="vm.printAllWidgets()" class="options-3-item">
-                        <span uib-tooltip="Print" tooltip-placement="bottom">
-                            <svg class="flaticons-print">
-                                <use xlink:href="#print" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                    <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()">
-                        <span uib-tooltip="Full Screen" tooltip-placement="bottom">
-                            <svg class="full-screen">
-                                <use xlink:href="#full-screen" />
-                            </svg>
-                        </span>
-                    </top-nav-button-component>
-                </div>
-            </div>
+           
             <div>
                 <div class="options-4">
                     <menu-component></menu-component>

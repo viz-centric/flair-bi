@@ -844,7 +844,9 @@
             if (!isLive) {
                 var visualization = $rootScope.updateWidget[v.id];
                 if(visualization){
-                    visualization.isLiveEnabled(true);
+                    if(visualization.isLiveEnabled){
+                        visualization.isLiveEnabled(true);
+                    }
                 }
                 var int = $interval(function() {
                     refreshWidget(v);
@@ -856,7 +858,11 @@
                 $interval.cancel(intervalRegistry[v.visualBuildId]);
                 $rootScope.isLiveState=v.isLiveEnabled = false;
                 var visualization = $rootScope.updateWidget[v.id];
-                visualization.isLiveEnabled(false);
+                if(visualization){
+                    if(visualization.isLiveEnabled){
+                        visualization.isLiveEnabled(false);
+                    }
+                };
             }
         }
 

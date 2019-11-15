@@ -30,21 +30,14 @@
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
                     result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
                     result["numberFormat"] = VisualizationUtils.getFieldPropertyValue(measure[0], "Number format");
-                    
+
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
                     return result;
                 }
 
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var doughnut = $rootScope.updateWidget[record.id];
-                        doughnut.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="doughnut-' + element[0].id + '" ></div>')
                     var div = $('#doughnut-' + element[0].id)
@@ -58,8 +51,23 @@
                         .data(record.data);
 
                     doughnut(div[0])
-                    if (!isNotification) {
+                    return doughnut;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var doughnut = $rootScope.updateWidget[record.id];
+                            doughnut.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var doughnut = createChart();
                         $rootScope.updateWidget[record.id] = doughnut;
+
                     }
                 }
             }

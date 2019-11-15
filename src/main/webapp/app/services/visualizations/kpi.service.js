@@ -63,24 +63,34 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var kpi = $rootScope.updateWidget[record.id];
-                        kpi.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="kpi-' + element[0].id + '" ></div>')
                     var div = $('#kpi-' + element[0].id)
 
                     var kpi = flairVisualizations.kpi()
                         .config(getProperties(VisualizationUtils, record))
+                        .notification(isNotification == true ? true : false)
                         .print(false)
                         .data(record.data);
 
                     kpi(div[0])
-                    $rootScope.updateWidget[record.id] = kpi;
+                    return kpi;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var kpi = $rootScope.updateWidget[record.id];
+                            kpi.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var kpi = createChart();
+                        $rootScope.updateWidget[record.id] = kpi;
+                    }
                 }
             }
         }

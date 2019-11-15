@@ -91,16 +91,7 @@
                     return result;
                 }
 
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var stackedhorizontalbar = $rootScope.updateWidget[record.id];
-
-                        stackedhorizontalbar.isLiveEnabled(record.isLiveEnabled)
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="stackedhorizontalbar-' + element[0].id + '" ></div>')
                     var div = $('#stackedhorizontalbar-' + element[0].id)
@@ -115,8 +106,26 @@
                         .data(record.data);
 
                     stackedhorizontalbar(div[0])
-                    if (!isNotification) {
+
+                    return stackedhorizontalbar;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var stackedhorizontalbar = $rootScope.updateWidget[record.id];
+
+                            stackedhorizontalbar.isLiveEnabled(record.isLiveEnabled)
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+
+                        var stackedhorizontalbar = createChart()
                         $rootScope.updateWidget[record.id] = stackedhorizontalbar;
+
                     }
                 }
             }

@@ -52,13 +52,7 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var treemap = $rootScope.updateWidget[record.id];
-                        treemap.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="treemap-' + element[0].id + '" ></div>')
                     var div = $('#treemap-' + element[0].id)
@@ -69,11 +63,28 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
-                        treemap(div[0])
+                    treemap(div[0])
 
-                    $rootScope.updateWidget[record.id] = treemap;
+                    return treemap;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var treemap = $rootScope.updateWidget[record.id];
+                            treemap.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var treemap = createChart();
+                        $rootScope.updateWidget[record.id] = treemap;
+                    }
                 }
             }
         }

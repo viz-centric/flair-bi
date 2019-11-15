@@ -33,13 +33,7 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var map = $rootScope.updateWidget[record.id];
-                        map.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="map-' + element[0].id + '" ></div>')
                     var div = $('#map-' + element[0].id)
@@ -50,11 +44,28 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     map(div[0])
 
-                    $rootScope.updateWidget[record.id] = map;
+                    return map;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var map = $rootScope.updateWidget[record.id];
+                            map.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+
+                        var map = createChart();
+                        $rootScope.updateWidget[record.id] = map;
+                    }
                 }
             }
         }

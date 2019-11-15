@@ -84,15 +84,7 @@
 
                     return result;
                 }
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var table = $rootScope.updateWidget[record.id];
-                        table
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:auto;text-align:center;position:relative" id="table-' + element[0].id + '" ></div>')
                     var div = $('#table-' + element[0].id)
@@ -102,10 +94,28 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     table(div[0])
-                    $rootScope.updateWidget[record.id] = table;
+
+                    return table;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var table = $rootScope.updateWidget[record.id];
+                            table
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var table = createChart();
+                        $rootScope.updateWidget[record.id] = table;
+                    }
                 }
             }
         }

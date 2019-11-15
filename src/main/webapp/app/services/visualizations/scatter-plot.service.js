@@ -47,7 +47,7 @@
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
 
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
-                    
+
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
                     result['fontStyle'] = [];
@@ -77,28 +77,38 @@
                     return result;
                 }
 
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var scatter = $rootScope.updateWidget[record.id];
-                        scatter.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="scatter-' + element[0].id + '" ></div>')
-                    var div = $('#scatter-' + element[0].id)
+                        $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="scatter-' + element[0].id + '" ></div>')
+                        var div = $('#scatter-' + element[0].id)
 
-                    var scatter = flairVisualizations.scatter()
-                        .config(getProperties(VisualizationUtils, record))
-                        .tooltip(true)
-                        .broadcast($rootScope)
-                        .filterParameters(filterParametersService)
-                        .print(isNotification == true ? true : false)
-                        .data(record.data);
+                        var scatter = flairVisualizations.scatter()
+                            .config(getProperties(VisualizationUtils, record))
+                            .tooltip(true)
+                            .broadcast($rootScope)
+                            .filterParameters(filterParametersService)
+                            .print(isNotification == true ? true : false)
+                            .notification(isNotification == true ? true : false)
+                            .data(record.data);
 
-                    scatter(div[0])
-                    $rootScope.updateWidget[record.id] = scatter;
+                        scatter(div[0])
+
+                    return scatter;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var scatter = $rootScope.updateWidget[record.id];
+                            scatter.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var scatter=createChart();
+                        $rootScope.updateWidget[record.id] = scatter;
+                    }
                 }
             }
         }

@@ -44,12 +44,7 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var gauge = $rootScope.updateWidget[record.id];
-                        gauge.update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="gauge-' + element[0].id + '" ></div>')
                     var div = $('#gauge-' + element[0].id)
@@ -57,13 +52,28 @@
                     var gauge = flairVisualizations.gauge()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
-                       
+                        .notification(isNotification == true ? true : false)
                         .print(isNotification == true ? true : false)
                         .data(record.data);
 
                     gauge(div[0])
+                    return gauge;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
 
-                    $rootScope.updateWidget[record.id] = gauge;
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var gauge = $rootScope.updateWidget[record.id];
+                            gauge.update(record.data);
+                        }
+                    } else {
+
+                        var gauge = createChart();
+                        $rootScope.updateWidget[record.id] = gauge;
+                    }
                 }
             }
         }

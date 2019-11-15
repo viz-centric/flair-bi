@@ -86,28 +86,51 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var pivot = $rootScope.updateWidget[record.id];
-                        pivot
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
+                    var config = getProperties(VisualizationUtils, record)
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="pivot-' + element[0].id + '" ></div>')
-                    var div = $('#pivot-' + element[0].id)
+                    var div = $('#pivot-' + element[0].id);
+                    var pivot;
 
-                    var pivot = flairVisualizations.pivot()
-                        .config(getProperties(VisualizationUtils, record))
-                        .broadcast($rootScope)
-                        .filterParameters(filterParametersService)
-                        .print(isNotification == true ? true : false)
-                        .data(record.data);
+                    if (config["isPivoted"].find(element => element == true)) {
+                        pivot = flairVisualizations.pivot()
+                            .config(config)
+                            .broadcast($rootScope)
+                            .filterParameters(filterParametersService)
+                            .print(isNotification == true ? true : false)
+                            .notification(isNotification == true ? true : false)
+                            .data(record.data);
+                    }
+                    else {
+                        pivot = flairVisualizations.table()
+                            .config(config)
+                            .broadcast($rootScope)
+                            .filterParameters(filterParametersService)
+                            .print(isNotification == true ? true : false)
+                            .notification(isNotification == true ? true : false)
+                            .data(record.data);
+                    }
 
                     pivot(div[0])
 
-                    $rootScope.updateWidget[record.id] = pivot;
+                    return pivot;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var pivot = $rootScope.updateWidget[record.id];
+                            pivot
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var pivot = createChart();
+                        $rootScope.updateWidget[record.id] = pivot;
+                    }
                 }
             }
         }

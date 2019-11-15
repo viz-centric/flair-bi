@@ -28,15 +28,8 @@
                     }
                     return result;
                 }
-              
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var pie = $rootScope.updateWidget[record.id];
-                        pie.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="pie-' + element[0].id + '" ></div>')
                     var div = $('#pie-' + element[0].id)
@@ -47,11 +40,25 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .notification(isNotification == true ? true : false)
-                        .print( false)
+                        .print(false)
                         .data(record.data);
 
                     pie(div[0])
-                    if (!isNotification) {
+
+                    return pie;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var pie = $rootScope.updateWidget[record.id];
+                            pie.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var pie = createChart();
                         $rootScope.updateWidget[record.id] = pie;
                     }
                 }

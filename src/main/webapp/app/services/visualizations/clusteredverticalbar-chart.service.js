@@ -91,15 +91,9 @@
 
                     return result;
                 }
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var clusteredverticalbar = $rootScope.updateWidget[record.id];
-                        clusteredverticalbar.isLiveEnabled(record.isLiveEnabled)
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
 
-                    }
-                } else {
+
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" vizID=' + record.id + ' id="clusteredverticalbar-' + element[0].id + '" ></div>')
                     var div = $('#clusteredverticalbar-' + element[0].id)
@@ -114,9 +108,23 @@
                         .data(record.data);
 
                     clusteredverticalbar(div[0])
-
-                    if (!isNotification) {
+                    return clusteredverticalbar;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var clusteredverticalbar = $rootScope.updateWidget[record.id];
+                            clusteredverticalbar.isLiveEnabled(record.isLiveEnabled)
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var clusteredverticalbar = createChart();
                         $rootScope.updateWidget[record.id] = clusteredverticalbar;
+
                     }
                 }
             }

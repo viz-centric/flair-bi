@@ -91,17 +91,7 @@
                     return result;
                 }
 
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var stackedverticalbar = $rootScope.updateWidget[record.id];
-
-                        stackedverticalbar.isLiveEnabled(record.isLiveEnabled)
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
-
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="stackedverticalbar-' + element[0].id + '" ></div>')
                     var div = $('#stackedverticalbar-' + element[0].id)
@@ -116,10 +106,27 @@
                         .data(record.data);
 
                     stackedverticalbar(div[0])
-                    if (!isNotification) {
+
+                    return stackedverticalbar;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var stackedverticalbar = $rootScope.updateWidget[record.id];
+
+                            stackedverticalbar.isLiveEnabled(record.isLiveEnabled)
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var stackedverticalbar = createChart()
                         $rootScope.updateWidget[record.id] = stackedverticalbar;
                     }
                 }
+
             }
         }
     }

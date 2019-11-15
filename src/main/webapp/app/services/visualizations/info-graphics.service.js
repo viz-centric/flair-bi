@@ -44,15 +44,7 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var infographics = $rootScope.updateWidget[record.id];
-
-                        infographics.config(getProperties(VisualizationUtils, record))
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="infographics-' + element[0].id + '" ></div>')
                     var div = $('#infographics-' + element[0].id)
@@ -61,13 +53,28 @@
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
-                        
-                    if (!isNotification) {
-                        infographics(div[0])
-                    }
 
-                    $rootScope.updateWidget[record.id] = infographics;
+                    infographics(div[0])
+                    return infographics;
+
+                }
+                if (isNotification) {
+                    createChart()
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var infographics = $rootScope.updateWidget[record.id];
+                            infographics.config(getProperties(VisualizationUtils, record))
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var infographics = createChart();
+                        $rootScope.updateWidget[record.id] = infographics;
+                    }
                 }
             }
         }

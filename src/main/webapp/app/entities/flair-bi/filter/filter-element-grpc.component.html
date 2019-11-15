@@ -1,38 +1,8 @@
 <div class="filter-element form-group">
     <label class="control-label">{{vm.dimension.name}}</label>
-    <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)"
-        style="padding: 0 6px 0 6px">
-        <div class="btn-group btn-group-sm"
-             role="group"
-             aria-label="Date range">
-            <button type="button" class="btn btn-default">Single</button>
-            <button type="button" class="btn btn-default">Range</button>
-            <button type="button" class="btn btn-default">Dynamic</button>
-        </div>
-        <div class="form-group">
-            <label class="control-label" for="startDate">Since:</label>
-            <div class="input-group">
-                <input id="startDate"
-                       type="text"
-                       class="form-control"
-                       name="startDate"
-                       datetime-picker="yyyy-MM-dd"
-                       ng-model="vm.fromDate"
-                       enable-time="false"
-                       is-open="vm.datePickerOpenStatus.startDate" />
-                <span class="input-group-btn flair-date-icon">
-                    <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                    </button>
-                </span>
-            </div>
-        </div>
-    </div>
-    <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">
-        <tags-input-grpc placeholder="Add a {{vm.dimension.name}}" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input"
-                         add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
-            <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)" min-length="0
+    <tags-input-grpc placeholder="Add a {{vm.dimension.name}}" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input"
+        add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
+        <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)" min-length="0
         " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
-        </tags-input-grpc>
-    </div>
+    </tags-input-grpc>
 </div>

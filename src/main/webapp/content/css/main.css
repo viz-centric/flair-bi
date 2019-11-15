@@ -6380,6 +6380,7 @@ input.select2-active {
   margin-top: 0px; }
 
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
+  margin: 5px;
   display: flex; }
   .scheduler-modal-body .cron-wrap .clearfix .form-group label {
     margin: 5px; }
@@ -6513,8 +6514,7 @@ input.select2-active {
   font-size: 15px; }
 
 .common-create-popup input, .common-create-popup select, .common-create-popup label {
-  border-radius: 10px;
-  margin-top: 7px; }
+  border-radius: 10px; }
 
 .common-create-popup .uploaded-image {
   float: right; }

@@ -1,0 +1,98 @@
+<div style="padding: 0 6px 0 6px">
+    <div class="btn-group btn-group-sm"
+         data-toggle="buttons"
+         role="group"
+         aria-label="Date range">
+        <button type="button"
+                class="btn btn-default"
+                ng-class="{'active':vm.dateRangeTab == 0}"
+                ng-click="vm.onDateRangeClick(0)">Day</button>
+        <button type="button"
+                class="btn btn-default"
+                ng-class="{'active':vm.dateRangeTab == 1}"
+                ng-click="vm.onDateRangeClick(1)">Range</button>
+    </div>
+    <div class="form-group"
+         ng-if="vm.dateRangeTab === 0">
+        <label class="control-label" for="startDate1">Since:</label>
+        <div class="input-group">
+            <input id="startDate1"
+                   readonly
+                   type="text"
+                   class="form-control"
+                   name="startDate"
+                   datetime-picker="yyyy-MM-dd"
+                   ng-model="vm.dimension.selected"
+                   ng-change="vm.onInputChange()"
+                   enable-time="false"
+                   when-closed="vm.onCalendarClose(args)"
+                   is-open="vm.datePickerOpenStatus.startDate" />
+            <span class="input-group-btn flair-date-icon">
+                <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="form-group"
+         ng-if="vm.dateRangeTab === 1">
+        <label class="control-label" for="startDate">Date:</label>
+        <div class="input-group">
+            <input id="startDate"
+                   readonly
+                   type="text"
+                   class="form-control"
+                   name="startDate"
+                   datetime-picker="yyyy-MM-dd"
+                   ng-model="vm.dimension.selected"
+                   ng-change="vm.onInputChange()"
+                   enable-time="false"
+                   is-open="vm.datePickerOpenStatus.startDate" />
+            <span class="input-group-btn flair-date-icon">
+                <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+        <label class="control-label" for="endDate">End date:</label>
+        <div class="input-group">
+            <input id="endDate"
+                   readonly
+                   type="text"
+                   class="form-control"
+                   name="endDate"
+                   datetime-picker="yyyy-MM-dd"
+                   ng-model="vm.dimension.selected2"
+                   ng-change="vm.onInputChange()"
+                   enable-time="false"
+                   is-open="vm.datePickerOpenStatus.endDate" />
+            <span class="input-group-btn flair-date-icon">
+                <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'endDate')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="form-group"
+         style="padding: 10px 0 0 0"
+         ng-if="vm.dateRangeTab === 2">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle"
+                    type="button"
+                    id="dateRangeDynamic"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="true">
+                Choose period:
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu"
+                aria-labelledby="dateRangeDynamic">
+                <li><a href="#">Week to date</a></li>
+                <li><a href="#">Month to date</a></li>
+                <li><a href="#">Quarter to date</a></li>
+                <li><a href="#">Year to date</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

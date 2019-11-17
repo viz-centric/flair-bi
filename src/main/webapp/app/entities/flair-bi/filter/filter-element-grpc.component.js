@@ -19,22 +19,14 @@
     function filterElementGrpcController($scope, proxyGrpcService, filterParametersService,$timeout,FilterStateManagerService,$rootScope,$filter,VisualDispatchService,stompClientService) {
         var vm = this;
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
-        var TAB_DAY = 0;
-        var TAB_RANGE = 1;
-        var TAB_DYNAMIC = 2;
         vm.$onInit = activate;
         vm.load = load;
         vm.added = added;
         vm.removed = removed;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
-        vm.onDateRangeClick = onDateRangeClick;
-        vm.onInputChange = onInputChange;
-        vm.datePickerOpenStatus = {};
-        vm.toggleCalendar = toggleCalendar;
-        vm.metaData=[];
-        vm.fromDate=null;
-        vm.endDate=null;
-        vm.dateRangeTab=0;
+        vm.onRefreshDay = refreshForDay;
+        vm.onRefreshRange = refreshForRange;
+        vm.onRefreshDynamic = onRefreshDynamic;
 
 
         ////////////////
@@ -48,16 +40,16 @@
             registerRemoveTag();
         }
 
-        function onDateRangeClick(tabIndex) {
-            vm.dateRangeTab = tabIndex;
-        }
-
         function refreshForDay() {
             var startDate = vm.dimension.selected;
             removeFilter(vm.dimension.name);
             if (startDate) {
                 added({text: startDate});
             }
+        }
+
+        function onRefreshDynamic() {
+
         }
 
         function refreshForRange() {
@@ -67,14 +59,6 @@
             if (startDate && endDate) {
                 added({text: startDate});
                 added({text: endDate});
-            }
-        }
-
-        function onInputChange() {
-            if (vm.dateRangeTab === TAB_DAY) {
-                refreshForDay();
-            } else if (vm.dateRangeTab === TAB_RANGE) {
-                refreshForRange();
             }
         }
 
@@ -144,12 +128,6 @@
         function applyFilter() {
             FilterStateManagerService.add(angular.copy(filterParametersService.get()));
             $rootScope.$broadcast('flairbiApp:filter');
-        }
-
-        function toggleCalendar(e, date) {
-            e.preventDefault();
-            e.stopPropagation();
-            vm.datePickerOpenStatus[date] = !vm.datePickerOpenStatus[date];
         }
 
         function load(q, dimension) {

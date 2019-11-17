@@ -26,7 +26,7 @@
             if (vm.features.property.value != "" && vm.features.property.value != null) {
                 var temp = vm.features.property.value.split('|');
 
-                for (let index = 0; index < temp.length; index++) {
+                for (var index = 0; index < temp.length; index++) {
                     var arr = temp[index].split(',');
                     var condition = {};
                     condition.expression = arr[0];
@@ -68,7 +68,7 @@
                 condition.icon = angular.element(this).find('.icon').val();
                 list.push(condition);
             })
-            for (let index = 0; index < list.length; index++) {
+            for (var index = 0; index < list.length; index++) {
                 if (vm.isIcon) {
                     vm.features.property.value += list[index].expression + "," + list[index].value + "," + list[index].icon + "," + list[index].color + "|";
                 }

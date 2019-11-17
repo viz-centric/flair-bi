@@ -1234,7 +1234,7 @@
                     }
                 } else {
 
-                    for (let index = 0; index < record.data.length; index++) {
+                    for (var index = 0; index < record.data.length; index++) {
                         record.data[index]["high_tolerance"] = record.data[index]["high_tolerance"] -10
 
                     }

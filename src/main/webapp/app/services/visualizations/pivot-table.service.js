@@ -93,7 +93,9 @@
                     var div = $('#pivot-' + element[0].id);
                     var pivot;
 
-                    if (config["isPivoted"].find(element => element == true)) {
+                    if (config["isPivoted"].find(function (element) {
+                        return element == true;
+                    })) {
                         pivot = flairVisualizations.pivot()
                             .config(config)
                             .broadcast($rootScope)

@@ -55,13 +55,18 @@
             };
         }
 
-        function createBetweenExpressionBody(value, secondValue, featureName) {
-            return {
-                '@type': 'Between',
-                value: value,
-                secondValue: secondValue,
-                featureName: featureName
-            };
+        function createBetweenExpressionBody(value, secondValue, featureName, dataType) {
+          var result = {
+            '@type': 'Between',
+            value: value,
+            secondValue: secondValue,
+            featureName: featureName
+          };
+          if (dataType) {
+            result.valueType = {value: value, type: dataType};
+            result.secondValueType = {value: secondValue, type: dataType};
+          }
+          return result;
         }
 
         function createContainsExpressionBody(values, featureName) {
@@ -72,11 +77,12 @@
             };
         }
 
-        function createCompareExpressionBody(value, featureName) {
+        function createCompareExpressionBody(value, featureName, dataType) {
             return {
                 '@type': 'Compare',
                 comparatorType: 'GTE',
                 value: value,
+                valueType: {value: value, type: dataType},
                 featureName: featureName
             };
         }
@@ -87,9 +93,9 @@
             if (COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1) {
                 console.log('getConditionExpression() comparable data types', dataType, 'for values', values);
                 if (values.length === 2) {
-                    return createBetweenExpressionBody(values[0], values[1], name);
+                    return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {
-                    return createCompareExpressionBody(values[0], name);
+                    return createCompareExpressionBody(values[0], name, dataType);
                 }
             } else {
                 return createContainsExpressionBody(values, name);

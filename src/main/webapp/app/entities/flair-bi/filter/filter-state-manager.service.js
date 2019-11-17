@@ -34,7 +34,6 @@
                 if (queue.length > configuration.limit - 1) {
                     queue.slice(index - configuration.limit + 1, index + 1);
                 }
-                console.log('adding filter', filter);
                 queue.push(filter);
                 index = queue.length - 1;
             }

@@ -40,7 +40,6 @@
         }
 
         function save(newValue) {
-            console.log('save() saving filter', newValue);
             paramObject = newValue;
             $rootScope.$broadcast('filterParametersService:filter-changed', paramObject);
         }
@@ -91,7 +90,6 @@
             var meta = values._meta || {};
             var dataType = meta.dataType || '';
             if (COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1) {
-                console.log('getConditionExpression() comparable data types', dataType, 'for values', values);
                 if (values.length === 2) {
                     return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {
@@ -112,7 +110,6 @@
                   && paramObject[name]
                   && paramObject[name].length > 0) {
                     var values = paramObject[name];
-                    console.log('getConditionExpression() filter name', name, values);
                     if (!condition.expression) {
                         if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
                             body = createBetweenExpressionBody(changeDateFormat(values[0]),

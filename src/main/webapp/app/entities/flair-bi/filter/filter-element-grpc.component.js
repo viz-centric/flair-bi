@@ -54,7 +54,6 @@
 
         function refreshForDay() {
             var startDate = vm.dimension.selected;
-            console.log('refresh for day', startDate);
             removeFilter(vm.dimension.name);
             if (startDate) {
                 added({text: startDate});
@@ -64,7 +63,6 @@
         function refreshForRange() {
             var startDate = vm.dimension.selected;
             var endDate = vm.dimension.selected2;
-            console.log('refresh for range', startDate, '-', endDate);
             removeFilter(vm.dimension.name);
             if (startDate && endDate) {
                 added({text: startDate});
@@ -214,7 +212,6 @@
         }
 
         function added(tag) {
-            console.log('added tag', tag);
             var filterParameters = filterParametersService.get();
             if (!filterParameters[vm.dimension.name]) {
                 filterParameters[vm.dimension.name] = [];

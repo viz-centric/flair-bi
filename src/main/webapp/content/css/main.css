@@ -779,6 +779,38 @@ body.modal-open .animated {
 .flair-date-icon {
   vertical-align: bottom; }
 
+::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 5px; }
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; }
+
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 139, 142, 0.5); }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #888b8e; }
+
+/* CSS used here will be applied after bootstrap.css */
+.modal {
+  display: block !important; }
+
+.modal-dialog {
+  overflow-y: initial !important; }
+
+.modal-body {
+  max-height: calc(100vh - 212px);
+  overflow-y: auto;
+  overflow-x: hidden; }
+
+.swal-icon {
+  width: 50px !important;
+  height: 50px !important; }
+
+.swal-icon--warning__body {
+  height: 25px !important; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1186,7 +1218,7 @@ nav.navbar-static-top {
   transition-property: top, bottom, left, right;
   z-index: 10;
   height: calc(100% - 95px);
-  overflow-y: auto;
+  overflow-y: hidden;
   margin-right: 46px;
   margin-top: 58px; }
   #slider .row {
@@ -1274,6 +1306,11 @@ nav.navbar-static-top {
             color: #353738; }
   #slider label {
     font-weight: 600; }
+  #slider #right-nav-footer button {
+    margin: 0 10px; }
+  #slider .properties {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto; }
 
 .right-nav-option-tabs .first-tab .tooltip {
   left: 0px !important; }
@@ -2727,7 +2764,9 @@ input[type="search"] {
 
 .ui-select-bootstrap > .ui-select-choices {
   margin-top: 0px;
-  border-radius: 0; }
+  border-radius: 0;
+  position: relative;
+  z-index: 999; }
   .ui-select-bootstrap > .ui-select-choices .ui-select-choices-row span.ui-select-choices-row-inner {
     padding: 10px; }
 
@@ -3934,10 +3973,12 @@ jhi-alert .alerts .alert-danger {
   .flairbi-content-header h2 {
     margin: 0px;
     line-height: 39px; }
+  .flairbi-content-header .configuration-options .visual-bookmark {
+    width: 18.66666667%; }
   .flairbi-content-header .configuration-options .visual-edit {
     width: 5%; }
   .flairbi-content-header .configuration-options .visual-arrow {
-    width: 22%; }
+    width: 20%; }
   .flairbi-content-header .configuration-options .visual-msc {
     width: 15%; }
   .flairbi-content-header .configuration-options .apply-bookmarks {
@@ -3949,16 +3990,7 @@ jhi-alert .alerts .alert-danger {
   .flairbi-content-header .configuration-options .options-1 {
     display: flex;
     justify-content: space-around;
-    padding: 0 10px; }
-  .flairbi-content-header .configuration-options .options-1::after {
-    content: "";
-    height: 35px;
-    display: block;
-    border-left: 1px #ced0d1 solid;
-    position: absolute;
-    right: 4%;
-    top: 50%;
-    transform: translateY(-50%); }
+    padding: 0px; }
   .flairbi-content-header .configuration-options .options-1::before {
     content: "";
     height: 35px;
@@ -3986,15 +4018,6 @@ jhi-alert .alerts .alert-danger {
       .flairbi-content-header .configuration-options .options-2 .viz-edit-button md-switch {
         margin: 0px;
         margin-top: 5px; }
-  .flairbi-content-header .configuration-options .options-2::after {
-    content: "";
-    height: 35px;
-    display: block;
-    border-left: 1px #ced0d1 solid;
-    position: absolute;
-    right: -3%;
-    top: 59%;
-    transform: translateY(-50%); }
   .flairbi-content-header .configuration-options .options-3 {
     display: flex;
     justify-content: space-around;
@@ -4136,6 +4159,11 @@ jhi-alert .alerts .alert-danger {
       text-align: center; }
     .flairbi-content-header .apply-bookmarks {
       justify-content: center; } }
+  .flairbi-content-header .vizEditButton {
+    width: 40px;
+    height: 40px;
+    padding: 0 8px;
+    margin-top: 0px; }
 
 .alarm-icon-off {
   fill: #676a6c !important;
@@ -4164,9 +4192,9 @@ jhi-alert .alerts .alert-danger {
     padding-right: 9px;
     padding-left: 0px;
     margin: 7px 7px;
-    margin-left:12px;
+    margin-left: 12px;
     display: flex;
-    align-items: center;}
+    align-items: center; }
     .dashboard-filter-header .clear-all .clear-all-icon {
       padding: 5px;
       font-size: 12px;
@@ -4425,6 +4453,8 @@ jhi-alert .alerts .alert-danger {
           margin-right: 10px; }
         #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-header-button {
           margin: 5px 10px; }
+        #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .live {
+          margin-top: 2px; }
         #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content .viz-header-flip-settings {
           margin-top: 10px; }
         #grid-container .grid-stack-item .grid-stack-item-content .viz-header .viz-header-content md-switch {
@@ -4459,6 +4489,9 @@ jhi-alert .alerts .alert-danger {
     margin-top: 85px; }
   #grid-container.filters-not-applied {
     margin-top: 43px; }
+  #grid-container .vizEditButton {
+    width: 15px;
+    height: 18px; }
 
 .grid-flipper {
   -webkit-perspective: 1000;
@@ -4666,12 +4699,12 @@ jhi-alert .alerts .alert-danger {
     .data-constrains-properties .data-constaraint-conditions-container .data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
-      .data-constrains-properties .data-constaraint-conditions-container .featuresName {
-        margin-top: 20px; }
-        .data-constrains-properties .data-constaraint-conditions-container .featuresName label{
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis; }
+  .data-constrains-properties .data-constaraint-conditions-container .featuresName {
+    margin-top: 20px; }
+  .data-constrains-properties .data-constaraint-conditions-container .featuresName label {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
 
 /* TABLES */
 .table-bordered {
@@ -6347,6 +6380,7 @@ input.select2-active {
   margin-top: 0px; }
 
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
+  margin: 5px;
   display: flex; }
   .scheduler-modal-body .cron-wrap .clearfix .form-group label {
     margin: 5px; }
@@ -6480,8 +6514,7 @@ input.select2-active {
   font-size: 15px; }
 
 .common-create-popup input, .common-create-popup select, .common-create-popup label {
-  border-radius: 10px;
-  margin-top: 7px; }
+  border-radius: 10px; }
 
 .common-create-popup .uploaded-image {
   float: right; }

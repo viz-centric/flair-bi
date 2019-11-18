@@ -44,6 +44,8 @@
                     result['yAxisColor'] = VisualizationUtils.getPropertyValue(record.properties, 'Y Axis Colour');
                     result['showXaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
                     result['showYaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
+                    result['axisScaleLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Axis Scale Label');
+
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
@@ -95,14 +97,8 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var line = $rootScope.updateWidget[record.id];
 
-                        line.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="line-' + element[0].id + '" ></div>')
                     var div = $('#line-' + element[0].id)
@@ -117,8 +113,26 @@
                         .data(record.data);
 
                     line(div[0])
-                    if (!isNotification) {
+
+                    return line;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var line = $rootScope.updateWidget[record.id];
+
+                            line.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+
+                        var line = createChart();
                         $rootScope.updateWidget[record.id] = line;
+
                     }
                 }
             }

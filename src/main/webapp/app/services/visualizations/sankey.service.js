@@ -47,15 +47,7 @@
                     }
                     return result;
                 }
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var sankey = $rootScope.updateWidget[record.id];
-                        sankey
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="sankey-' + element[0].id + '" ></div>')
                     var div = $('#sankey-' + element[0].id)
@@ -66,11 +58,28 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     sankey(div[0])
 
-                    $rootScope.updateWidget[record.id] = sankey;
+                    return sankey;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var sankey = $rootScope.updateWidget[record.id];
+                            sankey
+                                .config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    } else {
+                        var sankey = createChart();
+                        $rootScope.updateWidget[record.id] = sankey;
+                    }
                 }
             }
         }

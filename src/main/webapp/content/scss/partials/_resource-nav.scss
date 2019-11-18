@@ -9,7 +9,7 @@
     transition-property: top, bottom, left, right;
     z-index: 10;
     height: calc(100% - 95px);
-    overflow-y: auto;
+    overflow-y: hidden;
     margin-right: 46px;
     margin-top: 58px;
     .row {
@@ -128,6 +128,13 @@
     }
     label {
         font-weight: 600;
+    }
+    #right-nav-footer button{
+        margin: 0 10px; 
+    }
+    .properties{
+        max-height:calc(100vh - 200px);
+        overflow-y: auto;
     }
 }
 

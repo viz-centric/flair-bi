@@ -126,6 +126,9 @@
                     .viz-header-button {
                         margin: 5px 10px;
                     }
+                    .live {
+                        margin-top: 2px;
+                    }
                     .viz-header-flip-settings {
                         margin-top:10px;
                     }
@@ -175,6 +178,10 @@
     }
     &.filters-not-applied{
         margin-top: 43px;
+    }
+    .vizEditButton{
+        width: 15px;
+        height: 18px;
     }
 }
 

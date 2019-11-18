@@ -177,7 +177,9 @@
             showSideBar();
             vm.propertiesToggled = true;
             vm.sideBarTab = "properties";
+            vm.propTab = "viz-properties";
             $('#slider').css('display','block');
+            $('#properties').scrollTop(0)
             $timeout(function() {
                  $scope.$broadcast('reCalcViewDimensions');
             }); 

@@ -33,15 +33,7 @@
                     return result;
                 }
 
-
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var wordcloud = $rootScope.updateWidget[record.id];
-                        wordcloud
-                            .config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                } else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="wordcloud-' + element[0].id + '" ></div>')
                     var div = $('#wordcloud-' + element[0].id)
@@ -52,9 +44,25 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     wordcloud(div[0])
+
+                    return wordcloud;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                    if ($rootScope.filterSelection.id != record.id) {
+                        var wordcloud = $rootScope.updateWidget[record.id];
+                        wordcloud
+                            .config(getProperties(VisualizationUtils, record))
+                            .update(record.data);
+                    }
+                } else {
+                    var wordcloud = createChart();
 
                     $rootScope.updateWidget[record.id] = wordcloud;
                 }

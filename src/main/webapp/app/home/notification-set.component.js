@@ -115,13 +115,13 @@
             Visualmetadata.get({
                 id: removePrefix(notification.report.thresholdAlert, notification.report_line_item.visualizationid)
             }, function (v) {
-                if (vm.notificationSupportCharts.indexOf(notification.report_line_item.visualization) >= 0) {
+                //if (vm.notificationSupportCharts.indexOf(notification.report_line_item.visualization) >= 0) {
                     v.data = JSON.parse(queryResponse);
                     v.build_url = notification.report.build_url;
                     v.share_link = notification.report.share_link;
                     v.comment = notification.report.mail_body;
                     vm.visualmetadata.push(new VisualWrap(v));
-                }
+                //}
             });
         }
     

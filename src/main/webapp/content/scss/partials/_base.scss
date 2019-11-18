@@ -902,3 +902,44 @@ body.modal-open .animated {
 .flair-date-icon{
     vertical-align: bottom;
 }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 5px;
+  }
+  
+ 
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: rgba(136, 139, 142, 0.5); 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(136, 139, 142); 
+  }
+
+/* CSS used here will be applied after bootstrap.css */
+
+.modal{
+    display: block !important;
+}
+.modal-dialog{
+      overflow-y: initial !important
+}
+.modal-body{
+  max-height: calc(100vh - 212px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.swal-icon{
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .swal-icon--warning__body{
+    height: 25px !important;
+  }

@@ -71,14 +71,7 @@
                     return result;
                 }
 
-                if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
-                    if ($rootScope.filterSelection.id != record.id) {
-                        var heatmap = $rootScope.updateWidget[record.id];
-                        heatmap.config(getProperties(VisualizationUtils, record))
-                            .update(record.data);
-                    }
-                }
-                else {
+                function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="heatmap-' + element[0].id + '" ></div>')
                     var div = $('#heatmap-' + element[0].id)
@@ -89,16 +82,29 @@
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     heatmap(div[0])
-                    if (!isNotification) {
+                    return heatmap;
+                }
+                if (isNotification) {
+                    createChart();
+                }
+                else {
+                    if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
+                        if ($rootScope.filterSelection.id != record.id) {
+                            var heatmap = $rootScope.updateWidget[record.id];
+                            heatmap.config(getProperties(VisualizationUtils, record))
+                                .update(record.data);
+                        }
+                    }
+                    else {
+                        var heatmap = createChart();
                         $rootScope.updateWidget[record.id] = heatmap;
                     }
-
                 }
             }
         }
-
     }
 })();

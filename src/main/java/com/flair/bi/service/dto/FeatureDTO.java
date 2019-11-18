@@ -14,7 +14,7 @@ public class FeatureDTO {
 
     @NotNull
     @Size(max = 40)
-    @Pattern(regexp = "[a-z_0-9]+")
+    @Pattern(regexp = "[a-zA-Z_0-9]+")
     private String name;
 
     @NotNull

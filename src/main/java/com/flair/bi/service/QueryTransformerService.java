@@ -36,7 +36,7 @@ public class QueryTransformerService {
     private final FeatureService featureService;
 
     public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) {
-        log.info("Map to query {} params {}", queryDTO.toString(), params);
+        log.debug("Map to query {} params {}", queryDTO.toString(), params);
         return toQuery(queryDTO, params.getConnectionName(), params.getVId(), params.getUserId(), params.getDatasourceId());
     }
 

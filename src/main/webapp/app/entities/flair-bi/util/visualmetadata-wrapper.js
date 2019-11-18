@@ -270,7 +270,7 @@
         var measures = this.fields
             .filter(isMeasure);
       
-        if (this.metadataVisual.name == "Table") {
+        if (this.metadataVisual.name == "Table" || this.metadataVisual.name == "Pivot Table") {
             query.offset= this.getChartPropertyValue('Limit', 20)*offset
 
         }

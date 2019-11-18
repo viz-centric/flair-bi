@@ -40,12 +40,15 @@
         line-height: 39px;
     }
     .configuration-options {
-       
+
+        .visual-bookmark{
+            width: 18.66666667%
+        }
         .visual-edit {
             width: 5%;
         }
         .visual-arrow{
-            width: 22%;
+            width: 20%;
         }
         .visual-msc{
             width: 15%;
@@ -61,19 +64,19 @@
         .options-1 {
             display: flex;
             justify-content: space-around;
-            padding: 0 10px;
+            padding: 0px;
             //border-right: 1px lighten($icons-color, 40%) solid;
         }
-        .options-1::after{
-              content: "";
-              height: 35px;
-              display: block;
-              border-left: 1px lighten($icons-color, 40%) solid;
-              position: absolute;
-              right: 4%;
-              top: 50%;
-              transform: translateY(-50%);
-        }
+        // .options-1::after{
+        //       content: "";
+        //       height: 35px;
+        //       display: block;
+        //       border-left: 1px lighten($icons-color, 40%) solid;
+        //       position: absolute;
+        //       right: 4%;
+        //       top: 50%;
+        //       transform: translateY(-50%);
+        // }
         .options-1::before{
               content: "";
               height: 35px;
@@ -107,16 +110,16 @@
                 }
             }
         }
-        .options-2::after{
-              content: "";
-              height: 35px;
-              display: block;
-              border-left: 1px lighten($icons-color, 40%) solid;
-              position: absolute;
-              right: -3%;
-              top: 59%;
-              transform: translateY(-50%);
-        }
+        // .options-2::after{
+        //       content: "";
+        //       height: 35px;
+        //       display: block;
+        //       border-left: 1px lighten($icons-color, 40%) solid;
+        //       position: absolute;
+        //       right: -3%;
+        //       top: 59%;
+        //       transform: translateY(-50%);
+        // }
         .options-3 {
             display: flex;
             justify-content: space-around;
@@ -328,6 +331,12 @@
             justify-content: center;
         }
     }
+    .vizEditButton{
+        width: 40px;
+        height: 40px;
+        padding: 0 8px;
+        margin-top: 0px;
+    }
 }
 .alarm-icon-off{
     fill:#676a6c !important; 
@@ -337,6 +346,7 @@
     fill:#439dd3 !important; 
     stroke:#439dd3 !important; 
 }
+
 .flairbi-content-header-fullscreen {
     padding: 0;
     padding-top: 6px;

@@ -19,13 +19,14 @@
 
         ////////////////
         function printWidgets(widgetIds, dashboardName, viewName, buildURL) {
-
+            
             var docDefinition = {
                 content: [],
                 images: {}
             };
 
             var promises = [];
+            var fileName = "";
 
             widgetIds.forEach(function (item) {
 
@@ -33,7 +34,7 @@
                     .then(function (dataUrl) {
                         var img = new Image();
                         img.src = dataUrl;
-                        
+                        fileName = item.widgetsTitle;
                         docDefinition.content.push({
                             text: item.widgetsTitle,
                             margin: 10,
@@ -55,11 +56,14 @@
 
             $q.all(promises).then(function () {
 
+                if (widgetIds.length > 1) {
+                    fileName = viewName;
+                }
                 docDefinition.header = function (currentPage, pageCount, pageSize) {
                     return {
                         margin: 10,
                         table: {
-                            widths: [170,170,170],
+                            widths: [170, 170, 170],
                             body: [
                                 [
                                     {
@@ -98,7 +102,7 @@
                         layout: 'noBorders'
                     }
                 }
-                pdfMake.createPdf(docDefinition).download(CryptoService.UUIDv4() + '-widgets.pdf');
+                pdfMake.createPdf(docDefinition).download(fileName + ".pdf");
             });
         }
     }

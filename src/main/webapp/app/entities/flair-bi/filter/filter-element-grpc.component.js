@@ -18,14 +18,15 @@
 
     function filterElementGrpcController($scope, proxyGrpcService, filterParametersService,$timeout,FilterStateManagerService,$rootScope,$filter,VisualDispatchService,stompClientService) {
         var vm = this;
-
+        var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         vm.$onInit = activate;
         vm.load = load;
         vm.added = added;
         vm.removed = removed;
-        vm.datePickerOpenStatus = {};
-        vm.openCalendar = openCalendar;
-        vm.metaData=[];
+        vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
+        vm.onRefreshDay = refreshForDay;
+        vm.onRefreshRange = refreshForRange;
+        vm.onRefreshDynamic = onRefreshDynamic;
 
 
         ////////////////
@@ -37,6 +38,33 @@
 
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
+        }
+
+        function refreshForDay() {
+            var startDate = vm.dimension.selected;
+            removeFilter(vm.dimension.name);
+            if (startDate) {
+                added({text: startDate});
+            }
+        }
+
+        function onRefreshDynamic() {
+
+        }
+
+        function refreshForRange() {
+            var startDate = vm.dimension.selected;
+            var endDate = vm.dimension.selected2;
+            removeFilter(vm.dimension.name);
+            if (startDate && endDate) {
+                added({text: startDate});
+                added({text: endDate});
+            }
+        }
+
+        function canDisplayDateRangeControls(dimension) {
+            var type = dimension && dimension.type;
+            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
 
         function registerRemoveTag() {
@@ -56,49 +84,54 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function processRemoveTag(tag){
-        if(isTagExist(tag)){
-            removed(tag);
-            removeTagFromSelectedList(tag);
-        }
-        applyFilter();
+        function processRemoveTag(tag) {
+            if (isTagExist(tag)) {
+                removed(tag);
+                removeTagFromSelectedList(tag);
+            }
+            applyFilter();
         }
 
-        function processRemoveFilter(filter){
-        var filterParameters = filterParametersService.get();
-        if(filterParameters[filter]==undefined){
-            applyFilter();
-        }
-        else{if(filterParameters[filter].length!=0){
-            $filter('filter')(vm.dimensions, {'name':filter})[0].selected=[];
-            filterParameters[filter]=[];
+        function removeFilter(filter) {
+            var filterParameters = filterParametersService.get();
+            filterParameters[filter] = [];
             filterParametersService.save(filterParameters);
-            applyFilter();
         }
+
+        function processRemoveFilter(filter) {
+            var filterParameters = filterParametersService.get();
+            if (filterParameters[filter] == undefined) {
+                applyFilter();
+            } else {
+                if (filterParameters[filter].length != 0) {
+                    var found = $filter('filter')(vm.dimensions, {'name': filter})[0];
+                    found.selected = [];
+                    found.selected2 = [];
+                    filterParameters[filter] = [];
+                    filterParametersService.save(filterParameters);
+                    applyFilter();
+                }
+            }
         }
-    }
-        function isString(filter){
+
+        function isString(filter) {
             return typeof filter === 'string' || filter instanceof String;
         }
 
-        function isTagExist(tag){
+        function isTagExist(tag) {
             var filterParameters = filterParametersService.get();
             var tag = $filter('filter')(filterParameters[vm.dimension.name], tag['text']);
-            return tag==undefined?false:true;
+            return tag == undefined ? false : true;
         }
 
 
-        function applyFilter(){
+        function applyFilter() {
             FilterStateManagerService.add(angular.copy(filterParametersService.get()));
             $rootScope.$broadcast('flairbiApp:filter');
         }
 
-        function openCalendar(date) {
-            vm.datePickerOpenStatus[date] = true;
-        }
-
         function load(q, dimension) {
-            var vId=dimension.id;
+            var vId = dimension.id;
             var query = {};
             query.fields = [dimension.name];
             if (q) {
@@ -114,24 +147,16 @@
             query.distinct = true;
             query.limit = 100;
             proxyGrpcService.forwardCall(
-                vm.view.viewDashboard.dashboardDatasource.id, {
-                    queryDTO: query,
-                    vId:vId
-                }
+              vm.view.viewDashboard.dashboardDatasource.id, {
+                  queryDTO: query,
+                  vId: vId
+              }
             );
-            // .then(function (result) {
-                // var retVal = result.data.data.map(function (item) {
-                //         return item[dimensionName.toLowerCase()];
-                // });
-            //     return retVal; 
-            // }, function (reason) {
-            //     return [];
-            // });
         }
 
         function removed(tag) {
             var filterParameters = filterParametersService.get();
-            var array = filterParameters[vm.dimension.name]==undefined?filterParameters[vm.dimension.name.toLowerCase()]:filterParameters[vm.dimension.name];
+            var array = filterParameters[vm.dimension.name] == undefined ? filterParameters[vm.dimension.name.toLowerCase()] : filterParameters[vm.dimension.name];
             var index = array.indexOf(tag['text']);
             if (index > -1) {
                 array.splice(index, 1);
@@ -140,12 +165,11 @@
             filterParametersService.save(filterParameters);
         }
 
-        function removeTagFromSelectedList(tag){
+        function removeTagFromSelectedList(tag) {
             var index = -1;
-            vm.dimension.selected.some(function(obj, i) {
-            return obj.text === tag['text'] ? index = i : false;
+            vm.dimension.selected.some(function (obj, i) {
+                return obj.text === tag['text'] ? index = i : false;
             });
-            //var index = vm.dimension.selected.indexOf(tag);
             if (index > -1) {
                 vm.dimension.selected.splice(index, 1);
             }
@@ -161,6 +185,7 @@
                 });
             } else {
                 vm.dimension.selected = [];
+                vm.dimension.selected2 = [];
             }
         }
 
@@ -170,6 +195,9 @@
                 filterParameters[vm.dimension.name] = [];
             }
             filterParameters[vm.dimension.name].push(tag['text']);
+            filterParameters[vm.dimension.name]._meta = {
+                dataType: vm.dimension.type
+            };
             filterParametersService.save(filterParameters);
         }
 

@@ -40,11 +40,26 @@
             registerRemoveTag();
         }
 
+        function resetTimezone(startDate) {
+            var date = new Date(startDate);
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            return date;
+        }
+
+        function endOfDay(startDate) {
+            var date = new Date(startDate);
+            date.setHours(23, 59 - date.getTimezoneOffset(), 59);
+            return date;
+        }
+
         function refreshForDay() {
             var startDate = vm.dimension.selected;
             removeFilter(vm.dimension.name);
             if (startDate) {
+                startDate = resetTimezone(startDate);
+                var nextDay = endOfDay(startDate);
                 added({text: startDate});
+                added({text: nextDay});
             }
         }
 
@@ -57,6 +72,8 @@
             var endDate = vm.dimension.selected2;
             removeFilter(vm.dimension.name);
             if (startDate && endDate) {
+                startDate = resetTimezone(startDate);
+                endDate = resetTimezone(endDate);
                 added({text: startDate});
                 added({text: endDate});
             }

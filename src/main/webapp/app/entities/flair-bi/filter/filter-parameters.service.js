@@ -90,6 +90,7 @@
             var meta = values._meta || {};
             var dataType = meta.dataType || '';
             if (COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1) {
+                console.log('values', values);
                 if (values.length === 2) {
                     return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {

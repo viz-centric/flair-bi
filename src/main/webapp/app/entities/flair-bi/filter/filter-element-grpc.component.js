@@ -63,8 +63,15 @@
             }
         }
 
-        function onRefreshDynamic() {
-
+        function onRefreshDynamic(startDate) {
+            removeFilter(vm.dimension.name);
+            if (startDate) {
+                startDate = resetTimezone(startDate);
+                var today = resetTimezone(new Date());
+                added({text: startDate});
+                added({text: today});
+            }
+            applyFilter();
         }
 
         function refreshForRange() {

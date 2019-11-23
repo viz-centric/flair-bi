@@ -11,10 +11,14 @@
                 class="btn btn-default"
                 ng-class="{'active':vm.dateRangeTab == 1}"
                 ng-click="vm.onDateRangeClick(1)">Range</button>
+        <button type="button"
+                class="btn btn-default"
+                ng-class="{'active':vm.dateRangeTab == 2}"
+                ng-click="vm.onDateRangeClick(2)">Dynamic</button>
     </div>
     <div class="form-group"
          ng-if="vm.dateRangeTab === 0">
-        <label class="control-label" for="startDate1">Since:</label>
+        <label class="control-label" for="startDate1">Day:</label>
         <div class="input-group">
             <input id="startDate1"
                    readonly
@@ -73,26 +77,38 @@
             </span>
         </div>
     </div>
-    <div class="form-group"
-         style="padding: 10px 0 0 0"
-         ng-if="vm.dateRangeTab === 2">
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle"
-                    type="button"
-                    id="dateRangeDynamic"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="true">
-                Choose period:
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu"
-                aria-labelledby="dateRangeDynamic">
-                <li><a href="#">Week to date</a></li>
-                <li><a href="#">Month to date</a></li>
-                <li><a href="#">Quarter to date</a></li>
-                <li><a href="#">Year to date</a></li>
-            </ul>
+    <div ng-if="vm.dateRangeTab === 2">
+        <div class="form-group"
+             style="padding: 10px 0 0 0">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle"
+                        type="button"
+                        id="dateRangeDynamic"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="true">
+                    {{vm.currentDynamicDateRangeConfig.title || 'Choose period'}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu"
+                    aria-labelledby="dateRangeDynamic">
+                    <li ng-repeat="config in vm.dynamicDateRangeConfig">
+                        <a href="javascript:;"
+                           ng-click="vm.onDynamicDateRangeChanged(config)">
+                           {{config.title}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group"
+            ng-if="vm.currentDynamicDateRangeConfig.isCustom">
+            <label for="customDateRange">Days:</label>
+            <input type="text"
+                   class="form-control"
+                   id="customDateRange"
+                   ng-change="vm.onCustomDynamicDateRangeChange()"
+                   ng-model="vm.customDynamicDateRange">
         </div>
     </div>
 </div>

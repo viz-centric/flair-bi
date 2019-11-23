@@ -4,7 +4,7 @@
         <filter-date-range dimension="vm.dimension"
             on-refresh-day="vm.onRefreshDay()"
             on-refresh-range="vm.onRefreshRange()"
-            on-refresh-dynamic="vm.onRefreshDynamic()">
+            on-refresh-dynamic="vm.onRefreshDynamic(startDate)">
         </filter-date-range>
     </div>
     <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">

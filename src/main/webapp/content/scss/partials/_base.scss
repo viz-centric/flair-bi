@@ -943,3 +943,7 @@ body.modal-open .animated {
   .swal-icon--warning__body{
     height: 25px !important;
   }
+
+.md-icon-button + .md-datepicker-input-container {
+    margin-left: 0px;
+}

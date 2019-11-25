@@ -16,7 +16,9 @@
          ng-if="vm.dateRangeTab === 0">
         <label class="control-label" for="startDate1">Since:</label>
         <div class="input-group">
-            <input id="startDate1"
+          <md-datepicker id="startDate1" ng-model="vm.dimension.selected" ng-change="vm.onInputChange()" md-placeholder="Enter date"></md-datepicker>
+
+<!--             <input id="startDate1"
                    readonly
                    type="text"
                    class="form-control"
@@ -31,14 +33,14 @@
                 <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
                     <i class="glyphicon glyphicon-calendar"></i>
                 </button>
-            </span>
+            </span> -->
         </div>
     </div>
     <div class="form-group"
          ng-if="vm.dateRangeTab === 1">
         <label class="control-label" for="startDate">Date:</label>
         <div class="input-group">
-            <input id="startDate"
+<!--             <input id="startDate"
                    readonly
                    type="text"
                    class="form-control"
@@ -52,11 +54,12 @@
                 <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'startDate')">
                     <i class="glyphicon glyphicon-calendar"></i>
                 </button>
-            </span>
+            </span> -->
+          <md-datepicker id="startDate" ng-model="vm.dimension.selected" ng-change="vm.onInputChange()" md-placeholder="Start date"></md-datepicker>
         </div>
         <label class="control-label" for="endDate">End date:</label>
         <div class="input-group">
-            <input id="endDate"
+<!--             <input id="endDate"
                    readonly
                    type="text"
                    class="form-control"
@@ -70,7 +73,8 @@
                 <button type="button" class="btn btn-default" ng-click="vm.toggleCalendar($event, 'endDate')">
                     <i class="glyphicon glyphicon-calendar"></i>
                 </button>
-            </span>
+            </span> -->
+          <md-datepicker id="endDate" ng-model="vm.dimension.selected2" ng-change="vm.onInputChange()" md-placeholder="End Date"></md-datepicker>
         </div>
     </div>
     <div class="form-group"

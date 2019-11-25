@@ -48,7 +48,7 @@
         "$rootScope",
         "$window"
     ];
-    angularThemingConfig.$inject = ["$mdThemingProvider"];
+    angularThemingConfig.$inject = ["$mdThemingProvider","$mdDateLocaleProvider"];
 
     function run(stateHandler, translationHandler, $rootScope, $window) {
         stateHandler.initialize();
@@ -211,7 +211,7 @@
         };
     }
 
-    function angularThemingConfig($mdThemingProvider) {
+    function angularThemingConfig($mdThemingProvider,$mdDateLocaleProvider) {
         $mdThemingProvider
             .theme("default")
             .primaryPalette("blue", {
@@ -223,5 +223,9 @@
             .accentPalette("blue", {
                 default: "200"
             });
+
+        $mdDateLocaleProvider.formatDate = function(date) {
+           return moment(date).format('YYYY-MM-DD');
+        };
     }
 })();

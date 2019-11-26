@@ -225,7 +225,8 @@
             });
 
         $mdDateLocaleProvider.formatDate = function(date) {
-           return moment(date).format('YYYY-MM-DD');
+            var m = moment(date);
+            return m.isValid()? m.format('YYYY-MM-DD') : '';
         };
     }
 })();

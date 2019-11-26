@@ -20,18 +20,18 @@
          ng-if="vm.dateRangeTab === 0">
         <label class="control-label" for="startDate1">Day:</label>
         <div class="input-group">
-          <md-datepicker id="startDate1" ng-model="vm.dimension.selected" ng-change="vm.onInputChange()" md-placeholder="Enter date"></md-datepicker>
+          <md-datepicker class="md-datepicker-flair" id="startDate1" ng-model="vm.dimension.selected" ng-change="vm.onInputChange()" md-placeholder="Enter date"></md-datepicker>
         </div>
     </div>
     <div class="form-group"
          ng-if="vm.dateRangeTab === 1">
         <label class="control-label" for="startDate">Date:</label>
         <div class="input-group">
-          <md-datepicker id="startDate" ng-model="vm.dimension.selected" ng-change="vm.onInputChange()" md-placeholder="Start date"></md-datepicker>
+          <md-datepicker class="md-datepicker-flair" id="startDate" ng-model="vm.dimension.selected" ng-change="vm.onInputChange()" md-placeholder="Start date"></md-datepicker>
         </div>
         <label class="control-label" for="endDate">End date:</label>
         <div class="input-group">
-          <md-datepicker id="endDate" ng-model="vm.dimension.selected2" ng-change="vm.onInputChange()" md-placeholder="End Date"></md-datepicker>
+          <md-datepicker class="md-datepicker-flair" id="endDate" ng-model="vm.dimension.selected2" ng-change="vm.onInputChange()" md-placeholder="End Date"></md-datepicker>
         </div>
     </div>
     <div ng-if="vm.dateRangeTab === 2">

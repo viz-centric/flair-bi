@@ -60,8 +60,6 @@
         var vm = this;
 
         vm.$onInit = onInit;
-        vm.datePickerOpenStatus = {};
-        vm.toggleCalendar = toggleCalendar;
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
@@ -70,16 +68,12 @@
         vm.customDynamicDateRange = 1;
         vm.currentDynamicDateRangeConfig = null;
         vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
+        vm.dimension.selected='';
+        vm.dimension.selected2='';
 
         ////////////////
 
         function onInit() {
-        }
-
-        function toggleCalendar(e, date) {
-            e.preventDefault();
-            e.stopPropagation();
-            vm.datePickerOpenStatus[date] = !vm.datePickerOpenStatus[date];
         }
 
         function onDateRangeClick(tabIndex) {

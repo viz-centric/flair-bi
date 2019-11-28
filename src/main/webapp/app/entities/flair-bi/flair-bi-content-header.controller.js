@@ -440,6 +440,7 @@
             
             $event.preventDefault();
             if(isDateRange(key)){
+                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges',{startDate:'',endDate:''});
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));

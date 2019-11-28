@@ -116,6 +116,7 @@
                             body = createBetweenExpressionBody(changeDateFormat(values[0]),
                               changeDateFormat(values[1]),
                               name.split('|')[1]);
+                            setDatesInRightSideFilters(changeDateFormat(values[0]),changeDateFormat(values[1]));
                         } else {
                             body = createBodyExpr(values, name);
                         }
@@ -157,6 +158,10 @@
 
         function getDateRangePrefix(){
             return dateRangePrefix;
+        }
+
+        function setDatesInRightSideFilters(startDate,endDate){
+            $rootScope.$broadcast('flairbiApp:filter-set-date-ranges',{startDate:startDate,endDate:endDate});
         }
     }
 })();

@@ -103,6 +103,8 @@
                             .data(record.data);
                     }
                     else {
+
+                        config["showTotal"]=true;
                         pivot = flairVisualizations.table()
                             .config(config)
                             .broadcast($rootScope)

@@ -457,8 +457,9 @@
                     var dlen=$(event.target).parents().hasClass('entity-type')==true?1:0;  
                     var dcLen=$(event.target).parents().hasClass('data-constraint-operation-button')==true?1:0;
                     var pLen=$(event.target).parents().hasClass('md-color-picker-clear')==true?1:0;
+                    var cdatepicker=$(event.target).parents().is('.md-calendar-date,.md-calendar-month-label')==true?1:0;
                     var len=$(event.target).parents('.tag-item').length+$(event.target).parents('.suggestion-item').length+
-                            $(event.target).parents('.suggestion-list').length+pLen+dcLen+dlen+cpicker+gridLen;
+                            $(event.target).parents('.suggestion-list').length+pLen+dcLen+dlen+cpicker+gridLen+cdatepicker;
                         if (trigger !== event.target && !trigger.has(event.target).length && len == 0) {
                             $('#slider').css('display', 'none');
                             onVizualizationsClose();

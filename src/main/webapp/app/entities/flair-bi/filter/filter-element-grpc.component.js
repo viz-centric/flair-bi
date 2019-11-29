@@ -54,22 +54,23 @@
 
         function refreshForDay() {
             var startDate = vm.dimension.selected;
-            removeFilter(vm.dimension.name);
+            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate) {
                 startDate = resetTimezone(startDate);
                 var nextDay = endOfDay(startDate);
-                added({text: startDate});
-                added({text: nextDay});
+                addDateRangeFilter(startDate);
+                addDateRangeFilter(nextDay);
+
             }
         }
 
         function onRefreshDynamic(startDate) {
-            removeFilter(vm.dimension.name);
+            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate) {
                 startDate = resetTimezone(startDate);
                 var today = resetTimezone(new Date());
-                added({text: startDate});
-                added({text: today});
+                addDateRangeFilter(startDate);
+                addDateRangeFilter(today);
             }
             applyFilter();
         }
@@ -77,12 +78,12 @@
         function refreshForRange() {
             var startDate = vm.dimension.selected;
             var endDate = vm.dimension.selected2;
-            removeFilter(vm.dimension.name);
+            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate && endDate) {
                 startDate = resetTimezone(startDate);
                 endDate = resetTimezone(endDate);
-                added({text: startDate});
-                added({text: endDate});
+                addDateRangeFilter(startDate);
+                addDateRangeFilter(endDate);
             }
         }
 
@@ -222,6 +223,20 @@
             filterParameters[vm.dimension.name]._meta = {
                 dataType: vm.dimension.type
             };
+            filterParametersService.save(filterParameters);
+        }
+
+        function addDateRangeFilter(date){
+            var filterParameters = filterParametersService.get();
+            var dateRangeName=filterParametersService.buildDateRangeFilterName(vm.dimension.name);
+            delete filterParameters[ vm.dimension.name];
+            if (!filterParameters[dateRangeName]) {
+                filterParameters[dateRangeName] = [];
+            }
+            filterParameters[dateRangeName].push(date);
+            // filterParameters[vm.dimension.name]._meta = {
+            //     dataType: vm.dimension.type
+            // };
             filterParametersService.save(filterParameters);
         }
 

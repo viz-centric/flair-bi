@@ -20,7 +20,8 @@
             getConditionExpression: getConditionExpression,
             getFiltersCount:getFiltersCount,
             getDateRangePrefix:getDateRangePrefix,
-            changeDateFormat:changeDateFormat
+            changeDateFormat:changeDateFormat,
+            buildDateRangeFilterName:buildDateRangeFilterName
         };
 
 
@@ -162,6 +163,10 @@
 
         function setDatesInRightSideFilters(startDate,endDate){
             $rootScope.$broadcast('flairbiApp:filter-set-date-ranges',{startDate:startDate,endDate:endDate});
+        }
+
+        function buildDateRangeFilterName(name){
+            return dateRangePrefix+"|"+name;
         }
     }
 })();

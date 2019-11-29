@@ -116,7 +116,6 @@
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
                 vm.dimension.selected=dateRange.startDate;
                 vm.dimension.selected2=dateRange.endDate;
-                vm.dateRangeTab = TAB_RANGE;
             });
 
             $scope.$on('$destroy', unsubscribe);

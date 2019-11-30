@@ -231,7 +231,8 @@
             }
             filterParameters[vm.dimension.name].push(tag['text']);
             filterParameters[vm.dimension.name]._meta = {
-                dataType: vm.dimension.type
+                dataType: vm.dimension.type,
+                valueType: 'valueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
         }

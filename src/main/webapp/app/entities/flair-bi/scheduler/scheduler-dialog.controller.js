@@ -14,6 +14,8 @@
         };
         $scope.isCronDisabled = false;
 
+        var TIME_UNIT = [{value: 'hours', title: 'Hours'}, {value: 'days', title: 'Days'}];
+        var TIME_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var vm = this;
         vm.cronConfig = {quartz: false};
         vm.clear = clear;
@@ -21,6 +23,7 @@
         vm.timezoneGroups = TIMEZONES;
         vm.channels=scheduler_channels;
         vm.COMPARISIONS=COMPARISIONS;
+        vm.TIME_UNIT = TIME_UNIT;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.loadUsers=loadUsers;
@@ -37,7 +40,9 @@
         vm.thresholdAlert=thresholdAlert;
         vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
         vm.condition={};
+        vm.timeConditions={};
         vm.features=[];
+        vm.timeCompatibleDimensions=[];
         vm.vizIdPrefix='threshold_alert_:';
         vm.scheduleObj={
             "datasourceid":0,
@@ -72,6 +77,8 @@
                 "start_date": new Date(),
                 "end_date": new Date()
             },
+            "constraints": {
+            },
             "putcall":false,
             "emailReporter":false
           };
@@ -82,28 +89,38 @@
         function activate() {
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            var cronstrue = window.cronstrue;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;
                 vm.view=view;
-                getScheduleReport(visualMetaData.id);
-                getThresholdMeasureList(visualMetaData.fields);
-                vm.datasource= datasource;
-                if($rootScope.isThresholdAlert){
-                    vm.scheduleObj.report.thresholdAlert=true;
-                    vm.condition.value=$rootScope.ThresholdViz.measureValue;
-                    vm.condition.featureName=$rootScope.ThresholdViz.measure;
-                }
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+                initFeatures(view.id)
+                  .then(function () {
+                      vm.datasource= datasource;
+                      getScheduleReport(visualMetaData.id);
+                      getThresholdMeasureList(visualMetaData.fields);
+                      if($rootScope.isThresholdAlert){
+                          vm.scheduleObj.report.thresholdAlert=true;
+                          vm.condition.value=$rootScope.ThresholdViz.measureValue;
+                          vm.condition.featureName=$rootScope.ThresholdViz.measure;
+                      }
+                      buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+                  });
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
                 if(scheduledObj){
                     vm.emailReporterEdit=true;
-                    getVisualmetadata(scheduledObj);
-                    updateScheduledObj(scheduledObj);
+                    getVisualmetadata(scheduledObj)
+                      .then(function (value) {
+                          return initFeatures(vm.view.id);
+                      })
+                      .then(function () {
+                          return buildScheduledObject(scheduledObj, vm.visualMetaData);
+                      })
+                      .then(function () {
+                          return updateScheduledObj(scheduledObj);
+                      });
                 }else{
                     loadDashboards();
                 }
@@ -111,13 +128,41 @@
             }
         }
 
+        function initFeatures(visualId) {
+            return Features.query({view: visualId})
+              .$promise
+              .then(function (features) {
+                  initTimeDimensions(features);
+              })
+              .catch(function(error) {
+                  $rootScope.showErrorSingleToast({
+                      text: error.data.message,
+                      title: "Error"
+                  });
+              });
+        }
+
+        function initTimeDimensions(features) {
+            vm.timeCompatibleDimensions = features
+              .filter(function (feature) {
+                  return feature.featureType === "DIMENSION";
+              })
+              .filter(function (feature) {
+                  return isTimeType(feature);
+              });
+        }
+
+        function isTimeType(feature) {
+            var type = feature && feature.type;
+            return TIME_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+        }
+
         function getVisualmetadata(scheduledObj){
-            Visualmetadata.get({
+            return Visualmetadata.get({
                 id: removePrefix(scheduledObj.report_line_item.visualizationid)
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 getThresholdMeasureList(vm.visualMetaData.fields);
-                buildScheduledObject(scheduledObj,vm.visualMetaData);
             });
         }
 
@@ -138,6 +183,24 @@
             }   );
         }
 
+        function setTimeConditions(timeConditions) {
+            if (timeConditions) {
+                // if (vm.timeCompatibleDimensions) {
+                    vm.timeConditions.feature = vm.timeCompatibleDimensions.find(function (item) {
+                        return item.definition === timeConditions.featureName;
+                    });
+                // } else {
+                //     vm.timeConditions.feature = {
+                //         definition: timeConditions.featureName
+                //     };
+                // }
+                vm.timeConditions.value = timeConditions.value;
+                vm.timeConditions.unit = vm.TIME_UNIT.find(function (unit) {
+                    return unit.value === timeConditions.unit;
+                });
+            }
+        }
+
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
             $scope.cronExpression=data.schedule.cron_exp;
@@ -146,8 +209,13 @@
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
             vm.scheduleObj.report.thresholdAlert=data.report.thresholdAlert;
-            if(vm.scheduleObj.report.thresholdAlert)
+            vm.scheduleObj.constraints=data.constraints;
+            if (vm.scheduleObj.report.thresholdAlert) {
                 setHavingDTO(JSON.parse(data.query));
+            }
+            if (vm.scheduleObj.constraints) {
+                setTimeConditions(vm.scheduleObj.constraints.time);
+            }
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
                 addEmailList(data.assign_report.email_list);
@@ -177,6 +245,14 @@
             });
         }
 
+        function assignTimeConditionsToScheduledObj() {
+            vm.scheduleObj.constraints.time = {
+                featureName: vm.timeConditions.feature.definition,
+                value: vm.timeConditions.value,
+                unit: vm.timeConditions.unit.value
+            };
+        }
+
         function buildScheduledObject(scheduledObj,visualMetaData){
             vm.scheduleObj.report.dashboard_name=scheduledObj.report.dashboard_name;
             vm.scheduleObj.report.view_name=scheduledObj.report.view_name;
@@ -186,6 +262,7 @@
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
             vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            assignTimeConditionsToScheduledObj();
             setDimentionsAndMeasures(visualMetaData.fields);
         }
 
@@ -199,8 +276,9 @@
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
             vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            assignTimeConditionsToScheduledObj();
             setDimentionsAndMeasures(visualMetaData.fields);
-        
+
         }
 
         function getShareLink(visualMetaData,datasource) {
@@ -237,12 +315,34 @@
             return vId+":"+connectionId;
         }
 
+        function getAdditionalConditionalExpressions() {
+            var additionalFeatures = [];
+            if (vm.timeConditions.feature) {
+                var featureData = {};
+                var featureDefinition = vm.timeConditions.feature.definition;
+                featureData[featureDefinition] = [
+                  vm.timeConditions.value + ' ' + vm.timeConditions.unit.value
+                ];
+                featureData[featureDefinition]._meta = {
+                    operator: '-',
+                    initialValue: 'NOW()',
+                    valueType: 'intervalValueType'
+                };
+                additionalFeatures.push(featureData);
+            }
+            return additionalFeatures;
+        }
+
         function buildQueryDTO(visualMetaData){
-            return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
+            return visualMetaData.getQueryParameters(
+              filterParametersService.get(),
+              filterParametersService.getConditionExpression(getAdditionalConditionalExpressions())
+            );
         }
 
         function schedule() {
             if(validateAndSetHaving()){
+                console.log('vm.scheduleObj', vm.scheduleObj);
                 vm.isSaving = true;
                 setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
@@ -278,6 +378,8 @@
 
         function validateAndSetHaving(){
             var flag=true;
+            vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
+            assignTimeConditionsToScheduledObj();
             if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
                 vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
@@ -323,7 +425,7 @@
                 }
                 $rootScope.showSuccessToast(info);
                 vm.clear();
-            }).catch(function (error) {             
+            }).catch(function (error) {
                 var info = {
                     text: error.data.message,
                     title: "Error"
@@ -370,9 +472,12 @@
         function changeVisualization(visualMetaData){
             vm.visualMetaData = new VisualWrap(visualMetaData);
             vm.datasource=vm.dashboard.dashboardDatasource;
-            getScheduleReport(visualMetaData.id);
-            getThresholdMeasureList(visualMetaData.fields);
-            buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+            initFeatures(vm.view.id)
+              .then(function () {
+                  getScheduleReport(visualMetaData.id);
+                  getThresholdMeasureList(visualMetaData.fields);
+                  buildScheduleObject(vm.visualMetaData, vm.datasource, vm.dashboard, vm.view);
+              });
         }
 
         function getHavingDTO(){

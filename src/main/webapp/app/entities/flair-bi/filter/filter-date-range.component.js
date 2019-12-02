@@ -66,7 +66,7 @@
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
         vm.onCustomDynamicDateRangeChange = onCustomDynamicDateRangeChange;
         vm.dateRangeTab = 0;
-        vm.customDynamicDateRange = 1;
+        vm.dimension.customDynamicDateRange = 1;
         vm.currentDynamicDateRangeConfig = null;
         vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
         vm.dimension.selected='';
@@ -89,7 +89,7 @@
             var date = new Date();
             var config = vm.currentDynamicDateRangeConfig;
             if (config.isCustom) {
-                date.setDate(date.getDate() - vm.customDynamicDateRange);
+                date.setDate(date.getDate() - vm.dimension.customDynamicDateRange);
             } else {
                 date.setDate(date.getDate() - config.period.days);
                 date.setMonth(date.getMonth() - config.period.months);

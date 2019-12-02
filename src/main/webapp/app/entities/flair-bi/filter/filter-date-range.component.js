@@ -21,6 +21,7 @@
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
+        setDateRangeSubscription();
 
         var DYNAMIC_DATE_RANGE_CONFIG = [
             {
@@ -109,6 +110,15 @@
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
                 vm.onRefreshDynamic({startDate: getStartDateRange()});
             }
+        }
+
+        function setDateRangeSubscription() {
+            var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
+                vm.dimension.selected=dateRange.startDate;
+                vm.dimension.selected2=dateRange.endDate;
+            });
+
+            $scope.$on('$destroy', unsubscribe);
         }
 
     }

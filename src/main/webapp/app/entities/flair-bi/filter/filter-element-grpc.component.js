@@ -234,6 +234,7 @@
                 filterParameters[dateRangeName] = [];
             }
             filterParameters[dateRangeName].push(date);
+            // let this code commented for a while
             // filterParameters[vm.dimension.name]._meta = {
             //     dataType: vm.dimension.type
             // };

@@ -5078,8 +5078,7 @@ text {
   */
 .data-line {
   stroke-width: 2;
-  fill: none;
-  stroke-dasharray: 0; }
+  fill: none }
 
 path {
   stroke-width: 2;

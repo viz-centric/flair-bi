@@ -595,6 +595,9 @@
                     $(".grid-stack")
                         .data("gridstack")
                         .enable();
+
+                    $('.grid-stack-item').draggable({cancel: "div.widget-content" });
+
                 } else {
                     enableEditForNewWidget(true);
                     $(".grid-stack")

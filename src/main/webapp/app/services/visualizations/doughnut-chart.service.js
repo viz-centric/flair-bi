@@ -62,6 +62,7 @@
                         if ($rootScope.filterSelection.id != record.id) {
                             var doughnut = $rootScope.updateWidget[record.id];
                             doughnut.config(getProperties(VisualizationUtils, record))
+                                .data(record.data)
                                 .update(record.data);
                         }
                     } else {

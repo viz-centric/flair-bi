@@ -55,6 +55,7 @@
                         if ($rootScope.filterSelection.id != record.id) {
                             var pie = $rootScope.updateWidget[record.id];
                             pie.config(getProperties(VisualizationUtils, record))
+                                .data(record.data)
                                 .update(record.data);
                         }
                     } else {

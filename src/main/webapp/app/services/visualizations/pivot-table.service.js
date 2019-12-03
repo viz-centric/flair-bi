@@ -24,6 +24,8 @@
                     result['maxDim'] = dimensions.length;
                     result['maxMes'] = measures.length;
 
+                    result['limit'] = VisualizationUtils.getPropertyValue(record.properties, 'Limit');
+
                     result["displayNameForDimension"] = [];
                     result["cellColorForDimension"] = [];
                     result["fontStyleForDimension"] = [];
@@ -93,6 +95,13 @@
                     var div = $('#pivot-' + element[0].id);
                     var pivot;
 
+                    if (record.data.length < config.limit) {
+                        config["showNavigation"] = false
+                    }
+                    else {
+                        config["showNavigation"] = true
+                    }
+
                     if (config["isPivoted"].find(element => element == true)) {
                         pivot = flairVisualizations.pivot()
                             .config(config)
@@ -104,7 +113,7 @@
                     }
                     else {
 
-                        config["showTotal"]=true;
+                        config["showTotal"] = true;
                         pivot = flairVisualizations.table()
                             .config(config)
                             .broadcast($rootScope)

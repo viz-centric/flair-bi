@@ -162,6 +162,9 @@
             }
             if(VisualDispatchService.getApplyBookmark()){
                 vm.selectedBookmark=VisualDispatchService.getFeatureBookmark();
+                if(vm.selectedBookmark.dateRange){
+                    addFilterFromBookmark(vm.selectedBookmark);
+                }
                 $rootScope.$broadcast(
                     "flairbiApp:filter-input-refresh"
                 );
@@ -170,6 +173,17 @@
                 VisualDispatchService.setFeatureBookmark({});
                 recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id,$stateParams.id);
             }
+        }
+
+        function addFilterFromBookmark(selectedBookmark){
+            var filter = {};
+            selectedBookmark.featureCriteria.forEach(function(criteria) {
+                var featureName=selectedBookmark.dateRange? filterParametersService.buildDateRangeFilterName(criteria.feature.name):criteria.feature.name;
+                filter[
+                    featureName
+                ] = criteria.value.split(",");
+            });
+            filterParametersService.save(filter);
         }
 
         function openSettings(){
@@ -495,14 +509,7 @@
                     },
                     function(result) {
                         item.featureCriteria = result;
-                        var filter = {};
-                        item.featureCriteria.forEach(function(criteria) {
-                        var featureName=item.dateRange? filterParametersService.getDateRangePrefix()+"|"+criteria.feature.name:criteria.feature.name;
-                            filter[
-                                featureName
-                            ] = criteria.value.split(",");
-                        });
-                        filterParametersService.save(filter);
+                        addFilterFromBookmark(item);
                         $rootScope.$broadcast(
                             "flairbiApp:filter-input-refresh"
                         );

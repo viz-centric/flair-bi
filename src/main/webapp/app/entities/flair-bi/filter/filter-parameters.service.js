@@ -63,8 +63,8 @@
             featureName: featureName
           };
           if (dataType) {
-            result.valueType = {value: value, type: dataType};
-            result.secondValueType = {value: secondValue, type: dataType};
+            result.valueType = {value: value, type: dataType, '@type': 'valueType'};
+            result.secondValueType = {value: secondValue, type: dataType, '@type': 'valueType'};
           }
           return result;
         }
@@ -82,7 +82,7 @@
                 '@type': 'Compare',
                 comparatorType: 'GTE',
                 value: value,
-                valueType: {value: value, type: dataType},
+                valueType: {value: value, type: dataType, '@type': 'valueType'},
                 featureName: featureName
             };
         }

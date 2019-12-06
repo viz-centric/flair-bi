@@ -9,7 +9,7 @@
         on-drag-stop="vm.onDragStop(event,ui)" on-resize-start="vm.onResizeStart(event,ui)"
         on-resize-stop="vm.onResizeStop(event,ui)" style="height:auto">
 
-        <div data-gs-min-height="2" style="width:100%;left: 0px;" data-gs-min-width="3" id="{{v.visualBuildId}}"
+        <div data-gs-min-height="2" style="width:100%;left: 0px; max-height: 320px;" data-gs-min-width="3" id="{{v.visualBuildId}}"
             visual-build-id-resize="{{v.visualBuildId}}" gridstack-item ng-repeat="v in vm.visualmetadata"
             class="grid-flipper grid-stack-item notification grid-stack-item-{{v.visualBuildId}}    ng-class:{'flipToFront':v.isCardRevealed, 'flipToBack':!v.isCardRevealed}"
             gs-item-x="v.xPosition" gs-item-y="v.yPosition" gs-item-width="v.width" gs-item-height="v.height"

@@ -87,19 +87,18 @@
 
                     return result;
                 }
+                var config = getProperties(VisualizationUtils, record);
+
+                if (record.data.length < config.limit) {
+                    config["showNavigation"] = false
+                }
+                else {
+                    config["showNavigation"] = true
+                }
                 function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="table-' + element[0].id + '" ></div>')
                     var div = $('#table-' + element[0].id)
-
-                    var config = getProperties(VisualizationUtils, record);
-
-                    if (record.data.length < config.limit) {
-                        config["showNavigation"] = false
-                    }
-                    else {
-                        config["showNavigation"] = true
-                    }
 
                     var table = flairVisualizations.table()
                         .config(config)
@@ -119,9 +118,14 @@
                 else {
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
+
+                            $(element[0].parentElement.parentElement)
+                                .css('height', element[0].clientHeight + 'px')
+                                .css('width', element[0].width + 'px')
+
                             var table = $rootScope.updateWidget[record.id];
                             table
-                                .config(getProperties(VisualizationUtils, record))
+                                .config(config)
                                 .update(record.data);
                         }
                     } else {

@@ -165,6 +165,7 @@
                     conditionExpression: {
                         '@type': 'Like',
                         featureName: dimension.name,
+                        caseInsensitive: true,
                         value: q
                     }
                 }];

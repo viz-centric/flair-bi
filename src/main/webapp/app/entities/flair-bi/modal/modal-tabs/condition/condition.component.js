@@ -58,6 +58,7 @@
                     conditionExpression: {
                         '@type': 'Like',
                         featureName: featureName,
+                        caseInsensitive: true,
                         value: q
                     }
                 }];

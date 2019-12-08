@@ -1,5 +1,8 @@
 package com.flair.bi.service.dto.scheduler;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ReportDTO {
 
 private String userid;
@@ -9,6 +12,8 @@ private String report_name;
 private String title_name;
 private String dashboard_name;
 private String view_name;
+@Getter @Setter
+private Long view_id;
 private String share_link;
 private String build_url;
 private boolean thresholdAlert;

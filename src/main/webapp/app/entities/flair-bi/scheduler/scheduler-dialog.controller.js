@@ -55,6 +55,7 @@
                 "mail_body":null,
                 "dashboard_name":"",
                 "view_name":"",
+                "view_id":null,
                 "share_link":null,
                 "build_url":"",
                 "thresholdAlert":thresholdAlert
@@ -112,7 +113,7 @@
                     vm.emailReporterEdit=true;
                     getVisualmetadata(scheduledObj)
                       .then(function (value) {
-                          return initFeatures(vm.view.id);
+                          return initFeatures(scheduledObj.report.view_id);
                       })
                       .then(function () {
                           return buildScheduledObject(scheduledObj, vm.visualMetaData);
@@ -162,7 +163,7 @@
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 getThresholdMeasureList(vm.visualMetaData.fields);
-            });
+            }).$promise;
         }
 
         function getScheduleReport(visualizationid) {
@@ -262,6 +263,7 @@
         function buildScheduledObject(scheduledObj,visualMetaData){
             vm.scheduleObj.report.dashboard_name=scheduledObj.report.dashboard_name;
             vm.scheduleObj.report.view_name=scheduledObj.report.view_name;
+            vm.scheduleObj.report.view_id=scheduledObj.report.view_id;
             vm.scheduleObj.report.build_url=scheduledObj.report.build_url;
             vm.scheduleObj.report.share_link=scheduledObj.report.share_link;
             vm.scheduleObj.datasourceid=getDatasourceId(scheduledObj.report.share_link);
@@ -276,6 +278,7 @@
         function buildScheduleObject(visualMetaData,datasource,dashboard,view){
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
             vm.scheduleObj.report.view_name=view.viewName;
+            vm.scheduleObj.report.view_id=view.id;
             vm.scheduleObj.report.build_url=builUrl(dashboard,view);
             vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
             vm.scheduleObj.datasourceid=datasource.id;

@@ -250,6 +250,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                                 .build()
                 )
                 .setQuery(dto.getQuery())
+                .setConstraints(orEmpty(dto.getConstraints()))
                 .build();
     }
 
@@ -299,6 +300,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         schedule.setStart_date(scheduleReport.getSchedule().getStartDate());
         schedule.setTimezone(scheduleReport.getSchedule().getTimezone());
         responseDTO.setSchedule(schedule);
+        responseDTO.setConstraints(scheduleReport.getConstraints());
         return responseDTO;
     }
 

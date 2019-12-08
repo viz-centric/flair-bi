@@ -77,8 +77,7 @@
                 "start_date": new Date(),
                 "end_date": new Date()
             },
-            "constraints": {
-            },
+            "constraints":"",
             "putcall":false,
             "emailReporter":false
           };
@@ -214,7 +213,7 @@
                 setHavingDTO(JSON.parse(data.query));
             }
             if (vm.scheduleObj.constraints) {
-                setTimeConditions(vm.scheduleObj.constraints.time);
+                setTimeConditions(JSON.parse(vm.scheduleObj.constraints).time);
             }
             if(vm.scheduleObj.emailReporter){
                 vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
@@ -246,11 +245,18 @@
         }
 
         function assignTimeConditionsToScheduledObj() {
-            vm.scheduleObj.constraints.time = {
-                featureName: vm.timeConditions.feature.definition,
-                value: vm.timeConditions.value,
-                unit: vm.timeConditions.unit.value
+            if (!vm.timeConditions.feature) {
+                return;
+            }
+            var constraints = {
+               time: {
+                   featureName: vm.timeConditions.feature.definition,
+                   value: vm.timeConditions.value,
+                   unit: vm.timeConditions.unit.value
+               }
             };
+
+            vm.scheduleObj.constraints = JSON.stringify(constraints);
         }
 
         function buildScheduledObject(scheduledObj,visualMetaData){

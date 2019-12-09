@@ -101,13 +101,6 @@
                     var div = $('#pivot-' + element[0].id);
                     var pivot;
 
-                    if (record.data.length < config.limit) {
-                        config["showNavigation"] = false
-                    }
-                    else {
-                        config["showNavigation"] = true
-                    }
-
                     if (config["isPivoted"].find(element => element == true)) {
                         pivot = flairVisualizations.pivot()
                             .config(config)
@@ -140,10 +133,6 @@
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
                             var pivot = $rootScope.updateWidget[record.id];
-
-                            $(element[0].parentElement.parentElement)
-                                .css('height', element[0].clientHeight + 'px')
-                                .css('width', element[0].width + 'px')
 
                             pivot
                                 .config(getProperties(VisualizationUtils, record))

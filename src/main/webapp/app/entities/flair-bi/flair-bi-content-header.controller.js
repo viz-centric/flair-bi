@@ -177,8 +177,9 @@
 
         function addFilterFromBookmark(selectedBookmark){
             var filter = {};
+            var COMPARABLE_DATA_TYPES=filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function(criteria) {
-                var featureName=selectedBookmark.dateRange? filterParametersService.buildDateRangeFilterName(criteria.feature.name):criteria.feature.name;
+                var featureName=selectedBookmark.dateRange && COMPARABLE_DATA_TYPES.indexOf(criteria.feature.type.toLowerCase()) > -1? filterParametersService.buildDateRangeFilterName(criteria.feature.name):criteria.feature.name;
                 filter[
                     featureName
                 ] = criteria.value.split(",");

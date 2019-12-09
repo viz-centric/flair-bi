@@ -21,7 +21,8 @@
             getFiltersCount:getFiltersCount,
             getDateRangePrefix:getDateRangePrefix,
             changeDateFormat:changeDateFormat,
-            buildDateRangeFilterName:buildDateRangeFilterName
+            buildDateRangeFilterName:buildDateRangeFilterName,
+            getComparableDataTypes:getComparableDataTypes
         };
 
 
@@ -90,14 +91,14 @@
         function createBodyExpr(values, name) {
             var meta = values._meta || {};
             var dataType = meta.dataType || '';
-            if (COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1) {
-                console.log('values', values);
+            if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                setDatesInRightSideFilters(changeDateFormat(values[0]),changeDateFormat(values[1]));
                 if (values.length === 2) {
-                    return createBetweenExpressionBody(values[0], values[1], name, dataType);
+                    return createBetweenExpressionBody(changeDateFormat(values[0]),changeDateFormat(values[1]),name.split('|')[1]);
                 } else {
                     return createCompareExpressionBody(values[0], name, dataType);
                 }
-            } else {
+            }else {
                 return createContainsExpressionBody(values, name);
             }
         }
@@ -113,14 +114,7 @@
                   && paramObject[name].length > 0) {
                     var values = paramObject[name];
                     if (!condition.expression) {
-                        if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
-                            body = createBetweenExpressionBody(changeDateFormat(values[0]),
-                              changeDateFormat(values[1]),
-                              name.split('|')[1]);
-                            setDatesInRightSideFilters(changeDateFormat(values[0]),changeDateFormat(values[1]));
-                        } else {
-                            body = createBodyExpr(values, name);
-                        }
+                        body = createBodyExpr(values, name);
                         condition = new ConditionExpression(CryptoService.UUIDv4, body);
                     } else {
                         body = createBodyExpr(values, name);
@@ -167,6 +161,10 @@
 
         function buildDateRangeFilterName(name){
             return dateRangePrefix+"|"+name;
+        }
+
+        function getComparableDataTypes(){
+            return COMPARABLE_DATA_TYPES;
         }
     }
 })();

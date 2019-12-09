@@ -89,12 +89,6 @@
                 }
                 var config = getProperties(VisualizationUtils, record)
 
-                if (record.data.length < config.limit) {
-                    config["showNavigation"] = false
-                }
-                else {
-                    config["showNavigation"] = true
-                }
                 function createChart() {
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="pivot-' + element[0].id + '" ></div>')

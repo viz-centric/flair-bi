@@ -119,10 +119,6 @@
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
 
-                            $(element[0].parentElement.parentElement)
-                                .css('height', element[0].clientHeight + 'px')
-                                .css('width', element[0].width + 'px')
-
                             var table = $rootScope.updateWidget[record.id];
                             table
                                 .config(config)

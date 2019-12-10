@@ -185,15 +185,9 @@
 
         function setTimeConditions(timeConditions) {
             if (timeConditions) {
-                // if (vm.timeCompatibleDimensions) {
-                    vm.timeConditions.feature = vm.timeCompatibleDimensions.find(function (item) {
-                        return item.definition === timeConditions.featureName;
-                    });
-                // } else {
-                //     vm.timeConditions.feature = {
-                //         definition: timeConditions.featureName
-                //     };
-                // }
+                vm.timeConditions.feature = vm.timeCompatibleDimensions.find(function (item) {
+                    return item.definition === timeConditions.featureName;
+                });
                 vm.timeConditions.value = timeConditions.value;
                 vm.timeConditions.unit = vm.TIME_UNIT.find(function (unit) {
                     return unit.value === timeConditions.unit;

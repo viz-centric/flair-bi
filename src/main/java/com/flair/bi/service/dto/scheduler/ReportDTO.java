@@ -101,12 +101,22 @@ public void setThresholdAlert(boolean thresholdAlert) {
 	this.thresholdAlert = thresholdAlert;
 }
 
-@Override
-public String toString() {
-	return "ReportDTO [userid=" + userid + ", mail_body=" + mail_body + ", subject=" + subject + ", report_name="
-			+ report_name + ", title_name=" + title_name + ", dashboard_name=" + dashboard_name + ", view_name="
-			+ view_name + ", share_link=" + share_link + ", build_url=" + build_url + ", thresholdAlert="
-			+ thresholdAlert + "]";
-}
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("ReportDTO{");
+		sb.append("userid='").append(userid).append('\'');
+		sb.append(", mail_body='").append(mail_body).append('\'');
+		sb.append(", subject='").append(subject).append('\'');
+		sb.append(", report_name='").append(report_name).append('\'');
+		sb.append(", title_name='").append(title_name).append('\'');
+		sb.append(", dashboard_name='").append(dashboard_name).append('\'');
+		sb.append(", view_name='").append(view_name).append('\'');
+		sb.append(", view_id=").append(view_id);
+		sb.append(", share_link='").append(share_link).append('\'');
+		sb.append(", build_url='").append(build_url).append('\'');
+		sb.append(", thresholdAlert=").append(thresholdAlert);
+		sb.append('}');
+		return sb.toString();
+	}
 
 }

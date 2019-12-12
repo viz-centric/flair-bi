@@ -344,6 +344,7 @@
         }
 
         function schedule() {
+            vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
             if(validateAndSetHaving()){
                 console.log('vm.scheduleObj', vm.scheduleObj);
                 vm.isSaving = true;
@@ -381,7 +382,6 @@
 
         function validateAndSetHaving(){
             var flag=true;
-            vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
             assignTimeConditionsToScheduledObj();
             if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();

@@ -27,6 +27,7 @@
         vm.onRefreshDay = refreshForDay;
         vm.onRefreshRange = refreshForRange;
         vm.onRefreshDynamic = onRefreshDynamic;
+        vm.removeTagFromFilterList=removeTagFromFilterList;
 
 
         ////////////////
@@ -181,14 +182,22 @@
         }
 
         function removed(tag) {
-            var filterParameters = filterParametersService.get();
-            var array = filterParameters[vm.dimension.name] == undefined ? filterParameters[vm.dimension.name.toLowerCase()] : filterParameters[vm.dimension.name];
-            var index = array.indexOf(tag['text']);
-            if (index > -1) {
-                array.splice(index, 1);
-            }
+            filterParametersService.saveSelectedFilter(removeTagFromFilterList(filterParametersService.getSelectedFilter(),tag));
+        }
 
-            filterParametersService.save(filterParameters);
+        function removeTagFromFilterList(filterParameters,tag){
+            var array = filterParameters[vm.dimension.name]? filterParameters[vm.dimension.name.toLowerCase()] : filterParameters[vm.dimension.name];
+            if(array){
+                var index = array.indexOf(tag['text']);
+                if (index > -1) {
+                    array.splice(index, 1);
+                    filterParameters[vm.dimension.name]=array;
+                    if(filterParameters[vm.dimension.name].length==0)
+                        delete filterParameters[vm.dimension.name];
+                    return filterParameters;
+                }
+            }
+            return filterParameters;
         }
 
         function removeTagFromSelectedList(tag) {
@@ -216,7 +225,7 @@
         }
 
         function added(tag) {
-            var filterParameters = filterParametersService.get();
+            var filterParameters = filterParametersService.getSelectedFilter();
             if (!filterParameters[vm.dimension.name]) {
                 filterParameters[vm.dimension.name] = [];
             }
@@ -224,11 +233,11 @@
             filterParameters[vm.dimension.name]._meta = {
                 dataType: vm.dimension.type
             };
-            filterParametersService.save(filterParameters);
+            filterParametersService.saveSelectedFilter(filterParameters);
         }
 
         function addDateRangeFilter(date){
-            var filterParameters = filterParametersService.get();
+            var filterParameters = filterParametersService.getSelectedFilter();
             var dateRangeName=filterParametersService.buildDateRangeFilterName(vm.dimension.name);
             delete filterParameters[ vm.dimension.name];
             if (!filterParameters[dateRangeName]) {
@@ -238,7 +247,7 @@
             filterParameters[dateRangeName]._meta = {
                 dataType: vm.dimension.type
             };
-            filterParametersService.save(filterParameters);
+            filterParametersService.saveSelectedFilter(filterParameters);
         }
 
     }

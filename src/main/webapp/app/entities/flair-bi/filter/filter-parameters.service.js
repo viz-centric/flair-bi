@@ -12,6 +12,7 @@
         var paramObject = {};
         var dateRangePrefix='date-range';
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
+        var selectedFilters={};
 
         var service = {
             get: get,
@@ -21,7 +22,9 @@
             getFiltersCount:getFiltersCount,
             getDateRangePrefix:getDateRangePrefix,
             changeDateFormat:changeDateFormat,
-            buildDateRangeFilterName:buildDateRangeFilterName
+            buildDateRangeFilterName:buildDateRangeFilterName,
+            getSelectedFilter:getSelectedFilter,
+            saveSelectedFilter:saveSelectedFilter
         };
 
 
@@ -167,6 +170,14 @@
 
         function buildDateRangeFilterName(name){
             return dateRangePrefix+"|"+name;
+        }
+
+        function getSelectedFilter(){
+            return selectedFilters;
+        }
+
+        function saveSelectedFilter(selectedF){
+            selectedFilters=selectedF;
         }
     }
 })();

@@ -50,10 +50,12 @@
                 item.customDynamicDateRange=null;
             });
             filterParametersService.clear();
+            filterParametersService.saveSelectedFilter($rootScope.updateWidget);
             filter();
         }
 
         function filter() {
+            filterParametersService.save(filterParametersService.getSelectedFilter());
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');

@@ -636,6 +636,7 @@
         }
 
         function ngIfClearFilters() {
+            $rootScope.activePage.activePageNo = 0;
             return showOpt && !$rootScope.exploration;
         }
 

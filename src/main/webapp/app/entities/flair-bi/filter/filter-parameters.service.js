@@ -172,6 +172,7 @@
 
         function saveSelectedFilter(selectedF){
             selectedFilters=selectedF;
+        }
 
         function getComparableDataTypes(){
             return COMPARABLE_DATA_TYPES;

@@ -344,26 +344,36 @@
         }
 
         function schedule() {
-            vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
+            if (!vm.visualMetaData) {
+                getVisualmetadata(scheduledObj)
+                  .then(function () {
+                      continueSchedule();
+                  });
+            } else {
+                continueSchedule();
+            }
+        }
+
+        function continueSchedule() {
+            vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
             if(validateAndSetHaving()){
-                console.log('vm.scheduleObj', vm.scheduleObj);
                 vm.isSaving = true;
                 setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
                     if (success.data.message) {
-                      $rootScope.showErrorSingleToast({
-                        text: success.data.message,
-                        title: "Error"
-                      });
+                        $rootScope.showErrorSingleToast({
+                            text: success.data.message,
+                            title: "Error"
+                        });
                     } else {
-                      $uibModalInstance.close(vm.scheduleObj);
+                        $uibModalInstance.close(vm.scheduleObj);
                     }
                 }).catch(function (error) {
                     vm.isSaving = false;
                     $rootScope.showErrorSingleToast({
-                      text: error.data.message,
-                      title: "Error"
+                        text: error.data.message,
+                        title: "Error"
                     });
                 });
             }else{

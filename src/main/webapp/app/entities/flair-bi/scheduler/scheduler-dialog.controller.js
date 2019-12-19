@@ -65,7 +65,7 @@
             },
             "assign_report": {
                 "channel": [],
-                "email_list":[]
+                "communication_list":{"email":[],"teams":[]}
             },
             "schedule": {
                 "cron_exp":"",
@@ -150,8 +150,8 @@
             if(vm.scheduleObj.report.thresholdAlert)
                 setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
-                vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
-                addEmailList(data.assign_report.email_list);
+                vm.scheduleObj.assign_report.communication_list.email=data.assign_report.communication_list.email;
+                addEmailList(data.assign_report.communication_list.email);
             }
         }
 
@@ -293,16 +293,16 @@
         function added(tag) {
             console.log("-vm.selectedUser"+vm.selectedUsers);
             var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
-            vm.scheduleObj.assign_report.email_list.push(emailObj);
+            vm.scheduleObj.assign_report.communication_list.email.push(emailObj);
         }
 
         function removed(tag){
             var index = -1;
-            vm.scheduleObj.assign_report.email_list.some(function(obj, i) {
+            vm.scheduleObj.assign_report.communication_list.email.some(function(obj, i) {
             return obj.user_email === tag['text'].split(" ")[1] ? index = i : false;
             });
             if (index > -1) {
-                vm.scheduleObj.assign_report.email_list.splice(index, 1);
+                vm.scheduleObj.assign_report.communication_list.email.splice(index, 1);
             }
         }
 

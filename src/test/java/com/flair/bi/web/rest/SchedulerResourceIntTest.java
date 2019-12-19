@@ -9,6 +9,7 @@ import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AssignReport;
+import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -100,11 +101,13 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setReport_line_item(reportLineItem);
     	
     	AssignReport assignReport= new AssignReport();
+    	CommunicationList communicationList= new CommunicationList();
     	emailsDTO emailsDTO= new emailsDTO();
     	emailsDTO.setUser_email("example@localhost.com");
     	emailsDTO.setUser_name("example");
     	emailsDTO emailList[]= {emailsDTO};
-    	assignReport.setEmail_list(emailList);
+    	communicationList.setEmail(emailList);
+    	assignReport.setCommunication_list(communicationList);
     	assignReport.setChannel(channel);
     	schedulerDTO.setAssign_report(assignReport);
     	

@@ -9,7 +9,7 @@ private String channel_id;
 private String stride_API_Token;
 private String stride_cloud_id;
 private String stride_conversation_id;
-private emailsDTO email_list[];
+private CommunicationList communication_list;
 
 public AssignReport(){}
 
@@ -51,12 +51,12 @@ public void setStride_conversation_id(String stride_conversation_id) {
 	this.stride_conversation_id = stride_conversation_id;
 }
 
-public emailsDTO[] getEmail_list() {
-	return email_list;
+public CommunicationList getCommunication_list() {
+	return communication_list;
 }
 
-public void setEmail_list(emailsDTO[] email_list) {
-	this.email_list = email_list;
+public void setCommunication_list(CommunicationList communication_list) {
+	this.communication_list = communication_list;
 }
 
 
@@ -64,8 +64,8 @@ public void setEmail_list(emailsDTO[] email_list) {
 public String toString() {
 	return "AssignReport [channel=" + Arrays.toString(channel) + ", slack_API_Token=" + slack_API_Token
 			+ ", channel_id=" + channel_id + ", stride_API_Token=" + stride_API_Token + ", stride_cloud_id="
-			+ stride_cloud_id + ", stride_conversation_id=" + stride_conversation_id + ", email_list="
-			+ Arrays.toString(email_list) + "]";
+			+ stride_cloud_id + ", stride_conversation_id=" + stride_conversation_id + ", communication_list="
+			+ communication_list + "]";
 }
 
 }

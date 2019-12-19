@@ -79,11 +79,12 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setReport(reportDTO);
     	
     	ReportLineItem reportLineItem= new ReportLineItem();
-    	List<String> fields= new ArrayList<String>();//("State"), "COUNT(Price) as Price"};
+    	List<String> fields= new ArrayList<String>();
     	fields.add("State");
     	fields.add("COUNT(Price) as Price");
     	String dimentions[]= {"State"};
     	String measures[]= {"Price"};
+    	String channel[]={"email"};
     	List<String> groupBy= new ArrayList<String>();
     	groupBy.add("State");
     	QueryDTO queryDTO= new QueryDTO();
@@ -104,7 +105,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	emailsDTO.setUser_name("example");
     	emailsDTO emailList[]= {emailsDTO};
     	assignReport.setEmail_list(emailList);
-    	assignReport.setChannel("email");
+    	assignReport.setChannel(channel);
     	schedulerDTO.setAssign_report(assignReport);
     	
     	Schedule schedule= new Schedule();

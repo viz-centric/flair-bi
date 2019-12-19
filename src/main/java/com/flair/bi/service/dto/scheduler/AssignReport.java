@@ -3,7 +3,7 @@ package com.flair.bi.service.dto.scheduler;
 import java.util.Arrays;
 
 public class AssignReport {
-private String channel;
+private String channel[];
 private String slack_API_Token;
 private String channel_id;
 private String stride_API_Token;
@@ -13,10 +13,11 @@ private emailsDTO email_list[];
 
 public AssignReport(){}
 
-public String getChannel() {
+
+public String[] getChannel() {
 	return channel;
 }
-public void setChannel(String channel) {
+public void setChannel(String[] channel) {
 	this.channel = channel;
 }
 public String getSlack_API_Token() {
@@ -58,12 +59,13 @@ public void setEmail_list(emailsDTO[] email_list) {
 	this.email_list = email_list;
 }
 
+
 @Override
 public String toString() {
-	return "AssignReport [channel=" + channel + ", slack_API_Token=" + slack_API_Token + ", channel_id=" + channel_id
-			+ ", stride_API_Token=" + stride_API_Token + ", stride_cloud_id=" + stride_cloud_id
-			+ ", stride_conversation_id=" + stride_conversation_id + ", email_list=" + Arrays.toString(email_list)
-			+ "]";
+	return "AssignReport [channel=" + Arrays.toString(channel) + ", slack_API_Token=" + slack_API_Token
+			+ ", channel_id=" + channel_id + ", stride_API_Token=" + stride_API_Token + ", stride_cloud_id="
+			+ stride_cloud_id + ", stride_conversation_id=" + stride_conversation_id + ", email_list="
+			+ Arrays.toString(email_list) + "]";
 }
 
 }

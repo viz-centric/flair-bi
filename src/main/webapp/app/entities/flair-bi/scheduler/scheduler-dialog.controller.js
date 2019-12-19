@@ -39,6 +39,7 @@
         vm.condition={};
         vm.features=[];
         vm.vizIdPrefix='threshold_alert_:';
+        vm.setChannel=setChannel;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -63,7 +64,7 @@
             "queryDTO":{
             },
             "assign_report": {
-                "channel": "",
+                "channel": [],
                 "email_list":[]
             },
             "schedule": {
@@ -413,6 +414,16 @@
 
         function executeNow(id){
             ReportManagementUtilsService.executeNow(addPrefix(id));
+        }
+
+        function setChannel(channel){
+            channel.selected=!channel.selected;
+            var index = vm.scheduleObj.assign_report.channel.indexOf(channel.name);
+            if (index > -1) {
+                vm.scheduleObj.assign_report.channel.splice(index, 1);
+            }else{
+                vm.scheduleObj.assign_report.channel.push(channel.name)
+            }
         }
 }
 })();

@@ -112,6 +112,11 @@
         function createBodyExpr(values, name) {
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
+            if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
+                name = name.split('|')[1];
+                setDatesInRightSideFilters(values[0], values[1]);
+            }
             if (valueType === 'valueType') {
                 var dataType = meta.dataType || '';
                 console.log('value type values', values);

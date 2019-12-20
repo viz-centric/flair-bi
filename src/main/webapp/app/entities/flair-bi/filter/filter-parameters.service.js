@@ -11,6 +11,8 @@
 
         var paramObject = {};
         var dateRangePrefix='date-range';
+        var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
+        var selectedFilters={};
 
         var service = {
             get: get,
@@ -19,7 +21,11 @@
             getConditionExpression: getConditionExpression,
             getFiltersCount:getFiltersCount,
             getDateRangePrefix:getDateRangePrefix,
-            changeDateFormat:changeDateFormat
+            changeDateFormat:changeDateFormat,
+            buildDateRangeFilterName:buildDateRangeFilterName,
+            getSelectedFilter:getSelectedFilter,
+            saveSelectedFilter:saveSelectedFilter,
+            getComparableDataTypes:getComparableDataTypes
         };
 
 
@@ -53,33 +59,69 @@
             };
         }
 
+        function createBetweenExpressionBody(value, secondValue, featureName, dataType) {
+          var result = {
+            '@type': 'Between',
+            value: value,
+            secondValue: secondValue,
+            featureName: featureName
+          };
+          if (dataType) {
+            result.valueType = {value: value, type: dataType, '@type': 'valueType'};
+            result.secondValueType = {value: secondValue, type: dataType, '@type': 'valueType'};
+          }
+          return result;
+        }
+
+        function createContainsExpressionBody(values, featureName) {
+            return {
+                '@type': 'Contains',
+                values: values,
+                featureName: featureName
+            };
+        }
+
+        function createCompareExpressionBody(value, featureName, dataType) {
+            return {
+                '@type': 'Compare',
+                comparatorType: 'GTE',
+                value: value,
+                valueType: {value: value, type: dataType, '@type': 'valueType'},
+                featureName: featureName
+            };
+        }
+
+        function createBodyExpr(values, name) {
+            var meta = values._meta || {};
+            var dataType = meta.dataType || '';
+            if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                setDatesInRightSideFilters(changeDateFormat(values[0]),changeDateFormat(values[1]));
+                if (values.length === 2) {
+                    return createBetweenExpressionBody(changeDateFormat(values[0]),changeDateFormat(values[1]),name.split('|')[1]);
+                } else {
+                    return createCompareExpressionBody(values[0], name, dataType);
+                }
+            }else {
+                return createContainsExpressionBody(values, name);
+            }
+        }
+
         function getConditionExpression() {
+            var body;
             var condition = {
                 expression: null
             };
             for (var name in paramObject) {
-                if (paramObject.hasOwnProperty(name) &&
-                    paramObject[name] &&
-                    paramObject[name].length > 0) {
-                    if (!condition.expression && name.lastIndexOf(dateRangePrefix, 0) === 0) {
-                        condition = new ConditionExpression(CryptoService.UUIDv4, {
-                            '@type': 'Between',
-                            value: changeDateFormat(paramObject[name][0]),
-                            secondValue:changeDateFormat(paramObject[name][1]),
-                            featureName: name.split('|')[1]
-                        });
-                    }else if(!condition.expression && name.lastIndexOf(dateRangePrefix, 0) !== 0) {
-                        condition = new ConditionExpression(CryptoService.UUIDv4, {
-                            '@type': 'Contains',
-                            values: paramObject[name],
-                            featureName: name
-                        });
+                if (paramObject.hasOwnProperty(name)
+                  && paramObject[name]
+                  && paramObject[name].length > 0) {
+                    var values = paramObject[name];
+                    if (!condition.expression) {
+                        body = createBodyExpr(values, name);
+                        condition = new ConditionExpression(CryptoService.UUIDv4, body);
                     } else {
-                        condition.addNewExpression({
-                            '@type': 'Contains',
-                            values: paramObject[name],
-                            featureName: name
-                        });
+                        body = createBodyExpr(values, name);
+                        condition.addNewExpression(body);
                     }
                 }
             }
@@ -114,6 +156,26 @@
 
         function getDateRangePrefix(){
             return dateRangePrefix;
+        }
+
+        function setDatesInRightSideFilters(startDate,endDate){
+            $rootScope.$broadcast('flairbiApp:filter-set-date-ranges',{startDate:startDate,endDate:endDate});
+        }
+
+        function buildDateRangeFilterName(name){
+            return dateRangePrefix+"|"+name;
+        }
+
+        function getSelectedFilter(){
+            return selectedFilters;
+        }
+
+        function saveSelectedFilter(selectedF){
+            selectedFilters=selectedF;
+        }
+
+        function getComparableDataTypes(){
+            return COMPARABLE_DATA_TYPES;
         }
     }
 })();

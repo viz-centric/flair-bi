@@ -238,7 +238,7 @@
         }
 
         function onExchangeMetadata(data) {
-            var metaData = JSON.parse(data.body);
+            var metaData = data.body===""?{data:[]}:JSON.parse(data.body);
             if (data.headers.request === "filters") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
@@ -595,6 +595,9 @@
                     $(".grid-stack")
                         .data("gridstack")
                         .enable();
+
+                    $('.grid-stack-item').draggable({cancel: "div.widget-content" });
+
                 } else {
                     enableEditForNewWidget(true);
                     $(".grid-stack")

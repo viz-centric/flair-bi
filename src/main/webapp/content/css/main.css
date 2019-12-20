@@ -811,6 +811,9 @@ body.modal-open .animated {
 .swal-icon--warning__body {
   height: 25px !important; }
 
+.md-icon-button + .md-datepicker-input-container {
+  margin-left: 0px; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -5075,12 +5078,10 @@ text {
   */
 .data-line {
   stroke-width: 2;
-  fill: none;
-  stroke-dasharray: 0; }
+  fill: none }
 
 path {
-  stroke-width: 2;
-  stroke-dasharray: 0; }
+  stroke-width: 2; }
 
 text {
   font-family: "Fira Sans Extra Condensed", sans-serif;

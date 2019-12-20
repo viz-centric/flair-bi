@@ -24,6 +24,8 @@
                     result['maxDim'] = dimensions.length;
                     result['maxMes'] = measures.length;
 
+                    result['limit'] = VisualizationUtils.getPropertyValue(record.properties, 'Limit');
+
                     result["displayNameForDimension"] = [];
                     result["cellColorForDimension"] = [];
                     result["fontStyleForDimension"] = [];
@@ -85,9 +87,9 @@
                     }
                     return result;
                 }
+                var config = getProperties(VisualizationUtils, record)
 
                 function createChart() {
-                    var config = getProperties(VisualizationUtils, record)
                     $(element[0]).html('')
                     $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="pivot-' + element[0].id + '" ></div>')
                     var div = $('#pivot-' + element[0].id);
@@ -103,6 +105,8 @@
                             .data(record.data);
                     }
                     else {
+
+                        config["showTotal"] = true;
                         pivot = flairVisualizations.table()
                             .config(config)
                             .broadcast($rootScope)
@@ -123,6 +127,7 @@
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
                             var pivot = $rootScope.updateWidget[record.id];
+
                             pivot
                                 .config(getProperties(VisualizationUtils, record))
                                 .update(record.data);

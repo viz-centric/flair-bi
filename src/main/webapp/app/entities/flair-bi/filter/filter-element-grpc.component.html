@@ -1,8 +1,17 @@
 <div class="filter-element form-group">
     <label class="control-label">{{vm.dimension.name}}</label>
-    <tags-input-grpc placeholder="Add a {{vm.dimension.name}}" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input"
-        add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
-        <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)" min-length="0
+    <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
+        <filter-date-range dimension="vm.dimension"
+            on-refresh-day="vm.onRefreshDay()"
+            on-refresh-range="vm.onRefreshRange()"
+            on-refresh-dynamic="vm.onRefreshDynamic(startDate)">
+        </filter-date-range>
+    </div>
+    <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">
+        <tags-input-grpc placeholder="Add a {{vm.dimension.name}}" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input"
+                         add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
+            <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)" min-length="0
         " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
-    </tags-input-grpc>
+        </tags-input-grpc>
+    </div>
 </div>

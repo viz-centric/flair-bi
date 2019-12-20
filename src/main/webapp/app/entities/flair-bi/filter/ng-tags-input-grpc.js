@@ -24,8 +24,6 @@ var KEYS = {
     comma: 188
 };
 
-var dName=''
-
 var MAX_SAFE_INTEGER = 9007199254740991;
 var SUPPORTED_INPUT_TYPES = ['text', 'email', 'url'];
 
@@ -614,7 +612,6 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             self.index = -1;
             self.selected = null;
             self.query = null;
-            dName='';
         };
         self.show = function() {
             if (options.selectFirstMatch) {
@@ -844,28 +841,17 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
                 function(event,metaData) {
                     var obj=metaData[0];
                     var dimensionName='';
-                    if(!isCallMade(obj)){
-                        for(var i in obj){
-                            dimensionName=i;
-                            dName=i;
-                        }
-                        var retVal = metaData.map(function (item) {
-                                return item[dimensionName.toLowerCase()];
-                        });
-                        suggestionListG.receivedMetaData(retVal);
+                    for(var i in obj){
+                        dimensionName=i;
                     }
+                    var retVal = metaData.map(function (item) {
+                            return item[dimensionName.toLowerCase()];
+                    });
+                    suggestionListG.receivedMetaData(retVal);
                 }
             );
             scope.$on("$destroy", unsubscribe);
             };
-
-            function isCallMade(obj){
-                var dimensionName=''
-                for(var i in obj){
-                    var dimensionName=i;
-                }
-                return dimensionName==dName?true:false;
-            }
         }
     };
 }]);

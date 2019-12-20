@@ -137,6 +137,48 @@
                     <input ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.value" type="text" class="form-control condition-val" ng-model="vm.condition.value" />
                     </div>
                 </div>
+                <div class="row container threshold-alert-condition">
+                    <div class="col-xs-3">
+                        <label class="control-label">
+                            Dimension*
+                        </label>
+                        <ui-select class="condition-val"
+                                   ng-required="!vm.timeConditions.feature"
+                                   ng-model="vm.timeConditions.feature">
+                            <ui-select-match placeholder="Search Dimension">
+                                {{vm.timeConditions.feature.definition}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature">
+                                <div ng-bind="feature.definition"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-xs-3">
+                        <label class="control-label">
+                            Unit*
+                        </label>
+                        <ui-select ng-required="!vm.condition.timeCompatibleDimensions.unit"
+                                   class="condition-val"
+                                   ng-model="vm.timeConditions.unit"
+                                   theme="bootstrap">
+                            <ui-select-match placeholder="Unit">
+                                {{vm.timeConditions.unit.title}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="unit in vm.TIME_UNIT">
+                                {{unit.title}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-xs-2">
+                        <label class="control-label">
+                            Value*
+                        </label>
+                        <input ng-required="!vm.timeConditions.value"
+                               type="text"
+                               class="form-control condition-val"
+                               ng-model="vm.timeConditions.value" />
+                    </div>
+                </div>
                 <br ng-if="vm.scheduleObj.report.thresholdAlert" />
                 <div class="row container">
                     <div class="col-xs-8">

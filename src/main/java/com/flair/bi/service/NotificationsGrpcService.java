@@ -20,6 +20,7 @@ import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.messages.report.SearchReportsRequest;
 import com.flair.bi.messages.report.SearchReportsResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
+import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
@@ -225,32 +226,28 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                                 .setVisualization(orEmpty(dto.getReport_line_item().getVisualization()))
                                 .build()
                 )
-                .setAssignReport(
-                        com.flair.bi.messages.report.AssignReport.newBuilder()
-                                .setChannel(orEmpty(dto.getAssign_report().getChannel()))
-                                .setSlackAPIToken(orEmpty(dto.getAssign_report().getSlack_API_Token()))
-                                .setChannelId(orEmpty(dto.getAssign_report().getChannel_id()))
-                                .setStrideAPIToken(orEmpty(dto.getAssign_report().getStride_API_Token()))
-                                .setStrideCloudId(orEmpty(dto.getAssign_report().getStride_cloud_id()))
-                                .setStrideConversationId(orEmpty(dto.getAssign_report().getStride_conversation_id()))
-                                .addAllEmailList(Arrays.stream(dto.getAssign_report().getEmail_list())
-                                        .map(i -> Email.newBuilder()
-                                                .setUserEmail(orEmpty(i.getUser_email()))
-                                                .setUserName(orEmpty(i.getUser_name()))
-                                                .build())
-                                        .collect(toList()))
-                                .build()
-                )
-                .setSchedule(
-                        com.flair.bi.messages.report.Schedule.newBuilder()
-                                .setCronExp(orEmpty(dto.getSchedule().getCron_exp()))
-                                .setTimezone(orEmpty(dto.getSchedule().getTimezone()))
-                                .setStartDate(orEmpty(dto.getSchedule().getStart_date()))
-                                .setEndDate(orEmpty(dto.getSchedule().getEnd_date()))
-                                .build()
-                )
-                .setQuery(dto.getQuery())
-                .build();
+				.setAssignReport(com.flair.bi.messages.report.AssignReport.newBuilder()
+						.addAllChannel(Arrays.asList(dto.getAssign_report().getChannel()))
+						.setSlackAPIToken(orEmpty(dto.getAssign_report().getSlack_API_Token()))
+						.setChannelId(orEmpty(dto.getAssign_report().getChannel_id()))
+						.setStrideAPIToken(orEmpty(dto.getAssign_report().getStride_API_Token()))
+						.setStrideCloudId(orEmpty(dto.getAssign_report().getStride_cloud_id()))
+						.setStrideConversationId(orEmpty(dto.getAssign_report().getStride_conversation_id()))
+						.setCommunicationList(com.flair.bi.messages.report.CommunicationList.newBuilder()
+								.addAllTeams(Arrays.asList(
+										dto.getAssign_report().getCommunication_list().getTeams()))
+								.addAllEmail(Arrays.stream(dto.getAssign_report().getCommunication_list().getEmail())
+										.map(i -> Email.newBuilder().setUserEmail(orEmpty(i.getUser_email()))
+												.setUserName(orEmpty(i.getUser_name())).build())
+										.collect(toList()))
+								.build())
+						.build())
+				.setSchedule(com.flair.bi.messages.report.Schedule.newBuilder()
+						.setCronExp(orEmpty(dto.getSchedule().getCron_exp()))
+						.setTimezone(orEmpty(dto.getSchedule().getTimezone()))
+						.setStartDate(orEmpty(dto.getSchedule().getStart_date()))
+						.setEndDate(orEmpty(dto.getSchedule().getEnd_date())).build())
+				.setQuery(dto.getQuery()).build();
     }
 
     private SchedulerNotificationDTO createSchedulerNotificationDTO(ScheduleReportResponse response) {
@@ -282,12 +279,15 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         responseDTO.setReport_line_item(reportLineItem);
         responseDTO.setQuery(scheduleReport.getQuery());
         AssignReport assignReport = new AssignReport();
-        assignReport.setChannel(scheduleReport.getAssignReport().getChannel());
-        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId());
-        assignReport.setEmail_list(scheduleReport.getAssignReport().getEmailListList()
+        CommunicationList communicationList= new CommunicationList();
+        communicationList.setEmail(scheduleReport.getAssignReport().getCommunicationList().getEmailList()
                 .stream()
                 .map(item -> toEmailDto(item))
                 .collect(toList()).toArray(new emailsDTO[]{}));
+        communicationList.setTeams(scheduleReport.getAssignReport().getCommunicationList().getTeamsList().toArray(new Integer[]{}));
+        assignReport.setCommunication_list(communicationList);
+        assignReport.setChannel(scheduleReport.getAssignReport().getChannelList().toArray(new String[]{}));;
+        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId()); 
         assignReport.setSlack_API_Token(scheduleReport.getAssignReport().getSlackAPIToken());
         assignReport.setStride_API_Token(scheduleReport.getAssignReport().getStrideAPIToken());
         assignReport.setStride_cloud_id(scheduleReport.getAssignReport().getStrideCloudId());

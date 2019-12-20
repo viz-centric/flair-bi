@@ -59,7 +59,6 @@ public void setCommunication_list(CommunicationList communication_list) {
 	this.communication_list = communication_list;
 }
 
-
 @Override
 public String toString() {
 	return "AssignReport [channel=" + Arrays.toString(channel) + ", slack_API_Token=" + slack_API_Token

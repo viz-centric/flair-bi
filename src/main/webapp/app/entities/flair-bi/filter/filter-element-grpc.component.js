@@ -42,14 +42,12 @@
         }
 
         function resetTimezone(startDate) {
-            var date = new Date(startDate);
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            return date;
+            return startDate;
         }
 
         function endOfDay(startDate) {
             var date = new Date(startDate);
-            date.setHours(23, 59 - date.getTimezoneOffset(), 59);
+            date.setHours(23, 59, 59);
             return date;
         }
 

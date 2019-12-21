@@ -180,7 +180,7 @@
                                ng-model="vm.timeConditions.value" />
                     </div>
                 </div>
-                <div class="row container threshold-alert-condition">
+                <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.report.thresholdAlert">
                     <div class="col-xs-3">
                         <label class="control-label">
                             Dimension*
@@ -191,7 +191,7 @@
                             <ui-select-match placeholder="Search Dimension">
                                 {{vm.timeConditions.feature.definition}}
                             </ui-select-match>
-                            <ui-select-choices repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature">
+                            <ui-select-choices repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature.id">
                                 <div ng-bind="feature.definition"></div>
                             </ui-select-choices>
                         </ui-select>

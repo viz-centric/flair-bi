@@ -328,7 +328,7 @@
                 ];
                 featureData[featureDefinition]._meta = {
                     operator: '-',
-                    initialValue: 'NOW()',
+                    initialValue: '__FLAIR_NOW()',
                     valueType: 'intervalValueType'
                 };
                 additionalFeatures.push(featureData);

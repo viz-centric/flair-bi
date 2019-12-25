@@ -245,7 +245,7 @@
         function schedule() {
             if(validateAndSetHaving()){
                 vm.isSaving = true;
-                setScheduledData();
+                setCronExpression();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
                     if (success.data.message) {
@@ -272,8 +272,7 @@
             }
         }
 
-        function setScheduledData(){
-            vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
+        function setCronExpression(){
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
         }
 

@@ -137,7 +137,7 @@
                     <input ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.value" type="text" class="form-control condition-val" ng-model="vm.condition.value" />
                     </div>
                 </div>
-                <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.report.thresholdAlert">
+                <div class="row container threshold-alert-condition" ng-if="vm.scheduleObj.report.thresholdAlert">
                     <div class="col-xs-3">
                         <label class="control-label">
                             Dimension*

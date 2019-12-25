@@ -78,7 +78,7 @@
                 "start_date": new Date(),
                 "end_date": new Date()
             },
-            "constraints":"",
+            "constraints":"{}",
             "putcall":false,
             "emailReporter":false
           };

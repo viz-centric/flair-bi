@@ -157,10 +157,10 @@
                 })[0];
 
             if (featureDrillDown) {
-                return drillDown(featureDrillDown, fieldDimension.hierarchy, filters);
+                return {name: drillDown(featureDrillDown, fieldDimension.hierarchy, filters)};
             }
         }
-        return fieldDimension.feature.name;
+        return {name: fieldDimension.feature.name};
     }
 
     /**
@@ -237,12 +237,16 @@
         if (agg !== null && agg !== 'NONE') {
             return {
                 field: agg + '(' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.name,
-                agg: true
+                agg: true,
+                aggregation: agg,
+                name: fieldMeasure.feature.definition,
+                alias: fieldMeasure.feature.name,
             };
         } else {
             return {
                 field: fieldMeasure.feature.definition,
-                agg: false
+                agg: false,
+                name: fieldMeasure.feature.definition,
             };
         }
     }
@@ -260,16 +264,13 @@
 
     function getQueryParameters(filters, conditionExpression,offset) {
         var query = {};
-        var self = this;
-        var aggExists = false;
-        var ordersList = [];
 
         var dimensions = this.fields
             .filter(isDimension);
 
         var measures = this.fields
             .filter(isMeasure);
-      
+
         if (this.metadataVisual.name == "Table" || this.metadataVisual.name == "Pivot Table") {
             query.offset= this.getChartPropertyValue('Limit', 20)*offset
 
@@ -277,22 +278,24 @@
 
         var dimensionFields = dimensions
             .map(function (item) {
-                var selectedName = constructDimensionField(item, filters);
-                item.feature.selectedName = selectedName;
-                return selectedName;
+                var result = constructDimensionField(item, filters);
+                item.feature.selectedName = result.name;
+                return result;
             });
 
         var measureFields = this.fields
             .filter(isMeasure)
             .map(function (item) {
-                var result = constructMeasureField(item);
-                if (result.agg) {
-                    aggExists = true;
-                }
-                return result.field;
+                return constructMeasureField(item);
             });
 
         query.fields = dimensionFields.concat(measureFields);
+
+        var aggExists = !!measureFields
+            .filter(function (item) {
+                return item.aggregation;
+            })[0];
+
         if (aggExists) {
             query.groupBy = dimensionFields;
         }
@@ -303,43 +306,47 @@
             query.conditionExpressions = [conditionExpression];
         }
 
-        measures.filter(function (item) {
-            var property = getProperty(item.properties, 'Sort', null);
-            return property !== null && property !== 'None';
-        }).map(function (item) {
-            var property = getProperty(item.properties, 'Sort', null);
-            if (property === 'Ascending') {
-                ordersList.push({
-                    direction: 'ASC',
-                    featureName: item.feature.name
-                })
-            } else {
-                ordersList.push({
-                    direction: 'DESC',
-                    featureName: item.feature.name
-                })
-            }
-        });
+        var ordersListMeasures = measures
+            .filter(function (item) {
+                var property = getProperty(item.properties, 'Sort', null);
+                return property !== null && property !== 'None';
+            })
+            .map(function (item) {
+                var property = getProperty(item.properties, 'Sort', null);
+                if (property === 'Ascending') {
+                    return {
+                        direction: 'ASC',
+                        featureName: item.feature.name
+                    }
+                } else {
+                    return {
+                        direction: 'DESC',
+                        featureName: item.feature.name
+                    }
+                }
+            });
 
-        dimensions.filter(function (item) {
-            var property = getProperty(item.properties, 'Sort', null);
-            return property !== null && property !== 'None';
-        }).map(function (item) {
-            var property = getProperty(item.properties, 'Sort', null);
-            if (property === 'Ascending') {
-                ordersList.push({
-                    direction: 'ASC',
-                    featureName: item.feature.selectedName
-                })
-            } else {
-                ordersList.push({
-                    direction: 'DESC',
-                    featureName: item.feature.selectedName
-                })
-            }
-        });
+        var ordersListDimensions = dimensions
+            .filter(function (item) {
+                var property = getProperty(item.properties, 'Sort', null);
+                return property !== null && property !== 'None';
+            })
+            .map(function (item) {
+                var property = getProperty(item.properties, 'Sort', null);
+                if (property === 'Ascending') {
+                    return {
+                        direction: 'ASC',
+                        featureName: item.feature.selectedName
+                    }
+                } else {
+                    return {
+                        direction: 'DESC',
+                        featureName: item.feature.selectedName
+                    }
+                }
+            });
 
-        query.orders = ordersList;
+        query.orders = ordersListMeasures.concat(ordersListDimensions);
 
         return query;
     }

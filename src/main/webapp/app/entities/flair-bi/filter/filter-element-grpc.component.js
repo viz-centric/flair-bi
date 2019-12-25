@@ -157,7 +157,7 @@
         function load(q, dimension) {
             var vId = dimension.id;
             var query = {};
-            query.fields = [dimension.name];
+            query.fields = [{name: dimension.name}];
             if (q) {
                 query.conditionExpressions = [{
                     sourceType: 'FILTER',

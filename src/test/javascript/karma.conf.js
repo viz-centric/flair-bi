@@ -33,7 +33,6 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/pace/pace.js',
             'src/main/webapp/bower_components/metisMenu/dist/metisMenu.js',
             'src/main/webapp/bower_components/jquery-ui/jquery-ui.js',
-            'src/main/webapp/bower_components/jquery-slimscroll/jquery.slimscroll.js',
             'src/main/webapp/bower_components/gridstack/dist/gridstack.js',
             'src/main/webapp/bower_components/slidereveal/dist/jquery.slidereveal.js',
             'src/main/webapp/bower_components/codemirror/lib/codemirror.js',

@@ -85,6 +85,7 @@
             vm.datePickerOpenStatus.endDate = false;
             var cronstrue = window.cronstrue;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
+            resetSelectedChannels();
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;
@@ -141,6 +142,7 @@
 
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
+            selectChannels(data.assign_report.channel);
             $scope.cronExpression=data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
@@ -415,14 +417,26 @@
             ReportManagementUtilsService.executeNow(addPrefix(id));
         }
 
-        function setChannel(channel){
-            channel.selected=!channel.selected;
-            var index = vm.scheduleObj.assign_report.channel.indexOf(channel.name);
+        function setChannel(channel,selected){
+            vm.channels[channel]=!selected;
+            var index = vm.scheduleObj.assign_report.channel.indexOf(channel);
             if (index > -1) {
                 vm.scheduleObj.assign_report.channel.splice(index, 1);
             }else{
-                vm.scheduleObj.assign_report.channel.push(channel.name)
+                vm.scheduleObj.assign_report.channel.push(channel)
             }
+        }
+
+        function selectChannels(selectedChannels){
+            selectedChannels.filter(function(item) {
+                vm.channels[item]=true;
+            });
+        }
+
+        function resetSelectedChannels(){
+            angular.forEach(vm.channels, function(value, key) {
+              vm.channels[key]=false;
+            });
         }
 }
 })();

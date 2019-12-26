@@ -236,16 +236,12 @@
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
         if (agg !== null && agg !== 'NONE') {
             return {
-                field: agg + '(' + fieldMeasure.feature.definition + ') as ' + fieldMeasure.feature.name,
-                agg: true,
                 aggregation: agg,
                 name: fieldMeasure.feature.definition,
                 alias: fieldMeasure.feature.name,
             };
         } else {
             return {
-                field: fieldMeasure.feature.definition,
-                agg: false,
                 name: fieldMeasure.feature.definition,
             };
         }
@@ -254,11 +250,9 @@
     function constructHavingField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
         if (agg !== null && agg !== 'NONE') {
-            return agg + '(' + fieldMeasure.feature.definition + ')';
-        } else {
-
-            return null;
+            return {name: fieldMeasure.feature.definition, aggregation: agg};
         }
+        return null;
     }
 
 
@@ -306,7 +300,7 @@
             query.conditionExpressions = [conditionExpression];
         }
 
-        var ordersListMeasures = measures
+        var ordersListSortMeasures = measures
             .filter(function (item) {
                 var property = getProperty(item.properties, 'Sort', null);
                 return property !== null && property !== 'None';
@@ -316,17 +310,17 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        featureName: item.feature.name
+                        featureName: {name: item.feature.name}
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        featureName: item.feature.name
+                        featureName: {name: item.feature.name}
                     }
                 }
             });
 
-        var ordersListDimensions = dimensions
+        var ordersListSortDimensions = dimensions
             .filter(function (item) {
                 var property = getProperty(item.properties, 'Sort', null);
                 return property !== null && property !== 'None';
@@ -336,17 +330,17 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        featureName: item.feature.selectedName
+                        feature: {name: item.feature.selectedName}
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        featureName: item.feature.selectedName
+                        feature: {name: item.feature.selectedName}
                     }
                 }
             });
 
-        query.orders = ordersListMeasures.concat(ordersListDimensions);
+        query.orders = ordersListSortMeasures.concat(ordersListSortDimensions);
 
         return query;
     }

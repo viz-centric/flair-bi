@@ -494,21 +494,25 @@
         }
 
         function getHavingDTO(){
-            var having=[];
-            var havingFuntion=getMeasureField();
-            var havingDTO= {featureName:havingFuntion,value:vm.condition.value,comparatorType:vm.condition.compare.opt};
+            var having = [];
+            var havingField = getMeasureField();
+            var havingDTO = {
+                feature: havingField,
+                value: vm.condition.value,
+                comparatorType: vm.condition.compare.opt
+            };
             having.push(havingDTO);
             return having;
         }
 
-        function getMeasureField(){
-            var aggFunctionField={};
-            vm.visualMetaData.fields.filter(function(item) {
-                if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
-                    aggFunctionField=vm.visualMetaData.constructHavingField(item);
-                }
-            });
-            return aggFunctionField;
+        function getMeasureField() {
+            return vm.visualMetaData.fields
+                .filter(function (item) {
+                    return item.feature.featureType === "MEASURE" && item.feature.definition === vm.condition.featureName;
+                })
+                .map(function (item) {
+                    return vm.visualMetaData.constructHavingField(item);
+                })[0];
         }
 
 

@@ -9,6 +9,7 @@ import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AssignReport;
+import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -79,11 +80,12 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setReport(reportDTO);
     	
     	ReportLineItem reportLineItem= new ReportLineItem();
-    	List<String> fields= new ArrayList<String>();//("State"), "COUNT(Price) as Price"};
+    	List<String> fields= new ArrayList<String>();
     	fields.add("State");
     	fields.add("COUNT(Price) as Price");
     	String dimentions[]= {"State"};
     	String measures[]= {"Price"};
+    	String channel[]={"email"};
     	List<String> groupBy= new ArrayList<String>();
     	groupBy.add("State");
     	QueryDTO queryDTO= new QueryDTO();
@@ -99,12 +101,14 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setReport_line_item(reportLineItem);
     	
     	AssignReport assignReport= new AssignReport();
+    	CommunicationList communicationList= new CommunicationList();
     	emailsDTO emailsDTO= new emailsDTO();
     	emailsDTO.setUser_email("example@localhost.com");
     	emailsDTO.setUser_name("example");
     	emailsDTO emailList[]= {emailsDTO};
-    	assignReport.setEmail_list(emailList);
-    	assignReport.setChannel("email");
+    	communicationList.setEmail(emailList);
+    	assignReport.setCommunication_list(communicationList);
+    	assignReport.setChannel(channel);
     	schedulerDTO.setAssign_report(assignReport);
     	
     	Schedule schedule= new Schedule();

@@ -83,12 +83,15 @@
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="channels">Channels*</label>
-                            <ui-select ng-model="vm.scheduleObj.assign_report.channel">
-                              <ui-select-match placeholder="Select Channel ...">{{$select.selected}}</ui-select-match>
-                              <ui-select-choices repeat="channel in vm.channels  | filter: $select.search track by channel">
-                                <div ng-bind="channel"></div>
-                              </ui-select-choices>
-                            </ui-select>
+                            &nbsp;&nbsp;
+                            <label ng-click="vm.setChannel(key,value)" ng-repeat="(key, value) in vm.channels" class="flair-checkbox">
+                                <i
+                                    class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':value,'fa-square-o-unchecked':!value} "></i>
+                                <i
+                                    class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':value,'fa-check-square-o-unchecked':!value}"></i>
+                                <span>&nbsp;{{key}}</span>&nbsp;
+                            </label>
+
                         </div>
                     </div>
                 </div>

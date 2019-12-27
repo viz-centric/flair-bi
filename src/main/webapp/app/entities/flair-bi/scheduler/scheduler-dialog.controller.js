@@ -44,6 +44,7 @@
         vm.features=[];
         vm.timeCompatibleDimensions=[];
         vm.vizIdPrefix='threshold_alert_:';
+        vm.setChannel=setChannel;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -69,8 +70,8 @@
             "queryDTO":{
             },
             "assign_report": {
-                "channel": "",
-                "email_list":[]
+                "channel": [],
+                "communication_list":{"email":[],"teams":[]}
             },
             "schedule": {
                 "cron_exp":"",
@@ -90,6 +91,7 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
+            resetSelectedChannels();
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;
@@ -197,6 +199,7 @@
 
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
+            selectChannels(data.assign_report.channel);
             $scope.cronExpression=data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
@@ -211,8 +214,8 @@
                 setTimeConditions(JSON.parse(vm.scheduleObj.constraints).time);
             }
             if(vm.scheduleObj.emailReporter){
-                vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
-                addEmailList(data.assign_report.email_list);
+                vm.scheduleObj.assign_report.communication_list.email=data.assign_report.communication_list.email;
+                addEmailList(data.assign_report.communication_list.email);
             }
         }
 
@@ -358,16 +361,16 @@
             vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
             if(validateAndSetHaving()){
                 vm.isSaving = true;
-                setScheduledData();
+                setCronExpression();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.data.message) {
-                        $rootScope.showErrorSingleToast({
-                            text: success.data.message,
-                            title: "Error"
-                        });
+                    if (success.status==200) {
+                      $uibModalInstance.close(vm.scheduleObj);
                     } else {
-                        $uibModalInstance.close(vm.scheduleObj);
+                      $rootScope.showErrorSingleToast({
+                        text: success.data.message,
+                        title: "Error"
+                      });
                     }
                 }).catch(function (error) {
                     vm.isSaving = false;
@@ -385,8 +388,7 @@
             }
         }
 
-        function setScheduledData(){
-            vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
+        function setCronExpression(){
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
         }
 
@@ -407,16 +409,16 @@
         function added(tag) {
             console.log("-vm.selectedUser"+vm.selectedUsers);
             var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
-            vm.scheduleObj.assign_report.email_list.push(emailObj);
+            vm.scheduleObj.assign_report.communication_list.email.push(emailObj);
         }
 
         function removed(tag){
             var index = -1;
-            vm.scheduleObj.assign_report.email_list.some(function(obj, i) {
+            vm.scheduleObj.assign_report.communication_list.email.some(function(obj, i) {
             return obj.user_email === tag['text'].split(" ")[1] ? index = i : false;
             });
             if (index > -1) {
-                vm.scheduleObj.assign_report.email_list.splice(index, 1);
+                vm.scheduleObj.assign_report.communication_list.email.splice(index, 1);
             }
         }
 
@@ -531,6 +533,28 @@
 
         function executeNow(id){
             ReportManagementUtilsService.executeNow(addPrefix(id));
+        }
+
+        function setChannel(channel,selected){
+            vm.channels[channel]=!selected;
+            var index = vm.scheduleObj.assign_report.channel.indexOf(channel);
+            if (index > -1) {
+                vm.scheduleObj.assign_report.channel.splice(index, 1);
+            }else{
+                vm.scheduleObj.assign_report.channel.push(channel)
+            }
+        }
+
+        function selectChannels(selectedChannels){
+            selectedChannels.filter(function(item) {
+                vm.channels[item]=true;
+            });
+        }
+
+        function resetSelectedChannels(){
+            angular.forEach(vm.channels, function(value, key) {
+              vm.channels[key]=false;
+            });
         }
 }
 })();

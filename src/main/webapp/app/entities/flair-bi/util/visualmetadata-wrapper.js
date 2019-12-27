@@ -310,12 +310,12 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        featureName: {name: item.feature.name}
+                        feature: {name: item.feature.name}
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        featureName: {name: item.feature.name}
+                        feature: {name: item.feature.name}
                     }
                 }
             });

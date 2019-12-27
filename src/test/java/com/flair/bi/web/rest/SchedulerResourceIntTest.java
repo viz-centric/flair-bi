@@ -101,14 +101,12 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedulerDTO.setReport_line_item(reportLineItem);
     	
     	AssignReport assignReport= new AssignReport();
-    	CommunicationList communicationList= new CommunicationList();
     	emailsDTO emailsDTO= new emailsDTO();
     	emailsDTO.setUser_email("example@localhost.com");
     	emailsDTO.setUser_name("example");
     	emailsDTO emailList[]= {emailsDTO};
-    	communicationList.setEmail(emailList);
-    	assignReport.setCommunication_list(communicationList);
-    	assignReport.setChannel(channel);
+       	assignReport.setEmail_list(emailList);
+    	assignReport.setChannel("email");
     	schedulerDTO.setAssign_report(assignReport);
     	
     	Schedule schedule= new Schedule();

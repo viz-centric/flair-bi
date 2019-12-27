@@ -250,13 +250,13 @@
                 setCronExpression();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.data.message) {
+                    if (success.status==200) {
+                      $uibModalInstance.close(vm.scheduleObj);
+                    } else {
                       $rootScope.showErrorSingleToast({
                         text: success.data.message,
                         title: "Error"
                       });
-                    } else {
-                      $uibModalInstance.close(vm.scheduleObj);
                     }
                 }).catch(function (error) {
                     vm.isSaving = false;

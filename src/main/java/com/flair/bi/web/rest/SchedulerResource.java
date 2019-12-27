@@ -90,12 +90,7 @@ public class SchedulerResource {
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
-		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),
-				schedulerDTO.getReport_line_item(),
-				schedulerDTO.getAssign_report(),
-				schedulerDTO.getSchedule(),
-				query,
-				schedulerDTO.getConstraints());
+		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 
 		schedulerService.setChannelCredentials(schedulerNotificationDTO);
         log.info("Sending schedule report {}", schedulerNotificationDTO);

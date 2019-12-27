@@ -209,7 +209,6 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                                 .setUserid(orEmpty(dto.getReport().getUserid()))
                                 .setDashboardName(orEmpty(dto.getReport().getDashboard_name()))
                                 .setViewName(orEmpty(dto.getReport().getView_name()))
-                                .setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
                                 .setShareLink(orEmpty(dto.getReport().getShare_link()))
                                 .setBuildUrl(orEmpty(dto.getReport().getBuild_url()))
                                 .setMailBody(orEmpty(dto.getReport().getMail_body()))
@@ -270,7 +269,6 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         report.setTitle_name(scheduleReport.getReport().getTitleName());
         report.setUserid(scheduleReport.getReport().getUserid());
         report.setView_name(scheduleReport.getReport().getViewName());
-        report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
         report.setThresholdAlert(scheduleReport.getReport().getThresholdAlert());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();
@@ -301,7 +299,6 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         schedule.setStart_date(scheduleReport.getSchedule().getStartDate());
         schedule.setTimezone(scheduleReport.getSchedule().getTimezone());
         responseDTO.setSchedule(schedule);
-        responseDTO.setConstraints(scheduleReport.getConstraints());
         return responseDTO;
     }
 

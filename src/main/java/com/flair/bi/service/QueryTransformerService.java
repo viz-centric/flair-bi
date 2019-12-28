@@ -164,6 +164,24 @@ public class QueryTransformerService {
                 .orElse(field);
     }
 
+    private FieldDTO transformField(Map<String, Feature> features, FieldDTO field) {
+        return Optional.ofNullable(features.get(field.getName()))
+                .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation(), item.getName()))
+                .orElse(field);
+    }
+
+    private FieldDTO transformFieldNoAlias(Map<String, Feature> features, FieldDTO field) {
+        return Optional.ofNullable(features.get(field.getName()))
+                .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation()))
+                .orElse(field);
+    }
+
+    private String transformFieldNameOrSanitize(Map<String, Feature> features, String field) {
+        return Optional.ofNullable(features.get(field))
+                .map(item -> item.getDefinition())
+                .orElse(field);
+    }
+
     private static int getDirectionValue(int direction) {
         switch (direction) {
             case 0:

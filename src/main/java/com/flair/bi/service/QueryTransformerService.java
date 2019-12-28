@@ -4,6 +4,7 @@ import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.messages.Query;
+import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
@@ -17,6 +18,7 @@ import com.project.bi.query.expression.condition.impl.NotContainsConditionExpres
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -47,31 +49,31 @@ public class QueryTransformerService {
                         .collect(Collectors.toMap(item -> item.getName(), item -> item)))
                 .orElseGet(() -> new HashMap<>());
 
-        List<String> fields = transformFieldNames(queryDTO.getFields(), features);
-        List<String> groupBy = transformGroupBy(queryDTO.getGroupBy(), features);
+        List<FieldDTO> fields = transformSelectFields(features, queryDTO.getFields());
+        List<FieldDTO> groupBy = transformGroupByFields(features, queryDTO.getGroupBy());
 
         Query.Builder builder = Query.newBuilder();
         builder
-                .setSource(sanitize(queryDTO.getSource()))
+                .setSource(queryDTO.getSource())
                 .setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT))
                 .setDistinct(queryDTO.isDistinct())
-                .addAllFields(fields)
-                .addAllGroupBy(groupBy);
+                .addAllFields(toProtoFields(fields))
+                .addAllGroupBy(toProtoFields(groupBy));
 
         if (vId != null) {
             builder.setQueryId(vId);
         }
 
         if (connectionName != null) {
-            builder.setSourceId(sanitize(connectionName));
+            builder.setSourceId(connectionName);
         }
 
         if (userId != null) {
-            builder.setUserId(sanitize(userId));
+            builder.setUserId(userId);
         }
 
         if (queryDTO.getHaving().size() > 0) {
-            builder.addAllHaving(toHaving(queryDTO.getHaving(), features));
+            builder.addAllHaving(toHaving(features, queryDTO.getHaving()));
         }
 
         if (queryDTO.getOffset() != null) {
@@ -80,7 +82,7 @@ public class QueryTransformerService {
 
         queryDTO.getOrders().forEach(sortDTO -> builder.addOrders(Query.SortHolder.newBuilder()
                 .setDirectionValue(getDirectionValue(sortDTO.getDirection().ordinal()))
-                .setFeatureName(sanitize(sortDTO.getFeatureName()))
+                .setFeature(toProtoField(sortDTO.getFeature()))
                 .build()
         ));
 
@@ -96,38 +98,63 @@ public class QueryTransformerService {
         return builder.build();
     }
 
-    private List<Query.HavingHolder> toHaving(List<HavingDTO> having, Map<String, Feature> features) {
-        return having.stream()
-                .map(h -> Query.HavingHolder.newBuilder()
-                        .setFeatureName(transformFieldNameOrSanitize(features, h.getFeatureName()))
-                        .setValue(sanitize(h.getValue()))
-                        .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
-                        .build())
+    private List<Query.Field> toProtoFields(List<FieldDTO> fields) {
+        return fields.stream()
+                .map(this::toProtoField)
                 .collect(Collectors.toList());
     }
 
-    private List<String> transformFieldNames(List<String> fields, Map<String, Feature> features) {
+    private Query.Field toProtoField(FieldDTO field) {
+        return Query.Field.newBuilder()
+                .setName(StringUtils.isEmpty(field.getName()) ? "" : field.getName())
+                .setAggregation(StringUtils.isEmpty(field.getAggregation()) ? "" : field.getAggregation())
+                .setAlias(StringUtils.isEmpty(field.getAlias()) ? "" : field.getAlias())
+                .build();
+    }
+
+    private List<Query.HavingHolder> toHaving(Map<String, Feature> features, List<HavingDTO> having) {
+        return having.stream()
+                .map(h -> {
+                    FieldDTO fieldDTO = transformFieldNoAlias(features, h.getFeature());
+                    return Query.HavingHolder.newBuilder()
+                            .setFeature(toProtoField(fieldDTO))
+                            .setValue(h.getValue())
+                            .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<FieldDTO> transformSelectFields(Map<String, Feature> features, List<FieldDTO> fields) {
         return fields
                 .stream()
-                .map(field -> Optional.ofNullable(features.get(field))
-                        .map(item -> item.getDefinition() + " as " + item.getName())
-                        .orElse(field))
+                .map(field -> transformField(features, field))
                 .collect(Collectors.toList());
+    }
+
+    private List<FieldDTO> transformGroupByFields(Map<String, Feature> features, List<FieldDTO> fields) {
+        return fields
+                .stream()
+                .map(field -> transformFieldNoAlias(features, field))
+                .collect(Collectors.toList());
+    }
+
+    private FieldDTO transformField(Map<String, Feature> features, FieldDTO field) {
+        return Optional.ofNullable(features.get(field.getName()))
+                .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation(), item.getName()))
+                .orElse(field);
+    }
+
+    private FieldDTO transformFieldNoAlias(Map<String, Feature> features, FieldDTO field) {
+        return Optional.ofNullable(features.get(field.getName()))
+                .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation()))
+                .orElse(field);
     }
 
     private String transformFieldNameOrSanitize(Map<String, Feature> features, String field) {
         return Optional.ofNullable(features.get(field))
                 .map(item -> item.getDefinition())
-                .orElseGet(() -> sanitize(field));
-    }
-
-    private List<String> transformGroupBy(List<String> fields, Map<String, Feature> features) {
-        return fields
-                .stream()
-                .map(field -> Optional.ofNullable(features.get(field))
-                        .map(item -> item.getDefinition())
-                        .orElse(field))
-                .collect(Collectors.toList());
+                .orElse(field);
     }
 
     private static int getDirectionValue(int direction) {

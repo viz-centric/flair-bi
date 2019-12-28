@@ -218,7 +218,7 @@
 
         function setHavingDTO(query){
             if(query.having){
-                vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
+                vm.condition.featureName=query.having[0].feature.name;
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
                     return item.opt===query.having[0].comparatorType;
@@ -395,7 +395,7 @@
             assignTimeConditionsToScheduledObj();
             if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
-                vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
+                vm.scheduleObj.queryDTO.having[0].feature?flag=true:flag=false;
             }
             return flag;
         }
@@ -494,21 +494,25 @@
         }
 
         function getHavingDTO(){
-            var having=[];
-            var havingFuntion=getMeasureField();
-            var havingDTO= {featureName:havingFuntion,value:vm.condition.value,comparatorType:vm.condition.compare.opt};
+            var having = [];
+            var havingField = getMeasureField();
+            var havingDTO = {
+                feature: havingField,
+                value: vm.condition.value,
+                comparatorType: vm.condition.compare.opt
+            };
             having.push(havingDTO);
             return having;
         }
 
-        function getMeasureField(){
-            var aggFunctionField={};
-            vm.visualMetaData.fields.filter(function(item) {
-                if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
-                    aggFunctionField=vm.visualMetaData.constructHavingField(item);
-                }
-            });
-            return aggFunctionField;
+        function getMeasureField() {
+            return vm.visualMetaData.fields
+                .filter(function (item) {
+                    return item.feature.featureType === "MEASURE" && item.feature.definition === vm.condition.featureName;
+                })
+                .map(function (item) {
+                    return vm.visualMetaData.constructHavingField(item);
+                })[0];
         }
 
 

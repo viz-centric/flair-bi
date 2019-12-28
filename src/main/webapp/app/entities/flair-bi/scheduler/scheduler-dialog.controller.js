@@ -218,7 +218,7 @@
 
         function setHavingDTO(query){
             if(query.having){
-                vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
+                vm.condition.featureName=query.having[0].feature.name;
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
                     return item.opt===query.having[0].comparatorType;
@@ -395,7 +395,7 @@
             assignTimeConditionsToScheduledObj();
             if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
-                vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
+                vm.scheduleObj.queryDTO.having[0].feature?flag=true:flag=false;
             }
             return flag;
         }

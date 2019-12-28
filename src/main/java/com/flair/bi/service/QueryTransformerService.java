@@ -49,8 +49,8 @@ public class QueryTransformerService {
                         .collect(Collectors.toMap(item -> item.getName(), item -> item)))
                 .orElseGet(() -> new HashMap<>());
 
-        List<FieldDTO> fields = transformFields(features, queryDTO.getFields());
-        List<FieldDTO> groupBy = transformFields(features, queryDTO.getGroupBy());
+        List<FieldDTO> fields = transformSelectFields(features, queryDTO.getFields());
+        List<FieldDTO> groupBy = transformGroupByFields(features, queryDTO.getGroupBy());
 
         Query.Builder builder = Query.newBuilder();
         builder
@@ -115,7 +115,7 @@ public class QueryTransformerService {
     private List<Query.HavingHolder> toHaving(Map<String, Feature> features, List<HavingDTO> having) {
         return having.stream()
                 .map(h -> {
-                    FieldDTO fieldDTO = transformField(features, h.getFeature());
+                    FieldDTO fieldDTO = transformFieldNoAlias(features, h.getFeature());
                     return Query.HavingHolder.newBuilder()
                             .setFeature(toProtoField(fieldDTO))
                             .setValue(h.getValue())
@@ -125,10 +125,17 @@ public class QueryTransformerService {
                 .collect(Collectors.toList());
     }
 
-    private List<FieldDTO> transformFields(Map<String, Feature> features, List<FieldDTO> fields) {
+    private List<FieldDTO> transformSelectFields(Map<String, Feature> features, List<FieldDTO> fields) {
         return fields
                 .stream()
                 .map(field -> transformField(features, field))
+                .collect(Collectors.toList());
+    }
+
+    private List<FieldDTO> transformGroupByFields(Map<String, Feature> features, List<FieldDTO> fields) {
+        return fields
+                .stream()
+                .map(field -> transformFieldNoAlias(features, field))
                 .collect(Collectors.toList());
     }
 
@@ -138,10 +145,16 @@ public class QueryTransformerService {
                 .orElse(field);
     }
 
+    private FieldDTO transformFieldNoAlias(Map<String, Feature> features, FieldDTO field) {
+        return Optional.ofNullable(features.get(field.getName()))
+                .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation()))
+                .orElse(field);
+    }
+
     private String transformFieldNameOrSanitize(Map<String, Feature> features, String field) {
         return Optional.ofNullable(features.get(field))
                 .map(item -> item.getDefinition())
-                .orElseGet(() -> sanitize(field));
+                .orElse(field);
     }
 
     private static int getDirectionValue(int direction) {

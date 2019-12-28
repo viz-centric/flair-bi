@@ -15,6 +15,7 @@ import com.flair.bi.service.dto.scheduler.Schedule;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.view.VisualMetadataService;
+import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.QueryDTO;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -85,11 +87,9 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	String dimentions[]= {"State"};
     	String measures[]= {"Price"};
     	String channel[]={"email"};
-    	List<String> groupBy= new ArrayList<String>();
-    	groupBy.add("State");
     	QueryDTO queryDTO= new QueryDTO();
-    	queryDTO.setFields(fields);
-    	queryDTO.setGroupBy(groupBy);
+    	queryDTO.setFields(new ArrayList<>());
+    	queryDTO.setGroupBy(Arrays.asList(new FieldDTO("State")));
     	queryDTO.setLimit(20L);
     	queryDTO.setOffset(53L);
     	schedulerDTO.setQueryDTO(queryDTO);

@@ -197,7 +197,6 @@
 
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
-            selectChannels(data.assign_report.channel);
             $scope.cronExpression=data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);

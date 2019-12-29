@@ -19,6 +19,7 @@ import com.flair.bi.web.websocket.FbEngineWebSocketService;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -209,8 +210,9 @@ public class GrpcQueryService {
                     .userId(userId)
                     .build());
         } catch (QueryTransformerException e) {
-            log.error("Error validating a query " + queryDTO, e);
-            throw new RuntimeException(e);
+            log.error("Error validating a query " + queryDTO + " error " + e.getValidationMessage());
+            fbEngineWebSocketService.pushGRPCMetaDataError(userId, Status.FAILED_PRECONDITION);
+            return;
         }
 
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {

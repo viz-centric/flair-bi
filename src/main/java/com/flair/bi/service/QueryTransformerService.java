@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.project.bi.query.SQLUtil.sanitize;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -36,9 +37,15 @@ public class QueryTransformerService {
 
     public static final long MAX_LIMIT = 1000L;
     private final FeatureService featureService;
+    private final QueryValidationService queryValidationService;
 
-    public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) {
+    public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) throws QueryTransformerException {
         log.debug("Map to query {} params {}", queryDTO.toString(), params);
+        QueryValidationResult validationResult = queryValidationService.validate(queryDTO);
+        if (!validationResult.success()) {
+            throw new QueryTransformerException("Query validation error", validationResult);
+        }
+
         return toQuery(queryDTO, params.getConnectionName(), params.getVId(), params.getUserId(), params.getDatasourceId());
     }
 
@@ -101,7 +108,7 @@ public class QueryTransformerService {
     private List<Query.Field> toProtoFields(List<FieldDTO> fields) {
         return fields.stream()
                 .map(this::toProtoField)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private Query.Field toProtoField(FieldDTO field) {
@@ -122,21 +129,21 @@ public class QueryTransformerService {
                             .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
                             .build();
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private List<FieldDTO> transformSelectFields(Map<String, Feature> features, List<FieldDTO> fields) {
         return fields
                 .stream()
                 .map(field -> transformField(features, field))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private List<FieldDTO> transformGroupByFields(Map<String, Feature> features, List<FieldDTO> fields) {
         return fields
                 .stream()
                 .map(field -> transformFieldNoAlias(features, field))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private FieldDTO transformField(Map<String, Feature> features, FieldDTO field) {
@@ -252,7 +259,7 @@ public class QueryTransformerService {
         return list
                 .stream()
                 .map(item -> sanitize(item))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
 }

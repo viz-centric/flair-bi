@@ -52,10 +52,16 @@ public class GrpcQueryService {
         log.debug("Sending run query request for datasource {} id {}",
             queryDTO.getSource(), datasource.getConnectionName());
 
-        Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                .connectionName(datasource.getConnectionName())
-                .datasourceId(datasource.getId())
-                .build());
+        Query query;
+        try {
+            query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+                    .connectionName(datasource.getConnectionName())
+                    .datasourceId(datasource.getId())
+                    .build());
+        } catch (QueryTransformerException e) {
+            log.error("Error validating a query " + queryDTO, e);
+            throw new RuntimeException(e);
+        }
 
         RunQueryResponse result;
         try {
@@ -105,12 +111,18 @@ public class GrpcQueryService {
 
         queryDTO.setSource(datasource.getName());
 
-        Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                .connectionName(datasource.getConnectionName())
-                .vId(visualMetadataId != null ? visualMetadataId : "")
-                .userId(userId)
-                .datasourceId(datasource.getId())
-                .build());
+        Query query;
+        try {
+            query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+                    .connectionName(datasource.getConnectionName())
+                    .vId(visualMetadataId != null ? visualMetadataId : "")
+                    .userId(userId)
+                    .datasourceId(datasource.getId())
+                    .build());
+        } catch (QueryTransformerException e) {
+            log.error("Error validating a query " + queryDTO, e);
+            throw new RuntimeException(e);
+        }
 
         log.debug("Invoking gRPC query {}", query);
         QueryValidationResponse queryResponse = grpcService.validate(query);
@@ -159,10 +171,17 @@ public class GrpcQueryService {
     }
     
     public void sendQueryAll(String userId, QueryAllRequestDTO requestDTO) {
-        Query query = queryTransformerService.toQuery(requestDTO.getQuery(), QueryTransformerParams.builder()
-                .userId(userId)
-                .datasourceId(requestDTO.getSourceId())
-                .build());
+        Query query;
+        try {
+            query = queryTransformerService.toQuery(requestDTO.getQuery(), QueryTransformerParams.builder()
+                    .userId(userId)
+                    .datasourceId(requestDTO.getSourceId())
+                    .build());
+        } catch (QueryTransformerException e) {
+            log.error("Error validating a query " + requestDTO.getQuery(), e);
+            throw new RuntimeException(e);
+        }
+
         Connection connection = toProtoConnection(requestDTO.getConnection());
         QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
 
@@ -181,12 +200,19 @@ public class GrpcQueryService {
     
     
     private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, QueryDTO queryDTO, String vId, String request, String userId) throws InterruptedException {
-        Query query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                .datasourceId(datasource.getId())
-                .connectionName(datasource.getConnectionName())
-                .vId(vId)
-                .userId(userId)
-                .build());
+        Query query;
+        try {
+            query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
+                    .datasourceId(datasource.getId())
+                    .connectionName(datasource.getConnectionName())
+                    .vId(vId)
+                    .userId(userId)
+                    .build());
+        } catch (QueryTransformerException e) {
+            log.error("Error validating a query " + queryDTO, e);
+            throw new RuntimeException(e);
+        }
+
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
             @Override
             public void onNext(QueryResponse queryResponse) {

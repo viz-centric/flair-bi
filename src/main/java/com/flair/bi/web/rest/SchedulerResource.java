@@ -5,6 +5,7 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
@@ -89,7 +90,15 @@ public class SchedulerResource {
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
-		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
+		String query;
+		try {
+			query = schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
+		} catch (QueryTransformerException e) {
+			log.error("Error validating a query " + schedulerDTO.getQueryDTO(), e);
+			SchedulerResponse response = new SchedulerResponse();
+			response.setMessage("Validation failed " + e.getValidationMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
 		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),
 				schedulerDTO.getReport_line_item(),
 				schedulerDTO.getAssign_report(),

@@ -17,7 +17,7 @@ public class QueryTransformerException extends Exception {
     public String getValidationMessage() {
         return validationResult.getGroup() + "(" + validationResult.getErrors()
                 .stream()
-                .map(error -> error.getError() + ":" + error.getField())
+                .map(error -> error.getError() + ":" + error.getValue())
                 .collect(Collectors.joining(",")) + ")";
     }
 }

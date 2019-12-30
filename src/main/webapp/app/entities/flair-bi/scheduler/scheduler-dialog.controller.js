@@ -14,6 +14,8 @@
         };
         $scope.isCronDisabled = false;
 
+        var TIME_UNIT = [{value: 'hours', title: 'Hours'}, {value: 'days', title: 'Days'}];
+        var TIME_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var vm = this;
         vm.cronConfig = {quartz: false};
         vm.clear = clear;
@@ -21,6 +23,7 @@
         vm.timezoneGroups = TIMEZONES;
         vm.channels=scheduler_channels;
         vm.COMPARISIONS=COMPARISIONS;
+        vm.TIME_UNIT = TIME_UNIT;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.loadUsers=loadUsers;
@@ -37,9 +40,10 @@
         vm.thresholdAlert=thresholdAlert;
         vm.modalTitle=thresholdAlert?'Schedule Threshold Alert Report':'Schedule Report'
         vm.condition={};
+        vm.timeConditions={};
         vm.features=[];
+        vm.timeCompatibleDimensions=[];
         vm.vizIdPrefix='threshold_alert_:';
-        vm.setChannel=setChannel;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -51,6 +55,7 @@
                 "mail_body":null,
                 "dashboard_name":"",
                 "view_name":"",
+                "view_id":null,
                 "share_link":null,
                 "build_url":"",
                 "thresholdAlert":thresholdAlert
@@ -64,8 +69,8 @@
             "queryDTO":{
             },
             "assign_report": {
-                "channel": [],
-                "communication_list":{"email":[],"teams":[]}
+                "channel": "",
+                "email_list":[]
             },
             "schedule": {
                 "cron_exp":"",
@@ -73,6 +78,7 @@
                 "start_date": new Date(),
                 "end_date": new Date()
             },
+            "constraints":"{}",
             "putcall":false,
             "emailReporter":false
           };
@@ -83,29 +89,38 @@
         function activate() {
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
-            var cronstrue = window.cronstrue;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
-            resetSelectedChannels();
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;
                 vm.view=view;
-                getScheduleReport(visualMetaData.id);
-                getThresholdMeasureList(visualMetaData.fields);
-                vm.datasource= datasource;
-                if($rootScope.isThresholdAlert){
-                    vm.scheduleObj.report.thresholdAlert=true;
-                    vm.condition.value=$rootScope.ThresholdViz.measureValue;
-                    vm.condition.featureName=$rootScope.ThresholdViz.measure;
-                }
-                buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+                initFeatures(view.id)
+                  .then(function () {
+                      vm.datasource= datasource;
+                      getScheduleReport(visualMetaData.id);
+                      getThresholdMeasureList(visualMetaData.fields);
+                      if($rootScope.isThresholdAlert){
+                          vm.scheduleObj.report.thresholdAlert=true;
+                          vm.condition.value=$rootScope.ThresholdViz.measureValue;
+                          vm.condition.featureName=$rootScope.ThresholdViz.measure;
+                      }
+                      buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+                  });
             }else{
                 vm.scheduleObj.emailReporter=true;
                 vm.users=User.query();
                 if(scheduledObj){
                     vm.emailReporterEdit=true;
-                    getVisualmetadata(scheduledObj);
-                    updateScheduledObj(scheduledObj);
+                    getVisualmetadata(scheduledObj)
+                      .then(function (value) {
+                          return initFeatures(scheduledObj.report.view_id);
+                      })
+                      .then(function () {
+                          return buildScheduledObject(scheduledObj, vm.visualMetaData);
+                      })
+                      .then(function () {
+                          return updateScheduledObj(scheduledObj);
+                      });
                 }else{
                     loadDashboards();
                 }
@@ -113,14 +128,42 @@
             }
         }
 
+        function initFeatures(visualId) {
+            return Features.query({view: visualId})
+              .$promise
+              .then(function (features) {
+                  initTimeDimensions(features);
+              })
+              .catch(function(error) {
+                  $rootScope.showErrorSingleToast({
+                      text: error.data.message,
+                      title: "Error"
+                  });
+              });
+        }
+
+        function initTimeDimensions(features) {
+            vm.timeCompatibleDimensions = features
+              .filter(function (feature) {
+                  return feature.featureType === "DIMENSION";
+              })
+              .filter(function (feature) {
+                  return isTimeType(feature);
+              });
+        }
+
+        function isTimeType(feature) {
+            var type = feature && feature.type;
+            return TIME_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+        }
+
         function getVisualmetadata(scheduledObj){
-            Visualmetadata.get({
+            return Visualmetadata.get({
                 id: removePrefix(scheduledObj.report_line_item.visualizationid)
             },function(result){
                 vm.visualMetaData = new VisualWrap(result);
                 getThresholdMeasureList(vm.visualMetaData.fields);
-                buildScheduledObject(scheduledObj,vm.visualMetaData);
-            });
+            }).$promise;
         }
 
         function getScheduleReport(visualizationid) {
@@ -140,26 +183,42 @@
             }   );
         }
 
+        function setTimeConditions(timeConditions) {
+            if (timeConditions) {
+                vm.timeConditions.feature = vm.timeCompatibleDimensions.find(function (item) {
+                    return item.definition === timeConditions.featureName;
+                });
+                vm.timeConditions.value = timeConditions.value;
+                vm.timeConditions.unit = vm.TIME_UNIT.find(function (unit) {
+                    return unit.value === timeConditions.unit;
+                });
+            }
+        }
+
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
-            selectChannels(data.assign_report.channel);
             $scope.cronExpression=data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body=data.report.mail_body;
             vm.scheduleObj.putcall=true;
             vm.scheduleObj.report.thresholdAlert=data.report.thresholdAlert;
-            if(vm.scheduleObj.report.thresholdAlert)
+            vm.scheduleObj.constraints=data.constraints;
+            if (vm.scheduleObj.report.thresholdAlert) {
                 setHavingDTO(JSON.parse(data.query));
+            }
+            if (vm.scheduleObj.constraints) {
+                setTimeConditions(JSON.parse(vm.scheduleObj.constraints).time);
+            }
             if(vm.scheduleObj.emailReporter){
-                vm.scheduleObj.assign_report.communication_list.email=data.assign_report.communication_list.email;
-                addEmailList(data.assign_report.communication_list.email);
+                vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
+                addEmailList(data.assign_report.email_list);
             }
         }
 
         function setHavingDTO(query){
             if(query.having){
-                vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
+                vm.condition.featureName=query.having[0].feature.name;
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
                     return item.opt===query.having[0].comparatorType;
@@ -180,15 +239,32 @@
             });
         }
 
+        function assignTimeConditionsToScheduledObj() {
+            if (!vm.timeConditions.feature) {
+                return;
+            }
+            var constraints = {
+               time: {
+                   featureName: vm.timeConditions.feature.definition,
+                   value: vm.timeConditions.value,
+                   unit: vm.timeConditions.unit.value
+               }
+            };
+
+            vm.scheduleObj.constraints = JSON.stringify(constraints);
+        }
+
         function buildScheduledObject(scheduledObj,visualMetaData){
             vm.scheduleObj.report.dashboard_name=scheduledObj.report.dashboard_name;
             vm.scheduleObj.report.view_name=scheduledObj.report.view_name;
+            vm.scheduleObj.report.view_id=scheduledObj.report.view_id;
             vm.scheduleObj.report.build_url=scheduledObj.report.build_url;
             vm.scheduleObj.report.share_link=scheduledObj.report.share_link;
             vm.scheduleObj.datasourceid=getDatasourceId(scheduledObj.report.share_link);
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
             vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            assignTimeConditionsToScheduledObj();
             setDimentionsAndMeasures(visualMetaData.fields);
         }
 
@@ -196,14 +272,16 @@
         function buildScheduleObject(visualMetaData,datasource,dashboard,view){
             vm.scheduleObj.report.dashboard_name=dashboard.dashboardName;
             vm.scheduleObj.report.view_name=view.viewName;
+            vm.scheduleObj.report.view_id=view.id;
             vm.scheduleObj.report.build_url=builUrl(dashboard,view);
             vm.scheduleObj.report.share_link=getShareLink(visualMetaData,datasource);
             vm.scheduleObj.datasourceid=datasource.id;
             vm.scheduleObj.report.report_name=getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid=visualMetaData.id;
             vm.scheduleObj.queryDTO=buildQueryDTO(visualMetaData);
+            assignTimeConditionsToScheduledObj();
             setDimentionsAndMeasures(visualMetaData.fields);
-        
+
         }
 
         function getShareLink(visualMetaData,datasource) {
@@ -240,29 +318,62 @@
             return vId+":"+connectionId;
         }
 
+        function getAdditionalConditionalExpressions() {
+            var additionalFeatures = [];
+            if (vm.timeConditions.feature) {
+                var featureData = {};
+                var featureDefinition = vm.timeConditions.feature.definition;
+                featureData[featureDefinition] = [
+                  vm.timeConditions.value + ' ' + vm.timeConditions.unit.value
+                ];
+                featureData[featureDefinition]._meta = {
+                    operator: '-',
+                    initialValue: '__FLAIR_NOW()',
+                    valueType: 'intervalValueType'
+                };
+                additionalFeatures.push(featureData);
+            }
+            return additionalFeatures;
+        }
+
         function buildQueryDTO(visualMetaData){
-            return visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression());
+            return visualMetaData.getQueryParameters(
+              filterParametersService.get(),
+              filterParametersService.getConditionExpression(getAdditionalConditionalExpressions())
+            );
         }
 
         function schedule() {
+            if (!vm.visualMetaData) {
+                getVisualmetadata(scheduledObj)
+                  .then(function () {
+                      continueSchedule();
+                  });
+            } else {
+                continueSchedule();
+            }
+        }
+
+        function continueSchedule() {
+            vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
             if(validateAndSetHaving()){
                 vm.isSaving = true;
-                setCronExpression();
+                setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.status==200) {
-                      $uibModalInstance.close(vm.scheduleObj);
-                    } else {
-                      $rootScope.showErrorSingleToast({
-                        text: success.data.message,
-                        title: "Error"
-                      });
+                    if (success.data.message) {
+                        $rootScope.showErrorSingleToast({
+                            text: success.data.message,
+                            title: "Error"
+                        });
+                    }else {
+                        $uibModalInstance.close(vm.scheduleObj);
                     }
                 }).catch(function (error) {
                     vm.isSaving = false;
                     $rootScope.showErrorSingleToast({
-                      text: error.data.message,
-                      title: "Error"
+                        text: error.data.message,
+                        title: "Error"
                     });
                 });
             }else{
@@ -274,15 +385,17 @@
             }
         }
 
-        function setCronExpression(){
+        function setScheduledData(){
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
+            vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
         }
 
         function validateAndSetHaving(){
             var flag=true;
+            assignTimeConditionsToScheduledObj();
             if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
-                vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
+                vm.scheduleObj.queryDTO.having[0].feature?flag=true:flag=false;
             }
             return flag;
         }
@@ -294,16 +407,16 @@
         function added(tag) {
             console.log("-vm.selectedUser"+vm.selectedUsers);
             var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
-            vm.scheduleObj.assign_report.communication_list.email.push(emailObj);
+            vm.scheduleObj.assign_report.email_list.push(emailObj);
         }
 
         function removed(tag){
             var index = -1;
-            vm.scheduleObj.assign_report.communication_list.email.some(function(obj, i) {
+            vm.scheduleObj.assign_report.email_list.some(function(obj, i) {
             return obj.user_email === tag['text'].split(" ")[1] ? index = i : false;
             });
             if (index > -1) {
-                vm.scheduleObj.assign_report.communication_list.email.splice(index, 1);
+                vm.scheduleObj.assign_report.email_list.splice(index, 1);
             }
         }
 
@@ -325,7 +438,7 @@
                 }
                 $rootScope.showSuccessToast(info);
                 vm.clear();
-            }).catch(function (error) {             
+            }).catch(function (error) {
                 var info = {
                     text: error.data.message,
                     title: "Error"
@@ -372,27 +485,34 @@
         function changeVisualization(visualMetaData){
             vm.visualMetaData = new VisualWrap(visualMetaData);
             vm.datasource=vm.dashboard.dashboardDatasource;
-            getScheduleReport(visualMetaData.id);
-            getThresholdMeasureList(visualMetaData.fields);
-            buildScheduleObject(vm.visualMetaData,vm.datasource,vm.dashboard,vm.view);
+            initFeatures(vm.view.id)
+              .then(function () {
+                  getScheduleReport(visualMetaData.id);
+                  getThresholdMeasureList(visualMetaData.fields);
+                  buildScheduleObject(vm.visualMetaData, vm.datasource, vm.dashboard, vm.view);
+              });
         }
 
         function getHavingDTO(){
-            var having=[];
-            var havingFuntion=getMeasureField();
-            var havingDTO= {featureName:havingFuntion,value:vm.condition.value,comparatorType:vm.condition.compare.opt};
+            var having = [];
+            var havingField = getMeasureField();
+            var havingDTO = {
+                feature: havingField,
+                value: vm.condition.value,
+                comparatorType: vm.condition.compare.opt
+            };
             having.push(havingDTO);
             return having;
         }
 
-        function getMeasureField(){
-            var aggFunctionField={};
-            vm.visualMetaData.fields.filter(function(item) {
-                if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
-                    aggFunctionField=vm.visualMetaData.constructHavingField(item);
-                }
-            });
-            return aggFunctionField;
+        function getMeasureField() {
+            return vm.visualMetaData.fields
+                .filter(function (item) {
+                    return item.feature.featureType === "MEASURE" && item.feature.definition === vm.condition.featureName;
+                })
+                .map(function (item) {
+                    return vm.visualMetaData.constructHavingField(item);
+                })[0];
         }
 
 
@@ -415,28 +535,6 @@
 
         function executeNow(id){
             ReportManagementUtilsService.executeNow(addPrefix(id));
-        }
-
-        function setChannel(channel,selected){
-            vm.channels[channel]=!selected;
-            var index = vm.scheduleObj.assign_report.channel.indexOf(channel);
-            if (index > -1) {
-                vm.scheduleObj.assign_report.channel.splice(index, 1);
-            }else{
-                vm.scheduleObj.assign_report.channel.push(channel)
-            }
-        }
-
-        function selectChannels(selectedChannels){
-            selectedChannels.filter(function(item) {
-                vm.channels[item]=true;
-            });
-        }
-
-        function resetSelectedChannels(){
-            angular.forEach(vm.channels, function(value, key) {
-              vm.channels[key]=false;
-            });
         }
 }
 })();

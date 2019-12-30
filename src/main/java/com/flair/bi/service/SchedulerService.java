@@ -110,7 +110,7 @@ public class SchedulerService {
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
-			throws InvalidProtocolBufferException {
+			throws InvalidProtocolBufferException, QueryTransformerException {
 		queryDTO.setSource(datasource.getName());
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
@@ -127,9 +127,13 @@ public class SchedulerService {
 				.ifPresent(queryDTO.getConditionExpressions()::add);
 
 		Query query = queryTransformerService.toQuery(queryDTO,
-				QueryTransformerParams.builder().datasourceId(datasource.getId())
+				QueryTransformerParams.builder()
+						.datasourceId(datasource.getId())
 						.connectionName(datasource.getConnectionName())
-						.vId(visualizationId != null ? visualizationId : "").userId(userId).build());
+						.vId(visualizationId != null ? visualizationId : "")
+						.userId(userId)
+						.build()
+		);
 		String jsonQuery = JsonFormat.printer().print(query);
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;

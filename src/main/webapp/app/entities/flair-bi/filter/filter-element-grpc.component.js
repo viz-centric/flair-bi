@@ -42,14 +42,12 @@
         }
 
         function resetTimezone(startDate) {
-            var date = new Date(startDate);
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            return date;
+            return startDate;
         }
 
         function endOfDay(startDate) {
             var date = new Date(startDate);
-            date.setHours(23, 59 - date.getTimezoneOffset(), 59);
+            date.setHours(23, 59, 59);
             return date;
         }
 
@@ -165,7 +163,7 @@
                     sourceType: 'FILTER',
                     conditionExpression: {
                         '@type': 'Like',
-                        featureName: dimension.name,
+                        featureType: {featureName: dimension.name, type: dimension.type},
                         caseInsensitive: true,
                         value: q
                     }
@@ -231,7 +229,8 @@
             }
             filterParameters[vm.dimension.name].push(tag['text']);
             filterParameters[vm.dimension.name]._meta = {
-                dataType: vm.dimension.type
+                dataType: vm.dimension.type,
+                valueType: 'valueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
         }

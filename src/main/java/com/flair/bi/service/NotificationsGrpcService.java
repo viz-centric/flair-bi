@@ -248,6 +248,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 						.setTimezone(orEmpty(dto.getSchedule().getTimezone()))
 						.setStartDate(orEmpty(dto.getSchedule().getStart_date()))
 						.setEndDate(orEmpty(dto.getSchedule().getEnd_date())).build())
+				.setConstraints(orEmpty(dto.getConstraints()))
 				.setQuery(dto.getQuery()).build();
     }
 

@@ -105,7 +105,6 @@ public class SchedulerResource {
 				schedulerDTO.getSchedule(),
 				query,
 				schedulerDTO.getConstraints());
-
 		schedulerService.setChannelCredentials(schedulerNotificationDTO);
         log.info("Sending schedule report {}", schedulerNotificationDTO);
 

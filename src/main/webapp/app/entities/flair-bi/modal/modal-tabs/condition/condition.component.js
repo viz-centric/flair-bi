@@ -57,7 +57,7 @@
                     sourceType: 'FILTER',
                     conditionExpression: {
                         '@type': 'Like',
-                        featureType: {featureName: featureName, type: dimensions.type},
+                        featureName: featureName,
                         caseInsensitive: true,
                         value: q
                     }

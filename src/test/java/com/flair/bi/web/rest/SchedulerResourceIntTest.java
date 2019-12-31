@@ -9,6 +9,7 @@ import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.scheduler.AssignReport;
+import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -98,14 +99,15 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	reportLineItem.setMeasure(measures);
     	reportLineItem.setVisualizationid("90497569e61f113349fb082eb9000341--45d994f6-acad-4103-a87b-b7bf9fbc6c2a4");
     	schedulerDTO.setReport_line_item(reportLineItem);
-    	
+    	CommunicationList communicationList= new CommunicationList();
     	AssignReport assignReport= new AssignReport();
     	emailsDTO emailsDTO= new emailsDTO();
     	emailsDTO.setUser_email("example@localhost.com");
     	emailsDTO.setUser_name("example");
     	emailsDTO emailList[]= {emailsDTO};
-       	assignReport.setEmail_list(emailList);
-    	assignReport.setChannel("email");
+    	communicationList.setEmail(emailList);
+    	assignReport.setCommunication_list(communicationList);
+    	assignReport.setChannel(channel);
     	schedulerDTO.setAssign_report(assignReport);
     	
     	Schedule schedule= new Schedule();
@@ -114,7 +116,6 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest{
     	schedule.setTimezone("Asia/Kolkata");
     	schedule.setCron_exp("14 */16 * * *");
     	schedulerDTO.setSchedule(schedule);
-    	
     	
     	return schedulerDTO;
     	

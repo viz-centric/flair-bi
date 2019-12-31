@@ -39,7 +39,6 @@
         vm.condition={};
         vm.features=[];
         vm.vizIdPrefix='threshold_alert_:';
-        vm.setChannel=setChannel;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -64,8 +63,8 @@
             "queryDTO":{
             },
             "assign_report": {
-                "channel": [],
-                "communication_list":{"email":[],"teams":[]}
+                "channel": "",
+                "email_list":[]
             },
             "schedule": {
                 "cron_exp":"",
@@ -85,7 +84,6 @@
             vm.datePickerOpenStatus.endDate = false;
             var cronstrue = window.cronstrue;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
-            resetSelectedChannels();
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard=dashboard;
@@ -142,7 +140,6 @@
 
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
-            selectChannels(data.assign_report.channel);
             $scope.cronExpression=data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
@@ -152,14 +149,14 @@
             if(vm.scheduleObj.report.thresholdAlert)
                 setHavingDTO(JSON.parse(data.query));
             if(vm.scheduleObj.emailReporter){
-                vm.scheduleObj.assign_report.communication_list.email=data.assign_report.communication_list.email;
-                addEmailList(data.assign_report.communication_list.email);
+                vm.scheduleObj.assign_report.email_list=data.assign_report.email_list;
+                addEmailList(data.assign_report.email_list);
             }
         }
 
         function setHavingDTO(query){
             if(query.having){
-                vm.condition.featureName=query.having[0].featureName.split('(')[1].split(')')[0];
+                vm.condition.featureName=query.having[0].feature.name;
                 vm.condition.value=query.having[0].value;
                 vm.condition.compare=vm.COMPARISIONS.filter(function(item) {
                     return item.opt===query.having[0].comparatorType;
@@ -247,16 +244,16 @@
         function schedule() {
             if(validateAndSetHaving()){
                 vm.isSaving = true;
-                setCronExpression();
+                setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.status==200) {
-                      $uibModalInstance.close(vm.scheduleObj);
-                    } else {
-                      $rootScope.showErrorSingleToast({
-                        text: success.data.message,
-                        title: "Error"
-                      });
+                    if (success.data.message) {
+                        $rootScope.showErrorSingleToast({
+                            text: success.data.message,
+                            title: "Error"
+                        });
+                    }else {
+                        $uibModalInstance.close(vm.scheduleObj);
                     }
                 }).catch(function (error) {
                     vm.isSaving = false;
@@ -274,15 +271,16 @@
             }
         }
 
-        function setCronExpression(){
+        function setScheduledData(){
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
+            vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
         }
 
         function validateAndSetHaving(){
             var flag=true;
             if(vm.scheduleObj.report.thresholdAlert){
                 vm.scheduleObj.queryDTO.having=getHavingDTO();
-                vm.scheduleObj.queryDTO.having[0].featureName?flag=true:flag=false;
+                vm.scheduleObj.queryDTO.having[0].feature?flag=true:flag=false;
             }
             return flag;
         }
@@ -294,16 +292,16 @@
         function added(tag) {
             console.log("-vm.selectedUser"+vm.selectedUsers);
             var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
-            vm.scheduleObj.assign_report.communication_list.email.push(emailObj);
+            vm.scheduleObj.assign_report.email_list.push(emailObj);
         }
 
         function removed(tag){
             var index = -1;
-            vm.scheduleObj.assign_report.communication_list.email.some(function(obj, i) {
+            vm.scheduleObj.assign_report.email_list.some(function(obj, i) {
             return obj.user_email === tag['text'].split(" ")[1] ? index = i : false;
             });
             if (index > -1) {
-                vm.scheduleObj.assign_report.communication_list.email.splice(index, 1);
+                vm.scheduleObj.assign_report.email_list.splice(index, 1);
             }
         }
 
@@ -378,21 +376,25 @@
         }
 
         function getHavingDTO(){
-            var having=[];
-            var havingFuntion=getMeasureField();
-            var havingDTO= {featureName:havingFuntion,value:vm.condition.value,comparatorType:vm.condition.compare.opt};
+            var having = [];
+            var havingField = getMeasureField();
+            var havingDTO = {
+                feature: havingField,
+                value: vm.condition.value,
+                comparatorType: vm.condition.compare.opt
+            };
             having.push(havingDTO);
             return having;
         }
 
-        function getMeasureField(){
-            var aggFunctionField={};
-            vm.visualMetaData.fields.filter(function(item) {
-                if(item.feature.featureType === "MEASURE" && item.feature.definition ===vm.condition.featureName){
-                    aggFunctionField=vm.visualMetaData.constructHavingField(item);
-                }
-            });
-            return aggFunctionField;
+        function getMeasureField() {
+            return vm.visualMetaData.fields
+                .filter(function (item) {
+                    return item.feature.featureType === "MEASURE" && item.feature.definition === vm.condition.featureName;
+                })
+                .map(function (item) {
+                    return vm.visualMetaData.constructHavingField(item);
+                })[0];
         }
 
 
@@ -415,28 +417,6 @@
 
         function executeNow(id){
             ReportManagementUtilsService.executeNow(addPrefix(id));
-        }
-
-        function setChannel(channel,selected){
-            vm.channels[channel]=!selected;
-            var index = vm.scheduleObj.assign_report.channel.indexOf(channel);
-            if (index > -1) {
-                vm.scheduleObj.assign_report.channel.splice(index, 1);
-            }else{
-                vm.scheduleObj.assign_report.channel.push(channel)
-            }
-        }
-
-        function selectChannels(selectedChannels){
-            selectedChannels.filter(function(item) {
-                vm.channels[item]=true;
-            });
-        }
-
-        function resetSelectedChannels(){
-            angular.forEach(vm.channels, function(value, key) {
-              vm.channels[key]=false;
-            });
         }
 }
 })();

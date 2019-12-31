@@ -51,7 +51,7 @@
                 return item.name === featureName;
             });
             var query = {"distinct":true,"limit":100};
-            query.fields = [featureName];
+            query.fields = [{name: featureName}];
             if (q) {
                 query.conditionExpressions = [{
                     sourceType: 'FILTER',

@@ -43,14 +43,15 @@ public class SecurityDependenciesConfiguration {
     public PrincipalExtractor principalExtractor(UserRepository userRepository, UserService userService) {
         return map -> {
             map.forEach((k, v) -> log.info("Key :{} value :{}", k, v));
-            Optional<User> user = userRepository.findOneByEmail((String) map.get("email"));
+            String email = (String) map.get("email");
+            Optional<User> user = userRepository.findOneByEmail(email);
             if (!user.isPresent()) {
                 log.info("user is present !!!!!");
-                userService.createUser((String) map.get("email"), passwordEncoder().encode(RandomStringUtils.random(10)), (String) map.get("given_name"),
-                    (String) map.get("family_name"), (String) map.get("email"), Constants.LanguageKeys.ENGLISH,
+                userService.createUser(email, passwordEncoder().encode(RandomStringUtils.random(10)), (String) map.get("given_name"),
+                    (String) map.get("family_name"), email, Constants.LanguageKeys.ENGLISH,
                     Constants.EXTERNAL_USER);
             }
-            return null;
+            return email;
         };
     }
 }

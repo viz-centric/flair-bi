@@ -12,7 +12,6 @@
         var messageQueue = [];
 
         function isConnected() {
-            console.log('stompClient.ws.readyState', stompClient.ws.readyState);
             return stompClient.ws.readyState === 1;
         }
 

@@ -39,7 +39,6 @@
         vm.condition={};
         vm.features=[];
         vm.vizIdPrefix='threshold_alert_:';
-        vm.setChannel=setChannel;
         vm.scheduleObj={
             "datasourceid":0,
             "report": {
@@ -64,8 +63,8 @@
             "queryDTO":{
             },
             "assign_report": {
-                "channel": [],
-                "communication_list":{"email":[],"teams":[]}
+                "channel": "",
+                "email_list":[]
             },
             "schedule": {
                 "cron_exp":"",
@@ -84,7 +83,6 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             var cronstrue = window.cronstrue;
-            resetSelectedChannels();
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
@@ -142,7 +140,6 @@
 
         function updateScheduledObj(data){
             vm.scheduleObj.assign_report.channel=data.assign_report.channel;
-            selectChannels(data.assign_report.channel);
             $scope.cronExpression=data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date= new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date= new Date(data.schedule.end_date);
@@ -247,16 +244,16 @@
         function schedule() {
             if(validateAndSetHaving()){
                 vm.isSaving = true;
-                setCronExpression();
+                setScheduledData();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.status==200) {
-                      $uibModalInstance.close(vm.scheduleObj);
-                    } else {
-                      $rootScope.showErrorSingleToast({
-                        text: success.data.message,
-                        title: "Error"
-                      });
+                    if (success.data.message) {
+                        $rootScope.showErrorSingleToast({
+                            text: success.data.message,
+                            title: "Error"
+                        });
+                    }else {
+                        $uibModalInstance.close(vm.scheduleObj);
                     }
                 }).catch(function (error) {
                     vm.isSaving = false;
@@ -274,8 +271,9 @@
             }
         }
 
-        function setCronExpression(){
+        function setScheduledData(){
             vm.scheduleObj.schedule.cron_exp=$scope.cronExpression;
+            vm.scheduleObj.assign_report.channel=vm.scheduleObj.assign_report.channel.toLowerCase();
         }
 
         function validateAndSetHaving(){
@@ -419,28 +417,6 @@
 
         function executeNow(id){
             ReportManagementUtilsService.executeNow(addPrefix(id));
-        }
-
-        function setChannel(channel,selected){
-            vm.channels[channel]=!selected;
-            var index = vm.scheduleObj.assign_report.channel.indexOf(channel);
-            if (index > -1) {
-                vm.scheduleObj.assign_report.channel.splice(index, 1);
-            }else{
-                vm.scheduleObj.assign_report.channel.push(channel)
-            }
-        }
-
-        function selectChannels(selectedChannels){
-            selectedChannels.filter(function(item) {
-                vm.channels[item]=true;
-            });
-        }
-
-        function resetSelectedChannels(){
-            angular.forEach(vm.channels, function(value, key) {
-              vm.channels[key]=false;
-            });
         }
 }
 })();

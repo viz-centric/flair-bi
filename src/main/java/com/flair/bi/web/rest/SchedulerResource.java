@@ -5,7 +5,6 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
@@ -84,27 +83,14 @@ public class SchedulerResource {
 		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
 		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
-			schedulerDTO.getAssign_report().setEmail_list(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
+			schedulerDTO.getAssign_report().getCommunication_list().setEmail(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
-		String query;
-		try {
-			query = schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
-		} catch (QueryTransformerException e) {
-			log.error("Error validating a query " + schedulerDTO.getQueryDTO(), e);
-			SchedulerResponse response = new SchedulerResponse();
-			response.setMessage("Validation failed " + e.getValidationMessage());
-			return ResponseEntity.badRequest().body(response);
-		}
-		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),
-				schedulerDTO.getReport_line_item(),
-				schedulerDTO.getAssign_report(),
-				schedulerDTO.getSchedule(),
-				query,
-				schedulerDTO.getConstraints());
+		String query=schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
+		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),schedulerDTO.getReport_line_item(),schedulerDTO.getAssign_report(),schedulerDTO.getSchedule(),query);
 
 		schedulerService.setChannelCredentials(schedulerNotificationDTO);
         log.info("Sending schedule report {}", schedulerNotificationDTO);

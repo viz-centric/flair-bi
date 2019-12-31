@@ -230,9 +230,10 @@
                 });
             }else{
                 var error = QueryValidationService.getQueryValidationError(body.description);
-                $rootScope.showErrorSingleToast({
-                    text: $translate.instant(error.msgKey, error.params)
-                });
+
+                if (error) {
+                    AlertService.error(error.msgKey, error.params);
+                }
             }
         }
 

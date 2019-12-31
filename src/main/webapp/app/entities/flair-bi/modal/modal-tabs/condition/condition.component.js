@@ -51,13 +51,13 @@
                 return item.name === featureName;
             });
             var query = {"distinct":true,"limit":100};
-            query.fields = [{name: featureName}];
+            query.fields = [featureName];
             if (q) {
                 query.conditionExpressions = [{
                     sourceType: 'FILTER',
                     conditionExpression: {
                         '@type': 'Like',
-                        featureType: {featureName: featureName, type: dimensions.type},
+                        featureName: featureName,
                         caseInsensitive: true,
                         value: q
                     }

@@ -3,7 +3,7 @@ id|name|type|datasource_id|feature_type|feature_definition|created_by
 707|City|dim|501|DIMENSION|City|flairadmin
 708|Price|Integer|501|MEASURE|Price|flairadmin
 709|Quantity|Integer|501|MEASURE|Quantity|flairadmin
-710|Transaction_date|timestamp|502|DIMENSION|Transaction_date|flairadmin
+710|Transaction_date|String|502|DIMENSION|Transaction_date|flairadmin
 711|Product|String|502|DIMENSION|Product|flairadmin
 712|Price|String|502|MEASURE|Price|flairadmin
 713|Payment_Type|String|502|DIMENSION|Payment_Type|flairadmin
@@ -20,7 +20,7 @@ id|name|type|datasource_id|feature_type|feature_definition|created_by
 724|order_item_subtotal|Integer|503|MEASURE|order_item_subtotal|flairadmin
 725|order_item_product_price|Integer|503|MEASURE|order_item_product_price|flairadmin
 726|order_id|String|503|DIMENSION|order_id|flairadmin
-727|order_date|timestamp|503|DIMENSION|order_date|flairadmin
+727|order_date|String|503|DIMENSION|order_date|flairadmin
 728|order_status|String|503|DIMENSION|order_status|flairadmin
 729|product_id|String|503|DIMENSION|product_id|flairadmin
 730|product_name|String|503|DIMENSION|product_name|flairadmin

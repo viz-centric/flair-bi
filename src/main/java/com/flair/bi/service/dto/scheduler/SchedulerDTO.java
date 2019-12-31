@@ -1,6 +1,8 @@
 package com.flair.bi.service.dto.scheduler;
 
 import com.project.bi.query.dto.QueryDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class SchedulerDTO {
@@ -10,6 +12,8 @@ public class SchedulerDTO {
 	private ReportLineItem report_line_item;
 	private AssignReport assign_report;
 	private Schedule schedule;
+	@Getter @Setter
+	private String constraints;
 	private QueryDTO queryDTO;
 	private boolean putcall;
 	private boolean emailReporter;
@@ -17,12 +21,14 @@ public class SchedulerDTO {
 	public SchedulerDTO(){}
 	
 	public SchedulerDTO(long datasourceid, ReportDTO report, ReportLineItem report_line_item,
-			AssignReport assign_report, Schedule schedule, QueryDTO queryDTO, boolean putcall, boolean emailReporter) {
+			AssignReport assign_report, Schedule schedule, QueryDTO queryDTO, boolean putcall, boolean emailReporter,
+						String constraints) {
 		super();
 		this.datasourceid = datasourceid;
 		this.report = report;
 		this.report_line_item = report_line_item;
 		this.assign_report = assign_report;
+		this.constraints = constraints;
 		this.schedule = schedule;
 		this.queryDTO = queryDTO;
 		this.putcall = putcall;

@@ -191,4 +191,15 @@ public class SchedulerResource {
 		log.info("Search reports result {}", result);
 		return result;
 	}
+	
+	@GetMapping("/schedule/searchReports/")
+	@Timed
+	public GetSearchReportsDTO getChannelConfigurations() {
+		if (!SecurityUtils.iAdmin()) {
+			userName = SecurityUtils.getCurrentUserLogin();
+		}
+		//schedulerService.getChannelParameters);
+		//log.info("Search reports result {}", result);
+		return null;
+	}
 }

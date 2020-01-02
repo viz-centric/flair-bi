@@ -1,9 +1,13 @@
 package com.flair.bi.service;
 
+import com.flair.bi.messages.report.ChannelConnection;
+import com.flair.bi.messages.report.ConnectionProperties;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
+import com.flair.bi.messages.report.GetChannelPropertiesRequest;
+import com.flair.bi.messages.report.GetChannelPropertiesResponse;
 import com.flair.bi.messages.report.GetScheduleReportLogsRequest;
 import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
@@ -21,6 +25,8 @@ import com.flair.bi.messages.report.SearchReportsRequest;
 import com.flair.bi.messages.report.SearchReportsResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
+import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
@@ -179,6 +185,21 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .reports(toReportsDto(result.getRecordsList()))
                 .build();
     }
+    
+    @Override
+    public GetChannelParametersDTO getChannelParameters(){
+//    	GetChannelPropertiesResponse response=getReportStub().getChannelProperties(null);
+//    	List<ChannelConnection> channelConnections=response.getChannelConnectionList();
+//    	GetChannelParametersDTO.builder().connectionProperties(toConnectionPropertiesDTO(channelConnections.get(0).getChannelPropertiesList()));
+//    	//return GetChannelParametersDTO.builder().connectionProperties();
+    	return null;
+    }
+    
+    private List<ConnectionPropertiesDTO> toConnectionPropertiesDTO(List<ConnectionProperties> list) {
+        return list.stream()
+                .map(item -> createConnectionPropertiesDTO(item))
+                .collect(toList());
+    }
 
     private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
         return list.stream()
@@ -258,6 +279,16 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         }
         return createSchedulerNotificationDTO(response.getReport());
     }
+    
+    private ConnectionPropertiesDTO createConnectionPropertiesDTO(ConnectionProperties connectionProperties){
+    	ConnectionPropertiesDTO connectionPropertiesDTO= new ConnectionPropertiesDTO();
+    	connectionPropertiesDTO.setDisplayName(connectionProperties.getDisplayName());
+    	connectionPropertiesDTO.setFieldName(connectionProperties.getFieldName());
+    	connectionPropertiesDTO.setFieldType(connectionProperties.getFieldType());
+    	//connectionPropertiesDTO.setOrder(connectionProperties.getOrder());
+    	connectionPropertiesDTO.setRequired(connectionProperties.getRequired());
+		return null;
+    }
 
     private SchedulerNotificationDTO createSchedulerNotificationDTO(ScheduleReport scheduleReport) {
         SchedulerNotificationDTO responseDTO = new SchedulerNotificationDTO();
@@ -313,4 +344,5 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         emailsDTO.setUser_name(item.getUserName());
         return emailsDTO;
     }
+
 }

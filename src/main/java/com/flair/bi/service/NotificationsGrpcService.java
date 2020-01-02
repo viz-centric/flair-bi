@@ -271,7 +271,8 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         report.setTitle_name(scheduleReport.getReport().getTitleName());
         report.setUserid(scheduleReport.getReport().getUserid());
         report.setView_name(scheduleReport.getReport().getViewName());
-        report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
+        //this line is throwing an exception while fetching report and there is no column found in notification center. so comment this line for now
+        //report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
         report.setThresholdAlert(scheduleReport.getReport().getThresholdAlert());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();

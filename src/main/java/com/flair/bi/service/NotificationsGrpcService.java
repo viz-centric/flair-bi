@@ -209,6 +209,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                                 .setUserid(orEmpty(dto.getReport().getUserid()))
                                 .setDashboardName(orEmpty(dto.getReport().getDashboard_name()))
                                 .setViewName(orEmpty(dto.getReport().getView_name()))
+                                .setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
                                 .setShareLink(orEmpty(dto.getReport().getShare_link()))
                                 .setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
                                 .setBuildUrl(orEmpty(dto.getReport().getBuild_url()))
@@ -271,8 +272,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         report.setTitle_name(scheduleReport.getReport().getTitleName());
         report.setUserid(scheduleReport.getReport().getUserid());
         report.setView_name(scheduleReport.getReport().getViewName());
-        //this line is throwing an exception while fetching report and there is no column found in notification center. so comment this line for now
-        //report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
+        report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
         report.setThresholdAlert(scheduleReport.getReport().getThresholdAlert());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();
@@ -291,7 +291,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         communicationList.setTeams(scheduleReport.getAssignReport().getCommunicationList().getTeamsList().toArray(new Integer[]{}));
         assignReport.setCommunication_list(communicationList);
         assignReport.setChannel(scheduleReport.getAssignReport().getChannelList().toArray(new String[]{}));;
-        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId()); 
+        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId());
         assignReport.setSlack_API_Token(scheduleReport.getAssignReport().getSlackAPIToken());
         assignReport.setStride_API_Token(scheduleReport.getAssignReport().getStrideAPIToken());
         assignReport.setStride_cloud_id(scheduleReport.getAssignReport().getStrideCloudId());

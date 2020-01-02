@@ -209,7 +209,6 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                                 .setUserid(orEmpty(dto.getReport().getUserid()))
                                 .setDashboardName(orEmpty(dto.getReport().getDashboard_name()))
                                 .setViewName(orEmpty(dto.getReport().getView_name()))
-                                .setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
                                 .setShareLink(orEmpty(dto.getReport().getShare_link()))
                                 .setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
                                 .setBuildUrl(orEmpty(dto.getReport().getBuild_url()))

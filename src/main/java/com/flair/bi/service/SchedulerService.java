@@ -6,6 +6,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
@@ -164,4 +165,7 @@ public class SchedulerService {
 		}
 	}
 
+	public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
+		return notificationsGrpcService.getReportLogByMetaId(taskLogMetaId);
+	}
 }

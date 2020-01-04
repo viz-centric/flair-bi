@@ -4,6 +4,8 @@ import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
+import com.flair.bi.messages.report.GetScheduleReportLogRequest;
+import com.flair.bi.messages.report.GetScheduleReportLogResponse;
 import com.flair.bi.messages.report.GetScheduleReportLogsRequest;
 import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
@@ -19,17 +21,21 @@ import com.flair.bi.messages.report.ScheduleReportRequest;
 import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.messages.report.SearchReportsRequest;
 import com.flair.bi.messages.report.SearchReportsResponse;
+import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
+import com.flair.bi.service.dto.scheduler.SchedulerLogDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
+import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -180,19 +186,46 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .build();
     }
 
+    @Override
+    public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
+        GetScheduleReportLogResponse result = getReportStub().getScheduleReportLog(
+                GetScheduleReportLogRequest.newBuilder()
+                        .setTaskLogMetaId(taskLogMetaId)
+                        .build()
+        );
+        return GetSchedulerReportLogDTO.builder()
+                .reportLog(toReportLog(result.getReportLog()))
+                .error(toApiError(result.getError()))
+                .build();
+    }
+
+    private ApiErrorDTO toApiError(com.flair.bi.messages.report.ApiError error) {
+        if (StringUtils.isEmpty(error.getMessage())) {
+            return null;
+        }
+        return ApiErrorDTO.builder()
+                .message(error.getMessage())
+                .build();
+    }
+
     private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
         return list.stream()
                 .map(item -> createSchedulerNotificationDTO(item))
                 .collect(toList());
     }
 
-    private List<GetSchedulerReportLogsDTO.SchedulerLog> toLogs(List<ReportLog> list) {
+    private List<SchedulerLogDTO> toLogs(List<ReportLog> list) {
         return list.stream()
-                .map(item -> GetSchedulerReportLogsDTO.SchedulerLog.builder()
-                        .taskExecuted(item.getTaskExecuted())
-                        .taskStatus(item.getTaskStatus())
-                        .build())
+                .map(item -> toReportLog(item))
                 .collect(toList());
+    }
+
+    private SchedulerLogDTO toReportLog(ReportLog item) {
+        return SchedulerLogDTO.builder()
+                .taskExecuted(item.getTaskExecuted())
+                .taskStatus(item.getTaskStatus())
+                .query(QueryGrpcUtils.mapToQueryDTO(item.getQuery()))
+                .build();
     }
 
     private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {

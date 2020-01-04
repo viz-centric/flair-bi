@@ -8,18 +8,24 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerLogDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
@@ -190,5 +197,37 @@ public class SchedulerResource {
 		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate, pageSize, page);
 		log.info("Search reports result {}", result);
 		return result;
+	}
+
+	@GetMapping("/schedule/report/log/{taskLogMetaId}")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('DASHBOARDS', 'READ', 'APPLICATION')")
+	public ResponseEntity<?> getReportLogByMetaId(@Valid @NotNull @PathVariable Long taskLogMetaId) {
+		log.info("Get report log by meta {}", taskLogMetaId);
+		GetSchedulerReportLogDTO reportLogDto = schedulerService.getReportLogByMetaId(taskLogMetaId);
+		log.info("Get report log by meta {} result {}", taskLogMetaId, reportLogDto);
+
+		if (reportLogDto.getError() != null) {
+			return ResponseEntity.unprocessableEntity()
+					.body(ApiErrorResponse.builder()
+							.error(reportLogDto.getError())
+							.build());
+		}
+		GetSchedulerTaskResponse result = GetSchedulerTaskResponse.builder()
+				.reportLog(reportLogDto.getReportLog())
+				.build();
+		return ResponseEntity.ok(result);
+	}
+
+	@Data
+	@Builder
+	private static class GetSchedulerTaskResponse {
+		private final SchedulerLogDTO reportLog;
+	}
+
+	@Data
+	@Builder
+	private static class ApiErrorResponse {
+		private final ApiErrorDTO error;
 	}
 }

@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
@@ -53,6 +54,11 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 
     @Override
     public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
+        return null;
+    }
+
+    @Override
+    public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
         return null;
     }
 }

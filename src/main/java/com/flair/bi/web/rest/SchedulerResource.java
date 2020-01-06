@@ -8,6 +8,7 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
@@ -192,14 +193,12 @@ public class SchedulerResource {
 		return result;
 	}
 	
-	@GetMapping("/schedule/searchReports/")
+	@GetMapping("/schedule/channelConfigurations/")
 	@Timed
-	public GetSearchReportsDTO getChannelConfigurations() {
+	public GetChannelConnectionDTO getChannelConfigurations() {
 		if (!SecurityUtils.iAdmin()) {
 			userName = SecurityUtils.getCurrentUserLogin();
 		}
-		//schedulerService.getChannelParameters);
-		//log.info("Search reports result {}", result);
-		return null;
+		return schedulerService.getChannelParameters();
 	}
 }

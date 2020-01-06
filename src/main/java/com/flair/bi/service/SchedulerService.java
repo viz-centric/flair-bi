@@ -5,7 +5,8 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
-import com.flair.bi.service.dto.scheduler.GetChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
@@ -109,8 +110,8 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduledReportsCount(username);
 	}
 	
-	public GetChannelParametersDTO getChannelParameters(){
-		return  null;
+	public GetChannelConnectionDTO getChannelParameters(){
+		return  notificationsGrpcService.getChannelParameters();
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

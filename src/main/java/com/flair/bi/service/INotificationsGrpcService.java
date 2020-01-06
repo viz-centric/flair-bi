@@ -1,6 +1,5 @@
 package com.flair.bi.service;
-
-import com.flair.bi.service.dto.scheduler.GetChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
@@ -27,5 +26,5 @@ public interface INotificationsGrpcService {
 
     GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page);
     
-    GetChannelParametersDTO getChannelParameters();
+    GetChannelConnectionDTO getChannelParameters();
 }

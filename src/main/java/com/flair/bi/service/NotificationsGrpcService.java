@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.messages.report.ChannelConnection;
+import com.flair.bi.messages.report.ChannelParameters;
 import com.flair.bi.messages.report.ConnectionProperties;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
@@ -26,7 +27,8 @@ import com.flair.bi.messages.report.SearchReportsResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
-import com.flair.bi.service.dto.scheduler.GetChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
@@ -187,12 +189,16 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
     
     @Override
-    public GetChannelParametersDTO getChannelParameters(){
-//    	GetChannelPropertiesResponse response=getReportStub().getChannelProperties(null);
-//    	List<ChannelConnection> channelConnections=response.getChannelConnectionList();
-//    	GetChannelParametersDTO.builder().connectionProperties(toConnectionPropertiesDTO(channelConnections.get(0).getChannelPropertiesList()));
-//    	//return GetChannelParametersDTO.builder().connectionProperties();
-    	return null;
+    public GetChannelConnectionDTO getChannelParameters(){
+    	GetChannelPropertiesResponse response=getReportStub().getChannelProperties(null);
+    	ChannelConnection connection=response.getRequest(0);
+    	return GetChannelConnectionDTO.builder().channelParameters(toChannelParametersDTO(connection.getChannelParametersList())).build();
+    }
+    
+    private List<ChannelParametersDTO> toChannelParametersDTO(List<ChannelParameters> list) {
+        return list.stream()
+                .map(item -> createChannelParametersDTO(item))
+                .collect(toList());
     }
     
     private List<ConnectionPropertiesDTO> toConnectionPropertiesDTO(List<ConnectionProperties> list) {
@@ -200,6 +206,24 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .map(item -> createConnectionPropertiesDTO(item))
                 .collect(toList());
     }
+        
+    private ChannelParametersDTO createChannelParametersDTO(ChannelParameters channelParameters){
+    	ChannelParametersDTO channelParametersDTO= new ChannelParametersDTO();
+    	channelParametersDTO.setConnectionProperties(toConnectionPropertiesDTO(channelParameters.getConnectionPropertiesList()));
+    	channelParametersDTO.setId(channelParameters.getId());
+    	return channelParametersDTO;
+    }
+    
+    private ConnectionPropertiesDTO createConnectionPropertiesDTO(ConnectionProperties connectionProperties){
+    	ConnectionPropertiesDTO connectionPropertiesDTO= new ConnectionPropertiesDTO();
+    	connectionPropertiesDTO.setDisplayName(connectionProperties.getDisplayName());
+    	connectionPropertiesDTO.setFieldName(connectionProperties.getFieldName());
+    	connectionPropertiesDTO.setFieldType(connectionProperties.getFieldType());
+    	connectionPropertiesDTO.setOrder(connectionProperties.getOrder());
+    	connectionPropertiesDTO.setRequired(connectionProperties.getRequired());
+		return connectionPropertiesDTO;
+    }
+    
 
     private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
         return list.stream()
@@ -278,16 +302,6 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
             return null;
         }
         return createSchedulerNotificationDTO(response.getReport());
-    }
-    
-    private ConnectionPropertiesDTO createConnectionPropertiesDTO(ConnectionProperties connectionProperties){
-    	ConnectionPropertiesDTO connectionPropertiesDTO= new ConnectionPropertiesDTO();
-    	connectionPropertiesDTO.setDisplayName(connectionProperties.getDisplayName());
-    	connectionPropertiesDTO.setFieldName(connectionProperties.getFieldName());
-    	connectionPropertiesDTO.setFieldType(connectionProperties.getFieldType());
-    	//connectionPropertiesDTO.setOrder(connectionProperties.getOrder());
-    	connectionPropertiesDTO.setRequired(connectionProperties.getRequired());
-		return null;
     }
 
     private SchedulerNotificationDTO createSchedulerNotificationDTO(ScheduleReport scheduleReport) {

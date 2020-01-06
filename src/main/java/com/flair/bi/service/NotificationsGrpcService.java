@@ -190,7 +190,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     
     @Override
     public GetChannelConnectionDTO getChannelParameters(){
-    	GetChannelPropertiesResponse response=getReportStub().getChannelProperties(null);
+    	GetChannelPropertiesResponse response=getReportStub().getChannelProperties(GetChannelPropertiesRequest.newBuilder().setChannel("").build());
     	ChannelConnection connection=response.getRequest();
     	return GetChannelConnectionDTO.builder().channelParameters(toChannelParametersDTO(connection.getChannelParametersList())).build();
     }

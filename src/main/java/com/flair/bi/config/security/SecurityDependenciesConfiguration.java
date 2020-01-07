@@ -4,7 +4,6 @@ import com.flair.bi.config.Constants;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.service.UserService;
-import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
@@ -51,7 +50,7 @@ public class SecurityDependenciesConfiguration {
                 Collection<String> groups = (Collection<String>) map.get("groups");
                 userService.createUser(email, passwordEncoder().encode(RandomStringUtils.random(10)), (String) map.get("given_name"),
                     (String) map.get("family_name"), email, Constants.LanguageKeys.ENGLISH,
-                    Constants.EXTERNAL_USER, ImmutableSet.copyOf(groups));
+                    Constants.EXTERNAL_USER);
             }
             return email;
         };

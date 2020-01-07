@@ -193,12 +193,12 @@ public class SchedulerResource {
 		return result;
 	}
 	
-	@GetMapping("/schedule/channelConfigurations/")
+	@GetMapping("/schedule/channelParameters/")
 	@Timed
-	public GetChannelConnectionDTO getChannelConfigurations() {
-		if (!SecurityUtils.iAdmin()) {
-			userName = SecurityUtils.getCurrentUserLogin();
-		}
+	public GetChannelConnectionDTO getChannelParameters() {
+//		if (!SecurityUtils.iAdmin()) {
+//			userName = SecurityUtils.getCurrentUserLogin();
+//		}
 		return schedulerService.getChannelParameters();
 	}
 }

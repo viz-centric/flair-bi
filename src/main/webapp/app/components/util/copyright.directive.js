@@ -7,8 +7,9 @@
 
 
     function copyright() {
+    	var year=new Date().getFullYear();
         return {
-            template: '<strong>Copyright</strong> Vizcentric Flair BI &copy; 2019',
+            template: '<strong>Copyright</strong> Vizcentric Flair BI &copy; '+year,
         };
     }
 

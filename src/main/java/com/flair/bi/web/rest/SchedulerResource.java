@@ -195,10 +195,7 @@ public class SchedulerResource {
 	
 	@GetMapping("/schedule/channelParameters/")
 	@Timed
-	public GetChannelConnectionDTO getChannelParameters() {
-//		if (!SecurityUtils.iAdmin()) {
-//			userName = SecurityUtils.getCurrentUserLogin();
-//		}
-		return schedulerService.getChannelParameters();
+	public GetChannelConnectionDTO getChannelParameters(@RequestParam(required=false) String channel) {
+		return schedulerService.getChannelParameters(channel);
 	}
 }

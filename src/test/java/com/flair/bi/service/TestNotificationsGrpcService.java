@@ -58,7 +58,7 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     }
 
 	@Override
-	public GetChannelConnectionDTO getChannelParameters() {
+	public GetChannelConnectionDTO getChannelParameters(String channel) {
 		// TODO Auto-generated method stub
 		return null;
 	}

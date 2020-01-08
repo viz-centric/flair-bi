@@ -110,8 +110,8 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduledReportsCount(username);
 	}
 	
-	public GetChannelConnectionDTO getChannelParameters(){
-		return  notificationsGrpcService.getChannelParameters();
+	public GetChannelConnectionDTO getChannelParameters(String channel){
+		return  notificationsGrpcService.getChannelParameters(channel);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

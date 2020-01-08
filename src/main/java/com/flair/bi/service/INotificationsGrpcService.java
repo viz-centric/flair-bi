@@ -26,5 +26,5 @@ public interface INotificationsGrpcService {
 
     GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page);
     
-    GetChannelConnectionDTO getChannelParameters();
+    GetChannelConnectionDTO getChannelParameters(String channel);
 }

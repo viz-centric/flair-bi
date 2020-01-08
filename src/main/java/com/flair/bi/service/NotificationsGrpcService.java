@@ -1,6 +1,5 @@
 package com.flair.bi.service;
 
-import com.flair.bi.messages.report.ChannelConnection;
 import com.flair.bi.messages.report.ChannelParameters;
 import com.flair.bi.messages.report.ConnectionProperties;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;

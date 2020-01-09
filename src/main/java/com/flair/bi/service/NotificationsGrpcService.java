@@ -324,7 +324,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         emailsDTO.setUser_name(item.getUserName());
         return emailsDTO;
     }
-    
+
 	@Override
 	public GetChannelConnectionDTO getChannelParameters(String channel) {
 		GetChannelPropertiesResponse response = getReportStub()

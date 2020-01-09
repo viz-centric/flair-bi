@@ -14,7 +14,6 @@ import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,18 +22,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationConfigurationResource {
-	
+
 	private final SchedulerService schedulerService;
-	
+
 	@GetMapping("/notification/channelParameters/")
 	@Timed
-	public GetChannelConnectionDTO getChannelParameters(@RequestParam(required=false) String channel) {
+	public GetChannelConnectionDTO getChannelParameters(@RequestParam(required = false) String channel) {
 		return schedulerService.getChannelParameters(channel);
 	}
-	
+
 	@PostMapping("/notification/createTeamConfig")
 	@Timed
-	public String createTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO){
+	public String createTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO) {
 		return schedulerService.createTeamConfig(teamConfigParametersDTO);
 	}
 }

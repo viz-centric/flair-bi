@@ -16,6 +16,7 @@ import com.flair.bi.service.dto.scheduler.SchedulerDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -192,10 +193,5 @@ public class SchedulerResource {
 		log.info("Search reports result {}", result);
 		return result;
 	}
-	
-	@GetMapping("/schedule/channelParameters/")
-	@Timed
-	public GetChannelConnectionDTO getChannelParameters(@RequestParam(required=false) String channel) {
-		return schedulerService.getChannelParameters(channel);
-	}
+
 }

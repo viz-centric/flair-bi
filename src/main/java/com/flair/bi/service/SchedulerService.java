@@ -12,6 +12,7 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
@@ -69,7 +70,7 @@ public class SchedulerService {
 	private final DatasourceConstraintService datasourceConstraintService;
 
 	private final UserService userService;
-
+	
     public void executeImmediateScheduledReport(String visualizationid) {
 		notificationsGrpcService.executeImmediateScheduledReport(visualizationid);
 	}
@@ -112,6 +113,10 @@ public class SchedulerService {
 	
 	public GetChannelConnectionDTO getChannelParameters(String channel){
 		return  notificationsGrpcService.getChannelParameters(channel);
+	}
+	
+	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO){
+		return notificationsGrpcService.createTeamConfig(teamConfigParametersDTO);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

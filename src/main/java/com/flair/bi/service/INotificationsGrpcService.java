@@ -5,6 +5,7 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
 public interface INotificationsGrpcService {
 
@@ -25,6 +26,10 @@ public interface INotificationsGrpcService {
     GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page);
 
     GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page);
-    
+
     GetChannelConnectionDTO getChannelParameters(String channel);
+
+    String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
+
+    String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
 }

@@ -6,6 +6,8 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
+
 import org.junit.Ignore;
 import org.springframework.stereotype.Service;
 
@@ -62,4 +64,17 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

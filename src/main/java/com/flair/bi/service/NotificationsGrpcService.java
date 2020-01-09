@@ -1,11 +1,14 @@
 package com.flair.bi.service;
 
+import com.flair.bi.messages.report.AddEmailConfigsRequest;
+import com.flair.bi.messages.report.AddEmailConfigsResponse;
 import com.flair.bi.messages.report.AddTeamConfigsRequest;
 import com.flair.bi.messages.report.AddTeamConfigsResponse;
 import com.flair.bi.messages.report.ChannelParameters;
 import com.flair.bi.messages.report.ConnectionProperties;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
+import com.flair.bi.messages.report.EmailParameters;
 import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
 import com.flair.bi.messages.report.GetChannelPropertiesRequest;
@@ -26,11 +29,14 @@ import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.messages.report.SearchReportsRequest;
 import com.flair.bi.messages.report.SearchReportsResponse;
 import com.flair.bi.messages.report.TeamConfigParameters;
+import com.flair.bi.messages.report.UpdateEmailSMTPRequest;
+import com.flair.bi.messages.report.UpdateEmailSMTPResponse;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
@@ -383,6 +389,32 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 	private TeamConfigParameters toUpdateTeamConfigParameters(TeamConfigParametersDTO teamConfigParametersDTO) {
 		return TeamConfigParameters.newBuilder().setWebhookName(teamConfigParametersDTO.getWebhookName())
 				.setWebhookURL(teamConfigParametersDTO.getWebhookURL()).setId(teamConfigParametersDTO.getId()).build();
+	}
+
+	@Override
+	public String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		AddEmailConfigsResponse response = getReportStub().addEmailConfigs(AddEmailConfigsRequest.newBuilder()
+				.setEmailParameter(toEmailConfigParameters(emailConfigParametersDTO)).build());
+		return response.getMessage();
+	}
+
+	private EmailParameters toEmailConfigParameters(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return EmailParameters.newBuilder().setHost(emailConfigParametersDTO.getHost())
+				.setPassword(emailConfigParametersDTO.getPassword()).setPort(emailConfigParametersDTO.getPort())
+				.setSender(emailConfigParametersDTO.getSender()).build();
+	}
+
+	@Override
+	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		UpdateEmailSMTPResponse response = getReportStub().updateEmailSMTP(UpdateEmailSMTPRequest.newBuilder()
+				.setEmailParameter(toUpdateEmailConfigParameters(emailConfigParametersDTO)).build());
+		return response.getMessage();
+	}
+
+	private EmailParameters toUpdateEmailConfigParameters(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return EmailParameters.newBuilder().setHost(emailConfigParametersDTO.getHost())
+				.setPassword(emailConfigParametersDTO.getPassword()).setPort(emailConfigParametersDTO.getPort())
+				.setSender(emailConfigParametersDTO.getSender()).setId(emailConfigParametersDTO.getId()).build();
 	}
 
 }

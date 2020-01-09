@@ -6,6 +6,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -121,6 +122,14 @@ public class SchedulerService {
 
 	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
 		return notificationsGrpcService.updateTeamConfig(teamConfigParametersDTO);
+	}
+
+	public String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return notificationsGrpcService.createEmailConfig(emailConfigParametersDTO);
+	}
+
+	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return notificationsGrpcService.updateEmailConfig(emailConfigParametersDTO);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

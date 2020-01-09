@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
@@ -42,5 +43,17 @@ public class NotificationConfigurationResource {
 	@Timed
 	public String updateTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO) {
 		return schedulerService.updateTeamConfig(teamConfigParametersDTO);
+	}
+
+	@PostMapping("/notification/createEmailConfig")
+	@Timed
+	public String createEmailConfig(@Valid @RequestBody EmailConfigParametersDTO emailConfigParametersDTO) {
+		return schedulerService.createEmailConfig(emailConfigParametersDTO);
+	}
+
+	@PutMapping("/notification/updateEmailConfig")
+	@Timed
+	public String updateEmailConfig(@Valid @RequestBody EmailConfigParametersDTO emailConfigParametersDTO) {
+		return schedulerService.updateEmailConfig(emailConfigParametersDTO);
 	}
 }

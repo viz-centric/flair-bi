@@ -1,5 +1,6 @@
 package com.flair.bi.service;
 
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -73,6 +74,18 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
 		// TODO Auto-generated method stub
 		return null;
 	}

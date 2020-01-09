@@ -1,4 +1,5 @@
 package com.flair.bi.service;
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -31,5 +32,9 @@ public interface INotificationsGrpcService {
 
     String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
 
-    String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
+	String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
+
+	String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO);
+
+	String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO);
 }

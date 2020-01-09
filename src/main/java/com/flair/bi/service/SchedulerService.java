@@ -111,12 +111,16 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduledReportsCount(username);
 	}
 	
-	public GetChannelConnectionDTO getChannelParameters(String channel){
-		return  notificationsGrpcService.getChannelParameters(channel);
+	public GetChannelConnectionDTO getChannelParameters(String channel) {
+		return notificationsGrpcService.getChannelParameters(channel);
 	}
-	
-	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO){
+
+	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
 		return notificationsGrpcService.createTeamConfig(teamConfigParametersDTO);
+	}
+
+	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		return notificationsGrpcService.updateTeamConfig(teamConfigParametersDTO);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

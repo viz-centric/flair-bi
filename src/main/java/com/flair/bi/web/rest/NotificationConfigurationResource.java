@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,5 +36,11 @@ public class NotificationConfigurationResource {
 	@Timed
 	public String createTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO) {
 		return schedulerService.createTeamConfig(teamConfigParametersDTO);
+	}
+
+	@PutMapping("/notification/updateTeamConfig")
+	@Timed
+	public String updateTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO) {
+		return schedulerService.updateTeamConfig(teamConfigParametersDTO);
 	}
 }

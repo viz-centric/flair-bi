@@ -26,6 +26,8 @@ import com.flair.bi.messages.report.ScheduleReportResponse;
 import com.flair.bi.messages.report.SearchReportsRequest;
 import com.flair.bi.messages.report.SearchReportsResponse;
 import com.flair.bi.messages.report.TeamConfigParameters;
+import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
+import com.flair.bi.messages.report.UpdateTeamWebhookURLResponse;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
@@ -361,7 +363,6 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
-		;
 		AddTeamConfigsResponse response = getReportStub().addTeamConfigs(AddTeamConfigsRequest.newBuilder()
 				.setTeamConfigParameter(toTeamConfigParameters(teamConfigParametersDTO)).build());
 		return response.getMessage();
@@ -369,13 +370,19 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		UpdateTeamWebhookURLResponse response = getReportStub().updateTeamWebhookURL(UpdateTeamWebhookURLRequest
+				.newBuilder().setTeamConfigParameter(toUpdateTeamConfigParameters(teamConfigParametersDTO)).build());
+		return response.getMessage();
 	}
 
 	private TeamConfigParameters toTeamConfigParameters(TeamConfigParametersDTO teamConfigParametersDTO) {
 		return TeamConfigParameters.newBuilder().setWebhookName(teamConfigParametersDTO.getWebhookName())
 				.setWebhookURL(teamConfigParametersDTO.getWebhookURL()).build();
+	}
+
+	private TeamConfigParameters toUpdateTeamConfigParameters(TeamConfigParametersDTO teamConfigParametersDTO) {
+		return TeamConfigParameters.newBuilder().setWebhookName(teamConfigParametersDTO.getWebhookName())
+				.setWebhookURL(teamConfigParametersDTO.getWebhookURL()).setId(teamConfigParametersDTO.getId()).build();
 	}
 
 }

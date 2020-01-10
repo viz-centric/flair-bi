@@ -104,4 +104,10 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 		return null;
 	}
 
+	@Override
+	public String deleteChannelConfig(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

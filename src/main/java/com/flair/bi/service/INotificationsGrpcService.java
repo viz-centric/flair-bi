@@ -43,4 +43,6 @@ public interface INotificationsGrpcService {
 	EmailConfigParametersDTO getEmailConfig(Integer id);
 
 	List<TeamConfigParametersDTO> getTeamConfig(Integer id);
+
+	String deleteChannelConfig(Integer id);
 }

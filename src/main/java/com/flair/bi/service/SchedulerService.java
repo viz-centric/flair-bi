@@ -141,6 +141,10 @@ public class SchedulerService {
 		return notificationsGrpcService.getTeamConfig(id);
 	}
 
+	public String deleteChannelConfig(Integer id) {
+		return notificationsGrpcService.deleteChannelConfig(id);
+	}
+
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
 			throws InvalidProtocolBufferException, QueryTransformerException {

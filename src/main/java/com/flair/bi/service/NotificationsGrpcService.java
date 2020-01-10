@@ -6,6 +6,8 @@ import com.flair.bi.messages.report.AddTeamConfigsRequest;
 import com.flair.bi.messages.report.AddTeamConfigsResponse;
 import com.flair.bi.messages.report.ChannelParameters;
 import com.flair.bi.messages.report.ConnectionProperties;
+import com.flair.bi.messages.report.DeleteChannelConfigRequest;
+import com.flair.bi.messages.report.DeleteChannelConfigResponse;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.EmailParameters;
@@ -458,6 +460,13 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		teamConfigParametersDTO.setWebhookURL(teamConfigParameters.getWebhookURL());
 		teamConfigParametersDTO.setId(teamConfigParameters.getId());
 		return teamConfigParametersDTO;
+	}
+
+	@Override
+	public String deleteChannelConfig(Integer id) {
+		DeleteChannelConfigResponse response = getReportStub()
+				.deleteChannelConfig(DeleteChannelConfigRequest.newBuilder().setId(id).build());
+		return response.getMessage();
 	}
 
 }

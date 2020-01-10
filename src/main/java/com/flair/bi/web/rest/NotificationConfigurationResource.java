@@ -74,7 +74,7 @@ public class NotificationConfigurationResource {
 
 	@DeleteMapping("/notification/deleteChannelConfig")
 	@Timed
-	public String deleteChannelConfig(@RequestParam(required = false) Integer id) {
+	public String deleteChannelConfig(@RequestParam Integer id) {
 		return schedulerService.deleteChannelConfig(id);
 	}
 }

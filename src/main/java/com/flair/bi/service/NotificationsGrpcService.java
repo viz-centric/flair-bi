@@ -405,7 +405,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 	private EmailParameters toEmailConfigParameters(EmailConfigParametersDTO emailConfigParametersDTO) {
 		return EmailParameters.newBuilder().setHost(emailConfigParametersDTO.getHost())
 				.setPassword(emailConfigParametersDTO.getPassword()).setPort(emailConfigParametersDTO.getPort())
-				.setSender(emailConfigParametersDTO.getSender()).build();
+				.setSender(emailConfigParametersDTO.getSender()).setUser(emailConfigParametersDTO.getUser()).build();
 	}
 
 	@Override
@@ -418,7 +418,8 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 	private EmailParameters toUpdateEmailConfigParameters(EmailConfigParametersDTO emailConfigParametersDTO) {
 		return EmailParameters.newBuilder().setHost(emailConfigParametersDTO.getHost())
 				.setPassword(emailConfigParametersDTO.getPassword()).setPort(emailConfigParametersDTO.getPort())
-				.setSender(emailConfigParametersDTO.getSender()).setId(emailConfigParametersDTO.getId()).build();
+				.setSender(emailConfigParametersDTO.getSender()).setUser(emailConfigParametersDTO.getUser())
+				.setId(emailConfigParametersDTO.getId()).build();
 	}
 
 	@Override

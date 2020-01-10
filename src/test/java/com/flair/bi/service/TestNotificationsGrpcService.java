@@ -9,6 +9,8 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
+import java.util.List;
+
 import org.junit.Ignore;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +88,18 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EmailConfigParametersDTO getEmailConfig(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

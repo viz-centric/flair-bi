@@ -1,5 +1,7 @@
 package com.flair.bi.web.rest;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,4 +58,17 @@ public class NotificationConfigurationResource {
 	public String updateEmailConfig(@Valid @RequestBody EmailConfigParametersDTO emailConfigParametersDTO) {
 		return schedulerService.updateEmailConfig(emailConfigParametersDTO);
 	}
+
+	@GetMapping("/notification/getEmailConfig/")
+	@Timed
+	public EmailConfigParametersDTO getEmailConfig(@RequestParam(required = false) Integer id) {
+		return schedulerService.getEmailConfig(id);
+	}
+
+	@GetMapping("/notification/getTeamConfig/")
+	@Timed
+	public List<TeamConfigParametersDTO> getTeamConfig(@RequestParam(required = false) Integer id) {
+		return schedulerService.getTeamConfig(id);
+	}
+
 }

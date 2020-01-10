@@ -13,9 +13,13 @@ import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
 import com.flair.bi.messages.report.GetChannelPropertiesRequest;
 import com.flair.bi.messages.report.GetChannelPropertiesResponse;
+import com.flair.bi.messages.report.GetEmailConfigRequest;
+import com.flair.bi.messages.report.GetEmailConfigResponse;
 import com.flair.bi.messages.report.GetScheduleReportLogsRequest;
 import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
+import com.flair.bi.messages.report.GetTeamConfigRequest;
+import com.flair.bi.messages.report.GetTeamConfigResponse;
 import com.flair.bi.messages.report.RepUserCountReq;
 import com.flair.bi.messages.report.RepUserCountResp;
 import com.flair.bi.messages.report.RepUserReq;
@@ -415,6 +419,43 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		return EmailParameters.newBuilder().setHost(emailConfigParametersDTO.getHost())
 				.setPassword(emailConfigParametersDTO.getPassword()).setPort(emailConfigParametersDTO.getPort())
 				.setSender(emailConfigParametersDTO.getSender()).setId(emailConfigParametersDTO.getId()).build();
+	}
+
+	@Override
+	public EmailConfigParametersDTO getEmailConfig(Integer id) {
+		GetEmailConfigResponse response = getReportStub()
+				.getEmailConfig(GetEmailConfigRequest.newBuilder().setId(id).build());
+		return toEmailConfigParametersDTO(response.getRecord());
+	}
+
+	private EmailConfigParametersDTO toEmailConfigParametersDTO(EmailParameters emailParameters) {
+		EmailConfigParametersDTO emailConfigParametersDTO = new EmailConfigParametersDTO();
+		emailConfigParametersDTO.setHost(emailParameters.getHost());
+		emailConfigParametersDTO.setId(emailParameters.getId());
+		emailConfigParametersDTO.setPassword(emailParameters.getPassword());
+		emailConfigParametersDTO.setPort(emailParameters.getPort());
+		emailConfigParametersDTO.setSender(emailParameters.getSender());
+		emailConfigParametersDTO.setUser(emailParameters.getUser());
+		return emailConfigParametersDTO;
+	}
+
+	@Override
+	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
+		GetTeamConfigResponse response = getReportStub()
+				.getTeamConfig(GetTeamConfigRequest.newBuilder().setId(id).build());
+		return toTeamConfigParametersDTOList(response.getRecordsList());
+	}
+
+	private List<TeamConfigParametersDTO> toTeamConfigParametersDTOList(List<TeamConfigParameters> list) {
+		return list.stream().map(item -> toTeamConfigParametersDTO(item)).collect(toList());
+
+	}
+
+	private TeamConfigParametersDTO toTeamConfigParametersDTO(TeamConfigParameters teamConfigParameters) {
+		TeamConfigParametersDTO teamConfigParametersDTO = new TeamConfigParametersDTO();
+		teamConfigParametersDTO.setWebhookName(teamConfigParameters.getWebhookName());
+		teamConfigParametersDTO.setWebhookURL(teamConfigParameters.getWebhookURL());
+		return teamConfigParametersDTO;
 	}
 
 }

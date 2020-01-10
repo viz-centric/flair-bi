@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -130,6 +131,14 @@ public class SchedulerService {
 
 	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
 		return notificationsGrpcService.updateEmailConfig(emailConfigParametersDTO);
+	}
+
+	public EmailConfigParametersDTO getEmailConfig(Integer id) {
+		return notificationsGrpcService.getEmailConfig(id);
+	}
+
+	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
+		return notificationsGrpcService.getTeamConfig(id);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

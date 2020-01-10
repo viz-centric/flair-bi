@@ -455,6 +455,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		TeamConfigParametersDTO teamConfigParametersDTO = new TeamConfigParametersDTO();
 		teamConfigParametersDTO.setWebhookName(teamConfigParameters.getWebhookName());
 		teamConfigParametersDTO.setWebhookURL(teamConfigParameters.getWebhookURL());
+		teamConfigParametersDTO.setId(teamConfigParameters.getId());
 		return teamConfigParametersDTO;
 	}
 

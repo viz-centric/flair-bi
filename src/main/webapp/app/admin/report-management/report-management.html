@@ -1,113 +1,301 @@
-<div class="fbibox report-management">
-    <div class="fbibox-content">
-        <div class="row filters">
-            <div class="col-xs-3">
-                <div class="input-group">
-                    <h4 class="control-label" data-translate="reportManagement.filters.fromDate" for="fromDate">From Date</h4>
-                    <input  type="text" class="form-control" name="fromDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.fromDate" is-open="vm.datePickerOpenStatus.fromDate" />
-                    <span class="input-group-btn flair-date-icon">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('fromDate')">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                        </button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="input-group">
-                <h4 class="control-label" data-translate="reportManagement.filters.toDate" for="toDate">To Date</h4>
-                    <input  type="text" class="form-control" name="toDate" enable-time="false" datetime-picker="{{vm.dateFormat}}" ng-model="vm.toDate" is-open="vm.datePickerOpenStatus.toDate" />
-                    <span class="input-group-btn flair-date-icon">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('toDate')">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                        </button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-xs-2">
-                <div class="input-group">
-                <h4  class="control-label" data-translate="reportManagement.filters.reportName">Report Name</h4>
-                    <input type="text" class="report-name input-sm form-control" name="reportName" ng-model="vm.reportName"/>
-                </div>
-            </div>
-            <div ng-if="vm.isAdmin" class="col-md-3">
-                <user-search-component user="vm.user" />
-            </div>
-            <div class="col-xs-1">
-                <button data-translate="entity.action.search" type="button" ng-click="vm.searchReports()" class="btn btn-info search-btn">Search</button>
-            </div>
-        </div>
-        <br/>
-        <div class="table-responsive" ng-if="vm.reports.length>0">
-            <table class="table table-striped flair-table-v1">
-                <thead>
-                    <tr>
-                        <th>
-                            <span data-translate="reportManagement.no"></span>
-                        </th>
-                        <th>
-                            <span data-translate="reportManagement.reportName"></span>
-                        </th>
-                        <th>
-                            <span data-translate="reportManagement.dashboardName"></span>
-                        </th>
-                        <th>
-                            <span data-translate="reportManagement.isThresholdAlert"></span>
-                        </th>
-                        <th>
-                            <span data-translate="reportManagement.subject"></span>
-                        </th>
-                        <th>
-                            <span data-translate="reportManagement.run"></span>
-                        </th>
-                        <th>
-                            <span data-translate="reportManagement.createdBy"></span>
-                        </th>
-                         <th>
-                            <span data-translate="reportManagement.action"></span>
-                        </th> 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="report in vm.reports"> 
-                        <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
-                        <td>{{report.report.title_name}}</td>
-                        <td>{{report.report.dashboard_name}}</td>
-                        <td>{{report.report.thresholdAlert?'Yes':'No'}}</td>
-                       
-                        <td>{{report.report.subject}}</td>
-                        <td>{{report.schedule.cron_exp | CronParser}}</td>
-                        <td>{{report.report.userid}}</td>
-                        <td>
-                            <div class="btn-group flex-btn-group-container report-actions">
-                                <button uib-tooltip="Run Now" ng-click="vm.executeNow(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
-                                    <svg class="execute-now">
-                                       <use xlink:href="#execute-now"></use>
-                                    </svg>
-                                </button>
-                                <button uib-tooltip="Go to View" ng-click="vm.goToBuildPage(report.report.build_url)" class="btn btn-default btn-sm">
-                                    <span class="fa fa-eye views-icon fa-2x"></span>
-                                </button>
-                                <button type="submit" uib-tooltip="Logs" ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})" class="btn btn-default btn-sm">
-                                    <svg >
-                                       <use xlink:href="#admin-logs"></use>
-                                    </svg>
-                                </button>
-                                <button uib-tooltip="Edit" ng-click="vm.updateReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
-                                    <span class="fa fa-edit edit-icon fa-2x"></span>
-                                </button>
-                                <button uib-tooltip="Delete" ng-click="vm.deleteReport(report.report_line_item.visualizationid)" class="btn btn-default btn-sm">
-                                    <span class="fa fa-trash delete-icon fa-2x"></span>
-                                </button>
-                            </div>
-                        </td>  
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div id="report-management">
+    <div class="tabbable full-width-tabs panel panel-primary">
+        <ul class="nav nav-tabs report">
+            <li class="active" ng-click="vm.reportManagementTabClick('report')">
+                <a data-toggle="tab" href="#/administration/report-management#Reports">Reports
+                    <svg id="report-tab">
+                        <use xlink:href="#new-email-report"></use>
+                    </svg>
+                </a>
+            </li>
+            <li ng-click="vm.reportManagementTabClick('configuration')">
+                <a data-toggle="tab" href="#/administration/report-management#Configuration">Configuration
+                    <svg id="configuration-tab">
+                        <use xlink:href="#admin-configuration"></use>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#/administration/report-management#Configuration">Task Logger
+                    <svg id="configuration-tab">
+                        <use xlink:href="#admin-configuration"></use>
+                    </svg>
+                </a>
+            </li>
+        </ul>
 
-      <div class="text-center" ng-if="vm.totalItems>0">
-            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.loadPage(vm.page)" items-per-page="vm.itemsPerPage"></uib-pagination>
+        <div class="tab-content">
+            <div id="Reports" class="tab-pane fade in active">
+                <div class="fbibox report-management">
+                    <div class="fbibox-content">
+                        <div class="row filters">
+                            <div class="col-xs-3">
+                                <div class="input-group">
+                                    <h4 class="control-label" data-translate="reportManagement.filters.fromDate"
+                                        for="fromDate">
+                                        From
+                                        Date</h4>
+                                    <input type="text" class="form-control" name="fromDate" enable-time="false"
+                                        datetime-picker="{{vm.dateFormat}}" ng-model="vm.fromDate"
+                                        is-open="vm.datePickerOpenStatus.fromDate" />
+                                    <span class="input-group-btn flair-date-icon">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="vm.openCalendar('fromDate')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="input-group">
+                                    <h4 class="control-label" data-translate="reportManagement.filters.toDate"
+                                        for="toDate">
+                                        To
+                                        Date</h4>
+                                    <input type="text" class="form-control" name="toDate" enable-time="false"
+                                        datetime-picker="{{vm.dateFormat}}" ng-model="vm.toDate"
+                                        is-open="vm.datePickerOpenStatus.toDate" />
+                                    <span class="input-group-btn flair-date-icon">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="vm.openCalendar('toDate')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="input-group">
+                                    <h4 class="control-label" data-translate="reportManagement.filters.reportName">
+                                        Report
+                                        Name
+                                    </h4>
+                                    <input type="text" class="report-name input-sm form-control" name="reportName"
+                                        ng-model="vm.reportName" />
+                                </div>
+                            </div>
+                            <div ng-if="vm.isAdmin" class="col-md-3">
+                                <user-search-component user="vm.user" />
+                            </div>
+                            <div class="col-xs-1">
+                                <button data-translate="entity.action.search" type="button"
+                                    ng-click="vm.searchReports()" class="btn btn-info search-btn">Search</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="table-responsive" ng-if="vm.reports.length>0">
+                            <table class="table table-striped flair-table-v1">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-translate="reportManagement.no"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.reportName"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.dashboardName"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.isThresholdAlert"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.subject"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.run"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.createdBy"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.action"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="report in vm.reports">
+                                        <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
+                                        <td>{{report.report.title_name}}</td>
+                                        <td>{{report.report.dashboard_name}}</td>
+                                        <td>{{report.report.thresholdAlert?'Yes':'No'}}</td>
+
+                                        <td>{{report.report.subject}}</td>
+                                        <td>{{report.schedule.cron_exp | CronParser}}</td>
+                                        <td>{{report.report.userid}}</td>
+                                        <td>
+                                            <div class="btn-group flex-btn-group-container report-actions">
+                                                <button uib-tooltip="Run Now"
+                                                    ng-click="vm.executeNow(report.report_line_item.visualizationid)"
+                                                    class="btn btn-default btn-sm">
+                                                    <svg class="execute-now">
+                                                        <use xlink:href="#execute-now"></use>
+                                                    </svg>
+                                                </button>
+                                                <button uib-tooltip="Go to View"
+                                                    ng-click="vm.goToBuildPage(report.report.build_url)"
+                                                    class="btn btn-default btn-sm">
+                                                    <span class="fa fa-eye views-icon fa-2x"></span>
+                                                </button>
+                                                <button type="submit" uib-tooltip="Logs"
+                                                    ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})"
+                                                    class="btn btn-default btn-sm">
+                                                    <svg>
+                                                        <use xlink:href="#admin-logs"></use>
+                                                    </svg>
+                                                </button>
+                                                <button uib-tooltip="Edit"
+                                                    ng-click="vm.updateReport(report.report_line_item.visualizationid)"
+                                                    class="btn btn-default btn-sm">
+                                                    <span class="fa fa-edit edit-icon fa-2x"></span>
+                                                </button>
+                                                <button uib-tooltip="Delete"
+                                                    ng-click="vm.deleteReport(report.report_line_item.visualizationid)"
+                                                    class="btn btn-default btn-sm">
+                                                    <span class="fa fa-trash delete-icon fa-2x"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-center" ng-if="vm.totalItems>0">
+                            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage">
+                            </jhi-item-count>
+                            <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page"
+                                ng-change="vm.loadPage(vm.page)" items-per-page="vm.itemsPerPage"></uib-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Configuration" class="tab-pane fade">
+
+                <div class="fbibox report-management">
+                    <div class="fbibox-content">
+                        <div class="clearfix"></div>
+                        <div class="col-xs-2">
+
+                            <ul class="nav nav-tabs tabs-left">
+                                <li class="active" ng-click="vm.reportManagementTabClick('email')">
+                                    <a href="#/administration/report-management#Email" data-toggle="tab">Email
+                                        <i class="fa fa-envelope" id="email-setting" aria-hidden="true"></i>
+                                    </a></li>
+                                <li ng-click="vm.reportManagementTabClick('team')">
+                                    <a href="#/administration/report-management#Team" data-toggle="tab">Team
+                                        <img id="microsoft-team" src="../../../content/svgs/microsoft-teams.svg">
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="#/administration/report-management#Jira" data-toggle="tab">Jira
+                                        <!-- <img id="microsoft-team" src="../../../content/svgs/microsoft-teams.svg"> -->
+                                    </a>
+
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="col-xs-10">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="Email">
+                                    <form name="emailSetting" role="form" novalidate ng-submit="vm.saveSMTPSetting()"
+                                        show-validation>
+                                        <div class="row">
+                                            <div class="cal-md-12">
+                                                <channel-property-component c-property="property"
+                                                    connection="vm.connection"
+                                                    ng-repeat="property in vm.emailChannelConfig[0].connectionProperties | orderBy: 'order'">
+                                                </channel-property-component>
+                                                <div class="m-b-sm">
+                                                    <button ng-disabled="emailSetting.$invalid || vm.isSaving"
+                                                        class="btn btn-primary">
+                                                        <span>
+                                                            Save Settings
+                                                        </span>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="Team">
+                                    <div class="row">
+
+                                        <div class="cal-md-12  text-right">
+                                            <button class="btn btn-primary m-b-sm" ng-click="vm.openTeamConfigDialog()">
+                                                <span>
+                                                    Create Webhook
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div class="cal-md-12">
+
+                                            <table class="table table-striped flair-table-v1">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <span data-translate="reportManagement.no"></span>
+                                                        </th>
+                                                        <th>
+                                                            <span data-translate="reportManagement.webhookName"></span>
+                                                        </th>
+                                                        <th>
+                                                            <span data-translate="reportManagement.webhookURL"></span>
+                                                        </th>
+                                                        <th>
+                                                            <span data-translate="reportManagement.action"></span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="webhook in vm.webhookList">
+                                                        <td>{{$index+1}}</td>
+                                                        <td>{{webhook.webhookName}}</td>
+                                                        <td>{{webhook.webhookURL}}</td>
+                                                        <td>
+                                                            <div
+                                                                class="btn-group flex-btn-group-container report-actions">
+
+                                                                <button uib-tooltip="Edit"
+                                                                    ng-click="vm.openTeamConfigDialog(webhook)"
+                                                                    class="btn btn-default btn-sm">
+                                                                    <span class="fa fa-edit edit-icon fa-2x"></span>
+                                                                </button>
+                                                                <button uib-tooltip="Delete"
+                                                                    ng-click="vm.deleteWebhook(webhook)"
+                                                                    class="btn btn-default btn-sm">
+                                                                    <span class="fa fa-trash delete-icon fa-2x"></span>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <form name="form" role="form" novalidate ng-submit="vm.saveSMPTSetting()"
+                                                show-validation>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="Jira">
+                                    <div class="row">
+                                        Jira settings
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
         </div>
     </div>
 </div>

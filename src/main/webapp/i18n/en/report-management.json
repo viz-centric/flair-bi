@@ -21,6 +21,8 @@
               "toDate": "To Date",
               "reportName":"Report Name",
               "user":"User"
-        }
+        },
+        "webhookName":"Webhook Name",
+        "webhookURL":"Webhook URL"
     }
 }

@@ -1,0 +1,39 @@
+<div class="inmodal in modal-content common-create-popup">
+    <form name="teamSetting" novalidate="" role="form">
+        <div class="modal-header flair-model-header">
+            <svg class="common-edit-icon">
+                <use xlink:href="#edit-dashboard" />
+            </svg>
+            <div class="header-text">
+                {{ vm.headerText}}
+            </div>
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+                <use xlink:href="#cancle" />
+            </svg>
+        </div>
+        <div class="modal-body flair-remove-padding scheduler-modal-body">
+            <div class="">
+                <div class="row">
+                    <channel-property-component c-property="property" connection="vm.connection"
+                        ng-repeat="property in  vm.config[0].connectionProperties  | orderBy: 'order'">
+                    </channel-property-component>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer scheduler-footer">
+            <button ng-disabled="teamSetting.$invalid || vm.isSaving" ng-if="!vm.isEdit" class="btn btn-primary" ng-click="vm.addWebhook()">
+
+                <span>Create Webhook</span>
+            </button>
+            <button  ng-disabled="teamSetting.$invalid || vm.isSaving" ng-if="vm.isEdit" class="btn btn-primary" ng-click="vm.updateWebhook()">
+
+                <span>Update Webhook</span>
+            </button>
+
+            <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                <span data-translate="entity.action.close">Close</span>
+            </button>
+        </div>
+    </form>
+</div>

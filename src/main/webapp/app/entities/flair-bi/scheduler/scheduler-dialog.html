@@ -2,7 +2,7 @@
     <form name="editForm" novalidate="" role="form">
         <div class="modal-header flair-model-header">
             <svg class="common-edit-icon">
-              <use xlink:href="#edit-dashboard" />
+                <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
                 {{vm.modalTitle}}
@@ -12,14 +12,17 @@
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
-            <div class="container">
+            <div class="">
                 <div class="row container" ng-if="vm.scheduleObj.emailReporter && !vm.emailReporterEdit">
                     <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Dashboard*</label>
-                            <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)" ng-required="vm.dashboard==null">
-                                <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}</ui-select-match>
-                                <ui-select-choices repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
+                            <ui-select ng-model="vm.dashboard" ng-change="vm.changeDashboard(vm.dashboard)"
+                                ng-required="vm.dashboard==null">
+                                <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                    repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
                                     <div ng-bind="dashboard.dashboardName"></div>
                                 </ui-select-choices>
                             </ui-select>
@@ -28,8 +31,10 @@
                     <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select View*</label>
-                            <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)" ng-required="vm.view==null">
-                                <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}</ui-select-match>
+                            <ui-select ng-model="vm.view" ng-change="vm.changeView(vm.view)"
+                                ng-required="vm.view==null">
+                                <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}
+                                </ui-select-match>
                                 <ui-select-choices repeat="view in vm.views | filter: $select.search track by view.id">
                                     <div ng-bind="view.viewName"></div>
                                 </ui-select-choices>
@@ -41,18 +46,24 @@
                     <div class="col-xs-8">
                         <div class="form-group">
                             <label class="control-label" for="emails">Select Visualization*</label>
-                            <ui-select ng-model="vm.visualMetaData" ng-change="vm.changeVisualization(vm.visualMetaData)" ng-required="vm.visualMetaData==null">
-                                <ui-select-match placeholder="Search Visualization...">{{$select.selected.metadataVisual.name}}</ui-select-match>
-                                <ui-select-choices repeat="visualization in vm.visualizations | filter: $select.search track by visualization.id">
+                            <ui-select ng-model="vm.visualMetaData"
+                                ng-change="vm.changeVisualization(vm.visualMetaData)"
+                                ng-required="vm.visualMetaData==null">
+                                <ui-select-match placeholder="Search Visualization...">
+                                    {{$select.selected.metadataVisual.name}}</ui-select-match>
+                                <ui-select-choices
+                                    repeat="visualization in vm.visualizations | filter: $select.search track by visualization.id">
                                     <div ng-bind="visualization.metadataVisual.name"></div>
                                 </ui-select-choices>
                             </ui-select>
                         </div>
                     </div>
                 </div>
-                <div class="row container" ng-if="vm.scheduleObj.emailReporter && vm.scheduleObj.report.share_link!=null">
+                <div class="row container"
+                    ng-if="vm.scheduleObj.emailReporter && vm.scheduleObj.report.share_link!=null">
                     <div class="col-xs-8">
-                        <iframe width="730" height="300" src={{vm.scheduleObj.report.share_link}} name={{vm.visualMetaData.metadataVisual.name}}>
+                        <iframe width="730" height="300" src={{vm.scheduleObj.report.share_link}}
+                            name={{vm.visualMetaData.metadataVisual.name}}>
                         </iframe>
                     </div>
                 </div>
@@ -60,175 +71,220 @@
                     <div class="col-xs-8">
                         <div class="form-group scheduler-tags">
                             <label class="control-label" for="emails">Share Report with Users*</label>
-                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)" on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedUsers" ng-required="vm.scheduleObj.assign_report.emails.length==0"
+                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
+                                on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true"
+                                minTags="5" min-length="1" ng-model="vm.selectedUsers"
+                                ng-required="vm.scheduleObj.assign_report.emails.length==0"
                                 replace-spaces-with-dashes="false">
-                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)" min-length="0" load-on-focus="true " load-on-empty="true " max-results-to-show="32 ">
+                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
+                                    min-length="0" load-on-focus="true " load-on-empty="true "
+                                    max-results-to-show="32 ">
                                 </auto-complete>
                             </tags-input>
                         </div>
                     </div>
                 </div>
-                <div class="row container">
-                    <div class="col-xs-4" style="display: none;">
-                        <div class="form-group">
-                            <label class="control-label" for="timezoneGroup">Timezone*</label>
-                            <ui-select ng-model="vm.scheduleObj.schedule.timezone">
-                              <ui-select-match placeholder="Select Timezones ...">{{$select.selected}}</ui-select-match>
-                              <ui-select-choices repeat="timezoneGroup in vm.timezoneGroups | filter: $select.search track by timezoneGroup">
-                                <div ng-bind="timezoneGroup"></div>
-                              </ui-select-choices>
+                <fieldset>
+                    <legend>Channel Configuration</legend>
+                    <div class="row container">
+
+                        <div class="col-xs-4" style="display: none;">
+                            <div class="form-group">
+                                <label class="control-label" for="timezoneGroup">Timezone*</label>
+                                <ui-select ng-model="vm.scheduleObj.schedule.timezone">
+                                    <ui-select-match placeholder="Select Timezones ...">{{$select.selected}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                        repeat="timezoneGroup in vm.timezoneGroups | filter: $select.search track by timezoneGroup">
+                                        <div ng-bind="timezoneGroup"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label class="control-label" for="channels">Channels*</label>
+                                <label ng-click="vm.setChannel(key,value)" ng-repeat="(key, value) in vm.channels"
+                                    class="flair-checkbox">
+                                    <i
+                                        class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':value,'fa-square-o-unchecked':!value} "></i>
+                                    <i
+                                        class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':value,'fa-check-square-o-unchecked':!value}"></i>
+                                    <span>&nbsp;{{key}}</span>&nbsp;
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-8" ng-if="vm.channels.Teams">
+                            <div class="form-group scheduler-tags">
+                                <label class="control-label" for="emails">Select Webhooks*</label>
+                                <tags-input placeholder="Select a Webhooks" on-tag-added="vm.addWebhook($tag)"
+                                    on-tag-removed="vm.removeWebhook($tag)" class="filter-input"
+                                    add-from-autocomplete-only="true" minTags="5" min-length="1"
+                                    ng-model="vm.selectedWebhook" replace-spaces-with-dashes="false">
+                                    <auto-complete match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
+                                        min-length="0" load-on-focus="true " load-on-empty="true "
+                                        max-results-to-show="32 ">
+                                    </auto-complete>
+                                </tags-input>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row container">
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Comments*
+                                </label>
+                                <textarea ng-required="vm.scheduleObj.report.mail_body==null" class="form-control"
+                                    ng-model="vm.scheduleObj.report.mail_body"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <br />
+                <fieldset>
+                    <legend>Threshold Configuration</legend>
+                    <div class="row container threshold-alert-condition form-group"
+                        ng-if="vm.scheduleObj.report.thresholdAlert">
+                        <div class="col-xs-3">
+                            <label class="control-label">
+                                Measure*
+                            </label>
+                            <ui-select class="condition-val"
+                                ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.featureName"
+                                ng-model="vm.condition.featureName">
+                                <ui-select-match placeholder="Search Measure">
+                                    {{vm.condition.featureName}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                    repeat="feature in vm.features | filter: $select.search track by feature">
+                                    <div ng-bind="feature"></div>
+                                </ui-select-choices>
                             </ui-select>
                         </div>
-                    </div>
-                    <div class="col-xs-8">
-                        <div class="form-group">
-                            <label class="control-label" for="channels">Channels*</label>
-                            <label ng-click="vm.setChannel(key,value)" ng-repeat="(key, value) in vm.channels" class="flair-checkbox">
-                                <i
-                                    class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':value,'fa-square-o-unchecked':!value} "></i>
-                                <i
-                                    class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':value,'fa-check-square-o-unchecked':!value}"></i>
-                                <span>&nbsp;{{key}}</span>&nbsp;
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row container">
-                    <div class="col-xs-8">
-                        <div class="form-group">
+                        <div class="col-xs-3">
                             <label class="control-label">
-                                Comments*
+                                Compare*
                             </label>
-                            <textarea ng-required="vm.scheduleObj.report.mail_body==null" class="form-control" ng-model="vm.scheduleObj.report.mail_body" ></textarea>
+                            <ui-select ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.compare.opt"
+                                class="condition-val" ng-model="vm.condition.compare" theme="bootstrap">
+                                <ui-select-match placeholder="Compare">
+                                    {{vm.condition.compare.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="compare in vm.COMPARISIONS">
+                                    {{compare.value}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label class="control-label">
+                                Threshold*
+                            </label>
+                            <input ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.value" type="text"
+                                class="form-control condition-val" ng-model="vm.condition.value" />
                         </div>
                     </div>
-                </div>
-                <br/>
-                <div class="row container threshold-alert-condition" ng-show="vm.scheduleObj.report.thresholdAlert">
-                    <div class="col-xs-3">
-                        <label class="control-label">
-                            Measure*
-                        </label>
-                        <ui-select class="condition-val" ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.featureName" ng-model="vm.condition.featureName">
-                            <ui-select-match placeholder="Search Measure">
-                                {{vm.condition.featureName}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="feature in vm.features | filter: $select.search track by feature">
-                                <div ng-bind="feature"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                    <div class="row container threshold-alert-condition form-group"
+                        ng-if="vm.scheduleObj.report.thresholdAlert">
+                        <div class="col-xs-3">
+                            <label class="control-label">
+                                Dimension*
+                            </label>
+                            <ui-select class="condition-val" ng-required="!vm.timeConditions.feature"
+                                ng-model="vm.timeConditions.feature">
+                                <ui-select-match placeholder="Search Dimension">
+                                    {{vm.timeConditions.feature.definition}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                    repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature.id">
+                                    <div ng-bind="feature.definition"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-3">
+                            <label class="control-label">
+                                Unit*
+                            </label>
+                            <ui-select ng-required="!vm.condition.timeCompatibleDimensions.unit" class="condition-val"
+                                ng-model="vm.timeConditions.unit" theme="bootstrap">
+                                <ui-select-match placeholder="Unit">
+                                    {{vm.timeConditions.unit.title}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="unit in vm.TIME_UNIT">
+                                    {{unit.title}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label class="control-label">
+                                Value*
+                            </label>
+                            <input ng-required="!vm.timeConditions.value" type="text" class="form-control condition-val"
+                                ng-model="vm.timeConditions.value" />
+                        </div>
                     </div>
-                    <div class="col-xs-3">
-                        <label class="control-label">
-                            Compare*
-                        </label>
-                        <ui-select ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.compare.opt" class="condition-val" ng-model="vm.condition.compare" theme="bootstrap">
-                            <ui-select-match placeholder="Compare">
-                                {{vm.condition.compare.value}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="compare in vm.COMPARISIONS">
-                                {{compare.value}}
-                            </ui-select-choices>
-                        </ui-select>
+                    <br ng-if="vm.scheduleObj.report.thresholdAlert" />
+                    <div class="row container">
+                        <div class="col-xs-8">
+                            <label class="control-label">
+                                Frequency*
+                            </label>
+                            <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
+                        </div>
                     </div>
-                    <div class="col-xs-2">
-                        <label class="control-label">
-                            Threshold*
-                        </label>
-                    <input ng-required="vm.scheduleObj.report.thresholdAlert && !vm.condition.value" type="text" class="form-control condition-val" ng-model="vm.condition.value" />
+                    <br />
+                    <div class="row container">
+                        <div class="col-xs-5">
+                            Scheduled Report:
+                            <span class="text-success"><b>{{vm.cronstrue}}</b></span>
+                        </div>
+                        <div class="col-xs-5">
+                            Cron Expression:
+                            <span id="example-val" class="text-success"><b>{{cronExpression}}</b></span>
+                        </div>
                     </div>
-                </div>
-                <div class="row container threshold-alert-condition" ng-if="vm.scheduleObj.report.thresholdAlert">
-                    <div class="col-xs-3">
-                        <label class="control-label">
-                            Dimension*
-                        </label>
-                        <ui-select class="condition-val"
-                                   ng-required="!vm.timeConditions.feature"
-                                   ng-model="vm.timeConditions.feature">
-                            <ui-select-match placeholder="Search Dimension">
-                                {{vm.timeConditions.feature.definition}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature.id">
-                                <div ng-bind="feature.definition"></div>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="col-xs-3">
-                        <label class="control-label">
-                            Unit*
-                        </label>
-                        <ui-select ng-required="!vm.condition.timeCompatibleDimensions.unit"
-                                   class="condition-val"
-                                   ng-model="vm.timeConditions.unit"
-                                   theme="bootstrap">
-                            <ui-select-match placeholder="Unit">
-                                {{vm.timeConditions.unit.title}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="unit in vm.TIME_UNIT">
-                                {{unit.title}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="col-xs-2">
-                        <label class="control-label">
-                            Value*
-                        </label>
-                        <input ng-required="!vm.timeConditions.value"
-                               type="text"
-                               class="form-control condition-val"
-                               ng-model="vm.timeConditions.value" />
-                    </div>
-                </div>
-                <br ng-if="vm.scheduleObj.report.thresholdAlert" />
-                <div class="row container">
-                    <div class="col-xs-8">
-                        <label class="control-label">
-                            Frequency*
-                        </label>
-                        <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
-                    </div>
-                </div>
-                <br />
-                <div class="row container">
-                    <div class="col-xs-5">
-                        Scheduled Report:
-                        <span class="text-success"><b>{{vm.cronstrue}}</b></span>
-                    </div>
-                    <div class="col-xs-5">
-                        Cron Expression:
-                        <span id="example-val" class="text-success"><b>{{cronExpression}}</b></span>
-                    </div>
-                </div>
-                <br />
-                <div class="row container">
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="control-label" for="startDate">Start Date*</label>
-                            <div class="input-group">
-                                <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null" type="text" class="form-control" name="startDate" datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date" is-open="vm.datePickerOpenStatus.startDate" />
-                                <span class="input-group-btn flair-date-icon">
-                                    <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDate')">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </button>
-                                </span>
+                    <br />
+                    <div class="row container">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="control-label" for="startDate">Start Date*</label>
+                                <div class="input-group">
+                                    <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null"
+                                        type="text" class="form-control" name="startDate"
+                                        datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date"
+                                        is-open="vm.datePickerOpenStatus.startDate" />
+                                    <span class="input-group-btn flair-date-icon">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="vm.openCalendar('startDate')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="control-label" for="endDate">End Date*</label>
+                                <div class="input-group">
+                                    <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null"
+                                        type="text" class="form-control" name="endDate" enable-time="false"
+                                        datetime-picker="{{vm.endDateFormat}}"
+                                        ng-model="vm.scheduleObj.schedule.end_date"
+                                        is-open="vm.datePickerOpenStatus.endDate" />
+                                    <span class="input-group-btn flair-date-icon">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="vm.openCalendar('endDate')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="control-label" for="endDate">End Date*</label>
-                            <div class="input-group">
-                                <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null" type="text" class="form-control" name="endDate" enable-time="false" datetime-picker="{{vm.endDateFormat}}" ng-model="vm.scheduleObj.schedule.end_date" is-open="vm.datePickerOpenStatus.endDate" />
-                                <span class="input-group-btn flair-date-icon">
-                                    <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDate')">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </fieldset>
+
 
             </div>
         </div>
@@ -237,13 +293,15 @@
                 <span class="fa fa-calendar"></span>&nbsp;
                 <span>Schedule</span>
             </button>
-            <button ng-if="vm.scheduleObj.putcall" class="btn btn-default"  data-dismiss="modal" ng-click="vm.deleteReport(vm.scheduleObj.report_line_item.visualizationid)" type="button">
+            <button ng-if="vm.scheduleObj.putcall" class="btn btn-default" data-dismiss="modal"
+                ng-click="vm.deleteReport(vm.scheduleObj.report_line_item.visualizationid)" type="button">
                 <span class="cancel-job-icon glyphicon glyphicon-remove"></span>&nbsp;
                 <span data-translate="entity.action.canceljob">Cancel Job</span>
             </button>
-            <button ng-if="vm.scheduleObj.putcall" class="btn btn-primary"  data-dismiss="modal" ng-click="vm.executeNow(vm.scheduleObj.report_line_item.visualizationid)" type="button">
+            <button ng-if="vm.scheduleObj.putcall" class="btn btn-primary" data-dismiss="modal"
+                ng-click="vm.executeNow(vm.scheduleObj.report_line_item.visualizationid)" type="button">
                 <svg class="execute-now-icon">
-                   <use xlink:href="#execute-now"></use>
+                    <use xlink:href="#execute-now"></use>
                 </svg>
                 <span data-translate="entity.action.runNow">Run Now</span>
             </button>

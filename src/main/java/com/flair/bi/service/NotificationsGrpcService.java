@@ -48,6 +48,7 @@ import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -467,6 +468,35 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		DeleteChannelConfigResponse response = getReportStub()
 				.deleteChannelConfig(DeleteChannelConfigRequest.newBuilder().setId(id).build());
 		return response.getMessage();
+	}
+
+	@Override
+	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private JiraParametersDTO toJiraParametersDTO() {
+		// TODO
+		JiraParametersDTO jiraParametersDTO = new JiraParametersDTO();
+		jiraParametersDTO.setApiToken(null);
+		jiraParametersDTO.setId(null);
+		jiraParametersDTO.setKey(null);
+		jiraParametersDTO.setOrganization(null);
+		jiraParametersDTO.setUserName(null);
+		return jiraParametersDTO;
+	}
+
+	@Override
+	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JiraParametersDTO getJiraConfig(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

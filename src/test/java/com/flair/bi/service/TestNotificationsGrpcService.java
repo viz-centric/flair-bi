@@ -5,6 +5,7 @@ import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -106,6 +107,24 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String deleteChannelConfig(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JiraParametersDTO getJiraConfig(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

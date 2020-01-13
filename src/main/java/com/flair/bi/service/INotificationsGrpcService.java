@@ -6,6 +6,7 @@ import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -45,4 +46,10 @@ public interface INotificationsGrpcService {
 	List<TeamConfigParametersDTO> getTeamConfig(Integer id);
 
 	String deleteChannelConfig(Integer id);
+
+	public String createJiraConfig(JiraParametersDTO jiraParametersDTO);
+
+	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO);
+
+	public JiraParametersDTO getJiraConfig(Integer id);
 }

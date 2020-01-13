@@ -17,6 +17,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -76,5 +77,23 @@ public class NotificationConfigurationResource {
 	@Timed
 	public String deleteChannelConfig(@RequestParam Integer id) {
 		return schedulerService.deleteChannelConfig(id);
+	}
+
+	@PostMapping("/notification/createJiraConfig")
+	@Timed
+	public String createJiraConfig(@Valid @RequestBody JiraParametersDTO jiraParametersDTO) {
+		return schedulerService.createJiraConfig(jiraParametersDTO);
+	}
+
+	@PutMapping("/notification/updateJiraConfig")
+	@Timed
+	public String updateJiraConfig(@Valid @RequestBody JiraParametersDTO jiraParametersDTO) {
+		return schedulerService.updateJiraConfig(jiraParametersDTO);
+	}
+
+	@GetMapping("/notification/getJiraConfig/")
+	@Timed
+	public JiraParametersDTO getJiraConfig(@RequestParam(required = false) Integer id) {
+		return schedulerService.getJiraConfig(id);
 	}
 }

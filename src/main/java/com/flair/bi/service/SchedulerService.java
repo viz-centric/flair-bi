@@ -11,6 +11,7 @@ import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -143,6 +144,21 @@ public class SchedulerService {
 
 	public String deleteChannelConfig(Integer id) {
 		return notificationsGrpcService.deleteChannelConfig(id);
+	}
+
+	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO
+		return null;
+	}
+
+	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO
+		return null;
+	}
+
+	public JiraParametersDTO getJiraConfig(Integer id) {
+		// TODO
+		return null;
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

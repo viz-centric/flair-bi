@@ -4,6 +4,7 @@ import java.util.List;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
@@ -35,21 +36,23 @@ public interface INotificationsGrpcService {
 
     String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
 
-	String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
+	  String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO);
 
-	String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO);
+	  String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO);
 
-	String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO);
+	  String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO);
 
-	EmailConfigParametersDTO getEmailConfig(Integer id);
+	  EmailConfigParametersDTO getEmailConfig(Integer id);
 
-	List<TeamConfigParametersDTO> getTeamConfig(Integer id);
+	  List<TeamConfigParametersDTO> getTeamConfig(Integer id);
 
-	String deleteChannelConfig(Integer id);
+	  String deleteChannelConfig(Integer id);
 
-	public String createJiraConfig(JiraParametersDTO jiraParametersDTO);
+	  public String createJiraConfig(JiraParametersDTO jiraParametersDTO);
 
-	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO);
+	  public String updateJiraConfig(JiraParametersDTO jiraParametersDTO);
 
-	public JiraParametersDTO getJiraConfig(Integer id);
+	  public JiraParametersDTO getJiraConfig(Integer id);
+
+    GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId);
 }

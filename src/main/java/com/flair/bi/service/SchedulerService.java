@@ -9,6 +9,7 @@ import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
@@ -217,4 +218,7 @@ public class SchedulerService {
 		}
 	}
 
+	public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
+		return notificationsGrpcService.getReportLogByMetaId(taskLogMetaId);
+	}
 }

@@ -10,3 +10,10 @@ grpc:
     notificationsClientCertChainFile: ${GRPC_NOTIF_CERT:/app/notificationsClientCertChainFile.crt}
     notificationsClientPrivateKeyFile: ${GRPC_NOTIF_KEY:/app/notificationsClientPrivateKeyFile.pem}
     notificationsTrustCertCollectionFile: ${GRPC_NOTIF_TRUST_CERT:/app/notificationsTrustCertCollectionFile.crt}
+
+---
+spring:
+  profiles: dev
+
+liquibase:
+  drop-first: false

@@ -17,6 +17,8 @@ import com.flair.bi.messages.report.GetChannelPropertiesRequest;
 import com.flair.bi.messages.report.GetChannelPropertiesResponse;
 import com.flair.bi.messages.report.GetEmailConfigRequest;
 import com.flair.bi.messages.report.GetEmailConfigResponse;
+import com.flair.bi.messages.report.GetScheduleReportLogRequest;
+import com.flair.bi.messages.report.GetScheduleReportLogResponse;
 import com.flair.bi.messages.report.GetScheduleReportLogsRequest;
 import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
@@ -39,6 +41,7 @@ import com.flair.bi.messages.report.UpdateEmailSMTPRequest;
 import com.flair.bi.messages.report.UpdateEmailSMTPResponse;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLResponse;
+import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
@@ -46,16 +49,19 @@ import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
+import com.flair.bi.service.dto.scheduler.SchedulerLogDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
+import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -205,20 +211,47 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .reports(toReportsDto(result.getRecordsList()))
                 .build();
     }
-    
+
+    @Override
+    public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
+        GetScheduleReportLogResponse result = getReportStub().getScheduleReportLog(
+                GetScheduleReportLogRequest.newBuilder()
+                        .setTaskLogMetaId(taskLogMetaId)
+                        .build()
+        );
+        return GetSchedulerReportLogDTO.builder()
+                .reportLog(toReportLog(result.getReportLog()))
+                .error(toApiError(result.getError()))
+                .build();
+    }
+
+    private ApiErrorDTO toApiError(com.flair.bi.messages.report.ApiError error) {
+        if (StringUtils.isEmpty(error.getMessage())) {
+            return null;
+        }
+        return ApiErrorDTO.builder()
+                .message(error.getMessage())
+                .build();
+    }
+
     private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
         return list.stream()
                 .map(item -> createSchedulerNotificationDTO(item))
                 .collect(toList());
     }
 
-    private List<GetSchedulerReportLogsDTO.SchedulerLog> toLogs(List<ReportLog> list) {
+    private List<SchedulerLogDTO> toLogs(List<ReportLog> list) {
         return list.stream()
-                .map(item -> GetSchedulerReportLogsDTO.SchedulerLog.builder()
-                        .taskExecuted(item.getTaskExecuted())
-                        .taskStatus(item.getTaskStatus())
-                        .build())
+                .map(item -> toReportLog(item))
                 .collect(toList());
+    }
+
+    private SchedulerLogDTO toReportLog(ReportLog item) {
+        return SchedulerLogDTO.builder()
+                .taskExecuted(item.getTaskExecuted())
+                .taskStatus(item.getTaskStatus())
+                .query(QueryGrpcUtils.mapToQueryDTO(item.getQuery()))
+                .build();
     }
 
     private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
@@ -297,8 +330,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         report.setTitle_name(scheduleReport.getReport().getTitleName());
         report.setUserid(scheduleReport.getReport().getUserid());
         report.setView_name(scheduleReport.getReport().getViewName());
-        //this line is throwing an exception while fetching report and there is no column found in notification center. so comment this line for now
-        //report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
+        report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
         report.setThresholdAlert(scheduleReport.getReport().getThresholdAlert());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();
@@ -317,7 +349,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         communicationList.setTeams(scheduleReport.getAssignReport().getCommunicationList().getTeamsList().toArray(new Integer[]{}));
         assignReport.setCommunication_list(communicationList);
         assignReport.setChannel(scheduleReport.getAssignReport().getChannelList().toArray(new String[]{}));;
-        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId()); 
+        assignReport.setChannel_id(scheduleReport.getAssignReport().getChannelId());
         assignReport.setSlack_API_Token(scheduleReport.getAssignReport().getSlackAPIToken());
         assignReport.setStride_API_Token(scheduleReport.getAssignReport().getStrideAPIToken());
         assignReport.setStride_cloud_id(scheduleReport.getAssignReport().getStrideCloudId());

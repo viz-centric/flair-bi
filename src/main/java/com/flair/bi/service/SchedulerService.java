@@ -148,18 +148,15 @@ public class SchedulerService {
 	}
 
 	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		// TODO
-		return null;
+		return notificationsGrpcService.createJiraConfig(jiraParametersDTO);
 	}
 
 	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		// TODO
 		return null;
 	}
 
 	public JiraParametersDTO getJiraConfig(Integer id) {
-		// TODO
-		return null;
+		return notificationsGrpcService.getJiraConfig(id);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

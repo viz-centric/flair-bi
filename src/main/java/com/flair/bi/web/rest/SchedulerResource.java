@@ -8,6 +8,7 @@ import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
@@ -18,6 +19,7 @@ import com.flair.bi.service.dto.scheduler.SchedulerLogDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.view.VisualMetadataService;
 import lombok.Builder;
 import lombok.Data;
@@ -230,4 +232,5 @@ public class SchedulerResource {
 	private static class ApiErrorResponse {
 		private final ApiErrorDTO error;
 	}
+
 }

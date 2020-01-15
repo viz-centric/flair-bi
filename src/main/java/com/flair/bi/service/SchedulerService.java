@@ -5,12 +5,17 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
+import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
@@ -21,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -68,7 +74,7 @@ public class SchedulerService {
 	private final DatasourceConstraintService datasourceConstraintService;
 
 	private final UserService userService;
-
+	
     public void executeImmediateScheduledReport(String visualizationid) {
 		notificationsGrpcService.executeImmediateScheduledReport(visualizationid);
 	}
@@ -107,6 +113,53 @@ public class SchedulerService {
 
 	public Integer getScheduledReportsCount(String username) {
 		return notificationsGrpcService.getScheduledReportsCount(username);
+	}
+	
+	public GetChannelConnectionDTO getChannelParameters(String channel) {
+		return notificationsGrpcService.getChannelParameters(channel);
+	}
+
+	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		return notificationsGrpcService.createTeamConfig(teamConfigParametersDTO);
+	}
+
+	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		return notificationsGrpcService.updateTeamConfig(teamConfigParametersDTO);
+	}
+
+	public String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return notificationsGrpcService.createEmailConfig(emailConfigParametersDTO);
+	}
+
+	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return notificationsGrpcService.updateEmailConfig(emailConfigParametersDTO);
+	}
+
+	public EmailConfigParametersDTO getEmailConfig(Integer id) {
+		return notificationsGrpcService.getEmailConfig(id);
+	}
+
+	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
+		return notificationsGrpcService.getTeamConfig(id);
+	}
+
+	public String deleteChannelConfig(Integer id) {
+		return notificationsGrpcService.deleteChannelConfig(id);
+	}
+
+	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO
+		return null;
+	}
+
+	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		// TODO
+		return null;
+	}
+
+	public JiraParametersDTO getJiraConfig(Integer id) {
+		// TODO
+		return null;
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

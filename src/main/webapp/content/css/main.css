@@ -6739,3 +6739,6 @@ input.select2-active {
   -ms-transform: rotate(-90deg);
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg); }
+
+.table-view {
+  min-width: 95%; }

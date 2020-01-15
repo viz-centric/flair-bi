@@ -93,7 +93,7 @@
         }
         function channelParameters() {
             return $http({
-                url: 'api/notification/channelParameters/?channel=""',
+                url: 'api/notification/channelParameters/?channel=',
                 method: 'GET'
             });
         }

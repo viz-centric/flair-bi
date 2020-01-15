@@ -52,29 +52,24 @@
         }
 
         function connectWebSocket() {
-            console.log('flair-bi fullscreen controller connect web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function (frame) {
-                    console.log('flair-bi fullscreen controller connected web socket');
                     stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
 
             $scope.$on("$destroy", function (event) {
-                console.log('flair-bi fullscreen destorying web socket');
                 stompClientService.disconnect();
             });
         }
 
         function onExchangeMetadataError(data) {
-            console.log('controller on metadata error', data);
         }
 
 
         function onExchangeMetadata(data) {
-            console.log('controller on metadata', data);
             var metaData = JSON.parse(data.body);
             vm.tableData = metaData.data;
             vm.tablekey = Object.keys(metaData.data[0]);

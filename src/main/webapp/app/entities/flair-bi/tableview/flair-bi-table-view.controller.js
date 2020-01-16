@@ -22,7 +22,7 @@
         AuthServerProvider,
         schedulerService) {
         var vm = this;
-        vm.tableData = [1, 2, 3, 4, 5, 6];
+        vm.tableData = [];
         vm.tablekey = [];
         activate();
         ///////////////

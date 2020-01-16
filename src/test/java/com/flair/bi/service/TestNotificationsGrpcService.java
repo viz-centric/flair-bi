@@ -2,6 +2,7 @@ package com.flair.bi.service;
 
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -134,4 +135,10 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
        return null;
     }
+
+	@Override
+	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

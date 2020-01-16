@@ -152,7 +152,7 @@ public class SchedulerService {
 	}
 
 	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		return null;
+		return notificationsGrpcService.updateJiraConfig(jiraParametersDTO);
 	}
 
 	public JiraParametersDTO getJiraConfig(Integer id) {

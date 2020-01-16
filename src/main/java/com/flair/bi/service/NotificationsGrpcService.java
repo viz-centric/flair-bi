@@ -1,15 +1,11 @@
 package com.flair.bi.service;
 
 import com.flair.bi.messages.report.AddEmailConfigsRequest;
-import com.flair.bi.messages.report.AddJiraConfigsRequest;
 import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.AddTeamConfigsRequest;
-import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.ChannelParameters;
-import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.ConnectionProperties;
 import com.flair.bi.messages.report.DeleteChannelConfigRequest;
-import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.EmailParameters;
@@ -28,6 +24,7 @@ import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
 import com.flair.bi.messages.report.GetTeamConfigRequest;
 import com.flair.bi.messages.report.GetTeamConfigResponse;
+import com.flair.bi.messages.report.JiraConfigsRequest;
 import com.flair.bi.messages.report.JiraParameters;
 import com.flair.bi.messages.report.RepUserCountReq;
 import com.flair.bi.messages.report.RepUserCountResp;
@@ -509,8 +506,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		ConfigsResponse response = getReportStub().addJiraConfigs(
-				AddJiraConfigsRequest.newBuilder().setJiraParameter(toJiraParametersDTO(jiraParametersDTO)).build());
+		ConfigsResponse response = getReportStub().addJiraConfigs(JiraConfigsRequest.newBuilder().setJiraParameter(toJiraParametersDTO(jiraParametersDTO)).build());
 		return response.getMessage();
 	}
 
@@ -522,11 +518,8 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		// TODO
-		// ConfigsResponse
-		// response=getReportStub().updateJiraConfigs(updateJiraConfig.newBuilder().setJiraParameter(toUpdateJiraParametersDTO(jiraParametersDTO)).build());
-		// return response.getMessage();
-		return null;
+		ConfigsResponse response = getReportStub().updateJiraConfigs(JiraConfigsRequest.newBuilder().setJiraParameter(toUpdateJiraParametersDTO(jiraParametersDTO)).build());
+		return response.getMessage();
 	}
 
 	private JiraParameters toUpdateJiraParametersDTO(JiraParametersDTO jiraParametersDTO) {
@@ -537,8 +530,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public JiraParametersDTO getJiraConfig(Integer id) {
-		GetJiraConfigResponse response = getReportStub()
-				.getJiraConfig(GetJiraConfigRequest.newBuilder().setId(id).build());
+		GetJiraConfigResponse response = getReportStub().getJiraConfig(GetJiraConfigRequest.newBuilder().setId(id).build());
 		return createJiraParametersDTO(response.getRecord());
 	}
 

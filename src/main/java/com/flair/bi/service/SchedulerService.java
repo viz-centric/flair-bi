@@ -8,6 +8,7 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -157,6 +158,10 @@ public class SchedulerService {
 
 	public JiraParametersDTO getJiraConfig(Integer id) {
 		return notificationsGrpcService.getJiraConfig(id);
+	}
+	
+	public GetJiraTicketResponseDTO createJiraTicket(Integer id){
+		return notificationsGrpcService.createJiraTicket(id);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

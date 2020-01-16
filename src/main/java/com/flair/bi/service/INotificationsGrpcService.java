@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -48,11 +49,13 @@ public interface INotificationsGrpcService {
 
 	String deleteChannelConfig(Integer id);
 
-	public String createJiraConfig(JiraParametersDTO jiraParametersDTO);
+	String createJiraConfig(JiraParametersDTO jiraParametersDTO);
 
-	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO);
+	String updateJiraConfig(JiraParametersDTO jiraParametersDTO);
 
-	public JiraParametersDTO getJiraConfig(Integer id);
+	JiraParametersDTO getJiraConfig(Integer id);
 
 	GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId);
+
+	GetJiraTicketResponseDTO createJiraTicket(Integer id);
 }

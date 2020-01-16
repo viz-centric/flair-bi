@@ -42,6 +42,8 @@ import com.flair.bi.messages.report.TeamConfigParameters;
 import com.flair.bi.messages.report.UpdateEmailSMTPRequest;
 import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
+import com.flair.bi.messages.report.createjiraTicketRequest;
+import com.flair.bi.messages.report.createjiraTicketResponse;
 import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
@@ -49,6 +51,7 @@ import com.flair.bi.service.dto.scheduler.CommunicationList;
 import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
@@ -542,6 +545,12 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		jiraParametersDTO.setOrganization(jiraParameters.getOrganization());
 		jiraParametersDTO.setUserName(jiraParameters.getUserName());
 		return jiraParametersDTO;
+	}
+
+	@Override
+	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
+		createjiraTicketResponse response = getReportStub().createjiraTicket(createjiraTicketRequest.newBuilder().setId(id).build());
+		return GetJiraTicketResponseDTO.builder().jiraTicketLink(response.getJiraTicketLink()).message(response.getMessage()).build();
 	}
 
 }

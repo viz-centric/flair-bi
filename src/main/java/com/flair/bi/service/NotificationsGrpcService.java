@@ -255,6 +255,15 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         return SchedulerLogDTO.builder()
                 .taskExecuted(item.getTaskExecuted())
                 .taskStatus(item.getTaskStatus())
+                .channel(item.getChannel())
+                .comment(item.getComment())
+                .dashboardName(item.getDashboardName())
+                .descripition(item.getDescripition())
+                .notificationSent(item.getNotificationSent())
+                .thresholdMet(item.getThresholdMet())
+                .schedulerTaskMetaId(item.getSchedulerTaskMetaId())
+                .viewData(item.getViewData())
+                .viewName(item.getViewName())
                 .query(QueryGrpcUtils.mapToQueryDTO(item.getQuery()))
                 .build();
     }

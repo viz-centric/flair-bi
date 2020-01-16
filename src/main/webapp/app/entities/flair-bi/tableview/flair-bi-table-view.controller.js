@@ -22,7 +22,7 @@
         AuthServerProvider,
         schedulerService) {
         var vm = this;
-        vm.tableData = [];
+        vm.tableData = [1, 2, 3, 4, 5, 6];
         vm.tablekey = [];
         activate();
         ///////////////
@@ -71,30 +71,30 @@
 
         function onExchangeMetadata(data) {
             var metaData = JSON.parse(data.body);
-            vm.tableData = metaData.data;
-            vm.tablekey = Object.keys(metaData.data[0]);
-            var str = "";
-            str += "<div class='table-responsive'><table id='chartData' class='table table-condensed table-striped table-bordered table-responsive'><tr><thead>";
+            createHeader(metaData.data[0]);
+            addDataInTable(metaData.data);
 
-            for (var index = 0; index < vm.tablekey.length; index++) {
-
-                str += "<th>" + vm.tablekey[index] + "</th>";
-            }
-            str += "</tr></thead><tbody>";
-
-            for (var index = 0; index < vm.tableData.length; index++) {
-                str += "<tr>";
-                for (var j = 0; j < vm.tablekey.length; j++) {
-
-                    str += "<td>" + vm.tableData[index][vm.tablekey[j]] + "</td>";
-                }
-
-                str += "</tr>";
-            }
-            str += "</tbody></table></div>";
-            $("#content-table-view").html('')
-            $("#content-table-view").append(str)
 
         }
+        function createHeader(cols){
+            $("#table-view-col").empty();
+            var row=$("#table-view-col");
+            angular.forEach(cols, function(value, key){
+                 row.append("<th>"+key+"</th>");
+            });
+        }
+
+        function addDataInTable(data){
+            $("#table-view > tbody").empty();
+            var tBody=$("#table-view > tbody");
+            angular.forEach(data, function(row, index){
+                var tr=$("<tr></tr>");
+                angular.forEach(row, function(value, key){
+                     tr.append("<td>"+value+"</td>");
+                });
+                tBody.append(tr);
+            });
+        }
+
     }
 })();

@@ -50,30 +50,46 @@
         vm.emailChannelConfig = [];
         vm.teamChannelConfig = [];
         vm.connection = {};
+        vm.config = {
+            'team': {
+                getData: function () {
+                    getWebhookList();
+                }
+            },
+            'email': {
+                getData: function () {
+                    getSMTPSettings();
+                }
+            },
+            'jira': {
+                getData: function () {
+
+                }
+            },
+            'report': {
+                getData: function () {
+                    getAccount();
+                    getScheduledReports(vm.account.login, "", "", "");
+                }
+            },
+            'configuration': {
+                getData: function () {
+                    channelParameters();
+                    getSMTPSettings();
+                }
+            }
+        };
 
         activate();
         ///////////////////////////////////////
 
         function activate() {
-            reportManagementTabClick('report');
-            var cronstrue = window.cronstrue;
+
+            vm.config['report'].getData();
         }
 
         function reportManagementTabClick(tabName) {
-            if (tabName == "report") {
-                getAccount();
-                getScheduledReports(vm.account.login, "", "", "");
-            }
-            else if (tabName == "configuration") {
-                channelParameters();
-                getSMTPSettings();
-            }
-            else if (tabName == "email") {
-                getSMTPSettings();
-            }
-            else if (tabName == "team") {
-                getWebhookList();
-            }
+            vm.config[tabName].getData();
         }
 
         function getAccount() {

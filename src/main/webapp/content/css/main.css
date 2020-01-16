@@ -6616,10 +6616,21 @@ input.select2-active {
 
 #report-management .full-width-tabs svg#report-tab,
 #report-management .full-width-tabs svg#configuration-tab,
-#report-management .full-width-tabs #microsoft-team,
-#report-management .full-width-tabs #email-setting {
+#report-management .full-width-tabs svg#Task-tab {
   height: 20px;
   width: 20px;
+  vertical-align: middle;
+  margin-left: 5px; }
+
+#report-management #Configuration #microsoft-team,
+#report-management #Configuration #jira {
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  margin-left: 5px; }
+
+#report-management .full-width-tabs #email-setting {
+  font-size: 50px;
   vertical-align: middle;
   margin-left: 5px; }
 
@@ -6643,17 +6654,6 @@ input.select2-active {
   display: block;
   width: 0; }
 
-#report-management .tabs-left > li.active::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  right: -10px;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 10px solid #439dd3;
-  display: block;
-  width: 0; }
-
 #report-management .tabs-left,
 #report-management .tabs-right {
   border-bottom: none;
@@ -6669,6 +6669,14 @@ input.select2-active {
 #report-management .tabs-right > li {
   float: none;
   margin-bottom: 2px; }
+
+#report-management .tabs-left > li.active {
+  border: solid 2px #439dd3; }
+
+#report-management .tabs-left > li.active a {
+  color: #439dd3;
+  text-decoration: none;
+  background-color: #fff; }
 
 #report-management .tabs-left > li {
   margin-right: -1px; }

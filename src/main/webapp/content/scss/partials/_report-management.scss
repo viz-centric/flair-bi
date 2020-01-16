@@ -1,14 +1,14 @@
 .report-management {
-	.filters {
-	  .report-name {
-		height: 35px;
-	  }
-	  .search-btn {
-		margin-top: 30px;
-	  }
-	}
+  .filters {
+    .report-name {
+      height: 35px;
+    }
+    .search-btn {
+      margin-top: 30px;
+    }
   }
-  .report-actions {
+}
+.report-actions {
 	svg {
 	  width: 19px;
 	  height: 19px;
@@ -23,146 +23,179 @@
 	  vertical-align: -2px;
 	}
   }
-  
 
 #report-management .full-width-tabs > ul.nav.nav-tabs {
-	display: table;
-	width: 100%;
-	table-layout: fixed; }
-  
-  #report-management .full-width-tabs > ul.nav.nav-tabs > li {
-	float: none;
-	display: table-cell;
-	width: 100%; }
-  
-  #report-management .full-width-tabs > ul.nav.nav-tabs > li > a {
-	text-align: left; }
-  
-  #report-management .full-width-tabs svg#report-tab,
-  #report-management .full-width-tabs svg#configuration-tab,
-  #report-management .full-width-tabs #microsoft-team,
-  #report-management .full-width-tabs #email-setting {
-	height: 20px;
-	width: 20px;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#report-management .full-width-tabs > ul.nav.nav-tabs > li {
+  float: none;
+  display: table-cell;
+  width: 100%;
+}
+
+#report-management .full-width-tabs > ul.nav.nav-tabs > li > a {
+  text-align: left;
+}
+
+#report-management .full-width-tabs svg#report-tab,
+#report-management .full-width-tabs svg#configuration-tab,
+#report-management .full-width-tabs svg#Task-tab
+ {
+  height: 20px;
+  width: 20px;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+#report-management #Configuration #microsoft-team,
+#report-management #Configuration #jira{
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+#report-management .full-width-tabs #email-setting{
+	font-size: 50px;
 	vertical-align: middle;
-	margin-left: 5px; }
-  
-  #report-management .nav-tabs > li > a {
-	color: #337ab7;
-	text-decoration: none; }
-  
-  #report-management .nav-tabs > li.active > a {
-	color: #fff;
-	text-decoration: none;
-	background-color: #439dd3;
-  
-   }
-   #report-management .report > li.active::after{
-	content: "";
-	position: absolute;
-	bottom: -10px;
-	left: 45%;
-	border-left: 20px solid transparent;
-	border-right: 20px solid transparent;
-	border-top: 10px solid #439dd3;
-	display: block;
-	width: 0;
-   }
-   #report-management .tabs-left > li.active::after{
-	content: "";
-	position: absolute;
-	top: 10px;
-	right: -10px;
-	border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  
-  border-left: 10px solid #439dd3;
-	display: block;
-	width: 0;
-   }
-  
-  #report-management .tabs-left,
-  #report-management .tabs-right {
-	border-bottom: none;
-	padding-top: 2px; }
-  
-  #report-management .tabs-left {
-	border-right: 1px solid #ddd; }
-  
-  #report-management .tabs-right {
-	border-left: 1px solid #ddd; }
-  
-  #report-management .tabs-left > li,
-  #report-management .tabs-right > li {
-	float: none;
-	margin-bottom: 2px; }
-  
-  #report-management .tabs-left > li {
-	margin-right: -1px; }
-  
-  #report-management .tabs-right > li {
-	margin-left: -1px; }
-  
-  #report-management .tabs-left > li.active > a,
-  #report-management .tabs-left > li.active > a:hover,
-  #report-management .tabs-left > li.active > a:focus {
-	border-bottom-color: #ddd;
-	border-right-color: transparent; }
-  
-  #report-management .tabs-right > li.active > a,
-  #report-management .tabs-right > li.active > a:hover,
-  #report-management .tabs-right > li.active > a:focus {
-	border-bottom: 1px solid #ddd;
-	border-left-color: transparent; }
-  
-  #report-management .tabs-left > li > a {
-	border-radius: 4px 0 0 4px;
-	margin-right: 0;
-	display: block; }
-  
-  #report-management .tabs-right > li > a {
-	border-radius: 0 4px 4px 0;
-	margin-right: 0; }
-  
-  #report-management .vertical-text {
-	margin-top: 50px;
-	border: none;
-	position: relative; }
-  
-  #report-management .vertical-text > li {
-	height: 20px;
-	width: 120px;
-	margin-bottom: 100px; }
-  
-  #report-management .vertical-text > li > a {
-	border-bottom: 1px solid #ddd;
-	border-right-color: transparent;
-	text-align: center;
-	border-radius: 4px 4px 0px 0px; }
-  
-  #report-management .vertical-text > li.active > a,
-  #report-management .vertical-text > li.active > a:hover,
-  #report-management .vertical-text > li.active > a:focus {
-	border-bottom-color: transparent;
-	border-right-color: #ddd;
-	border-left-color: #ddd; }
-  
-  #report-management .vertical-text.tabs-left {
-	left: -50px; }
-  
-  #report-management .vertical-text.tabs-right {
-	right: -50px; }
-  
-  #report-management .vertical-text.tabs-right > li {
-	-webkit-transform: rotate(90deg);
-	-moz-transform: rotate(90deg);
-	-ms-transform: rotate(90deg);
-	-o-transform: rotate(90deg);
-	transform: rotate(90deg); }
-  
-  #report-management .vertical-text.tabs-left > li {
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-	-ms-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg);
-	transform: rotate(-90deg); }
+	margin-left: 5px;
+}
+
+#report-management .nav-tabs > li > a {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+#report-management .nav-tabs > li.active > a {
+  color: #fff;
+  text-decoration: none;
+  background-color: #439dd3;
+}
+#report-management .report > li.active::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 45%;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 10px solid #439dd3;
+  display: block;
+  width: 0;
+}
+
+
+#report-management .tabs-left,
+#report-management .tabs-right {
+  border-bottom: none;
+  padding-top: 2px;
+}
+
+#report-management .tabs-left {
+  border-right: 1px solid #ddd;
+}
+
+#report-management .tabs-right {
+  border-left: 1px solid #ddd;
+}
+
+#report-management .tabs-left > li,
+#report-management .tabs-right > li {
+  float: none;
+  margin-bottom: 2px;
+  //border: solid 2px #439dd3;
+}
+
+#report-management .tabs-left > li.active{
+  border: solid 2px #439dd3;
+}
+
+#report-management .tabs-left > li.active a{
+  color: #439dd3;
+  text-decoration: none;
+  background-color: #fff;
+}
+
+#report-management .tabs-left > li {
+  margin-right: -1px;
+}
+
+#report-management .tabs-right > li {
+  margin-left: -1px;
+}
+
+#report-management .tabs-left > li.active > a,
+#report-management .tabs-left > li.active > a:hover,
+#report-management .tabs-left > li.active > a:focus {
+  border-bottom-color: #ddd;
+  border-right-color: transparent;
+}
+
+#report-management .tabs-right > li.active > a,
+#report-management .tabs-right > li.active > a:hover,
+#report-management .tabs-right > li.active > a:focus {
+  border-bottom: 1px solid #ddd;
+  border-left-color: transparent;
+}
+
+#report-management .tabs-left > li > a {
+  border-radius: 4px 0 0 4px;
+  margin-right: 0;
+  display: block;
+}
+
+#report-management .tabs-right > li > a {
+  border-radius: 0 4px 4px 0;
+  margin-right: 0;
+}
+
+#report-management .vertical-text {
+  margin-top: 50px;
+  border: none;
+  position: relative;
+}
+
+#report-management .vertical-text > li {
+  height: 20px;
+  width: 120px;
+  margin-bottom: 100px;
+}
+
+#report-management .vertical-text > li > a {
+  border-bottom: 1px solid #ddd;
+  border-right-color: transparent;
+  text-align: center;
+  border-radius: 4px 4px 0px 0px;
+}
+
+#report-management .vertical-text > li.active > a,
+#report-management .vertical-text > li.active > a:hover,
+#report-management .vertical-text > li.active > a:focus {
+  border-bottom-color: transparent;
+  border-right-color: #ddd;
+  border-left-color: #ddd;
+}
+
+#report-management .vertical-text.tabs-left {
+  left: -50px;
+}
+
+#report-management .vertical-text.tabs-right {
+  right: -50px;
+}
+
+#report-management .vertical-text.tabs-right > li {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+#report-management .vertical-text.tabs-left > li {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}

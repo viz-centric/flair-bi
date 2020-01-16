@@ -100,7 +100,7 @@ public class NotificationConfigurationResource {
 	
 	@GetMapping("/notification/createJiraTicket/")
 	@Timed
-	public GetJiraTicketResponseDTO createJiraTicket(@RequestParam(required = false) Integer id) {
+	public GetJiraTicketResponseDTO createJiraTicket(@RequestParam Integer id) {
 		return schedulerService.createJiraTicket(id);
 	}
 }

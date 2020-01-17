@@ -30,6 +30,11 @@
         vm.schedulerData={};
         vm.added = added;
         vm.removed = removed;
+        vm.WebhookList=[];
+        vm.addWebhook = addWebhook;
+        vm.removeWebhook=removeWebhook;
+        vm.loadWebhooks=loadWebhooks;
+        
         vm.endDateFormat='yyyy-MM-dd';
         vm.deleteReport=deleteReport;
         vm.changeDashboard=changeDashboard;
@@ -91,6 +96,7 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate()+1);
+            getWebhookList();
             resetSelectedChannels();
             if(visualMetaData){
                 vm.visualMetaData = visualMetaData;
@@ -206,6 +212,9 @@
             vm.scheduleObj.putcall=true;
             vm.scheduleObj.report.thresholdAlert=data.report.thresholdAlert;
             vm.scheduleObj.constraints=data.constraints;
+            vm.scheduleObj.assign_report.communication_list.teams=data.assign_report.communication_list.teams;
+            addWebhhokList(data.assign_report.communication_list.teams);
+            selectChannels(data.assign_report.channel)
             if (vm.scheduleObj.report.thresholdAlert) {
                 setHavingDTO(JSON.parse(data.query));
             }
@@ -237,6 +246,19 @@
             vm.selectedUsers = emails.map(function (item) {
                 var newItem = {};
                 newItem['text'] = item.user_name+" "+item.user_email;
+                return newItem;
+            });
+        }
+
+        function addWebhhokList(webhook){
+            vm.selectedWebhook = webhook.map(function (item) {
+                var newItem = {};
+                var webhook=vm.WebhookList.filter(function(val){
+                    if (val.id==item){
+                        return val
+                    }
+                })
+                newItem['text'] = webhook[0].webhookName;
                 return newItem;
             });
         }
@@ -304,6 +326,13 @@
         function loadUsers(q){
             var retVal = vm.users.map(function (item) {
                 return item.firstName+" "+item.email;
+            });
+            return retVal;
+        }
+
+        function loadWebhooks(){
+            var retVal = vm.WebhookList.map(function (item) {
+                return item.webhookName;
             });
             return retVal;
         }
@@ -410,11 +439,34 @@
             var emailObj={"user_name":tag['text'].split(" ")[0],"user_email":tag['text'].split(" ")[1]};
             vm.scheduleObj.assign_report.communication_list.email.push(emailObj);
         }
+        function addWebhook(tag) {
+            console.log("-vm.selectedUser"+vm.selectedWebhook);
+            var webhook=vm.WebhookList.filter(function(val){
+                if (val.webhookName==tag.text){
+                    return val
+                }
+            })
+            vm.scheduleObj.assign_report.communication_list.teams.push(webhook[0].id);
+        }
+        function removeWebhook(tag){
+            
+            var webhook=vm.WebhookList.filter(function(val){
+                if (val.webhookName==tag.text){
+                    return val
+                }
+            })
+
+            var index= vm.scheduleObj.assign_report.communication_list.teams.indexOf(webhook[0].id)
+
+            if (index > -1) {
+                vm.scheduleObj.assign_report.communication_list.teams.splice(index, 1);
+            }
+        }
 
         function removed(tag){
             var index = -1;
             vm.scheduleObj.assign_report.communication_list.email.some(function(obj, i) {
-            return obj.user_email === tag['text'].split(" ")[1] ? index = i : false;
+            return obj.user_email == tag['text'].split(" ")[1] ? index = i : false;
             });
             if (index > -1) {
                 vm.scheduleObj.assign_report.communication_list.email.splice(index, 1);
@@ -559,6 +611,20 @@
             angular.forEach(vm.channels, function(value, key) {
               vm.channels[key]=false;
             });
+        }
+
+        function getWebhookList() {
+            schedulerService.getTeamConfig(0)
+                .then(function (success) {
+                    vm.WebhookList = success.data;
+
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
         }
 }
 })();

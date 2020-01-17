@@ -5078,7 +5078,7 @@ text {
   */
 .data-line {
   stroke-width: 2;
-  fill: none }
+  fill: none; }
 
 path {
   stroke-width: 2; }
@@ -6395,6 +6395,19 @@ input.select2-active {
 .scheduler-modal-body .center {
   text-align: center; }
 
+.scheduler-modal-body fieldset {
+  min-width: 0;
+  padding: .35em .625em .75em;
+  margin: 0 2px;
+  border: 1px solid #c0c0c0; }
+
+.scheduler-modal-body legend {
+  display: block;
+  padding: 0;
+  font-size: 20px;
+  line-height: inherit;
+  border: 0; }
+
 .scheduler-footer .cancel-job-icon {
   color: #ED5565; }
 
@@ -6587,3 +6600,153 @@ input.select2-active {
   width: 16px;
   height: 16px;
   vertical-align: -2px; }
+
+#report-management .full-width-tabs > ul.nav.nav-tabs {
+  display: table;
+  width: 100%;
+  table-layout: fixed; }
+
+#report-management .full-width-tabs > ul.nav.nav-tabs > li {
+  float: none;
+  display: table-cell;
+  width: 100%; }
+
+#report-management .full-width-tabs > ul.nav.nav-tabs > li > a {
+  text-align: left; }
+
+#report-management .full-width-tabs svg#report-tab,
+#report-management .full-width-tabs svg#configuration-tab,
+#report-management .full-width-tabs svg#Task-tab {
+  height: 20px;
+  width: 20px;
+  vertical-align: middle;
+  margin-left: 5px; }
+
+#report-management #Configuration #microsoft-team,
+#report-management #Configuration #jira {
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  margin-left: 5px; }
+
+#report-management .full-width-tabs #email-setting {
+  font-size: 50px;
+  vertical-align: middle;
+  margin-left: 5px; }
+
+#report-management .nav-tabs > li > a {
+  color: #337ab7;
+  text-decoration: none; }
+
+#report-management .nav-tabs > li.active > a {
+  color: #fff;
+  text-decoration: none;
+  background-color: #439dd3; }
+
+#report-management .report > li.active::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 45%;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 10px solid #439dd3;
+  display: block;
+  width: 0; }
+
+#report-management .tabs-left,
+#report-management .tabs-right {
+  border-bottom: none;
+  padding-top: 2px; }
+
+#report-management .tabs-left {
+  border-right: 1px solid #ddd; }
+
+#report-management .tabs-right {
+  border-left: 1px solid #ddd; }
+
+#report-management .tabs-left > li,
+#report-management .tabs-right > li {
+  float: none;
+  margin-bottom: 2px; }
+
+#report-management .tabs-left > li.active {
+  border: solid 2px #439dd3; }
+
+#report-management .tabs-left > li.active a {
+  color: #439dd3;
+  text-decoration: none;
+  background-color: #fff; }
+
+#report-management .tabs-left > li {
+  margin-right: -1px; }
+
+#report-management .tabs-right > li {
+  margin-left: -1px; }
+
+#report-management .tabs-left > li.active > a,
+#report-management .tabs-left > li.active > a:hover,
+#report-management .tabs-left > li.active > a:focus {
+  border-bottom-color: #ddd;
+  border-right-color: transparent; }
+
+#report-management .tabs-right > li.active > a,
+#report-management .tabs-right > li.active > a:hover,
+#report-management .tabs-right > li.active > a:focus {
+  border-bottom: 1px solid #ddd;
+  border-left-color: transparent; }
+
+#report-management .tabs-left > li > a {
+  border-radius: 4px 0 0 4px;
+  margin-right: 0;
+  display: block; }
+
+#report-management .tabs-right > li > a {
+  border-radius: 0 4px 4px 0;
+  margin-right: 0; }
+
+#report-management .vertical-text {
+  margin-top: 50px;
+  border: none;
+  position: relative; }
+
+#report-management .vertical-text > li {
+  height: 20px;
+  width: 120px;
+  margin-bottom: 100px; }
+
+#report-management .vertical-text > li > a {
+  border-bottom: 1px solid #ddd;
+  border-right-color: transparent;
+  text-align: center;
+  border-radius: 4px 4px 0px 0px; }
+
+#report-management .vertical-text > li.active > a,
+#report-management .vertical-text > li.active > a:hover,
+#report-management .vertical-text > li.active > a:focus {
+  border-bottom-color: transparent;
+  border-right-color: #ddd;
+  border-left-color: #ddd; }
+
+#report-management .vertical-text.tabs-left {
+  left: -50px; }
+
+#report-management .vertical-text.tabs-right {
+  right: -50px; }
+
+#report-management .vertical-text.tabs-right > li {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg); }
+
+#report-management .vertical-text.tabs-left > li {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg); }
+
+.table-view {
+  min-width: 95%; }

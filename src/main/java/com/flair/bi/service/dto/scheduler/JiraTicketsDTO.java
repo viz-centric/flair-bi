@@ -18,4 +18,6 @@ public class JiraTicketsDTO {
 	private String createDate;
 	private String assignPerson;
 	private String priority;
+	private String reporter;
+	private String summary;
 }

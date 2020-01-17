@@ -26,6 +26,7 @@ import com.flair.bi.messages.report.GetTeamConfigRequest;
 import com.flair.bi.messages.report.GetTeamConfigResponse;
 import com.flair.bi.messages.report.JiraConfigsRequest;
 import com.flair.bi.messages.report.JiraParameters;
+import com.flair.bi.messages.report.JiraTickets;
 import com.flair.bi.messages.report.RepUserCountReq;
 import com.flair.bi.messages.report.RepUserCountResp;
 import com.flair.bi.messages.report.RepUserReq;
@@ -44,6 +45,8 @@ import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
 import com.flair.bi.messages.report.createjiraTicketRequest;
 import com.flair.bi.messages.report.createjiraTicketResponse;
+import com.flair.bi.messages.report.getAllJiraRequest;
+import com.flair.bi.messages.report.getAllJiraResponse;
 import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
@@ -58,6 +61,7 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
+import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.ReportDTO;
 import com.flair.bi.service.dto.scheduler.ReportLineItem;
 import com.flair.bi.service.dto.scheduler.Schedule;
@@ -388,10 +392,8 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public GetChannelConnectionDTO getChannelParameters(String channel) {
-		GetChannelPropertiesResponse response = getReportStub()
-				.getChannelProperties(GetChannelPropertiesRequest.newBuilder().setChannel(channel).build());
-		return GetChannelConnectionDTO.builder()
-				.channelParameters(toChannelParametersDTO(response.getChannelParametersList())).build();
+		GetChannelPropertiesResponse response = getReportStub().getChannelProperties(GetChannelPropertiesRequest.newBuilder().setChannel(channel).build());
+		return GetChannelConnectionDTO.builder().channelParameters(toChannelParametersDTO(response.getChannelParametersList())).build();
 	}
 
 	private List<ChannelParametersDTO> toChannelParametersDTO(List<ChannelParameters> list) {
@@ -404,8 +406,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	private ChannelParametersDTO createChannelParametersDTO(ChannelParameters channelParameters) {
 		ChannelParametersDTO channelParametersDTO = new ChannelParametersDTO();
-		channelParametersDTO
-				.setConnectionProperties(toConnectionPropertiesDTO(channelParameters.getConnectionPropertiesList()));
+		channelParametersDTO.setConnectionProperties(toConnectionPropertiesDTO(channelParameters.getConnectionPropertiesList()));
 		channelParametersDTO.setId(channelParameters.getId());
 		return channelParametersDTO;
 	}
@@ -429,8 +430,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
-		ConfigsResponse response = getReportStub().updateTeamWebhookURL(UpdateTeamWebhookURLRequest
-				.newBuilder().setTeamConfigParameter(toUpdateTeamConfigParameters(teamConfigParametersDTO)).build());
+		ConfigsResponse response = getReportStub().updateTeamWebhookURL(UpdateTeamWebhookURLRequest.newBuilder().setTeamConfigParameter(toUpdateTeamConfigParameters(teamConfigParametersDTO)).build());
 		return response.getMessage();
 	}
 
@@ -446,8 +446,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
-		ConfigsResponse response = getReportStub().addEmailConfigs(AddEmailConfigsRequest.newBuilder()
-				.setEmailParameter(toEmailConfigParameters(emailConfigParametersDTO)).build());
+		ConfigsResponse response = getReportStub().addEmailConfigs(AddEmailConfigsRequest.newBuilder().setEmailParameter(toEmailConfigParameters(emailConfigParametersDTO)).build());
 		return response.getMessage();
 	}
 
@@ -459,8 +458,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
-		ConfigsResponse response = getReportStub().updateEmailSMTP(UpdateEmailSMTPRequest.newBuilder()
-				.setEmailParameter(toUpdateEmailConfigParameters(emailConfigParametersDTO)).build());
+		ConfigsResponse response = getReportStub().updateEmailSMTP(UpdateEmailSMTPRequest.newBuilder().setEmailParameter(toUpdateEmailConfigParameters(emailConfigParametersDTO)).build());
 		return response.getMessage();
 	}
 
@@ -473,8 +471,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public EmailConfigParametersDTO getEmailConfig(Integer id) {
-		GetEmailConfigResponse response = getReportStub()
-				.getEmailConfig(GetEmailConfigRequest.newBuilder().setId(id).build());
+		GetEmailConfigResponse response = getReportStub().getEmailConfig(GetEmailConfigRequest.newBuilder().setId(id).build());
 		return toEmailConfigParametersDTO(response.getRecord());
 	}
 
@@ -491,8 +488,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
-		GetTeamConfigResponse response = getReportStub()
-				.getTeamConfig(GetTeamConfigRequest.newBuilder().setId(id).build());
+		GetTeamConfigResponse response = getReportStub().getTeamConfig(GetTeamConfigRequest.newBuilder().setId(id).build());
 		return toTeamConfigParametersDTOList(response.getRecordsList());
 	}
 
@@ -511,8 +507,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String deleteChannelConfig(Integer id) {
-		ConfigsResponse response = getReportStub()
-				.deleteChannelConfig(DeleteChannelConfigRequest.newBuilder().setId(id).build());
+		ConfigsResponse response = getReportStub().deleteChannelConfig(DeleteChannelConfigRequest.newBuilder().setId(id).build());
 		return response.getMessage();
 	}
 
@@ -560,6 +555,30 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
 		createjiraTicketResponse response = getReportStub().createjiraTicket(createjiraTicketRequest.newBuilder().setId(id).build());
 		return GetJiraTicketResponseDTO.builder().jiraTicketLink(response.getJiraTicketLink()).message(response.getMessage()).build();
+	}
+
+	@Override
+	public List<JiraTicketsDTO> getJiraTickets(String status) {
+		getAllJiraResponse response = getReportStub().getAllJira(getAllJiraRequest.newBuilder().setStatus(status).build());
+		return toJiraTicketsDTOList(response.getRecordsList());
+	}
+
+	private List<JiraTicketsDTO> toJiraTicketsDTOList(List<JiraTickets> list) {
+		return list.stream().map(item -> toJiraTicketsDTO(item)).collect(toList());
+
+	}
+
+	private JiraTicketsDTO toJiraTicketsDTO(JiraTickets jiraTickets) {
+		JiraTicketsDTO jiraTicketsDTO = new JiraTicketsDTO();
+		jiraTicketsDTO.setAssignPerson(jiraTickets.getAssignPerson());
+		jiraTicketsDTO.setCreateDate(jiraTickets.getCreateDate());
+		jiraTicketsDTO.setIssueID(jiraTickets.getIssueID());
+		jiraTicketsDTO.setPriority(jiraTickets.getPriority());
+		jiraTicketsDTO.setProjectKey(jiraTickets.getProjectKey());
+		jiraTicketsDTO.setReporter(jiraTickets.getReporter());
+		jiraTicketsDTO.setStatus(jiraTickets.getStatus());
+		jiraTicketsDTO.setSummary(jiraTickets.getSummary());
+		return jiraTicketsDTO;
 	}
 
 }

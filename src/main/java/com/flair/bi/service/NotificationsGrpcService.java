@@ -268,6 +268,9 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .schedulerTaskMetaId(item.getSchedulerTaskMetaId())
                 .viewData(item.getViewData())
                 .viewName(item.getViewName())
+                .enableTicketCreation(item.getEnableTicketCreation())
+                .isTicketCreated(item.getIsTicketCreated())
+                .viewTicket(item.getViewTicket())
                 .query(QueryGrpcUtils.mapToQueryDTO(item.getQuery()))
                 .build();
     }

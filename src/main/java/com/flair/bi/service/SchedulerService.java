@@ -8,11 +8,13 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
+import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -148,18 +150,23 @@ public class SchedulerService {
 	}
 
 	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		// TODO
-		return null;
+		return notificationsGrpcService.createJiraConfig(jiraParametersDTO);
 	}
 
 	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
-		// TODO
-		return null;
+		return notificationsGrpcService.updateJiraConfig(jiraParametersDTO);
 	}
 
 	public JiraParametersDTO getJiraConfig(Integer id) {
-		// TODO
-		return null;
+		return notificationsGrpcService.getJiraConfig(id);
+	}
+
+	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
+		return notificationsGrpcService.createJiraTicket(id);
+	}
+
+	public List<JiraTicketsDTO> getJiraTickets(String status) {
+		return notificationsGrpcService.getJiraTickets(status);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

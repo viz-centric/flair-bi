@@ -8,9 +8,18 @@ import lombok.Data;
 @Data
 @Builder
 public class SchedulerLogDTO {
-    @JsonProperty("task_status")
-    private final String taskStatus;
-    @JsonProperty("task_executed")
-    private final String taskExecuted;
-    private final QueryDTO query;
+	@JsonProperty("task_status")
+	private final String taskStatus;
+	@JsonProperty("task_executed")
+	private final String taskExecuted;
+	private final Boolean thresholdMet;
+	private final Boolean notificationSent;
+	private final String channel;;
+	private final String schedulerTaskMetaId;
+	private final String dashboardName;
+	private final String viewName;
+	private final String viewData;
+	private final String descripition;
+	private final String comment;
+	private final QueryDTO query;
 }

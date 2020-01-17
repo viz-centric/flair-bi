@@ -17,7 +17,9 @@ import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
+import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -95,5 +97,17 @@ public class NotificationConfigurationResource {
 	@Timed
 	public JiraParametersDTO getJiraConfig(@RequestParam(required = false) Integer id) {
 		return schedulerService.getJiraConfig(id);
+	}
+	
+	@GetMapping("/notification/createJiraTicket/")
+	@Timed
+	public GetJiraTicketResponseDTO createJiraTicket(@RequestParam Integer id) {
+		return schedulerService.createJiraTicket(id);
+	}
+
+	@GetMapping("/notification/getJiraTickets/")
+	@Timed
+	List<JiraTicketsDTO> getJiraTickets(@RequestParam String status) {
+		return schedulerService.getJiraTickets(status);
 	}
 }

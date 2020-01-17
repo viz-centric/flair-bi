@@ -8,6 +8,7 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
+import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -138,6 +139,12 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<JiraTicketsDTO> getJiraTickets(String status) {
 		// TODO Auto-generated method stub
 		return null;
 	}

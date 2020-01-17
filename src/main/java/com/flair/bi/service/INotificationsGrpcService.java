@@ -9,6 +9,7 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
+import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -58,4 +59,6 @@ public interface INotificationsGrpcService {
 	GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId);
 
 	GetJiraTicketResponseDTO createJiraTicket(Integer id);
+
+	List<JiraTicketsDTO> getJiraTickets(String status);
 }

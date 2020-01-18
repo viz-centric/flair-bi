@@ -21,5 +21,8 @@ public class SchedulerLogDTO {
 	private final String viewData;
 	private final String descripition;
 	private final String comment;
+	private final Boolean isTicketCreated;
+	private final Boolean enableTicketCreation;
+	private final String viewTicket;
 	private final QueryDTO query;
 }

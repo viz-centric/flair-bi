@@ -3,9 +3,8 @@
 
     angular
         .module('flairbiApp')
-        .controller('FlairBiTableviewController', FlairBiTableviewController);
-
-    FlairBiTableviewController.$inject = ['$scope',
+        .controller('FlairBiDisplayVisualizationTableviewController', FlairBiDisplayVisualizationTableviewController);
+    FlairBiDisplayVisualizationTableviewController.$inject = ['$scope',
         "$rootScope",
         "$stateParams",
         "proxyGrpcService",
@@ -14,7 +13,7 @@
         "schedulerService"
     ];
 
-    function FlairBiTableviewController($scope,
+    function FlairBiDisplayVisualizationTableviewController($scope,
         $rootScope,
         $stateParams,
         proxyGrpcService,
@@ -24,6 +23,7 @@
         var vm = this;
         vm.tableData = [];
         vm.tablekey = [];
+        vm.reportData;
         activate();
         ///////////////
 
@@ -32,6 +32,7 @@
             schedulerService.getReportLogByMetaId($stateParams.id)
                 .then(
                     function (response) {
+                        vm.reportData = response.data.reportLog;
                         var info = {
                             text: 'Report will be execute now',
                             title: 'Success'
@@ -76,21 +77,21 @@
 
 
         }
-        function createHeader(cols){
+        function createHeader(cols) {
             $("#table-view-col").empty();
-            var row=$("#table-view-col");
-            angular.forEach(cols, function(value, key){
-                 row.append("<th>"+key+"</th>");
+            var row = $("#table-view-col");
+            angular.forEach(cols, function (value, key) {
+                row.append("<th>" + key + "</th>");
             });
         }
 
-        function addDataInTable(data){
+        function addDataInTable(data) {
             $("#table-view > tbody").empty();
-            var tBody=$("#table-view > tbody");
-            angular.forEach(data, function(row, index){
-                var tr=$("<tr></tr>");
-                angular.forEach(row, function(value, key){
-                     tr.append("<td>"+value+"</td>");
+            var tBody = $("#table-view > tbody");
+            angular.forEach(data, function (row, index) {
+                var tr = $("<tr></tr>");
+                angular.forEach(row, function (value, key) {
+                    tr.append("<td>" + value + "</td>");
                 });
                 tBody.append(tr);
             });

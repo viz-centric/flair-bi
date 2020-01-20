@@ -9,20 +9,20 @@
   }
 }
 .report-actions {
-	svg {
-	  width: 19px;
-	  height: 19px;
-	  fill: $primary-color;
-	}
-	.views-icon {
-	  color: $primary-color;
-	}
-	.execute-now {
-	  width: 16px;
-	  height: 16px;
-	  vertical-align: -2px;
-	}
+  svg {
+    width: 19px;
+    height: 19px;
+    fill: $primary-color;
   }
+  .views-icon {
+    color: $primary-color;
+  }
+  .execute-now {
+    width: 16px;
+    height: 16px;
+    vertical-align: -2px;
+  }
+}
 
 #report-management .full-width-tabs > ul.nav.nav-tabs {
   display: table;
@@ -42,48 +42,50 @@
 
 #report-management .full-width-tabs svg#report-tab,
 #report-management .full-width-tabs svg#configuration-tab,
-#report-management .full-width-tabs svg#Task-tab
- {
+#report-management .full-width-tabs svg#Task-tab {
   height: 20px;
   width: 20px;
   vertical-align: middle;
   margin-left: 5px;
 }
 #report-management #Configuration #microsoft-team,
-#report-management #Configuration #jira{
+#report-management #Configuration #jira {
   height: 50px;
   width: 50px;
   vertical-align: middle;
   margin-left: 5px;
 }
-#report-management .full-width-tabs #email-setting{
-	font-size: 50px;
-	vertical-align: middle;
-	margin-left: 5px;
+#report-management .full-width-tabs #email-setting {
+  font-size: 50px;
+  vertical-align: middle;
+  margin-left: 5px;
+  color: #439dd3;
 }
 
 #report-management .nav-tabs > li > a {
-  color: #337ab7;
   text-decoration: none;
 }
-
+#report-management .nav-tabs > li.active{
+  border: solid 1px #439dd3;
+  border-top: 0px;
+}
 #report-management .nav-tabs > li.active > a {
-  color: #fff;
+  color: #439dd3;
   text-decoration: none;
-  background-color: #439dd3;
+  background-color: #fff;
 }
-#report-management .report > li.active::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 45%;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 10px solid #439dd3;
-  display: block;
-  width: 0;
-}
-
+// }
+// #report-management .report > li.active::after {
+//   content: "";
+//   position: absolute;
+//   bottom: -10px;
+//   left: 45%;
+//   border-left: 20px solid transparent;
+//   border-right: 20px solid transparent;
+//   border-top: 10px solid #439dd3;
+//   display: block;
+//   width: 0;
+// }
 
 #report-management .tabs-left,
 #report-management .tabs-right {
@@ -106,11 +108,11 @@
   //border: solid 2px #439dd3;
 }
 
-#report-management .tabs-left > li.active{
+#report-management .tabs-left > li.active {
   border: solid 2px #439dd3;
 }
 
-#report-management .tabs-left > li.active a{
+#report-management .tabs-left > li.active a {
   color: #439dd3;
   text-decoration: none;
   background-color: #fff;
@@ -198,4 +200,15 @@
   -ms-transform: rotate(-90deg);
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg);
+}
+
+#reportLog {
+  img {
+    height: 18px;
+    width: 18px;
+  }
+
+  label.disabled .fa-check-square-o{
+    opacity: 0.5;
+  }
 }

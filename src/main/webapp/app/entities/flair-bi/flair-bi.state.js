@@ -37,8 +37,8 @@
                 views: {
                     "content@": {
                         templateUrl:
-                            "app/entities/flair-bi/tableview/flair-bi-table-view.html",
-                        controller: "FlairBiTableviewController",
+                            "app/entities/flair-bi/tableview/flair-bi-display-visualization-tableview.html",
+                        controller: "FlairBiDisplayVisualizationTableviewController",
                         controllerAs: "vm"
                     },
                     "footer@": {},

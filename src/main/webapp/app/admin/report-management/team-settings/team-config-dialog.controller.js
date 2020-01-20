@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('teamConfigDialog', teamConfigDialog);
 
-    teamConfigDialog.$inject = ['$scope', 'data', 'config', '$uibModalInstance', '$rootScope', 'schedulerService'];
+    teamConfigDialog.$inject = ['$scope', 'data', 'config', '$uibModalInstance', '$rootScope', 'ChannelService'];
 
-    function teamConfigDialog($scope, data, config, $uibModalInstance, $rootScope, schedulerService) {
+    function teamConfigDialog($scope, data, config, $uibModalInstance, $rootScope, ChannelService) {
         var vm = this;
         vm.config = config;
         vm.clear = clear;
@@ -35,7 +35,7 @@
                 webhookName: vm.connection.details.webhookName,
                 webhookURL: vm.connection.details.webhookURL
             }
-            schedulerService.createTeamConfig(teamConfig)
+            ChannelService.createTeamConfig(teamConfig)
                 .then(function (success) {
                     var info = {
                         text: "new team config is saved into database",
@@ -59,7 +59,7 @@
                 webhookName: vm.connection.details.webhookName,
                 webhookURL: vm.connection.details.webhookURL
             }
-            schedulerService.updateTeamConfig(teamConfig)
+            ChannelService.updateTeamConfig(teamConfig)
                 .then(function (success) {
                     var info = {
                         text: "team webhook URL updated successfully",

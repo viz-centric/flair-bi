@@ -20,6 +20,6 @@ public class JiraTicketsDTO {
 	private String priority;
 	private String reporter;
 	private String summary;
-	private String createBy;
+	private String createdBy;
 	private String viewTicket;
 }

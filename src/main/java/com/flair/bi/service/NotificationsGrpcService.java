@@ -199,6 +199,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         return GetSchedulerReportLogsDTO.builder()
                 .message(StringUtils.isEmpty(result.getMessage()) ? null : result.getMessage())
                 .schedulerLogs(toLogs(result.getSchedulerLogsList()))
+                .totalRecords(result.getTotalRecords())
                 .build();
     }
 
@@ -585,7 +586,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		jiraTicketsDTO.setStatus(jiraTickets.getStatus());
 		jiraTicketsDTO.setSummary(jiraTickets.getSummary());
 		jiraTicketsDTO.setViewTicket(jiraTickets.getViewTicket());
-		jiraTicketsDTO.setCreateBy(jiraTickets.getCreateBy());
+		jiraTicketsDTO.setCreatedBy(jiraTickets.getCreatedBy());
 		return jiraTicketsDTO;
 	}
 

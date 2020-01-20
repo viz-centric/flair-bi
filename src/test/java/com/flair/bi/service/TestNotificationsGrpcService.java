@@ -144,7 +144,7 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 	}
 
 	@Override
-	public List<JiraTicketsDTO> getJiraTickets(String status) {
+	public List<JiraTicketsDTO> getJiraTickets(String status, Integer page, Integer pageSize) {
 		// TODO Auto-generated method stub
 		return null;
 	}

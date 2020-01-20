@@ -584,6 +584,8 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		jiraTicketsDTO.setReporter(jiraTickets.getReporter());
 		jiraTicketsDTO.setStatus(jiraTickets.getStatus());
 		jiraTicketsDTO.setSummary(jiraTickets.getSummary());
+		jiraTicketsDTO.setViewTicket(jiraTickets.getViewTicket());
+		jiraTicketsDTO.setCreateBy(jiraTickets.getCreateBy());
 		return jiraTicketsDTO;
 	}
 

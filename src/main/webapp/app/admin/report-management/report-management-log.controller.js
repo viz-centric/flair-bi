@@ -6,11 +6,11 @@
         .controller('ReportManagementLogsController', ReportManagementLogsController);
 
     ReportManagementLogsController.$inject = ['User', 'schedulerService','ChannelService',
-        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService'
+        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService','$window'
     ];
 
     function ReportManagementLogsController(User, schedulerService,ChannelService,
-        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService) {
+        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService,$window) {
 
         var vm = this;
         vm.logs = []
@@ -81,7 +81,7 @@
             ChannelService.createJiraTicket(log.schedulerTaskMetaId).then(
                 function (response) {
                     if (response.data) {
-                        window.open(response.data.jiraTicketLink, '_blank');
+                        $window.open(response.data.jiraTicketLink, '_blank');
                     }
                 },
                 function (error) {
@@ -92,7 +92,7 @@
                 });
         }
         function viewJiraTicket(log) {
-            window.open(log.viewTicket, '_blank');
+            $window.open(log.viewTicket, '_blank');
         }
         function setTicketCreation(log, enableTicketCreation) {
             if (!log.isTicketCreated) {

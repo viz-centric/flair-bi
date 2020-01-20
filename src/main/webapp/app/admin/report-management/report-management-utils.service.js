@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('ReportManagementUtilsService', ReportManagementUtilsService);
 
-    ReportManagementUtilsService.$inject = ['schedulerService','$rootScope','$location','$uibModal','$state'];
+    ReportManagementUtilsService.$inject = ['schedulerService','$rootScope','$location','$uibModal','$state','$window'];
 
-    function ReportManagementUtilsService(schedulerService,$rootScope,$location,$uibModal,$state) {
+    function ReportManagementUtilsService(schedulerService,$rootScope,$location,$uibModal,$state,$window) {
         var service = {
             goToBuildPage:goToBuildPage,
             updateReport:updateReport,
@@ -23,7 +23,7 @@
         }
 
         function goToViewDataPage(viewData){
-            window.open(viewData, '_blank');
+            $window.open(viewData, '_blank');
         }
 
         function openScheduledReport(scheduledObj){

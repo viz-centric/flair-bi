@@ -107,7 +107,7 @@ public class NotificationConfigurationResource {
 
 	@GetMapping("/notification/getJiraTickets/")
 	@Timed
-	List<JiraTicketsDTO> getJiraTickets(@RequestParam String status) {
-		return schedulerService.getJiraTickets(status);
+	List<JiraTicketsDTO> getJiraTickets(@RequestParam String status,@RequestParam Integer page,@RequestParam Integer pageSize) {
+		return schedulerService.getJiraTickets(status,page,pageSize);
 	}
 }

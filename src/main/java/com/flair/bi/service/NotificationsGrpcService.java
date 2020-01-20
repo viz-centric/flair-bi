@@ -5,12 +5,16 @@ import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.AddTeamConfigsRequest;
 import com.flair.bi.messages.report.ChannelParameters;
 import com.flair.bi.messages.report.ConnectionProperties;
+import com.flair.bi.messages.report.CreateJiraTicketRequest;
+import com.flair.bi.messages.report.CreateJiraTicketResponse;
 import com.flair.bi.messages.report.DeleteChannelConfigRequest;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.EmailParameters;
 import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
+import com.flair.bi.messages.report.GetAllJiraRequest;
+import com.flair.bi.messages.report.GetAllJiraResponse;
 import com.flair.bi.messages.report.GetChannelPropertiesRequest;
 import com.flair.bi.messages.report.GetChannelPropertiesResponse;
 import com.flair.bi.messages.report.GetEmailConfigRequest;
@@ -43,11 +47,6 @@ import com.flair.bi.messages.report.TeamConfigParameters;
 import com.flair.bi.messages.report.UpdateEmailSMTPRequest;
 import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
-import com.flair.bi.messages.report.createjiraTicketRequest;
-import com.flair.bi.messages.report.createjiraTicketResponse;
-import com.flair.bi.messages.report.getAllJiraRequest;
-import com.flair.bi.messages.report.getAllJiraResponse;
-import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
@@ -556,13 +555,17 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
-		createjiraTicketResponse response = getReportStub().createjiraTicket(createjiraTicketRequest.newBuilder().setId(id).build());
+		CreateJiraTicketResponse response = getReportStub().createJiraTicket(CreateJiraTicketRequest.newBuilder().setId(id).build());
 		return GetJiraTicketResponseDTO.builder().jiraTicketLink(response.getJiraTicketLink()).message(response.getMessage()).build();
 	}
 
 	@Override
-	public List<JiraTicketsDTO> getJiraTickets(String status) {
-		getAllJiraResponse response = getReportStub().getAllJira(getAllJiraRequest.newBuilder().setStatus(status).build());
+	public List<JiraTicketsDTO> getJiraTickets(String status, Integer page, Integer pageSize) {
+		GetAllJiraResponse response = getReportStub().getAllJira(GetAllJiraRequest.newBuilder()
+				.setStatus(status)
+				.setPage(page)
+				.setPageSize(pageSize)
+				.build());
 		return toJiraTicketsDTOList(response.getRecordsList());
 	}
 

@@ -165,8 +165,8 @@ public class SchedulerService {
 		return notificationsGrpcService.createJiraTicket(id);
 	}
 
-	public List<JiraTicketsDTO> getJiraTickets(String status) {
-		return notificationsGrpcService.getJiraTickets(status);
+	public List<JiraTicketsDTO> getJiraTickets(String status,Integer page,Integer pageSize) {
+		return notificationsGrpcService.getJiraTickets(status, page, pageSize);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

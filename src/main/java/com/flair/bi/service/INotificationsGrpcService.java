@@ -60,5 +60,5 @@ public interface INotificationsGrpcService {
 
 	GetJiraTicketResponseDTO createJiraTicket(Integer id);
 
-	List<JiraTicketsDTO> getJiraTickets(String status);
+	List<JiraTicketsDTO> getJiraTickets(String status, Integer page, Integer pageSize);
 }

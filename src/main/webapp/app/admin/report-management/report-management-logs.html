@@ -29,7 +29,7 @@
                         <th>
                             <span data-translate="reportManagement.queryID"></span>
                         </th>
-                        <th>
+                        <th style="width: 100px;">
                             <span data-translate="reportManagement.status"></span>
                         </th>
                         <th>
@@ -43,24 +43,34 @@
                 <tbody>
                     <tr ng-repeat="log in vm.logs">
                         <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
-                        <td>{{log.task_executed | date : "dd.MM.y" }}</td>
+                        <td>{{log.taskExecuted | date : "dd.MM.y" }}</td>
                         <td>{{log.dashboardName  }}</td>
                         <td>{{log.viewName}}</td>
                         <td>{{log.descripition}}</td>
                         <td>{{log.channel}}</td>
-                        <td>{{log.thresholdMet}}</td>
-                        <td>{{log.schedulerTaskMetaId  }}</td>
-                        <td>{{log.task_status}}</td>
                         <td>
-                                <label class="flair-checkbox"  ng-class="log.isTicketCreated ? 'disabled' : ''" ng-click="vm.setTicketCreation(log, !log.enableTicketCreation)">
-                                        <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':log.enableTicketCreation,'fa-square-o-unchecked':!log.enableTicketCreation} "></i>
-                                        <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':log.enableTicketCreation,'fa-check-square-o-unchecked':!log.enableTicketCreation}"></i>
-                                </label>
+                            <label class="flair-checkbox">
+                                <i
+                                    class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':log.thresholdMet,'fa-square-o-unchecked':!log.thresholdMet} "></i>
+                                <i
+                                    class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':log.thresholdMet,'fa-check-square-o-unchecked':!log.thresholdMet}"></i>
+                            </label>
+                        </td>
+                        <td>{{log.schedulerTaskMetaId  }}</td>
+                        <td>{{log.taskStatus}}</td>
+                        <td>
+                            <label class="flair-checkbox" ng-class="vm.getLabelClass(log)"
+                                ng-click="vm.enableTicketCreation(log)">
+                                <i
+                                    class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':log.enableTicketCreation,'fa-square-o-unchecked':!log.enableTicketCreation} "></i>
+                                <i
+                                    class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':log.enableTicketCreation,'fa-check-square-o-unchecked':!log.enableTicketCreation}"></i>
+                            </label>
                         </td>
                         <td>
                             <div class="btn-group flex-btn-group-container report-actions">
                                 <button
-                                    ng-if="log.thresholdMet && log.task_status=='success' && log.enableTicketCreation && !log.isTicketCreated"
+                                    ng-if="log.thresholdMet && log.taskStatus=='success' && log.enableTicketCreation && !log.isTicketCreated"
                                     ng-click="vm.createJira(log)" uib-tooltip="Create Jira"
                                     class="btn btn-default btn-sm">
                                     <img src="../../../content/svgs/jira.svg" />
@@ -73,14 +83,14 @@
 
                                 </button>
 
-                                <button ng-if="log.task_status == 'success' || log.viewData != ''"
+                                <button ng-if="log.taskStatus == 'success' || log.viewData != ''"
                                     uib-tooltip="View Data" ng-click="vm.goToViewDataPage(log)"
                                     class="btn btn-default btn-sm">
                                     <span class="fa fa-eye views-icon fa-2x"></span>
                                 </button>
 
-                                <button ng-if="log.thresholdMet" uib-tooltip="Ignore"
-                                    ng-click="vm.goToBuildPage(report.report.build_url)" class="btn btn-default btn-sm">
+                                <button ng-if="log.thresholdMet && log.taskStatus=='success' && !log.isTicketCreated && log.enableTicketCreation" uib-tooltip="Ignore"
+                                    ng-click="vm.enableTicketCreation(log)" class="btn btn-default btn-sm">
                                     <span class="fa fa-times-circle fa-2x text-danger"></span>
                                 </button>
                             </div>

@@ -65,7 +65,7 @@
 #report-management .nav-tabs > li > a {
   text-decoration: none;
 }
-#report-management .nav-tabs > li.active{
+#report-management .nav-tabs > li.active {
   border: solid 1px #439dd3;
   border-top: 0px;
 }
@@ -196,7 +196,7 @@
     width: 18px;
   }
 
-  label.disabled .fa-check-square-o{
+  label.disabled i {
     opacity: 0.5;
   }
 }

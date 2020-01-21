@@ -36,6 +36,7 @@
         "assignPerson": "Assign",
         "priority": "Priority",
         "reporter": "Reporter",
-        "enableTicketCreation":"Enable Create Ticket"
+        "enableTicketCreation": "Enable Create Ticket",
+        "viewTicket": "View Ticket"
     }
 }

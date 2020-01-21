@@ -5,12 +5,12 @@
         .module('flairbiApp')
         .controller('ReportManagementController', ReportManagementController);
 
-    ReportManagementController.$inject = ['User', 'schedulerService','ChannelService',
+    ReportManagementController.$inject = ['User', 'schedulerService', 'ChannelService',
         'AlertService', 'pagingParams', 'paginationConstants', '$rootScope', '$state',
         'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal'
     ];
 
-    function ReportManagementController(User, schedulerService,ChannelService,
+    function ReportManagementController(User, schedulerService, ChannelService,
         AlertService, pagingParams, paginationConstants, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal) {
 
         var vm = this;
@@ -19,6 +19,11 @@
 
         vm.page = 1;
         vm.totalItems = 0;
+        vm.totalJiraTickets = 0;
+        vm.jiraPage = 1;
+        vm.JiraItemsPerPage = 5;
+
+        vm.jiraLoadPage = jiraLoadPage;
         vm.links = null;
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
@@ -86,7 +91,7 @@
             },
             'tasklogger': {
                 getData: function () {
-                    getJiraTickets();
+                    getJiraTickets(vm.jiraTicketStatus,vm.jiraPage-1,vm.JiraItemsPerPage);
                 }
             }
         };
@@ -158,6 +163,11 @@
             vm.transition();
         }
 
+        function jiraLoadPage(page) {
+            vm.jiraPage = page;
+            vm.config["tasklogger"].getData();
+        }
+
         function transition() {
             $state.transitionTo($state.$current, {
                 page: vm.page,
@@ -183,7 +193,7 @@
         }
 
         function channelParameters() {
-            schedulerService.channelParameters()
+            ChannelService.channelParameters()
                 .then(function (success) {
                     vm.channelConfig = success.data.channelParameters;
                     vm.emailChannelConfig = success.data.channelParameters.filter(function (item) {
@@ -204,10 +214,12 @@
                 });
         }
 
-        function getJiraTickets() {
-            ChannelService.getJiraTickets(vm.jiraTicketStatus)
+        function getJiraTickets(status,page,pageSize) {
+            ChannelService.getJiraTickets(status,page,pageSize)
                 .then(function (success) {
-                    vm.jiraTickets = success.data;
+                    vm.jiraTickets = success.data.records;
+                    vm.totalJiraTickets = success.data.totalRecords;
+                    vm.jiraPage = pagingParams.page;
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,
@@ -327,10 +339,10 @@
         }
 
         function deleteChannelConfig(data, channel) {
-            var title = channel == "team" ? data.webhookName + " webhook URL" : "configuration";
+            var title = channel == "team" ? data.webhookName + " webhook URL" : "configuration";
             swal(
-                "Are you sure?",
-                "You want to delete " + title, {
+                "Are you sure?",
+                "You want to delete " + title, {
                 dangerMode: true,
                 buttons: true,
             })
@@ -341,7 +353,7 @@
                                 .then(function (success) {
                                     title = channel == "team" ? data.webhookName + "Webhook" : "Configuration";
                                     var info = {
-                                        text: title + " delete Webhook delete successfully",
+                                        text: title + " delete Webhook delete successfully",
                                         title: "Updated"
                                     }
                                     vm.config[channel].getData();

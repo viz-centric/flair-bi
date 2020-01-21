@@ -352,6 +352,9 @@
                                             <span data-translate="reportManagement.issueID"></span>
                                         </th>
                                         <th>
+                                            <span data-translate="reportManagement.viewTicket"></span>
+                                        </th>
+                                        <th>
                                             <span data-translate="reportManagement.projectKey"></span>
                                         </th>
                                         <th style="width:200px">
@@ -362,6 +365,9 @@
                                         </th>
                                         <th>
                                             <span data-translate="reportManagement.createDate"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.createdBy"></span>
                                         </th>
                                         <th>
                                             <span data-translate="reportManagement.assignPerson"></span>
@@ -377,8 +383,10 @@
                                 <tbody>
 
                                     <tr ng-repeat="jira in vm.jiraTickets">
-                                        <td>{{$index+1}}</td>
+                                        <td>{{$index+1+ (vm.jiraPage-1) * vm.JiraItemsPerPage}}</td>
                                         <td>{{jira.issueID}}</td>
+                                        <td><a target="_blank" href="{{jira.viewTicket |  split:'|':1}}" class="btn btn-link">
+                                                {{jira.viewTicket |  split:'|':0}}</a> </td>
                                         <td>{{jira.projectKey  }}</td>
                                         <td>{{jira.summary}}</td>
                                         <td ng-if="jira.status=='To Do'">
@@ -391,6 +399,7 @@
                                             <span class="btn btn-primary"> {{jira.status}}</span>
                                         </td>
                                         <td>{{jira.createDate | date : "dd.MM.y hh:mm:ss"}}</td>
+                                        <td>{{jira.createdBy}}</td>
                                         <td>{{jira.assignPerson}}</td>
                                         <td ng-if="jira.priority=='Medium'">
                                             <i class="fa fa-arrow-up" style="color: #ea7d24" aria-hidden="true"></i>
@@ -418,8 +427,12 @@
                                 </tbody>
                             </table>
                         </div>
-
-
+                        <div class="text-center" ng-if="vm.totalJiraTickets>0">
+                            <jhi-item-count page="vm.jiraPage" total="vm.queryCount" items-per-page="vm.JiraItemsPerPage">
+                            </jhi-item-count>
+                            <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
+                                ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></uib-pagination>
+                        </div>
                     </div>
                 </div>
             </div>

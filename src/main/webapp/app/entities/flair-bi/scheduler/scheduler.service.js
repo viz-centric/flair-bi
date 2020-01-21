@@ -17,7 +17,8 @@
             executeNow: executeNow,
             getScheduleReportLogs: getScheduleReportLogs,
             filterScheduledReports: filterScheduledReports,
-            getReportLogByMetaId: getReportLogByMetaId
+            getReportLogByMetaId: getReportLogByMetaId,
+            disableTicketCreation: disableTicketCreation
         };
 
         return service;
@@ -80,6 +81,12 @@
         function getReportLogByMetaId(taskLogMetaId) {
             return $http({
                 url: 'api/schedule/report/log/' + taskLogMetaId,
+                method: 'GET'
+            });
+        }
+        function disableTicketCreation(schedulerTaskLogId) {
+            return $http({
+                url: 'api/notification/disableTicketCreationRequest/?schedulerTaskLogId=' + schedulerTaskLogId + '',
                 method: 'GET'
             });
         }

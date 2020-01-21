@@ -18,6 +18,7 @@ import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -107,7 +108,14 @@ public class NotificationConfigurationResource {
 
 	@GetMapping("/notification/getJiraTickets/")
 	@Timed
-	List<JiraTicketsDTO> getJiraTickets(@RequestParam String status,@RequestParam Integer page,@RequestParam Integer pageSize) {
+	GetJiraTicketsDTO getJiraTickets(@RequestParam String status,@RequestParam Integer page,@RequestParam Integer pageSize) {
 		return schedulerService.getJiraTickets(status,page,pageSize);
 	}
+
+	@GetMapping("/notification/disableTicketCreationRequest/")
+	@Timed
+	String disableTicketCreationRequest(@RequestParam Integer schedulerTaskLogId) {
+		return schedulerService.disableTicketCreationRequest(schedulerTaskLogId);
+	}
+
 }

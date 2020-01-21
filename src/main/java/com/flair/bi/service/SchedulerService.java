@@ -9,6 +9,7 @@ import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
@@ -165,8 +166,12 @@ public class SchedulerService {
 		return notificationsGrpcService.createJiraTicket(id);
 	}
 
-	public List<JiraTicketsDTO> getJiraTickets(String status,Integer page,Integer pageSize) {
+	public GetJiraTicketsDTO getJiraTickets(String status, Integer page, Integer pageSize) {
 		return notificationsGrpcService.getJiraTickets(status, page, pageSize);
+	}
+
+	public String disableTicketCreationRequest(Integer schedulerTaskLogId) {
+		return notificationsGrpcService.disableTicketCreationRequest(schedulerTaskLogId);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

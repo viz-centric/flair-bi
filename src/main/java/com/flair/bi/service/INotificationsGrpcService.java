@@ -4,12 +4,12 @@ import java.util.List;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
-import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -60,5 +60,7 @@ public interface INotificationsGrpcService {
 
 	GetJiraTicketResponseDTO createJiraTicket(Integer id);
 
-	List<JiraTicketsDTO> getJiraTickets(String status, Integer page, Integer pageSize);
+	GetJiraTicketsDTO getJiraTickets(String status, Integer page, Integer pageSize);
+
+	String disableTicketCreationRequest(Integer schedulerTaskLogId);
 }

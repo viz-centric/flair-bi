@@ -9,6 +9,7 @@ import com.flair.bi.messages.report.CreateJiraTicketRequest;
 import com.flair.bi.messages.report.CreateJiraTicketResponse;
 import com.flair.bi.messages.report.DeleteChannelConfigRequest;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
+import com.flair.bi.messages.report.DisableTicketCreationRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.EmailParameters;
 import com.flair.bi.messages.report.ExecuteReportRequest;
@@ -54,6 +55,7 @@ import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
@@ -561,13 +563,13 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 	}
 
 	@Override
-	public List<JiraTicketsDTO> getJiraTickets(String status, Integer page, Integer pageSize) {
+	public GetJiraTicketsDTO getJiraTickets(String status, Integer page, Integer pageSize) {
 		GetAllJiraResponse response = getReportStub().getAllJira(GetAllJiraRequest.newBuilder()
 				.setStatus(status)
 				.setPage(page)
 				.setPageSize(pageSize)
 				.build());
-		return toJiraTicketsDTOList(response.getRecordsList());
+		return GetJiraTicketsDTO.builder().records(toJiraTicketsDTOList(response.getRecordsList())).totalRecords(response.getRecordsCount()).build();
 	}
 
 	private List<JiraTicketsDTO> toJiraTicketsDTOList(List<JiraTickets> list) {
@@ -588,6 +590,12 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		jiraTicketsDTO.setViewTicket(jiraTickets.getViewTicket());
 		jiraTicketsDTO.setCreatedBy(jiraTickets.getCreatedBy());
 		return jiraTicketsDTO;
+	}
+
+	@Override
+	public String disableTicketCreationRequest(Integer schedulerTaskLogId) {
+		ConfigsResponse response=getReportStub().disableTicketCreation(DisableTicketCreationRequest.newBuilder().setSchedulerTaskLogId(schedulerTaskLogId).build());
+		return response.getMessage();
 	}
 
 }

@@ -5,12 +5,12 @@
         .module('flairbiApp')
         .controller('ReportManagementController', ReportManagementController);
 
-    ReportManagementController.$inject = ['User', 'schedulerService',
+    ReportManagementController.$inject = ['User', 'schedulerService','ChannelService',
         'AlertService', 'pagingParams', 'paginationConstants', '$rootScope', '$state',
         'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal'
     ];
 
-    function ReportManagementController(User, schedulerService,
+    function ReportManagementController(User, schedulerService,ChannelService,
         AlertService, pagingParams, paginationConstants, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal) {
 
         var vm = this;
@@ -35,20 +35,26 @@
         vm.searchReports = searchReports;
         vm.saveSMTPSetting = saveSMTPSetting;
 
-        vm.deleteWebhook = deleteWebhook;
+        vm.deleteChannelConfig = deleteChannelConfig;
         vm.openTeamConfigDialog = openTeamConfigDialog;
         vm.reportManagementTabClick = reportManagementTabClick;
         vm.getWebhookList = getWebhookList;
+        vm.saveJiraSetting = saveJiraSetting;
         vm.openCalendar = openCalendar;
         vm.datePickerOpenStatus = {};
         vm.datePickerOpenStatus.fromDate = false;
         vm.datePickerOpenStatus.toDate = false;
         vm.webhookList = [];
         vm.SMPTSetting = {};
+        vm.jiraSetting = {};
         vm.dateFormat = 'yyyy-MM-dd';
         vm.user = null;
         vm.emailChannelConfig = [];
         vm.teamChannelConfig = [];
+        vm.jiraConfig = [];
+        vm.jiraTickets = [];
+        vm.jiraStatusList = ["All", "Closed", "Open", "To Do", "In Progress"];
+        vm.jiraTicketStatus = "All";
         vm.connection = {};
         vm.config = {
             'team': {
@@ -63,7 +69,7 @@
             },
             'jira': {
                 getData: function () {
-
+                    getJiraSettings();
                 }
             },
             'report': {
@@ -76,6 +82,11 @@
                 getData: function () {
                     channelParameters();
                     getSMTPSettings();
+                }
+            },
+            'tasklogger': {
+                getData: function () {
+                    getJiraTickets();
                 }
             }
         };
@@ -181,6 +192,22 @@
                     vm.teamChannelConfig = success.data.channelParameters.filter(function (item) {
                         return item.id === "Teams"
                     });
+                    vm.jiraConfig = success.data.channelParameters.filter(function (item) {
+                        return item.id === "Jira"
+                    });
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+        }
+
+        function getJiraTickets() {
+            ChannelService.getJiraTickets(vm.jiraTicketStatus)
+                .then(function (success) {
+                    vm.jiraTickets = success.data;
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,
@@ -199,14 +226,13 @@
 
                 password: vm.connection.details.password,
             }
-            schedulerService.createEmailConfig(SMPTConfig)
+            ChannelService.createEmailConfig(SMPTConfig)
                 .then(function (success) {
                     var info = {
                         text: "SMTP settings are save successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);
-                    vm.clear();
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,
@@ -216,8 +242,32 @@
                 });
 
         }
+
+        function saveJiraSetting() {
+            var jiraConfig = {
+                organization: vm.connection.details.organization,
+                key: vm.connection.details.key,
+                userName: vm.connection.details.userName,
+                apiToken: vm.connection.details.apiToken
+            }
+            ChannelService.createJiraConfig(jiraConfig)
+                .then(function (success) {
+                    var info = {
+                        text: "Jira settings are save successfully",
+                        title: "Updated"
+                    }
+                    $rootScope.showSuccessToast(info);
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+        }
+
         function getWebhookList() {
-            schedulerService.getTeamConfig(0)
+            ChannelService.getTeamConfig(0)
                 .then(function (success) {
                     vm.webhookList = success.data;
 
@@ -230,10 +280,24 @@
                 });
         }
         function getSMTPSettings() {
-            schedulerService.getEmailConfig(0)
+            ChannelService.getEmailConfig(0)
                 .then(function (success) {
                     vm.SMPTSetting = success.data;
                     vm.connection.details = vm.SMPTSetting;
+
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+        }
+        function getJiraSettings() {
+            ChannelService.getJiraConfig(0)
+                .then(function (success) {
+                    vm.jiraSetting = success.data;
+                    vm.connection.details = vm.jiraSetting;
 
                 }).catch(function (error) {
                     var info = {
@@ -262,23 +326,25 @@
             }).result.then(function () { }, function () { });
         }
 
-        function deleteWebhook(webhook) {
+        function deleteChannelConfig(data, channel) {
+            var title = channel == "team" ? data.webhookName + " webhook URL" : "configuration";
             swal(
                 "Are you sure?",
-                "You want to delete " + webhook.webhookName + " webhook URL", {
+                "You want to delete " + title, {
                 dangerMode: true,
                 buttons: true,
             })
                 .then(function (value) {
                     if (value) {
-                        if (webhook.id) {
-                            schedulerService.deleteChannelConfig(webhook.id)
+                        if (data.id) {
+                            ChannelService.deleteChannelConfig(data.id)
                                 .then(function (success) {
+                                    title = channel == "team" ? data.webhookName + "Webhook" : "Configuration";
                                     var info = {
-                                        text: "Webhook delete successfully",
+                                        text: title + " delete Webhook delete successfully",
                                         title: "Updated"
                                     }
-                                    getWebhookList();
+                                    vm.config[channel].getData();
                                     $rootScope.showSuccessToast(info);
 
                                 }).catch(function (error) {

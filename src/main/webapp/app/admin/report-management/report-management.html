@@ -15,10 +15,10 @@
                     </svg>
                 </a>
             </li>
-            <li>
-                <a data-toggle="tab" href="#/administration/report-management#Configuration">Task Logger
+            <li ng-click="vm.reportManagementTabClick('tasklogger')">
+                <a data-toggle="tab" href="#/administration/report-management#TaskLogger">Task Logger
                     <svg id="Task-tab">
-                        <use xlink:href="#admin-configuration"></use>
+                        <use xlink:href="#admin-logs"></use>
                     </svg>
                 </a>
             </li>
@@ -180,7 +180,7 @@
                                 <li class="active" ng-click="vm.reportManagementTabClick('email')">
                                     <a class="text-center" href="#/administration/report-management#Email"
                                         data-toggle="tab">
-                                        <i class="fa fa-envelope" id="email-setting" aria-hidden="true"></i>
+                                        <i class="fa fa-envelope active" id="email-setting" aria-hidden="true"></i>
                                         <h3>Email</h3>
                                     </a></li>
                                 <li ng-click="vm.reportManagementTabClick('team')">
@@ -191,7 +191,7 @@
                                     </a>
 
                                 </li>
-                                <li>
+                                <li ng-click="vm.reportManagementTabClick('jira')">
                                     <a class="text-center" href="#/administration/report-management#Jira"
                                         data-toggle="tab">
                                         <img id="jira" src="../../../content/svgs/jira.svg">
@@ -213,14 +213,19 @@
                                                     connection="vm.connection"
                                                     ng-repeat="property in vm.emailChannelConfig[0].connectionProperties | orderBy: 'order'">
                                                 </channel-property-component>
-                                                <div class="m-b-sm">
-                                                    <button ng-disabled="emailSetting.$invalid || vm.isSaving"
-                                                        class="btn btn-primary">
-                                                        <span>
-                                                            Save Settings
-                                                        </span>
-                                                    </button>
-                                                </div>
+                                                <button ng-disabled="emailSetting.$invalid || vm.isSaving"
+                                                    class="btn btn-primary">
+                                                    <span>
+                                                        <i class="fa fa-save"></i> Save Configurations
+                                                    </span>
+                                                </button>
+                                                <button ng-disabled="vm.SMPTSetting.id===0" type="button"
+                                                    class="btn btn-danger"
+                                                    ng-click="vm.deleteChannelConfig(vm.SMPTSetting,'email')">
+                                                    <span>
+                                                        <i class="fa fa-trash"></i> Remove Configurations
+                                                    </span>
+                                                </button>
 
                                             </div>
                                         </div>
@@ -270,7 +275,7 @@
                                                                     <span class="fa fa-edit edit-icon fa-2x"></span>
                                                                 </button>
                                                                 <button uib-tooltip="Delete"
-                                                                    ng-click="vm.deleteWebhook(webhook)"
+                                                                    ng-click="vm.deleteChannelConfig(webhook,team)"
                                                                     class="btn btn-default btn-sm">
                                                                     <span class="fa fa-trash delete-icon fa-2x"></span>
                                                                 </button>
@@ -288,20 +293,138 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="Jira">
-                                    <div class="row">
-                                        Jira settings
+                                    <form name="jiraSetting" role="form" novalidate ng-submit="vm.saveJiraSetting()"
+                                        show-validation>
+                                        <div class="row">
+                                            <div class="cal-md-12">
+                                                <channel-property-component c-property="property"
+                                                    connection="vm.connection"
+                                                    ng-repeat="property in vm.jiraConfig[0].connectionProperties | orderBy: 'order'">
+                                                </channel-property-component>
+                                                <div class="m-b-sm">
+                                                    <button ng-disabled="jiraSetting.$invalid || vm.isSaving"
+                                                        class="btn btn-primary">
+                                                        <span>
+                                                            <i class="fa fa-save"></i> Save Configurations
+                                                        </span>
+                                                    </button>
+                                                    <button ng-disabled="vm.jiraSetting.id===0" type="button"
+                                                        class="btn btn-danger"
+                                                        ng-click="vm.deleteChannelConfig(vm.jiraSetting,'jira')">
+                                                        <span>
+                                                            <i class="fa fa-trash"></i> Remove Configurations
+                                                        </span>
+                                                    </button>
+                                                </div>
 
-
-                                    </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-
                         </div>
 
                     </div>
+
                 </div>
-                <div class="clearfix"></div>
             </div>
+            <div id="TaskLogger" class="tab-pane fade">
+                <div class="fbibox report-management">
+                    <div class="fbibox-content">
+                        <div class="table-responsive">
+                            <div class="row filters">
+                                <div class="col-md-3">
+                                    <select class="form-control" id="jiraTicketStatus" name="jiraTicketStatus"
+                                        ng-model="vm.jiraTicketStatus"
+                                        ng-change="vm.reportManagementTabClick('tasklogger')"
+                                        ng-options="status for status in vm.jiraStatusList" required=""></select>
+                                </div>
+
+                            </div>
+                            <table class="table table-striped flair-table-v1">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-translate="reportManagement.no"></span>
+                                        </th>
+
+                                        <th>
+                                            <span data-translate="reportManagement.issueID"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.projectKey"></span>
+                                        </th>
+                                        <th style="width:200px">
+                                            <span data-translate="reportManagement.summary"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.status"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.createDate"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.assignPerson"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.priority"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.reporter"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="jira in vm.jiraTickets">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{jira.issueID}}</td>
+                                        <td>{{jira.projectKey  }}</td>
+                                        <td>{{jira.summary}}</td>
+                                        <td ng-if="jira.status=='To Do'">
+                                            <span class="btn btn-default"> {{jira.status}}</span>
+                                        </td>
+                                        <td ng-if="jira.status=='Done'">
+                                            <span class="btn btn-success"> {{jira.status}}</span>
+                                        </td>
+                                        <td class="inProgress" ng-if="jira.status=='In Progress'">
+                                            <span class="btn btn-primary"> {{jira.status}}</span>
+                                        </td>
+                                        <td>{{jira.createDate | date : "dd.MM.y hh:mm:ss"}}</td>
+                                        <td>{{jira.assignPerson}}</td>
+                                        <td ng-if="jira.priority=='Medium'">
+                                            <i class="fa fa-arrow-up" style="color: #ea7d24" aria-hidden="true"></i>
+                                            {{jira.priority}}
+                                        </td>
+                                        <td ng-if="jira.priority=='High'">
+                                            <i class="fa fa-arrow-up" style="color: #ea4444" aria-hidden="true"></i>
+                                            {{jira.priority}}
+                                        </td>
+                                        <td ng-if="jira.priority=='Low'">
+                                            <i class="fa fa-arrow-down" style="color: #2a8735" aria-hidden="true"></i>
+                                            {{jira.priority}}
+                                        </td>
+                                        <td ng-if="jira.priority=='Lowest'">
+                                            <i class="fa fa-arrow-down" style="color: #55a557" aria-hidden="true"></i>
+                                            {{jira.priority}}
+                                        </td>
+                                        <td ng-if="jira.priority=='Highest'">
+                                            <i class="fa fa-arrow-up" style="color: #ce0000" aria-hidden="true"></i>
+                                            {{jira.priority}}
+                                        </td>
+
+                                        <td>{{jira.reporter  }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
+</div>
 </div>

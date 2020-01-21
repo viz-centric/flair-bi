@@ -569,7 +569,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 				.setPage(page)
 				.setPageSize(pageSize)
 				.build());
-		return GetJiraTicketsDTO.builder().records(toJiraTicketsDTOList(response.getRecordsList())).totalRecords(response.getRecordsCount()).build();
+		return GetJiraTicketsDTO.builder().records(toJiraTicketsDTOList(response.getRecordsList())).totalRecords(response.getTotalRecords()).build();
 	}
 
 	private List<JiraTicketsDTO> toJiraTicketsDTOList(List<JiraTickets> list) {

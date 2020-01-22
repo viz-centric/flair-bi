@@ -6,11 +6,11 @@
         .controller('ReportManagementLogsController', ReportManagementLogsController);
 
     ReportManagementLogsController.$inject = ['User', 'schedulerService', 'ChannelService',
-        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window','DATEFORMAT'
+        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window', 'REPORTMANAGEMENTCONSTANTS'
     ];
 
     function ReportManagementLogsController(User, schedulerService, ChannelService,
-        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window,DATEFORMAT) {
+        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window, REPORTMANAGEMENTCONSTANTS) {
 
         var vm = this;
         vm.logs = []
@@ -28,7 +28,7 @@
         vm.viewJiraTicket = viewJiraTicket;
         vm.getLabelClass = getLabelClass;
         vm.enableTicketCreation = enableTicketCreation;
-        vm.dateFormat=DATEFORMAT.dateTime;
+        vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
         activate();
         ///////////////////////////////////////
 
@@ -114,7 +114,7 @@
         }
         function getLabelClass(log) {
             if (log.isTicketCreated || !log.thresholdMet || log.taskStatus !== "success") {
-                return 'disabled';
+                return REPORTMANAGEMENTCONSTANTS.disabledTicketCreation;
             }
         }
     }

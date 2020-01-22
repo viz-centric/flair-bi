@@ -11,7 +11,7 @@
         "stompClientService",
         "AuthServerProvider",
         "schedulerService",
-        "DATEFORMAT"
+        "REPORTMANAGEMENTCONSTANTS"
     ];
 
     function FlairBiDisplayVisualizationTableviewController($scope,
@@ -21,12 +21,12 @@
         stompClientService,
         AuthServerProvider,
         schedulerService,
-        DATEFORMAT) {
+        REPORTMANAGEMENTCONSTANTS) {
         var vm = this;
         vm.tableData = [];
         vm.tablekey = [];
         vm.reportData;
-        vm.dateFormat = DATEFORMAT.dateTime;
+        vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
         activate();
         ///////////////
 

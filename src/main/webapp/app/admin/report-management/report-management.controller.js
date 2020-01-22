@@ -91,7 +91,7 @@
             },
             'tasklogger': {
                 getData: function () {
-                    getJiraTickets(vm.jiraTicketStatus,vm.jiraPage-1,vm.JiraItemsPerPage);
+                    getJiraTickets(vm.jiraTicketStatus, vm.jiraPage - 1, vm.JiraItemsPerPage);
                 }
             }
         };
@@ -214,12 +214,13 @@
                 });
         }
 
-        function getJiraTickets(status,page,pageSize) {
-            ChannelService.getJiraTickets(status,page,pageSize)
+        function getJiraTickets(status, page, pageSize) {
+            ChannelService.getJiraTickets(status, page, pageSize)
                 .then(function (success) {
                     vm.jiraTickets = success.data.records;
                     vm.totalJiraTickets = success.data.totalRecords;
-                    vm.jiraPage = pagingParams.page;
+                    vm.jiraPage = page + 1;
+                    vm.jiraQueryCount = vm.totalJiraTickets;
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,
@@ -335,7 +336,9 @@
                         return vm.teamChannelConfig;
                     }
                 }
-            }).result.then(function () { }, function () { });
+            }).result.then(function () {
+                vm.config["team"].getData();
+             }, function () { });
         }
 
         function deleteChannelConfig(data, channel) {

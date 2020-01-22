@@ -5720,6 +5720,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
   /*
     Force border-box so that % widths fit the parent
     container without overlap because of margin/padding.
+
     More Info : http://www.quirksmode.org/css/box.html
   */
   -webkit-box-sizing: border-box;
@@ -5931,8 +5932,10 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
   /**border-bottom-color: transparent;
     -webkit-box-shadow: 0 1px 0 #fff inset;
             box-shadow: 0 1px 0 #fff inset;
+
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+
     background-color:$active-background-color;
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #fff), color-stop(0.5,$active-background-color));
     background-image: -webkit-linear-gradient(center bottom, #fff 0%,$active-background-color 50%);
@@ -6744,6 +6747,9 @@ input.select2-active {
 
 #reportLog label.disabled i {
   opacity: 0.5; }
+
+#reportLog .logInfo {
+  width: 100px; }
 
 .table-view {
   min-width: 95%; }

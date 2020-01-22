@@ -385,7 +385,8 @@
                                     <tr ng-repeat="jira in vm.jiraTickets">
                                         <td>{{$index+1+ (vm.jiraPage-1) * vm.JiraItemsPerPage}}</td>
                                         <td>{{jira.issueID}}</td>
-                                        <td><a target="_blank" href="{{jira.viewTicket |  split:'|':1}}" class="btn btn-link">
+                                        <td><a target="_blank" href="{{jira.viewTicket |  split:'|':1}}"
+                                                class="btn btn-link">
                                                 {{jira.viewTicket |  split:'|':0}}</a> </td>
                                         <td>{{jira.projectKey  }}</td>
                                         <td>{{jira.summary}}</td>
@@ -428,10 +429,12 @@
                             </table>
                         </div>
                         <div class="text-center" ng-if="vm.totalJiraTickets>0">
-                            <jhi-item-count page="vm.jiraPage" total="vm.queryCount" items-per-page="vm.JiraItemsPerPage">
+                            <jhi-item-count page="vm.jiraPage" total="vm.jiraQueryCount"
+                                items-per-page="vm.JiraItemsPerPage">
                             </jhi-item-count>
-                            <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
-                                ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></uib-pagination>
+                            <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets"
+                                ng-model="vm.jiraPage" ng-change="vm.jiraLoadPage(vm.jiraPage)"
+                                items-per-page="vm.JiraItemsPerPage"></uib-pagination>
                         </div>
                     </div>
                 </div>

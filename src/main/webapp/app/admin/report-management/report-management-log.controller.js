@@ -6,11 +6,11 @@
         .controller('ReportManagementLogsController', ReportManagementLogsController);
 
     ReportManagementLogsController.$inject = ['User', 'schedulerService', 'ChannelService',
-        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window'
+        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window','DATEFORMAT'
     ];
 
     function ReportManagementLogsController(User, schedulerService, ChannelService,
-        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window) {
+        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window,DATEFORMAT) {
 
         var vm = this;
         vm.logs = []
@@ -28,6 +28,7 @@
         vm.viewJiraTicket = viewJiraTicket;
         vm.getLabelClass = getLabelClass;
         vm.enableTicketCreation = enableTicketCreation;
+        vm.dateFormat=DATEFORMAT.dateTime;
         activate();
         ///////////////////////////////////////
 
@@ -74,7 +75,7 @@
 
 
         function goToViewDataPage(log) {
-            if (log.task_status == "success" && log.viewData != "") {
+            if (log.taskStatus === "success" && log.viewData !== "") {
                 ReportManagementUtilsService.goToViewDataPage(log.viewData);
             }
         }
@@ -95,7 +96,7 @@
         function viewJiraTicket(log) {
             $window.open(log.viewTicket, '_blank');
         }
-       
+
         function enableTicketCreation(log) {
             if (!log.isTicketCreated && log.thresholdMet) {
                 log.enableTicketCreation = !log.enableTicketCreation;
@@ -105,14 +106,14 @@
                     },
                     function (error) {
                         $rootScope.showErrorSingleToast({
-                            text: 'Error while disable ticket creation',
+                            text: 'Error occured while disabling ticket creation',
                             title: "Error"
                         });
                     });
             }
         }
         function getLabelClass(log) {
-            if (log.isTicketCreated == true || log.thresholdMet == false || log.taskStatus != "success") {
+            if (log.isTicketCreated || !log.thresholdMet || log.taskStatus !== "success") {
                 return 'disabled';
             }
         }

@@ -5,12 +5,17 @@ import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.AddTeamConfigsRequest;
 import com.flair.bi.messages.report.ChannelParameters;
 import com.flair.bi.messages.report.ConnectionProperties;
+import com.flair.bi.messages.report.CreateJiraTicketRequest;
+import com.flair.bi.messages.report.CreateJiraTicketResponse;
 import com.flair.bi.messages.report.DeleteChannelConfigRequest;
 import com.flair.bi.messages.report.DeleteScheduledReportRequest;
+import com.flair.bi.messages.report.DisableTicketCreationRequest;
 import com.flair.bi.messages.report.Email;
 import com.flair.bi.messages.report.EmailParameters;
 import com.flair.bi.messages.report.ExecuteReportRequest;
 import com.flair.bi.messages.report.ExecuteReportResponse;
+import com.flair.bi.messages.report.GetAllJiraRequest;
+import com.flair.bi.messages.report.GetAllJiraResponse;
 import com.flair.bi.messages.report.GetChannelPropertiesRequest;
 import com.flair.bi.messages.report.GetChannelPropertiesResponse;
 import com.flair.bi.messages.report.GetEmailConfigRequest;
@@ -43,11 +48,6 @@ import com.flair.bi.messages.report.TeamConfigParameters;
 import com.flair.bi.messages.report.UpdateEmailSMTPRequest;
 import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
-import com.flair.bi.messages.report.createjiraTicketRequest;
-import com.flair.bi.messages.report.createjiraTicketResponse;
-import com.flair.bi.messages.report.getAllJiraRequest;
-import com.flair.bi.messages.report.getAllJiraResponse;
-import com.flair.bi.messages.report.ConfigsResponse;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
@@ -55,6 +55,7 @@ import com.flair.bi.service.dto.scheduler.ConnectionPropertiesDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
@@ -200,6 +201,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         return GetSchedulerReportLogsDTO.builder()
                 .message(StringUtils.isEmpty(result.getMessage()) ? null : result.getMessage())
                 .schedulerLogs(toLogs(result.getSchedulerLogsList()))
+                .totalRecords(result.getTotalRecords())
                 .build();
     }
 
@@ -556,14 +558,18 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
-		createjiraTicketResponse response = getReportStub().createjiraTicket(createjiraTicketRequest.newBuilder().setId(id).build());
+		CreateJiraTicketResponse response = getReportStub().createJiraTicket(CreateJiraTicketRequest.newBuilder().setId(id).build());
 		return GetJiraTicketResponseDTO.builder().jiraTicketLink(response.getJiraTicketLink()).message(response.getMessage()).build();
 	}
 
 	@Override
-	public List<JiraTicketsDTO> getJiraTickets(String status) {
-		getAllJiraResponse response = getReportStub().getAllJira(getAllJiraRequest.newBuilder().setStatus(status).build());
-		return toJiraTicketsDTOList(response.getRecordsList());
+	public GetJiraTicketsDTO getJiraTickets(String status, Integer page, Integer pageSize) {
+		GetAllJiraResponse response = getReportStub().getAllJira(GetAllJiraRequest.newBuilder()
+				.setStatus(status)
+				.setPage(page)
+				.setPageSize(pageSize)
+				.build());
+		return GetJiraTicketsDTO.builder().records(toJiraTicketsDTOList(response.getRecordsList())).totalRecords(response.getTotalRecords()).build();
 	}
 
 	private List<JiraTicketsDTO> toJiraTicketsDTOList(List<JiraTickets> list) {
@@ -581,7 +587,15 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		jiraTicketsDTO.setReporter(jiraTickets.getReporter());
 		jiraTicketsDTO.setStatus(jiraTickets.getStatus());
 		jiraTicketsDTO.setSummary(jiraTickets.getSummary());
+		jiraTicketsDTO.setViewTicket(jiraTickets.getViewTicket());
+		jiraTicketsDTO.setCreatedBy(jiraTickets.getCreatedBy());
 		return jiraTicketsDTO;
+	}
+
+	@Override
+	public String disableTicketCreationRequest(Integer schedulerTaskLogId) {
+		ConfigsResponse response=getReportStub().disableTicketCreation(DisableTicketCreationRequest.newBuilder().setSchedulerTaskLogId(schedulerTaskLogId).build());
+		return response.getMessage();
 	}
 
 }

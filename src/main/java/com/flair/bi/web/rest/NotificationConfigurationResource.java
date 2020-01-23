@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -35,79 +37,100 @@ public class NotificationConfigurationResource {
 
 	@GetMapping("/notification/channelParameters/")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
 	public GetChannelConnectionDTO getChannelParameters(@RequestParam(required = false) String channel) {
 		return schedulerService.getChannelParameters(channel);
 	}
 
 	@PostMapping("/notification/createTeamConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'WRITE','APPLICATION')")
 	public String createTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO) {
 		return schedulerService.createTeamConfig(teamConfigParametersDTO);
 	}
 
 	@PutMapping("/notification/updateTeamConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'UPDATE','APPLICATION')")
 	public String updateTeamConfig(@Valid @RequestBody TeamConfigParametersDTO teamConfigParametersDTO) {
 		return schedulerService.updateTeamConfig(teamConfigParametersDTO);
 	}
 
 	@PostMapping("/notification/createEmailConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'WRITE','APPLICATION')")
 	public String createEmailConfig(@Valid @RequestBody EmailConfigParametersDTO emailConfigParametersDTO) {
 		return schedulerService.createEmailConfig(emailConfigParametersDTO);
 	}
 
 	@PutMapping("/notification/updateEmailConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'UPDATE','APPLICATION')")
 	public String updateEmailConfig(@Valid @RequestBody EmailConfigParametersDTO emailConfigParametersDTO) {
 		return schedulerService.updateEmailConfig(emailConfigParametersDTO);
 	}
 
 	@GetMapping("/notification/getEmailConfig/")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
 	public EmailConfigParametersDTO getEmailConfig(@RequestParam(required = false) Integer id) {
 		return schedulerService.getEmailConfig(id);
 	}
 
 	@GetMapping("/notification/getTeamConfig/")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
 	public List<TeamConfigParametersDTO> getTeamConfig(@RequestParam(required = false) Integer id) {
 		return schedulerService.getTeamConfig(id);
 	}
 
 	@DeleteMapping("/notification/deleteChannelConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'DELETE','APPLICATION')")
 	public String deleteChannelConfig(@RequestParam Integer id) {
 		return schedulerService.deleteChannelConfig(id);
 	}
 
 	@PostMapping("/notification/createJiraConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'WRITE','APPLICATION')")
 	public String createJiraConfig(@Valid @RequestBody JiraParametersDTO jiraParametersDTO) {
 		return schedulerService.createJiraConfig(jiraParametersDTO);
 	}
 
 	@PutMapping("/notification/updateJiraConfig")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'UPDATE','APPLICATION')")
 	public String updateJiraConfig(@Valid @RequestBody JiraParametersDTO jiraParametersDTO) {
 		return schedulerService.updateJiraConfig(jiraParametersDTO);
 	}
 
 	@GetMapping("/notification/getJiraConfig/")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
 	public JiraParametersDTO getJiraConfig(@RequestParam(required = false) Integer id) {
 		return schedulerService.getJiraConfig(id);
 	}
 	
 	@GetMapping("/notification/createJiraTicket/")
 	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
 	public GetJiraTicketResponseDTO createJiraTicket(@RequestParam Integer id) {
 		return schedulerService.createJiraTicket(id);
 	}
 
 	@GetMapping("/notification/getJiraTickets/")
 	@Timed
-	List<JiraTicketsDTO> getJiraTickets(@RequestParam String status) {
-		return schedulerService.getJiraTickets(status);
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
+	GetJiraTicketsDTO getJiraTickets(@RequestParam String status,@RequestParam Integer page,@RequestParam Integer pageSize) {
+		return schedulerService.getJiraTickets(status,page,pageSize);
 	}
+
+	@GetMapping("/notification/disableTicketCreationRequest/")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
+	String disableTicketCreationRequest(@RequestParam Integer schedulerTaskLogId) {
+		return schedulerService.disableTicketCreationRequest(schedulerTaskLogId);
+	}
+
 }

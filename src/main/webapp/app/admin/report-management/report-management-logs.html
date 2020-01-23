@@ -29,7 +29,7 @@
                         <th>
                             <span data-translate="reportManagement.queryID"></span>
                         </th>
-                        <th style="width: 100px;">
+                        <th class="logInfo">
                             <span data-translate="reportManagement.status"></span>
                         </th>
                         <th>
@@ -43,7 +43,7 @@
                 <tbody>
                     <tr ng-repeat="log in vm.logs">
                         <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
-                        <td>{{log.taskExecuted | date : "dd.MM.y" }}</td>
+                        <td>{{log.taskExecuted | date : "vm.dateFormat" }}</td>
                         <td>{{log.dashboardName  }}</td>
                         <td>{{log.viewName}}</td>
                         <td>{{log.descripition}}</td>

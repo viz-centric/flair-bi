@@ -342,10 +342,10 @@
         }
 
         function deleteChannelConfig(data, channel) {
-            var title = channel == "team" ? data.webhookName + " webhook URL" : "configuration";
+            var title = channel == "team" ? data.webhookName + " webhook URL" : "configuration";
             swal(
-                "Are you sure?",
-                "You want to delete " + title, {
+                "Are you sure?",
+                "You want to delete " + title, {
                 dangerMode: true,
                 buttons: true,
             })
@@ -356,7 +356,7 @@
                                 .then(function (success) {
                                     title = channel == "team" ? data.webhookName + "Webhook" : "Configuration";
                                     var info = {
-                                        text: title + " delete Webhook delete successfully",
+                                        text: title + " delete Webhook delete successfully",
                                         title: "Updated"
                                     }
                                     vm.config[channel].getData();

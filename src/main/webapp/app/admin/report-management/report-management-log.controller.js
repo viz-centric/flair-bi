@@ -29,11 +29,13 @@
         vm.getLabelClass = getLabelClass;
         vm.enableTicketCreation = enableTicketCreation;
         vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
+        vm.getJiraSettings = getJiraSettings;
         activate();
         ///////////////////////////////////////
 
         function activate() {
             getScheduledReportsLogs(vm.visualizationid);
+            vm.getJiraSettings();
         }
 
         function getScheduledReportsLogs(visualizationid) {
@@ -83,6 +85,8 @@
             ChannelService.createJiraTicket(log.schedulerTaskMetaId).then(
                 function (response) {
                     if (response.data) {
+                        log.isTicketCreated = true;
+                        log.viewTicket = response.data.jiraTicketLink;
                         $window.open(response.data.jiraTicketLink, '_blank');
                     }
                 },
@@ -116,6 +120,19 @@
             if (log.isTicketCreated || !log.thresholdMet || log.taskStatus !== "success") {
                 return REPORTMANAGEMENTCONSTANTS.disabledTicketCreation;
             }
+        }
+        function getJiraSettings() {
+            ChannelService.getJiraConfig(0)
+                .then(function (success) {
+                    vm.jiraSetting = success.data;
+
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
         }
     }
 })();

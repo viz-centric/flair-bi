@@ -10,7 +10,8 @@
         "proxyGrpcService",
         "stompClientService",
         "AuthServerProvider",
-        "schedulerService"
+        "schedulerService",
+        "REPORTMANAGEMENTCONSTANTS"
     ];
 
     function FlairBiDisplayVisualizationTableviewController($scope,
@@ -19,11 +20,13 @@
         proxyGrpcService,
         stompClientService,
         AuthServerProvider,
-        schedulerService) {
+        schedulerService,
+        REPORTMANAGEMENTCONSTANTS) {
         var vm = this;
         vm.tableData = [];
         vm.tablekey = [];
         vm.reportData;
+        vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
         activate();
         ///////////////
 

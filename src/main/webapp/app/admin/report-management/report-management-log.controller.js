@@ -5,12 +5,12 @@
         .module('flairbiApp')
         .controller('ReportManagementLogsController', ReportManagementLogsController);
 
-    ReportManagementLogsController.$inject = ['User', 'schedulerService','ChannelService',
-        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService','$window'
+    ReportManagementLogsController.$inject = ['User', 'schedulerService', 'ChannelService',
+        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window', 'REPORTMANAGEMENTCONSTANTS'
     ];
 
-    function ReportManagementLogsController(User, schedulerService,ChannelService,
-        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService,$window) {
+    function ReportManagementLogsController(User, schedulerService, ChannelService,
+        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window, REPORTMANAGEMENTCONSTANTS) {
 
         var vm = this;
         vm.logs = []
@@ -26,7 +26,9 @@
         vm.goToViewDataPage = goToViewDataPage;
         vm.createJira = createJira;
         vm.viewJiraTicket = viewJiraTicket;
-        vm.setTicketCreation = setTicketCreation;
+        vm.getLabelClass = getLabelClass;
+        vm.enableTicketCreation = enableTicketCreation;
+        vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
         activate();
         ///////////////////////////////////////
 
@@ -73,7 +75,7 @@
 
 
         function goToViewDataPage(log) {
-            if (log.task_status == "success" && log.viewData != "") {
+            if (log.taskStatus === "success" && log.viewData !== "") {
                 ReportManagementUtilsService.goToViewDataPage(log.viewData);
             }
         }
@@ -94,9 +96,25 @@
         function viewJiraTicket(log) {
             $window.open(log.viewTicket, '_blank');
         }
-        function setTicketCreation(log, enableTicketCreation) {
-            if (!log.isTicketCreated) {
-                log.enableTicketCreation = enableTicketCreation;
+
+        function enableTicketCreation(log) {
+            if (!log.isTicketCreated && log.thresholdMet) {
+                log.enableTicketCreation = !log.enableTicketCreation;
+                schedulerService.disableTicketCreation(log.schedulerTaskMetaId).then(
+                    function (response) {
+
+                    },
+                    function (error) {
+                        $rootScope.showErrorSingleToast({
+                            text: 'Error occured while disabling ticket creation',
+                            title: "Error"
+                        });
+                    });
+            }
+        }
+        function getLabelClass(log) {
+            if (log.isTicketCreated || !log.thresholdMet || log.taskStatus !== "success") {
+                return REPORTMANAGEMENTCONSTANTS.disabledTicketCreation;
             }
         }
     }

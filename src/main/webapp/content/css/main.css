@@ -6745,8 +6745,11 @@ input.select2-active {
   height: 18px;
   width: 18px; }
 
-#reportLog label.disabled .fa-check-square-o {
+#reportLog label.disabled i {
   opacity: 0.5; }
+
+#reportLog .logInfo {
+  width: 100px; }
 
 .table-view {
   min-width: 95%; }

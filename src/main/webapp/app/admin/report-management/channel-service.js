@@ -98,9 +98,9 @@
                 method: 'GET'
             });
         }
-        function getJiraTickets(status) {
+        function getJiraTickets(status,page,pageSize) {
             return $http({
-                url: 'api/notification/getJiraTickets/?status=' + status + '',
+                url: 'api/notification/getJiraTickets/?status=' + status + '&page='+page+'&pageSize='+pageSize+'',
                 method: 'GET'
             });
         }

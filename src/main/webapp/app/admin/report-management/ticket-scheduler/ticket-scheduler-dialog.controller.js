@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('ticketSchedulerDialog', ticketSchedulerDialog);
 
-    ticketSchedulerDialog.$inject = ['$scope', 'data', '$uibModalInstance', '$rootScope', 'ChannelService', 'scheduler_channels'];
+    ticketSchedulerDialog.$inject = ['$scope', 'data', 'config', '$uibModalInstance', '$rootScope', 'ChannelService', 'scheduler_channels'];
 
-    function ticketSchedulerDialog($scope, data, $uibModalInstance, $rootScope, ChannelService, scheduler_channels) {
+    function ticketSchedulerDialog($scope, data, config, $uibModalInstance, $rootScope, ChannelService, scheduler_channels) {
         var vm = this;
         vm.clear = clear;
         vm.webhookList = data;
@@ -25,14 +25,15 @@
             $uibModalInstance.close();
         }
         function notifyOpenedJiraTicket() {
-            var teamConfig = {
+            var jiraConfig = {
                 channels: vm.selectedChannel,
-                webhookID: vm.webhook
+                webhookID: vm.webhook,
+                project: config.key
             }
-            ChannelService.createTeamConfig(teamConfig)
+            ChannelService.notifyOpenedJiraTicket(jiraConfig)
                 .then(function (success) {
                     var info = {
-                        text: "new team config is saved into database",
+                        text: "Notification sent successfully for open tickets",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);

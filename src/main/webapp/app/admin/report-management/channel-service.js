@@ -5,7 +5,7 @@
         .module('flairbiApp')
         .factory('ChannelService', ChannelService);
 
-        ChannelService.$inject = ['$http'];
+    ChannelService.$inject = ['$http'];
 
     function ChannelService($http) {
         var service = {
@@ -21,7 +21,8 @@
             createJiraConfig: createJiraConfig,
             getJiraConfig: getJiraConfig,
             createJiraTicket: createJiraTicket,
-            getJiraTickets: getJiraTickets
+            getJiraTickets: getJiraTickets,
+            notifyOpenedJiraTicket: notifyOpenedJiraTicket
         };
 
         return service;
@@ -98,10 +99,17 @@
                 method: 'GET'
             });
         }
-        function getJiraTickets(status,page,pageSize) {
+        function getJiraTickets(status, page, pageSize) {
             return $http({
-                url: 'api/notification/getJiraTickets/?status=' + status + '&page='+page+'&pageSize='+pageSize+'',
+                url: 'api/notification/getJiraTickets/?status=' + status + '&page=' + page + '&pageSize=' + pageSize + '',
                 method: 'GET'
+            });
+        }
+        function notifyOpenedJiraTicket(body) {
+            return $http({
+                url: 'api/notification/notifyOpenedJiraTicket',
+                method: 'POST',
+                data: body
             });
         }
     }

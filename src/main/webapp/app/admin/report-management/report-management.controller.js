@@ -98,6 +98,7 @@
             'tasklogger': {
                 getData: function () {
                     getWebhookList();
+                    getJiraSettings();
                     getJiraTickets(vm.jiraTicketStatus, vm.jiraPage - 1, vm.JiraItemsPerPage);
                 }
             }
@@ -358,7 +359,7 @@
                 }
             }).result.then(function () {
                 vm.config["team"].getData();
-             }, function () { });
+            }, function () { });
         }
 
         function deleteChannelConfig(data, channel) {
@@ -409,6 +410,9 @@
                 resolve: {
                     data: function () {
                         return vm.webhookList;
+                    },
+                    config: function () {
+                        return vm.jiraSetting;
                     }
                 }
             }).result.then(function () { }, function () { });

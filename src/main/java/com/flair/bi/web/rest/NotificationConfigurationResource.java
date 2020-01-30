@@ -22,7 +22,6 @@ import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
-import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -134,11 +133,5 @@ public class NotificationConfigurationResource {
 		return schedulerService.disableTicketCreationRequest(schedulerTaskLogId);
 	}
 
-	@PostMapping("/notification/notifyOpenedJiraTicket")
-	@Timed
-	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'WRITE','APPLICATION')")
-	public String notifyOpenedJiraTicket(@Valid @RequestBody OpenJiraTicketDTO openJiraTicketDTO) {
-		return schedulerService.notifyOpenedJiraTicket(openJiraTicketDTO);
-	}
 
 }

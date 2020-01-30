@@ -10,7 +10,6 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
-import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -64,6 +63,4 @@ public interface INotificationsGrpcService {
 	GetJiraTicketsDTO getJiraTickets(String status, Integer page, Integer pageSize);
 
 	String disableTicketCreationRequest(Integer schedulerTaskLogId);
-
-	String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO);
 }

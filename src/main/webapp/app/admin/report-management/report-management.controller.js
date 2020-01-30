@@ -7,11 +7,11 @@
 
     ReportManagementController.$inject = ['User', 'schedulerService', 'ChannelService',
         'AlertService', 'pagingParams', 'paginationConstants', '$rootScope', '$state',
-        'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal'
+        'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal', '$location'
     ];
 
     function ReportManagementController(User, schedulerService, ChannelService,
-        AlertService, pagingParams, paginationConstants, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal) {
+        AlertService, pagingParams, paginationConstants, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal, $location) {
 
         var vm = this;
 
@@ -42,6 +42,7 @@
 
         vm.deleteChannelConfig = deleteChannelConfig;
         vm.openTeamConfigDialog = openTeamConfigDialog;
+        vm.openTicketSchedulerDialog = openTicketSchedulerDialog;
         vm.reportManagementTabClick = reportManagementTabClick;
         vm.getWebhookList = getWebhookList;
         vm.saveJiraSetting = saveJiraSetting;
@@ -61,6 +62,11 @@
         vm.jiraStatusList = ["All", "Closed", "Open", "To Do", "In Progress"];
         vm.jiraTicketStatus = "All";
         vm.connection = {};
+        vm.activeTab = {
+            reportActiveTab: $location.absUrl().endsWith("#Reports"),
+            configurationActiveTab: $location.absUrl().endsWith("#Configuration"),
+            taskLoggerActiveTab: $location.absUrl().endsWith("#TaskLogger")
+        }
         vm.config = {
             'team': {
                 getData: function () {
@@ -91,6 +97,8 @@
             },
             'tasklogger': {
                 getData: function () {
+                    getWebhookList();
+                    getJiraSettings();
                     getJiraTickets(vm.jiraTicketStatus, vm.jiraPage - 1, vm.JiraItemsPerPage);
                 }
             }
@@ -101,7 +109,20 @@
 
         function activate() {
 
-            vm.config['report'].getData();
+            if (vm.activeTab.reportActiveTab) {
+                vm.config['report'].getData();
+            }
+            else if (vm.activeTab.configurationActiveTab) {
+                vm.config['configuration'].getData();
+            }
+            else if (vm.activeTab.taskLoggerActiveTab) {
+                vm.config['tasklogger'].getData();
+            }
+            else {
+                vm.activeTab.reportActiveTab = true;
+                vm.config['report'].getData();
+            }
+
         }
 
         function reportManagementTabClick(tabName) {
@@ -338,7 +359,7 @@
                 }
             }).result.then(function () {
                 vm.config["team"].getData();
-             }, function () { });
+            }, function () { });
         }
 
         function deleteChannelConfig(data, channel) {
@@ -376,6 +397,25 @@
                     }
 
                 });
+        }
+
+        function openTicketSchedulerDialog() {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'app/admin/report-management/ticket-scheduler/ticket-scheduler-dialog.html',
+                controller: 'ticketSchedulerDialog',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: "sm",
+                resolve: {
+                    data: function () {
+                        return vm.webhookList;
+                    },
+                    config: function () {
+                        return vm.jiraSetting;
+                    }
+                }
+            }).result.then(function () { }, function () { });
         }
     }
 })();

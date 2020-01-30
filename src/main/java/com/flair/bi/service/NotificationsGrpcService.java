@@ -603,7 +603,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 
 	@Override
 	public String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO) {
-		ConfigsResponse response = getReportStub().notifyOpenedJiraTicket(NotifyOpenedJiraTicketRequest.newBuilder().setOpenJiraTicketConfig(toOpenJiraTicket(openJiraTicketDTO)).build());
+		ConfigsResponse response = getReportStub().notifyOpenedJiraTicket(NotifyOpenedJiraTicketRequest.newBuilder().setOpenJiraTicket(toOpenJiraTicket(openJiraTicketDTO)).build());
 		return response.getMessage();
 	}
 

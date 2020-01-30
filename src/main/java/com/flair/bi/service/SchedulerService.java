@@ -16,6 +16,7 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
 import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
+import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
@@ -172,6 +173,10 @@ public class SchedulerService {
 
 	public String disableTicketCreationRequest(Integer schedulerTaskLogId) {
 		return notificationsGrpcService.disableTicketCreationRequest(schedulerTaskLogId);
+	}
+
+	public String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO) {
+		return notificationsGrpcService.notifyOpenedJiraTicket(openJiraTicketDTO);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

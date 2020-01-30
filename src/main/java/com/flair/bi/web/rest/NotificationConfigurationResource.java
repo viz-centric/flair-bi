@@ -133,5 +133,4 @@ public class NotificationConfigurationResource {
 		return schedulerService.disableTicketCreationRequest(schedulerTaskLogId);
 	}
 
-
 }

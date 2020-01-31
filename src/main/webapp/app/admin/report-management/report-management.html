@@ -1,21 +1,23 @@
 <div id="report-management">
     <div class="tabbable full-width-tabs panel panel-primary">
         <ul class="nav nav-tabs report">
-            <li class="active" ng-click="vm.reportManagementTabClick('report')">
+            <li ng-class="{active: vm.activeTab.reportActiveTab}" ng-click="vm.reportManagementTabClick('report')">
                 <a data-toggle="tab" href="#/administration/report-management#Reports">Reports
                     <svg id="report-tab">
                         <use xlink:href="#new-email-report"></use>
                     </svg>
                 </a>
             </li>
-            <li ng-click="vm.reportManagementTabClick('configuration')">
+            <li ng-class="{active: vm.activeTab.configurationActiveTab}"
+                ng-click="vm.reportManagementTabClick('configuration')">
                 <a data-toggle="tab" href="#/administration/report-management#Configuration">Configuration
                     <svg id="configuration-tab">
                         <use xlink:href="#admin-configuration"></use>
                     </svg>
                 </a>
             </li>
-            <li ng-click="vm.reportManagementTabClick('tasklogger')">
+            <li ng-class="{active: vm.activeTab.taskLoggerActiveTab}"
+                ng-click="vm.reportManagementTabClick('tasklogger')">
                 <a data-toggle="tab" href="#/administration/report-management#TaskLogger">Task Logger
                     <svg id="Task-tab">
                         <use xlink:href="#admin-logs"></use>
@@ -25,7 +27,7 @@
         </ul>
 
         <div class="tab-content">
-            <div id="Reports" class="tab-pane fade in active">
+            <div id="Reports" class="tab-pane fade in" ng-class="{active: vm.activeTab.reportActiveTab}">
                 <div class="fbibox report-management">
                     <div class="fbibox-content">
                         <div class="row filters">
@@ -169,7 +171,7 @@
                     </div>
                 </div>
             </div>
-            <div id="Configuration" class="tab-pane fade">
+            <div id="Configuration" class="tab-pane fade in" ng-class="{active: vm.activeTab.configurationActiveTab}">
 
                 <div class="fbibox report-management">
                     <div class="fbibox-content">
@@ -328,7 +330,7 @@
 
                 </div>
             </div>
-            <div id="TaskLogger" class="tab-pane fade">
+            <div id="TaskLogger" class="tab-pane fade in" ng-class="{active: vm.activeTab.taskLoggerActiveTab}">
                 <div class="fbibox report-management">
                     <div class="fbibox-content">
                         <div class="table-responsive">
@@ -338,6 +340,11 @@
                                         ng-model="vm.jiraTicketStatus"
                                         ng-change="vm.reportManagementTabClick('tasklogger')"
                                         ng-options="status for status in vm.jiraStatusList" required=""></select>
+                                </div>
+                                <div class="col-md-9 text-right">
+                                    <svg id="configuration-tab" ng-click="vm.openTicketSchedulerDialog()">
+                                        <use xlink:href="#admin-configuration"></use>
+                                    </svg>
                                 </div>
 
                             </div>

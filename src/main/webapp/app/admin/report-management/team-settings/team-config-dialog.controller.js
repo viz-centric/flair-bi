@@ -38,7 +38,7 @@
             ChannelService.createTeamConfig(teamConfig)
                 .then(function (success) {
                     var info = {
-                        text: "new team config is saved into database",
+                        text: "team's config is saved",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);

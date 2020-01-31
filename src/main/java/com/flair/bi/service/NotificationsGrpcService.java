@@ -598,4 +598,18 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		return response.getMessage();
 	}
 
+	@Override
+	public String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO) {
+		ConfigsResponse response = getReportStub().notifyOpenedJiraTicket(NotifyOpenedJiraTicketRequest.newBuilder().setOpenJiraTicket(toOpenJiraTicket(openJiraTicketDTO)).build());
+		return response.getMessage();
+	}
+
+	private OpenJiraTicket toOpenJiraTicket(OpenJiraTicketDTO openJiraTicketDTO) {
+		return OpenJiraTicket.newBuilder()
+				.setProject(openJiraTicketDTO.getProject())
+				.setWebhookID(openJiraTicketDTO.getWebhookID())
+				.addAllChannels(Arrays.asList(openJiraTicketDTO.getChannels()))
+				.build();
+	}
+
 }

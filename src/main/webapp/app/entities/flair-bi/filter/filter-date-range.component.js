@@ -8,7 +8,7 @@
             controller: FilterDateRangeController,
             controllerAs: 'vm',
             bindings: {
-                dimension: '=',
+                dimension: '<',
                 onRefreshDay: '&',
                 onRefreshRange: '&',
                 onRefreshDynamic: '&'
@@ -61,16 +61,22 @@
         var vm = this;
 
         vm.$onInit = onInit;
+        vm.$onChanges = $onChanges;
+        vm.currentDimension = {customDynamicDateRange: 1 };
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
         vm.onCustomDynamicDateRangeChange = onCustomDynamicDateRangeChange;
         vm.dateRangeTab = 0;
-        vm.dimension.customDynamicDateRange = 1;
+        // vm.dimension.customDynamicDateRange = 1;
         vm.currentDynamicDateRangeConfig = null;
         vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
-        vm.dimension.selected='';
-        vm.dimension.selected2='';
+        // vm.dimension.selected='';
+        // vm.dimension.selected2='';
+        vm.datePickerOptions = {
+            timezone: '+0000'
+            // timezone: '+0' + new Date().getTimezoneOffset()/60 + '00' ,
+        };
 
         ////////////////
 
@@ -89,7 +95,7 @@
             var date = new Date();
             var config = vm.currentDynamicDateRangeConfig;
             if (config.isCustom) {
-                date.setDate(date.getDate() - vm.dimension.customDynamicDateRange);
+                date.setDate(date.getDate() - vm.currentDimension.customDynamicDateRange);
             } else {
                 date.setDate(date.getDate() - config.period.days);
                 date.setMonth(date.getMonth() - config.period.months);
@@ -104,21 +110,33 @@
 
         function onInputChange() {
             if (vm.dateRangeTab === TAB_DAY) {
-                vm.onRefreshDay();
+                vm.onRefreshDay({dimension: vm.currentDimension});
             } else if (vm.dateRangeTab === TAB_RANGE) {
-                vm.onRefreshRange();
+                vm.onRefreshRange({dimension: vm.currentDimension});
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
-                vm.onRefreshDynamic({startDate: getStartDateRange()});
+                vm.onRefreshDynamic({startDate: getStartDateRange(), dimension: vm.currentDimension});
             }
         }
 
         function setDateRangeSubscription() {
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
-                vm.dimension.selected=dateRange.startDate;
-                vm.dimension.selected2=dateRange.endDate;
+                console.log('event fired range', dateRange);
+                vm.currentDimension.selected=dateRange.startDate;
+                vm.currentDimension.selected2=dateRange.endDate;
             });
 
             $scope.$on('$destroy', unsubscribe);
+        }
+
+        function $onChanges(changesObj) {
+            console.log('on changes', changesObj);
+            if (changesObj.dimension) {
+                vm.currentDimension = {
+                    customDynamicDateRange: vm.dimension.customDynamicDateRange,
+                    selected: vm.dimension.selected,
+                    selected2: vm.dimension.selected2,
+                };
+            }
         }
 
     }

@@ -176,17 +176,21 @@
             return size;
         }
 
-        function changeDateFormat(date){
-        if((typeof date)=='string'){
-            return date;
-        }else{
-            return [ (date.getFullYear()),
-                        date.getMonth()+1,
-                        date.getDate()].join('-')+
-                        ' ' +
-                      [ date.getHours(),
-                        date.getMinutes(),
-                        date.getSeconds()].join(':');
+        function changeDateFormat(date) {
+            if ((typeof date) == 'string') {
+                console.log('changeDateFormat string', date);
+                return date;
+            } else {
+                throw new Error("Did not expect date " + date);
+                // console.log('changeDateFormat date', date);
+                return date.toISOString();
+                // return [ (date.getFullYear()),
+                //             date.getMonth()+1,
+                //             date.getDate()].join('-')+
+                //             ' ' +
+                //           [ date.getHours(),
+                //             date.getMinutes(),
+                //             date.getSeconds()].join(':');
             }
         }
 

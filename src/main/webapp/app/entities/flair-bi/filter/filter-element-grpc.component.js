@@ -42,20 +42,23 @@
         }
 
         function resetTimezone(startDate) {
+            // var date = new Date(startDate.getTime());
+            // date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            // return date;
             return startDate;
         }
 
         function endOfDay(startDate) {
             var date = new Date(startDate);
-            date.setHours(23, 59, 59);
+            date.setDate(date.getDate() + 1);
             return date;
         }
 
-        function refreshForDay() {
-            var startDate = vm.dimension.selected;
+        function refreshForDay(dimension) {
+            var startDate = resetTimezone(dimension.selected);
+            console.log('refreshForDay startDate', startDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate) {
-                startDate = resetTimezone(startDate);
                 var nextDay = endOfDay(startDate);
                 addDateRangeFilter(startDate);
                 addDateRangeFilter(nextDay);
@@ -66,10 +69,8 @@
         function onRefreshDynamic(startDate) {
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate) {
-                startDate = resetTimezone(startDate);
-                var today = resetTimezone(new Date());
-                addDateRangeFilter(startDate);
-                addDateRangeFilter(today);
+                addDateRangeFilter(resetTimezone(startDate));
+                addDateRangeFilter(resetTimezone(new Date()));
             }
             applyFilter();
         }
@@ -79,10 +80,8 @@
             var endDate = vm.dimension.selected2;
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate && endDate) {
-                startDate = resetTimezone(startDate);
-                endDate = resetTimezone(endDate);
-                addDateRangeFilter(startDate);
-                addDateRangeFilter(endDate);
+                addDateRangeFilter(resetTimezone(startDate));
+                addDateRangeFilter(resetTimezone(endDate));
             }
         }
 
@@ -129,8 +128,8 @@
             } else {
                 if (filterParameters[filter].length != 0) {
                     var found = $filter('filter')(vm.dimensions, {'name': filter})[0];
-                    found.selected = [];
-                    found.selected2 = [];
+                    found.selected = null;
+                    found.selected2 = null;
                     filterParameters[filter] = [];
                     filterParametersService.save(filterParameters);
                     applyFilter();
@@ -210,6 +209,7 @@
 
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
+            console.log('refresh filters', myFilters);
             if (myFilters && myFilters.length > 0) {
                 vm.dimension.selected = myFilters.map(function (item) {
                     var newItem = {};

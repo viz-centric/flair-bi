@@ -11,7 +11,7 @@
         "viewName": "View Name",
         "queryID": "Query ID",
         "description": "Description",
-        "channel": "Channel Name",
+        "channel": "Channel",
         "thresholdMet": "Threshold Met",
         "thresholdAlert": "Is threshold Report",
         "subject": "Subject",
@@ -37,6 +37,7 @@
         "priority": "Priority",
         "reporter": "Reporter",
         "enableTicketCreation": "Enable Create Ticket",
-        "viewTicket": "View Ticket"
+        "viewTicket": "View Ticket",
+        "reportRecipient":"Report Recipient"
     }
 }

@@ -139,7 +139,7 @@
                                                     <span class="fa fa-eye views-icon fa-2x"></span>
                                                 </button>
                                                 <button type="submit" uib-tooltip="Logs"
-                                                    ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})"
+                                                    ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid,reportType:report.report.thresholdAlert})"
                                                     class="btn btn-default btn-sm">
                                                     <svg>
                                                         <use xlink:href="#admin-logs"></use>
@@ -215,20 +215,21 @@
                                                     connection="vm.connection"
                                                     ng-repeat="property in vm.emailChannelConfig[0].connectionProperties | orderBy: 'order'">
                                                 </channel-property-component>
-                                                <button ng-disabled="emailSetting.$invalid || vm.isSaving"
-                                                    class="btn btn-primary">
-                                                    <span>
-                                                        <i class="fa fa-save"></i> Save Configurations
-                                                    </span>
-                                                </button>
-                                                <button ng-disabled="vm.SMPTSetting.id===0" type="button"
-                                                    class="btn btn-danger"
-                                                    ng-click="vm.deleteChannelConfig(vm.SMPTSetting,'email')">
-                                                    <span>
-                                                        <i class="fa fa-trash"></i> Remove Configurations
-                                                    </span>
-                                                </button>
-
+                                                <div class="m-b-sm">
+                                                    <button ng-disabled="emailSetting.$invalid || vm.isSaving"
+                                                        class="btn btn-primary">
+                                                        <span>
+                                                            <i class="fa fa-save"></i> Save Configurations
+                                                        </span>
+                                                    </button>
+                                                    <button ng-disabled="vm.SMPTSetting.id===0" type="button"
+                                                        class="btn btn-danger"
+                                                        ng-click="vm.deleteChannelConfig(vm.SMPTSetting,'email')">
+                                                        <span>
+                                                            <i class="fa fa-trash"></i> Remove Configurations
+                                                        </span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -340,6 +341,10 @@
                                         ng-model="vm.jiraTicketStatus"
                                         ng-change="vm.reportManagementTabClick('tasklogger')"
                                         ng-options="status for status in vm.jiraStatusList" required=""></select>
+                                </div>
+                                <div class="col-md-1" id="refreshTicket" >
+                                    <span uib-tooltip="Refresh" tooltip-placement="right" ng-click="vm.reportManagementTabClick('tasklogger')" class="fa fa-refresh"
+                                        aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-9 text-right">
                                     <svg id="configuration-tab" ng-click="vm.openTicketSchedulerDialog()">

@@ -19,7 +19,7 @@
         activate();
         ////////////////
         function activate() {
-
+            resetSelectedChannels();
         }
         function clear() {
             $uibModalInstance.close();
@@ -55,6 +55,11 @@
             } else {
                 vm.selectedChannel.push(channel)
             }
+        }
+        function resetSelectedChannels(){
+            angular.forEach(vm.channels, function(value, key) {
+              vm.channels[key]=false;
+            });
         }
     }
 })();

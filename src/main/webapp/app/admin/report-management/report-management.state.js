@@ -110,7 +110,7 @@
             // })
             .state('report-management-log', {
                 parent:'report-management',
-                url: '/report/:visualizationid',
+                url: '/report/:visualizationid/:reportType',
                 data: {
                     authorities: [],
                     pageTitle: 'Report',

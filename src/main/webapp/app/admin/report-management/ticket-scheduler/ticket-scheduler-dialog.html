@@ -29,14 +29,15 @@
             <div class="form-group" ng-if="vm.channels.Teams">
                 <label class="control-label" for="emails">Select Webhooks*</label>
                 <select class="form-control" id="webhook" name="webhook" ng-model="vm.webhook" ng-options="webhook.id 
-                as webhook.webhookName for webhook in vm.webhookList" required></select>
+                as webhook.webhookName for webhook in vm.webhookList" required=""></select>
 
             </div>
         </div>
         <div class="modal-footer scheduler-footer">
             <div class="m-b-sm">
                 <button ng-click="vm.notifyOpenedJiraTicket()"
-                    ng-disabled="ticketScheduler.$invalid || vm.selectedChannel.length===0" class="btn btn-primary">
+                    ng-disabled="ticketScheduler.$invalid || vm.selectedChannel.length===0 || (vm.webhook===0 && vm.channels.Teams)"
+                    class="btn btn-primary">
                     <span>
                         <i class="fa fa-paper-plane"></i> Send Notification
                     </span>

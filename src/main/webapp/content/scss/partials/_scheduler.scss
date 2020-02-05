@@ -49,6 +49,9 @@
 		line-height: inherit;
 		border: 0;	
 	}
+	label.disabled i {
+		opacity: 0.5;
+	}
 
 }
 .scheduler-footer{

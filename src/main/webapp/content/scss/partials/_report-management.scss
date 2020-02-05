@@ -37,7 +37,7 @@
 }
 
 #report-management .full-width-tabs > ul.nav.nav-tabs > li > a {
-  text-align: left;
+  text-align: center;
 }
 
 #report-management .full-width-tabs svg#report-tab,
@@ -65,8 +65,13 @@
 #report-management .nav-tabs > li > a {
   text-decoration: none;
 }
+
+#report-management .nav-tabs > li:hover {
+  border-bottom: solid 1px #439dd3;
+  border-top: 0px;
+}
 #report-management .nav-tabs > li.active {
-  border: solid 1px #439dd3;
+  border-bottom: solid 1px #439dd3;
   border-top: 0px;
 }
 #report-management .nav-tabs > li.active > a {
@@ -190,6 +195,11 @@
   transform: rotate(-90deg);
 }
 
+#report-management #refreshTicket{
+  padding: 6px 0px;
+  font-size: 14px;
+}
+
 #reportLog {
   img {
     height: 18px;
@@ -199,7 +209,15 @@
   label.disabled i {
     opacity: 0.5;
   }
-  .logInfo{
-    width: 100px;
+  .logInfo {
+    max-width: 100px;
   }
+  td.text-left, th.text-left {
+    text-align: left !important;
+
+    li {
+      list-style-type: none;;
+    }
+  }
+  
 }

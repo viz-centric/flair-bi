@@ -12,6 +12,11 @@
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
+                <div ng-if="vm.WebhookList.length===0 || vm.SMPTSetting.id===0" class="alert alert-info alert-dismissible">
+                        <a href="#administration/report-management/report/{{vm.visualizationid}}" class="close"
+                            data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong><a class="alert-link" href="#/administration/report-management#Configuration"> Please configuer Email and team for scheduling report.</a></strong>
+                    </div>
             <div class="">
                 <div class="row container" ng-if="vm.scheduleObj.emailReporter && !vm.emailReporterEdit">
                     <div class="col-xs-4">
@@ -104,7 +109,7 @@
                         <div class="col-xs-8">
                             <div class="form-group">
                                 <label class="control-label" for="channels">Channels*</label>
-                                <label ng-click="vm.setChannel(key,value)" ng-repeat="(key, value) in vm.channels"
+                                <label ng-class="vm.getLabelClass(key)"  ng-click="vm.setChannel(key,value,vm.getLabelClass(key))" ng-repeat="(key, value) in vm.channels"
                                     class="flair-checkbox">
                                     <i
                                         class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':value,'fa-square-o-unchecked':!value} "></i>
@@ -145,7 +150,7 @@
 
                 <br />
                 <fieldset>
-                    <legend>Threshold Configuration</legend>
+                    <legend>Scheduler Configuration</legend>
                     <div class="row container threshold-alert-condition form-group"
                         ng-if="vm.scheduleObj.report.thresholdAlert">
                         <div class="col-xs-3">

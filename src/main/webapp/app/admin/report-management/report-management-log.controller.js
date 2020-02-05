@@ -15,6 +15,7 @@
         var vm = this;
         vm.logs = []
         vm.visualizationid = $stateParams.visualizationid;
+        vm.reportType = $stateParams.reportType;
         vm.page = 1;
         vm.totalItems = null;
         vm.links = null;
@@ -42,6 +43,11 @@
             schedulerService.getScheduleReportLogs(visualizationid, vm.itemsPerPage, pagingParams.page - 1).then(
                 function (response) {
                     vm.logs = response.data.schedulerLogs;
+
+                    vm.logs.forEach(element => {
+                        element.channel = JSON.parse(element.channel);
+                    });
+
                     vm.totalItems = response.data.totalRecords;
                     vm.queryCount = vm.totalItems;
                     vm.page = pagingParams.page;

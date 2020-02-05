@@ -6408,6 +6408,9 @@ input.select2-active {
   line-height: inherit;
   border: 0; }
 
+.scheduler-modal-body label.disabled i {
+  opacity: 0.5; }
+
 .scheduler-footer .cancel-job-icon {
   color: #ED5565; }
 
@@ -6612,7 +6615,7 @@ input.select2-active {
   width: 100%; }
 
 #report-management .full-width-tabs > ul.nav.nav-tabs > li > a {
-  text-align: left; }
+  text-align: center; }
 
 #report-management .full-width-tabs svg#report-tab,
 #report-management .full-width-tabs svg#configuration-tab,
@@ -6638,8 +6641,12 @@ input.select2-active {
 #report-management .nav-tabs > li > a {
   text-decoration: none; }
 
+#report-management .nav-tabs > li:hover {
+    border-bottom: solid 1px #439dd3;
+    border-top: 0px;  }
+
 #report-management .nav-tabs > li.active {
-  border: solid 1px #439dd3;
+  border-bottom: solid 1px #439dd3;
   border-top: 0px; }
 
 #report-management .nav-tabs > li.active > a {
@@ -6741,6 +6748,10 @@ input.select2-active {
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg); }
 
+#report-management #refreshTicket{
+    padding: 6px 0px;
+    font-size: 14px;  }
+
 #reportLog img {
   height: 18px;
   width: 18px; }
@@ -6749,7 +6760,11 @@ input.select2-active {
   opacity: 0.5; }
 
 #reportLog .logInfo {
-  width: 100px; }
-
-.table-view {
-  min-width: 95%; }
+  max-width: 100px;
+ }
+  #reportLog td.text-left ,#reportLog th.text-left {
+    text-align: left !important;
+ }
+  #reportLog td.text-left li {
+    list-style-type: none;;
+ }

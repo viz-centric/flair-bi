@@ -1997,7 +1997,8 @@ a {
       margin-bottom: 12px; }
       .home-container .box .box-title p {
         font-size: 20px;
-        margin: 0 0 15px 0; }
+        margin: 0 0 15px 0;
+        font-weight: bold; }
       .home-container .box .box-title img {
         float: right;
         margin: -63px -41px 0 0;
@@ -2103,7 +2104,6 @@ a {
           font-size: 13px;
           color: #676a6c;
           letter-spacing: 0.5px;
-          font-weight: 400;
           margin-top: 10px; }
         .home-container .home-right-container .alerts-tabs .tab svg {
           width: 19px;
@@ -2311,6 +2311,10 @@ a {
 
 .notification {
   border: 1px #e1e3e3 solid; }
+
+.home_label {
+  font-weight: 600;
+  font-family: "Times New Roman", Times, serif; }
 
 tags-input .tags {
   border: 1px solid #e1e3e3;
@@ -5218,8 +5222,7 @@ div.featuresList {
         font-size: 13px;
         color: #676a6c;
         line-height: 17px;
-        letter-spacing: 0.5px;
-        font-weight: 400; }
+        letter-spacing: 0.5px; }
     .information-card .information-card-body img {
       width: 102px;
       height: 65px;
@@ -6642,8 +6645,8 @@ input.select2-active {
   text-decoration: none; }
 
 #report-management .nav-tabs > li:hover {
-    border-bottom: solid 1px #439dd3;
-    border-top: 0px;  }
+  border-bottom: solid 1px #439dd3;
+  border-top: 0px; }
 
 #report-management .nav-tabs > li.active {
   border-bottom: solid 1px #439dd3;
@@ -6748,9 +6751,9 @@ input.select2-active {
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg); }
 
-#report-management #refreshTicket{
-    padding: 6px 0px;
-    font-size: 14px;  }
+#report-management #refreshTicket {
+  padding: 6px 0px;
+  font-size: 14px; }
 
 #reportLog img {
   height: 18px;
@@ -6760,11 +6763,12 @@ input.select2-active {
   opacity: 0.5; }
 
 #reportLog .logInfo {
-  max-width: 100px;
- }
-  #reportLog td.text-left ,#reportLog th.text-left {
-    text-align: left !important;
- }
-  #reportLog td.text-left li {
-    list-style-type: none;;
- }
+  max-width: 100px; }
+
+#reportLog td.text-left, #reportLog th.text-left {
+  text-align: left !important; }
+  #reportLog td.text-left li, #reportLog th.text-left li {
+    list-style-type: none; }
+
+.table-view {
+  min-width: 95%; }

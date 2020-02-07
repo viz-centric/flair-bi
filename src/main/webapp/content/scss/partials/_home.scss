@@ -315,7 +315,7 @@
       p {
         font-size: 20px;
         margin: 0 0 15px 0;
-        //float: left;
+        font-weight: bold;
       }
       img {
         float: right;
@@ -455,7 +455,6 @@
           font-size: 13px;
           color: #676a6c;
           letter-spacing: 0.5px;
-          font-weight: 400;
           margin-top: 10px;
         }
         svg {
@@ -730,4 +729,9 @@
 
 .notification {
   border: 1px #e1e3e3 solid;
+}
+
+.home_label{
+  font-weight: 600;
+  font-family: "Times New Roman", Times, serif;
 }

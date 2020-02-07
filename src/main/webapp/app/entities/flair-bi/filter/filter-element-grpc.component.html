@@ -2,9 +2,9 @@
     <label class="control-label">{{vm.dimension.name}}</label>
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension"
-            on-refresh-day="vm.onRefreshDay()"
-            on-refresh-range="vm.onRefreshRange()"
-            on-refresh-dynamic="vm.onRefreshDynamic(startDate)">
+            on-refresh-day="vm.onRefreshDay(startDate, endDate)"
+            on-refresh-range="vm.onRefreshRange(startDate, endDate)"
+            on-refresh-dynamic="vm.onRefreshDynamic(startDate, endDate)">
         </filter-date-range>
     </div>
     <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">

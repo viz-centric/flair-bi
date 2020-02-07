@@ -119,7 +119,7 @@
             }
             if (valueType === 'valueType') {
                 var dataType = meta.dataType || '';
-                console.log('value type values', values);
+                console.log('filter-parameters: value type values', values);
                 if (values.length === 2) {
                     return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {

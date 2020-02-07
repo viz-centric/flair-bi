@@ -47,7 +47,6 @@
             vm.dimensions.forEach(function (item) {
                 item.selected = null;
                 item.selected2 = null;
-                item.customDynamicDateRange=null;
             });
             filterParametersService.clear();
             filterParametersService.saveSelectedFilter($rootScope.updateWidget);

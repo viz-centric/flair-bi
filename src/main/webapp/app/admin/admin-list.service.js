@@ -110,7 +110,7 @@
             },
             {
                 image: "#admin-logs",
-                label: "Logs",
+                label: "Log Configuration",
                 href: "logs",
                 order: 7
             },

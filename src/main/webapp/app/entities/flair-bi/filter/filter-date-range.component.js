@@ -9,9 +9,7 @@
             controllerAs: 'vm',
             bindings: {
                 dimension: '<',
-                onRefreshDay: '&',
-                onRefreshRange: '&',
-                onRefreshDynamic: '&'
+                onDateChange: '&',
             }
         });
 
@@ -115,25 +113,25 @@
                 var endDate = resetTimezone(endOfDay(vm.currentDimension.selected.toISOString()));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
-                vm.onRefreshDay({
+                vm.onDateChange({
                     startDate: startDate,
                     endDate: endDate
                 });
             } else if (vm.dateRangeTab === TAB_RANGE) {
-                var endDate = resetTimezone(vm.currentDimension.selected2);
                 var startDate = resetTimezone(vm.currentDimension.selected);
+                var endDate = resetTimezone(vm.currentDimension.selected2);
                 console.log('filter-date-range-component: input change range', typeof startDate, startDate,
                     typeof endDate, endDate);
-                vm.onRefreshRange({
+                vm.onDateChange({
                     startDate: startDate,
                     endDate: endDate,
                 });
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
-                var endDate = resetTimezone(new Date().toISOString());
-                var startDate = resetTimezone(getStartDateRange().toISOString());
+                var startDate = resetTimezone(startOfDay(getStartDateRange().toISOString()));
+                var endDate = resetTimezone(endOfDay(new Date().toISOString()));
                 console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
                     typeof endDate, endDate);
-                vm.onRefreshDynamic({
+                vm.onDateChange({
                     startDate: startDate,
                     endDate: endDate
                 });
@@ -186,6 +184,15 @@
             }
             var date = new Date(startDate);
             date.setHours(23, 59, 59);
+            return date.toISOString();
+        }
+
+        function startOfDay(startDate) {
+            if (!startDate) {
+                return '';
+            }
+            var date = new Date(startDate);
+            date.setHours(0, 0, 0);
             return date.toISOString();
         }
 

@@ -24,9 +24,7 @@
         vm.added = added;
         vm.removed = removed;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
-        vm.onRefreshDay = refreshForRange;
-        vm.onRefreshRange = refreshForRange;
-        vm.onRefreshDynamic = refreshForRange;
+        vm.onDateChange = onDateChange;
         vm.removeTagFromFilterList=removeTagFromFilterList;
 
 
@@ -51,19 +49,7 @@
             return date;
         }
 
-        function refreshForDay(startDate) {
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
-            if (startDate) {
-                console.log('filter-element-grpc: refresh for day', typeof startDate, startDate);
-                startDate = resetTimezone(startDate);
-                var nextDay = endOfDay(startDate);
-                addDateRangeFilter(startDate);
-                addDateRangeFilter(nextDay);
-
-            }
-        }
-
-        function refreshForRange(startDate, endDate) {
+        function onDateChange(startDate, endDate) {
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
@@ -73,17 +59,6 @@
                 addDateRangeFilter(startDate);
                 addDateRangeFilter(endDate);
             }
-        }
-
-        function onRefreshDynamic(startDate, endDate) {
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
-            if (startDate && endDate) {
-                startDate = resetTimezone(startDate);
-                var today = resetTimezone(endDate);
-                addDateRangeFilter(startDate);
-                addDateRangeFilter(today);
-            }
-            applyFilter();
         }
 
         function canDisplayDateRangeControls(dimension) {

@@ -113,6 +113,7 @@
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
             if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                console.log('create body exp ', values, name);
                 values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
                 name = name.split('|')[1];
                 setDatesInRightSideFilters(values[0], values[1]);

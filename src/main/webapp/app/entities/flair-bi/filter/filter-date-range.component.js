@@ -67,15 +67,8 @@
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
         vm.onCustomDynamicDateRangeChange = onCustomDynamicDateRangeChange;
         vm.dateRangeTab = 0;
-        // vm.dimension.customDynamicDateRange = 1;
         vm.currentDynamicDateRangeConfig = null;
         vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
-        // vm.dimension.selected='';
-        // vm.dimension.selected2='';
-        vm.datePickerOptions = {
-            // timezone: '+0000'
-            // timezone: '+0' + new Date().getTimezoneOffset()/60 + '00' ,
-        };
 
         ////////////////
 

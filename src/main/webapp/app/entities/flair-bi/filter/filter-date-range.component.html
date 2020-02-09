@@ -23,8 +23,7 @@
           <md-datepicker class="md-datepicker-flair" id="startDate1"
                          ng-model="vm.currentDimension.selected"
                          ng-change="vm.onInputChange()"
-                         md-placeholder="Enter date"
-                         ng-model-options="vm.datePickerOptions"></md-datepicker>
+                         md-placeholder="Enter date"></md-datepicker>
         </div>
     </div>
     <div class="form-group"
@@ -34,16 +33,14 @@
           <md-datepicker class="md-datepicker-flair" id="startDate"
                          ng-model="vm.currentDimension.selected"
                          ng-change="vm.onInputChange()"
-                         md-placeholder="Start date"
-                         ng-model-options="vm.datePickerOptions"></md-datepicker>
+                         md-placeholder="Start date"></md-datepicker>
         </div>
         <label class="control-label" for="endDate">End date:</label>
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="endDate"
                          ng-model="vm.currentDimension.selected2"
                          ng-change="vm.onInputChange()"
-                         md-placeholder="End Date"
-                         ng-model-options="vm.datePickerOptions"></md-datepicker>
+                         md-placeholder="End Date"></md-datepicker>
         </div>
     </div>
     <div ng-if="vm.dateRangeTab === 2">

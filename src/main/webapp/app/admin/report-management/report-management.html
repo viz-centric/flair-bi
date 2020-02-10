@@ -79,8 +79,16 @@
                                 <user-search-component user="vm.user" />
                             </div>
                             <div class="col-xs-1">
-                                <button data-translate="entity.action.search" type="button"
-                                    ng-click="vm.searchReports()" class="btn btn-info search-btn">Search</button>
+                            <label uib-tooltip="Threshold Alerts" class="flair-checkbox" ng-click="vm.setThresholdAlert(vm.thresholdAlert)">
+                                    <i class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.thresholdAlert,'fa-square-o-unchecked':!vm.thresholdAlert} "></i>
+                                    <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.thresholdAlert,'fa-check-square-o-unchecked':!vm.thresholdAlert}"></i>
+                            </label>
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                                <svg class="search-icon" ng-click="vm.searchReports()">
+                                    <use xlink:href="#search" />
+                                </svg>
                             </div>
                         </div>
                         <br />

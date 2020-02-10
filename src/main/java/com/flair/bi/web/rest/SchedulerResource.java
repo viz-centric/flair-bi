@@ -190,7 +190,7 @@ public class SchedulerResource {
 	}
 	@GetMapping("/schedule/searchReports/")
 	@Timed
-	public GetSearchReportsDTO searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page) {
+	public GetSearchReportsDTO searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page,@RequestParam String thresholdAlert) {
 		log.info("Search reports username {} report {} start date {} end date {} page size {} page {}",
 				userName, reportName, startDate, endDate, pageSize, page);
 		if (!SecurityUtils.iAdmin()) {

@@ -63,7 +63,7 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
+    public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page,Boolean thresholdAlert) {
         return null;
     }
 

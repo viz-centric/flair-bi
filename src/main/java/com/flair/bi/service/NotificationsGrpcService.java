@@ -209,7 +209,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
     }
 
     @Override
-    public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
+    public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page,Boolean thresholdAlert) {
         SearchReportsResponse result = getReportStub().searchReports(
                 SearchReportsRequest.newBuilder()
                         .setUsername(username)
@@ -218,6 +218,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                         .setEndDate(endDate)
                         .setPageSize(pageSize)
                         .setPage(page)
+                        .setThresholdAlert(thresholdAlert)
                         .build()
         );
         return GetSearchReportsDTO.builder()

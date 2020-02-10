@@ -189,14 +189,17 @@
                                     <a class="text-center" href="#/administration/report-management#Team"
                                         data-toggle="tab">
                                         <img id="microsoft-team" src="../../../content/svgs/Teams.svg">
-                                        <h3> Team </h3>
+                                        <h3> Teams </h3>
                                     </a>
 
                                 </li>
                                 <li ng-click="vm.reportManagementTabClick('jira')">
                                     <a class="text-center" href="#/administration/report-management#Jira"
                                         data-toggle="tab">
-                                        <img id="jira" src="../../../content/svgs/jira.svg">
+                                   
+                                        <svg id="jira">
+                                            <use xlink:href="#jiraSetting"></use>
+                                        </svg>
                                         <h3>Jira</h3>
                                     </a>
 
@@ -278,7 +281,7 @@
                                                                     <span class="fa fa-edit edit-icon fa-2x"></span>
                                                                 </button>
                                                                 <button uib-tooltip="Delete"
-                                                                    ng-click="vm.deleteChannelConfig(webhook,team)"
+                                                                    ng-click="vm.deleteChannelConfig(webhook,'team')"
                                                                     class="btn btn-default btn-sm">
                                                                     <span class="fa fa-trash delete-icon fa-2x"></span>
                                                                 </button>
@@ -342,13 +345,14 @@
                                         ng-change="vm.reportManagementTabClick('tasklogger')"
                                         ng-options="status for status in vm.jiraStatusList" required=""></select>
                                 </div>
-                                <div class="col-md-1" id="refreshTicket" >
-                                    <span uib-tooltip="Refresh" tooltip-placement="right" ng-click="vm.reportManagementTabClick('tasklogger')" class="fa fa-refresh"
+                                <div class="col-md-1" id="refreshTicket">
+                                    <span uib-tooltip="Refresh" tooltip-placement="right"
+                                        ng-click="vm.reportManagementTabClick('tasklogger')" class="fa fa-refresh"
                                         aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-9 text-right">
                                     <svg id="configuration-tab" ng-click="vm.openTicketSchedulerDialog()">
-                                        <use xlink:href="#admin-configuration"></use>
+                                        <use xlink:href="#calendar" />
                                     </svg>
                                 </div>
 

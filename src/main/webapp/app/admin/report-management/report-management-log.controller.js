@@ -15,7 +15,7 @@
         var vm = this;
         vm.logs = []
         vm.visualizationid = $stateParams.visualizationid;
-        vm.reportType = $stateParams.reportType;
+        vm.reportType = ($stateParams.reportType === 'true')
         vm.page = 1;
         vm.totalItems = null;
         vm.links = null;
@@ -123,7 +123,7 @@
             }
         }
         function getLabelClass(log) {
-            if (log.isTicketCreated || !log.thresholdMet || log.taskStatus !== "success") {
+            if (log.isTicketCreated || log.taskStatus !== "success") {
                 return REPORTMANAGEMENTCONSTANTS.disabledTicketCreation;
             }
         }

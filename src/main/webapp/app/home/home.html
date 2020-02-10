@@ -30,11 +30,11 @@
                                 <p class="home_label">New Dashboard</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-data-ins">
+                            <a class="quick-box new-data-ins" ng-click="vm.expandTile(vm.expandFlairInsight)">
                                 <svg >
                                    <use xlink:href="#new-data-insights"></use>
                                </svg>
-                                <p class="home_label">New Data Insights</p>
+                                <p class="home_label">Data Insights</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a class="quick-box new-data-sou" ui-sref="connection.new">
@@ -44,11 +44,11 @@
                                 <p class="home_label">New Data Source</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-email" ui-sref="report-management.new" ng-if="vm.isAdmin">
+                            <a class="quick-box new-email" ng-if="vm.isAdmin">
                                 <svg >
                                    <use xlink:href="#new-email-report"></use>
                                </svg>
-                                <p class="home_label">New Email Reporter</p>
+                                <p class="home_label">Reports Workbench</p>
                                 <div class="blue-line"></div>
                             </a>
                             <a class="quick-box new-trash">

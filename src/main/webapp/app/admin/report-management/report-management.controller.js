@@ -375,10 +375,10 @@
                         if (data.id) {
                             ChannelService.deleteChannelConfig(data.id)
                                 .then(function (success) {
-                                    title = channel == "team" ? data.webhookName + "Webhook" : "Configuration";
+                                    title = channel == "team" ? data.webhookName + " Webhook" : "Configuration";
                                     var info = {
-                                        text: title + " delete Webhook delete successfully",
-                                        title: "Updated"
+                                        text: title + " successfully deleted",
+                                        title: "Cancelled"
                                     }
                                     vm.config[channel].getData();
                                     $rootScope.showSuccessToast(info);

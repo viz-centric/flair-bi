@@ -31,6 +31,10 @@
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
                     result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
                     result['showValue'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Value on Points');
+                    if (isNotification) {
+                        result['showValue'] = false;
+                        result['showLabel'] = false;
+                    }
                     return result;
                 }
                 function createChart() {

@@ -72,9 +72,9 @@
                 method: 'GET'
             });
         }
-        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page) {
+        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert) {
             return $http({
-                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName + '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' + page,
+                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName + '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' + page+'&thresholdAlert='+thresholdAlert,
                 method: 'GET'
             });
         }

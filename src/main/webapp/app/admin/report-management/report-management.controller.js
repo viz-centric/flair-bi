@@ -50,6 +50,8 @@
         vm.datePickerOpenStatus = {};
         vm.datePickerOpenStatus.fromDate = false;
         vm.datePickerOpenStatus.toDate = false;
+        vm.setThresholdAlert = setThresholdAlert;
+        vm.thresholdAlert=false;
         vm.webhookList = [];
         vm.SMPTSetting = {};
         vm.jiraSetting = {};
@@ -86,7 +88,7 @@
             'report': {
                 getData: function () {
                     getAccount();
-                    getScheduledReports(vm.account.login, "", "", "");
+                    getScheduledReports(vm.account.login, "", "", "",vm.thresholdAlert);
                 }
             },
             'configuration': {
@@ -134,8 +136,8 @@
             vm.isAdmin = AccountDispatch.isAdmin();
         }
 
-        function getScheduledReports(userName, reportName, startDate, endDate) {
-            schedulerService.filterScheduledReports(userName, reportName, startDate, endDate, vm.itemsPerPage, pagingParams.page - 1).then(
+        function getScheduledReports(userName, reportName, startDate, endDate,thresholdAlert) {
+            schedulerService.filterScheduledReports(userName, reportName, startDate, endDate, vm.itemsPerPage, pagingParams.page - 1,thresholdAlert).then(
                 function (response) {
                     vm.reports = response.data.reports;
                     vm.totalItems = response.data.totalRecords;
@@ -169,7 +171,7 @@
                     title: "Cancelled"
                 }
                 $rootScope.showSuccessToast(info);
-                getScheduledReports(vm.account.login, "", "", "");
+                getScheduledReports(vm.account.login, "", "", "",vm.thresholdAlert);
             }).catch(function (error) {
                 var info = {
                     text: error.data.message,
@@ -201,8 +203,7 @@
             vm.reportName = vm.reportName ? vm.reportName : "";
             vm.fromDate = vm.fromDate ? vm.fromDate : "";
             vm.toDate = vm.toDate ? vm.toDate : "";
-
-            getScheduledReports(user, vm.reportName, vm.fromDate, vm.toDate);
+            getScheduledReports(user, vm.reportName, vm.fromDate, vm.toDate,vm.thresholdAlert);
         }
 
         function updateReport(visualizationid) {
@@ -417,5 +418,9 @@
                 }
             }).result.then(function () { }, function () { });
         }
+
+    function setThresholdAlert(thresholdAlert){
+        vm.thresholdAlert=!thresholdAlert;
+    }
     }
 })();

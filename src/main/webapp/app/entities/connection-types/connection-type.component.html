@@ -1,5 +1,11 @@
 <div ng-click="vm.onClick({ct: vm.connectionType})" class="connection-type-svg">
 	<svg class="connection-icons">
-	 	<use xlink:href="{{vm.connectionType.connectionPropertiesSchema.imagePath}}"></use>
+		<use xlink:href="{{vm.connectionType.connectionPropertiesSchema.imagePath}}"></use>
 	</svg>
+	<div class="text-center">
+		<span>
+			{{vm.connectionType.connectionPropertiesSchema.connectionDetailsType}}
+		</span>
+	</div>
+
 </div>

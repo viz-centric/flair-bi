@@ -108,7 +108,7 @@
         }
 
         function enableTicketCreation(log) {
-            if (!log.isTicketCreated && log.thresholdMet) {
+            if (!log.isTicketCreated) {
                 log.enableTicketCreation = !log.enableTicketCreation;
                 schedulerService.disableTicketCreation(log.schedulerTaskMetaId).then(
                     function (response) {

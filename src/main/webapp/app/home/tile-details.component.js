@@ -44,7 +44,7 @@
         vm.executeNow=executeNow;
         vm.goToBuildPage=goToBuildPage;
         vm.serchReports=serchReports;
-
+        vm.thresholdAlert=false;
 
         //function to search element 
         function filterFn(array,searchText,key){
@@ -135,7 +135,7 @@
             }
             else if (tileId == "4") {
                 activeTile(tileId);
-                getScheduledReports(vm.account.login,"","","");
+                getScheduledReports(vm.account.login,"","","",vm.thresholdAlert);
                 toggle4Boxes(tileId);
                 //$("#box-area").show();
             }
@@ -244,7 +244,7 @@
         }
 
         function getScheduledReports(userName,reportName){
-            schedulerService.filterScheduledReports(userName,reportName,"","",5,0).then(
+            schedulerService.filterScheduledReports(userName,reportName,"","",5,0,vm.thresholdAlert).then(
             function(response) {
             vm.reports=response.data.reports;
             vm.dashboards = [];

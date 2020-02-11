@@ -7,11 +7,11 @@
 
     ReportManagementController.$inject = ['User', 'schedulerService', 'ChannelService',
         'AlertService', 'pagingParams', 'paginationConstants', '$rootScope', '$state',
-        'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal', '$location'
+        'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal', '$location','$stateParams'
     ];
 
     function ReportManagementController(User, schedulerService, ChannelService,
-        AlertService, pagingParams, paginationConstants, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal, $location) {
+        AlertService, pagingParams, paginationConstants, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal, $location,$stateParams) {
 
         var vm = this;
 
@@ -51,7 +51,7 @@
         vm.datePickerOpenStatus.fromDate = false;
         vm.datePickerOpenStatus.toDate = false;
         vm.setThresholdAlert = setThresholdAlert;
-        vm.thresholdAlert=false;
+        vm.thresholdAlert=$stateParams.thresholdAlert?$stateParams.thresholdAlert:false;
         vm.webhookList = [];
         vm.SMPTSetting = {};
         vm.jiraSetting = {};

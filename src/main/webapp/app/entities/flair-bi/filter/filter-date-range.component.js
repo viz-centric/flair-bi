@@ -133,9 +133,9 @@
 
         function setDateRangeSubscription() {
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
-                console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate);
-                vm.currentDimension.selected = addTimezone(dateRange.startDate);
-                vm.currentDimension.selected2 = addTimezone(dateRange.endDate);
+                console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate, 'timezone', new Date(dateRange.startDate).getTimezoneOffset());
+                vm.currentDimension.selected = dateRange.startDate;
+                vm.currentDimension.selected2 = dateRange.endDate;
                 console.log('filter-date-range: event filter-set-date-ranges after', vm.currentDimension.selected);
             });
 

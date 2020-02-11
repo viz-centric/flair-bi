@@ -24,9 +24,7 @@
         vm.added = added;
         vm.removed = removed;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
-        vm.onRefreshDay = refreshForDay;
-        vm.onRefreshRange = refreshForRange;
-        vm.onRefreshDynamic = onRefreshDynamic;
+        vm.onDateChange = onDateChange;
         vm.removeTagFromFilterList=removeTagFromFilterList;
 
 
@@ -51,32 +49,9 @@
             return date;
         }
 
-        function refreshForDay() {
-            var startDate = vm.dimension.selected;
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
-            if (startDate) {
-                startDate = resetTimezone(startDate);
-                var nextDay = endOfDay(startDate);
-                addDateRangeFilter(startDate);
-                addDateRangeFilter(nextDay);
-
-            }
-        }
-
-        function onRefreshDynamic(startDate) {
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
-            if (startDate) {
-                startDate = resetTimezone(startDate);
-                var today = resetTimezone(new Date());
-                addDateRangeFilter(startDate);
-                addDateRangeFilter(today);
-            }
-            applyFilter();
-        }
-
-        function refreshForRange() {
-            var startDate = vm.dimension.selected;
-            var endDate = vm.dimension.selected2;
+        function onDateChange(startDate, endDate) {
+            console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
+                typeof endDate, endDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
             if (startDate && endDate) {
                 startDate = resetTimezone(startDate);
@@ -227,7 +202,7 @@
             if (!filterParameters[vm.dimension.name]) {
                 filterParameters[vm.dimension.name] = [];
             }
-            filterParameters[vm.dimension.name].push(tag['text'].toISOString());
+            filterParameters[vm.dimension.name].push(tag['text']);
             filterParameters[vm.dimension.name]._meta = {
                 dataType: vm.dimension.type,
                 valueType: 'valueType'
@@ -242,7 +217,7 @@
             if (!filterParameters[dateRangeName]) {
                 filterParameters[dateRangeName] = [];
             }
-            filterParameters[dateRangeName].push(date.toISOString());
+            filterParameters[dateRangeName].push(date);
             filterParameters[dateRangeName]._meta = {
                 dataType: vm.dimension.type,
                 valueType: 'valueType'

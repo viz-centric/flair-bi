@@ -190,13 +190,13 @@ public class SchedulerResource {
 	}
 	@GetMapping("/schedule/searchReports/")
 	@Timed
-	public GetSearchReportsDTO searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page) {
+	public GetSearchReportsDTO searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page,@RequestParam Boolean thresholdAlert) {
 		log.info("Search reports username {} report {} start date {} end date {} page size {} page {}",
 				userName, reportName, startDate, endDate, pageSize, page);
 		if (!SecurityUtils.iAdmin()) {
 			userName = SecurityUtils.getCurrentUserLogin();
 		}
-		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate, pageSize, page);
+		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert);
 		log.info("Search reports result {}", result);
 		return result;
 	}

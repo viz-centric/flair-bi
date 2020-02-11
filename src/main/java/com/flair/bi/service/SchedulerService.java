@@ -87,8 +87,8 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduleReportLogs(visualizationid, pageSize, page);
 	}
 	
-	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
-		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page);
+	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate, String endDate, Integer pageSize, Integer page,Boolean thresholdAlert) {
+		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert);
 	}
 	
 	public String buildUrl(String host,String port,String apiUrl) {

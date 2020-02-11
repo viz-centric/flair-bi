@@ -11,7 +11,7 @@
         $stateProvider
             .state('report-management', {
                 parent: 'admin',
-                url: '/report-management?page&sort',
+                url: '/report-management?page&sort&:thresholdAlert',
                 data: {
                     authorities: [],
                     pageTitle: 'Reports',

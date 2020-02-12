@@ -73,9 +73,7 @@
     "sockjs": "^0.3.4",
     "stomp-websocket": "^2.3.4",
     "angular-jwt": "^0.1.10",
-    "angular-cron-gen": "^0.0.26",
     "cronstrue": "^0.8.0",
-    "angular-cron-generator": "^1.0.0",
     "flair-visualizations": "master",
     "datatables.net-dt": "^3.2.2"
   },
@@ -128,18 +126,6 @@
       "dependencies": {
         "angular": "*"
       }
-    },
-    "angular-cron-gen": {
-      "main": [
-        "build/cron-gen.min.css",
-        "build/cron-gen.min.js"
-      ]
-    },
-    "angular-cron-generator": {
-      "main": [
-        "dist/angular-cron-generator.css",
-        "dist/angular-cron-generator.min.js"
-      ]
     },
     "flair-visualizations": {
       "main": [

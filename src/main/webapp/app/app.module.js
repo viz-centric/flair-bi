@@ -34,7 +34,6 @@
             "rzModule",
             "angular.filter",
             "angularUtils.directives.uiBreadcrumbs",
-            "angular-cron-gen",
             "ngFileUpload",
             "angular-cron-generator"
             // jhipster-needle-angularjs-add-module JHipster will add new module here

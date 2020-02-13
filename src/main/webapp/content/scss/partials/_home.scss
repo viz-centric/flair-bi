@@ -203,16 +203,10 @@
   .recently-box-inside a {
     float: left;
     margin: 6px 0 5px 10px;
-    color: #676a6c;
     font-weight: 400;
     transition: 300ms all ease;
   }
-  .recently-box-inside a:link,
-  .recently-box-isnide a:visited {
-    color: #676a6c;
-  }
-  .recently-box-inside a:hover,
-  .recently-box-isnide a:visited {
+  .recently-box-inside a:hover{
     color: #535557;
   }
   .rotate {

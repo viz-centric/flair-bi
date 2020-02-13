@@ -58,6 +58,7 @@ table {
 }
 
 .flair-table-v1 {
+    color: $flair-text;
     thead {
         tr {
             th {
@@ -97,6 +98,7 @@ table {
                 .roles {
                     .role-label {
                         background-color: $active-background-color;
+                        color:$flair-text;
                     }
                 }
             }

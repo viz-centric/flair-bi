@@ -814,6 +814,17 @@ body.modal-open .animated {
 .md-icon-button + .md-datepicker-input-container {
   margin-left: 0px; }
 
+.flair-text {
+  color: #000000; }
+  .flair-text a {
+    color: #000000; }
+
+.header-text {
+  color: #000000; }
+
+ui-breadcrumbs .breadcrumb li.active {
+  color: #000000 !important; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1908,14 +1919,9 @@ a {
   .home-container .recently-box-inside a {
     float: left;
     margin: 6px 0 5px 10px;
-    color: #676a6c;
     font-weight: 400;
     transition: 300ms all ease; }
-  .home-container .recently-box-inside a:link,
-  .home-container .recently-box-isnide a:visited {
-    color: #676a6c; }
-  .home-container .recently-box-inside a:hover,
-  .home-container .recently-box-isnide a:visited {
+  .home-container .recently-box-inside a:hover {
     color: #535557; }
   .home-container .rotate {
     transform: rotate(90deg);
@@ -4754,40 +4760,41 @@ table.property-information-table tbody tr td {
 .flair-table-v2 {
   background: #f0f0f2; }
 
-.flair-table-v1 thead tr th {
-  background-color: #f0f0f2;
-  text-align: center; }
-
-.flair-table-v1 tbody tr {
-  background-color: #ffffff; }
-  .flair-table-v1 tbody tr td {
-    vertical-align: middle;
+.flair-table-v1 {
+  color: #000000; }
+  .flair-table-v1 thead tr th {
+    background-color: #f0f0f2;
     text-align: center; }
-    .flair-table-v1 tbody tr td .flex-btn-group-container {
+  .flair-table-v1 tbody tr {
+    background-color: #ffffff; }
+    .flair-table-v1 tbody tr td {
+      vertical-align: middle;
+      text-align: center; }
+      .flair-table-v1 tbody tr td .flex-btn-group-container {
+        align-items: center;
+        justify-content: center; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .delete-icon {
+          color: #ED5565; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .edit-icon {
+          color: #439dd3; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .view-icon {
+          color: #439dd3; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .fa-2x {
+          font-size: 1.5em; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .build-icon {
+          color: #439dd3;
+          font-size: 17px; }
+      .flair-table-v1 tbody tr td .roles .role-label {
+        background-color: #f0f0f2;
+        color: #000000; }
+    .flair-table-v1 tbody tr .button-centered {
       align-items: center;
       justify-content: center; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .delete-icon {
-        color: #ED5565; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .edit-icon {
-        color: #439dd3; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .view-icon {
-        color: #439dd3; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .fa-2x {
-        font-size: 1.5em; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .build-icon {
-        color: #439dd3;
-        font-size: 17px; }
-    .flair-table-v1 tbody tr td .roles .role-label {
-      background-color: #f0f0f2; }
-  .flair-table-v1 tbody tr .button-centered {
-    align-items: center;
-    justify-content: center; }
-  .flair-table-v1 tbody tr button {
-    border: none;
-    background-color: initial; }
-
-.flair-table-v1 tbody tr:hover {
-  background-color: #f2fbfe; }
+    .flair-table-v1 tbody tr button {
+      border: none;
+      background-color: initial; }
+  .flair-table-v1 tbody tr:hover {
+    background-color: #f2fbfe; }
 
 /* iCheck plugin Square skin, blue
 ----------------------------------- */
@@ -6632,7 +6639,7 @@ input.select2-active {
   width: 20px;
   vertical-align: middle;
   margin-left: 5px;
-  fill: #676a6c }
+  fill: #676a6c; }
 
 #report-management #Configuration #microsoft-team,
 #report-management #Configuration #jira {

@@ -44,14 +44,14 @@
                                 <p class="home_label">New Data Source</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-email" ng-if="vm.isAdmin">
+                            <a class="quick-box new-email" ng-if="vm.isAdmin" ui-sref="report-management({id:'report'})">
                                 <svg >
-                                   <use xlink:href="#new-email-report"></use>
+                                   <use xlink:href="#new-email-report" ></use>
                                </svg>
                                 <p class="home_label">Reports Workbench</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-trash" ui-sref="report-management({thresholdAlert:true})">
+                            <a class="quick-box new-trash" ui-sref="report-management({id:'report',thresholdAlert:true})">
                                 <svg >
                                    <use xlink:href="#new-thresolda-lert"></use>
                                </svg>
@@ -258,12 +258,12 @@
                                 <div class="blue-line"></div>
                             </a>
 
-                            <a class="quick-box admin-box" ui-sref="report-management">
+                            <a class="quick-box admin-box" ui-sref="report-management({id:'configuration'})">
                                 <i style="font-size: 16px" class="fa fa-external-link-square"></i>
                                 <svg >
                                    <use xlink:href="#new-email-report"></use>
                                </svg>
-                                <p class="home_label">Report Management</p>
+                                <p class="home_label">Configuration</p>
                                 <div class="blue-line"></div>
                             </a>
 

@@ -91,9 +91,18 @@
             ChannelService.createJiraTicket(log.schedulerTaskMetaId).then(
                 function (response) {
                     if (response.data) {
-                        log.isTicketCreated = true;
-                        log.viewTicket = response.data.jiraTicketLink;
-                        $window.open(response.data.jiraTicketLink, '_blank');
+                        if (response.data.jiraTicketLink != "") {
+                            log.isTicketCreated = true;
+                            log.viewTicket = response.data.jiraTicketLink;
+                            $window.open(response.data.jiraTicketLink, '_blank');
+                        }
+                        else{
+                            $rootScope.showErrorSingleToast({
+                                text: 'Error while creating jira',
+                                title: "Error"
+                            });
+                        }
+
                     }
                 },
                 function (error) {

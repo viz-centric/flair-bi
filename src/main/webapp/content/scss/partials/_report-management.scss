@@ -10,7 +10,7 @@
       fill: $primary-color;
     }
     .flair-checkbox .checkbox-icon {
-        vertical-align: 6px;
+      vertical-align: 6px;
     }
   }
 }
@@ -27,6 +27,95 @@
     width: 16px;
     height: 16px;
     vertical-align: -2px;
+  }
+}
+
+#report-management {
+  .blue-line {
+    height: 1px;
+    width: 0%;
+    background: #439dd2;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+    transition: 400ms all ease;
+  }
+  svg {
+    width: 19px;
+    height: 19px;
+    margin: 5px;
+  }
+  .alerts-tabs {
+    display: flex;
+    position: relative;
+    margin-left: 13px;
+    z-index: 0;
+    .tab {
+      min-width: 0;
+      background-color: #fff;
+      //box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16);
+      width: 50%;
+      padding: 5px 15px;
+      display: flex;
+      position: relative;
+      justify-content: space-between;
+      align-items: center;
+      outline: none;
+      border: 1px solid #ededed;
+      p {
+        font-size: 13px;
+        color: #676a6c;
+        letter-spacing: 0.5px;
+        margin-top: 10px;
+      }
+     
+      .release-icon {
+        fill: #439dd3;
+      }
+      .alarm-icon {
+        fill: #ee775e;
+      }
+    }
+    .tab:hover {
+      background: #ededed;
+    }
+    .tab:hover > .blue-line {
+      width: 100% !important;
+    }
+    .tab-active {
+      background: #ededed;
+    }
+    .tab-active > .blue-line {
+      width: 100% !important;
+    }
+  }
+  .tab:hover {
+    background: #ededed;
+  }
+  .tab:hover > .blue-line {
+    width: 100% !important;
+  }
+  .tab-active {
+    background: #ededed;
+  }
+  .tab-active > .blue-line {
+    width: 100% !important;
+  }
+  .nav > li > a:hover, .nav > li > a:focus
+  {
+    outline: none !important
+  }
+  #configuration-container {
+    svg,
+    img,
+    #email-setting {
+      height: 50px;
+      width: 50px;
+      vertical-align: middle;
+      margin-left: 5px;
+      font-size: 50px;
+    }
   }
 }
 
@@ -53,7 +142,7 @@
   width: 20px;
   vertical-align: middle;
   margin-left: 5px;
-  fill: #676a6c
+  fill: #676a6c;
 }
 #report-management #Configuration #microsoft-team,
 #report-management #Configuration #jira {
@@ -69,54 +158,6 @@
   color: #439dd3;
 }
 
-#report-management .nav-tabs > li > a {
-  text-decoration: none;
-}
-
-#report-management .nav-tabs > li:hover {
-  border-bottom: solid 1px #439dd3;
-  border-top: 0px;
-}
-#report-management .nav-tabs > li.active {
-  border-bottom: solid 1px #439dd3;
-  border-top: 0px;
-}
-#report-management .nav-tabs > li.active > a {
-  color: #439dd3;
-  text-decoration: none;
-  background-color: #fff;
-}
-
-#report-management .tabs-left,
-#report-management .tabs-right {
-  border-bottom: none;
-  padding-top: 2px;
-}
-
-#report-management .tabs-left {
-  border-right: 1px solid #ddd;
-}
-
-#report-management .tabs-right {
-  border-left: 1px solid #ddd;
-}
-
-#report-management .tabs-left > li,
-#report-management .tabs-right > li {
-  float: none;
-  margin-bottom: 2px;
-  //border: solid 2px #439dd3;
-}
-
-#report-management .tabs-left > li.active {
-  border: solid 2px #439dd3;
-}
-
-#report-management .tabs-left > li.active a {
-  color: #439dd3;
-  text-decoration: none;
-  background-color: #fff;
-}
 
 #report-management .tabs-left > li {
   margin-right: -1px;
@@ -202,7 +243,7 @@
   transform: rotate(-90deg);
 }
 
-#report-management #refreshTicket{
+#report-management #refreshTicket {
   padding: 6px 0px;
   font-size: 14px;
 }
@@ -219,12 +260,12 @@
   .logInfo {
     max-width: 100px;
   }
-  td.text-left, th.text-left {
+  td.text-left,
+  th.text-left {
     text-align: left !important;
 
     li {
-      list-style-type: none;;
+      list-style-type: none;
     }
   }
-  
 }

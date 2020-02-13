@@ -1,0 +1,115 @@
+<div class="fbibox report-management">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <div class="row filters">
+                <div class="col-md-3">
+                    <select class="form-control" id="jiraTicketStatus" name="jiraTicketStatus"
+                        ng-model="vm.jiraTicketStatus" ng-change="vm.getJiraByStatus()"
+                        ng-options="status for status in vm.jiraStatusList" required=""></select>
+                </div>
+                <div class="col-md-1" id="refreshTicket">
+                    <span uib-tooltip="Refresh" tooltip-placement="right"
+                        ng-click="vm.refreshTickete()" class="fa fa-refresh"
+                        aria-hidden="true"></span>
+                </div>
+                <div class="col-md-9 text-right">
+                    <svg id="configuration-tab" ng-click="vm.openTicketSchedulerDialog()">
+                        <use xlink:href="#calendar" />
+                    </svg>
+                </div>
+
+            </div>
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                    <tr>
+                        <th>
+                            <span data-translate="reportManagement.no"></span>
+                        </th>
+
+                        <th>
+                            <span data-translate="reportManagement.issueID"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.viewTicket"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.projectKey"></span>
+                        </th>
+                        <th class="logInfo">
+                            <span data-translate="reportManagement.summary"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.status"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.createDate"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.createdBy"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.assignPerson"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.priority"></span>
+                        </th>
+                        <th>
+                            <span data-translate="reportManagement.reporter"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="jira in vm.jiraTickets">
+                        <td>{{$index+1+ (vm.jiraPage-1) * vm.JiraItemsPerPage}}</td>
+                        <td>{{jira.issueID}}</td>
+                        <td><a target="_blank" href="{{jira.viewTicket |  split:'|':1}}" class="btn btn-link">
+                                {{jira.viewTicket |  split:'|':0}}</a> </td>
+                        <td>{{jira.projectKey  }}</td>
+                        <td>{{jira.summary}}</td>
+                        <td ng-if="jira.status=='To Do'">
+                            <span class="btn btn-default"> {{jira.status}}</span>
+                        </td>
+                        <td ng-if="jira.status=='Done'">
+                            <span class="btn btn-success"> {{jira.status}}</span>
+                        </td>
+                        <td class="inProgress" ng-if="jira.status=='In Progress'">
+                            <span class="btn btn-primary"> {{jira.status}}</span>
+                        </td>
+                        <td>{{jira.createDate | date : "dd.MM.y hh:mm:ss"}}</td>
+                        <td>{{jira.createdBy}}</td>
+                        <td>{{jira.assignPerson}}</td>
+                        <td ng-if="jira.priority=='Medium'">
+                            <i class="fa fa-arrow-up" style="color: #ea7d24" aria-hidden="true"></i>
+                            {{jira.priority}}
+                        </td>
+                        <td ng-if="jira.priority=='High'">
+                            <i class="fa fa-arrow-up" style="color: #ea4444" aria-hidden="true"></i>
+                            {{jira.priority}}
+                        </td>
+                        <td ng-if="jira.priority=='Low'">
+                            <i class="fa fa-arrow-down" style="color: #2a8735" aria-hidden="true"></i>
+                            {{jira.priority}}
+                        </td>
+                        <td ng-if="jira.priority=='Lowest'">
+                            <i class="fa fa-arrow-down" style="color: #55a557" aria-hidden="true"></i>
+                            {{jira.priority}}
+                        </td>
+                        <td ng-if="jira.priority=='Highest'">
+                            <i class="fa fa-arrow-up" style="color: #ce0000" aria-hidden="true"></i>
+                            {{jira.priority}}
+                        </td>
+
+                        <td>{{jira.reporter  }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center" ng-if="vm.totalJiraTickets>0">
+            <jhi-item-count page="vm.jiraPage" total="vm.jiraQueryCount" items-per-page="vm.JiraItemsPerPage">
+            </jhi-item-count>
+            <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
+                ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></uib-pagination>
+        </div>
+    </div>
+</div>

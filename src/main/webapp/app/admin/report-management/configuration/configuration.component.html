@@ -1,0 +1,152 @@
+<div class="fbibox report-management">
+    <div class="fbibox-content">
+        <div class="clearfix"></div>
+        <div class="col-xs-2">
+
+            <ul class="nav tabs-left">
+                <li class="tab email-tab  ng-class:{'tab-active':vm.alertTab =='email'}"
+                    ng-click="vm.configurationTabClick('email')">
+                    <a class="text-center" data-toggle="tab">
+                        <i class="fa fa-envelope active" id="email-setting" aria-hidden="true"></i>
+                        <h3>Email</h3>
+                    </a>
+                    <div class="blue-line"></div>
+                </li>
+                <li class="tab team-tab  ng-class:{'tab-active':vm.alertTab =='team'}"
+                    ng-click="vm.configurationTabClick('team')">
+                    <a class="text-center" data-toggle="tab">
+                        <img id="microsoft-team" src="../../../content/svgs/Teams.svg">
+                        <h3> Teams </h3>
+                    </a>
+                    <div class="blue-line"></div>
+                </li>
+                <li ng-click="vm.configurationTabClick('jira')"
+                    class="tab jira-tab  ng-class:{'tab-active':vm.alertTab =='jira'}">
+                    <a class="text-center" data-toggle="tab">
+
+                        <svg id="jira">
+                            <use xlink:href="#jiraSetting"></use>
+                        </svg>
+                        <h3>Jira</h3>
+                    </a>
+                    <div class="blue-line"></div>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-xs-10">
+            <div class="tab-content">
+                <div id="email-container" class="email-container" ng-show="vm.alertTab =='email'">
+                    <form name="emailSetting" role="form" novalidate ng-submit="vm.saveSMTPSetting()" show-validation>
+                        <div class="row">
+                            <div class="cal-md-12">
+                                <channel-property-component c-property="property" connection="vm.connection"
+                                    ng-repeat="property in vm.emailChannelConfig[0].connectionProperties | orderBy: 'order'">
+                                </channel-property-component>
+                                <div class="m-b-sm">
+                                    <button ng-disabled="emailSetting.$invalid || vm.isSaving" class="btn btn-primary">
+                                        <span>
+                                            <i class="fa fa-save"></i> Save Configurations
+                                        </span>
+                                    </button>
+                                    <button ng-disabled="vm.SMPTSetting.id===0" type="button" class="btn btn-danger"
+                                        ng-click="vm.deleteChannelConfig(vm.SMPTSetting,'email')">
+                                        <span>
+                                            <i class="fa fa-trash"></i> Remove Configurations
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="team-container" class="team-container" ng-show="vm.alertTab =='team'">
+                    <div class="row">
+
+                        <div class="cal-md-12  text-right">
+                            <button class="btn btn-primary m-b-sm" ng-click="vm.openTeamConfigDialog()">
+                                <span>
+                                    Create Webhook
+                                </span>
+                            </button>
+                        </div>
+                        <div class="cal-md-12">
+
+                            <table class="table table-striped flair-table-v1">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <span data-translate="reportManagement.no"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.webhookName"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.webhookURL"></span>
+                                        </th>
+                                        <th>
+                                            <span data-translate="reportManagement.action"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="webhook in vm.webhookList">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{webhook.webhookName}}</td>
+                                        <td>{{webhook.webhookURL}}</td>
+                                        <td>
+                                            <div class="btn-group flex-btn-group-container report-actions">
+
+                                                <button uib-tooltip="Edit" ng-click="vm.openTeamConfigDialog(webhook)"
+                                                    class="btn btn-default btn-sm">
+                                                    <span class="fa fa-edit edit-icon fa-2x"></span>
+                                                </button>
+                                                <button uib-tooltip="Delete"
+                                                    ng-click="vm.deleteChannelConfig(webhook,'team')"
+                                                    class="btn btn-default btn-sm">
+                                                    <span class="fa fa-trash delete-icon fa-2x"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <form name="form" role="form" novalidate ng-submit="vm.saveSMPTSetting()" show-validation>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="jira-container" class="jira-container" ng-show="vm.alertTab =='jira'">
+                    <form name="jiraSetting" role="form" novalidate ng-submit="vm.saveJiraSetting()" show-validation>
+                        <div class="row">
+                            <div class="cal-md-12">
+                                <channel-property-component c-property="property" connection="vm.connection"
+                                    ng-repeat="property in vm.jiraConfig[0].connectionProperties | orderBy: 'order'">
+                                </channel-property-component>
+                                <div class="m-b-sm">
+                                    <button ng-disabled="jiraSetting.$invalid || vm.isSaving" class="btn btn-primary">
+                                        <span>
+                                            <i class="fa fa-save"></i> Save Configurations
+                                        </span>
+                                    </button>
+                                    <button ng-disabled="vm.jiraSetting.id===0" type="button" class="btn btn-danger"
+                                        ng-click="vm.deleteChannelConfig(vm.jiraSetting,'jira')">
+                                        <span>
+                                            <i class="fa fa-trash"></i> Remove Configurations
+                                        </span>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

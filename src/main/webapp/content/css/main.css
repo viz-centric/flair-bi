@@ -825,6 +825,9 @@ body.modal-open .animated {
 ui-breadcrumbs .breadcrumb li.active {
   color: #000000 !important; }
 
+.btn-default {
+  color: #000000 !important; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -3266,7 +3269,8 @@ input[type="search"] {
   clear: both;
   margin-bottom: 25px;
   margin-top: 0;
-  padding: 0; }
+  padding: 0;
+  color: #000000; }
   .fbibox .fbibox-title {
     background-color: #ffffff;
     color: inherit;

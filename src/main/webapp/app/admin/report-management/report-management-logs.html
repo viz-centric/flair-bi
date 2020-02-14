@@ -4,9 +4,7 @@
 
         <div class="table-responsive">
             <div ng-if="vm.jiraSetting.id===0" class="alert alert-info alert-dismissible">
-                <a href="#administration/report-management/report/{{vm.visualizationid}}" class="close"
-                    data-dismiss="alert" aria-label="close">&times;</a>
-                <strong><a class="alert-link" href="#/administration/report-management#Configuration"> Jira Configration
+             <strong><a class="alert-link" ui-sref="report-management({id:'configuration'})"> Jira Configration
                         is not enabled, Please configure Jira here.</a></strong>
             </div>
             <table class="table table-striped flair-table-v1">

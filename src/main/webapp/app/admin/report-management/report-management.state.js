@@ -25,6 +25,10 @@
                     sort: {
                         value: 'id,asc',
                         squash: true
+                    },
+                    id:{
+                        value: 'report',
+                        squash: true
                     }
                 },
                 views: {
@@ -36,7 +40,6 @@
                         controller: 'ReportManagementController',
                         controllerAs: 'vm'
                     }
-
                 },
                 resolve: {
                     pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {

@@ -2004,7 +2004,8 @@ a {
       .home-container .box .box-title p {
         font-size: 20px;
         margin: 0 0 15px 0;
-        font-weight: bold; }
+        font-weight: bold;
+        color: #000000; }
       .home-container .box .box-title img {
         float: right;
         margin: -63px -41px 0 0;

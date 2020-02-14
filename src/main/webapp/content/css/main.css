@@ -825,6 +825,9 @@ body.modal-open .animated {
 ui-breadcrumbs .breadcrumb li.active {
   color: #000000 !important; }
 
+.btn-default {
+  color: #000000 !important; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -2004,7 +2007,8 @@ a {
       .home-container .box .box-title p {
         font-size: 20px;
         margin: 0 0 15px 0;
-        font-weight: bold; }
+        font-weight: bold;
+        color: #000000; }
       .home-container .box .box-title img {
         float: right;
         margin: -63px -41px 0 0;
@@ -3265,7 +3269,8 @@ input[type="search"] {
   clear: both;
   margin-bottom: 25px;
   margin-top: 0;
-  padding: 0; }
+  padding: 0;
+  color: #000000; }
   .fbibox .fbibox-title {
     background-color: #ffffff;
     color: inherit;

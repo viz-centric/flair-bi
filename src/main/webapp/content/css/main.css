@@ -815,18 +815,18 @@ body.modal-open .animated {
   margin-left: 0px; }
 
 .flair-text {
-  color: #000000; }
+  color: #404345; }
   .flair-text a {
-    color: #000000; }
+    color: #404345; }
 
 .header-text {
-  color: #000000; }
+  color: #404345; }
 
 ui-breadcrumbs .breadcrumb li.active {
-  color: #000000 !important; }
+  color: #404345 !important; }
 
 .btn-default {
-  color: #000000 !important; }
+  color: #404345 !important; }
 
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
@@ -2008,7 +2008,7 @@ a {
         font-size: 20px;
         margin: 0 0 15px 0;
         font-weight: bold;
-        color: #000000; }
+        color: #404345; }
       .home-container .box .box-title img {
         float: right;
         margin: -63px -41px 0 0;
@@ -2323,7 +2323,7 @@ a {
 
 .home_label {
   font-weight: 600;
-  color: #000000; }
+  color: #404345; }
 
 tags-input .tags {
   border: 1px solid #e1e3e3;
@@ -3270,7 +3270,7 @@ input[type="search"] {
   margin-bottom: 25px;
   margin-top: 0;
   padding: 0;
-  color: #000000; }
+  color: #404345; }
   .fbibox .fbibox-title {
     background-color: #ffffff;
     color: inherit;
@@ -4766,7 +4766,7 @@ table.property-information-table tbody tr td {
   background: #f0f0f2; }
 
 .flair-table-v1 {
-  color: #000000; }
+  color: #404345; }
   .flair-table-v1 thead tr th {
     background-color: #f0f0f2;
     text-align: center; }
@@ -4791,9 +4791,9 @@ table.property-information-table tbody tr td {
           font-size: 17px; }
       .flair-table-v1 tbody tr td .roles .role-label {
         background-color: #f0f0f2;
-        color: #000000; }
+        color: #404345; }
       .flair-table-v1 tbody tr td a {
-        color: #000000; }
+        color: #404345; }
     .flair-table-v1 tbody tr .button-centered {
       align-items: center;
       justify-content: center; }

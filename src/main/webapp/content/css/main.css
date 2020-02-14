@@ -2108,7 +2108,6 @@ a {
         border: 1px solid #ededed; }
         .home-container .home-right-container .alerts-tabs .tab p {
           font-size: 13px;
-          color: #676a6c;
           letter-spacing: 0.5px;
           margin-top: 10px; }
         .home-container .home-right-container .alerts-tabs .tab svg {
@@ -2319,7 +2318,8 @@ a {
   border: 1px #e1e3e3 solid; }
 
 .home_label {
-  font-weight: 600; }
+  font-weight: 600;
+  color: #000000; }
 
 tags-input .tags {
   border: 1px solid #e1e3e3;
@@ -4787,6 +4787,8 @@ table.property-information-table tbody tr td {
       .flair-table-v1 tbody tr td .roles .role-label {
         background-color: #f0f0f2;
         color: #000000; }
+      .flair-table-v1 tbody tr td a {
+        color: #000000; }
     .flair-table-v1 tbody tr .button-centered {
       align-items: center;
       justify-content: center; }
@@ -5226,7 +5228,6 @@ div.featuresList {
         font-size: 25px; }
       .information-card .information-card-body .tile-value p {
         font-size: 13px;
-        color: #676a6c;
         line-height: 17px;
         letter-spacing: 0.5px; }
     .information-card .information-card-body img {

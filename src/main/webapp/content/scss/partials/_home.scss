@@ -447,7 +447,6 @@
         border: 1px solid #ededed;
         p {
           font-size: 13px;
-          color: #676a6c;
           letter-spacing: 0.5px;
           margin-top: 10px;
         }
@@ -727,4 +726,5 @@
 
 .home_label{
   font-weight: 600;
+  color : $flair-text;
 }

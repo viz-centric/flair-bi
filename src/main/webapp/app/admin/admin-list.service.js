@@ -76,7 +76,7 @@
             },
             {
                 image: "#new-email-report",
-                label: "Congratulations Settings",
+                label: "Report Configuration",
                 href: "report-management({id:'configuration'})",
                 order: 11
             }
@@ -134,7 +134,7 @@
             },
             {
                 image: "#new-email-report",
-                label: "Congratulations",
+                label: "Report Configuration",
                 href: "report-management({id:'configuration'})",
                 order: 12
             }

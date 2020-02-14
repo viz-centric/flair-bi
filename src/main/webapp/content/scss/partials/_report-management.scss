@@ -45,6 +45,7 @@
     width: 19px;
     height: 19px;
     margin: 5px;
+    fill: #676a6c;
   }
   .alerts-tabs {
     display: flex;
@@ -106,6 +107,14 @@
   {
     outline: none !important
   }
+  .configuration{
+    .fbibox-content{
+      background-color: #ffffff;
+      color: inherit;
+      padding: 1px;
+      margin-top: 20px;
+    }
+  }
   #configuration-container {
     svg,
     img,
@@ -161,6 +170,7 @@
 
 #report-management .tabs-left > li {
   margin-right: -1px;
+  outline: none !important;
 }
 
 #report-management .tabs-right > li {

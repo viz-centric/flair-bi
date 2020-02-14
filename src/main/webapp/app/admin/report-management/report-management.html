@@ -2,7 +2,7 @@
 
     <div class="alerts">
         <div class="alerts-tabs">
-            <div id="configuration-tab" 
+            <div id="configuration-tab" ng-if="vm.isAdmin"
                 class="tab configuration-tab  ng-class:{'tab-active':vm.alertTab =='configuration'}"
                 ng-click="vm.reportManagementTabClick('configuration')">
                 <p class="home_label">Configuration</span>
@@ -34,13 +34,13 @@
                     <div class="blue-line"></div>
             </div>
         </div>
-        <div id="configuration-container" class="configuration-container" ng-if="vm.alertTab =='configuration'">
+        <div id="configuration-container" class="configuration-container" alert="vm.alertTab" ng-if="vm.isAdmin && vm.alertTab =='configuration'">
             <configuration-component />
         </div>
         <div id="report-container" class="report-container" alert="vm.alertTab" ng-if="vm.alertTab =='report'">
             <report-list-component></report-list-component>
         </div>
-        <div id="tasklogger-container" class="tasklogger-container" ng-if="vm.alertTab=='tasklogger'">
+        <div id="tasklogger-container" class="tasklogger-container" alert="vm.alertTab" ng-if="vm.alertTab=='tasklogger'">
             <task-logger-component></task-logger-component>
         </div>
     </div>

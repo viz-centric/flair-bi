@@ -12,9 +12,9 @@
             }
         });
 
-    configurationController.$inject = ['$uibModal', '$rootScope', 'ChannelService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
+    configurationController.$inject = ['$uibModal','$uibModalStack', '$rootScope', 'ChannelService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
 
-    function configurationController($uibModal, $rootScope, ChannelService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
+    function configurationController($uibModal,$uibModalStack, $rootScope, ChannelService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
         var vm = this;
 
         vm.saveSMTPSetting = saveSMTPSetting;
@@ -55,6 +55,7 @@
         activate();
 
         function activate() {
+            $uibModalStack.dismissAll()
             vm.config['email'].getData();
         }
 

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
+
 @Slf4j
 public final class QueryGrpcUtils {
 
@@ -33,7 +35,7 @@ public final class QueryGrpcUtils {
         return Optional.ofNullable(connection)
             .map(c -> {
                 Connection.Builder builder = Connection.newBuilder()
-                    .setConnectionPassword(c.getConnectionPassword())
+                    .setConnectionPassword(orEmpty(c.getConnectionPassword()))
                     .setConnectionUsername(c.getConnectionUsername())
                     .setConnectionType(c.getConnectionTypeId())
                     .setName(c.getName())

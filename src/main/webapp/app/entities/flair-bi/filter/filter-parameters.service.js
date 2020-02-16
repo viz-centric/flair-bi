@@ -97,15 +97,19 @@
 
         function createCompareExpressionBodyForInterval(value, featureName, interval, operator) {
             return {
-                '@type': 'Compare',
-                comparatorType: 'GTE',
+                '@type': 'Between',
+                featureName: featureName,
                 valueType: {
                     '@type': 'intervalValueType',
                     operator: operator,
                     interval: interval,
                     value: value
                 },
-                featureName: featureName
+                secondValueType: {
+                    '@type': 'predefinedValueType',
+                    value: value
+                },
+                secondValue: value,
             };
         }
 

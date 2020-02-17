@@ -15,12 +15,11 @@
         vm.connection.details = data;
         vm.addWebhook = addWebhook;
         vm.updateWebhook = updateWebhook;
-        vm.headerText = "Add team webhook URL";
+        vm.headerText = "Add MS Teams webhook URL";
         if (data) {
-            vm.headerText = "Edit team webhook URL";
+            vm.headerText = "Edit MS Teams webhook URL";
             vm.isEdit = true;
         }
-
 
         activate();
         ////////////////

@@ -41,11 +41,12 @@
     z-index: 10;
     transition: 400ms all ease;
   }
-  svg {
+  svg,img {
     width: 19px;
     height: 19px;
+    
     margin: 5px;
-    fill: #676a6c;
+    fill: $primary-color;
   }
   .alerts-tabs {
     display: flex;
@@ -70,7 +71,7 @@
         letter-spacing: 0.5px;
         margin-top: 10px;
       }
-     
+
       .release-icon {
         fill: #439dd3;
       }
@@ -103,18 +104,29 @@
   .tab-active > .blue-line {
     width: 100% !important;
   }
-  .nav > li > a:hover, .nav > li > a:focus
-  {
-    outline: none !important
+  .nav > li > a:hover,
+  .nav > li > a:focus {
+    outline: none !important;
   }
-  .configuration{
-    .fbibox-content{
+  .configuration {
+    .fbibox-content {
       background-color: #ffffff;
       color: inherit;
       padding: 1px;
       margin-top: 20px;
     }
   }
+  #email-setting {
+    font-size: 50px;
+    vertical-align: middle;
+    margin-left: 5px;
+    color: $primary-color;
+  }
+  .tabs-left > li {
+    margin-right: -1px;
+    outline: none !important;
+  }
+
   #configuration-container {
     svg,
     img,
@@ -126,138 +138,16 @@
       font-size: 50px;
     }
   }
+  #openTicketScheduler {
+    color: lighten($icons-color, 20%);
+    fill: $icons-color;
+  }
+  #refreshTicket {
+    padding: 6px 0px;
+    font-size: 14px;
+    color: $icons-color;
+  }
 }
-
-#report-management .full-width-tabs > ul.nav.nav-tabs {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-#report-management .full-width-tabs > ul.nav.nav-tabs > li {
-  float: none;
-  display: table-cell;
-  width: 100%;
-}
-
-#report-management .full-width-tabs > ul.nav.nav-tabs > li > a {
-  text-align: center;
-}
-
-#report-management .full-width-tabs svg#report-tab,
-#report-management .full-width-tabs svg#configuration-tab,
-#report-management .full-width-tabs svg#Task-tab {
-  height: 20px;
-  width: 20px;
-  vertical-align: middle;
-  margin-left: 5px;
-  fill: #676a6c;
-}
-#report-management #Configuration #microsoft-team,
-#report-management #Configuration #jira {
-  height: 50px;
-  width: 50px;
-  vertical-align: middle;
-  margin-left: 5px;
-}
-#report-management .full-width-tabs #email-setting {
-  font-size: 50px;
-  vertical-align: middle;
-  margin-left: 5px;
-  color: #439dd3;
-}
-
-
-#report-management .tabs-left > li {
-  margin-right: -1px;
-  outline: none !important;
-}
-
-#report-management .tabs-right > li {
-  margin-left: -1px;
-}
-
-#report-management .tabs-left > li.active > a,
-#report-management .tabs-left > li.active > a:hover,
-#report-management .tabs-left > li.active > a:focus {
-  border-bottom-color: #ddd;
-  border-right-color: transparent;
-}
-
-#report-management .tabs-right > li.active > a,
-#report-management .tabs-right > li.active > a:hover,
-#report-management .tabs-right > li.active > a:focus {
-  border-bottom: 1px solid #ddd;
-  border-left-color: transparent;
-}
-
-#report-management .tabs-left > li > a {
-  border-radius: 4px 0 0 4px;
-  margin-right: 0;
-  display: block;
-}
-
-#report-management .tabs-right > li > a {
-  border-radius: 0 4px 4px 0;
-  margin-right: 0;
-}
-
-#report-management .vertical-text {
-  margin-top: 50px;
-  border: none;
-  position: relative;
-}
-
-#report-management .vertical-text > li {
-  height: 20px;
-  width: 120px;
-  margin-bottom: 100px;
-}
-
-#report-management .vertical-text > li > a {
-  border-bottom: 1px solid #ddd;
-  border-right-color: transparent;
-  text-align: center;
-  border-radius: 4px 4px 0px 0px;
-}
-
-#report-management .vertical-text > li.active > a,
-#report-management .vertical-text > li.active > a:hover,
-#report-management .vertical-text > li.active > a:focus {
-  border-bottom-color: transparent;
-  border-right-color: #ddd;
-  border-left-color: #ddd;
-}
-
-#report-management .vertical-text.tabs-left {
-  left: -50px;
-}
-
-#report-management .vertical-text.tabs-right {
-  right: -50px;
-}
-
-#report-management .vertical-text.tabs-right > li {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-
-#report-management .vertical-text.tabs-left > li {
-  -webkit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-}
-
-#report-management #refreshTicket {
-  padding: 6px 0px;
-  font-size: 14px;
-}
-
 #reportLog {
   img {
     height: 18px;

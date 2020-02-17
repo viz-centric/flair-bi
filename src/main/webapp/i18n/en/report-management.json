@@ -17,7 +17,7 @@
         "subject": "Subject",
         "run": "Run",
         "createdBy": "Created By",
-        "action": "Action",
+        "action": "Actions",
         "status": "Status",
         "executedAt": "Executed At",
         "isThresholdAlert": "Threshold Alert",

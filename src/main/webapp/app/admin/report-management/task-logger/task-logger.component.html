@@ -1,25 +1,25 @@
 <div class="fbibox report-management">
     <div class="fbibox-content">
-        <div class="table-responsive">
-            <div class="row filters">
-                <div class="col-md-3">
-                    <select class="form-control" id="jiraTicketStatus" name="jiraTicketStatus"
-                        ng-model="vm.jiraTicketStatus" ng-change="vm.getJiraByStatus()"
-                        ng-options="status for status in vm.jiraStatusList" required=""></select>
-                </div>
-                <div class="col-md-1" id="refreshTicket">
-                    <span uib-tooltip="Refresh" tooltip-placement="right"
-                        ng-click="vm.refreshTickete()" class="fa fa-refresh"
-                        aria-hidden="true"></span>
-                </div>
-                <div class="col-md-8 text-right">
-                    <svg id="configuration-tab" ng-click="vm.openTicketSchedulerDialog()">
-                        <use xlink:href="#calendar" />
-                    </svg>
-                </div>
 
+        <div class="row filters">
+            <div class="col-md-3">
+                <select class="form-control" id="jiraTicketStatus" name="jiraTicketStatus"
+                    ng-model="vm.jiraTicketStatus" ng-change="vm.getJiraByStatus()"
+                    ng-options="status for status in vm.jiraStatusList" required=""></select>
             </div>
-            <br />
+            <div class="col-md-1" id="refreshTicket">
+                <span uib-tooltip="Refresh" tooltip-placement="right" ng-click="vm.refreshTickete()"
+                    class="fa fa-refresh" aria-hidden="true"></span>
+            </div>
+            <div class="col-md-8 text-right">
+                <svg id="openTicketScheduler" ng-click="vm.openTicketSchedulerDialog()">
+                    <use xlink:href="#calendar" />
+                </svg>
+            </div>
+
+        </div>
+        <br />
+        <div class="table-responsive" ng-if="vm.jiraTickets.length>0">
             <table class="table table-striped flair-table-v1">
                 <thead>
                     <tr>
@@ -106,11 +106,13 @@
                 </tbody>
             </table>
         </div>
-        <div class="text-center" ng-if="vm.totalJiraTickets>0">
-            <jhi-item-count page="vm.jiraPage" total="vm.jiraQueryCount" items-per-page="vm.JiraItemsPerPage">
-            </jhi-item-count>
-            <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
-                ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></uib-pagination>
-        </div>
+
     </div>
+    <div class="text-center" ng-if="vm.totalJiraTickets>0">
+        <jhi-item-count page="vm.jiraPage" total="vm.jiraQueryCount" items-per-page="vm.JiraItemsPerPage">
+        </jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
+            ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></uib-pagination>
+    </div>
+
 </div>

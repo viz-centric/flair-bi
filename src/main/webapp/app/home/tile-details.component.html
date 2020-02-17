@@ -265,7 +265,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="report in vm.reports"> 
-                <td>{{$index+1}}</td>
+                <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
                 <td>{{report.report.title_name}}</td>
                 <td>{{report.report.dashboard_name}}</td>
                 <td>{{report.report.thresholdAlert?'Yes':'No'}}</td>
@@ -294,18 +294,11 @@
             </tr>
         </tbody>
     </table>
-    <div class="text-center" ng-show="vm.reports.length > 0">
-        <ul class="pagination">
-            <li ng-class="{disabled: vm.currentPage == 0}">
-                <a href="javascript:;" ng-click="vm.prevPage()"><i class="fa fa-angle-double-left"></i></a>
-            </li>
-            <li ng-repeat="n in vm.range(vm.pagedItems.length)" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
-                <a href="javascript:;" ng-bind="n+1">1</a>
-            </li>
-            <li ng-class="{disabled: vm.currentPage == vm.pagedItems.length - 1}">
-                <a href="javascript:;" ng-click="vm.nextPage()"><i class="fa fa-angle-double-right"></i></a>
-            </li>
-        </ul>
+    <div class="text-center" ng-if="vm.totalItems>0">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage">
+        </jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page"
+            ng-change="vm.loadPage(vm.page)" items-per-page="vm.itemsPerPage"></uib-pagination>
     </div>
 </div>
 

@@ -44,7 +44,10 @@
         vm.executeNow=executeNow;
         vm.goToBuildPage=goToBuildPage;
         vm.serchReports=serchReports;
+        vm.loadPage = loadPage;
         vm.thresholdAlert=false;
+        vm.page = 1;
+        vm.totalItems = 0;
 
         //function to search element 
         function filterFn(array,searchText,key){
@@ -134,6 +137,7 @@
                 toggle4Boxes(tileId);
             }
             else if (tileId == "4") {
+                vm.page = 1;
                 activeTile(tileId);
                 getScheduledReports(vm.account.login,"","","",vm.thresholdAlert);
                 toggle4Boxes(tileId);
@@ -244,22 +248,25 @@
         }
 
         function getScheduledReports(userName,reportName){
-            schedulerService.filterScheduledReports(userName,reportName,"","",5,0,vm.thresholdAlert).then(
+            schedulerService.filterScheduledReports(userName,reportName,"","",vm.itemsPerPage, vm.page - 1,vm.thresholdAlert).then(
             function(response) {
-            vm.reports=response.data.reports;
-            vm.dashboards = [];
-            vm.datasources=[];
-            vm.views=[];
-            vm.viewWatches=[];
-            vm.bookmarkWatches=[];
-            vm.groupToPages(response.data.reports);
+                vm.reports=response.data.reports;
+                vm.totalItems = response.data.totalRecords;
+                vm.queryCount = vm.totalItems;
+                        
+                vm.dashboards = [];
+                vm.datasources=[];
+                vm.views=[];
+                vm.viewWatches=[];
+                vm.bookmarkWatches=[];
+                vm.groupToPages(response.data.reports);
             },
             function(error) {
-            var info = {
-                text: error.statusText,
-                title: "Error"
-            }
-            $rootScope.showErrorSingleToast(info);
+                var info = {
+                    text: error.statusText,
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
             });
         }
 
@@ -293,6 +300,10 @@
      function executeNow(id){
         ReportManagementUtilsService.executeNow(id);
      }
-
+     function loadPage(page) {
+        vm.page = page;
+        vm.reportName = vm.reportName ? vm.reportName : "" ;   
+        getScheduledReports(vm.account.login,vm.reportName);
+    }
     }
 })();

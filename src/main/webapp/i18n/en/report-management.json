@@ -2,25 +2,42 @@
     "reportManagement": {
         "home": {
             "title": "Reports",
-            "createLabel":"Schedule Report"
+            "createLabel": "Schedule Report"
         },
-        "errorDeleting":"Error deleting user",
+        "errorDeleting": "Error deleting user",
         "no": "No.",
         "reportName": "Report Name",
         "dashboardName": "Dashboard Name",
+        "viewName": "View Name",
+        "queryID": "Query ID",
+        "description": "Description",
+        "channel": "Channel",
+        "thresholdMet": "Threshold Met",
         "thresholdAlert": "Is threshold Report",
         "subject": "Subject",
         "run": "Run",
         "createdBy": "Created By",
-        "action": "Action"  ,
-        "status":"status",
-        "executedAt":"Executed At",
-        "isThresholdAlert":"Threshold Alert",
+        "action": "Actions",
+        "status": "Status",
+        "executedAt": "Executed At",
+        "isThresholdAlert": "Threshold Alert",
         "filters": {
-              "fromDate": "From Date",
-              "toDate": "To Date",
-              "reportName":"Report Name",
-              "user":"User"
-        }
+            "fromDate": "From Date",
+            "toDate": "To Date",
+            "reportName": "Report Name",
+            "user": "User"
+        },
+        "webhookName": "Webhook Name",
+        "webhookURL": "Webhook URL",
+        "issueID": "Issue ID",
+        "projectKey": "Project Name",
+        "summary": "Title",
+        "createDate": "Date Time",
+        "assignPerson": "Assign",
+        "priority": "Priority",
+        "reporter": "Reporter",
+        "enableTicketCreation": "Enable Create Ticket",
+        "viewTicket": "View Ticket",
+        "reportRecipient":"Report Recipient"
     }
 }

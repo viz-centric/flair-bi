@@ -203,16 +203,10 @@
   .recently-box-inside a {
     float: left;
     margin: 6px 0 5px 10px;
-    color: #676a6c;
     font-weight: 400;
     transition: 300ms all ease;
   }
-  .recently-box-inside a:link,
-  .recently-box-isnide a:visited {
-    color: #676a6c;
-  }
-  .recently-box-inside a:hover,
-  .recently-box-isnide a:visited {
+  .recently-box-inside a:hover{
     color: #535557;
   }
   .rotate {
@@ -315,7 +309,8 @@
       p {
         font-size: 20px;
         margin: 0 0 15px 0;
-        //float: left;
+        font-weight: bold;
+        color : $flair-text;
       }
       img {
         float: right;
@@ -453,9 +448,7 @@
         border: 1px solid #ededed;
         p {
           font-size: 13px;
-          color: #676a6c;
           letter-spacing: 0.5px;
-          font-weight: 400;
           margin-top: 10px;
         }
         svg {
@@ -730,4 +723,9 @@
 
 .notification {
   border: 1px #e1e3e3 solid;
+}
+
+.home_label{
+  font-weight: 600;
+  color : $flair-text;
 }

@@ -5,11 +5,21 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
+import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
+import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
+import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
+import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
+import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
+import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
+import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
@@ -20,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -67,7 +78,7 @@ public class SchedulerService {
 	private final DatasourceConstraintService datasourceConstraintService;
 
 	private final UserService userService;
-
+	
     public void executeImmediateScheduledReport(String visualizationid) {
 		notificationsGrpcService.executeImmediateScheduledReport(visualizationid);
 	}
@@ -76,8 +87,8 @@ public class SchedulerService {
 		return notificationsGrpcService.getScheduleReportLogs(visualizationid, pageSize, page);
 	}
 	
-	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate, String endDate, Integer pageSize, Integer page) {
-		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page);
+	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate, String endDate, Integer pageSize, Integer page,Boolean thresholdAlert) {
+		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert);
 	}
 	
 	public String buildUrl(String host,String port,String apiUrl) {
@@ -107,10 +118,70 @@ public class SchedulerService {
 	public Integer getScheduledReportsCount(String username) {
 		return notificationsGrpcService.getScheduledReportsCount(username);
 	}
+	
+	public GetChannelConnectionDTO getChannelParameters(String channel) {
+		return notificationsGrpcService.getChannelParameters(channel);
+	}
+
+	public String createTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		return notificationsGrpcService.createTeamConfig(teamConfigParametersDTO);
+	}
+
+	public String updateTeamConfig(TeamConfigParametersDTO teamConfigParametersDTO) {
+		return notificationsGrpcService.updateTeamConfig(teamConfigParametersDTO);
+	}
+
+	public String createEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return notificationsGrpcService.createEmailConfig(emailConfigParametersDTO);
+	}
+
+	public String updateEmailConfig(EmailConfigParametersDTO emailConfigParametersDTO) {
+		return notificationsGrpcService.updateEmailConfig(emailConfigParametersDTO);
+	}
+
+	public EmailConfigParametersDTO getEmailConfig(Integer id) {
+		return notificationsGrpcService.getEmailConfig(id);
+	}
+
+	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
+		return notificationsGrpcService.getTeamConfig(id);
+	}
+
+	public String deleteChannelConfig(Integer id) {
+		return notificationsGrpcService.deleteChannelConfig(id);
+	}
+
+	public String createJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		return notificationsGrpcService.createJiraConfig(jiraParametersDTO);
+	}
+
+	public String updateJiraConfig(JiraParametersDTO jiraParametersDTO) {
+		return notificationsGrpcService.updateJiraConfig(jiraParametersDTO);
+	}
+
+	public JiraParametersDTO getJiraConfig(Integer id) {
+		return notificationsGrpcService.getJiraConfig(id);
+	}
+
+	public GetJiraTicketResponseDTO createJiraTicket(Integer id) {
+		return notificationsGrpcService.createJiraTicket(id);
+	}
+
+	public GetJiraTicketsDTO getJiraTickets(String status, Integer page, Integer pageSize) {
+		return notificationsGrpcService.getJiraTickets(status, page, pageSize);
+	}
+
+	public String disableTicketCreationRequest(Integer schedulerTaskLogId) {
+		return notificationsGrpcService.disableTicketCreationRequest(schedulerTaskLogId);
+	}
+
+	public String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO) {
+		return notificationsGrpcService.notifyOpenedJiraTicket(openJiraTicketDTO);
+	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
-			throws InvalidProtocolBufferException {
+			throws InvalidProtocolBufferException, QueryTransformerException {
 		queryDTO.setSource(datasource.getName());
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
@@ -127,9 +198,13 @@ public class SchedulerService {
 				.ifPresent(queryDTO.getConditionExpressions()::add);
 
 		Query query = queryTransformerService.toQuery(queryDTO,
-				QueryTransformerParams.builder().datasourceId(datasource.getId())
+				QueryTransformerParams.builder()
+						.datasourceId(datasource.getId())
 						.connectionName(datasource.getConnectionName())
-						.vId(visualizationId != null ? visualizationId : "").userId(userId).build());
+						.vId(visualizationId != null ? visualizationId : "")
+						.userId(userId)
+						.build()
+		);
 		String jsonQuery = JsonFormat.printer().print(query);
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
@@ -160,4 +235,7 @@ public class SchedulerService {
 		}
 	}
 
+	public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
+		return notificationsGrpcService.getReportLogByMetaId(taskLogMetaId);
+	}
 }

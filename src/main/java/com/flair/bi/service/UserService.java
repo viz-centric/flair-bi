@@ -10,14 +10,12 @@ import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.util.RandomUtil;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.common.collect.ImmutableSet;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -89,10 +87,24 @@ public class UserService {
 
     public User createUser(String login, String password, String firstName, String lastName, String email,
                            String langKey, String userType) {
+        return createUser(login, password, firstName, lastName, email, langKey,
+                userType, null);
+    }
 
+    public User createUser(String login, String password, String firstName, String lastName, String email,
+                           String langKey, String userType, Set<String> authorities) {
+
+        Set<String> foundAuthorityNames = ImmutableSet.of();
+        if (authorities != null) {
+            foundAuthorityNames = AuthoritiesConstants.ALL.stream()
+                    .filter(authority -> authorities.contains(authority))
+                    .collect(Collectors.toSet());
+        }
+        if (foundAuthorityNames.isEmpty()) {
+            foundAuthorityNames = ImmutableSet.of(AuthoritiesConstants.USER);
+        }
+        List<UserGroup> userGroups = userGroupRepository.findAll(foundAuthorityNames);
         User newUser = new User();
-        final UserGroup userGroup = userGroupRepository.findOne(AuthoritiesConstants.USER);
-        final Set<UserGroup> userGroups = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(login);
         // new user gets initially a generated password
@@ -102,11 +114,10 @@ public class UserService {
         newUser.setEmail(email);
         newUser.setLangKey(langKey);
         newUser.setActivated(true);
-        userGroups.add(userGroup);
         newUser.addUserGroups(userGroups);
         newUser.setUserType(StringUtils.isNoneBlank(userType) ? userType : Constants.INTERNAL_USER);
         userRepository.save(newUser);
-        log.debug("Created Information for User: {}", newUser);
+        log.debug("Created Information for User: {} authorities {}", newUser, foundAuthorityNames);
         return newUser;
     }
 

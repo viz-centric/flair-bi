@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
+import java.util.Collection;
 import java.util.Optional;
 
 
@@ -42,15 +43,16 @@ public class SecurityDependenciesConfiguration {
     @Bean
     public PrincipalExtractor principalExtractor(UserRepository userRepository, UserService userService) {
         return map -> {
-            map.forEach((k, v) -> log.info("Key :{} value :{}", k, v));
-            Optional<User> user = userRepository.findOneByEmail((String) map.get("email"));
+            map.forEach((k, v) -> log.debug("PrincipalExtractor Key :{} value :{}", k, v));
+            String email = (String) map.get("email");
+            Optional<User> user = userRepository.findOneByEmail(email);
             if (!user.isPresent()) {
-                log.info("user is present !!!!!");
-                userService.createUser((String) map.get("email"), passwordEncoder().encode(RandomStringUtils.random(10)), (String) map.get("given_name"),
-                    (String) map.get("family_name"), (String) map.get("email"), Constants.LanguageKeys.ENGLISH,
+                Collection<String> groups = (Collection<String>) map.get("groups");
+                userService.createUser(email, passwordEncoder().encode(RandomStringUtils.random(10)), (String) map.get("given_name"),
+                    (String) map.get("family_name"), email, Constants.LanguageKeys.ENGLISH,
                     Constants.EXTERNAL_USER);
             }
-            return null;
+            return email;
         };
     }
 }

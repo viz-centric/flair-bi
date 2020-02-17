@@ -36,6 +36,22 @@
 	.center{
 		text-align: center;
 	}
+	fieldset{
+		min-width:0;
+		padding: .35em .625em .75em;
+		margin: 0 2px;
+		border: 1px solid #c0c0c0;
+	}
+	legend{
+		display: block;
+		padding: 0;
+		font-size: 20px;
+		line-height: inherit;
+		border: 0;	
+	}
+	label.disabled i {
+		opacity: 0.5;
+	}
 
 }
 .scheduler-footer{

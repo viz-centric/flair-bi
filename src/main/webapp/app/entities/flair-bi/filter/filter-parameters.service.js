@@ -97,15 +97,19 @@
 
         function createCompareExpressionBodyForInterval(value, featureName, interval, operator) {
             return {
-                '@type': 'Compare',
-                comparatorType: 'GTE',
+                '@type': 'Between',
+                featureName: featureName,
                 valueType: {
                     '@type': 'intervalValueType',
                     operator: operator,
                     interval: interval,
                     value: value
                 },
-                featureName: featureName
+                secondValueType: {
+                    '@type': 'predefinedValueType',
+                    value: value
+                },
+                secondValue: value,
             };
         }
 
@@ -113,13 +117,14 @@
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
             if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+                console.log('create body exp ', values, name);
                 values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
                 name = name.split('|')[1];
                 setDatesInRightSideFilters(values[0], values[1]);
             }
             if (valueType === 'valueType') {
                 var dataType = meta.dataType || '';
-                console.log('value type values', values);
+                console.log('filter-parameters: value type values', values);
                 if (values.length === 2) {
                     return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {

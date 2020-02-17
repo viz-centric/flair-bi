@@ -36,7 +36,6 @@
     "metisMenu": "~2.0.2",
     "fontawesome": "~4.5.0",
     "jquery-ui": "^1.12.1",
-    "jquery-slimscroll": "^1.3.8",
     "oclazyload": "^1.0.9",
     "gridstack": "^0.2.6",
     "slidereveal": "^1.1.2",
@@ -74,9 +73,7 @@
     "sockjs": "^0.3.4",
     "stomp-websocket": "^2.3.4",
     "angular-jwt": "^0.1.10",
-    "angular-cron-gen": "^0.0.26",
     "cronstrue": "^0.8.0",
-    "angular-cron-generator": "^1.0.0",
     "flair-visualizations": "master",
     "datatables.net-dt": "^3.2.2"
   },
@@ -110,11 +107,6 @@
         "css/font-awesome.css"
       ]
     },
-    "jquery-slimscroll": {
-      "main": [
-        "jquery.slimscroll.js"
-      ]
-    },
     "slidereveal": {
       "main": [
         "dist/jquery.slidereveal.js"
@@ -134,18 +126,6 @@
       "dependencies": {
         "angular": "*"
       }
-    },
-    "angular-cron-gen": {
-      "main": [
-        "build/cron-gen.min.css",
-        "build/cron-gen.min.js"
-      ]
-    },
-    "angular-cron-generator": {
-      "main": [
-        "dist/angular-cron-generator.css",
-        "dist/angular-cron-generator.min.js"
-      ]
     },
     "flair-visualizations": {
       "main": [

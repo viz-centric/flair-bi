@@ -26,6 +26,7 @@
         vm.allReleaseAlerts=[];
         vm.reports=[];
         vm.alertTab='';
+        vm.expandFlairInsight={id:4};
 
         activate();
 

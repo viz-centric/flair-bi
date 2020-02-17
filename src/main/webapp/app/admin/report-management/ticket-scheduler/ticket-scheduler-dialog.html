@@ -1,0 +1,52 @@
+<div class="inmodal in modal-content common-create-popup">
+    <form name="ticketScheduler" novalidate="" role="form">
+        <div class="modal-header flair-model-header">
+            <svg class="common-edit-icon">
+                <use xlink:href="#edit-dashboard" />
+            </svg>
+            <div class="header-text">
+                Task Notification Scheduler
+            </div>
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+                <use xlink:href="#cancle" />
+            </svg>
+        </div>
+        <div class="modal-body flair-remove-padding scheduler-modal-body">
+            <div class="form-group">
+                <label class="control-label" for="channels">Channels*</label>
+                <div class="form-control">
+                    <label ng-click="vm.setChannel(key,value)" ng-repeat="(key, value) in vm.channels"
+                        class="flair-checkbox">
+                        <i
+                            class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':value,'fa-square-o-unchecked':!value} "></i>
+                        <i
+                            class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':value,'fa-check-square-o-unchecked':!value}"></i>
+                        <span>&nbsp;{{key}}</span>&nbsp;
+                    </label>
+                </div>
+
+            </div>
+            <div class="form-group" ng-if="vm.channels.Teams">
+                <label class="control-label" for="emails">Select Webhooks*</label>
+                <select class="form-control" id="webhook" name="webhook" ng-model="vm.webhook" ng-options="webhook.id 
+                as webhook.webhookName for webhook in vm.webhookList" required=""></select>
+
+            </div>
+        </div>
+        <div class="modal-footer scheduler-footer">
+            <div class="m-b-sm">
+                <button ng-click="vm.notifyOpenedJiraTicket()"
+                    ng-disabled="ticketScheduler.$invalid || vm.selectedChannel.length===0 || (vm.webhook===0 && vm.channels.Teams)"
+                    class="btn btn-primary">
+                    <span>
+                        <i class="fa fa-paper-plane"></i> Send Notification
+                    </span>
+                </button>
+                <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
+                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                    <span data-translate="entity.action.close">Close</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -76,8 +76,8 @@
             },
             {
                 image: "#new-email-report",
-                label: "Report Management",
-                href: "report-management",
+                label: "Report Configuration",
+                href: "report-management({id:'configuration'})",
                 order: 11
             }
 
@@ -110,7 +110,7 @@
             },
             {
                 image: "#admin-logs",
-                label: "Logs",
+                label: "Log Configuration",
                 href: "logs",
                 order: 7
             },
@@ -134,8 +134,8 @@
             },
             {
                 image: "#new-email-report",
-                label: "Report Management",
-                href: "report-management",
+                label: "Report Configuration",
+                href: "report-management({id:'configuration'})",
                 order: 12
             }
             

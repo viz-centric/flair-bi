@@ -947,3 +947,22 @@ body.modal-open .animated {
 .md-icon-button + .md-datepicker-input-container {
     margin-left: 0px;
 }
+
+.flair-text{
+    color:$flair-text;
+    a{
+        color:$flair-text;
+    }
+}
+
+.header-text{
+    color:$flair-text;
+}
+
+ui-breadcrumbs .breadcrumb li.active {
+    color: $flair-text !important;
+}
+
+.btn-default{
+    color: $flair-text !important;
+}

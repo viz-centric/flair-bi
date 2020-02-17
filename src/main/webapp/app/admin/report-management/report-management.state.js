@@ -11,7 +11,7 @@
         $stateProvider
             .state('report-management', {
                 parent: 'admin',
-                url: '/report-management?page&sort',
+                url: '/report-management/{id}?page&sort&:thresholdAlert',
                 data: {
                     authorities: [],
                     pageTitle: 'Reports',
@@ -25,6 +25,10 @@
                     sort: {
                         value: 'id,asc',
                         squash: true
+                    },
+                    id:{
+                        value: 'report',
+                        squash: true
                     }
                 },
                 views: {
@@ -36,7 +40,6 @@
                         controller: 'ReportManagementController',
                         controllerAs: 'vm'
                     }
-
                 },
                 resolve: {
                     pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
@@ -110,7 +113,7 @@
             // })
             .state('report-management-log', {
                 parent:'report-management',
-                url: '/report/:visualizationid',
+                url: '/report/:visualizationid/:reportType',
                 data: {
                     authorities: [],
                     pageTitle: 'Report',

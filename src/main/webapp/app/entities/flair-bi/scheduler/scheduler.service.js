@@ -10,13 +10,15 @@
     function schedulerService($http) {
         var service = {
             scheduleReport: scheduleReport,
-            getScheduledReportsCount:getScheduledReportsCount,
-            getScheduleReport:getScheduleReport,
-            cancelScheduleReport:cancelScheduleReport,
-            getSchedulerReports:getSchedulerReports,
-            executeNow:executeNow,
-            getScheduleReportLogs:getScheduleReportLogs,
-            filterScheduledReports:filterScheduledReports
+            getScheduledReportsCount: getScheduledReportsCount,
+            getScheduleReport: getScheduleReport,
+            cancelScheduleReport: cancelScheduleReport,
+            getSchedulerReports: getSchedulerReports,
+            executeNow: executeNow,
+            getScheduleReportLogs: getScheduleReportLogs,
+            filterScheduledReports: filterScheduledReports,
+            getReportLogByMetaId: getReportLogByMetaId,
+            disableTicketCreation: disableTicketCreation
         };
 
         return service;
@@ -30,9 +32,9 @@
             });
         }
 
-        function getSchedulerReports(pageSize,page) {
+        function getSchedulerReports(pageSize, page) {
             return $http({
-                url: 'api/schedule/reports/'+pageSize+'/'+page,
+                url: 'api/schedule/reports/' + pageSize + '/' + page,
                 method: 'GET'
             });
         }
@@ -46,36 +48,47 @@
 
         function getScheduleReport(visualizationid) {
             return $http({
-                url: 'api/schedule/'+visualizationid,
+                url: 'api/schedule/' + visualizationid,
                 method: 'GET'
             });
         }
 
         function cancelScheduleReport(visualizationid) {
             return $http({
-                url: 'api/schedule/'+visualizationid,
+                url: 'api/schedule/' + visualizationid,
                 method: 'DELETE'
             });
         }
 
-        function executeNow(visualizationid){
+        function executeNow(visualizationid) {
             return $http({
-                url: 'api/executeImmediate/'+visualizationid,
+                url: 'api/executeImmediate/' + visualizationid,
                 method: 'GET'
             });
         }
-        function getScheduleReportLogs(visualizationid,pageSize,page){
+        function getScheduleReportLogs(visualizationid, pageSize, page) {
             return $http({
-                url: 'api/schedule/report/logs/'+visualizationid+'/'+pageSize+'/'+page,
-                method: 'GET'
-            });   
-        }
-        function filterScheduledReports(userName,reportName,startDate,endDate,pageSize,page){
-           return $http({
-                url: 'api/schedule/searchReports/?userName='+userName+'&reportName='+reportName+'&startDate='+startDate+'&endDate='+endDate+'&pageSize='+pageSize+'&page='+page,
+                url: 'api/schedule/report/logs/' + visualizationid + '/' + pageSize + '/' + page,
                 method: 'GET'
             });
         }
-
+        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert) {
+            return $http({
+                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName + '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' + page+'&thresholdAlert='+thresholdAlert,
+                method: 'GET'
+            });
+        }
+        function getReportLogByMetaId(taskLogMetaId) {
+            return $http({
+                url: 'api/schedule/report/log/' + taskLogMetaId,
+                method: 'GET'
+            });
+        }
+        function disableTicketCreation(schedulerTaskLogId) {
+            return $http({
+                url: 'api/notification/disableTicketCreationRequest/?schedulerTaskLogId=' + schedulerTaskLogId + '',
+                method: 'GET'
+            });
+        }
     }
 })();

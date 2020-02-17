@@ -814,6 +814,20 @@ body.modal-open .animated {
 .md-icon-button + .md-datepicker-input-container {
   margin-left: 0px; }
 
+.flair-text {
+  color: #404345; }
+  .flair-text a {
+    color: #404345; }
+
+.header-text {
+  color: #404345; }
+
+ui-breadcrumbs .breadcrumb li.active {
+  color: #404345 !important; }
+
+.btn-default {
+  color: #404345 !important; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1908,14 +1922,9 @@ a {
   .home-container .recently-box-inside a {
     float: left;
     margin: 6px 0 5px 10px;
-    color: #676a6c;
     font-weight: 400;
     transition: 300ms all ease; }
-  .home-container .recently-box-inside a:link,
-  .home-container .recently-box-isnide a:visited {
-    color: #676a6c; }
-  .home-container .recently-box-inside a:hover,
-  .home-container .recently-box-isnide a:visited {
+  .home-container .recently-box-inside a:hover {
     color: #535557; }
   .home-container .rotate {
     transform: rotate(90deg);
@@ -1997,7 +2006,9 @@ a {
       margin-bottom: 12px; }
       .home-container .box .box-title p {
         font-size: 20px;
-        margin: 0 0 15px 0; }
+        margin: 0 0 15px 0;
+        font-weight: bold;
+        color: #404345; }
       .home-container .box .box-title img {
         float: right;
         margin: -63px -41px 0 0;
@@ -2101,9 +2112,7 @@ a {
         border: 1px solid #ededed; }
         .home-container .home-right-container .alerts-tabs .tab p {
           font-size: 13px;
-          color: #676a6c;
           letter-spacing: 0.5px;
-          font-weight: 400;
           margin-top: 10px; }
         .home-container .home-right-container .alerts-tabs .tab svg {
           width: 19px;
@@ -2311,6 +2320,10 @@ a {
 
 .notification {
   border: 1px #e1e3e3 solid; }
+
+.home_label {
+  font-weight: 600;
+  color: #404345; }
 
 tags-input .tags {
   border: 1px solid #e1e3e3;
@@ -3256,7 +3269,8 @@ input[type="search"] {
   clear: both;
   margin-bottom: 25px;
   margin-top: 0;
-  padding: 0; }
+  padding: 0;
+  color: #404345; }
   .fbibox .fbibox-title {
     background-color: #ffffff;
     color: inherit;
@@ -4751,40 +4765,43 @@ table.property-information-table tbody tr td {
 .flair-table-v2 {
   background: #f0f0f2; }
 
-.flair-table-v1 thead tr th {
-  background-color: #f0f0f2;
-  text-align: center; }
-
-.flair-table-v1 tbody tr {
-  background-color: #ffffff; }
-  .flair-table-v1 tbody tr td {
-    vertical-align: middle;
+.flair-table-v1 {
+  color: #404345; }
+  .flair-table-v1 thead tr th {
+    background-color: #f0f0f2;
     text-align: center; }
-    .flair-table-v1 tbody tr td .flex-btn-group-container {
+  .flair-table-v1 tbody tr {
+    background-color: #ffffff; }
+    .flair-table-v1 tbody tr td {
+      vertical-align: middle;
+      text-align: center; }
+      .flair-table-v1 tbody tr td .flex-btn-group-container {
+        align-items: center;
+        justify-content: center; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .delete-icon {
+          color: #ED5565; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .edit-icon {
+          color: #439dd3; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .view-icon {
+          color: #439dd3; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .fa-2x {
+          font-size: 1.5em; }
+        .flair-table-v1 tbody tr td .flex-btn-group-container .btn .build-icon {
+          color: #439dd3;
+          font-size: 17px; }
+      .flair-table-v1 tbody tr td .roles .role-label {
+        background-color: #f0f0f2;
+        color: #404345; }
+      .flair-table-v1 tbody tr td a {
+        color: #404345; }
+    .flair-table-v1 tbody tr .button-centered {
       align-items: center;
       justify-content: center; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .delete-icon {
-        color: #ED5565; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .edit-icon {
-        color: #439dd3; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .view-icon {
-        color: #439dd3; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .fa-2x {
-        font-size: 1.5em; }
-      .flair-table-v1 tbody tr td .flex-btn-group-container .btn .build-icon {
-        color: #439dd3;
-        font-size: 17px; }
-    .flair-table-v1 tbody tr td .roles .role-label {
-      background-color: #f0f0f2; }
-  .flair-table-v1 tbody tr .button-centered {
-    align-items: center;
-    justify-content: center; }
-  .flair-table-v1 tbody tr button {
-    border: none;
-    background-color: initial; }
-
-.flair-table-v1 tbody tr:hover {
-  background-color: #f2fbfe; }
+    .flair-table-v1 tbody tr button {
+      border: none;
+      background-color: initial; }
+  .flair-table-v1 tbody tr:hover {
+    background-color: #f2fbfe; }
 
 /* iCheck plugin Square skin, blue
 ----------------------------------- */
@@ -5078,7 +5095,7 @@ text {
   */
 .data-line {
   stroke-width: 2;
-  fill: none }
+  fill: none; }
 
 path {
   stroke-width: 2; }
@@ -5216,10 +5233,8 @@ div.featuresList {
         font-size: 25px; }
       .information-card .information-card-body .tile-value p {
         font-size: 13px;
-        color: #676a6c;
         line-height: 17px;
-        letter-spacing: 0.5px;
-        font-weight: 400; }
+        letter-spacing: 0.5px; }
     .information-card .information-card-body img {
       width: 102px;
       height: 65px;
@@ -6395,6 +6410,22 @@ input.select2-active {
 .scheduler-modal-body .center {
   text-align: center; }
 
+.scheduler-modal-body fieldset {
+  min-width: 0;
+  padding: .35em .625em .75em;
+  margin: 0 2px;
+  border: 1px solid #c0c0c0; }
+
+.scheduler-modal-body legend {
+  display: block;
+  padding: 0;
+  font-size: 20px;
+  line-height: inherit;
+  border: 0; }
+
+.scheduler-modal-body label.disabled i {
+  opacity: 0.5; }
+
 .scheduler-footer .cancel-job-icon {
   color: #ED5565; }
 
@@ -6572,8 +6603,14 @@ input.select2-active {
 .report-management .filters .report-name {
   height: 35px; }
 
-.report-management .filters .search-btn {
-  margin-top: 30px; }
+.report-management .filters .search-icon {
+  margin-top: 35px;
+  width: 25px;
+  height: 25px;
+  fill: #439dd3; }
+
+.report-management .filters .flair-checkbox .checkbox-icon {
+  vertical-align: 6px; }
 
 .report-actions svg {
   width: 19px;
@@ -6587,3 +6624,156 @@ input.select2-active {
   width: 16px;
   height: 16px;
   vertical-align: -2px; }
+
+#report-management .blue-line {
+  height: 1px;
+  width: 0%;
+  background: #439dd2;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  z-index: 10;
+  transition: 400ms all ease; }
+
+#report-management svg, #report-management img {
+  width: 19px;
+  height: 19px;
+  margin: 5px;
+  fill: #439dd3; }
+
+#report-management .alerts-tabs {
+  display: flex;
+  position: relative;
+  margin-left: 13px;
+  z-index: 0; }
+  #report-management .alerts-tabs .tab {
+    min-width: 0;
+    background-color: #fff;
+    width: 50%;
+    padding: 5px 15px;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+    border: 1px solid #ededed; }
+    #report-management .alerts-tabs .tab p {
+      font-size: 13px;
+      color: #676a6c;
+      letter-spacing: 0.5px;
+      margin-top: 10px; }
+    #report-management .alerts-tabs .tab .release-icon {
+      fill: #439dd3; }
+    #report-management .alerts-tabs .tab .alarm-icon {
+      fill: #ee775e; }
+  #report-management .alerts-tabs .tab:hover {
+    background: #ededed; }
+  #report-management .alerts-tabs .tab:hover > .blue-line {
+    width: 100% !important; }
+  #report-management .alerts-tabs .tab-active {
+    background: #ededed; }
+  #report-management .alerts-tabs .tab-active > .blue-line {
+    width: 100% !important; }
+
+#report-management .tab:hover {
+  background: #ededed; }
+
+#report-management .tab:hover > .blue-line {
+  width: 100% !important; }
+
+#report-management .tab-active {
+  background: #ededed; }
+
+#report-management .tab-active > .blue-line {
+  width: 100% !important; }
+
+#report-management .nav > li > a:hover,
+#report-management .nav > li > a:focus {
+  outline: none !important; }
+
+#report-management .configuration .fbibox-content {
+  background-color: #ffffff;
+  color: inherit;
+  padding: 1px;
+  margin-top: 20px; }
+
+#report-management #email-setting {
+  font-size: 50px;
+  vertical-align: middle;
+  margin-left: 5px;
+  color: #439dd3; }
+
+#report-management .tabs-left > li {
+  margin-right: -1px;
+  outline: none !important; }
+
+#report-management #configuration-container svg,
+#report-management #configuration-container img,
+#report-management #configuration-container #email-setting {
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  margin-left: 5px;
+  font-size: 50px; }
+
+#report-management #openTicketScheduler {
+  color: #9a9d9f;
+  fill: #676a6c; }
+
+#report-management #refreshTicket {
+  padding: 6px 0px;
+  font-size: 14px;
+  color: #676a6c; }
+
+#reportLog img {
+  height: 18px;
+  width: 18px; }
+
+#reportLog label.disabled i {
+  opacity: 0.5; }
+
+#reportLog .logInfo {
+  max-width: 100px; }
+
+#reportLog td.text-left,
+#reportLog th.text-left {
+  text-align: left !important; }
+  #reportLog td.text-left li,
+  #reportLog th.text-left li {
+    list-style-type: none; }
+
+.table-view {
+  min-width: 95%; }
+
+.cron-select-wrap {
+  display: inline-block; }
+
+.cron-select-wrap .cron-select {
+  width: 150px;
+  height: 34px;
+  padding: 6px 12px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }
+
+.cron-select-wrap select {
+  min-width: 100px; }
+
+.cron-select-wrap select[multiple] {
+  height: 140px; }
+
+.form-group .din {
+  display: inline-block; }
+
+.select-options {
+  display: inline-block; }

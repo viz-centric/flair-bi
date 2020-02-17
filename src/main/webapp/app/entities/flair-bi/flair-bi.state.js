@@ -28,6 +28,43 @@
                     true
                 )
             )
+            .state("table-view", {
+                parent: "entity",
+                url: "/visual-table/{id}?datasource",
+                data: {
+                    authorities: []
+                },
+                views: {
+                    "content@": {
+                        templateUrl:
+                            "app/entities/flair-bi/tableview/flair-bi-display-visualization-tableview.html",
+                        controller: "FlairBiDisplayVisualizationTableviewController",
+                        controllerAs: "vm"
+                    },
+                    "footer@": {},
+                    "topnavbar@": {},
+                    "rightnavbar@": {},
+                    "navbar@": {}
+                },
+                resolve: {
+                    visualMetadata: [
+                        "$stateParams",
+                        "Visualmetadata",
+                        "$state",
+                        function($stateParams, Visualmetadata, $state) {
+                            return $stateParams.id
+                        }
+                    ],
+                    datasource: [
+                        "$stateParams",
+                        "Datasources",
+                        function($stateParams, Datasources){
+                          return $stateParams.datasource
+                         
+                        }
+                      ]
+                }
+            })
             .state("fullscreen", {
                 parent: "entity",
                 url: "/visual/{id}?datasource",

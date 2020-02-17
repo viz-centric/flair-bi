@@ -12,7 +12,9 @@
 
         function getQueryValidationError(error) {
             if (!error) {
-                return null;
+                return {
+                    msgKey: 'error.query.validation.generic'
+                };
             }
 
             var errorObject = JSON.parse(error);

@@ -1,25 +1,171 @@
-.report-management{
-	.filters{
-		.report-name{
-			height: 35px;
-		}
-		.search-btn{
-			margin-top: 30px;
-		}
-	}
+.report-management {
+  .filters {
+    .report-name {
+      height: 35px;
+    }
+    .search-icon {
+      margin-top: 35px;
+      width: 25px;
+      height: 25px;
+      fill: $primary-color;
+    }
+    .flair-checkbox .checkbox-icon {
+      vertical-align: 6px;
+    }
+  }
 }
-.report-actions{
-	svg{
-		width: 19px;
-	    height: 19px;
-	    fill : $primary-color;
-	}
-	.views-icon{
-		color:$primary-color;
-	}
-	.execute-now{
-	    width: 16px;
-	    height: 16px;
-	    vertical-align: -2px;
-	}
+.report-actions {
+  svg {
+    width: 19px;
+    height: 19px;
+    fill: $primary-color;
+  }
+  .views-icon {
+    color: $primary-color;
+  }
+  .execute-now {
+    width: 16px;
+    height: 16px;
+    vertical-align: -2px;
+  }
+}
+
+#report-management {
+  .blue-line {
+    height: 1px;
+    width: 0%;
+    background: #439dd2;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+    transition: 400ms all ease;
+  }
+  svg,img {
+    width: 19px;
+    height: 19px;
+    
+    margin: 5px;
+    fill: $primary-color;
+  }
+  .alerts-tabs {
+    display: flex;
+    position: relative;
+    margin-left: 13px;
+    z-index: 0;
+    .tab {
+      min-width: 0;
+      background-color: #fff;
+      //box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16);
+      width: 50%;
+      padding: 5px 15px;
+      display: flex;
+      position: relative;
+      justify-content: space-between;
+      align-items: center;
+      outline: none;
+      border: 1px solid #ededed;
+      p {
+        font-size: 13px;
+        color: #676a6c;
+        letter-spacing: 0.5px;
+        margin-top: 10px;
+      }
+
+      .release-icon {
+        fill: #439dd3;
+      }
+      .alarm-icon {
+        fill: #ee775e;
+      }
+    }
+    .tab:hover {
+      background: #ededed;
+    }
+    .tab:hover > .blue-line {
+      width: 100% !important;
+    }
+    .tab-active {
+      background: #ededed;
+    }
+    .tab-active > .blue-line {
+      width: 100% !important;
+    }
+  }
+  .tab:hover {
+    background: #ededed;
+  }
+  .tab:hover > .blue-line {
+    width: 100% !important;
+  }
+  .tab-active {
+    background: #ededed;
+  }
+  .tab-active > .blue-line {
+    width: 100% !important;
+  }
+  .nav > li > a:hover,
+  .nav > li > a:focus {
+    outline: none !important;
+  }
+  .configuration {
+    .fbibox-content {
+      background-color: #ffffff;
+      color: inherit;
+      padding: 1px;
+      margin-top: 20px;
+    }
+  }
+  #email-setting {
+    font-size: 50px;
+    vertical-align: middle;
+    margin-left: 5px;
+    color: $primary-color;
+  }
+  .tabs-left > li {
+    margin-right: -1px;
+    outline: none !important;
+  }
+
+  #configuration-container {
+    svg,
+    img,
+    #email-setting {
+      height: 50px;
+      width: 50px;
+      vertical-align: middle;
+      margin-left: 5px;
+      font-size: 50px;
+    }
+  }
+  #openTicketScheduler {
+    color: lighten($icons-color, 20%);
+    fill: $icons-color;
+  }
+  #refreshTicket {
+    padding: 6px 0px;
+    font-size: 14px;
+    color: $icons-color;
+  }
+}
+#reportLog {
+  img {
+    height: 18px;
+    width: 18px;
+  }
+
+  label.disabled i {
+    opacity: 0.5;
+  }
+  .logInfo {
+    max-width: 100px;
+  }
+  td.text-left,
+  th.text-left {
+    text-align: left !important;
+
+    li {
+      list-style-type: none;
+    }
+  }
 }

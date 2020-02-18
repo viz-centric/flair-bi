@@ -23,32 +23,60 @@
 
         var DYNAMIC_DATE_RANGE_CONFIG = [
             {
-                title: 'Week to date',
+                title: 'Last 7 days',
                 period: {
                     months: 0,
                     days: 7
                 }
             },
             {
-                title: 'Month to date',
+                title: 'Last 30 days',
                 period: {
                     months: 1,
                     days: 0
                 }
             },
             {
-                title: 'Quarter to date',
+                title: 'Last 90 days',
                 period: {
                     months: 3,
                     days: 0
                 }
             },
             {
-                title: 'Year to date',
+                title: 'Last 365 days',
                 period: {
                     months: 12,
                     days: 0
                 }
+            },
+            {
+                title: 'Week to date',
+                period: {
+                    months: 0,
+                },
+                toDate: 'isoWeek'
+            },
+            {
+                title: 'Month to date',
+                period: {
+                    months: 0,
+                },
+                toDate: 'month'
+            },
+            {
+                title: 'Quarter to date',
+                period: {
+                    months: 1,
+                },
+                toDate: 'quarter'
+            },
+            {
+                title: 'Year to date',
+                period: {
+                    months: 0,
+                },
+                toDate: 'year'
             },
             {
                 title: 'Custom X days',
@@ -88,6 +116,9 @@
             var config = vm.currentDynamicDateRangeConfig;
             if (config.isCustom) {
                 date.setDate(date.getDate() - vm.customDynamicDateRange);
+            } else if (config.toDate) {
+                date = moment(date).startOf(config.toDate).toDate();
+                date.setMonth(date.getMonth() - config.period.months);
             } else {
                 date.setDate(date.getDate() - config.period.days);
                 date.setMonth(date.getMonth() - config.period.months);

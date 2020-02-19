@@ -120,6 +120,12 @@
                 });
             },
 
+            getTypes: function (arr) {
+                return arr.map(function (item) {
+                        return item.feature.type;
+                });
+            },
+
             getExpressionConfig: function (expression, args) {
                 var config = [],
                     temp,

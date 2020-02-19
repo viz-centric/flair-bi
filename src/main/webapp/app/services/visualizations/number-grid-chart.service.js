@@ -24,14 +24,16 @@
                     result['colorSet'] = colorSet;
                     result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name') || result['dimension'][0];
                     result['measureDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Display name') || result['measure'][0];
-
+                    result['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Number format');
                     result['fontSize'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size');
                     result['fontStyle'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font style');
                     result['fontWeight'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font weight');
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
+                    result['showValue'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Value on Points');
                     result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
                     result['fontSizeforDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size for diplay name');
                     if (isNotification) {
+                        result['showValue'] = false;
                         result['showLabel'] = false;
                     }
                     return result;

@@ -23,6 +23,7 @@
         schedulerService,
         REPORTMANAGEMENTCONSTANTS) {
         var vm = this;
+        vm.id = $stateParams.id;
         vm.tableData = [];
         vm.tablekey = [];
         vm.reportData;
@@ -81,16 +82,16 @@
 
         }
         function createHeader(cols) {
-            $("#table-view-col").empty();
-            var row = $("#table-view-col");
+            $("#table-view-col-" + vm.id + "").empty();
+            var row = $("#table-view-col-" + vm.id + "");
             angular.forEach(cols, function (value, key) {
                 row.append("<th>" + key + "</th>");
             });
         }
 
         function addDataInTable(data) {
-            $("#table-view > tbody").empty();
-            var tBody = $("#table-view > tbody");
+            $("#table-view-" + vm.id + " > tbody").empty();
+            var tBody = $("#table-view-" + vm.id + " > tbody");
             angular.forEach(data, function (row, index) {
                 var tr = $("<tr></tr>");
                 angular.forEach(row, function (value, key) {

@@ -1,5 +1,4 @@
 <form name="dataSourceForm" role="form" show-validation>
-    <p class="wizard-help-text"> Configure datasource information</p>
     <div class="form-group">
         <label class="control-label" data-translate="flairbiApp.datasources.name" for="field_name">Table Name</label>
         <ui-select ng-keyup="vm.onSearchKeyUp($select.search)" id="field_name" name="name" ng-model="vm.datasource" required ng-change="vm.setDataSource($select.selected)">

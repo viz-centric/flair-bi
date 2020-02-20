@@ -30,10 +30,10 @@
         vm.gridStackOptions = {
             cellHeight: 60,
             verticalMargin: 10,
-            disableOneColumnMode: true,
-            animate: true,
-            disableDrag: true,
-            disableResize: true
+            disableOneColumnMode: false,
+            animate: false,
+            disableDrag: false,
+            disableResize: false
         };
         vm.notificationSupportCharts = ['Pie Chart', 'Line Chart', 'Clustered Vertical Bar Chart', 'Clustered Horizontal Bar Chart',
             'Stacked Vertical Bar Chart', 'Stacked Horizontal Bar Chart', 'Heat Map', 'Combo Chart', 'Tree Map',

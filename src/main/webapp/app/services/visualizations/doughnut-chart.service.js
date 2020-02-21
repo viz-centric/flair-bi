@@ -48,6 +48,7 @@
                     var doughnut = flairVisualizations.doughnut()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .print(false)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
                         .notification(isNotification == true ? true : false)

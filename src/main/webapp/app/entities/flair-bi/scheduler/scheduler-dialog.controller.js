@@ -393,8 +393,12 @@
                 setCronExpression();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.status == 200) {
+                    if (success.status == 200 && (success.data.message == "report is updated" || success.data.message == "Report is scheduled successfully")) {
                         $uibModalInstance.close(vm.scheduleObj);
+                        $rootScope.showSuccessToast({
+                            text: success.data.message,
+                            title: "Success"
+                        });
                     } else {
                         $rootScope.showErrorSingleToast({
                             text: success.data.message,

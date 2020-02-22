@@ -38,7 +38,7 @@
                     result['measureNumberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Number format');
                     result['targetNumberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[1], 'Number format');
 
-                    if (notification) {
+                    if (isNotification) {
                         result['showLabel'] = false;
                     }
                     return result;

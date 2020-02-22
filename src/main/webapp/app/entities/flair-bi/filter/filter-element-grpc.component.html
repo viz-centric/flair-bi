@@ -2,7 +2,8 @@
     <label class="control-label">{{vm.dimension.name}}</label>
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension"
-            on-date-change="vm.onDateChange(startDate, endDate)">
+                           reload="vm.dateRangeReload"
+                           on-date-change="vm.onDateChange(startDate, endDate)">
         </filter-date-range>
     </div>
     <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">

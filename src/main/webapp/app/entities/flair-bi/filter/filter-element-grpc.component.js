@@ -226,7 +226,7 @@
             filterParameters[dateRangeName].push(date);
             filterParameters[dateRangeName]._meta = {
                 dataType: vm.dimension.type,
-                valueType: 'valueType'
+                valueType: 'dateRangeValueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
         }

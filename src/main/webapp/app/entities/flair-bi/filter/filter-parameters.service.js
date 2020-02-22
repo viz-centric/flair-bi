@@ -122,7 +122,7 @@
                 name = name.split('|')[1];
                 setDatesInRightSideFilters(values[0], values[1]);
             }
-            if (valueType === 'dateRangeValueType' || valueType === 'castValueType') {
+            if (valueType === 'dateRangeValueType') {
                 var dataType = meta.dataType || '';
                 console.log('filter-parameters: date range value type values', values);
                 if (values.length === 2) {
@@ -130,7 +130,7 @@
                 } else {
                     return createCompareExpressionBody(values[0], name, dataType);
                 }
-            } else if (valueType === 'valueType') {
+            } else if (valueType === 'valueType' || valueType === 'castValueType') {
                 console.log('filter-parameters: value type values', values);
                 return createContainsExpressionBody(values, name);
             } else if (valueType === 'intervalValueType') {

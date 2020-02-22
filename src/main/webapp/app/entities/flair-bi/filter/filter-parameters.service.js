@@ -122,14 +122,17 @@
                 name = name.split('|')[1];
                 setDatesInRightSideFilters(values[0], values[1]);
             }
-            if (valueType === 'valueType') {
+            if (valueType === 'dateRangeValueType' || valueType === 'castValueType') {
                 var dataType = meta.dataType || '';
-                console.log('filter-parameters: value type values', values);
+                console.log('filter-parameters: date range value type values', values);
                 if (values.length === 2) {
                     return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {
                     return createCompareExpressionBody(values[0], name, dataType);
                 }
+            } else if (valueType === 'valueType') {
+                console.log('filter-parameters: value type values', values);
+                return createContainsExpressionBody(values, name);
             } else if (valueType === 'intervalValueType') {
                 var operator = meta.operator;
                 var initialValue = meta.initialValue;

@@ -25,6 +25,7 @@
         vm.removed = removed;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.onDateChange = onDateChange;
+        vm.dateRangeReload = false;
         vm.removeTagFromFilterList=removeTagFromFilterList;
 
 
@@ -35,18 +36,20 @@
                 refresh();
             });
 
+            $scope.$on('flairbiApp:clearFilters', function () {
+                clear();
+            });
+
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
         }
 
-        function resetTimezone(startDate) {
-            return startDate;
+        function clear() {
+            vm.dateRangeReload = !vm.dateRangeReload;
         }
 
-        function endOfDay(startDate) {
-            var date = new Date(startDate);
-            date.setHours(23, 59, 59);
-            return date;
+        function resetTimezone(startDate) {
+            return startDate;
         }
 
         function onDateChange(startDate, endDate) {
@@ -63,6 +66,9 @@
 
         function canDisplayDateRangeControls(dimension) {
             var type = dimension && dimension.type;
+            if (!type) {
+                return false;
+            }
             return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
 

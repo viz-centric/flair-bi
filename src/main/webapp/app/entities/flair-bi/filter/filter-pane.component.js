@@ -19,7 +19,7 @@
         var vm = this;
 
         vm.filter = filter;
-        vm.clear = clear;
+        vm.onClearClick = onClearClick;
         vm.selectedFilters = {};
         activate();
 
@@ -42,8 +42,12 @@
             $scope.$on('$destroy', unsubscribe);
         }
 
+        function onClearClick() {
+            $rootScope.$broadcast("flairbiApp:clearFilters");
+        }
+
         function clear() {
-            $rootScope.updateWidget = {};            
+            $rootScope.updateWidget = {};
             vm.dimensions.forEach(function (item) {
                 item.selected = null;
                 item.selected2 = null;

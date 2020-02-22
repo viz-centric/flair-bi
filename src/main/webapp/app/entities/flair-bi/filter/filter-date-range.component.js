@@ -9,6 +9,7 @@
             controllerAs: 'vm',
             bindings: {
                 dimension: '<',
+                reload: '<',
                 onDateChange: '&',
             }
         });
@@ -173,14 +174,24 @@
             $scope.$on('$destroy', unsubscribe);
         }
 
+        function onDimensionChange(dimension) {
+            console.log('date component: on changes before', dimension);
+            vm.currentDimension = {
+                selected: resetTimezone(dimension.selected),
+                selected2: resetTimezone(dimension.selected2),
+            };
+            console.log('date component: on changes after-', vm.currentDimension.selected);
+        }
+
+        function onReloadChange() {
+            onDimensionChange({selected: '', selected2: ''});
+        }
+
         function $onChanges(changesObj) {
             if (changesObj.dimension) {
-                console.log('date component: on changes before', vm.dimension);
-                vm.currentDimension = {
-                    selected: resetTimezone(vm.dimension.selected),
-                    selected2: resetTimezone(vm.dimension.selected2),
-                };
-                console.log('date component: on changes after-', vm.currentDimension.selected);
+                onDimensionChange(vm.dimension);
+            } else if (changesObj.reload) {
+                onReloadChange();
             }
         }
 

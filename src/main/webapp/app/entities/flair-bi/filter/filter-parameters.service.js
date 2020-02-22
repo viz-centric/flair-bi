@@ -73,12 +73,22 @@
           return result;
         }
 
-        function createContainsExpressionBody(values, featureName) {
-            return {
+        function createContainsExpressionBody(values, featureName, dataType) {
+            var ret = {
                 '@type': 'Contains',
                 values: values,
                 featureName: featureName
             };
+            if (dataType) {
+                ret.valueTypes = values.map(function (item) {
+                    return {
+                        '@type': 'valueType',
+                        value: item,
+                        type: dataType
+                    };
+                });
+            }
+            return ret;
         }
 
         function createCompareExpressionBody(value, featureName, dataType) {
@@ -131,8 +141,9 @@
                     return createCompareExpressionBody(values[0], name, dataType);
                 }
             } else if (valueType === 'valueType' || valueType === 'castValueType') {
-                console.log('filter-parameters: value type values', values);
-                return createContainsExpressionBody(values, name);
+                var dataType = meta.dataType || '';
+                console.log('filter-parameters: value type values', values, dataType);
+                return createContainsExpressionBody(values, name, dataType);
             } else if (valueType === 'intervalValueType') {
                 var operator = meta.operator;
                 var initialValue = meta.initialValue;

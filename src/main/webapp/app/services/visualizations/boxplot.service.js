@@ -27,6 +27,8 @@
                         allMeasures = [];
 
                     result["dimension"] = [D3Utils.getNames(dimensions)[0]];
+                    result["dimensionType"] = [D3Utils.getTypes(dimensions)[0]];
+
                     result["measure"] = D3Utils.getNames(measures);
                     result["maxMes"] = measures.length;
                     result["showXaxis"] = VisualizationUtils.getPropertyValue(record.properties, "Show X Axis");

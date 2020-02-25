@@ -28,6 +28,8 @@
 
 
                     result['dimension'] = D3Utils.getNames(dimensions);
+                    result['dimensionType'] = D3Utils.getTypes(dimensions);
+
                     result['measure'] = D3Utils.getNames(measures)[0];
 
                     return result;

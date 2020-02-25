@@ -29,6 +29,7 @@
                     result['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Number format');
                     result['measure'] = [measures[0].feature.name];
                     result['dimension'] = [];
+                    result['dimensionType'] = [];
                     result['showLabelForDimension'] = [];
                     result['labelColorForDimension'] = [];
                     result['fontStyleForDimension'] = [];
@@ -39,6 +40,7 @@
 
                     for (var i = 0, j = ''; i < result.maxDim; i++ , j = i + 1) {
                         result['dimension'].push(dimensions[i].feature.name);
+                        result['dimensionType'].push(dimensions[i].feature.type);
                         result['showLabelForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Show Labels'));
                         result['labelColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Colour of labels'));
                         var displayColor = VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display colour');

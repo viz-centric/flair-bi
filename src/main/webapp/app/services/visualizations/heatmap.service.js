@@ -10,7 +10,7 @@
     function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-                function getProperties(VisualizationUtils, record, isNotification) {
+                function getProperties(VisualizationUtils, record) {
                     var result = {};
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
@@ -67,6 +67,10 @@
                         result['fontSizeForMeasure'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
                         result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                         result['iconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
+                        if (isNotification) {
+                            result['showValues'].push(false);
+                            result['showIcon'].push(false);
+                        }
                     }
                     return result;
                 }

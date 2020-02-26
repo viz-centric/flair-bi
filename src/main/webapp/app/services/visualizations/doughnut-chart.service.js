@@ -19,6 +19,7 @@
                         measure = features.measures;
 
                     result['dimension'] = D3Utils.getNames(dimension);
+                    result['dimensionType'] = D3Utils.getTypes(dimension);
                     result['measure'] = D3Utils.getNames(measure);
 
                     result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name') || result['dimension'][0];

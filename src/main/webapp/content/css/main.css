@@ -2231,116 +2231,94 @@ a {
     padding-top: 5px !important;
     padding-bottom: 0px !important; } }
 
-    #notification-panel {
-      /* Accordion styles */
-      padding-right: 0px;
+.home_label {
+  font-weight: 600;
+  color: #404345; }
+
+#notification-panel {
+  /* Accordion styles */
+  padding-right: 0px; }
+  #notification-panel input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1; }
+  #notification-panel svg.flaticon{
+      height: 20px;
+      width: 20px;
     }
-    
-    #notification-panel input {
-      position: absolute;
-      opacity: 0;
-      z-index: -1;
+  #notification-panel   svg.dashboard{
+      fill:#379DD5;
     }
-    
-    #notification-panel .row {
-      display: flex;
+  #notification-panel   svg.view{
+      fill:#23c59b;
     }
-    
+  #notification-panel   svg.alarm{
+      fill:#ee775e;
+    }
+
+  #notification-panel .row {
+    display: flex; }
     #notification-panel .row .col {
-      flex: 1;
-    }
-    
-    #notification-panel .row .col:last-child {
-      margin-left: 1em;
-    }
-    
-    #notification-panel .tabs {
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
-    }
-    
-    #notification-panel .tab {
-      width: 100%;
-      overflow: hidden;
-      border: solid 1px #eee;
-      margin: 5px 0px;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16);
-    }
-    
-    #notification-panel .tab-label {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5em;
-      background: #eee;
-      font-weight: bold;
-      cursor: pointer;
-      /* Icon */
-    }
-    
+      flex: 1; }
+      #notification-panel .row .col:last-child {
+        margin-left: 1em; }
+  #notification-panel .tabs {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5); }
+  #notification-panel .tab {
+    width: 100%;
+    overflow: hidden;
+    border: solid 1px #eee;
+    margin: 5px 0px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16); }
+  #notification-panel .tab-label {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+    background: #eee;
+    font-weight: bold;
+    cursor: pointer;
+    /* Icon */ }
     #notification-panel .tab-label:hover {
-      background: #ccc;
-    }
-    
+      background: #ccc; }
     #notification-panel .tab-label::after {
       content: "\276F";
       width: 1em;
       height: 1em;
       text-align: center;
-      transition: all 0.35s;
-    }
-    
-    #notification-panel .tab-content {
-      max-height: 0;
-      color: #2c3e50;
-      background: white;
-      transition: all 0.35s;
-    }
-    #notification-panel .tab-content .description{
-      padding: 0em 0.5em;
-    }
-    
-    #notification-panel .tab-content .description p{
-      word-break: break-all;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-    
-    #notification-panel .tab-content .description a {
-      margin-right: 10px;
-    }
-    
-    #notification-panel .tab-close {
-      display: flex;
-      justify-content: flex-end;
-      padding: 0.5em;
-      font-size: 0.75em;
-      background: #2c3e50;
-      cursor: pointer;
-    }
-    
+      transition: all 0.35s; }
+  #notification-panel .tab-content {
+    max-height: 0;
+    color: #2c3e50;
+    background: white;
+    transition: all 0.35s; }
+    #notification-panel .tab-content .description {
+      padding: 0em 0.5em; }
+      #notification-panel .tab-content .description p {
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical; }
+      #notification-panel .tab-content .description a {
+        margin-right: 10px; }
+  #notification-panel .tab-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5em;
+    font-size: 0.75em;
+    background: #2c3e50;
+    cursor: pointer; }
     #notification-panel .tab-close:hover {
-      background: #ccc;
-    }
-    
-    #notification-panel input:checked+.tab-label {
-      background: #ccc;
-    }
-    
-    #notification-panel input:checked+.tab-label::after {
-      transform: rotate(90deg);
-    }
-    
-    #notification-panel input:checked~.tab-content {
-      max-height: 100vh;
-    }
-
-.home_label {
-  font-weight: 600;
-  color: #404345; }
+      background: #ccc; }
+  #notification-panel input:checked + .tab-label {
+    background: #ccc; }
+    #notification-panel input:checked + .tab-label::after {
+      transform: rotate(90deg); }
+  #notification-panel input:checked ~ .tab-content {
+    max-height: 100vh; }
 
 tags-input .tags {
   border: 1px solid #e1e3e3;

@@ -362,7 +362,7 @@
                                             placeholder="Search Visualizations..." />
                                     </div>
                                     <div class="visualContainer properties">
-                                        <div uib-tooltip={{visual.name}} ng-if="visual.name!='Text Object' && visual.name!='Word Cloud'" tooltip-placement="auto" class="visual-items"
+                                        <div uib-tooltip={{visual.name}} ng-if="visual.name!='Text Object' && visual.name!='Word Cloud' && visual.name!='Box Plot'" tooltip-placement="auto" class="visual-items"
                                             ng-repeat="visual in vm.visualizations  | filter: {name: searchVisual} track by visual.id"
                                             ng-click="vm.addVisual(visual)">
                                             <a class="visual-sub-items" href>

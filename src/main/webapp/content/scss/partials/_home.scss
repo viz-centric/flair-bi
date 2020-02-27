@@ -620,6 +620,11 @@
   }
 }
 
+.home_label{
+  font-weight: 600;
+  color : $flair-text;
+}
+
 #notification-panel {
   /* Accordion styles */
   padding-right: 0px;
@@ -628,6 +633,19 @@
     position: absolute;
     opacity: 0;
     z-index: -1;
+  }
+  svg.flaticon{
+    height: 20px;
+    width: 20px;
+  }
+  svg.dashboard{
+    fill:#379DD5;
+  }
+  svg.view{
+    fill:#23c59b;
+  }
+  svg.alarm{
+    fill:#ee775e
   }
 
   .row {
@@ -729,9 +747,4 @@
       max-height: 100vh;
     }
   }
-}
-
-.home_label{
-  font-weight: 600;
-  color : $flair-text;
 }

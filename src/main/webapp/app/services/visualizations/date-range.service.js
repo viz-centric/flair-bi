@@ -30,6 +30,7 @@
                         colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimensions);
+                    result['dimensionType'] = D3Utils.getTypes(dimensions);
                     result['measure'] = D3Utils.getNames(measures);
                     result['showXaxis'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis');
                     result['showYaxis'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis');

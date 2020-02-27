@@ -19,6 +19,7 @@
                         dimension = features.dimensions,
                         measure = features.measures;
                     result['dimension'] = D3Utils.getNames(dimension);
+                    result['dimensionType'] = D3Utils.getTypes(dimension);
                     result['measure'] = D3Utils.getNames(measure);
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toUpperCase();

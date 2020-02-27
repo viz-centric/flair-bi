@@ -19,7 +19,8 @@
                         measure = features.measures,
                         colorSet = D3Utils.getDefaultColorset();
 
-                    result['dimension'] = D3Utils.getNames(dimension);
+                   result['dimension'] = D3Utils.getNames(dimension);
+                    result['dimensionType'] = D3Utils.getTypes(dimension);
                     result['measure'] = D3Utils.getNames(measure);
                     result['colorSet'] = colorSet;
                     result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name') || result['dimension'][0];

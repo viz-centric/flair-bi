@@ -20,6 +20,8 @@
                         colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimensions)[0];
+                    result['dimensionType'] = D3Utils.getTypes(dimensions)[0];
+
                     result['colorSet'] = colorSet;
                     result['measure'] = D3Utils.getNames(measures)[0];
                     result['minimumSize'] = VisualizationUtils.getPropertyValue(record.properties, 'Minimum Size') || '10px';

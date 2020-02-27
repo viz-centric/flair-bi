@@ -33,6 +33,7 @@
                         allMeasures = [],
                         colorSet = D3Utils.getDefaultColorset();
                     result['dimension'] = D3Utils.getNames(dimensions);
+                    result['dimensionType'] = D3Utils.getTypes(dimensions);
                     result['measure'] = D3Utils.getNames(measures);
 
                     result['maxMes'] = measures.length;

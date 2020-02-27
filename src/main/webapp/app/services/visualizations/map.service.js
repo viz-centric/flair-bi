@@ -20,6 +20,8 @@
 
                     result['colorPattern'] = VisualizationUtils.getPropertyValue(record.properties, 'Color Pattern').toLowerCase().replace(' ', '_');
                     result['dimension'] = [D3Utils.getNames(dimension)[0]];
+                    result['dimensionType'] = [D3Utils.getTypes(dimension)[0]];
+
                     result['measure'] = [D3Utils.getNames(measure)[0]];
                     result['colorSet'] = colorSet;
                     result['colourOfLabels'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Colour of labels');

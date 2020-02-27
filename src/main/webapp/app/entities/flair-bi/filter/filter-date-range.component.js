@@ -134,8 +134,8 @@
 
         function onInputChange() {
             if (vm.dateRangeTab === TAB_DAY) {
-                var startDate = resetTimezone(vm.currentDimension.selected.toISOString());
-                var endDate = resetTimezone(endOfDay(vm.currentDimension.selected.toISOString()));
+                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
+                var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected))));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -143,8 +143,8 @@
                     endDate: endDate
                 });
             } else if (vm.dateRangeTab === TAB_RANGE) {
-                var startDate = resetTimezone(vm.currentDimension.selected);
-                var endDate = resetTimezone(vm.currentDimension.selected2);
+                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
+                var endDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected2)));
                 console.log('filter-date-range-component: input change range', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -152,8 +152,8 @@
                     endDate: endDate,
                 });
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
-                var startDate = resetTimezone(startOfDay(getStartDateRange().toISOString()));
-                var endDate = resetTimezone(endOfDay(new Date().toISOString()));
+                var startDate = formatDate(resetTimezone(startOfDay(strToDate(getStartDateRange()))));
+                var endDate = formatDate(resetTimezone(endOfDay(new Date())));
                 console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -166,8 +166,8 @@
         function setDateRangeSubscription() {
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
                 console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate, 'timezone', new Date(dateRange.startDate).getTimezoneOffset());
-                vm.currentDimension.selected = dateRange.startDate;
-                vm.currentDimension.selected2 = dateRange.endDate;
+                vm.currentDimension.selected = strToDate(dateRange.startDate);
+                vm.currentDimension.selected2 = strToDate(dateRange.endDate);
                 console.log('filter-date-range: event filter-set-date-ranges after', vm.currentDimension.selected);
             });
 
@@ -177,14 +177,14 @@
         function onDimensionChange(dimension) {
             console.log('date component: on changes before', dimension);
             vm.currentDimension = {
-                selected: resetTimezone(dimension.selected),
-                selected2: resetTimezone(dimension.selected2),
+                selected: resetTimezone(strToDate(dimension.selected)),
+                selected2: resetTimezone(strToDate(dimension.selected2)),
             };
             console.log('date component: on changes after-', vm.currentDimension.selected);
         }
 
         function onReloadChange() {
-            onDimensionChange({selected: '', selected2: ''});
+            onDimensionChange({selected: null, selected2: null});
         }
 
         function $onChanges(changesObj) {
@@ -195,40 +195,43 @@
             }
         }
 
-        function resetTimezone(startDate) {
-            if (!startDate) {
-                return '';
+        function resetTimezone(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            return date.toISOString();
+            return date;
         }
 
-        function addTimezone(startDate) {
-            if (!startDate) {
-                return '';
+        function strToDate(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
-            date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-            return date.toISOString();
+            // console.log('str to date', date, typeof date);
+            return new Date(date);
         }
 
-        function endOfDay(startDate) {
-            if (!startDate) {
-                return '';
+        function endOfDay(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
             date.setHours(23, 59, 59);
-            return date.toISOString();
+            return date;
         }
 
-        function startOfDay(startDate) {
-            if (!startDate) {
-                return '';
+        function startOfDay(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
             date.setHours(0, 0, 0);
-            return date.toISOString();
+            return date;
+        }
+
+        function formatDate(date) {
+            if (!date) {
+                return null;
+            }
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
         }
 
     }

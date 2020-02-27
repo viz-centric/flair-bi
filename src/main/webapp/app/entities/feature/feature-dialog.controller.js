@@ -30,7 +30,6 @@
         vm.save = save;
         vm.clear = clear;
         vm.featureTypes = FeatureTypes.query();
-        vm.feature.type=vm.feature.featureType=='DIMENSION'?'String':'Integer';
         vm.functions= Functions.query();
         vm.copyFunctions=copyFunctions;
         ////////////////

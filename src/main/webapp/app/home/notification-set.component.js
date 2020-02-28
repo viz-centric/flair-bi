@@ -129,7 +129,7 @@
                                 + '<input type="checkbox" id="' + metaData.notification.report_line_item.visualizationid + '">'
                                 + '<label class="tab-label" for="' + metaData.notification.report_line_item.visualizationid + '">' + obj.title + '</label>'
                                 + '<div class="tab-content" >'
-                                + '<div height="250" width="' + notificationWidth + '" style="height:250px;width:' + notificationWidth + 'px;" id="content-' + id + '"></div>'
+                                + '<div class="description" height="250" width="' + notificationWidth + '" style="height:250px;width:' + notificationWidth + 'px;" id="content-' + id + '"></div>'
                                 + '<div class="description">'
                                 + '<div><p>' + metaData.notification.report.mail_body + '</p>'
                                 + '<div class="text-center">'
@@ -858,7 +858,8 @@
                                     'align-items': 'center',
                                     'justify-content': 'center'
                                 });
-                                div[0].innerHTML = "Data not available";
+                                div[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+
                             }
                         }
 

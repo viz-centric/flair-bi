@@ -98,7 +98,7 @@
             ChannelService.createEmailConfig(SMPTConfig)
                 .then(function (success) {
                     var info = {
-                        text: "SMTP settings are save successfully",
+                        text: "SMTP settings are saved successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);
@@ -122,7 +122,7 @@
             ChannelService.createJiraConfig(jiraConfig)
                 .then(function (success) {
                     var info = {
-                        text: "Jira settings are save successfully",
+                        text: "Jira settings are saved successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);

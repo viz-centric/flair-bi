@@ -46,6 +46,9 @@
                         result['fontWeight'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font weight'));
                         result['fontSize'].push(parseInt(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Font size')));
                         result['textColor'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Text colour'));
+                        if(isNotification){
+                            result['showLabels'].push(false);
+                        }
                     }
                     return result;
                 }

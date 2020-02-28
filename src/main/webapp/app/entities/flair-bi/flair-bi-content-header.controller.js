@@ -659,6 +659,14 @@
             Auth.logout()
                 .then(function () {
                     $state.go('login');
+                })
+                .catch(function (response) {
+                    console.log("Logout error status:"+response.status)
+                    console.log("Logout error data:"+response.data)
+                    console.log("Logout error :"+response)
+                    console.log("Logout error stringify:"+JSON.stringify(response))
+                    console.log("Logout error parse:"+JSON.parse(response))
+
                 });
         }
 

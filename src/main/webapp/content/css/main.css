@@ -4860,6 +4860,18 @@ table.property-information-table tbody tr td {
   .link:hover {
     stroke-opacity: 1; }
 
+  .noDataFound{
+    color: #fe9800;
+    font-size: 25px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  .noDataText{
+    font-size: 12px;
+    color: #9d9d9d;
+    margin: 0px;
+  }
+
 .flair-table {
   word-wrap: break-word;
   margin: 0 auto;

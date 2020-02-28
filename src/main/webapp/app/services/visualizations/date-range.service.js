@@ -17,9 +17,7 @@
                         'align-items': 'center',
                         'justify-content': 'center'
                     });
-
-                    element[0].innerHTML = "Data not available";
-
+                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
                     return;
                 }
                 function getProperties(VisualizationUtils, record) {

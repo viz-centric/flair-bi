@@ -29,14 +29,16 @@ $active-background-color: #f0f0f2;
 /* Main page background color */
 $page-content-color: #f1f3f3;
 
+$flair-text: #404345;
+
 /* Icon color*/
-$icons-color: #676a6c;
+$icons-color: $flair-text;
 
 /* Anchor color */
-$anchor-color: #676a6c;
+$anchor-color: $flair-text;
 
 /* Text color */
-$text-color: #676a6c;
+$text-color: $flair-text;
 
 /* Modal Colors*/ 
 $modal-body-color: #ffffff;
@@ -84,4 +86,3 @@ $homepage-table-background: #ffffff ;
 
 $pop_up_header_background: #f6f8f8 ;
 $views-color:#23c59b;
-$flair-text: #404345;

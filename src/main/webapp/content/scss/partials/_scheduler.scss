@@ -11,6 +11,19 @@
 	    margin-top: 0px;
 	}
 
+	.scheduler-tags{
+	    .tooltip-position{
+			position: absolute;
+		    top: 23px;
+		    right: -20px;
+		    .more-icon{
+			    width: 24px;
+			    height: 24px;
+			    fill: $primary-color;
+		    }
+	    }
+	}
+
 	.cron-wrap{
 		.clearfix{
 			.form-group{

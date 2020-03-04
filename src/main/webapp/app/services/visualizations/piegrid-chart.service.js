@@ -10,7 +10,15 @@
     function GeneratePieGridChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-
+                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                    element.css({
+                        'display': 'flex',
+                        'align-items': 'center',
+                        'justify-content': 'center'
+                    });
+                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+                    return;
+                }
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -19,7 +27,7 @@
                         measure = features.measures,
                         colorSet = D3Utils.getDefaultColorset();
 
-                   result['dimension'] = D3Utils.getNames(dimension);
+                    result['dimension'] = D3Utils.getNames(dimension);
                     result['dimensionType'] = D3Utils.getTypes(dimension);
                     result['measure'] = D3Utils.getNames(measure);
                     result['colorSet'] = colorSet;

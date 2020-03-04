@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('teamConfigDialog', teamConfigDialog);
 
-    teamConfigDialog.$inject = ['$scope', 'data', 'config', '$uibModalInstance', '$rootScope', 'ChannelService'];
+    teamConfigDialog.$inject = ['$scope', 'data', 'config', 'webhook', '$uibModalInstance', '$rootScope', 'ChannelService'];
 
-    function teamConfigDialog($scope, data, config, $uibModalInstance, $rootScope, ChannelService) {
+    function teamConfigDialog($scope, data, config, webhook, $uibModalInstance, $rootScope, ChannelService) {
         var vm = this;
         vm.config = config;
         vm.clear = clear;
@@ -16,6 +16,7 @@
         vm.addWebhook = addWebhook;
         vm.updateWebhook = updateWebhook;
         vm.headerText = "Add MS Teams webhook URL";
+        vm.webhookList = webhook;
         if (data) {
             vm.headerText = "Edit MS Teams webhook URL";
             vm.isEdit = true;
@@ -29,27 +30,51 @@
         function clear() {
             $uibModalInstance.close();
         }
+        function checkWebhhokIsExiste(webhook) {
+            for (var index = 0; index < vm.webhookList.length; index++) {
+                if (webhook.id) {
+                    if (webhook.webhookName === vm.webhookList[index].webhookName && webhook.id !== vm.webhookList[index].id) {
+                        return true;
+                    }
+                }
+                else {
+                    if (webhook.webhookName === vm.webhookList[index].webhookName) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         function addWebhook() {
             var teamConfig = {
                 webhookName: vm.connection.details.webhookName,
                 webhookURL: vm.connection.details.webhookURL
             }
-            ChannelService.createTeamConfig(teamConfig)
-                .then(function (success) {
-                    var info = {
-                        text: "team's config is saved",
-                        title: "Saved"
-                    }
-                    $rootScope.showSuccessToast(info);
-                    vm.clear();
+            if (!checkWebhhokIsExiste(teamConfig)) {
+                ChannelService.createTeamConfig(teamConfig)
+                    .then(function (success) {
+                        var info = {
+                            text: "team's config is saved",
+                            title: "Saved"
+                        }
+                        $rootScope.showSuccessToast(info);
+                        vm.clear();
 
-                }).catch(function (error) {
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
-                });
+                    }).catch(function (error) {
+                        var info = {
+                            text: error.data.message,
+                            title: "Error"
+                        }
+                        $rootScope.showErrorSingleToast(info);
+                    });
+            }
+            else {
+                var info = {
+                    text: "Webhook already exists with this name",
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            }
         }
 
         function updateWebhook() {
@@ -58,22 +83,31 @@
                 webhookName: vm.connection.details.webhookName,
                 webhookURL: vm.connection.details.webhookURL
             }
-            ChannelService.updateTeamConfig(teamConfig)
-                .then(function (success) {
-                    var info = {
-                        text: "team webhook URL updated successfully",
-                        title: "Updated"
-                    }
-                    $rootScope.showSuccessToast(info);
-                    vm.clear();
+            if (!checkWebhhokIsExiste(teamConfig)) {
+                ChannelService.updateTeamConfig(teamConfig)
+                    .then(function (success) {
+                        var info = {
+                            text: "team webhook URL updated successfully",
+                            title: "Updated"
+                        }
+                        $rootScope.showSuccessToast(info);
+                        vm.clear();
 
-                }).catch(function (error) {
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
-                });
+                    }).catch(function (error) {
+                        var info = {
+                            text: error.data.message,
+                            title: "Error"
+                        }
+                        $rootScope.showErrorSingleToast(info);
+                    });
+            }
+            else {
+                var info = {
+                    text: "Webhook already exists with this name",
+                    title: "Error"
+                }
+                $rootScope.showErrorSingleToast(info);
+            }
         }
 
     }

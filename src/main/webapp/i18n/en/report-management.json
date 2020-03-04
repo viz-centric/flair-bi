@@ -38,6 +38,7 @@
         "reporter": "Reporter",
         "enableTicketCreation": "Enable Create Ticket",
         "viewTicket": "View Ticket",
-        "reportRecipient":"Report Recipient"
+        "reportRecipient":"Report Recipient",
+        "uniqueError" : "Webhook already exists with this name"
     }
 }

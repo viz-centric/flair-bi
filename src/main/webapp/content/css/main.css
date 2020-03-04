@@ -6717,6 +6717,10 @@ input.select2-active {
   margin-left: 5px;
   font-size: 50px; }
 
+#report-management #configuration-container .col-xs-10{
+    overflow-y: auto;
+    max-height: calc(100vh - 250px); }
+
 #report-management #openTicketScheduler {
   color: #71767a;
   fill: #404345; }

@@ -12,9 +12,9 @@
             }
         });
 
-    configurationController.$inject = ['$uibModal','$uibModalStack', '$rootScope', 'ChannelService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
+    configurationController.$inject = ['$uibModal', '$uibModalStack', '$rootScope', 'ChannelService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
 
-    function configurationController($uibModal,$uibModalStack, $rootScope, ChannelService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
+    function configurationController($uibModal, $uibModalStack, $rootScope, ChannelService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
         var vm = this;
 
         vm.saveSMTPSetting = saveSMTPSetting;
@@ -190,6 +190,9 @@
                     },
                     config: function () {
                         return vm.teamChannelConfig;
+                    },
+                    webhook: function () {
+                        return vm.webhookList;
                     }
                 }
             }).result.then(function () {

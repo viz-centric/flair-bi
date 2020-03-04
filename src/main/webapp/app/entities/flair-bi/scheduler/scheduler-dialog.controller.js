@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$window'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$window) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -50,6 +50,7 @@
         vm.timeCompatibleDimensions = [];
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.setChannel = setChannel;
+        vm.openCommunicationListWindow=openCommunicationListWindow;
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
@@ -652,6 +653,14 @@
             // if (channel === "Teams" && vm.WebhookList.length === 0) {
             //     return REPORTMANAGEMENTCONSTANTS.disabledTicketCreation;
             // }
+        }
+
+        function openCommunicationListWindow(){
+            var obj={};
+            var vizId=addPrefix(vm.scheduleObj.report_line_item.visualizationid);
+            //obj[vizId]={emails:vm.selectedUsers,webhooks:vm.selectedWebhooks};
+            //CommunicationDispatcherService.saveCommunicationList(obj);
+            $window.open("/#/communication-list/"+vizId,'_blank');
         }
     }
 })();

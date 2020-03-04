@@ -83,10 +83,10 @@
                                 replace-spaces-with-dashes="false">
                                 <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
                                     min-length="0" load-on-focus="true " load-on-empty="true "
-                                    max-results-to-show="32 ">
+                                    max-results-to-show="10">
                                 </auto-complete>
                             </tags-input>
-                            <span class="tooltip-position" uib-tooltip="More...">
+                            <span class="tooltip-position" uib-tooltip="More..." ng-click="vm.openCommunicationListWindow()" ng-if="vm.selectedUsers.length>10">
                                 <svg class="more-icon">
                                     <use xlink:href="#more-recipient" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     </use>
@@ -135,9 +135,15 @@
                                     ng-model="vm.selectedWebhook" replace-spaces-with-dashes="false">
                                     <auto-complete match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
                                         min-length="0" load-on-focus="true " load-on-empty="true "
-                                        max-results-to-show="32 ">
+                                        max-results-to-show="10">
                                     </auto-complete>
                                 </tags-input>
+                                <span class="tooltip-position" uib-tooltip="More..." ng-click="vm.openCommunicationListWindow()" ng-if="vm.selectedWebhook.length>10">
+                                    <svg class="more-icon">
+                                        <use xlink:href="#more-recipient" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        </use>
+                                    </svg>
+                                </span>
                             </div>
 
                         </div>

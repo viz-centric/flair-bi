@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$window'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$uibModal'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$window) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$uibModal) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
@@ -50,7 +50,7 @@
         vm.timeCompatibleDimensions = [];
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.setChannel = setChannel;
-        vm.openCommunicationListWindow=openCommunicationListWindow;
+        vm.openCommunicationListModal=openCommunicationListModal;
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
@@ -94,6 +94,7 @@
         ////////////////
 
         function activate() {
+            registerSetCommunicationList();
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
@@ -655,12 +656,43 @@
             // }
         }
 
-        function openCommunicationListWindow(){
-            var obj={};
-            var vizId=addPrefix(vm.scheduleObj.report_line_item.visualizationid);
-            //obj[vizId]={emails:vm.selectedUsers,webhooks:vm.selectedWebhooks};
-            //CommunicationDispatcherService.saveCommunicationList(obj);
-            $window.open("/#/communication-list/"+vizId,'_blank');
+        function openCommunicationListModal(){
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'app/entities/flair-bi/scheduler/communication-list/communication-list.html',
+                size: 'lg',
+                controller: 'CommunicationListController',
+                controllerAs: 'vm',
+                resolve: {
+                    vizIdPrefix: function () {
+                        return vm.vizIdPrefix;
+                    },
+                    report: function(){
+                        return vm.scheduleObj;
+                    },
+                    users: function(){
+                        return vm.users;
+                    },
+                    webhookList: function(){
+                        return vm.WebhookList;
+                    }
+                }
+            }).result.then(function () { }, function () { });
+
+
         }
+
+        function registerSetCommunicationList() {
+            var setCommunicationList = $scope.$on(
+                "flairbiApp:Scheduler:Set-Communication-List",
+                function(event,vizId) {
+                    var communicationList=CommunicationDispatcherService.getCommunicationList(vizId);
+                    vm.selectedUsers=communicationList.emails;
+                    vm.selectedWebhooks=communicationList.webhooks;
+                }
+            );
+            $scope.$on("$destroy", setCommunicationList);
+        }
+
     }
 })();

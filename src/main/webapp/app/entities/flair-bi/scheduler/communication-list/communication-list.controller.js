@@ -5,58 +5,33 @@
         .module('flairbiApp')
         .controller('CommunicationListController', CommunicationListController);
 
-    CommunicationListController.$inject = ['$scope','$stateParams','schedulerService','$rootScope','CommunicationDispatcherService','ChannelService','User'];
+    CommunicationListController.$inject = ['$scope','$stateParams','$rootScope','CommunicationDispatcherService','users','webhookList','vizIdPrefix','report','$uibModalInstance'];
 
-    function CommunicationListController($scope,$stateParams,schedulerService,$rootScope,CommunicationDispatcherService,ChannelService,User) {
+    function CommunicationListController($scope,$stateParams,$rootScope,CommunicationDispatcherService,users,webhookList,vizIdPrefix,report,$uibModalInstance) {
         var vm = this;
         vm.added = added;
         vm.loadWebhooks=loadWebhooks;
         vm.loadUsers=loadUsers;
         vm.saveCommunicationList=saveCommunicationList;
-        vm.vizIdPrefix = 'threshold_alert_:';
+        vm.vizIdPrefix = vizIdPrefix;
+        vm.report=report;
+        vm.users=users;
+        vm.webhookList=webhookList;
+        vm.clear = clear;
         activate();
 
         ////////////////
 
         function activate() {
-
-            getScheduleReport($stateParams.id);
-            vm.users = User.query();
-            getWebhookList();
-        }
-
-        function getScheduleReport(id) {
-            schedulerService.getScheduleReport(id)
-                .then(function (success) {
-                    vm.report = success.data.report;
-                    addEmailList(vm.report.assign_report.communication_list.email);
-                })
-                .catch(function (error) {
-                    $rootScope.showErrorSingleToast({
-                        text: error.data.message,
-                        title: "Error"
-                    });
-                });
-        }
-
-        function getWebhookList() {
-            ChannelService.getTeamConfig(0)
-                .then(function (success) {
-                    vm.WebhookList = success.data;
-                    addWebhookList(vm.report.assign_report.communication_list.teams);
-                }).catch(function (error) {
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
-                });
+            vm.users = users;
+            addEmailList(vm.report.assign_report.communication_list.email);
+            addWebhookList(vm.report.assign_report.communication_list.teams);
         }
 
         function addWebhookList(webhooks) {
             vm.webhooks = webhooks.map(function (item) {
                 var newItem = {};
-                var webhook = vm.WebhookList.filter(function (val) {
+                var webhook = vm.webhookList.filter(function (val) {
                     if (val.id == item) {
                         return val
                     }
@@ -64,17 +39,6 @@
                 newItem['text'] = webhook[0].webhookName;
                 return newItem;
             });
-
-            // vm.selectedWebhook = webhook.map(function (item) {
-            //     var newItem = {};
-            //     var webhook = vm.WebhookList.filter(function (val) {
-            //         if (val.id == item) {
-            //             return val
-            //         }
-            //     })
-            //     newItem['text'] = webhook[0].webhookName;
-            //     return newItem;
-            // });
         }
 
         function addEmailList(emails) {
@@ -93,7 +57,7 @@
 
         function addWebhook(tag) {
             console.log("-vm.selectedUser" + vm.selectedWebhook);
-            var webhook = vm.WebhookList.filter(function (val) {
+            var webhook = vm.webhookList.filter(function (val) {
                 if (val.webhookName == tag.text) {
                     return val
                 }
@@ -102,7 +66,7 @@
         }
 
         function removeWebhook(tag) {
-            var webhook = vm.WebhookList.filter(function (val) {
+            var webhook = vm.webhookList.filter(function (val) {
                 if (val.webhookName == tag.text) {
                     return val
                 }
@@ -124,7 +88,7 @@
         }
 
         function loadWebhooks() {
-            var retVal = vm.WebhookList.map(function (item) {
+            var retVal = vm.webhookList.map(function (item) {
                 return item.webhookName;
             });
             return retVal;
@@ -138,14 +102,14 @@
         }
 
         function saveCommunicationList(){
-            var obj={};
-            var vizId=addPrefix(vm.report.report_line_item.visualizationid);
-            obj[vizId]={emails:vm.emails,webhooks:vm.webhooks};
-            CommunicationDispatcherService.saveCommunicationList(obj);
+            var vizId=vm.report.report_line_item.visualizationid;
+            CommunicationDispatcherService.saveCommunicationList(vizId,{emails:vm.emails,webhooks:vm.webhooks});
+            $rootScope.$broadcast("flairbiApp:Scheduler:Set-Communication-List",vizId);
+            clear();
         }
 
-        function addPrefix(vizId) {
-            return vm.report.report.thresholdAlert ? vm.vizIdPrefix + vizId : vizId;
+        function clear() {
+            $uibModalInstance.close();
         }
 
     }

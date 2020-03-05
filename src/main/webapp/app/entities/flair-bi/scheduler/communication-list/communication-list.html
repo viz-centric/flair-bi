@@ -1,40 +1,52 @@
-<div class="container-margin-top" style="margin-top: 65px;">
-    <div class="row">
-        <div class="col-xs-8">
-            <div class="form-group scheduler-tags">
-                <label class="control-label" for="emails">Share Report with Users*</label>
-                <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
-                    on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true"
-                    minTags="5" min-length="1" ng-model="vm.emails"
-                    ng-required="vm.emails.length==0"
-                    replace-spaces-with-dashes="false">
-                    <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
-                        min-length="0" load-on-focus="true " load-on-empty="true "
-                        max-results-to-show="200">
-                    </auto-complete>
-                </tags-input>
+<div class="inmodal in modal-content common-create-popup">
+    <div class="modal-header">
+        <svg class="common-edit-icon">
+          <use xlink:href="#edit-dashboard" />
+        </svg>
+        <div class="header-text">
+            Hii
+        </div>
+        <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+          <use xlink:href="#cancle" />
+        </svg>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="form-group scheduler-tags">
+                    <label class="control-label" for="emails">Share Report with Users*</label>
+                    <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
+                        on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true"
+                        minTags="5" min-length="1" ng-model="vm.emails"
+                        ng-required="vm.emails.length==0"
+                        replace-spaces-with-dashes="false">
+                        <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
+                            min-length="0" load-on-focus="true " load-on-empty="true "
+                            max-results-to-show="200">
+                        </auto-complete>
+                    </tags-input>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="form-group scheduler-tags">
+                    <label class="control-label" for="emails">Select Webhooks*</label>
+                    <tags-input placeholder="Select a Webhooks" on-tag-added="vm.addWebhook($tag)"
+                        on-tag-removed="vm.removeWebhook($tag)" class="filter-input"
+                        add-from-autocomplete-only="true" minTags="5" min-length="1"
+                        ng-model="vm.webhooks" replace-spaces-with-dashes="false">
+                        <auto-complete match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
+                            min-length="0" load-on-focus="true " load-on-empty="true "
+                            max-results-to-show="50">
+                        </auto-complete>
+                    </tags-input>
+                </div>
             </div>
         </div>
-        <div class="col-xs-8">
-            <div class="form-group scheduler-tags">
-                <label class="control-label" for="emails">Select Webhooks*</label>
-                <tags-input placeholder="Select a Webhooks" on-tag-added="vm.addWebhook($tag)"
-                    on-tag-removed="vm.removeWebhook($tag)" class="filter-input"
-                    add-from-autocomplete-only="true" minTags="5" min-length="1"
-                    ng-model="vm.webhooks" replace-spaces-with-dashes="false">
-                    <auto-complete match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
-                        min-length="0" load-on-focus="true " load-on-empty="true "
-                        max-results-to-show="50">
-                    </auto-complete>
-                </tags-input>
-            </div>
-        </div>
-        <br/>
-        <div class="col-xs-8">
-            <button class="btn btn-primary" ng-click="vm.saveCommunicationList()">
-                <span class="glyphicon glyphicon-save"></span>&nbsp;
-                <span data-translate="entity.action.save">Save</span>
-            </button>
-        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="vm.saveCommunicationList()">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;
+            <span data-translate="entity.action.save">Save</span>
+        </button>
     </div>
 </div>

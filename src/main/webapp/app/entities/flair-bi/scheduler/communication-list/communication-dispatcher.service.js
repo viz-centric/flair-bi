@@ -18,8 +18,8 @@
         return service;
 
         ////////////////
-        function saveCommunicationList(list) {
-            communicationList=list;
+        function saveCommunicationList(id,list) {
+            communicationList[id]=list;
         }
 
         function getCommunicationList(id) {

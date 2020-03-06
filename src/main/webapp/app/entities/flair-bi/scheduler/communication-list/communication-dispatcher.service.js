@@ -12,18 +12,23 @@
 
         var service = {
             saveCommunicationList: saveCommunicationList,
-            getCommunicationList: getCommunicationList
+            getCommunicationList: getCommunicationList,
+            resetCommunicationList:resetCommunicationList
         };
 
         return service;
 
         ////////////////
-        function saveCommunicationList(id,list) {
-            communicationList[id]=list;
+        function saveCommunicationList(list) {
+            communicationList=list;
         }
 
-        function getCommunicationList(id) {
-            return communicationList[id];
+        function getCommunicationList() {
+            return communicationList;
+        }
+
+        function resetCommunicationList(){
+            communicationList={};
         }
     }
 })();

@@ -10,6 +10,9 @@
     function CommunicationListController($scope,$stateParams,$rootScope,CommunicationDispatcherService,users,webhookList,vizIdPrefix,report,$uibModalInstance) {
         var vm = this;
         vm.added = added;
+        vm.removed=removed;
+        vm.addWebhook=addWebhook;
+        vm.removeWebhook=removeWebhook;
         vm.loadWebhooks=loadWebhooks;
         vm.loadUsers=loadUsers;
         vm.saveCommunicationList=saveCommunicationList;
@@ -62,7 +65,7 @@
                     return val
                 }
             })
-            vm.scheduleObj.assign_report.communication_list.teams.push(webhook[0].id);
+            vm.report.assign_report.communication_list.teams.push(webhook[0].id);
         }
 
         function removeWebhook(tag) {
@@ -71,19 +74,19 @@
                     return val
                 }
             });
-            var index = vm.scheduleObj.assign_report.communication_list.teams.indexOf(webhook[0].id);
+            var index = vm.report.assign_report.communication_list.teams.indexOf(webhook[0].id);
             if (index > -1) {
-                vm.scheduleObj.assign_report.communication_list.teams.splice(index, 1);
+                vm.report.assign_report.communication_list.teams.splice(index, 1);
             }
         }
 
         function removed(tag) {
             var index = -1;
-            vm.scheduleObj.assign_report.communication_list.email.some(function (obj, i) {
+            vm.report.assign_report.communication_list.email.some(function (obj, i) {
                 return obj.user_email == tag['text'].split(" ")[1] ? index = i : false;
             });
             if (index > -1) {
-                vm.scheduleObj.assign_report.communication_list.email.splice(index, 1);
+                vm.report.assign_report.communication_list.email.splice(index, 1);
             }
         }
 
@@ -102,9 +105,8 @@
         }
 
         function saveCommunicationList(){
-            var vizId=vm.report.report_line_item.visualizationid;
-            CommunicationDispatcherService.saveCommunicationList(vizId,{emails:vm.emails,webhooks:vm.webhooks});
-            $rootScope.$broadcast("flairbiApp:Scheduler:Set-Communication-List",vizId);
+            CommunicationDispatcherService.saveCommunicationList({emails:vm.report.assign_report.communication_list.email,webhooks:vm.report.assign_report.communication_list.teams});
+            $rootScope.$broadcast("flairbiApp:Scheduler:Set-Communication-List");
             clear();
         }
 

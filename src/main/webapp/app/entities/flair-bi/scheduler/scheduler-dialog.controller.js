@@ -685,10 +685,15 @@
         function registerSetCommunicationList() {
             var setCommunicationList = $scope.$on(
                 "flairbiApp:Scheduler:Set-Communication-List",
-                function(event,vizId) {
-                    var communicationList=CommunicationDispatcherService.getCommunicationList(vizId);
-                    vm.selectedUsers=communicationList.emails;
-                    vm.selectedWebhooks=communicationList.webhooks;
+                function() {
+                    var communicationList=CommunicationDispatcherService.getCommunicationList();
+                    vm.scheduleObj.assign_report.communication_list.email=communicationList.emails;
+                    vm.scheduleObj.assign_report.communication_list.teams=communicationList.webhooks;
+                    vm.selectedUsers=[];
+                    vm.selectedWebhook=[];
+                    addWebhhokList(communicationList.webhooks);
+                    addEmailList(communicationList.emails);
+                    CommunicationDispatcherService.resetCommunicationList();
                 }
             );
             $scope.$on("$destroy", setCommunicationList);

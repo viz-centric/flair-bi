@@ -721,7 +721,7 @@ input[type="search"] {
     }
     .fbibox-content {
         background-color: $fbibox-content-backgraound;
-        color: inherit;
+        color: $flair-text;
         padding: 20px;
         .image-container-right {
             min-width: 500px;

@@ -10,7 +10,15 @@
     function GenerateChordDiagram(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-
+                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                    element.css({
+                        'display': 'flex',
+                        'align-items': 'center',
+                        'justify-content': 'center'
+                    });
+                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+                    return;
+                }
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -28,6 +36,8 @@
 
 
                     result['dimension'] = D3Utils.getNames(dimensions);
+                    result['dimensionType'] = D3Utils.getTypes(dimensions);
+
                     result['measure'] = D3Utils.getNames(measures)[0];
 
                     return result;

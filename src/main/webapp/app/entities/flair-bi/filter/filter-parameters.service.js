@@ -73,12 +73,22 @@
           return result;
         }
 
-        function createContainsExpressionBody(values, featureName) {
-            return {
+        function createContainsExpressionBody(values, featureName, dataType) {
+            var ret = {
                 '@type': 'Contains',
                 values: values,
                 featureName: featureName
             };
+            if (dataType) {
+                ret.valueTypes = values.map(function (item) {
+                    return {
+                        '@type': 'valueType',
+                        value: item,
+                        type: dataType
+                    };
+                });
+            }
+            return ret;
         }
 
         function createCompareExpressionBody(value, featureName, dataType) {
@@ -122,14 +132,18 @@
                 name = name.split('|')[1];
                 setDatesInRightSideFilters(values[0], values[1]);
             }
-            if (valueType === 'valueType') {
+            if (valueType === 'dateRangeValueType') {
                 var dataType = meta.dataType || '';
-                console.log('filter-parameters: value type values', values);
+                console.log('filter-parameters: date range value type values', values);
                 if (values.length === 2) {
                     return createBetweenExpressionBody(values[0], values[1], name, dataType);
                 } else {
                     return createCompareExpressionBody(values[0], name, dataType);
                 }
+            } else if (valueType === 'valueType' || valueType === 'castValueType') {
+                var dataType = meta.dataType || '';
+                console.log('filter-parameters: value type values', values, dataType);
+                return createContainsExpressionBody(values, name, dataType);
             } else if (valueType === 'intervalValueType') {
                 var operator = meta.operator;
                 var initialValue = meta.initialValue;

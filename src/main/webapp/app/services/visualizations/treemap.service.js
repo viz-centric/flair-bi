@@ -10,7 +10,15 @@
     function GenerateTreemap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-
+                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                    element.css({
+                        'display': 'flex',
+                        'align-items': 'center',
+                        'justify-content': 'center'
+                    });
+                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+                    return;
+                }
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -29,6 +37,7 @@
                     result['numberFormat'] = VisualizationUtils.getFieldPropertyValue(measures[0], 'Number format');
                     result['measure'] = [measures[0].feature.name];
                     result['dimension'] = [];
+                    result['dimensionType'] = [];
                     result['showLabelForDimension'] = [];
                     result['labelColorForDimension'] = [];
                     result['fontStyleForDimension'] = [];
@@ -39,6 +48,7 @@
 
                     for (var i = 0, j = ''; i < result.maxDim; i++ , j = i + 1) {
                         result['dimension'].push(dimensions[i].feature.name);
+                        result['dimensionType'].push(dimensions[i].feature.type);
                         result['showLabelForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Show Labels'));
                         result['labelColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Colour of labels'));
                         var displayColor = VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display colour');

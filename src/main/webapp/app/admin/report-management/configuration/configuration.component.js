@@ -12,9 +12,9 @@
             }
         });
 
-    configurationController.$inject = ['$uibModal','$uibModalStack', '$rootScope', 'ChannelService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
+    configurationController.$inject = ['$uibModal', '$uibModalStack', '$rootScope', 'ChannelService', 'stompClientService', 'AuthServerProvider', 'schedulerService', 'proxyGrpcService', 'Visualmetadata', 'VisualizationUtils', 'visualizationRenderService', 'VisualWrap'];
 
-    function configurationController($uibModal,$uibModalStack, $rootScope, ChannelService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
+    function configurationController($uibModal, $uibModalStack, $rootScope, ChannelService, stompClientService, AuthServerProvider, schedulerService, proxyGrpcService, Visualmetadata, VisualizationUtils, visualizationRenderService, VisualWrap) {
         var vm = this;
 
         vm.saveSMTPSetting = saveSMTPSetting;
@@ -98,7 +98,7 @@
             ChannelService.createEmailConfig(SMPTConfig)
                 .then(function (success) {
                     var info = {
-                        text: "SMTP settings are save successfully",
+                        text: "SMTP settings are saved successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);
@@ -122,7 +122,7 @@
             ChannelService.createJiraConfig(jiraConfig)
                 .then(function (success) {
                     var info = {
-                        text: "Jira settings are save successfully",
+                        text: "Jira settings are saved successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);
@@ -190,6 +190,9 @@
                     },
                     config: function () {
                         return vm.teamChannelConfig;
+                    },
+                    webhook: function () {
+                        return vm.webhookList;
                     }
                 }
             }).result.then(function () {

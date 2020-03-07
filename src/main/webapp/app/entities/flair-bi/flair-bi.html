@@ -14,11 +14,11 @@
                         </div>
                     </div>
                 </div>
-                <div id="{{v.id}}" container-id="{{v.visualBuildId}}" ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border}" class="grid-stack-item-content ui-draggable-handle visualization-card grid-front ng-class:{'face-hidden':!hideBackFace}">
+                <div id="{{v.id}}" container-id="{{v.visualBuildId}}" ng-style="{'background-color': v.bodyProperties.backgroundColor, 'border': v.bodyProperties.border}" class="flair-text grid-stack-item-content ui-draggable-handle visualization-card grid-front ng-class:{'face-hidden':!hideBackFace}">
                     <div id="title-{{v.id}}" class="float-e-margins header  grid-stack-item-content print-visibility-hide" style="margin-bottom:0px;">
                         <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px;">
                             <div class="viz-header-content">
-                                <div class="viz-title">
+                                <div class="viz-title flair-text">
                                     <i ng-show="v.isLiveEnabled" class="fa fa-circle text-danger live-icon"></i> {{v.titleProperties.titleText}}
                                     <i ng-if="v.cacheDate" class="fa fa-circle text-danger live-icon" title="{{(v.cacheDate * 1000) | date:'MMM d, h:mm:ss a'}}"></i>
                                 </div>
@@ -160,7 +160,7 @@
                 <div class="float-e-margins header  grid-stack-item-content print-visibility-hide ui-draggable-handle" style="margin-bottom:0px;">
                     <div class="viz-header ui-draggable-handle" ng-style="{'background-color': v.titleProperties.backgroundColor, 'border-bottom': v.titleProperties.borderBottom, 'color': v.titleProperties.color}" style="border-top-width: 0px; background-color: rgb(250, 250, 250); border-bottom: none; color: rgb(103, 106, 108);">
                         <div class="viz-header-content">
-                            <div class="viz-title ng-binding">Dimensions and Measures</div>
+                            <div class="viz-title ng-binding flair-text">Dimensions and Measures</div>
                             <a href class="viz-header-button viz-header-flip-settings" ng-click="vm.settings(v)">
                                 <span uib-tooltip="Settings" tooltip-placement="bottom">
                                     <svg class="viz-header-icon flaticons-settings">

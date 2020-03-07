@@ -137,6 +137,10 @@
       margin-left: 5px;
       font-size: 50px;
     }
+    .col-xs-10{
+      overflow-y: auto;
+      max-height: calc(100vh - 240px);
+    }
   }
   #openTicketScheduler {
     color: lighten($icons-color, 20%);
@@ -147,6 +151,7 @@
     font-size: 14px;
     color: $icons-color;
   }
+
 }
 #reportLog {
   img {

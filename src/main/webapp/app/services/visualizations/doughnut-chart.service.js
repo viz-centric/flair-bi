@@ -10,7 +10,15 @@
     function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-
+                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                    element.css({
+                        'display': 'flex',
+                        'align-items': 'center',
+                        'justify-content': 'center'
+                    });
+                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+                    return;
+                }
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -19,6 +27,7 @@
                         measure = features.measures;
 
                     result['dimension'] = D3Utils.getNames(dimension);
+                    result['dimensionType'] = D3Utils.getTypes(dimension);
                     result['measure'] = D3Utils.getNames(measure);
 
                     result['dimensionDisplayName'] = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display name') || result['dimension'][0];
@@ -34,6 +43,9 @@
                     result['legend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['valueAs'] = VisualizationUtils.getPropertyValue(record.properties, 'Show value as').toLowerCase();
+                    if (isNotification) {
+                        result['legend'] = false;
+                    }
                     return result;
                 }
 
@@ -45,9 +57,10 @@
                     var doughnut = flairVisualizations.doughnut()
                         .config(getProperties(VisualizationUtils, record))
                         .tooltip(true)
+                        .print(false)
                         .broadcast($rootScope)
                         .filterParameters(filterParametersService)
-                        .print(isNotification == true ? true : false)
+                        .notification(isNotification == true ? true : false)
                         .data(record.data);
 
                     doughnut(div[0])

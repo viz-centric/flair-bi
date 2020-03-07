@@ -9,6 +9,7 @@
             controllerAs: 'vm',
             bindings: {
                 dimension: '<',
+                reload: '<',
                 onDateChange: '&',
             }
         });
@@ -23,32 +24,60 @@
 
         var DYNAMIC_DATE_RANGE_CONFIG = [
             {
-                title: 'Week to date',
+                title: 'Last 7 days',
                 period: {
                     months: 0,
                     days: 7
                 }
             },
             {
-                title: 'Month to date',
+                title: 'Last 30 days',
                 period: {
                     months: 1,
                     days: 0
                 }
             },
             {
-                title: 'Quarter to date',
+                title: 'Last 90 days',
                 period: {
                     months: 3,
                     days: 0
                 }
             },
             {
-                title: 'Year to date',
+                title: 'Last 365 days',
                 period: {
                     months: 12,
                     days: 0
                 }
+            },
+            {
+                title: 'Week to date',
+                period: {
+                    months: 0,
+                },
+                toDate: 'isoWeek'
+            },
+            {
+                title: 'Month to date',
+                period: {
+                    months: 0,
+                },
+                toDate: 'month'
+            },
+            {
+                title: 'Quarter to date',
+                period: {
+                    months: 1,
+                },
+                toDate: 'quarter'
+            },
+            {
+                title: 'Year to date',
+                period: {
+                    months: 0,
+                },
+                toDate: 'year'
             },
             {
                 title: 'Custom X days',
@@ -88,6 +117,9 @@
             var config = vm.currentDynamicDateRangeConfig;
             if (config.isCustom) {
                 date.setDate(date.getDate() - vm.customDynamicDateRange);
+            } else if (config.toDate) {
+                date = moment(date).startOf(config.toDate).toDate();
+                date.setMonth(date.getMonth() - config.period.months);
             } else {
                 date.setDate(date.getDate() - config.period.days);
                 date.setMonth(date.getMonth() - config.period.months);
@@ -102,8 +134,8 @@
 
         function onInputChange() {
             if (vm.dateRangeTab === TAB_DAY) {
-                var startDate = resetTimezone(vm.currentDimension.selected.toISOString());
-                var endDate = resetTimezone(endOfDay(vm.currentDimension.selected.toISOString()));
+                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
+                var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected))));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -111,8 +143,8 @@
                     endDate: endDate
                 });
             } else if (vm.dateRangeTab === TAB_RANGE) {
-                var startDate = resetTimezone(vm.currentDimension.selected);
-                var endDate = resetTimezone(vm.currentDimension.selected2);
+                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
+                var endDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected2)));
                 console.log('filter-date-range-component: input change range', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -120,8 +152,8 @@
                     endDate: endDate,
                 });
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
-                var startDate = resetTimezone(startOfDay(getStartDateRange().toISOString()));
-                var endDate = resetTimezone(endOfDay(new Date().toISOString()));
+                var startDate = formatDate(resetTimezone(startOfDay(strToDate(getStartDateRange()))));
+                var endDate = formatDate(resetTimezone(endOfDay(new Date())));
                 console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -134,59 +166,72 @@
         function setDateRangeSubscription() {
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
                 console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate, 'timezone', new Date(dateRange.startDate).getTimezoneOffset());
-                vm.currentDimension.selected = dateRange.startDate;
-                vm.currentDimension.selected2 = dateRange.endDate;
+                vm.currentDimension.selected = strToDate(dateRange.startDate);
+                vm.currentDimension.selected2 = strToDate(dateRange.endDate);
                 console.log('filter-date-range: event filter-set-date-ranges after', vm.currentDimension.selected);
             });
 
             $scope.$on('$destroy', unsubscribe);
         }
 
+        function onDimensionChange(dimension) {
+            console.log('date component: on changes before', dimension);
+            vm.currentDimension = {
+                selected: resetTimezone(strToDate(dimension.selected)),
+                selected2: resetTimezone(strToDate(dimension.selected2)),
+            };
+            console.log('date component: on changes after-', vm.currentDimension.selected);
+        }
+
+        function onReloadChange() {
+            onDimensionChange({selected: null, selected2: null});
+        }
+
         function $onChanges(changesObj) {
             if (changesObj.dimension) {
-                console.log('date component: on changes before', vm.dimension);
-                vm.currentDimension = {
-                    selected: resetTimezone(vm.dimension.selected),
-                    selected2: resetTimezone(vm.dimension.selected2),
-                };
-                console.log('date component: on changes after-', vm.currentDimension.selected);
+                onDimensionChange(vm.dimension);
+            } else if (changesObj.reload) {
+                onReloadChange();
             }
         }
 
-        function resetTimezone(startDate) {
-            if (!startDate) {
-                return '';
+        function resetTimezone(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            return date.toISOString();
+            return date;
         }
 
-        function addTimezone(startDate) {
-            if (!startDate) {
-                return '';
+        function strToDate(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
-            date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-            return date.toISOString();
+            // console.log('str to date', date, typeof date);
+            return new Date(date);
         }
 
-        function endOfDay(startDate) {
-            if (!startDate) {
-                return '';
+        function endOfDay(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
             date.setHours(23, 59, 59);
-            return date.toISOString();
+            return date;
         }
 
-        function startOfDay(startDate) {
-            if (!startDate) {
-                return '';
+        function startOfDay(date) {
+            if (!date) {
+                return null;
             }
-            var date = new Date(startDate);
             date.setHours(0, 0, 0);
-            return date.toISOString();
+            return date;
+        }
+
+        function formatDate(date) {
+            if (!date) {
+                return null;
+            }
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
         }
 
     }

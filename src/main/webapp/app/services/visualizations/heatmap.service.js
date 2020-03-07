@@ -10,7 +10,16 @@
     function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-                function getProperties(VisualizationUtils, record, isNotification) {
+                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                    element.css({
+                        'display': 'flex',
+                        'align-items': 'center',
+                        'justify-content': 'center'
+                    });
+                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+                    return;
+                }
+                function getProperties(VisualizationUtils, record) {
                     var result = {};
                     var features = VisualizationUtils.getDimensionsAndMeasures(record.fields),
                         dimensions = features.dimensions,
@@ -18,6 +27,8 @@
                         colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = [D3Utils.getNames(dimensions)[0]];
+                    result['dimensionType'] = [D3Utils.getTypes(dimensions)[0]];
+
                     result['measure'] = D3Utils.getNames(measures);
                     result['maxMes'] = measures.length;
                     result['dimLabelColor'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Colour of labels');
@@ -67,6 +78,10 @@
                         result['fontSizeForMeasure'].push(parseInt(VisualizationUtils.getFieldPropertyValue(measures[i], 'Font size')));
                         result['numberFormat'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Number format'));
                         result['iconExpression'].push(VisualizationUtils.getFieldPropertyValue(measures[i], 'Icon Expression'));
+                        if (isNotification) {
+                            result['showValues'].push(false);
+                            result['showIcon'].push(false);
+                        }
                     }
                     return result;
                 }

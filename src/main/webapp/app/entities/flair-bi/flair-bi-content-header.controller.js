@@ -177,12 +177,16 @@
 
         function addFilterFromBookmark(selectedBookmark){
             var filter = {};
-            var COMPARABLE_DATA_TYPES=filterParametersService.getComparableDataTypes();
+            var isTemporalDataType = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function(criteria) {
-                var featureName=selectedBookmark.dateRange && COMPARABLE_DATA_TYPES.indexOf(criteria.feature.type.toLowerCase()) > -1? filterParametersService.buildDateRangeFilterName(criteria.feature.name):criteria.feature.name;
-                filter[
-                    featureName
-                ] = criteria.value.split(",");
+                var featureName = selectedBookmark.dateRange && isTemporalDataType.indexOf(criteria.feature.type.toLowerCase()) > -1
+                    ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
+                    : criteria.feature.name;
+                filter[featureName] = criteria.value.split(",");
+                filter[featureName]._meta = {
+                    dataType: criteria.feature.type,
+                    valueType: 'valueType'
+                };
             });
             filterParametersService.save(filter);
         }

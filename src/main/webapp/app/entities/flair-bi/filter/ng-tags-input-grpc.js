@@ -839,13 +839,14 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             var unsubscribe = scope.$on(
                 "flairbiApp:filters-meta-Data",
                 function(event,metaData) {
-                    var obj=metaData[0];
-                    var dimensionName='';
+                    var obj = metaData[0];
+                    var dimensionName = '';
                     for(var i in obj){
-                        dimensionName=i;
+                        dimensionName = i;
+                        break;
                     }
                     var retVal = metaData.map(function (item) {
-                            return item[dimensionName.toLowerCase()];
+                            return item[dimensionName];
                     });
                     suggestionListG.receivedMetaData(retVal);
                 }

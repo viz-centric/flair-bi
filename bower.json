@@ -31,7 +31,7 @@
     "angular-animate": "~1.5.0",
     "angular-touch": "~1.5.0",
     "angular-messages": "~1.5.0",
-    "moment": "~2.10.6",
+    "moment": "~2.24.0",
     "pace": "~1.0.2",
     "metisMenu": "~2.0.2",
     "fontawesome": "~4.5.0",

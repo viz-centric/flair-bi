@@ -46,26 +46,9 @@
     <div ng-if="vm.dateRangeTab === 2">
         <div class="form-group"
              style="padding: 10px 0 0 0">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle"
-                        type="button"
-                        id="dateRangeDynamic"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="true">
-                    {{vm.currentDynamicDateRangeConfig.title || 'Choose period'}}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu"
-                    aria-labelledby="dateRangeDynamic">
-                    <li ng-repeat="config in vm.dynamicDateRangeConfig">
-                        <a href="javascript:;"
-                           ng-click="vm.onDynamicDateRangeChanged(config)">
-                           {{config.title}}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <select ng-model="vm.currentDynamicDateRangeConfig"
+                    ng-change="vm.onInputChange()"
+                    ng-options="config.title for config in vm.dynamicDateRangeConfig"></select>
         </div>
         <div class="form-group"
             ng-if="vm.currentDynamicDateRangeConfig.isCustom">

@@ -89,19 +89,23 @@
 
         vm.$onInit = onInit;
         vm.$onChanges = $onChanges;
-        vm.customDynamicDateRange = 0;
         vm.currentDimension = {};
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
         vm.onCustomDynamicDateRangeChange = onCustomDynamicDateRangeChange;
-        vm.dateRangeTab = 0;
-        vm.currentDynamicDateRangeConfig = null;
         vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
+        reset();
 
         ////////////////
 
         function onInit() {
+        }
+
+        function reset() {
+            vm.dateRangeTab = 0;
+            vm.currentDynamicDateRangeConfig = null;
+            vm.customDynamicDateRange = 0;
         }
 
         function onDateRangeClick(tabIndex) {
@@ -118,7 +122,7 @@
             if (config.isCustom) {
                 date.setDate(date.getDate() - vm.customDynamicDateRange);
             } else if (config.toDate) {
-                date = moment(date).startOf(config.toDate).toDate();
+                date = moment(date).startOf(config.toDate).add(1, 'M').toDate();
                 date.setMonth(date.getMonth() - config.period.months);
             } else {
                 date.setDate(date.getDate() - config.period.days);
@@ -185,6 +189,7 @@
 
         function onReloadChange() {
             onDimensionChange({selected: null, selected2: null});
+            reset();
         }
 
         function $onChanges(changesObj) {

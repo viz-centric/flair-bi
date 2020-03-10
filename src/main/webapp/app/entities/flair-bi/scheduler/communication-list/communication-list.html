@@ -4,7 +4,7 @@
           <use xlink:href="#edit-dashboard" />
         </svg>
         <div class="header-text">
-            Hii
+            Report Recipients
         </div>
         <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
           <use xlink:href="#cancle" />
@@ -12,7 +12,31 @@
     </div>
     <div class="modal-body">
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-10">
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Dashboard Name</span>
+                        </th>
+                        <th>
+                            <span>View Name</span>
+                        </th>
+                        <th>
+                            <span>Report Name</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{vm.report.report.dashboard_name }}</td>
+                        <td>{{vm.report.report.view_name }}</td>
+                        <td>{{vm.report.report.report_name }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="col-xs-10">
                 <div class="form-group scheduler-tags">
                     <label class="control-label" for="emails">Share Report with Users*</label>
                     <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
@@ -27,7 +51,7 @@
                     </tags-input>
                 </div>
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-10">
                 <div class="form-group scheduler-tags">
                     <label class="control-label" for="emails">Select Webhooks*</label>
                     <tags-input placeholder="Select a Webhooks" on-tag-added="vm.addWebhook($tag)"

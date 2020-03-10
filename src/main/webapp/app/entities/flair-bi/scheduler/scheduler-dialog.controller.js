@@ -17,6 +17,7 @@
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         var TIME_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var vm = this;
+        var emptyList=[];
         vm.cronConfig = { quartz: false };
         vm.clear = clear;
         vm.schedule = schedule;
@@ -51,6 +52,9 @@
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.setChannel = setChannel;
         vm.openCommunicationListModal=openCommunicationListModal;
+        vm.maxListSize=10;
+        vm.selectedUsers=[];
+        vm.selectedWebhook=[];
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
@@ -245,7 +249,8 @@
             return params[params.length - 1];
         }
 
-        function addEmailList(emails) {
+        function addEmailList(emailsR) {
+            var emails=emailsR.slice(0, vm.maxListSize);
             vm.selectedUsers = emails.map(function (item) {
                 var newItem = {};
                 newItem['text'] = item.user_name + " " + item.user_email;
@@ -253,8 +258,9 @@
             });
         }
 
-        function addWebhhokList(webhook) {
-            vm.selectedWebhook = webhook.map(function (item) {
+        function addWebhhokList(webhooksR) {
+            var webhooks =webhooksR.slice(0, vm.maxListSize);
+            vm.selectedWebhook = webhooks.map(function (item) {
                 var newItem = {};
                 var webhook = vm.WebhookList.filter(function (val) {
                     if (val.id == item) {
@@ -327,17 +333,28 @@
         }
 
         function loadUsers(q) {
-            var retVal = vm.users.map(function (item) {
-                return item.firstName + " " + item.email;
-            });
-            return retVal;
+            if(vm.selectedUsers.length<vm.maxListSize){
+                var retVal = vm.users.map(function (item) {
+                    return item.firstName + " " + item.email;
+                });
+                return retVal;
+            }
+            else
+            {
+                return emptyList;
+            }
         }
 
         function loadWebhooks() {
-            var retVal = vm.WebhookList.map(function (item) {
-                return item.webhookName;
-            });
-            return retVal;
+            if(vm.selectedWebhook.length<vm.maxListSize){
+                var retVal = vm.WebhookList.map(function (item) {
+                    return item.webhookName;
+                });
+                return retVal;
+            }
+            else{
+                return emptyList;
+            }
         }
 
         $scope.$watch('cronExpression', function () {
@@ -442,12 +459,10 @@
         }
 
         function added(tag) {
-            console.log("-vm.selectedUser" + vm.selectedUsers);
             var emailObj = { "user_name": tag['text'].split(" ")[0], "user_email": tag['text'].split(" ")[1] };
             vm.scheduleObj.assign_report.communication_list.email.push(emailObj);
         }
         function addWebhook(tag) {
-            console.log("-vm.selectedUser" + vm.selectedWebhook);
             var webhook = vm.WebhookList.filter(function (val) {
                 if (val.webhookName == tag.text) {
                     return val
@@ -456,7 +471,6 @@
             vm.scheduleObj.assign_report.communication_list.teams.push(webhook[0].id);
         }
         function removeWebhook(tag) {
-
             var webhook = vm.WebhookList.filter(function (val) {
                 if (val.webhookName == tag.text) {
                     return val

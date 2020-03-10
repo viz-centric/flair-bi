@@ -177,15 +177,17 @@
 
         function addFilterFromBookmark(selectedBookmark){
             var filter = {};
-            var isTemporalDataType = filterParametersService.getComparableDataTypes();
+            var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function(criteria) {
-                var featureName = selectedBookmark.dateRange && isTemporalDataType.indexOf(criteria.feature.type.toLowerCase()) > -1
+                var isTemporal = selectedBookmark.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
+                var featureName = isTemporal
                     ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
                     : criteria.feature.name;
+                var valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
                 filter[featureName] = criteria.value.split(",");
                 filter[featureName]._meta = {
                     dataType: criteria.feature.type,
-                    valueType: 'valueType'
+                    valueType: valueType
                 };
             });
             filterParametersService.save(filter);

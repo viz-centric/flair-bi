@@ -53,13 +53,11 @@
         }
 
         function added(tag) {
-            console.log("-vm.selectedUser" + vm.selectedUsers);
             var emailObj = { "user_name": tag['text'].split(" ")[0], "user_email": tag['text'].split(" ")[1] };
             vm.report.assign_report.communication_list.email.push(emailObj);
         }
 
         function addWebhook(tag) {
-            console.log("-vm.selectedUser" + vm.selectedWebhook);
             var webhook = vm.webhookList.filter(function (val) {
                 if (val.webhookName == tag.text) {
                     return val

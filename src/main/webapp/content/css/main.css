@@ -6396,6 +6396,15 @@ input.select2-active {
 .scheduler-modal-body .scheduler-tags > tags-input .host {
   margin-top: 0px; }
 
+.scheduler-modal-body .scheduler-tags .tooltip-position {
+  position: absolute;
+  top: 23px;
+  right: -20px; }
+  .scheduler-modal-body .scheduler-tags .tooltip-position .more-icon {
+    width: 24px;
+    height: 24px;
+    fill: #439dd3; }
+
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;
   display: flex; }

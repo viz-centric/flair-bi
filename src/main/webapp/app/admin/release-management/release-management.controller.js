@@ -11,12 +11,16 @@
 
         vm.approve = approve;
         vm.disapprove = disapprove;
+        vm.showWaterMark=true;
         activate();
 
         ////////////////
 
         function activate() {
-            vm.viewRequests = Release.query({});
+            Release.query(function(result){
+                vm.viewRequests = result;
+                vm.showWaterMark = vm.viewRequests.length > 0; 
+            });
         }
 
         function disapprove(vr) {

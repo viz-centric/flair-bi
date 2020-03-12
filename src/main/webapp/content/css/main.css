@@ -6405,6 +6405,15 @@ input.select2-active {
     height: 24px;
     fill: #439dd3; }
 
+.scheduler-modal-body .scheduler-webhooks .webhooks {
+  display: flex; }
+  .scheduler-modal-body .scheduler-webhooks .webhooks .webhook {
+    font-size: 12px;
+    background-color: #439dd3;
+    color: #fafafa;
+    padding: 4px 8px;
+    margin-right: 5px; }
+
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;
   display: flex; }
@@ -6726,9 +6735,9 @@ input.select2-active {
   margin-left: 5px;
   font-size: 50px; }
 
-#report-management #configuration-container .col-xs-10{
-    overflow-y: auto;
-    max-height: calc(100vh - 240px); }
+#report-management #configuration-container .col-xs-10 {
+  overflow-y: auto;
+  max-height: calc(100vh - 240px); }
 
 #report-management #openTicketScheduler {
   color: #71767a;

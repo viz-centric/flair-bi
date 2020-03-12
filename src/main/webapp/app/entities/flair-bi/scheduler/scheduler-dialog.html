@@ -72,7 +72,7 @@
                         </iframe>
                     </div>
                 </div>
-                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
+                <div class="row container" ng-if="vm.scheduleObj.emailReporter && vm.isAdmin" >
                     <div class="col-xs-8">
                         <div class="form-group scheduler-tags">
                             <label class="control-label" for="emails">Share Report with Users*</label>
@@ -126,7 +126,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-xs-8" ng-if="vm.channels.Teams">
+                        <div class="col-xs-8" ng-if="vm.channels.Teams && vm.isAdmin">
                             <div class="form-group scheduler-tags">
                                 <label class="control-label" for="emails">Select Webhooks*</label>
                                 <tags-input placeholder="Select a Webhook" on-tag-added="vm.addWebhook($tag)"
@@ -145,7 +145,15 @@
                                     </svg>
                                 </span>
                             </div>
-
+                        </div>
+                        <div class="col-xs-8" ng-if="vm.channels.Teams && !vm.isAdmin">
+                            <div class="form-group scheduler-webhooks">
+                                <label class="control-label">Configured Webhooks*</label>
+                                <div class="webhooks">
+                                    <div ng-repeat="webhooksName in vm.webhooksNames" class="label webhook">{{webhooksName}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row container">

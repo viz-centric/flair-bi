@@ -363,11 +363,6 @@
             }
         }
 
-        // function convertWebhooksToString(webhookNames){
-        //     var returnedString=webhookNames.join(",");
-        //     return returnedString;
-        // }
-
         $scope.$watch('cronExpression', function () {
             vm.cronstrue = cronstrue.toString($scope.cronExpression);
         });

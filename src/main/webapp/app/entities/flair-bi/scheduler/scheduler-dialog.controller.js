@@ -107,7 +107,9 @@
             }else{
                 getWebhookNames();
             }
-            getSMTPSettings();
+            if(vm.isAdmin){
+                getSMTPSettings();
+            }
             resetSelectedChannels();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;

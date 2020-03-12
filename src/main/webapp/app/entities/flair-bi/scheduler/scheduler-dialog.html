@@ -12,7 +12,7 @@
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
-            <div ng-if="vm.WebhookList.length===0 || vm.SMPTSetting.id===0" class="alert alert-info alert-dismissible">
+            <div ng-if="vm.isAdmin && (vm.WebhookList.length===0 || vm.SMPTSetting.id===0)" class="alert alert-info alert-dismissible">
 
                 <strong><a class="alert-link" ui-sref="report-management({id:'configuration'})"> To add new email
                         recipient and channel click here</a></strong>

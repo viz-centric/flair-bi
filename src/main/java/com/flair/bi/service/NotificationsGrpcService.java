@@ -29,6 +29,7 @@ import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
 import com.flair.bi.messages.report.GetScheduledReportRequest;
 import com.flair.bi.messages.report.GetTeamConfigRequest;
 import com.flair.bi.messages.report.GetTeamConfigResponse;
+import com.flair.bi.messages.report.GetTeamNamesResponse;
 import com.flair.bi.messages.report.JiraConfigsRequest;
 import com.flair.bi.messages.report.JiraParameters;
 import com.flair.bi.messages.report.JiraTickets;
@@ -499,6 +500,12 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 	public List<TeamConfigParametersDTO> getTeamConfig(Integer id) {
 		GetTeamConfigResponse response = getReportStub().getTeamConfig(GetTeamConfigRequest.newBuilder().setId(id).build());
 		return toTeamConfigParametersDTOList(response.getRecordsList());
+	}
+
+	@Override
+	public List<String> getTeamNames(Integer id) {
+		GetTeamNamesResponse response = getReportStub().getTeamNames(GetTeamConfigRequest.newBuilder().setId(id).build());
+		return response.getRecordsList();
 	}
 
 	private List<TeamConfigParametersDTO> toTeamConfigParametersDTOList(List<TeamConfigParameters> list) {

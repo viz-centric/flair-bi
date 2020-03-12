@@ -147,6 +147,10 @@ public class SchedulerService {
 		return notificationsGrpcService.getTeamConfig(id);
 	}
 
+	public List<String> getTeamNames(Integer id) {
+		return notificationsGrpcService.getTeamNames(id);
+	}
+
 	public String deleteChannelConfig(Integer id) {
 		return notificationsGrpcService.deleteChannelConfig(id);
 	}

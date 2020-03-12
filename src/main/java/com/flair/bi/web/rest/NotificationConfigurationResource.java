@@ -85,6 +85,12 @@ public class NotificationConfigurationResource {
 		return schedulerService.getTeamConfig(id);
 	}
 
+	@GetMapping("/notification/getTeamNames/")
+	@Timed
+	public List<String> getTeamNames(@RequestParam(required = false) Integer id) {
+		return schedulerService.getTeamNames(id);
+	}
+
 	@DeleteMapping("/notification/deleteChannelConfig")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'DELETE','APPLICATION')")

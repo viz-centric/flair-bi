@@ -3,11 +3,16 @@
 
     angular
         .module('flairbiApp')
-        .controller('RequestResetController', RequestResetController);
+        .component('resetRequestComponent', {
+            templateUrl: 'app/account/reset/request/reset.request.component.html',
+            controller: RequestResetController,
+            controllerAs: 'vm'
+        });
 
-    RequestResetController.$inject = ['$timeout', 'Auth'];
+    RequestResetController.$inject = ['Auth'];
 
-    function RequestResetController($timeout, Auth) {
+    function RequestResetController(Auth) {
+        //TODO fix not showing when logged in.
         var vm = this;
 
         vm.error = null;
@@ -16,10 +21,6 @@
         vm.requestReset = requestReset;
         vm.resetAccount = {};
         vm.success = null;
-
-        $timeout(function () {
-            angular.element('#email').focus();
-        });
 
         function requestReset() {
 
@@ -41,3 +42,5 @@
         }
     }
 })();
+
+

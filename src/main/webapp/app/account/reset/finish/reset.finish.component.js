@@ -3,7 +3,11 @@
 
     angular
         .module('flairbiApp')
-        .controller('ResetFinishController', ResetFinishController);
+        .component('resetFinishComponent', {
+            templateUrl: 'app/account/reset/finish/reset.finish.component.html',
+            controller: ResetFinishController,
+            controllerAs: 'vm'
+        });
 
     ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService'];
 
@@ -18,10 +22,6 @@
         vm.login = LoginService.open;
         vm.resetAccount = {};
         vm.success = null;
-
-        $timeout(function () {
-            angular.element('#password').focus();
-        });
 
         function finishReset() {
             vm.doNotMatch = null;

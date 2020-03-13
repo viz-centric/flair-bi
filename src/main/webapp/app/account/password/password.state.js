@@ -20,9 +20,7 @@
                     templateUrl: 'app/account/password/password-content-header.html'
                 },
                 'content@': {
-                    templateUrl: 'app/account/password/password.html',
-                    controller: 'PasswordController',
-                    controllerAs: 'vm'
+                    template: '<password-component></password-component>'
                 }
             },
             resolve: {

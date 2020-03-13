@@ -16,9 +16,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/account/reset/finish/reset.finish.html',
-                    controller: 'ResetFinishController',
-                    controllerAs: 'vm'
+                    template: '<reset-finish-component></reset-finish-component>'
                 },
                 'navbar@': {
 

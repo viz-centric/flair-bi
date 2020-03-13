@@ -1,14 +1,19 @@
 (function () {
     'use strict';
 
+
     angular
         .module('flairbiApp')
-        .controller('RegisterController', RegisterController);
+        .component('registerComponent', {
+            templateUrl: 'app/account/register/register.component.html',
+            controller: RegisterController,
+            controllerAs: 'vm',
+        });
 
 
-    RegisterController.$inject = ['$translate', '$timeout', 'Auth', 'LoginService'];
+    RegisterController.$inject = ['$translate', 'Auth', 'LoginService'];
 
-    function RegisterController($translate, $timeout, Auth, LoginService) {
+    function RegisterController($translate, Auth, LoginService) {
         var vm = this;
 
         vm.doNotMatch = null;
@@ -18,10 +23,6 @@
         vm.register = register;
         vm.registerAccount = {};
         vm.success = null;
-
-        $timeout(function () {
-            angular.element('#login').focus();
-        });
 
         function register() {
             if (vm.registerAccount.password !== vm.confirmPassword) {

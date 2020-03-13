@@ -17,9 +17,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/account/register/register.html',
-                    controller: 'RegisterController',
-                    controllerAs: 'vm'
+                    template: '<register-component></register-component>'
                 }
             },
             resolve: {

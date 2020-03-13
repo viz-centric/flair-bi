@@ -3,10 +3,13 @@
 
     angular
         .module('flairbiApp')
-        .controller('PasswordController', PasswordController);
+        .component('passwordComponent', {
+            templateUrl: 'app/account/password/password.component.html',
+            controller: PasswordController,
+            controllerAs: 'vm',
+        });
 
     PasswordController.$inject = ['Auth', 'Principal'];
-
     function PasswordController(Auth, Principal) {
         var vm = this;
 
@@ -14,10 +17,14 @@
         vm.doNotMatch = null;
         vm.error = null;
         vm.success = null;
+        ////////////////
 
-        Principal.identity().then(function (account) {
-            vm.account = account;
-        });
+        vm.$onInit = function () {
+            Principal.identity().then(function (account) {
+                vm.account = account;
+            });
+        };
+
 
         function changePassword() {
             if (vm.password !== vm.confirmPassword) {
@@ -37,3 +44,4 @@
         }
     }
 })();
+

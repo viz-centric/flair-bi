@@ -12,7 +12,7 @@
                             <h3 class="password-reset-title"> Reset Password </h3>
                     </div>
                     <label class="control-label" for="email" data-translate="global.form.email">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email"
+                    <input auto-focus type="email" class="form-control" id="email" name="email"
                            placeholder="{{'global.form.email.placeholder' | translate}}"
                            ng-model="vm.resetAccount.email" ng-minlength=5 ng-maxlength=100 required>
                     <div ng-show="form.email.$dirty && form.email.$invalid">

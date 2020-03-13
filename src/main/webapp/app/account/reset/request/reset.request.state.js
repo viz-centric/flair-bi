@@ -16,9 +16,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/account/reset/request/reset.request.html',
-                    controller: 'RequestResetController',
-                    controllerAs: 'vm'
+                    template: '<reset-request-component></reset-request-component>'
                 },
                 'navbar@': {
 
@@ -27,7 +25,7 @@
 
                 },
                 'footer@': {
-                        
+
                 }
             },
             resolve: {

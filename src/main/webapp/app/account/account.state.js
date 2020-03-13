@@ -13,10 +13,7 @@
             url: '/account',
             views: {
                 'content@': {
-                    templateUrl: 'app/account/account.html',
-                    controller: 'AccountController',
-                    controllerAs: 'vm'
-                   
+                    template: '<account-component></account-component>'
                 } 
             }
         });

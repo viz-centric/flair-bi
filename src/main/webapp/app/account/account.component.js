@@ -3,13 +3,17 @@
 
     angular
         .module('flairbiApp')
-        .controller('AccountController', AccountController);
+        .component('accountComponent', {
+            templateUrl: 'app/account/account.component.html',
+            controller: AccountController,
+            controllerAs: 'vm'
+        });
 
-    AccountController.$inject = ['$scope'];
-
-    function AccountController($scope) {
+    AccountController.$inject = [];
+    function AccountController() {
         var vm = this;
 
+        ////////////////
         vm.menuItems = [{
             image: '#account-settings',
             label: 'Account Settings',

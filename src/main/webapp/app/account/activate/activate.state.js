@@ -17,9 +17,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/account/activate/activate.html',
-                    controller: 'ActivationController',
-                    controllerAs: 'vm'
+                    template: '<activate-component></activate-component>'
                 }
             },
             resolve: {

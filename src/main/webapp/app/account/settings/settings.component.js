@@ -3,7 +3,16 @@
 
     angular
         .module('flairbiApp')
-        .controller('SettingsController', SettingsController);
+        .component('settingsComponent', {
+            templateUrl: 'app/account/settings/settings.component.html',
+            controller: SettingsController,
+            controllerAs: 'vm'
+        })
+        .component('settingsContentHeaderComponent', {
+            templateUrl: 'app/account/settings/settings-content-header.html',
+            controller: SettingsController,
+            controllerAs: 'vm'
+        });
 
     SettingsController.$inject = ['Principal', 'Auth', 'JhiLanguageService', '$translate'];
 
@@ -18,7 +27,7 @@
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
          */
-        var copyAccount = function (account) {
+        function copyAccount(account) {
             return {
                 activated: account.activated,
                 email: account.email,
@@ -29,9 +38,11 @@
             };
         };
 
-        Principal.identity().then(function (account) {
-            vm.settingsAccount = copyAccount(account);
-        });
+        vm.$onInit = function () {
+            Principal.identity().then(function (account) {
+                vm.settingsAccount = copyAccount(account);
+            });
+        }
 
         function save() {
             Auth.updateAccount(vm.settingsAccount).then(function () {

@@ -3838,6 +3838,10 @@ jhi-alert .alerts .alert-danger {
   .watermark-container svg {
     width: 1000px; }
 
+.watermark-container-small svg {
+  width: 347px;
+  height: 291px; }
+
 .center-text {
   text-align: center; }
 
@@ -6654,7 +6658,7 @@ input.select2-active {
   z-index: 10;
   transition: 400ms all ease; }
 
-#report-management svg, #report-management img {
+#report-management .svg-icon {
   width: 19px;
   height: 19px;
   margin: 5px;

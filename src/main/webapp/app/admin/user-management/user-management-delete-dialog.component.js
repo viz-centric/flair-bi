@@ -10,7 +10,7 @@
             bindings: {
                 resolve: '<',
                 dismiss: '&',
-                cancel: '&'
+                close: '&'
             }
         });
 

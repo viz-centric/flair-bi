@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -42,7 +42,7 @@
                     pagingParams: [
                         "$stateParams",
                         "PaginationUtil",
-                        function($stateParams, PaginationUtil) {
+                        function ($stateParams, PaginationUtil) {
                             return {
                                 page: PaginationUtil.parsePage(
                                     $stateParams.page
@@ -61,7 +61,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("global");
                             $translatePartialLoader.addPart("service");
                             return $translate.refresh();
@@ -70,7 +70,6 @@
                 }
             })
             .state("connection.new", {
-                parent: "connection",
                 url: "/new",
                 data: {
                     authorities: [],
@@ -84,7 +83,7 @@
                     }
                 },
                 resolve: {
-                    entity: function() {
+                    entity: function () {
                         return {
                             name: null,
                             lastUpdated: null,
@@ -96,7 +95,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("global");
                             $translatePartialLoader.addPart("datasources");
                             return $translate.refresh();
@@ -105,13 +104,12 @@
                 }
             })
             .state("connection.edit", {
-                parent: "connection",
                 url: "/{connectionId}/edit",
                 onEnter: [
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -123,7 +121,7 @@
                                 resolve: {
                                     entity: [
                                         "Connections",
-                                        function(Connections) {
+                                        function (Connections) {
                                             return Connections.get({
                                                 id: $stateParams.connectionId
                                             }).$promise;
@@ -132,12 +130,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("connection", null, {
                                         reload: "connection"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -145,13 +143,12 @@
                 ]
             })
             .state("connection.delete", {
-                parent: "connection",
                 url: "/{connectionId}/delete",
                 onEnter: [
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -163,7 +160,7 @@
                                 resolve: {
                                     entity: [
                                         "Connections",
-                                        function(Connections) {
+                                        function (Connections) {
                                             return Connections.get({
                                                 id: $stateParams.connectionId
                                             }).$promise;
@@ -172,12 +169,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("connection", null, {
                                         reload: "connection"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -206,14 +203,14 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             return $translate.refresh();
                         }
                     ],
                     entity: [
                         "$stateParams",
                         "Connections",
-                        function($stateParams, Connections) {
+                        function ($stateParams, Connections) {
                             return Connections.query({
                                 linkId: $stateParams.connectionLinkId
                             }).$promise;
@@ -221,7 +218,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "connection",
                                 params: $state.params,
@@ -249,14 +246,14 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("datasources");
                             return $translate.refresh();
                         }
                     ],
                     datasourceFilter: [
                         "$stateParams",
-                        function($stateParams) {
+                        function ($stateParams) {
                             return {
                                 connectionName: $stateParams.connectionLinkId
                             };
@@ -264,7 +261,7 @@
                     ],
                     config: [
                         "$stateParams",
-                        function($stateParams) {
+                        function ($stateParams) {
                             return {
                                 create: {
                                     enabled: false,
@@ -328,7 +325,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("datasources");
                             return $translate.refresh();
                         }
@@ -336,7 +333,7 @@
                     entity: [
                         "$stateParams",
                         "Datasources",
-                        function($stateParams, Datasources) {
+                        function ($stateParams, Datasources) {
                             return Datasources.get({
                                 id: $stateParams.datasourceId
                             }).$promise;
@@ -344,7 +341,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "datasources",
                                 params: $state.params,
@@ -371,7 +368,7 @@
                 resolve: {
                     dashboardFilter: [
                         "$stateParams",
-                        function($stateParams) {
+                        function ($stateParams) {
                             return {
                                 "dashboardDatasources.id":
                                     $stateParams.datasourceId
@@ -390,7 +387,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -402,7 +399,7 @@
                                 resolve: {
                                     entity: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.get({
                                                 id: $stateParams.datasourceId
                                             }).$promise;
@@ -411,12 +408,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("connection-detail", null, {
                                         reload: "connection-detail"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -433,7 +430,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -444,7 +441,7 @@
                                 resolve: {
                                     entity: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.get({
                                                 id: $stateParams.datasourceId
                                             }).$promise;
@@ -452,7 +449,7 @@
                                     ],
                                     deleteInfo: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.deleteInfo({
                                                 id: $stateParams.datasourceId
                                             }).$promise;
@@ -461,12 +458,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("connection-detail", null, {
                                         reload: "connection-detail"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );

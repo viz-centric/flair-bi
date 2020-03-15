@@ -86,7 +86,6 @@
                 }
             })
             .state("visualizations-detail.edit", {
-                parent: "visualizations-detail",
                 url: "/detail/edit",
                 data: {
                     authorities: [PERMISSIONS.UPDATE_VISUALIZATIONS]
@@ -133,7 +132,6 @@
                 ]
             })
             .state("visualizations.new", {
-                parent: "visualizations",
                 url: "/new",
                 data: {
                     authorities: [PERMISSIONS.WRITE_VISUALIZATIONS]
@@ -177,7 +175,6 @@
                 ]
             })
             .state("visualizations.edit", {
-                parent: "visualizations",
                 url: "/{id}/edit",
                 data: {
                     authorities: [PERMISSIONS.UPDATE_VISUALIZATIONS]
@@ -220,7 +217,6 @@
                 ]
             })
             .state("visualizations.delete", {
-                parent: "visualizations",
                 url: "/{id}/delete",
                 data: {
                     authorities: [PERMISSIONS.DELETE_VISUALIZATIONS]

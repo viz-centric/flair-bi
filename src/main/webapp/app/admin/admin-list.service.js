@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('adminListService', adminListService);
 
-    adminListService.$inject = ['$http'];
+    adminListService.$inject = [];
 
-    function adminListService($http) {
+    function adminListService() {
 
         var service = {
             getList: getList,
@@ -138,7 +138,7 @@
                 href: "report-management({id:'configuration'})",
                 order: 12
             }
-            
+
         ];
 
         return service;

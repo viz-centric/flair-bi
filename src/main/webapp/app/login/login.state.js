@@ -25,14 +25,9 @@
                     }
                 },
                 data: {
-
+                    notAuthenticated: true
                 },
                 resolve: {
-                    authorize: ['Auth',
-                        function (Auth) {
-                            return Auth.authorize();
-                        }
-                    ],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('login');
                         $translatePartialLoader.addPart('global');

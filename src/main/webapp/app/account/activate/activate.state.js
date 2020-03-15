@@ -12,7 +12,7 @@
             parent: 'account',
             url: '/activate?key',
             data: {
-                authorities: [],
+                public: true,
                 pageTitle: 'activate.title'
             },
             views: {

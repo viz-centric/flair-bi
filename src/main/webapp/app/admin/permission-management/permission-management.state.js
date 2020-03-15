@@ -59,7 +59,6 @@
                 }
             })
             .state('permission-management.user-group-delete', {
-                parent: 'permission-management',
                 url: '/userGroup/{name}/delete',
                 data: {
                     authorities: []

@@ -82,17 +82,16 @@
                     }],
                     //Added resolve to remember current state before moving to new state
                     PreviousState: ["$state", function ($state) {
-                            var currentStateData = {
-                                Name: $state.current.name,
-                                Params: $state.params,
-                                URL: $state.href($state.current.name, $state.params)
-                            };
-                            return currentStateData;
-                        }]
+                        var currentStateData = {
+                            Name: $state.current.name,
+                            Params: $state.params,
+                            URL: $state.href($state.current.name, $state.params)
+                        };
+                        return currentStateData;
+                    }]
                 }
             })
             .state('user-management-detail.newConstraint', {
-                parent: 'user-management-detail',
                 url: '/newConstraint',
                 data: {
                     authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT],
@@ -130,7 +129,6 @@
                 }
             })
             .state('user-management-detail.editConstraint', {
-                parent: 'user-management-detail',
                 url: '/editConstraint/:constraintId',
                 data: {
                     authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT],
@@ -165,7 +163,6 @@
                 }
             })
             .state('user-management-detail.deleteConstraint', {
-                parent: 'user-management-detail',
                 url: '/deleteConstraint/:constraintId',
                 data: {
                     authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT],
@@ -199,7 +196,6 @@
                 }
             })
             .state('user-management.new', {
-                parent: 'user-management',
                 url: '/new',
                 data: {
                     authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT]
@@ -241,7 +237,6 @@
                 }]
             })
             .state('user-management.edit', {
-                parent: 'user-management',
                 url: '/{login}/edit',
                 data: {
                     authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT]
@@ -270,7 +265,6 @@
                 }]
             })
             .state('user-management.delete', {
-                parent: 'user-management',
                 url: '/{login}/delete',
                 data: {
                     authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT]

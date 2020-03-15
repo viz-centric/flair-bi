@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -26,7 +26,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart(
                                 "datasourceConstraint"
                             );
@@ -55,7 +55,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart(
                                 "datasourceConstraint"
                             );
@@ -65,7 +65,7 @@
                     entity: [
                         "$stateParams",
                         "DatasourceConstraint",
-                        function($stateParams, DatasourceConstraint) {
+                        function ($stateParams, DatasourceConstraint) {
                             return DatasourceConstraint.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -73,7 +73,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name:
                                     $state.current.name ||
@@ -90,7 +90,6 @@
                 }
             })
             .state("datasource-constraint-detail.edit", {
-                parent: "datasource-constraint-detail",
                 url: "/detail/edit",
                 data: {
                     authorities: []
@@ -99,7 +98,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -112,7 +111,7 @@
                                 resolve: {
                                     entity: [
                                         "DatasourceConstraint",
-                                        function(DatasourceConstraint) {
+                                        function (DatasourceConstraint) {
                                             return DatasourceConstraint.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -121,10 +120,10 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("^", {}, { reload: false });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -132,7 +131,6 @@
                 ]
             })
             .state("datasource-constraint.new", {
-                parent: "datasource-constraint",
                 url: "/new",
                 data: {
                     authorities: []
@@ -141,7 +139,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -152,7 +150,7 @@
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {
-                                    entity: function() {
+                                    entity: function () {
                                         return {
                                             constraintDefinition: null,
                                             id: null
@@ -161,12 +159,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("datasource-constraint", null, {
                                         reload: "datasource-constraint"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("datasource-constraint");
                                 }
                             );
@@ -174,7 +172,6 @@
                 ]
             })
             .state("datasource-constraint.edit", {
-                parent: "datasource-constraint",
                 url: "/{id}/edit",
                 data: {
                     authorities: []
@@ -183,7 +180,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -196,7 +193,7 @@
                                 resolve: {
                                     entity: [
                                         "DatasourceConstraint",
-                                        function(DatasourceConstraint) {
+                                        function (DatasourceConstraint) {
                                             return DatasourceConstraint.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -205,12 +202,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("datasource-constraint", null, {
                                         reload: "datasource-constraint"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -218,7 +215,6 @@
                 ]
             })
             .state("datasource-constraint.delete", {
-                parent: "datasource-constraint",
                 url: "/{id}/delete",
                 data: {
                     authorities: []
@@ -227,7 +223,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -239,7 +235,7 @@
                                 resolve: {
                                     entity: [
                                         "DatasourceConstraint",
-                                        function(DatasourceConstraint) {
+                                        function (DatasourceConstraint) {
                                             return DatasourceConstraint.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -248,12 +244,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("datasource-constraint", null, {
                                         reload: "datasource-constraint"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );

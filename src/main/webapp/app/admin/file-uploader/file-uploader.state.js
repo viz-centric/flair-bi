@@ -1,5 +1,5 @@
 (function () {
-    'use strict'; 
+    'use strict';
 
     angular
         .module('flairbiApp')
@@ -7,7 +7,7 @@
 
     stateConfig.$inject = ['$stateProvider', 'PERMISSIONS'];
 
-    function stateConfig($stateProvider,PERMISSIONS) {
+    function stateConfig($stateProvider, PERMISSIONS) {
         $stateProvider.state('file-uploader', {
             parent: 'admin',
             url: '/file-uploader?page&sort&search',
@@ -16,14 +16,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/file-uploader/file-uploader-header.html',
-                    controller: 'FileUploaderController',
-                    controllerAs: 'vm'
+                    component: 'fileUploaderHeaderComponent'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/file-uploader/file-uploader.html',
-                    controller: 'FileUploaderController',
-                    controllerAs: 'vm'
+                    component: 'fileUploaderComponent'
                 }
             },
             params: {

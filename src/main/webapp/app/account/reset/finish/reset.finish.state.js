@@ -12,7 +12,7 @@
             parent: 'entity',
             url: '/reset/finish?key',
             data: {
-                authorities: []
+                public: true
             },
             views: {
                 'content@': {
@@ -25,7 +25,7 @@
 
                 },
                 'footer@': {
-                        
+
                 }
             },
             resolve: {

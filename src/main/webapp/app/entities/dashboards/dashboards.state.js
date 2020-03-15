@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -32,7 +32,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("dashboards");
                             $translatePartialLoader.addPart("global");
                             return $translate.refresh();
@@ -66,7 +66,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("dashboards");
                             return $translate.refresh();
                         }
@@ -74,7 +74,7 @@
                     entity: [
                         "$stateParams",
                         "Dashboards",
-                        function($stateParams, Dashboards) {
+                        function ($stateParams, Dashboards) {
                             return Dashboards.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -82,7 +82,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "dashboards",
                                 params: $state.params,
@@ -122,7 +122,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("dashboards");
                             return $translate.refresh();
                         }
@@ -130,7 +130,7 @@
                     entity: [
                         "$stateParams",
                         "Dashboards",
-                        function($stateParams, Dashboards) {
+                        function ($stateParams, Dashboards) {
                             return Dashboards.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -138,7 +138,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "dashboards",
                                 params: $state.params,
@@ -153,7 +153,6 @@
                 }
             })
             .state("dashboards-detail.edit", {
-                parent: "dashboards-detail",
                 url: "/edit",
                 data: {
                     authorities: [],
@@ -163,7 +162,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -174,7 +173,7 @@
                                 size: "md"
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go(
                                         "^",
                                         {},
@@ -183,7 +182,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -191,7 +190,6 @@
                 ]
             })
             .state("dashboards.new", {
-                parent: "dashboards",
                 // TODO : this is just a work around not a permanent fix
                 url: "/create/new",
                 data: {
@@ -202,7 +200,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -213,12 +211,12 @@
                                 size: "md"
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("dashboards", null, {
                                         reload: "dashboards"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("dashboards");
                                 }
                             );
@@ -226,7 +224,6 @@
                 ]
             })
             .state("dashboards.edit", {
-                parent: "dashboards",
                 url: "/{id}/edit",
                 data: {
                     authorities: []
@@ -235,7 +232,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -246,12 +243,12 @@
                                 size: "lg"
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("dashboards", null, {
                                         reload: "dashboards"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -259,7 +256,6 @@
                 ]
             })
             .state("dashboards.delete", {
-                parent: "dashboards",
                 url: "/{id}/delete",
                 data: {
                     authorities: [],
@@ -269,7 +265,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -280,7 +276,7 @@
                                 resolve: {
                                     entity: [
                                         "Dashboards",
-                                        function(Dashboards) {
+                                        function (Dashboards) {
                                             return Dashboards.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -289,12 +285,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("dashboards", null, {
                                         reload: "dashboards"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -327,7 +323,7 @@
                         "Dashboards",
                         "$q",
                         "$stateParams",
-                        function(
+                        function (
                             FeatureBookmark,
                             Dashboards,
                             $q,
@@ -339,21 +335,21 @@
                                 {
                                     id: $stateParams.id
                                 },
-                                function(res) {
+                                function (res) {
                                     FeatureBookmark.query(
                                         {
                                             "datasource.id":
                                                 res.dashboardDatasource.id
                                         },
-                                        function(res) {
+                                        function (res) {
                                             defered.resolve(res);
                                         },
-                                        function(err) {
+                                        function (err) {
                                             defered.reject(res);
                                         }
                                     );
                                 },
-                                function(err) {
+                                function (err) {
                                     defered.reject(err);
                                 }
                             ).$promise;
@@ -363,7 +359,7 @@
                     ],
                     config: [
                         "$stateParams",
-                        function($stateParams) {
+                        function ($stateParams) {
                             return {
                                 create: {
                                     enabled: false,
@@ -393,7 +389,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("featureBookmark");
                             return $translate.refresh();
                         }
@@ -401,13 +397,12 @@
                 }
             })
             .state("dashboard-bookmarks.edit", {
-                parent: "dashboard-bookmarks",
                 url: "/{bookmarkId}/edit",
                 onEnter: [
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -419,7 +414,7 @@
                                 resolve: {
                                     entity: [
                                         "FeatureBookmark",
-                                        function(FeatureBookmark) {
+                                        function (FeatureBookmark) {
                                             return FeatureBookmark.get({
                                                 id: $stateParams.bookmarkId
                                             }).$promise;
@@ -428,12 +423,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("dashboard-bookmarks", null, {
                                         reload: "dashboard-bookmarks"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -441,13 +436,12 @@
                 ]
             })
             .state("dashboard-bookmarks.delete", {
-                parent: "dashboard-bookmarks",
                 url: "/{bookmarkId}/delete",
                 onEnter: [
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -458,7 +452,7 @@
                                 resolve: {
                                     entity: [
                                         "FeatureBookmark",
-                                        function(FeatureBookmark) {
+                                        function (FeatureBookmark) {
                                             return FeatureBookmark.get({
                                                 id: $stateParams.bookmarkId
                                             }).$promise;
@@ -467,12 +461,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("dashboard-bookmarks", null, {
                                         reload: "dashboard-bookmarks"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -489,7 +483,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -501,7 +495,7 @@
                                 resolve: {
                                     entity: [
                                         "Dashboards",
-                                        function(Dashboards) {
+                                        function (Dashboards) {
                                             return Dashboards.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -510,7 +504,7 @@
                                 }
                             })
                             .result.then(
-                                function(result) {
+                                function (result) {
                                     $state.go(
                                         "dashboards-overview",
                                         {
@@ -521,7 +515,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                 }
                             );
                     }

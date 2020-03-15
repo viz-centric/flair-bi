@@ -7,10 +7,13 @@ import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
 import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,6 +34,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Slf4j
 @Profile("!integration")
+@Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
 public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
@@ -38,27 +42,19 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
     private final JHipsterProperties jHipsterProperties;
 
     public LoginConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
-                              UserDetailsService userDetailsService,
-                              TokenProvider tokenProvider,
-                              CorsFilter corsFilter,
-                              PasswordEncoder passwordEncoder,
-                              JHipsterProperties jHipsterProperties,
-                              LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
-                              LDAPUserDetailsContextMapper ldapUserDetailsContextMapper) throws Exception {
+            UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter,
+            PasswordEncoder passwordEncoder, JHipsterProperties jHipsterProperties,
+            LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
+            LDAPUserDetailsContextMapper ldapUserDetailsContextMapper) throws Exception {
         log.info("Creating Jwt and Ldap configuration");
 
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
         this.jHipsterProperties = jHipsterProperties;
 
-        authenticationManagerBuilder
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder);
-        authenticationManagerBuilder
-                .ldapAuthentication()
-                .ldapAuthoritiesPopulator(ldapAuthoritiesPopulator)
-                .userDnPatterns("uid={0},ou=people")
-                .userDetailsContextMapper(ldapUserDetailsContextMapper)
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        authenticationManagerBuilder.ldapAuthentication().ldapAuthoritiesPopulator(ldapAuthoritiesPopulator)
+                .userDnPatterns("uid={0},ou=people").userDetailsContextMapper(ldapUserDetailsContextMapper)
                 .contextSource(getLDAPContextSource());
     }
 
@@ -69,63 +65,44 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
-            .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/i18n/**")
-            .antMatchers("/content/**")
-            .antMatchers("/swagger-ui/index.html")
-            .antMatchers("/test/**");
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").antMatchers("/app/**/*.{js,html}").antMatchers("/i18n/**")
+                .antMatchers("/content/**").antMatchers("/swagger-ui/index.html").antMatchers("/test/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling()
-            .authenticationEntryPoint(http401UnauthorizedEntryPoint())
-            .and()
-            .csrf()
-            .disable()
-            .headers()
-            .frameOptions()
-            .disable()
-            .and()
-            .logout()
-            .logoutUrl("/api/logout")
-            .logoutSuccessUrl("/")
-            .invalidateHttpSession(true)
-            .deleteCookies("JSESSIONID")
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .and()
-            .authorizeRequests()
-            .antMatchers("/flair-ws**").permitAll()
-            .antMatchers("/login**").permitAll()
-            .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/activate").permitAll()
-            .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/account/reset_password/init").permitAll()
-            .antMatchers("/api/account/reset_password/finish").permitAll()
-            .antMatchers("/api/profile-info").permitAll()
-            .antMatchers("/api/external/**").permitAll()
-            .antMatchers("/api/**").authenticated()
-            .antMatchers("/v2/api-docs/**").permitAll()
-            .antMatchers("/swagger-resources/configuration/ui").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/users/**").access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'READ', 'APPLICATION')")
-            .antMatchers(HttpMethod.POST, "/api/users/**").access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'WRITE', 'APPLICATION')")
-            .antMatchers(HttpMethod.PUT, "/api/users/**").access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'UPDATE', 'APPLICATION')")
-            .antMatchers(HttpMethod.DELETE, "/api/users/**").access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'DELETE', 'APPLICATION')")
-            .antMatchers("/swagger-ui/index.html").access("@accessControlManager.hasAccess('API', 'READ', 'APPLICATION')")
-            .antMatchers("/management/audits/**").access("@accessControlManager.hasAccess('AUDITS', 'READ', 'APPLICATION')")
-            .antMatchers("/management/configprops/**").access("@accessControlManager.hasAccess('CONFIGURATION', 'READ', 'APPLICATION')")
-            .antMatchers(HttpMethod.GET, "/management/logs/**").access("@accessControlManager.hasAccess('LOGS', 'READ', 'APPLICATION')")
-            .antMatchers(HttpMethod.PUT, "/management/logs/**").access("@accessControlManager.hasAccess('LOGS', 'UPDATE', 'APPLICATION')")
-            .antMatchers("/management/metrics").access("@accessControlManager.hasAccess('APPLICATION-METRICS', 'READ', 'APPLICATION')")
-            .and()
-            .apply(securityConfigurerAdapter());
-
+        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling()
+                .authenticationEntryPoint(http401UnauthorizedEntryPoint()).and().csrf().disable().headers()
+                .frameOptions().disable().and().logout().logoutUrl("/api/logout").logoutSuccessUrl("/")
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID").and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().authorizeRequests()
+                .antMatchers("/flair-ws**").permitAll().antMatchers("/login**").permitAll().antMatchers("/api/register")
+                .permitAll().antMatchers("/api/activate").permitAll().antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/account/reset_password/init").permitAll()
+                .antMatchers("/api/account/reset_password/finish").permitAll().antMatchers("/api/profile-info")
+                .permitAll().antMatchers("/api/external/**").permitAll().antMatchers("/api/**").authenticated()
+                .antMatchers("/v2/api-docs/**").permitAll().antMatchers("/swagger-resources/configuration/ui")
+                .permitAll().antMatchers(HttpMethod.GET, "/api/users/**")
+                .access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'READ', 'APPLICATION')")
+                .antMatchers(HttpMethod.POST, "/api/users/**")
+                .access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'WRITE', 'APPLICATION')")
+                .antMatchers(HttpMethod.PUT, "/api/users/**")
+                .access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'UPDATE', 'APPLICATION')")
+                .antMatchers(HttpMethod.DELETE, "/api/users/**")
+                .access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'DELETE', 'APPLICATION')")
+                .antMatchers("/swagger-ui/index.html")
+                .access("@accessControlManager.hasAccess('API', 'READ', 'APPLICATION')")
+                .antMatchers("/management/audits/**")
+                .access("@accessControlManager.hasAccess('AUDITS', 'READ', 'APPLICATION')")
+                .antMatchers("/management/configprops/**")
+                .access("@accessControlManager.hasAccess('CONFIGURATION', 'READ', 'APPLICATION')")
+                .antMatchers(HttpMethod.GET, "/management/logs/**")
+                .access("@accessControlManager.hasAccess('LOGS', 'READ', 'APPLICATION')")
+                .antMatchers(HttpMethod.PUT, "/management/logs/**")
+                .access("@accessControlManager.hasAccess('LOGS', 'UPDATE', 'APPLICATION')")
+                .antMatchers("/management/metrics")
+                .access("@accessControlManager.hasAccess('APPLICATION-METRICS', 'READ', 'APPLICATION')").and()
+                .apply(securityConfigurerAdapter());
 
     }
 

@@ -12,7 +12,7 @@
             parent: 'entity',
             url: '/reset/request',
             data: {
-                authorities: []
+                public: true
             },
             views: {
                 'content@': {

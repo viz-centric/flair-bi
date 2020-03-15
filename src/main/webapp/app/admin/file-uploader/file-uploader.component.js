@@ -1,29 +1,45 @@
-(function() {
+(function () {
     "use strict";
 
-    angular.module("flairbiApp").controller("FileUploaderController", FileUploaderController);
+    angular
+        .module('flairbiApp')
+        .component('fileUploaderComponent', {
+            templateUrl: 'app/admin/file-uploader/file-uploader.component.html',
+            controller: FileUploaderController,
+            controllerAs: 'vm',
+            bindings: {
+                pagingParams: '<'
+            }
+        }).component('fileUploaderHeaderComponent', {
+            templateUrl: 'app/admin/file-uploader/file-uploader-header.component.html',
+            controller: FileUploaderController,
+            controllerAs: 'vm',
+            bindings: {
+                pagingParams: '<'
+            }
+        });
 
-    FileUploaderController.$inject = ["$scope", "Upload", 'fileSystemList', 'uploadFileService', 'DataUtils', 'csvParserService', '$uibModal','separatorList','$rootScope','$state','Principal','PERMISSIONS','FileUploaderStatus', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams','appPropertiesService'];
+    FileUploaderController.$inject = ["$scope", 'fileSystemList', 'uploadFileService', 'csvParserService', '$uibModal', '$rootScope', '$state', 'FileUploaderStatus', 'ParseLinks', 'AlertService', 'paginationConstants', 'appPropertiesService'];
 
-    function FileUploaderController($scope, Upload, fileSystemList, uploadFileService, DataUtils, csvParserService, $uibModal,separatorList,$rootScope,Principal,PERMISSIONS, $state, FileUploaderStatus, ParseLinks, AlertService, paginationConstants, pagingParams,appPropertiesService) {
+    function FileUploaderController($scope, fileSystemList, uploadFileService, csvParserService, $uibModal, $rootScope, $state, FileUploaderStatus, ParseLinks, AlertService, paginationConstants, appPropertiesService) {
         var vm = this;
         vm.fileSystemList = fileSystemList;
         vm.changeFileSystem = changeFileSystem;
         vm.clearFileSystem = clearFileSystem;
         vm.clearFile = clearFile;
         vm.uploadFile = uploadFile;
-        vm.separatorList=[{"id":"|","name":"Pipe"}, {"id":",","name":"Comma"}, {"id":":","name":"Colon"}, {"id":";","name":"Semi-Colon"}];
-        vm.clearSeparator=clearSeparator;
-        vm.changeSeparator=changeSeparator;
-        vm.resetFileDTO=resetFileDTO;
-        vm.authorities = ['ROLE_USER','ROLE_ADMIN'];
-        vm.fileError="";
+        vm.separatorList = [{ "id": "|", "name": "Pipe" }, { "id": ",", "name": "Comma" }, { "id": ":", "name": "Colon" }, { "id": ";", "name": "Semi-Colon" }];
+        vm.clearSeparator = clearSeparator;
+        vm.changeSeparator = changeSeparator;
+        vm.resetFileDTO = resetFileDTO;
+        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        vm.fileError = "";
         vm.loadPage = loadPage;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
+        vm.predicate = vm.pagingParams.predicate;
+        vm.reverse = vm.pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-        
+
         activate();
 
         ////////////////
@@ -31,12 +47,12 @@
         function activate() {
             resetFileDTO();
             loadAll();
-            if($rootScope.appProperies.maxDataFileSize==="0"){
+            if ($rootScope.appProperies.maxDataFileSize === "0") {
                 getApplicationSettings();
             }
         }
 
-        function resetFileDTO(){
+        function resetFileDTO() {
             vm.fileDTO = {
                 "file": null,
                 "fileSystem": null,
@@ -76,19 +92,19 @@
             vm.fileDTO.fileName = null;
         }
 
-        $scope.$watch('files', function() {
+        $scope.$watch('files', function () {
             if ($scope.files && $scope.files.length) {
-                if(isFileSizeInRange($scope.files[0].size)){    
+                if (isFileSizeInRange($scope.files[0].size)) {
                     $scope.upload($scope.files[0]);
-                }else{
+                } else {
                     showCSVError({
-                        text: "you can not upload the file more than "+$rootScope.appProperies.maxDataFileSize+" MB!!",
+                        text: "you can not upload the file more than " + $rootScope.appProperies.maxDataFileSize + " MB!!",
                         title: "Error"
-                    });   
+                    });
                 }
             }
         });
-        $scope.$watch('file', function() {
+        $scope.$watch('file', function () {
             if ($scope.file != null) {
                 $scope.files = [$scope.file];
             }
@@ -122,55 +138,53 @@
             reader.readAsBinaryString(file);
         };
 
-        function showCSVError(info){
+        function showCSVError(info) {
             $rootScope.showErrorSingleToast(info);
         }
 
 
         function openCSVFile(csvData) {
             $uibModal.open({
-                    animation: true,
-                    templateUrl: "app/admin/file-uploader/csv-dialoag.html",
-                    size: "lg",
-                    controller: "CSVDialogController",
-                    controllerAs: "vm",
-                    resolve: {
-                        csvData: function() {
-                            return csvData.slice(0, 5);
-                        }
+                animation: true,
+                component: 'csvDialogComponent',
+                size: "lg",
+                resolve: {
+                    csvData: function () {
+                        return csvData.slice(0, 5);
                     }
-                })
-                .result.then(function() {}, function() {});
+                }
+            })
+                .result.then(function () { }, function () { });
         }
 
         function createCSVFile(rows) {
             var csvContent = "";
-            rows.forEach(function(rowArray) {
+            rows.forEach(function (rowArray) {
                 var row = rowArray.join(",");
                 csvContent += row + "\r\n";
             });
-            vm.fileDTO.file  = window.btoa(csvContent);
+            vm.fileDTO.file = window.btoa(csvContent);
         }
 
-        function clearSeparator(){
-            vm.separator=null;
+        function clearSeparator() {
+            vm.separator = null;
         }
-        function changeSeparator(separator){
-            vm.separator=separator;
+        function changeSeparator(separator) {
+            vm.separator = separator;
         }
         function isFileSizeInRange(size) {
             if (size > 0) {
                 var fileSizeInMb = Math.floor(size / 1000000);
-                if (fileSizeInMb <= parseInt($rootScope.appProperies.maxDataFileSize)) 
+                if (fileSizeInMb <= parseInt($rootScope.appProperies.maxDataFileSize))
                     return true;
-                }else{
-                    return false;
-                }
+            } else {
+                return false;
+            }
         }
 
-        function loadAll () {
+        function loadAll() {
             FileUploaderStatus.query({
-                page: pagingParams.page - 1,
+                page: vm.pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
             }, onSuccess, onError);
@@ -186,7 +200,7 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.fileUploaderStatuses = data;
-                vm.page = pagingParams.page;
+                vm.page = vm.pagingParams.page;
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -206,12 +220,12 @@
             });
         }
 
-        function getApplicationSettings(){
+        function getApplicationSettings() {
             appPropertiesService.getProperties().then(onPropertiesServiceSuccess, onPropertiesServiceError);
         }
 
         function onPropertiesServiceSuccess(result) {
-            $rootScope.appProperies=result.data;
+            $rootScope.appProperies = result.data;
         }
 
         function onPropertiesServiceError(error) {

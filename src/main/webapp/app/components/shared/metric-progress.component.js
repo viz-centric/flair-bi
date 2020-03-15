@@ -17,9 +17,9 @@
             }
         });
 
-    metricProgressController.$inject = ['$scope'];
+    metricProgressController.$inject = [];
 
-    function metricProgressController($scope) {
+    function metricProgressController() {
         var vm = this;
 
 
@@ -27,6 +27,6 @@
 
         ////////////////
 
-        function activate() {}
+        function activate() { }
     }
 })();

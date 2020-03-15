@@ -15,8 +15,12 @@
         var vm = this;
         vm.$state = $state;
         vm.logout = logout;
-        activate();
-        getAccount();
+
+        vm.$onInit = function () {
+            activate();
+            getAccount();
+        }
+
 
         function logout() {
             Auth.logout()

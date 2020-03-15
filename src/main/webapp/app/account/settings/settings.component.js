@@ -14,15 +14,18 @@
             controllerAs: 'vm'
         });
 
-    SettingsController.$inject = ['Principal', 'Auth', 'JhiLanguageService', '$translate'];
+    SettingsController.$inject = ['Principal', 'Auth', 'JhiLanguageService', '$translate', 'tmhDynamicLocale'];
 
-    function SettingsController(Principal, Auth, JhiLanguageService, $translate) {
+    function SettingsController(Principal, Auth, JhiLanguageService, $translate, tmhDynamicLocale) {
         var vm = this;
 
         vm.error = null;
         vm.save = save;
         vm.settingsAccount = null;
         vm.success = null;
+
+        vm.changeLanguage = changeLanguage;
+        vm.languages = [];
 
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
@@ -42,6 +45,15 @@
             Principal.identity().then(function (account) {
                 vm.settingsAccount = copyAccount(account);
             });
+
+            JhiLanguageService.getAll().then(function (languages) {
+                vm.languages = languages;
+            });
+        }
+
+        function changeLanguage(languageKey) {
+            $translate.use(languageKey);
+            tmhDynamicLocale.set(languageKey);
         }
 
         function save() {

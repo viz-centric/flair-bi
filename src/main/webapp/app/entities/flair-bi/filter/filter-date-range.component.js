@@ -53,30 +53,18 @@
             },
             {
                 title: 'Week to date',
-                period: {
-                    months: 0,
-                },
                 toDate: 'isoWeek'
             },
             {
                 title: 'Month to date',
-                period: {
-                    months: 0,
-                },
                 toDate: 'month'
             },
             {
                 title: 'Quarter to date',
-                period: {
-                    months: 1,
-                },
                 toDate: 'quarter'
             },
             {
                 title: 'Year to date',
-                period: {
-                    months: 0,
-                },
                 toDate: 'year'
             },
             {
@@ -116,19 +104,29 @@
             onInputChange();
         }
 
+        function getStartDateRangeInterval() {
+            var config = vm.currentDynamicDateRangeConfig;
+            if (config.toDate || config.isCustom) {
+                return null;
+            } else if (config.period.days) {
+                return config.period.days + ' days';
+            } else if (config.period.months) {
+                return config.period.months + ' months';
+            }
+            return null;
+        }
+
         function getStartDateRange() {
             var date = new Date();
             var config = vm.currentDynamicDateRangeConfig;
             if (config.isCustom) {
                 date.setDate(date.getDate() - vm.customDynamicDateRange);
+                return date;
             } else if (config.toDate) {
-                date = moment(date).startOf(config.toDate).add(1, 'M').toDate();
-                date.setMonth(date.getMonth() - config.period.months);
-            } else {
-                date.setDate(date.getDate() - config.period.days);
-                date.setMonth(date.getMonth() - config.period.months);
+                date = moment(date).startOf(config.toDate).toDate();
+                return date;
             }
-            return date;
+            return null;
         }
 
         function onDynamicDateRangeChanged(config) {
@@ -156,8 +154,15 @@
                     endDate: endDate,
                 });
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
-                var startDate = formatDate(resetTimezone(startOfDay(strToDate(getStartDateRange()))));
-                var endDate = formatDate(resetTimezone(endOfDay(new Date())));
+                var startDateRange = getStartDateRange();
+                var startDate;
+                if (startDateRange) {
+                    startDate = formatDate(resetTimezone(startOfDay(strToDate(startDateRange))));
+                } else {
+                    var startDateRangeInterval = getStartDateRangeInterval();
+                    startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                }
+                var endDate = '__FLAIR_NOW()';
                 console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({

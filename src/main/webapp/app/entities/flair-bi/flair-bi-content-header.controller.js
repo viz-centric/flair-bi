@@ -189,7 +189,7 @@
                     ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
                     : criteria.feature.name;
                 var valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
-                filter[featureName] = criteria.value.split(",");
+                filter[featureName] = criteria.value.split("||");
                 filter[featureName]._meta = {
                     dataType: criteria.feature.type,
                     valueType: valueType
@@ -562,7 +562,7 @@
                         params[key][1] = filterParametersService.changeDateFormat(params[key][1]);
                     }
                     filterCriterias.push({
-                        value: params[key].join(),
+                        value: params[key].join('||'),
                         feature: vm.features.filter(function (item) {
                             var featureName = "";
                             if (isDateRange(key)) {

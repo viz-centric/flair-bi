@@ -7,9 +7,9 @@
 
 
     function CronParser() {
-       var cronstrue = window.cronstrue;
+        var cronstrue = window.cronstrue;
 
-       return function(input){
+        return function (input) {
             return cronstrue.toString(input);
         }
 

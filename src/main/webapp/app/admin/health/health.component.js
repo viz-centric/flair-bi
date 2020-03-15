@@ -1,9 +1,19 @@
 (function () {
     'use strict';
 
+
     angular
         .module('flairbiApp')
-        .controller('JhiHealthCheckController', JhiHealthCheckController);
+        .component('healthComponent', {
+            templateUrl: 'app/admin/health/health.component.html',
+            controller: JhiHealthCheckController,
+            controllerAs: 'vm'
+        })
+        .component('healthContentHeaderComponent', {
+            templateUrl: 'app/admin/health/health-content-header.compoonent.html',
+            controller: JhiHealthCheckController,
+            controllerAs: 'vm'
+        });
 
     JhiHealthCheckController.$inject = ['JhiHealthService', '$uibModal'];
 
@@ -17,7 +27,7 @@
         vm.baseName = JhiHealthService.getBaseName;
         vm.subSystemName = JhiHealthService.getSubSystemName;
 
-        vm.refresh();
+        vm.$onInit = vm.refresh;
 
         function getLabelClass(statusState) {
             if (statusState === 'UP') {
@@ -40,9 +50,7 @@
 
         function showHealth(health) {
             $uibModal.open({
-                templateUrl: 'app/admin/health/health.modal.html',
-                controller: 'HealthModalController',
-                controllerAs: 'vm',
+                component: 'healthModalComponent',
                 size: 'lg',
                 resolve: {
                     currentHealth: function () {

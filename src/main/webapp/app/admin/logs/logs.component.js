@@ -3,7 +3,16 @@
 
     angular
         .module('flairbiApp')
-        .controller('LogsController', LogsController);
+        .component('logsComponent', {
+            templateUrl: 'app/admin/logs/logs.component.html',
+            controller: LogsController,
+            controllerAs: 'vm'
+        }).component('logsContentHeaderComponent', {
+            templateUrl: 'app/admin/logs/logs-content-header.html',
+            controller: LogsController,
+            controllerAs: 'vm'
+        });
+
 
     LogsController.$inject = ['LogsService', 'Principal', 'PERMISSIONS'];
 

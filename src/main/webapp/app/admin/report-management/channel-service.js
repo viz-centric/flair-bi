@@ -9,7 +9,6 @@
 
     function ChannelService($http) {
         var service = {
-
             channelParameters: channelParameters,
             createTeamConfig: createTeamConfig,
             updateTeamConfig: updateTeamConfig,
@@ -17,7 +16,7 @@
             updateEmailConfig: updateEmailConfig,
             getEmailConfig: getEmailConfig,
             getTeamConfig: getTeamConfig,
-            getTeamNames:getTeamNames,
+            getTeamNames: getTeamNames,
             deleteChannelConfig: deleteChannelConfig,
             createJiraConfig: createJiraConfig,
             getJiraConfig: getJiraConfig,

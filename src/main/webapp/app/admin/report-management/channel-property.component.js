@@ -14,9 +14,9 @@
         }
     });
 
-    channelPropertyController.$inject = ["$scope"];
+    channelPropertyController.$inject = [];
 
-    function channelPropertyController($scope) {
+    function channelPropertyController() {
         var vm = this;
 
         vm.property = property;

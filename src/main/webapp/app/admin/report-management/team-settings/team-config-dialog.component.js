@@ -3,33 +3,40 @@
 
     angular
         .module('flairbiApp')
-        .controller('teamConfigDialog', teamConfigDialog);
+        .component('teamConfigDialogComponent', {
+            templateUrl: 'app/admin/report-management/team-settings/team-config-dialog.component.html',
+            controller: teamConfigDialog,
+            controllerAs: 'vm',
+            bindings: {
+                resolve: '<',
+                close: '&',
+                dismiss: '&'
+            }
+        });
 
-    teamConfigDialog.$inject = ['$scope', 'data', 'config', 'webhook', '$uibModalInstance', '$rootScope', 'ChannelService'];
+    teamConfigDialog.$inject = ['$rootScope', 'ChannelService'];
 
-    function teamConfigDialog($scope, data, config, webhook, $uibModalInstance, $rootScope, ChannelService) {
+    function teamConfigDialog($rootScope, ChannelService) {
         var vm = this;
-        vm.config = config;
-        vm.clear = clear;
+        vm.config = vm.resolve.config;
+        vm.clear = vm.close;
         vm.connection = {};
-        vm.connection.details = data;
+        vm.connection.details = vm.resolve.data;
         vm.addWebhook = addWebhook;
         vm.updateWebhook = updateWebhook;
         vm.headerText = "Add MS Teams webhook URL";
-        vm.webhookList = webhook;
-        if (data) {
+        vm.webhookList = vm.resolve.webhook;
+        if (vm.resolve.data) {
             vm.headerText = "Edit MS Teams webhook URL";
             vm.isEdit = true;
         }
 
-        activate();
+        vm.$onInit = activate;
         ////////////////
         function activate() {
 
         }
-        function clear() {
-            $uibModalInstance.close();
-        }
+
         function checkWebhhokIsExiste(webhook) {
             for (var index = 0; index < vm.webhookList.length; index++) {
                 if (webhook.id) {
@@ -52,7 +59,7 @@
             }
             if (!checkWebhhokIsExiste(teamConfig)) {
                 ChannelService.createTeamConfig(teamConfig)
-                    .then(function (success) {
+                    .then(function () {
                         var info = {
                             text: "team's config is saved",
                             title: "Saved"

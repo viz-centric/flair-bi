@@ -3,7 +3,11 @@
 
     angular
         .module('flairbiApp')
-        .controller('PermissionManagementContentHeaderController', PermissionManagementContentHeaderController);
+        .component('permissionManagementContentHeaderComponent', {
+            templateUrl: 'app/admin/permission-management/permission-management-content-header.component.html',
+            controller: PermissionManagementContentHeaderController,
+            controllerAs: 'vm'
+        });
 
     PermissionManagementContentHeaderController.$inject = [
         '$rootScope',
@@ -24,7 +28,7 @@
 
         ////////////////
 
-        function activate() {}
+        function activate() { }
 
         function save() {
             $rootScope.$broadcast('flairbiApp:savePermissions');

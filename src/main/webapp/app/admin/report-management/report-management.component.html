@@ -1,5 +1,4 @@
 <div id="report-management">
-
     <div class="alerts">
         <div class="alerts-tabs">
             <div id="configuration-tab" ng-if="vm.isAdmin"
@@ -34,13 +33,15 @@
                     <div class="blue-line"></div>
             </div>
         </div>
-        <div id="configuration-container" class="configuration-container" alert="vm.alertTab" ng-if="vm.isAdmin && vm.alertTab =='configuration'">
+        <div id="configuration-container" class="configuration-container" alert="vm.alertTab"
+            ng-if="vm.isAdmin && vm.alertTab =='configuration'">
             <configuration-component />
         </div>
         <div id="report-container" class="report-container" alert="vm.alertTab" ng-if="vm.alertTab =='report'">
             <report-list-component></report-list-component>
         </div>
-        <div id="tasklogger-container" class="tasklogger-container" alert="vm.alertTab" ng-if="vm.alertTab=='tasklogger'">
+        <div id="tasklogger-container" class="tasklogger-container" alert="vm.alertTab"
+            ng-if="vm.alertTab=='tasklogger'">
             <task-logger-component></task-logger-component>
         </div>
     </div>

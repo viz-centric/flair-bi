@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('JhiHealthService', JhiHealthService);
 
-    JhiHealthService.$inject = ['$rootScope', '$http'];
+    JhiHealthService.$inject = ['$http'];
 
-    function JhiHealthService($rootScope, $http) {
+    function JhiHealthService($http) {
         var separator = '.';
         var service = {
             checkHealth: checkHealth,

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -17,16 +17,14 @@
                     templateUrl: "app/admin/release-management/release-management-content-header.html"
                 },
                 "content@": {
-                    templateUrl: "app/admin/release-management/release-management.html",
-                    controller: "ReleaseManagementController",
-                    controllerAs: "vm"
+                    component: 'releaseManagementComponent'
                 }
             },
             resolve: {
                 translatePartialLoader: [
                     "$translate",
                     "$translatePartialLoader",
-                    function($translate, $translatePartialLoader) {
+                    function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart("releaseRequests");
                         return $translate.refresh();
                     }

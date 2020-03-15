@@ -3,7 +3,15 @@
 
     angular
         .module('flairbiApp')
-        .controller('JhiMetricsMonitoringController', JhiMetricsMonitoringController);
+        .component('metricsComponent', {
+            templateUrl: 'app/admin/metrics/metrics.component.html',
+            controller: JhiMetricsMonitoringController,
+            controllerAs: 'vm'
+        }).component('metricsContentHeaderComponent', {
+            templateUrl: 'app/admin/metrics/metrics-content-header.component.html',
+            controller: JhiMetricsMonitoringController,
+            controllerAs: 'vm'
+        });
 
     JhiMetricsMonitoringController.$inject = ['$scope', 'JhiMetricsService', '$uibModal'];
 
@@ -16,7 +24,7 @@
         vm.servicesStats = {};
         vm.updatingMetrics = true;
 
-        vm.refresh();
+        vm.$onInit = vm.refresh;
 
         $scope.$watch('vm.metrics', function (newValue) {
             vm.servicesStats = {};
@@ -42,9 +50,7 @@
         function refreshThreadDumpData() {
             JhiMetricsService.threadDump().then(function (data) {
                 $uibModal.open({
-                    templateUrl: 'app/admin/metrics/metrics.modal.html',
-                    controller: 'JhiMetricsMonitoringModalController',
-                    controllerAs: 'vm',
+                    component: 'metricsModalComponent',
                     size: 'lg',
                     resolve: {
                         threadDump: function () {

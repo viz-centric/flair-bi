@@ -3,14 +3,23 @@
 
     angular
         .module('flairbiApp')
-        .controller('ticketSchedulerDialog', ticketSchedulerDialog);
+        .component('ticketSchedulerDialogComponent', {
+            templateUrl: 'app/admin/report-management/ticket-scheduler/ticket-scheduler-dialog.component.html',
+            controller: ticketSchedulerDialog,
+            controllerAs: 'vm',
+            bindings: {
+                resolve: '<',
+                close: '&',
+                dismiss: '&'
+            }
+        });
 
-    ticketSchedulerDialog.$inject = ['$scope', 'data', 'config', '$uibModalInstance', '$rootScope', 'ChannelService', 'scheduler_channels'];
+    ticketSchedulerDialog.$inject = ['$rootScope', 'ChannelService', 'scheduler_channels'];
 
-    function ticketSchedulerDialog($scope, data, config, $uibModalInstance, $rootScope, ChannelService, scheduler_channels) {
+    function ticketSchedulerDialog($rootScope, ChannelService, scheduler_channels) {
         var vm = this;
-        vm.clear = clear;
-        vm.webhookList = data;
+        vm.clear = vm.close;
+        vm.webhookList = vm.resolve.data;
         vm.notifyOpenedJiraTicket = notifyOpenedJiraTicket;
         vm.channels = scheduler_channels;
         vm.setChannel = setChannel;
@@ -21,17 +30,15 @@
         function activate() {
             resetSelectedChannels();
         }
-        function clear() {
-            $uibModalInstance.close();
-        }
+
         function notifyOpenedJiraTicket() {
             var jiraConfig = {
                 channels: vm.selectedChannel,
                 webhookID: vm.webhook,
-                project: config.key
+                project: vm.resolve.config.key
             }
             ChannelService.notifyOpenedJiraTicket(jiraConfig)
-                .then(function (success) {
+                .then(function () {
                     var info = {
                         text: "Notification sent successfully for open tickets",
                         title: "Saved"
@@ -56,9 +63,9 @@
                 vm.selectedChannel.push(channel)
             }
         }
-        function resetSelectedChannels(){
-            angular.forEach(vm.channels, function(value, key) {
-              vm.channels[key]=false;
+        function resetSelectedChannels() {
+            angular.forEach(vm.channels, function (_, key) {
+                vm.channels[key] = false;
             });
         }
     }

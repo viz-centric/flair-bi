@@ -1,19 +1,28 @@
 (function () {
     'use strict';
 
+
     angular
         .module('flairbiApp')
-        .controller('ReportManagementController', ReportManagementController);
+        .component('reportManagementComponent', {
+            templateUrl: 'app/admin/report-management/report-management.component.html',
+            controller: ReportManagementController,
+            controllerAs: 'vm',
+            bindings: {
+                pagingParams: '<'
+            }
+        });
+
 
     ReportManagementController.$inject = ['$stateParams', 'AccountDispatch'];
 
-    function ReportManagementController($stateParams,AccountDispatch) {
+    function ReportManagementController($stateParams, AccountDispatch) {
 
         var vm = this;
 
         vm.reportManagementTabClick = reportManagementTabClick;
         vm.alertTab = $stateParams.id;
-        activate();
+        vm.$onInit = activate;
         ///////////////////////////////////////
 
         function activate() {

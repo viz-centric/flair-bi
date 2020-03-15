@@ -1,21 +1,26 @@
 (function () {
     'use strict';
 
+
     angular
         .module('flairbiApp')
-        .controller('PermissionManagementController', PermissionManagementController);
+        .component('permissionManagementComponent', {
+            templateUrl: 'app/admin/permission-management/permission-management.component.html',
+            controller: PermissionManagementController,
+            controllerAs: 'vm',
+            bindings: {
+                pagingParams: '<'
+            }
+        });
 
     PermissionManagementController.$inject = ['User',
         'AlertService',
         'UserGroup',
         '$state',
-        'pagingParams',
         'paginationConstants',
         'ParseLinks',
         '$localStorage',
-        '$q',
         '$scope',
-        '$filter',
         'ROLES'
     ];
 
@@ -23,13 +28,10 @@
         AlertService,
         UserGroup,
         $state,
-        pagingParams,
         paginationConstants,
         ParseLinks,
         $localStorage,
-        $q,
         $scope,
-        $filter,
         ROLES) {
         var vm = this;
 
@@ -72,7 +74,7 @@
             UNPUBLISHED: 5
         };
 
-        activate();
+        vm.$onInit = activate;
         ///////////////////////////////////////
 
         function activate() {
@@ -179,9 +181,9 @@
                 swal(
                     "Are you sure?",
                     "You want to make changes to following permissions", {
-                        dangerMode: true,
-                        buttons: true,
-                    })
+                    dangerMode: true,
+                    buttons: true,
+                })
                     .then(function (value) {
                         if (value) {
                             savePermissions();
@@ -296,7 +298,7 @@
         }
 
         function isPredefinedGroup(groupName) {
-            return  ROLES[groupName] == undefined ? false : true;
+            return ROLES[groupName] == undefined ? false : true;
         }
 
         function findChanges() {
@@ -359,7 +361,7 @@
             $localStorage.selected = vm.selected;
             UserGroup.getDashboardPermissions({
                 name: name,
-                page: pagingParams.dashboardsPage === 0 ? 0 : pagingParams.dashboardsPage - 1,
+                page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
                 size: vm.dashboardsItemsPerPage
             }, dashboardPermissionsSuccess, onError)
         }
@@ -372,7 +374,7 @@
             $localStorage.selected = vm.selected;
             User.getDashboardPermissions({
                 login: id,
-                page: pagingParams.dashboardsPage === 0 ? 0 : pagingParams.dashboardsPage - 1,
+                page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
                 size: vm.dashboardsItemsPerPage
             }, dashboardPermissionsSuccess, onError);
         }
@@ -382,7 +384,7 @@
             $localStorage.areUsersToggled = true;
             vm.dashboards = [];
             User.query({
-                page: pagingParams.usersPage === 0 ? 0 : pagingParams.usersPage - 1,
+                page: vm.pagingParams.usersPage === 0 ? 0 : vm.pagingParams.usersPage - 1,
                 size: vm.usersItemsPerPage
             }, onSuccess, onError);
         }
@@ -392,7 +394,7 @@
             $localStorage.areUserGroupsToggled = true;
             vm.dashboards = [];
             UserGroup.query({
-                page: pagingParams.userGroupsPage === 0 ? 0 : pagingParams.userGroupsPage - 1,
+                page: vm.pagingParams.userGroupsPage === 0 ? 0 : vm.pagingParams.userGroupsPage - 1,
                 size: vm.userGroupsItemsPerPage
             }, onUserGroupsSuccess, onError);
         }
@@ -401,7 +403,7 @@
             vm.userGroupLinks = ParseLinks.parse(headers('link'));
             vm.userGroupsTotalItems = headers('X-Total-Count');
             vm.userGroupsQueryCount = vm.userGroupsTotalItems;
-            vm.userGroupsPage = pagingParams.userGroupsPage;
+            vm.userGroupsPage = vm.pagingParams.userGroupsPage;
             vm.userGroups = data;
             if (vm.selected === 'userGroup') {
                 getUserGroupPermissions(vm.selectedEntity);
@@ -423,7 +425,7 @@
             vm.dashboardsLinks = ParseLinks.parse(headers('link'));
             vm.dashboardsTotalItems = headers('X-Total-Count');
             vm.dashboardsQueryCount = vm.dashboardsTotalItems;
-            vm.dashboardsPage = pagingParams.dashboardsPage;
+            vm.dashboardsPage = vm.pagingParams.dashboardsPage;
             vm.dashboards = data.map(function (item) {
                 return item.info;
             });
@@ -469,7 +471,7 @@
             vm.usersLinks = ParseLinks.parse(headers('link'));
             vm.usersTotalItems = headers('X-Total-Count') - hiddenUsersSize;
             vm.usersQueryCount = vm.usersTotalItems;
-            vm.usersPage = pagingParams.usersPage;
+            vm.usersPage = vm.pagingParams.usersPage;
             vm.users = data;
             if (vm.selected === 'user') {
                 getUserPermissions(vm.selectedEntity);

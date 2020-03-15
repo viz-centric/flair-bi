@@ -5,12 +5,10 @@
         .module('flairbiApp')
         .controller('ReportManagementLogsController', ReportManagementLogsController);
 
-    ReportManagementLogsController.$inject = ['User', 'schedulerService', 'ChannelService',
-        'AlertService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window', 'REPORTMANAGEMENTCONSTANTS'
+    ReportManagementLogsController.$inject = ['schedulerService', 'ChannelService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window', 'REPORTMANAGEMENTCONSTANTS'
     ];
 
-    function ReportManagementLogsController(User, schedulerService, ChannelService,
-        AlertService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window, REPORTMANAGEMENTCONSTANTS) {
+    function ReportManagementLogsController(schedulerService, ChannelService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window, REPORTMANAGEMENTCONSTANTS) {
 
         var vm = this;
         vm.logs = []
@@ -96,7 +94,7 @@
                             log.viewTicket = response.data.jiraTicketLink;
                             $window.open(response.data.jiraTicketLink, '_blank');
                         }
-                        else{
+                        else {
                             $rootScope.showErrorSingleToast({
                                 text: 'Error while creating jira',
                                 title: "Error"

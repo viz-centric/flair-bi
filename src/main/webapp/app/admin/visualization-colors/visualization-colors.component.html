@@ -12,28 +12,29 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="visualizationColors in vm.visualizationColors track by visualizationColors.id">
-                        <td><a ui-sref="visualization-colors-detail({id:visualizationColors.id})">{{visualizationColors.id}}</a></td>
+                        <td><a
+                                ui-sref="visualization-colors-detail({id:visualizationColors.id})">{{visualizationColors.id}}</a>
+                        </td>
                         <td>{{visualizationColors.code}}</td>
                         <!-- <td ng-style="{'background-color':visualizationColors.code}"></td> -->
-                        <td><button ng-style="{'background-color':visualizationColors.code,'padding': '15px','pointer-events': 'none'}" class="btn btn-default btn-sm"></button></td>
+                        <td><button
+                                ng-style="{'background-color':visualizationColors.code,'padding': '15px','pointer-events': 'none'}"
+                                class="btn btn-default btn-sm"></button></td>
                         <td class="text-right">
                             <div class="btn-group flex-btn-group-container">
-                                <button type="submit"
-                                        ui-sref="visualization-colors-detail({id:visualizationColors.id})"
-                                        class="btn btn-default btn-sm">
-                                <span class="fa fa-eye view-icon fa-2x"></span>
+                                <button type="submit" ui-sref="visualization-colors-detail({id:visualizationColors.id})"
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-eye view-icon fa-2x"></span>
                                 </button>
                                 &nbsp;
-                                <button type="submit"
-                                        ui-sref="visualization-colors.edit({id:visualizationColors.id})"
-                                        class="btn btn-default btn-sm">
-                                <span class="fa fa-edit edit-icon fa-2x"></span>
+                                <button type="submit" ui-sref="visualization-colors.edit({id:visualizationColors.id})"
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-edit edit-icon fa-2x"></span>
                                 </button>
                                 &nbsp;
-                                <button type="submit"
-                                        ui-sref="visualization-colors.delete({id:visualizationColors.id})"
-                                        class="btn btn-default btn-sm">
-                                <span class="fa fa-trash delete-icon fa-2x"></span>
+                                <button type="submit" ui-sref="visualization-colors.delete({id:visualizationColors.id})"
+                                    class="btn btn-default btn-sm">
+                                    <span class="fa fa-trash delete-icon fa-2x"></span>
                                 </button>
                             </div>
                         </td>
@@ -43,4 +44,3 @@
         </div>
     </div>
 </div>
-

@@ -18,14 +18,10 @@
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors.html',
-                        controller: 'VisualizationColorsController',
-                        controllerAs: 'vm'
+                        component: 'visualizationColorsComponent'
                     },
                     'content-header@': {
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors-content-header.html',
-                        controller: 'VisualizationColorsController',
-                        controllerAs: 'vm'
+                        component: 'visualizationColorsContentHeaderComponent'
                     }
                 },
                 resolve: {
@@ -45,9 +41,7 @@
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors-detail.html',
-                        controller: 'VisualizationColorsDetailController',
-                        controllerAs: 'vm'
+                        component: 'visualizationColorsDetailComponent'
                     }
                 },
                 resolve: {
@@ -75,9 +69,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors-dialog.html',
-                        controller: 'VisualizationColorsDialogController',
-                        controllerAs: 'vm',
+                        component: 'visualizationColorsDialogComponent',
                         backdrop: 'static',
                         size: 'md',
                         resolve: {
@@ -97,11 +89,9 @@
                 data: {
                     authorities: [PERMISSIONS.WRITE_VISUALIZATION_COLORS]
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                onEnter: ['$stateParams', '$state', '$uibModal', function (_$stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors-dialog.html',
-                        controller: 'VisualizationColorsDialogController',
-                        controllerAs: 'vm',
+                        component: 'visualizationColorsDialogComponent',
                         backdrop: 'static',
                         size: 'md',
                         resolve: {
@@ -126,9 +116,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors-dialog.html',
-                        controller: 'VisualizationColorsDialogController',
-                        controllerAs: 'vm',
+                        component: 'visualizationColorsDialogComponent',
                         backdrop: 'static',
                         size: 'md',
                         resolve: {
@@ -150,9 +138,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/visualization-colors/visualization-colors-delete-dialog.html',
-                        controller: 'VisualizationColorsDeleteController',
-                        controllerAs: 'vm',
+                        component: 'visualizationColorsDeleteComponent',
                         size: 'md',
                         resolve: {
                             entity: ['VisualizationColors', function (VisualizationColors) {

@@ -101,11 +101,7 @@
                     function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
-                                templateUrl:
-                                    "app/entities/datasource-constraint/datasource-constraint-dialog.html",
-                                controller:
-                                    "DatasourceConstraintDialogController",
-                                controllerAs: "vm",
+                                component: 'datasourceConstraintDialogComponent',
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {
@@ -142,11 +138,7 @@
                     function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
-                                templateUrl:
-                                    "app/entities/datasource-constraint/datasource-constraint-dialog.html",
-                                controller:
-                                    "DatasourceConstraintDialogController",
-                                controllerAs: "vm",
+                                component: 'datasourceConstraintDialogComponent',
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {
@@ -183,11 +175,7 @@
                     function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
-                                templateUrl:
-                                    "app/entities/datasource-constraint/datasource-constraint-dialog.html",
-                                controller:
-                                    "DatasourceConstraintDialogController",
-                                controllerAs: "vm",
+                                component: 'datasourceConstraintDialogComponent',
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {

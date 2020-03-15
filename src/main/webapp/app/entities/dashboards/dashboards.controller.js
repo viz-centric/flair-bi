@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular
@@ -6,21 +6,15 @@
         .controller("DashboardsController", DashboardsController);
 
     DashboardsController.$inject = [
-        "$scope",
-        "$state",
         "DataUtils",
         "Dashboards",
-        "PERMISSIONS",
-        "Principal"
+        "PERMISSIONS"
     ];
 
     function DashboardsController(
-        $scope,
-        $state,
         DataUtils,
         Dashboards,
-        PERMISSIONS,
-        Principal
+        PERMISSIONS
     ) {
         var vm = this;
 
@@ -34,7 +28,7 @@
         loadAll();
 
         function loadAll() {
-            Dashboards.query(function(result) {
+            Dashboards.query(function (result) {
                 vm.dashboards = result;
                 vm.showWaterMark = vm.dashboards.length > 0;
                 vm.searchQuery = null;

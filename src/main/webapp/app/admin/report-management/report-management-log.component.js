@@ -3,12 +3,20 @@
 
     angular
         .module('flairbiApp')
-        .controller('ReportManagementLogsController', ReportManagementLogsController);
+        .component('reportManagementLogComponent', {
+            templateUrl: 'app/admin/report-management/report-management-log.component.html',
+            controller: ReportManagementLogsController,
+            controllerAs: 'vm',
+            bindings: {
+                pagingParams: '<'
+            }
+        });
 
-    ReportManagementLogsController.$inject = ['schedulerService', 'ChannelService', '$stateParams', 'pagingParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window', 'REPORTMANAGEMENTCONSTANTS'
-    ];
+    ReportManagementLogsController.$inject =
+        ['schedulerService', 'ChannelService', '$stateParams', '$state', '$rootScope', 'ReportManagementUtilsService', '$window', 'REPORTMANAGEMENTCONSTANTS'
+        ];
 
-    function ReportManagementLogsController(schedulerService, ChannelService, $stateParams, pagingParams, $state, $rootScope, ReportManagementUtilsService, $window, REPORTMANAGEMENTCONSTANTS) {
+    function ReportManagementLogsController(schedulerService, ChannelService, $stateParams, $state, $rootScope, ReportManagementUtilsService, $window, REPORTMANAGEMENTCONSTANTS) {
 
         var vm = this;
         vm.logs = []
@@ -18,8 +26,8 @@
         vm.totalItems = null;
         vm.links = null;
         vm.loadPage = loadPage;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
+        vm.predicate = vm.pagingParams.predicate;
+        vm.reverse = vm.pagingParams.ascending;
         vm.itemsPerPage = 10;
         vm.transition = transition;
         vm.goToViewDataPage = goToViewDataPage;
@@ -38,7 +46,7 @@
         }
 
         function getScheduledReportsLogs(visualizationid) {
-            schedulerService.getScheduleReportLogs(visualizationid, vm.itemsPerPage, pagingParams.page - 1).then(
+            schedulerService.getScheduleReportLogs(visualizationid, vm.itemsPerPage, vm.pagingParams.page - 1).then(
                 function (response) {
                     vm.logs = response.data.schedulerLogs;
 
@@ -48,7 +56,7 @@
 
                     vm.totalItems = response.data.totalRecords;
                     vm.queryCount = vm.totalItems;
-                    vm.page = pagingParams.page;
+                    vm.page = vm.pagingParams.page;
                 },
                 function (error) {
                     $rootScope.showErrorSingleToast({

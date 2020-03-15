@@ -1,21 +1,23 @@
-(function() {
+(function () {
     "use strict";
 
     angular
-        .module("flairbiApp")
-        .controller(
-            "DatasourceConstraintDialogController",
-            DatasourceConstraintDialogController
-        );
+        .module('flairbiApp')
+        .component('datasourceConstraintDialogComponent', {
+            templateUrl: 'app/entities/datasource-constraint/datasource-constraint-dialog.component.html',
+            controller: DatasourceConstraintDialogController,
+            controllerAs: 'vm',
+            bindings: {
+                resolve: '<',
+                close: '&',
+                dismiss: '&'
+            }
+        });
 
     DatasourceConstraintDialogController.$inject = [
         "$timeout",
         "$scope",
-        "$stateParams",
-        "$uibModalInstance",
-        "entity",
         "DatasourceConstraint",
-        "User",
         "Datasources",
         "Features",
         "$translate",
@@ -26,11 +28,7 @@
     function DatasourceConstraintDialogController(
         $timeout,
         $scope,
-        $stateParams,
-        $uibModalInstance,
-        entity,
         DatasourceConstraint,
-        User,
         Datasources,
         Features,
         $translate,
@@ -39,7 +37,7 @@
     ) {
         var vm = this;
 
-        vm.datasourceConstraint = entity;
+
         vm.clear = clear;
         vm.save = save;
         vm.constraintTypes = ["Inclusion", "Exclusion"];
@@ -48,13 +46,19 @@
         vm.removeConstraint = removeConstraint;
         vm.createArray = createArray;
         vm.features = [];
-        vm.search=search;
+        vm.search = search;
 
-        activate();
 
-        $timeout(function() {
-            angular.element(".form-group:eq(1)>input").focus();
-        });
+
+        vm.$onInit = function () {
+            vm.datasourceConstraint = vm.resolve.entity;
+            activate();
+            $timeout(function () {
+                angular.element(".form-group:eq(1)>input").focus();
+            });
+        }
+
+
 
         function activate() {
             if (
@@ -62,7 +66,7 @@
                 vm.datasourceConstraint.constraintDefinition.featureConstraints
             ) {
                 vm.datasourceConstraint.constraintDefinition.featureConstraints.forEach(
-                    function(item) {
+                    function (item) {
                         if (item.values) {
                             item.stringValues = item.values.join();
                         }
@@ -105,16 +109,16 @@
                         datasource: vm.datasourceConstraint.datasource.id,
                         featureType: "DIMENSION"
                     },
-                    function(result) {
+                    function (result) {
                         vm.features = result;
                     },
-                    function(errors) {}
+                    function (_) { }
                 );
             }
         }
 
         function clear() {
-            $uibModalInstance.dismiss("cancel");
+            vm.dismiss();
         }
 
         function save() {
@@ -137,13 +141,13 @@
 
         function onSaveSuccess(result) {
             onSave(result);
-            var info = {text:$translate.instant('flairbiApp.datasourceConstraint.created',{param:result.id}),title: "Saved"}
+            var info = { text: $translate.instant('flairbiApp.datasourceConstraint.created', { param: result.id }), title: "Saved" }
             $rootScope.showSuccessToast(info);
         }
 
         function onUpdateSuccess(result) {
             onSave(result);
-            var info = {text:$translate.instant('flairbiApp.datasourceConstraint.updated',{param:result.id}),title: "Updated"}
+            var info = { text: $translate.instant('flairbiApp.datasourceConstraint.updated', { param: result.id }), title: "Updated" }
             $rootScope.showSuccessToast(info);
         }
 
@@ -154,13 +158,13 @@
             });
         }
 
-        function onSave(result){
+        function onSave(result) {
             $scope.$emit("flairbiApp:datasourceConstraintUpdate", result);
-            $uibModalInstance.close(result);
+            vm.close(result);
             vm.isSaving = false;
         }
 
-        function search(e,searchedText) {
+        function search(e, searchedText) {
             e.preventDefault();
             if (searchedText) {
                 Datasources.search({

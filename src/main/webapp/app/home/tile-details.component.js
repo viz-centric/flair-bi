@@ -9,19 +9,19 @@
             controllerAs: 'vm',
             bindings: {
                 account: "=",
-                isAdmin: "="  
+                isAdmin: "="
             }
         });
 
-    tileDetailsController.$inject = ['$scope', '$state','Dashboards','Datasources','Views','recentBookmarkService','ViewWatches','screenDetectService','$window','$rootScope','VisualDispatchService','schedulerService','ReportManagementUtilsService'];
+    tileDetailsController.$inject = ['$scope', '$state', 'Dashboards', 'Datasources', 'Views', 'recentBookmarkService', 'ViewWatches', 'screenDetectService', '$window', '$rootScope', 'VisualDispatchService', 'schedulerService', 'ReportManagementUtilsService'];
 
-    function tileDetailsController($scope, $state,Dashboards,Datasources,Views,recentBookmarkService,ViewWatches,screenDetectService,$window,$rootScope,VisualDispatchService,schedulerService,ReportManagementUtilsService) {
+    function tileDetailsController($scope, $state, Dashboards, Datasources, Views, recentBookmarkService, ViewWatches, screenDetectService, $window, $rootScope, VisualDispatchService, schedulerService, ReportManagementUtilsService) {
         var vm = this;
-        vm.build=build;
+        vm.build = build;
 
         active();
 
-        function active(){
+        function active() {
             registerOnClickTile();
             //$(".tile-area-table").stop(true).slideUp(600);
         }
@@ -36,43 +36,43 @@
         vm.nextPage = nextPage;
         vm.prevPage = prevPage;
         vm.range = range;
-        vm.filterFn=filterFn;
-        vm.toggleTables={'tile-1':false,'tile-2':false,'tile-3':false,'tile-4':false,'tile-5':false}
-        vm.isDesktop=isDesktop;
-        vm.filterBookmarks=filterBookmarks;
-        vm.updateReport=updateReport;
-        vm.executeNow=executeNow;
-        vm.goToBuildPage=goToBuildPage;
-        vm.serchReports=serchReports;
+        vm.filterFn = filterFn;
+        vm.toggleTables = { 'tile-1': false, 'tile-2': false, 'tile-3': false, 'tile-4': false, 'tile-5': false }
+        vm.isDesktop = isDesktop;
+        vm.filterBookmarks = filterBookmarks;
+        vm.updateReport = updateReport;
+        vm.executeNow = executeNow;
+        vm.goToBuildPage = goToBuildPage;
+        vm.serchReports = serchReports;
         vm.loadPage = loadPage;
-        vm.thresholdAlert=false;
+        vm.thresholdAlert = false;
         vm.page = 1;
         vm.totalItems = 0;
 
         //function to search element 
-        function filterFn(array,searchText,key){
-            var filtered=[];
-            angular.forEach(array, function(item) {
-                if(item[key].toLowerCase().indexOf(toStringLowerCase(searchText)) >= 0 ) 
+        function filterFn(array, searchText, key) {
+            var filtered = [];
+            angular.forEach(array, function (item) {
+                if (item[key].toLowerCase().indexOf(toStringLowerCase(searchText)) >= 0)
                     filtered.push(item);
             });
-            if(filtered.length>0)
-            groupToPages(filtered);
+            if (filtered.length > 0)
+                groupToPages(filtered);
         }
 
         //function to search element in bookmarks
-        function filterBookmarks(array,searchText,key){
-            var filtered=[];
-            angular.forEach(array, function(item) {
-                if(item.featureBookmark[key].toLowerCase().indexOf(toStringLowerCase(searchText)) >= 0 ) 
+        function filterBookmarks(array, searchText, key) {
+            var filtered = [];
+            angular.forEach(array, function (item) {
+                if (item.featureBookmark[key].toLowerCase().indexOf(toStringLowerCase(searchText)) >= 0)
                     filtered.push(item);
             });
-            if(filtered.length>0)
-            groupToPages(filtered);
+            if (filtered.length > 0)
+                groupToPages(filtered);
         }
 
-        function toStringLowerCase(searchText){
-            return searchText!==""?searchText.toLowerCase():searchText;
+        function toStringLowerCase(searchText) {
+            return searchText !== "" ? searchText.toLowerCase() : searchText;
         }
 
         // calculate page in place
@@ -121,7 +121,7 @@
             $scope.searchDashboard = '';
             $scope.searchView = '';
             $scope.searchDataSource = '';
-            $scope.searchBoomark='';
+            $scope.searchBoomark = '';
             if (tileId == "1") {
                 activeTile(tileId);
                 fetchDashboards();
@@ -139,7 +139,7 @@
             else if (tileId == "4") {
                 vm.page = 1;
                 activeTile(tileId);
-                getScheduledReports(vm.account.login,"","","",vm.thresholdAlert);
+                getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
                 toggle4Boxes(tileId);
                 //$("#box-area").show();
             }
@@ -161,149 +161,153 @@
             }
         }
 
-        function toggle4Boxes(tileId){
-            vm.show4Boxes=false;
-            angular.forEach(vm.toggleTables, function(value, key) {
-                if(key=='tile-'+tileId){
-                    vm.toggleTables['tile-'+tileId]=!vm.toggleTables['tile-'+tileId];
-                    value=!value;
-                }else{
-                    vm.toggleTables[key]=false;
+        function toggle4Boxes(tileId) {
+            vm.show4Boxes = false;
+            angular.forEach(vm.toggleTables, function (value, key) {
+                if (key == 'tile-' + tileId) {
+                    vm.toggleTables['tile-' + tileId] = !vm.toggleTables['tile-' + tileId];
+                    value = !value;
+                } else {
+                    vm.toggleTables[key] = false;
                 }
-                vm.show4Boxes=vm.show4Boxes || value;
+                vm.show4Boxes = vm.show4Boxes || value;
             });
             isTableVisible();
         }
 
-        function isTableVisible(){
-            if(vm.show4Boxes){
+        function isTableVisible() {
+            if (vm.show4Boxes) {
                 $("#box-area").hide();
-            }else{
+            } else {
                 $("#box-area").show();
             }
         }
 
-        function activeTile(tileId){
+        function activeTile(tileId) {
             removeActiveClass();
-            $('#information-card-'+tileId).addClass("information-card-active");
+            $('#information-card-' + tileId).addClass("information-card-active");
         }
 
-        function removeActiveClass(){
+        function removeActiveClass() {
             $('.information-card').removeClass("information-card-active");
         }
 
-        function fetchDashboards(){
-            Dashboards.query(function(result) {
+        function fetchDashboards() {
+            Dashboards.query(function (result) {
                 vm.dashboards = result;
-                vm.datasources=[];
-                vm.views=[];
-                vm.bookmarkWatches =[];
+                vm.datasources = [];
+                vm.views = [];
+                vm.bookmarkWatches = [];
                 vm.groupToPages(result);
             });
         }
 
-        function fetchDataSources(){
-            Datasources.query(function(result) {
+        function fetchDataSources() {
+            Datasources.query(function (result) {
                 vm.datasources = result;
                 vm.dashboards = [];
-                vm.views=[];
-                vm.bookmarkWatches =[];
+                vm.views = [];
+                vm.bookmarkWatches = [];
                 vm.groupToPages(result);
             });
         }
 
-        function fetchViews(){
-            Views.query(function(result) {
+        function fetchViews() {
+            Views.query(function (result) {
                 vm.views = result;
                 vm.dashboards = [];
-                vm.datasources=[];
-                vm.bookmarkWatches =[];
+                vm.datasources = [];
+                vm.bookmarkWatches = [];
                 vm.groupToPages(result);
             });
         }
 
-        function getRecentAccessedBookmark(){
+        function getRecentAccessedBookmark() {
             recentBookmarkService.getRecentBookmark("?page=0&size=5&sort=watchTime,desc").then(function (result) {
                 vm.bookmarkWatches = result.data;
                 vm.dashboards = [];
-                vm.datasources=[];
-                vm.views=[];
-                vm.viewWatches=[];
+                vm.datasources = [];
+                vm.views = [];
+                vm.viewWatches = [];
                 vm.groupToPages(result.data);
             });
         }
 
-        function getRecentAccessedViews(){
+        function getRecentAccessedViews() {
             vm.viewWatches = ViewWatches.query({
                 page: 0,
                 size: 5,
                 sort: 'watchTime,desc'
             });
-            vm.bookmarkWatches=[];
+            vm.bookmarkWatches = [];
         }
 
-        function serchReports(){
-            vm.reportName = vm.reportName ? vm.reportName : "" ;            
-            getScheduledReports(vm.account.login,vm.reportName);
+        function serchReports() {
+            vm.reportName = vm.reportName ? vm.reportName : "";
+            getScheduledReports(vm.account.login, vm.reportName);
         }
 
-        function getScheduledReports(userName,reportName){
-            schedulerService.filterScheduledReports(userName,reportName,"","",vm.itemsPerPage, vm.page - 1,vm.thresholdAlert).then(
-            function(response) {
-                vm.reports=response.data.reports;
-                vm.totalItems = response.data.totalRecords;
-                vm.queryCount = vm.totalItems;
-                        
-                vm.dashboards = [];
-                vm.datasources=[];
-                vm.views=[];
-                vm.viewWatches=[];
-                vm.bookmarkWatches=[];
-                vm.groupToPages(response.data.reports);
-            },
-            function(error) {
-                var info = {
-                    text: error.statusText,
-                    title: "Error"
-                }
-                $rootScope.showErrorSingleToast(info);
-            });
+        function getScheduledReports(userName, reportName) {
+            schedulerService.filterScheduledReports(userName, reportName, "", "", vm.itemsPerPage, vm.page - 1, vm.thresholdAlert).then(
+                function (response) {
+                    vm.reports = response.data.reports;
+                    vm.totalItems = response.data.totalRecords;
+                    vm.queryCount = vm.totalItems;
+
+                    vm.dashboards = [];
+                    vm.datasources = [];
+                    vm.views = [];
+                    vm.viewWatches = [];
+                    vm.bookmarkWatches = [];
+                    vm.groupToPages(response.data.reports);
+                },
+                function (error) {
+                    var info = {
+                        text: error.statusText,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
         }
 
         function registerOnClickTile() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:onClickTile",
-                function(event,tileId) {
+                function (event, tileId) {
                     registerOnClickTileReceived(tileId);
                 }
             );
             $scope.$on("$destroy", unsubscribe);
         }
 
-      function isDesktop(){
-        return screenDetectService.isDesktop();
-      }
+        function isDesktop() {
+            return screenDetectService.isDesktop();
+        }
 
 
-     function build(viewId,dashboardId,featureBookmark){
-        VisualDispatchService.addFeatureBookmark(viewId,dashboardId,featureBookmark);
-     }
+        function build(viewId, dashboardId, featureBookmark) {
+            VisualDispatchService.addFeatureBookmark(viewId, dashboardId, featureBookmark);
+            $state.go('flair-bi-build', {
+                id: viewId,
+                dashboardId: dashboardId
+            })
+        }
 
-     function updateReport(id){
-        ReportManagementUtilsService.updateReport(id);
-     }
+        function updateReport(id) {
+            ReportManagementUtilsService.updateReport(id);
+        }
 
-     function goToBuildPage(build_url){
-        ReportManagementUtilsService.goToBuildPage(build_url);
-     }
+        function goToBuildPage(build_url) {
+            ReportManagementUtilsService.goToBuildPage(build_url);
+        }
 
-     function executeNow(id){
-        ReportManagementUtilsService.executeNow(id);
-     }
-     function loadPage(page) {
-        vm.page = page;
-        vm.reportName = vm.reportName ? vm.reportName : "" ;   
-        getScheduledReports(vm.account.login,vm.reportName);
-    }
+        function executeNow(id) {
+            ReportManagementUtilsService.executeNow(id);
+        }
+        function loadPage(page) {
+            vm.page = page;
+            vm.reportName = vm.reportName ? vm.reportName : "";
+            getScheduledReports(vm.account.login, vm.reportName);
+        }
     }
 })();

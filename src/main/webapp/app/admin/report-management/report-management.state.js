@@ -132,9 +132,7 @@
                         templateUrl: 'app/admin/report-management/report-management-logs-content-header.html',
                     },
                     'content@': {
-                        templateUrl: 'app/admin/report-management/report-management-logs.html',
-                        controller: 'ReportManagementLogsController',
-                        controllerAs: 'vm'
+                        component: 'reportManagementLogComponent'
                     }
                 },
                 resolve: {

@@ -22,7 +22,7 @@
         };
         return directive;
 
-        function link(scope, element, attrs) {
+        function link(_scope, element, _attrs) {
             $(element).metisMenu();
         }
     }

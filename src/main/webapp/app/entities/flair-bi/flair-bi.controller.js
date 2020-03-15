@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular
@@ -132,17 +132,17 @@
         vm.recreateVisual = recreateVisual;
         vm.openSchedulerDialog = openSchedulerDialog;
         vm.showVizLoader = showVizLoader;
-        vm.filtersLength=0;
+        vm.filtersLength = 0;
         activate();
 
         ////////////////
 
         function activate() {
-            $rootScope.updateWidget={}
-            if(!VisualDispatchService.getApplyBookmark()){
+            $rootScope.updateWidget = {}
+            if (!VisualDispatchService.getApplyBookmark()) {
                 filterParametersService.clear();
-            }else{
-                vm.filtersLength=filterParametersService.getFiltersCount();
+            } else {
+                vm.filtersLength = filterParametersService.getFiltersCount();
             }
             VisualMetadataContainer.clear();
             VisualDispatchService.clearAll();
@@ -169,7 +169,7 @@
             registerOnDragEnd();
             registerOnDropEnd();
             registerFilterCountChanged();
-            $timeout(function() {
+            $timeout(function () {
                 vm.hideFilters = false;
             }, 50);
             $rootScope.hideHeader = true;
@@ -182,8 +182,8 @@
         function registerFilterCountChanged() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:filter-count-changed",
-                function() {
-                    vm.filtersLength=filterParametersService.getFiltersCount();
+                function () {
+                    vm.filtersLength = filterParametersService.getFiltersCount();
                 }
             );
             $scope.$on("$destroy", unsubscribe);
@@ -195,11 +195,11 @@
 
         function setVizualizationServiceMode() {
             HttpService.getVizualizationServiceMode(
-                function(result) {
+                function (result) {
                     $rootScope.vizualizationServiceMode =
                         result.data.vizualizationServiceMode;
                 },
-                function(error) {
+                function (error) {
                     //console.log('error=='+error);
                 }
             );
@@ -208,7 +208,7 @@
         function connectWebSocket() {
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
-                function(frame) {
+                function (frame) {
                     console.log('flair-bi controller connected web socket');
                     stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
@@ -223,12 +223,12 @@
         function onExchangeMetadataError(data) {
             angular.element("#loader-spinner").hide();
             var body = JSON.parse(data.body || '{}');
-            if(body.description==="io exception"){
-                var msg=$translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') +" : "+ body.cause.message;
+            if (body.description === "io exception") {
+                var msg = $translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') + " : " + body.cause.message;
                 $rootScope.showErrorSingleToast({
                     text: msg
                 });
-            }else{
+            } else {
                 var error = QueryValidationService.getQueryValidationError(body.description);
                 $rootScope.showErrorSingleToast({
                     text: $translate.instant(error.msgKey, error.params)
@@ -237,7 +237,7 @@
         }
 
         function onExchangeMetadata(data) {
-            var metaData = data.body===""?{data:[]}:JSON.parse(data.body);
+            var metaData = data.body === "" ? { data: [] } : JSON.parse(data.body);
             if (data.headers.request === "filters") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
@@ -259,7 +259,7 @@
                         contentId
                     );
                     angular.element("#loader-spinner").hide();
-                }else{
+                } else {
                     angular.element("#loader-spinner").hide();
                 }
             }
@@ -270,10 +270,10 @@
                 {
                     id: v.metadataVisual.id
                 },
-                function(success) {
+                function (success) {
                     saveClonedVisual(setVisualProps(v, createVisualMetadata(success)));
                 },
-                function(error) {}
+                function (error) { }
             );
         }
 
@@ -291,7 +291,7 @@
                     viewId: vm.view.id,
                     visualMetadata: clonedV
                 },
-                function(result){
+                function (result) {
                     VisualMetadataContainer.add(result);
                 },
                 onSaveFeaturesError
@@ -301,7 +301,7 @@
         function registerSaveDataConstraints() {
             var saveDataConstraints = $scope.$on(
                 "flairbiApp:saveDataConstraints",
-                function() {
+                function () {
                     saveFeatures(VisualDispatchService.getVisual().visual);
                 }
             );
@@ -317,10 +317,10 @@
                 backdrop: "static",
                 size: "lg",
                 resolve: {
-                    features: function() {
+                    features: function () {
                         return vm.features;
                     },
-                    conditionExpression: function() {
+                    conditionExpression: function () {
                         return v.conditionExpression;
                     },
                     visualMetaData: function () {
@@ -339,7 +339,7 @@
         }
 
         function isRequiredFeatureEmpty(fields) {
-            var features = fields.filter(function(item) {
+            var features = fields.filter(function (item) {
                 return (
                     item.fieldType.constraint === "REQUIRED" &&
                     item.feature == null
@@ -349,7 +349,7 @@
         }
 
         function isDefaultFeatureEmpty(fields, type) {
-            var features = fields.filter(function(item) {
+            var features = fields.filter(function (item) {
                 return (
                     item.fieldType.featureType === type && item.feature == null
                 );
@@ -370,10 +370,10 @@
                         id: v.metadataVisual.id,
                         fieldTypeId: field.fieldType.id
                     },
-                    function(result) {
+                    function (result) {
                         field.fieldType = result;
                         field.properties = field.fieldType.propertyTypes.map(
-                            function(item) {
+                            function (item) {
                                 return {
                                     propertyType: item.propertyType,
                                     value: item.propertyType.defaultValue,
@@ -386,7 +386,7 @@
                         if (isFeatureExist(v.fields, feature))
                             v.fields.push(field);
                     },
-                    function(error) {}
+                    function (error) { }
                 );
             }
         }
@@ -404,10 +404,10 @@
                         id: v.metadataVisual.id,
                         fieldTypeId: field.fieldType.id
                     },
-                    function(result) {
+                    function (result) {
                         field.fieldType = result;
                         field.properties = field.fieldType.propertyTypes.map(
-                            function(item) {
+                            function (item) {
                                 return {
                                     propertyType: item.propertyType,
                                     value: item.propertyType.defaultValue,
@@ -420,13 +420,13 @@
                         if (isFeatureExist(v.fields, feature))
                             v.fields.push(field);
                     },
-                    function(error) {}
+                    function (error) { }
                 );
             }
         }
 
         function isFeatureExist(fields, feature) {
-            var features = fields.filter(function(item) {
+            var features = fields.filter(function (item) {
                 return (
                     item.feature != null &&
                     item.feature.definition === feature.definition
@@ -444,10 +444,10 @@
                         viewId: vm.view.id,
                         visualMetadata: v
                     },
-                    function(result){
+                    function (result) {
                         vm.isSaving = false;
-                        VisualMetadataContainer.update(v.id,result,'id');
-                        var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:v.id}),title: "Updated"}
+                        VisualMetadataContainer.update(v.id, result, 'id');
+                        var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: v.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
                     },
                     onSaveFeaturesError
@@ -458,10 +458,10 @@
                         viewId: vm.view.id,
                         visualMetadata: v
                     },
-                    function(result){
+                    function (result) {
                         vm.isSaving = false;
-                        VisualMetadataContainer.update(v.visualBuildId,result,'visualBuildId');
-                        var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}
+                        VisualMetadataContainer.update(v.visualBuildId, result, 'visualBuildId');
+                        var info = { text: $translate.instant('flairbiApp.visualmetadata.created', { param: result.id }), title: "Created" }
                         $rootScope.showSuccessToast(info);
                     },
                     onSaveFeaturesError
@@ -481,26 +481,26 @@
                 $("#" + v.visualBuildId).height()
             );
             v.isCardRevealed = v.isCardRevealed == undefined ? true : !v.isCardRevealed;
-            if(!v.isCardRevealed){
+            if (!v.isCardRevealed) {
                 $rootScope.$broadcast("flairbiApp:onData-open");
             }
         }
 
         function registerOnDragEnd() {
-            var unsubscribe = $scope.$on("flairbiApp:onDragEnd", function(
+            var unsubscribe = $scope.$on("flairbiApp:onDragEnd", function (
                 event,
                 data
             ) {
                 if (data != undefined) {
                     VisualDispatchService.setFeature(data);
                 }
-                $timeout(function() {});
+                $timeout(function () { });
             });
             $scope.$on("$destroy", unsubscribe);
         }
 
         function registerOnDropEnd() {
-            angular.element(document).bind("drop dragdrop", function() {
+            angular.element(document).bind("drop dragdrop", function () {
                 var tagName = event.target.tagName.toLowerCase();
                 if (tagName == "input") {
                     var vId = $(event.target)
@@ -518,7 +518,7 @@
                                 .parent()
                                 .hasClass("measure-item") &&
                             VisualDispatchService.getFeature().featureType ==
-                                "MEASURE"
+                            "MEASURE"
                         ) {
                             var index = $(event.target).attr("index");
                             if (index == -1) {
@@ -537,7 +537,7 @@
                                 .parent()
                                 .hasClass("dimension-item") &&
                             VisualDispatchService.getFeature().featureType ==
-                                "DIMENSION"
+                            "DIMENSION"
                         ) {
                             var index = $(event.target).attr("index");
                             if (index == -1) {
@@ -556,17 +556,17 @@
             });
         }
 
-        $(document).on("dragenter", function(event) {
+        $(document).on("dragenter", function (event) {
             event.preventDefault();
         });
-        $(document).on("dragleave", function(event) {});
-        $(document).on("dragover", function(event) {
+        $(document).on("dragleave", function (event) { });
+        $(document).on("dragover", function (event) {
             event.preventDefault();
         });
-        $(document).on("dragstart", function(event) {});
+        $(document).on("dragstart", function (event) { });
 
         function registerRefreshWidgetsEvent() {
-            $scope.$on("flairbiApp:refreshWidgets", function() {
+            $scope.$on("flairbiApp:refreshWidgets", function () {
                 cb();
             });
         }
@@ -574,16 +574,16 @@
         function printElement(w) {
             PrintService.printWidgets(
                 [{
-                    widgetsID :  "content-" +  w.visualBuildId,
-                    widgetsTitle : w.titleProperties.titleText
+                    widgetsID: "content-" + w.visualBuildId,
+                    widgetsTitle: w.titleProperties.titleText
                 }],
                 vm.view.viewDashboard.dashboardName,
-                vm.view.viewName, 
+                vm.view.viewName,
                 $window.location.href);
         }
 
         function registerButtonToggleEvent() {
-            var unsubscribe = $scope.$on("FlairBi:button-toggle", function(
+            var unsubscribe = $scope.$on("FlairBi:button-toggle", function (
                 event,
                 result
             ) {
@@ -595,7 +595,7 @@
                         .data("gridstack")
                         .enable();
 
-                    $('.grid-stack-item').draggable({cancel: "div.widget-content" });
+                    $('.grid-stack-item').draggable({ cancel: "div.widget-content" });
 
                 } else {
                     enableEditForNewWidget(true);
@@ -615,7 +615,7 @@
                 Visualmetadata.get({
                     id: $rootScope.ThresholdViz.ID
                 }, function (v) {
-                    openSchedulerDialog(new VisualWrap(v),true);
+                    openSchedulerDialog(new VisualWrap(v), true);
                 });
             });
             $scope.$on("$destroy", unsubscribe);
@@ -639,7 +639,7 @@
                             cancel: "Cancel"
                         }
                     }
-                ).then(function(value) {
+                ).then(function (value) {
                     switch (value) {
                         case "Okay":
                             $rootScope.$broadcast("FlairBi:saveAllWidgets");
@@ -660,7 +660,7 @@
                 event,
                 result
             ) {
-                 Visualmetadata.get({
+                Visualmetadata.get({
                     id: $rootScope.activePage.visualizationID
                 }, function (v) {
                     refreshWidget(v);
@@ -670,7 +670,7 @@
         }
 
         function registerDateRangeFilterEvent() {
-            var unsubscribe = $scope.$on("FlairBi:date-range", function(
+            var unsubscribe = $scope.$on("FlairBi:date-range", function (
                 event,
                 result
             ) {
@@ -680,7 +680,7 @@
         }
 
         function registerAddVisual() {
-            var unsub = $scope.$on("FlairBi:addVisual", function(
+            var unsub = $scope.$on("FlairBi:addVisual", function (
                 event,
                 result
             ) {
@@ -688,10 +688,10 @@
                     {
                         id: result.id
                     },
-                    function(success) {
+                    function (success) {
                         addWidget(createVisualMetadata(success));
                     },
-                    function(error) {}
+                    function (error) { }
                 );
                 VisualDispatchService.setViewEditedBeforeSave(true);
                 VisualDispatchService.setSavePromptMessage("new visualization has been created and it has not been saved.Do you want to save?");
@@ -700,7 +700,7 @@
         }
 
         function registerSaveAllWidgetsEvent() {
-            var un = $scope.$on("FlairBi:saveAllWidgets", function(
+            var un = $scope.$on("FlairBi:saveAllWidgets", function (
                 event,
                 result
             ) {
@@ -716,10 +716,10 @@
                             id: vm.view.id
                         },
                         viewState,
-                        function(res) {
-                        isSaving = false;
+                        function (res) {
+                            isSaving = false;
                         },
-                        function(err) {
+                        function (err) {
                             isSaving = false;
                         }
                     );
@@ -736,7 +736,7 @@
         }
 
         function loadDimensions() {
-            vm.dimensions = featureEntities.filter(function(item) {
+            vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
             });
         }
@@ -744,7 +744,7 @@
         function registerToggleFilterOff() {
             var toggleFiltersUnsubscribeOff = $scope.$on(
                 "flairbiApp:toggleFilters-off",
-                function(event, result) {
+                function (event, result) {
                     vm.toggleFilters = false;
                 }
             );
@@ -754,7 +754,7 @@
         function registerToggleFilterOn() {
             var toggleFiltersUnsubscribeOn = $scope.$on(
                 "flairbiApp:toggleFilters-on",
-                function(event, result) {
+                function (event, result) {
                     vm.toggleFilters = true;
                 }
             );
@@ -770,15 +770,15 @@
         }
 
         function registerStateChangeStartEvent() {
-            $scope.$on("$stateChangeStart", function(event, next, current) {
+            $scope.$on("$stateChangeStart", function (event, next, current) {
                 angular.element("#loader-spinner").hide();
-                $rootScope.isLiveState=false;
+                $rootScope.isLiveState = false;
                 setDefaultColorFullScreen();
-                if($(window).width()<990){
+                if ($(window).width() < 990) {
                     $rootScope.hideHeader = false;
-                }else if(next.name==="home" || next.name==="account"){
-                    $rootScope.hideHeader=false;
-                }else{
+                } else if (next.name === "home" || next.name === "account") {
+                    $rootScope.hideHeader = false;
+                } else {
                     $rootScope.hideHeader = $rootScope.isFullScreen;
                 }
                 if (VisualDispatchService.getViewEditedBeforeSave()) {
@@ -799,7 +799,7 @@
                                 cancel: "Cancel"
                             }
                         }
-                    ).then(function(value) {
+                    ).then(function (value) {
                         switch (value) {
                             case "dontSave":
                                 VisualDispatchService.setViewEditedBeforeSave(false);
@@ -819,9 +819,9 @@
             });
         }
 
-        function setDefaultColorFullScreen(){
-            $('.flairbi-content-header-fullscreen').css('background-color',"#fafafa");
-            $('.page-wrapper-full-screen').css('background-color',"#f1f3f3");            
+        function setDefaultColorFullScreen() {
+            $('.flairbi-content-header-fullscreen').css('background-color', "#fafafa");
+            $('.page-wrapper-full-screen').css('background-color', "#f1f3f3");
         }
 
         function disconnectWebSocket() {
@@ -831,7 +831,7 @@
 
         /** This should be used instead of livestate method */
         function onAction(v) {
-            var int = $interval(function() {
+            var int = $interval(function () {
                 refreshWidget(v);
             }, 5000);
             intervalRegistry[v.visualBuildId] = int;
@@ -845,23 +845,23 @@
         function liveState(isLive, v) {
             if (!isLive) {
                 var visualization = $rootScope.updateWidget[v.id];
-                if(visualization){
-                    if(visualization.isLiveEnabled){
+                if (visualization) {
+                    if (visualization.isLiveEnabled) {
                         visualization.isLiveEnabled(true);
                     }
                 }
-                var int = $interval(function() {
+                var int = $interval(function () {
                     refreshWidget(v);
                 }, 5000);
                 intervalRegistry[v.visualBuildId] = int;
-                $rootScope.isLiveState=v.isLiveEnabled = true;
-                
+                $rootScope.isLiveState = v.isLiveEnabled = true;
+
             } else {
                 $interval.cancel(intervalRegistry[v.visualBuildId]);
-                $rootScope.isLiveState=v.isLiveEnabled = false;
+                $rootScope.isLiveState = v.isLiveEnabled = false;
                 var visualization = $rootScope.updateWidget[v.id];
-                if(visualization){
-                    if(visualization.isLiveEnabled){
+                if (visualization) {
+                    if (visualization.isLiveEnabled) {
                         visualization.isLiveEnabled(false);
                     }
                 };
@@ -878,7 +878,7 @@
                     controller: "ShareDialogController",
                     controllerAs: "vm",
                     resolve: {
-                        shareLink: function() {
+                        shareLink: function () {
                             return ShareLinkService.createLink(
                                 v.getSharePath(vm.datasource)
                             );
@@ -886,10 +886,10 @@
                     }
                 })
                 .result.then(
-                    function() {
+                    function () {
                         cb();
                     },
-                    function() {}
+                    function () { }
                 );
         }
 
@@ -898,7 +898,7 @@
                 return false;
             }
             var canBeBuilt = true;
-            v.fields.forEach(function(item) {
+            v.fields.forEach(function (item) {
                 if (
                     item.constraint === "REQUIRED" &&
                     (item.feature === null || angular.isUndefined(item.feature))
@@ -912,7 +912,7 @@
 
         function transformToCsv(data) {
             var csv = [];
-            data.forEach(function(item, index) {
+            data.forEach(function (item, index) {
                 var values = [];
                 var header = [];
                 for (var key in item) {
@@ -939,22 +939,19 @@
             $uibModal
                 .open({
                     animation: true,
-                    templateUrl:
-                        "app/components/shared/table-dialog/table-dialog.html",
+                    component: 'tableDialogComponent',
                     size: "lg",
-                    controller: "TableDialogController",
-                    controllerAs: "vm",
                     resolve: {
-                        data: function() {
-                            var data=applyToDigitDecimals(v);
+                        data: function () {
+                            var data = applyToDigitDecimals(v);
                             return transformToCsv(data);
                         },
                         fileName: function () {
-                            return v.titleProperties.titleText+".csv";
+                            return v.titleProperties.titleText + ".csv";
                         }
                     }
                 })
-                .result.then(function() {}, function() {});
+                .result.then(function () { }, function () { });
         }
 
         /**
@@ -964,22 +961,22 @@
          */
         function exportCSV(visualMetadata) {
             var csv = transformToCsv(visualMetadata.data);
-            ExportService.exportCSV(visualMetadata.titleProperties.titleText+".csv", csv);
+            ExportService.exportCSV(visualMetadata.titleProperties.titleText + ".csv", csv);
         }
 
         function applyToDigitDecimals(v) {
             var features = VisualizationUtils.getDimensionsAndMeasures(v.fields),
-            measures = features.measures,
-            measure= D3Utils.getNames(measures);
-            var data=[];
-            v.data.forEach(function(item,index){
-                measure.forEach(function(d,i){
-                    if(! Number.isInteger(item[measure[i]])){
-                        item[measure[i]]=parseFloat( item[measure[i]]).toFixed(2)
+                measures = features.measures,
+                measure = D3Utils.getNames(measures);
+            var data = [];
+            v.data.forEach(function (item, index) {
+                measure.forEach(function (d, i) {
+                    if (!Number.isInteger(item[measure[i]])) {
+                        item[measure[i]] = parseFloat(item[measure[i]]).toFixed(2)
                     }
                 })
                 data.push(item)
-            })  
+            })
             return data
         }
 
@@ -987,7 +984,7 @@
             if (visual.id) {
                 Visualmetadata.update(
                     visual,
-                    function(result) {
+                    function (result) {
                         onSaveSuccess(visual, result, array, cb);
                     },
                     onSaveError
@@ -995,7 +992,7 @@
             } else {
                 Visualmetadata.save(
                     visual,
-                    function(result) {
+                    function (result) {
                         onSaveSuccess(visual, result, array, cb);
                     },
                     onSaveError
@@ -1009,10 +1006,10 @@
                     id: id,
                     viewId: vm.view.id
                 }).$promise.then(
-                    function(result) {
+                    function (result) {
                         VisualMetadataContainer.clear();
                         VisualMetadataContainer.add(
-                            vm.visualmetadata.filter(function(item) {
+                            vm.visualmetadata.filter(function (item) {
                                 return item.visualBuildId !== buildId;
                             })
                         );
@@ -1030,12 +1027,12 @@
                         );
                         isSaving = false;
                     },
-                    function(error) {}
+                    function (error) { }
                 );
             } else {
                 Visualmetadata.query({
                     views: $stateParams.id
-                }).$promise.then(function(result) {
+                }).$promise.then(function (result) {
                     isSaving = false;
                     VisualMetadataContainer.clear();
                     //Clear all widgets and fetch all from database
@@ -1058,7 +1055,7 @@
             }
         }
 
-        function onSaveError() {}
+        function onSaveError() { }
 
         function createVisualMetadata(visualization) {
             var newVM = {
@@ -1102,26 +1099,26 @@
 
         function createFields(newVM) {
             newVM.fields = newVM.metadataVisual.fieldTypes
-                .filter(function(item) {
+                .filter(function (item) {
                     return item.constraint === "REQUIRED";
                 })
-                .map(function(item) {
+                .map(function (item) {
                     return {
                         fieldType: item,
                         feature: null,
                         constraint: item.constraint
                     };
                 });
-            newVM.fields.forEach(function(field) {
+            newVM.fields.forEach(function (field) {
                 Visualizations.getFieldType(
                     {
                         id: newVM.metadataVisual.id,
                         fieldTypeId: field.fieldType.id
                     },
-                    function(result) {
+                    function (result) {
                         field.fieldType = result;
                         field.properties = field.fieldType.propertyTypes.map(
-                            function(item) {
+                            function (item) {
                                 return {
                                     propertyType: item.propertyType,
                                     value: item.propertyType.defaultValue,
@@ -1131,7 +1128,7 @@
                             }
                         );
                     },
-                    function(error) {}
+                    function (error) { }
                 );
             });
 
@@ -1139,7 +1136,7 @@
         }
 
         function createProperties(newVM) {
-            newVM.properties = newVM.metadataVisual.propertyTypes.map(function(
+            newVM.properties = newVM.metadataVisual.propertyTypes.map(function (
                 item
             ) {
                 return {
@@ -1159,7 +1156,7 @@
             VisualDispatchService.setOpacity(v.visualBuildId);
         }
 
-        function onResizeStart(event, ui) {}
+        function onResizeStart(event, ui) { }
 
         function onResizeStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
@@ -1170,18 +1167,18 @@
             );
         }
 
-        function onChange(event, items) {}
+        function onChange(event, items) { }
 
-        function onDragStart(event, ui) {}
+        function onDragStart(event, ui) { }
 
         function onDragStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
             VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
         }
 
-        function onItemAdded(item) {}
+        function onItemAdded(item) { }
 
-        function onItemRemoved(item) {}
+        function onItemRemoved(item) { }
 
         function addWidget(widget) {
             vm.visualmetadata.push(widget);
@@ -1191,7 +1188,7 @@
             swal("Delete Visual from dashboard", "Your'e about to delete visualization from this dashboard. Deleting this visualization will impact any scheduled reports", {
                 dangerMode: true,
                 buttons: true
-            }).then(function(value) {
+            }).then(function (value) {
                 if (value) {
                     delete $rootScope.updateWidget[widget.id];
 
@@ -1200,10 +1197,10 @@
                             {
                                 id: widget.id
                             },
-                            function(result) {
+                            function (result) {
                                 removeFromView(widget);
                             },
-                            function(error) {
+                            function (error) {
                                 swal("Something went wrong");
                             }
                         );
@@ -1234,7 +1231,7 @@
             vm.gridStackOptions.disableResize = mode;
         }
 
-        function openSchedulerDialog(v,thresholdAlert){
+        function openSchedulerDialog(v, thresholdAlert) {
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/entities/flair-bi/scheduler/scheduler-dialog.html',
@@ -1245,19 +1242,19 @@
                     visualMetaData: function () {
                         return v;
                     },
-                    datasource: function(){
+                    datasource: function () {
                         return vm.datasource;
                     },
-                    view: function(){
+                    view: function () {
                         return vm.view;
                     },
-                    dashboard: function(){
+                    dashboard: function () {
                         return vm.view.viewDashboard;
                     },
-                    scheduledObj: function(){
+                    scheduledObj: function () {
                         return null;
                     },
-                    thresholdAlert: function(){
+                    thresholdAlert: function () {
                         return thresholdAlert;
                     }
                 }

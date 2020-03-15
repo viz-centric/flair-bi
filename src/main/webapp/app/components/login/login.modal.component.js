@@ -1,13 +1,23 @@
 (function () {
     'use strict';
 
+
     angular
         .module('flairbiApp')
-        .controller('ModalLoginController', LoginController);
+        .component('loginModalComponent', {
+            templateUrl: 'app/components/login/login.modal.component.html',
+            controller: LoginController,
+            controllerAs: 'vm',
+            bindings: {
+                resolve: '<',
+                close: '&',
+                dismiss: '&'
+            }
+        });
 
-    LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance'];
+    LoginController.$inject = ['$rootScope', '$state', 'Auth'];
 
-    function LoginController($rootScope, $state, $timeout, Auth, $uibModalInstance) {
+    function LoginController($rootScope, $state, Auth) {
         var vm = this;
 
         vm.authenticationError = false;
@@ -20,9 +30,6 @@
         vm.requestResetPassword = requestResetPassword;
         vm.username = null;
 
-        $timeout(function () {
-            angular.element('#username').focus();
-        });
 
         function cancel() {
             vm.credentials = {
@@ -31,7 +38,7 @@
                 rememberMe: true
             };
             vm.authenticationError = false;
-            $uibModalInstance.dismiss('cancel');
+            vm.dismiss();
         }
 
         function login(event) {
@@ -42,7 +49,7 @@
                 rememberMe: vm.rememberMe
             }).then(function () {
                 vm.authenticationError = false;
-                $uibModalInstance.close();
+                vm.close();
                 if ($state.current.name === 'register' || $state.current.name === 'activate' ||
                     $state.current.name === 'finishReset' || $state.current.name === 'requestReset') {
                     $state.go('home');
@@ -63,12 +70,12 @@
         }
 
         function register() {
-            $uibModalInstance.dismiss('cancel');
+            vm.dismiss();
             $state.go('register');
         }
 
         function requestResetPassword() {
-            $uibModalInstance.dismiss('cancel');
+            vm.dismiss();
             $state.go('requestReset');
         }
     }

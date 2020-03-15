@@ -67,8 +67,8 @@
             featureName: featureName
           };
           if (dataType) {
-            result.valueType = {value: value, type: dataType, '@type': 'valueType'};
-            result.secondValueType = {value: secondValue, type: dataType, '@type': 'valueType'};
+              result.valueType = {value: value, type: dataType, '@type': 'valueType'};
+              result.secondValueType = {value: secondValue, type: dataType, '@type': 'valueType'};
           }
           return result;
         }
@@ -116,7 +116,7 @@
                     value: value
                 },
                 secondValueType: {
-                    '@type': 'predefinedValueType',
+                    '@type': 'valueType',
                     value: value
                 },
                 secondValue: value,

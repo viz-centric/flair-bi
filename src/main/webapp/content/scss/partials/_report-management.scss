@@ -86,7 +86,7 @@
       width: 100% !important;
     }
     .tab-active {
-      background: #ededed;
+      background: #fff;
     }
     .tab-active > .blue-line {
       width: 100% !important;
@@ -99,7 +99,7 @@
     width: 100% !important;
   }
   .tab-active {
-    background: #ededed;
+    background: #fff;
   }
   .tab-active > .blue-line {
     width: 100% !important;
@@ -145,6 +145,8 @@
   #openTicketScheduler {
     color: lighten($icons-color, 20%);
     fill: $icons-color;
+    height:19px;
+    width: 19px;
   }
   #refreshTicket {
     padding: 6px 0px;

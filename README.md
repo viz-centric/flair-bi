@@ -10,3 +10,17 @@ Flair BI is an opensource, cloud-native and scalable application which is build 
 - [Setting up connectors](https://github.com/viz-centric/flair-bi/wiki/Setting-up-connectors)
 
 > **Note**: We are constantly updating our documentation. If there is anything you are looking for in specific, please feel to drop in a mail to [admin@vizcentric.com]() :smiley:
+
+
+### Development
+Required dependencies:
+
+* Node v12.14.1
+* NPM v6.13.4
+* Java 8
+
+Install the following dependencies globally:
+```
+npm i -g bower
+npm i -g gulp-cli
+```

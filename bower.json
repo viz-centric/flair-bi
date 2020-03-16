@@ -127,6 +127,16 @@
         "angular": "*"
       }
     },
+    "angular-cache-buster": {
+      "dependencies": {
+        "angular": "*"
+      }
+    },
+    "angular-dynamic-locale": {
+      "dependencies": {
+        "angular": "*"
+      }
+    },
     "flair-visualizations": {
       "main": [
         "dist/main.bundle.js",

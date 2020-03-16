@@ -63,7 +63,11 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'src/main/webapp/bower_components/angular-cache-buster/angular-cache-buster.js',
             'src/main/webapp/bower_components/angular-cookies/angular-cookies.js',
+<<<<<<< HEAD
             'src/main/webapp/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+=======
+            'src/main/webapp/bower_components/angular-dynamic-locale/dist/tmhDynamicLocale.js',
+>>>>>>> 00c1f259... FIxed gulp inject
             'src/main/webapp/bower_components/ngstorage/ngStorage.js',
             'src/main/webapp/bower_components/angular-resource/angular-resource.js',
             'src/main/webapp/bower_components/angular-sanitize/angular-sanitize.js',

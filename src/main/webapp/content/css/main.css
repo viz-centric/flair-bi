@@ -2771,7 +2771,6 @@ input[type="search"] {
 .ui-select-bootstrap > .ui-select-choices {
   margin-top: 0px;
   border-radius: 0;
-  position: relative;
   z-index: 999; }
   .ui-select-bootstrap > .ui-select-choices .ui-select-choices-row span.ui-select-choices-row-inner {
     padding: 10px; }
@@ -6409,6 +6408,17 @@ input.select2-active {
     height: 24px;
     fill: #439dd3; }
 
+.scheduler-modal-body .scheduler-webhooks .webhooks {
+  display: flex;
+  flex-wrap: wrap; }
+  .scheduler-modal-body .scheduler-webhooks .webhooks .webhook {
+    font-size: 12px;
+    background-color: #439dd3;
+    color: #fafafa;
+    padding: 4px 8px;
+    margin-right: 5px;
+    margin-top: 5px; }
+
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;
   display: flex; }
@@ -6685,7 +6695,7 @@ input.select2-active {
   #report-management .alerts-tabs .tab:hover > .blue-line {
     width: 100% !important; }
   #report-management .alerts-tabs .tab-active {
-    background: #ededed; }
+    background: #fff; }
   #report-management .alerts-tabs .tab-active > .blue-line {
     width: 100% !important; }
 
@@ -6696,7 +6706,7 @@ input.select2-active {
   width: 100% !important; }
 
 #report-management .tab-active {
-  background: #ededed; }
+  background: #fff; }
 
 #report-management .tab-active > .blue-line {
   width: 100% !important; }
@@ -6736,7 +6746,9 @@ input.select2-active {
 
 #report-management #openTicketScheduler {
   color: #71767a;
-  fill: #404345; }
+  fill: #404345;
+  height: 19px;
+  width: 19px; }
 
 #report-management #refreshTicket {
   padding: 6px 0px;

@@ -20,14 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -186,6 +179,25 @@ public class FeatureResource {
         }
         featureService.save(features);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    /**
+     * PUT  /feature : Updates an existing feature.
+     *
+     * @param markFavouriteFilter,id the feature to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated feature,
+     * or with status 400 (Bad Request) if the feature is not valid,
+     * or with status 500 (Internal Server Error) if the feature couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @GetMapping("/features/markFavouriteFilter/")
+    @Timed
+    public ResponseEntity<?> markFavouriteFilter(@RequestParam  Boolean favouriteFilter, @RequestParam Long id) throws URISyntaxException {
+        log.debug("REST request to mark favourite filter : {}", favouriteFilter,id);
+        featureService.markFavouriteFilter(favouriteFilter,id);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert("features", id.toString()))
+                .body(null);
     }
 
 }

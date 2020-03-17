@@ -6,11 +6,11 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = ['$scope', 'Principal', 'LoginService',
-        '$state', 'Information', 'ViewWatches', 'Views', 'Dashboards','$rootScope','alertsService','screenDetectService','adminListService','AccountDispatch','proxyGrpcService'
+        '$state', 'Information', 'ViewWatches', 'Views', 'Dashboards','$rootScope','alertsService','screenDetectService','adminListService','AccountDispatch','proxyGrpcService','AlertsDispatcherService'
     ];
 
     function HomeController($scope, Principal, LoginService,
-        $state, Information, ViewWatches, Views, Dashboards,$rootScope,alertsService,screenDetectService,adminListService,AccountDispatch,proxyGrpcService) {
+        $state, Information, ViewWatches, Views, Dashboards,$rootScope,alertsService,screenDetectService,adminListService,AccountDispatch,proxyGrpcService,AlertsDispatcherService) {
         var vm = this;
 
         vm.account = null;
@@ -99,11 +99,13 @@
             onRecentlyBox();
             angular.element($("#on-recently-box1")).triggerHandler("click");
             vm.menuItems=adminListService.getHomeList();
+            registerOnSetTotalReleaseAlerts();
         }
 
         function getReleaseAlerts() {
         alertsService.getAllReleaseAlerts().then(function(result){
                 vm.allReleaseAlerts=result.data;
+                vm.totalReleaseAlerts=0;
             });
         }
 
@@ -125,6 +127,16 @@
             }else{
                 return flag==false?'block':'none';
             }
+        }
+
+        function registerOnSetTotalReleaseAlerts() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:setTotalReleaseAlerts",
+                function() {
+                    vm.totalReleaseAlerts=AlertsDispatcherService.getReleaseTotalAlertsCount();
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
         }
 
 

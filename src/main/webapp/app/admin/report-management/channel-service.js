@@ -9,7 +9,6 @@
 
     function ChannelService($http) {
         var service = {
-
             channelParameters: channelParameters,
             createTeamConfig: createTeamConfig,
             updateTeamConfig: updateTeamConfig,
@@ -17,6 +16,7 @@
             updateEmailConfig: updateEmailConfig,
             getEmailConfig: getEmailConfig,
             getTeamConfig: getTeamConfig,
+            getTeamNames: getTeamNames,
             deleteChannelConfig: deleteChannelConfig,
             createJiraConfig: createJiraConfig,
             getJiraConfig: getJiraConfig,
@@ -71,6 +71,12 @@
         function getTeamConfig(id) {
             return $http({
                 url: 'api/notification/getTeamConfig/?id=' + id + '',
+                method: 'GET'
+            });
+        }
+        function getTeamNames(id) {
+            return $http({
+                url: 'api/notification/getTeamNames/?id=' + id + '',
                 method: 'GET'
             });
         }

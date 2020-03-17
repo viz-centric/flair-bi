@@ -3,7 +3,6 @@
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     inject = require('gulp-inject'),
-    es = require('event-stream'),
     naturalSort = require('gulp-natural-sort'),
     angularFilesort = require('gulp-angular-filesort'),
     bowerFiles = require('main-bower-files');
@@ -24,16 +23,16 @@ function app() {
         .pipe(inject(gulp.src([
             config.app + 'app/**/*.js',
             config.app + 'content/js/*.js'])
-            .pipe(plumber({errorHandler: handleErrors}))
+            .pipe(plumber({ errorHandler: handleErrors }))
             .pipe(naturalSort())
-            .pipe(angularFilesort()), {relative: true}))
+            .pipe(angularFilesort()), { relative: true }))
         .pipe(gulp.dest(config.app));
 }
 
 function vendor() {
     return gulp.src(config.app + 'index.html')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+        .pipe(plumber({ errorHandler: handleErrors }))
+        .pipe(inject(gulp.src(bowerFiles(), { read: false }), {
             name: 'bower',
             relative: true
         }))
@@ -42,8 +41,8 @@ function vendor() {
 
 function test() {
     return gulp.src(config.test + 'karma.conf.js')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({includeDev: true, filter: ['**/*.js']}), {read: false}), {
+        .pipe(plumber({ errorHandler: handleErrors }))
+        .pipe(inject(gulp.src(bowerFiles({ includeDev: true, filter: ['**/*.js'] }), { read: false }), {
             starttag: '// bower:js',
             endtag: '// endbower',
             transform: function (filepath) {
@@ -56,9 +55,9 @@ function test() {
 function troubleshoot() {
     /* this task removes the troubleshooting content from index.html*/
     return gulp.src(config.app + 'index.html')
-        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(plumber({ errorHandler: handleErrors }))
         /* having empty src as we dont have to read any files*/
-        .pipe(inject(gulp.src('', {read: false}), {
+        .pipe(inject(gulp.src('', { read: false }), {
             starttag: '<!-- inject:troubleshoot -->',
             removeTags: true,
             transform: function () {

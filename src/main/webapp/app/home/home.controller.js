@@ -12,51 +12,50 @@
     function HomeController($scope, Principal, LoginService,
         $state, Information, ViewWatches, Views, Dashboards,$rootScope,alertsService,screenDetectService,adminListService,AccountDispatch,proxyGrpcService,AlertsDispatcherService) {
         var vm = this;
-
         vm.account = null;
         vm.isAuthenticated = null;
         vm.login = LoginService.open;
         vm.register = register;
         vm.recentlyCreatedViews = [];
-        vm.onRecentlyBox1=onRecentlyBox1;
-        vm.onRecentlyBox2=onRecentlyBox2;
-        vm.expandTile=expandTile;
-        vm.toggleAlerts=toggleAlerts;
-        vm.isTileVisible=isTileVisible;
-        vm.allReleaseAlerts=[];
-        vm.reports=[];
-        vm.alertTab='';
-        vm.expandFlairInsight={id:4};
+        vm.onRecentlyBox1 = onRecentlyBox1;
+        vm.onRecentlyBox2 = onRecentlyBox2;
+        vm.expandTile = expandTile;
+        vm.toggleAlerts = toggleAlerts;
+        vm.isTileVisible = isTileVisible;
+        vm.allReleaseAlerts = [];
+        vm.reports = [];
+        vm.alertTab = '';
+        vm.expandFlairInsight = { id: 4 };
 
         activate();
 
-        function toggleAlerts(alertTab){
-            vm.alertTab=alertTab;
-            if(vm.alertTab =='notifications'){
+        function toggleAlerts(alertTab) {
+            vm.alertTab = alertTab;
+            if (vm.alertTab == 'notifications') {
                 getScheduledReports();
-            }else{
+            } else {
                 getReleaseAlerts();
             }
         }
 
-        function expandTile(info){
-            $rootScope.$broadcast('flairbiApp:onClickTile',info.id);
+        function expandTile(info) {
+            $rootScope.$broadcast('flairbiApp:onClickTile', info.id);
         }
 
-        function onRecentlyBox1(){
-            if($(".expand1").hasClass("rotate")){
+        function onRecentlyBox1() {
+            if ($(".expand1").hasClass("rotate")) {
                 $(".expand1").removeClass("rotate");
                 $(".recently-box:first-of-type > .blue-line").css("width", "0%");
             } else {
                 $(".expand1").addClass("rotate");
                 $(".expand2").removeClass("rotate");
                 $(".recently-box:first-of-type > .blue-line").css("width", "100%");
-                $(".recently-box2 > .blue-line").css("width", "0%");   
+                $(".recently-box2 > .blue-line").css("width", "0%");
             };
         }
 
-        function onRecentlyBox2(){
-            if($(".expand2").hasClass("rotate")){
+        function onRecentlyBox2() {
+            if ($(".expand2").hasClass("rotate")) {
                 $(".expand2").removeClass("rotate");
                 $(".recently-box2 > .blue-line").css("width", "0%");
             } else {
@@ -67,23 +66,23 @@
             };
         }
 
-        function onRecentlyBox(){
-			 var $innerWrapper = $('.recently-block');
-				$(".recently-box").click(function () {
-					var $inn = $(this).next(".recently-block").stop(true).slideToggle(600);
-					$innerWrapper.not($inn).filter(':visible').stop(true).slideUp(600);
-				});
+        function onRecentlyBox() {
+            var $innerWrapper = $('.recently-block');
+            $(".recently-box").click(function () {
+                var $inn = $(this).next(".recently-block").stop(true).slideToggle(600);
+                $innerWrapper.not($inn).filter(':visible').stop(true).slideUp(600);
+            });
         }
 
 
         function getAccount() {
             vm.account = AccountDispatch.getAccount();
             vm.isAuthenticated = Principal.isAuthenticated;
-            vm.isAdmin =  AccountDispatch.isAdmin();
+            vm.isAdmin = AccountDispatch.isAdmin();
         }
 
-        function isAdmin(userGroups){
-            if(userGroups.indexOf("ROLE_ADMIN")>-1)
+        function isAdmin(userGroups) {
+            if (userGroups.indexOf("ROLE_ADMIN") > -1)
                 return true;
             else
                 return false;
@@ -106,26 +105,26 @@
         alertsService.getAllReleaseAlerts().then(function(result){
                 vm.allReleaseAlerts=result.data;
                 vm.totalReleaseAlerts=0;
-            });
+                vm.menuItems = adminListService.getHomeList();
         }
 
-        function getScheduledReports(){
-            proxyGrpcService.getSchedulerReportsAndEngineData(3,0);
+        function getScheduledReports() {
+            proxyGrpcService.getSchedulerReportsAndEngineData(3, 0);
         }
 
         function register() {
             $state.go('register');
         }
 
-        function loadInformation(){
-            vm.information=Information.query();
+        function loadInformation() {
+            vm.information = Information.query();
         }
 
-        function isTileVisible(flag){
-            if(screenDetectService.isDesktop()){
-                return flag==true?'block':'none';
-            }else{
-                return flag==false?'block':'none';
+        function isTileVisible(flag) {
+            if (screenDetectService.isDesktop()) {
+                return flag == true ? 'block' : 'none';
+            } else {
+                return flag == false ? 'block' : 'none';
             }
         }
 

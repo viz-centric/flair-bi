@@ -120,7 +120,7 @@
                 apiToken: vm.connection.details.apiToken
             }
             ChannelService.createJiraConfig(jiraConfig)
-                .then(function (success) {
+                .then(function () {
                     var info = {
                         text: "Jira settings are saved successfully",
                         title: "Updated"
@@ -179,9 +179,7 @@
         function openTeamConfigDialog(webhook) {
             $uibModal.open({
                 animation: true,
-                templateUrl: 'app/admin/report-management/team-settings/team-config-dialog.html',
-                controller: 'teamConfigDialog',
-                controllerAs: 'vm',
+                component: 'teamConfigDialogComponent',
                 backdrop: 'static',
                 size: "lg",
                 resolve: {

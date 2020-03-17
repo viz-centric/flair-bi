@@ -5,17 +5,17 @@
         .module('flairbiApp')
         .factory('AuditsUtilsService', AuditsUtilsService);
 
-    AuditsUtilsService.$inject = ['ParseLinks'];
+    AuditsUtilsService.$inject = [];
 
-    function AuditsUtilsService(ParseLinks) {
+    function AuditsUtilsService() {
         var service = {
-            previousMonth:previousMonth,
-            today:today
+            previousMonth: previousMonth,
+            today: today
         };
 
         return service;
 
-        function previousMonth(){
+        function previousMonth() {
             var fromDate = new Date();
             if (fromDate.getMonth() === 0) {
                 fromDate = new Date(fromDate.getFullYear() - 1, 11, fromDate.getDate());
@@ -28,7 +28,7 @@
         function today() {
             // Today + 1 day - needed if the current day must be included
             var today = new Date();
-            today.setDate(today.getDate()+1);
+            today.setDate(today.getDate() + 1);
             return today;
         }
     }

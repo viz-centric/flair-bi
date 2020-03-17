@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
     angular
         .module('flairbiApp')
@@ -6,11 +6,11 @@
 
     VisualizationColors.$inject = ['$resource'];
 
-    function VisualizationColors ($resource) {
-        var resourceUrl =  'api/visualization-colors/:id';
+    function VisualizationColors($resource) {
+        var resourceUrl = 'api/visualization-colors/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'GET', isArray: true},
+            'query': { method: 'GET', isArray: true },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -20,7 +20,7 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method: 'PUT' }
         });
     }
 })();

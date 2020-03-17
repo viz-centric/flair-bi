@@ -5,8 +5,10 @@
         </div>
         <div class="dimensions-container flair-scroll-gray properties">
             <div ng-repeat="dimension in vm.dimensions" class="filter-item">
-                <filter-element-grpc-component ng-if="$root.vizualizationServiceMode == 'grpc'" dimensions="vm.dimensions" dimension="dimension" view="vm.view" ></filter-element-grpc-component>
-                <filter-element-component ng-if="$root.vizualizationServiceMode == 'http'" dimensions="vm.dimensions" dimension="dimension" view="vm.view" ></filter-element-component>
+                <filter-element-grpc-component ng-if="$root.vizualizationServiceMode == 'grpc'"
+                    dimensions="vm.dimensions" dimension="dimension" view="vm.view"></filter-element-grpc-component>
+                <filter-element-component ng-if="$root.vizualizationServiceMode == 'http'" dimensions="vm.dimensions"
+                    dimension="dimension" view="vm.view"></filter-element-component>
             </div>
         </div>
 

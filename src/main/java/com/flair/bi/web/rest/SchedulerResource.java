@@ -92,7 +92,7 @@ public class SchedulerResource {
 		log.info("Creating schedule report {}", schedulerDTO);
 		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
 		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
-		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
+		if(!SecurityUtils.iAdmin()) {
 			schedulerDTO.getAssign_report().getCommunication_list().setEmail(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());

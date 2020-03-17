@@ -4,33 +4,33 @@
   "appPath": "src/main/webapp/",
   "testPath": "src/test/javascript/spec",
   "dependencies": {
-    "angular": "1.5.8",
-    "angular-aria": "1.5.8",
-    "angular-bootstrap": "1.3.3",
+    "angular": "1.7.9",
+    "angular-aria": "1.7.9",
+    "angular-bootstrap": "2.5.0",
     "angular-cache-buster": "0.4.3",
-    "angular-cookies": "1.5.8",
-    "angular-dynamic-locale": "0.1.32",
-    "angular-i18n": "1.5.8",
+    "angular-cookies": "1.7.9",
+    "angular-dynamic-locale": "0.1.37",
+    "angular-i18n": "1.7.9",
     "ngstorage": "0.3.10",
-    "angular-resource": "1.5.8",
-    "angular-sanitize": "1.5.8",
-    "angular-translate": "2.11.1",
-    "angular-translate-interpolation-messageformat": "2.11.1",
-    "angular-translate-loader-partial": "2.11.1",
-    "angular-translate-storage-cookie": "2.11.1",
-    "angular-ui-router": "0.3.1",
+    "angular-resource": "1.7.9",
+    "angular-sanitize": "1.7.9",
+    "angular-translate": "2.18.2",
+    "angular-translate-interpolation-messageformat": "2.18.2",
+    "angular-translate-loader-partial": "2.18.2",
+    "angular-translate-storage-cookie": "2.18.2",
+    "angular-ui-router": "1.0.25",
     "bootstrap": "3.3.7",
-    "bootstrap-ui-datetime-picker": "2.4.3",
+    "bootstrap-ui-datetime-picker": "2.6.4",
     "jquery": "3.1.0",
     "json3": "3.3.2",
-    "messageformat": "0.3.1",
+    "messageformat": "1.0.2",
     "modernizr": "3.3.1",
     "ng-file-upload": "^12.2.13",
     "ngInfiniteScroll": "1.3.0",
     "swagger-ui": "2.1.5",
-    "angular-animate": "~1.5.0",
-    "angular-touch": "~1.5.0",
-    "angular-messages": "~1.5.0",
+    "angular-animate": "1.7.9",
+    "angular-touch": "1.7.9",
+    "angular-messages": "1.7.9",
     "moment": "~2.24.0",
     "pace": "~1.0.2",
     "metisMenu": "~2.0.2",
@@ -64,7 +64,7 @@
     "dom-to-image": "^2.6.0",
     "pdfmake": "^0.1.33",
     "animate.css": "^3.5.2",
-    "angular-material": "^1.1.5",
+    "angular-material": "1.1.21",
     "md-color-picker": "^0.2.6",
     "angular-filter": "^0.5.17",
     "angular-drag-and-drop-lists": "^2.1.0",
@@ -78,22 +78,12 @@
     "datatables.net-dt": "^3.2.2"
   },
   "devDependencies": {
-    "angular-mocks": "1.5.8"
+    "angular-mocks": "1.7.9"
   },
   "overrides": {
     "angular": {
       "dependencies": {
         "jquery": "3.1.0"
-      }
-    },
-    "angular-cache-buster": {
-      "dependencies": {
-        "angular": "1.5.8"
-      }
-    },
-    "angular-dynamic-locale": {
-      "dependencies": {
-        "angular": "1.5.8"
       }
     },
     "bootstrap": {
@@ -127,6 +117,16 @@
         "angular": "*"
       }
     },
+    "angular-cache-buster": {
+      "dependencies": {
+        "angular": "*"
+      }
+    },
+    "angular-dynamic-locale": {
+      "dependencies": {
+        "angular": "*"
+      }
+    },
     "flair-visualizations": {
       "main": [
         "dist/main.bundle.js",
@@ -135,8 +135,7 @@
     }
   },
   "resolutions": {
-    "angular": "1.5.8",
-    "angular-bootstrap": "2.0.0",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "angular": "1.7.9"
   }
 }

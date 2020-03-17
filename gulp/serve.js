@@ -3,13 +3,14 @@
 var gulp = require('gulp'),
     util = require('./utils'),
     url = require('url'),
-    browserSync = require('browser-sync'),
-    proxy = require('proxy-middleware');
+    browserSync = require('browser-sync').create(),
+    { createProxyMiddleware } = require('http-proxy-middleware');
 
 var config = require('./config');
 
 module.exports = function () {
-    var baseUri = config.uri + config.apiPort;
+    var baseUri = config.uri + config.apiPort,
+        wsBaseUri = config.wsUri + config.apiPort;
     // Routes to proxy to the backend. Routes ending with a / will setup
     // a redirect so that if accessed without a trailing slash, will
     // redirect. This is required for some endpoints for proxy-middleware
@@ -20,7 +21,8 @@ module.exports = function () {
         '/management',
         '/swagger-resources',
         '/v2/api-docs',
-        '/h2-console'
+        '/h2-console',
+        '/flair-ws'
     ];
 
     var requireTrailingSlash = proxyRoutes.filter(function (r) {
@@ -48,13 +50,13 @@ module.exports = function () {
         .concat(
             // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
             proxyRoutes.map(function (r) {
-                var options = url.parse(baseUri + r);
-                options.route = r;
-                options.preserveHost = true;
-                return proxy(options);
+                var isWebsocket = r.indexOf('flair-ws') != -1,
+                    route = (isWebsocket ? wsBaseUri : baseUri) + r;
+
+                return createProxyMiddleware(route);
             }));
 
-    browserSync({
+    browserSync.init({
         open: true,
         port: config.port,
         https: false,
@@ -63,7 +65,14 @@ module.exports = function () {
             middleware: proxies
         },
         ghostMode: false
-    });
+    })
 
-    gulp.start('watch');
+    gulp.watch('bower.json', gulp.series('install'));
+    gulp.watch(['gulpfile.js', 'pom.xml'], gulp.series('ngconstant:dev'));
+    gulp.watch(config.app + 'content/css/**/*.css', gulp.series('styles'));
+    gulp.watch(config.app + 'content/images/**', gulp.series('images'));
+    gulp.watch(config.app + 'app/**/*.js', gulp.series('inject:app'));
+    gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
+    gulp.watch(config.customStyles + '/**/*.scss', gulp.series('customStyles'));
+
 };

@@ -13,7 +13,7 @@
                 parent: 'app',
                 url: '/error',
                 data: {
-                    authorities: [],
+                    public: true,
                     pageTitle: 'error.title'
                 },
                 views: {
@@ -32,7 +32,7 @@
                 parent: 'app',
                 url: '/accessdenied',
                 data: {
-                    authorities: []
+                    public: true
                 },
                 views: {
                     'content@': {

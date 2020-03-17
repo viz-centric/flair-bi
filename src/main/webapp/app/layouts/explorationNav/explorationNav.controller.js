@@ -34,10 +34,6 @@
 
         vm.dataSourceId=Number($state.params.sid);
 
-        // loadVisualizations()
-        // loadMeasures()
-        // loadDimensions()
-
         if($state.current.name=="flairbi"){
             if(window.location.href.indexOf('?') < 0){
                 window.location.href = window.location.href+'?load';

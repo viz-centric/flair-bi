@@ -100,9 +100,7 @@
         function openTicketSchedulerDialog() {
             $uibModal.open({
                 animation: true,
-                templateUrl: 'app/admin/report-management/ticket-scheduler/ticket-scheduler-dialog.html',
-                controller: 'ticketSchedulerDialog',
-                controllerAs: 'vm',
+                component: 'ticketSchedulerDialogComponent',
                 backdrop: 'static',
                 size: "sm",
                 resolve: {

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -28,7 +28,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("views");
                             $translatePartialLoader.addPart("global");
                             return $translate.refresh();
@@ -37,12 +37,11 @@
                 }
             })
             .state("dashboards-overview.view-detail", {
-                parent: "dashboards-overview",
                 url: "/views/{viewId}/details",
                 data: {
                     authorities: [],
                     pageTitle: "flairbiApp.views.detail.title",
-                    displayName:"Details"
+                    displayName: "Details"
                 },
                 views: {
                     "content-header@": {
@@ -61,7 +60,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("views");
                             return $translate.refresh();
                         }
@@ -69,7 +68,7 @@
                     entity: [
                         "$stateParams",
                         "Views",
-                        function($stateParams, Views) {
+                        function ($stateParams, Views) {
                             return Views.get({
                                 id: $stateParams.viewId
                             }).$promise;
@@ -77,7 +76,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "views",
                                 params: $state.params,
@@ -115,7 +114,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("views");
                             return $translate.refresh();
                         }
@@ -123,7 +122,7 @@
                     entity: [
                         "$stateParams",
                         "Views",
-                        function($stateParams, Views) {
+                        function ($stateParams, Views) {
                             return Views.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -131,7 +130,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "views",
                                 params: $state.params,
@@ -163,7 +162,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("views");
                             return $translate.refresh();
                         }
@@ -171,7 +170,7 @@
                     entity: [
                         "$stateParams",
                         "Views",
-                        function($stateParams, Views) {
+                        function ($stateParams, Views) {
                             return Views.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -179,7 +178,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "views",
                                 params: $state.params,
@@ -194,17 +193,16 @@
                 }
             })
             .state("dashboards-overview.view-detail.edit", {
-                parent: "dashboards-overview.view-detail",
                 url: "/edit",
                 data: {
                     authorities: [],
-                    displayName:false
+                    displayName: false
                 },
                 onEnter: [
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -216,7 +214,7 @@
                                 resolve: {
                                     entity: [
                                         "Views",
-                                        function(Views) {
+                                        function (Views) {
                                             return Views.get({
                                                 id: $stateParams.viewId
                                             }).$promise;
@@ -224,7 +222,7 @@
                                     ],
                                     viewReleases: [
                                         "Views",
-                                        function(Views) {
+                                        function (Views) {
                                             return Views.getViewReleases({
                                                 id: $stateParams.viewId
                                             }).$promise;
@@ -233,7 +231,7 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go(
                                         "^",
                                         {},
@@ -242,7 +240,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -250,7 +248,6 @@
                 ]
             })
             .state("views-detail.edit", {
-                parent: "views-detail",
                 url: "/edit",
                 data: {
                     authorities: []
@@ -259,7 +256,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -271,7 +268,7 @@
                                 resolve: {
                                     entity: [
                                         "Views",
-                                        function(Views) {
+                                        function (Views) {
                                             return Views.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -280,7 +277,7 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go(
                                         "^",
                                         {},
@@ -289,7 +286,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -297,7 +294,6 @@
                 ]
             })
             .state("dashboards-overview.view-new", {
-                parent: "dashboards-overview",
                 url: "/views/new",
                 data: {
                     authorities: [],
@@ -312,7 +308,7 @@
                     "$uibModal",
                     "$window",
                     "$location",
-                    function(
+                    function (
                         $stateParams,
                         $state,
                         $uibModal,
@@ -328,7 +324,7 @@
                                 backdrop: "static",
                                 size: "md",
                                 resolve: {
-                                    entity: function() {
+                                    entity: function () {
                                         return {
                                             viewDashboard:
                                                 $stateParams.dashboard,
@@ -340,13 +336,13 @@
                                             id: null
                                         };
                                     },
-                                    viewReleases: function() {
+                                    viewReleases: function () {
                                         return [];
                                     }
                                 }
                             })
                             .result.then(
-                                function(result) {
+                                function (result) {
                                     $state.go(
                                         "dashboards-overview",
                                         {
@@ -357,7 +353,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     $state.go("dashboards");
                                 }
                             );
@@ -367,7 +363,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("views");
                             $translatePartialLoader.addPart("global");
                             return $translate.refresh();
@@ -376,7 +372,6 @@
                 }
             })
             .state("dashboards-overview.view-delete", {
-                parent: "dashboards-overview",
                 url: "/views/{viewId}/delete",
                 data: {
                     authorities: [],
@@ -386,7 +381,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -397,7 +392,7 @@
                                 resolve: {
                                     entity: [
                                         "Views",
-                                        function(Views) {
+                                        function (Views) {
                                             return Views.get({
                                                 id: $stateParams.viewId
                                             }).$promise;
@@ -406,7 +401,7 @@
                                 }
                             })
                             .result.then(
-                                function(result) {
+                                function (result) {
                                     $state.go(
                                         "dashboards-overview",
                                         {
@@ -417,7 +412,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     //$state.go('^');
                                 }
                             );
@@ -427,7 +422,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("views");
                             $translatePartialLoader.addPart("global");
                             return $translate.refresh();
@@ -445,7 +440,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -456,7 +451,7 @@
                                 resolve: {
                                     entity: [
                                         "Views",
-                                        function(Views) {
+                                        function (Views) {
                                             return Views.get({
                                                 id: $stateParams.viewId
                                             }).$promise;
@@ -465,7 +460,7 @@
                                 }
                             })
                             .result.then(
-                                function(result) {
+                                function (result) {
                                     $state.go(
                                         "dashboards-overview",
                                         {
@@ -476,7 +471,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                 }
                             );
                     }

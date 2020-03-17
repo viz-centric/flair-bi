@@ -5,15 +5,14 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$uibModal'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$uibModal','AccountDispatch'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$uibModal) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$uibModal,AccountDispatch) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
         };
         $scope.isCronDisabled = false;
-
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         var TIME_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var vm = this;
@@ -98,13 +97,21 @@
         ////////////////
 
         function activate() {
+            vm.isAdmin =  AccountDispatch.isAdmin();
             registerSetCommunicationList();
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
-            getWebhookList();
-            getSMTPSettings();
+            if(vm.isAdmin){
+                getWebhookList();
+            }else{
+                getWebhookNames();
+            }
+            if(vm.isAdmin){
+                getSMTPSettings();
+            }
             resetSelectedChannels();
+            vm.users = User.query();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard = dashboard;
@@ -123,7 +130,6 @@
                     });
             } else {
                 vm.scheduleObj.emailReporter = true;
-                vm.users = User.query();
                 if (scheduledObj) {
                     vm.emailReporterEdit = true;
                     getVisualmetadata(scheduledObj)
@@ -228,10 +234,8 @@
             if (vm.scheduleObj.constraints) {
                 setTimeConditions(JSON.parse(vm.scheduleObj.constraints).time);
             }
-            if (vm.scheduleObj.emailReporter) {
-                vm.scheduleObj.assign_report.communication_list.email = data.assign_report.communication_list.email;
-                addEmailList(data.assign_report.communication_list.email);
-            }
+            vm.scheduleObj.assign_report.communication_list.email = data.assign_report.communication_list.email;
+            addEmailList(data.assign_report.communication_list.email);
         }
 
         function setHavingDTO(query) {
@@ -640,7 +644,18 @@
             ChannelService.getTeamConfig(0)
                 .then(function (success) {
                     vm.WebhookList = success.data;
-
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+        }
+        function getWebhookNames() {
+            ChannelService.getTeamNames(0)
+                .then(function (success) {
+                    vm.webhooksNames=success.data;
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,

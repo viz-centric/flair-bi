@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").component("dashboardComponent", {
@@ -10,28 +10,28 @@
         }
     });
 
-    dashboardController.$inject = ["$scope","Principal"];
+    dashboardController.$inject = ["Principal"];
 
-    function dashboardController($scope,Principal) {
+    function dashboardController(Principal) {
         var vm = this;
 
         vm.$onInit = activate;
 
         ////////////////
 
-        function activate() {}
+        function activate() {
+            //Issue Fix - hasAuthority returns promise object - Below is the way to get the value from promise - Start
+            Principal.hasAuthority(
+                "DELETE_" + vm.dashboard.id + "_DASHBOARD"
+            ).then(function (obj) {
+                vm.canDeleteDashboard = obj;
+            });
 
-                //Issue Fix - hasAuthority returns promise object - Below is the way to get the value from promise - Start
-        Principal.hasAuthority(
-            "DELETE_" + vm.dashboard.id + "_DASHBOARD"
-        ).then(function(obj) {
-            vm.canDeleteDashboard = obj;
-        });
-
-        Principal.hasAuthority(
-            "REQUEST-PUBLISH_" + vm.dashboard.id + "_DASHBOARD"
-            ).then(function(obj){
-            vm.canRequestDashboardRelease = obj;
-        });
+            Principal.hasAuthority(
+                "REQUEST-PUBLISH_" + vm.dashboard.id + "_DASHBOARD"
+            ).then(function (obj) {
+                vm.canRequestDashboardRelease = obj;
+            });
+        }
     }
 })();

@@ -25,12 +25,13 @@
         }
 
         function afterLogout() {
-            var to = $rootScope.toState;
-            var params = $rootScope.toStateParams;
-            var Auth = $injector.get('Auth');
-            if (to.name !== 'accessdenied' && to.name !== 'login') {
-                Auth.storePreviousState(to.name, params);
-            }
+            //TODO
+            // var to = $rootScope.toState;
+            // var params = $rootScope.toStateParams;
+            // var Auth = $injector.get('Auth');
+            // if (to.name !== 'accessdenied' && to.name !== 'login') {
+            //     Auth.storePreviousState(to.name, params);
+            // }
             var LoginService = $injector.get('LoginService');
             LoginService.open();
         }

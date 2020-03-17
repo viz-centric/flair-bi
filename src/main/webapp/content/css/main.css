@@ -6418,6 +6418,7 @@ input.select2-active {
     padding: 4px 8px;
     margin-right: 5px;
     margin-top: 5px; }
+    margin-right: 5px; }
 
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;

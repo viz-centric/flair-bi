@@ -17,9 +17,9 @@
             }
         });
 
-    TopNavButtonController.$inject = ['$scope'];
+    TopNavButtonController.$inject = [];
 
-    function TopNavButtonController($scope) {
+    function TopNavButtonController() {
         var vm = this;
 
         vm.$onInit = activate;

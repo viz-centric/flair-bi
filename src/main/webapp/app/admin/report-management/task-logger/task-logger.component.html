@@ -12,7 +12,8 @@
                     class="fa fa-refresh" aria-hidden="true"></span>
             </div>
             <div class="col-md-8 text-right">
-                <svg id="openTicketScheduler" ng-click="vm.openTicketSchedulerDialog()">
+                <svg style="width: 50px; height: 50px" id="openTicketScheduler"
+                    ng-click="vm.openTicketSchedulerDialog()">
                     <use xlink:href="#calendar" />
                 </svg>
             </div>
@@ -101,7 +102,7 @@
                             {{jira.priority}}
                         </td>
 
-                        <td>{{jira.reporter  }}</td>
+                        <td>{{jira.reporter}}</td>
                     </tr>
                 </tbody>
             </table>

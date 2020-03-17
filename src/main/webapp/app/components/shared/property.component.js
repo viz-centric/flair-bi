@@ -12,22 +12,22 @@
                 labelClasses: '@',
                 inputClasses: '@',
                 alignment: '@',
-                formClass:'@',
-                display:'=',
-                propstype:'@'
+                formClass: '@',
+                display: '=',
+                propstype: '@'
             }
         });
 
-    propertyController.$inject = ['$scope','VisualDispatchService','$rootScope','$uibModal'];
+    propertyController.$inject = ['VisualDispatchService', '$rootScope', '$uibModal'];
 
-    function propertyController($scope,VisualDispatchService, $rootScope,$uibModal) {
+    function propertyController(VisualDispatchService, $rootScope, $uibModal) {
         var vm = this;
-        vm.getDisplayName=getDisplayName;
-        vm.setProperty=setProperty;
-        vm.setCheckboxProperty=setCheckboxProperty;
-        vm.openIconExpression=openIconExpression;
+        vm.getDisplayName = getDisplayName;
+        vm.setProperty = setProperty;
+        vm.setCheckboxProperty = setCheckboxProperty;
+        vm.openIconExpression = openIconExpression;
 
-        function getDisplayName(value){
+        function getDisplayName(value) {
             return value;
         }
 
@@ -42,31 +42,31 @@
             vm.alignment = vm.alignment || 'default';
         }
 
-        function setProperty(value){
+        function setProperty(value) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            if(vm.propstype==='data'){
+            if (vm.propstype === 'data') {
                 VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");
-                $rootScope.$broadcast("flairbiApp:on-data-properties-update",{value:value,fieldName:vm.display,property:vm.property});
-            }else if(vm.propstype==='chart'){
+                $rootScope.$broadcast("flairbiApp:on-data-properties-update", { value: value, fieldName: vm.display, property: vm.property });
+            } else if (vm.propstype === 'chart') {
                 VisualDispatchService.setSavePromptMessage("visualization chart property has been changed and it has not been saved.Do you want to save?");
-                $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
+                $rootScope.$broadcast("flairbiApp:on-chart-properties-update", { value: value, property: vm.property });
             }
         }
 
-        function setCheckboxProperty(value){
+        function setCheckboxProperty(value) {
             value = !value;
             VisualDispatchService.setViewEditedBeforeSave(true);
-            if(vm.propstype==='data'){
+            if (vm.propstype === 'data') {
                 VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");
-                $rootScope.$broadcast("flairbiApp:on-data-properties-update",{value:value,fieldName:vm.display,property:vm.property});
-            }else if(vm.propstype==='chart'){
+                $rootScope.$broadcast("flairbiApp:on-data-properties-update", { value: value, fieldName: vm.display, property: vm.property });
+            } else if (vm.propstype === 'chart') {
                 VisualDispatchService.setSavePromptMessage("visualization chart property has been changed and it has not been saved.Do you want to save?");
-                $rootScope.$broadcast("flairbiApp:on-chart-properties-update",{value:value,property:vm.property});
+                $rootScope.$broadcast("flairbiApp:on-chart-properties-update", { value: value, property: vm.property });
             }
         }
 
         function openIconExpression(v) {
-            
+
             $uibModal.open({
                 templateUrl:
                     "app/entities/flair-bi/modal/modal-tabs/openColourExpression.html",

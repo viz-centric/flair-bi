@@ -1,8 +1,7 @@
 <div>
   <div ng-cloak="">
     <div class="row">
-      <div class="col-md-3 col-sm-6 dashboard"
-           ng-repeat="dashboards in vm.dashboards track by dashboards.id">
+      <div class="col-md-3 col-sm-6 dashboard" ng-repeat="dashboards in vm.dashboards track by dashboards.id">
         <dashboard-component dashboard="dashboards" />
       </div>
     </div>
@@ -10,6 +9,6 @@
 </div>
 
 <div ng-hide="vm.showWaterMark">
-	<no-data-found-component message="No dashboards available" action="click on “create” button
+  <no-data-found-component message="No dashboards available" action="click on “create” button
 	"></no-data-found-component>
 </div>

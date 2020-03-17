@@ -17,14 +17,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/configuration/configuration-content-header.html',
-                    controller: 'JhiConfigurationController',
-                    controllerAs: 'vm'
+                    template: '<jh-configuration-content-header-component></jh-configuration-content-header-component>'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/configuration/configuration.html',
-                    controller: 'JhiConfigurationController',
-                    controllerAs: 'vm'
+                    template: '<jh-configuration-component></jh-configuration-component>'
                 }
             },
             resolve: {

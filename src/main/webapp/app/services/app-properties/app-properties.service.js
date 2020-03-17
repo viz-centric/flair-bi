@@ -10,7 +10,7 @@
     function appPropertiesService($http) {
         var service = {
             getMaxImageSize: getMaxImageSize,
-            getProperties:getProperties
+            getProperties: getProperties
         };
 
         return service;

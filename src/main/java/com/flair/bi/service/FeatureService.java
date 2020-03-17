@@ -7,6 +7,7 @@ import com.flair.bi.service.dto.FunctionsDTO;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +84,11 @@ public class FeatureService {
         log.debug("Saving feature {}", features);
     	featureRepository.save(features);
    }
+
+    public void markFavouriteFilter(Boolean favouriteFilter,Long id){
+        log.debug("FeatureService markFavouriteFilter ", favouriteFilter,id);
+        featureRepository.markFavouriteFilter(favouriteFilter,id);
+    }
 
 
     public List<FeatureValidationResult> validate(List<Feature> features) {

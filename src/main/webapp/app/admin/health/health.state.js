@@ -7,7 +7,7 @@
 
     stateConfig.$inject = ['$stateProvider', 'PERMISSIONS'];
 
-    function stateConfig($stateProvider,PERMISSIONS) {
+    function stateConfig($stateProvider, PERMISSIONS) {
         $stateProvider.state('jhi-health', {
             parent: 'admin',
             url: '/health',
@@ -17,14 +17,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/health/health-content-header.html',
-                    controller: 'JhiHealthCheckController',
-                    controllerAs: 'vm'
+                    component: 'healthContentHeaderComponent'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/health/health.html',
-                    controller: 'JhiHealthCheckController',
-                    controllerAs: 'vm'
+                    component: 'healthComponent'
                 }
             },
             resolve: {

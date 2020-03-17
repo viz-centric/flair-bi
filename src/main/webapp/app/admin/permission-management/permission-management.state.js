@@ -19,16 +19,11 @@
                 },
                 views: {
                     'content-header@': {
-                        templateUrl: 'app/admin/permission-management/permission-management-content-header.html',
-                        controller: 'PermissionManagementContentHeaderController',
-                        controllerAs: 'vm'
+                        component: 'permissionManagementContentHeaderComponent'
                     },
                     'content@': {
-                        templateUrl: 'app/admin/permission-management/permission-management.html',
-                        controller: 'PermissionManagementController',
-                        controllerAs: 'vm'
+                        component: 'permissionManagementComponent'
                     }
-
                 },
                 params: {
                     usersPage: {
@@ -59,7 +54,6 @@
                 }
             })
             .state('permission-management.user-group-delete', {
-                parent: 'permission-management',
                 url: '/userGroup/{name}/delete',
                 data: {
                     authorities: []

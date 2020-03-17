@@ -111,6 +111,7 @@
                 getSMTPSettings();
             }
             resetSelectedChannels();
+            vm.users = User.query();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard = dashboard;
@@ -129,7 +130,6 @@
                     });
             } else {
                 vm.scheduleObj.emailReporter = true;
-                vm.users = User.query();
                 if (scheduledObj) {
                     vm.emailReporterEdit = true;
                     getVisualmetadata(scheduledObj)
@@ -234,10 +234,8 @@
             if (vm.scheduleObj.constraints) {
                 setTimeConditions(JSON.parse(vm.scheduleObj.constraints).time);
             }
-            if (vm.scheduleObj.emailReporter) {
-                vm.scheduleObj.assign_report.communication_list.email = data.assign_report.communication_list.email;
-                addEmailList(data.assign_report.communication_list.email);
-            }
+            vm.scheduleObj.assign_report.communication_list.email = data.assign_report.communication_list.email;
+            addEmailList(data.assign_report.communication_list.email);
         }
 
         function setHavingDTO(query) {

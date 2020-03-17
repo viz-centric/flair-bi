@@ -44,7 +44,7 @@
                                 <p class="home_label">New Data Source</p>
                                 <div class="blue-line"></div>
                             </a>
-                            <a class="quick-box new-email" ng-if="vm.isAdmin" ui-sref="report-management({id:'report'})">
+                            <a class="quick-box new-email"ui-sref="report-management({id:'report'})">
                                 <svg >
                                    <use xlink:href="#new-email-report" ></use>
                                </svg>
@@ -365,6 +365,9 @@
             </div>
             <div id="release-container" class="release-container" ng-show="vm.alertTab =='releases'">
                 <release-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts" />
+            </div>
+            <div ng-show="vm.totalReleaseAlerts==0 && vm.alertTab =='releases'">
+                <no-data-found-small-component  message="No releases available"></no-data-found-small-component >
             </div>
             <div id="notification-container" class="notification-container" alert="vm.alertTab" ng-show="vm.alertTab =='notifications'">
                <notification-set-component  />

@@ -17,9 +17,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/account/sessions/sessions.html',
-                    controller: 'SessionsController',
-                    controllerAs: 'vm'
+                    template: '<session-component></session-component>'
                 }
             },
             resolve: {

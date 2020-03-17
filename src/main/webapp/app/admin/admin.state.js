@@ -13,9 +13,7 @@
             url: '/administration',
             views: {
                 'content@': {
-                    templateUrl: 'app/admin/admin.html',
-                    controller: 'AdminController',
-                    controllerAs: 'vm'
+                    template: '<admin-component></admin-component>'
                 }
             }
         });

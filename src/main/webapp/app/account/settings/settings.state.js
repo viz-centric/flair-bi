@@ -17,14 +17,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/account/settings/settings-content-header.html',
-                    controller: 'SettingsController',
-                    controllerAs: 'vm'
+                    template: '<settings-content-header-component></settings-content-header-component>'
                 },
                 'content@': {
-                    templateUrl: 'app/account/settings/settings.html',
-                    controller: 'SettingsController',
-                    controllerAs: 'vm'
+                    template: '<settings-component></settings-component>'
                 }
             },
             resolve: {

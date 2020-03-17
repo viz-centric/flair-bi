@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(Config);
@@ -9,7 +9,7 @@
         jwtOptionsProvider.config({
             tokenGetter: [
                 "AuthServerProvider",
-                function(AuthServerProvider) {
+                function (AuthServerProvider) {
                     return AuthServerProvider.getToken();
                 }
             ]

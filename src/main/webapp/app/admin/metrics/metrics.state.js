@@ -17,14 +17,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/metrics/metrics-content-header.html',
-                    controller: 'JhiMetricsMonitoringController',
-                    controllerAs: 'vm'
+                    component: 'metricsContentHeaderComponent'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/metrics/metrics.html',
-                    controller: 'JhiMetricsMonitoringController',
-                    controllerAs: 'vm'
+                    component: 'metricsComponent'
                 }
             },
             resolve: {

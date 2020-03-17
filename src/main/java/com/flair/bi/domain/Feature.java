@@ -77,6 +77,9 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "feature")
     private Set<Field> fields = new HashSet<>();
 
+    @Column(name = "favourite_filter")
+    private Boolean favouriteFilter;
+
     public void clearFields() {
         getFields().forEach(x -> x.setFeature(null));
         getFields().clear();

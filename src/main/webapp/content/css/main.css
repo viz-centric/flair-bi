@@ -2771,7 +2771,6 @@ input[type="search"] {
 .ui-select-bootstrap > .ui-select-choices {
   margin-top: 0px;
   border-radius: 0;
-  position: relative;
   z-index: 999; }
   .ui-select-bootstrap > .ui-select-choices .ui-select-choices-row span.ui-select-choices-row-inner {
     padding: 10px; }
@@ -3837,6 +3836,10 @@ jhi-alert .alerts .alert-danger {
   align-items: center; }
   .watermark-container svg {
     width: 1000px; }
+
+.watermark-container-small svg {
+  width: 347px;
+  height: 291px; }
 
 .center-text {
   text-align: center; }
@@ -6406,13 +6409,15 @@ input.select2-active {
     fill: #439dd3; }
 
 .scheduler-modal-body .scheduler-webhooks .webhooks {
-  display: flex; }
+  display: flex;
+  flex-wrap: wrap; }
   .scheduler-modal-body .scheduler-webhooks .webhooks .webhook {
     font-size: 12px;
     background-color: #439dd3;
     color: #fafafa;
     padding: 4px 8px;
-    margin-right: 5px; }
+    margin-right: 5px;
+    margin-top: 5px; }
 
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;
@@ -6622,17 +6627,17 @@ input.select2-active {
   bottom: 0;
   right: 0; }
 
-.report-management .filters .report-name {
-  height: 35px; }
-
-.report-management .filters .search-icon {
-  margin-top: 35px;
-  width: 25px;
-  height: 25px;
-  fill: #439dd3; }
-
-.report-management .filters .flair-checkbox .checkbox-icon {
-  vertical-align: 6px; }
+.report-management {
+  margin-top: 16px; }
+  .report-management .filters .report-name {
+    height: 35px; }
+  .report-management .filters .search-icon {
+    margin-top: 35px;
+    width: 25px;
+    height: 25px;
+    fill: #439dd3; }
+  .report-management .filters .flair-checkbox .checkbox-icon {
+    vertical-align: 6px; }
 
 .report-actions svg {
   width: 19px;
@@ -6657,7 +6662,12 @@ input.select2-active {
   z-index: 10;
   transition: 400ms all ease; }
 
-#report-management svg, #report-management img {
+#report-management .tabs-left {
+  background: #fff; }
+  #report-management .tabs-left .tab-left {
+    border: 1px solid #ededed; }
+
+#report-management .svg-icon {
   width: 19px;
   height: 19px;
   margin: 5px;
@@ -6666,7 +6676,7 @@ input.select2-active {
 #report-management .alerts-tabs {
   display: flex;
   position: relative;
-  margin-left: 13px;
+  margin-left: -1px;
   z-index: 0; }
   #report-management .alerts-tabs .tab {
     min-width: 0;
@@ -6716,7 +6726,7 @@ input.select2-active {
 #report-management .configuration .fbibox-content {
   background-color: #ffffff;
   color: inherit;
-  padding: 1px;
+  padding: 0px;
   margin-top: 20px; }
 
 #report-management #email-setting {
@@ -6744,7 +6754,9 @@ input.select2-active {
 
 #report-management #openTicketScheduler {
   color: #71767a;
-  fill: #404345; }
+  fill: #404345;
+  height: 19px;
+  width: 19px; }
 
 #report-management #refreshTicket {
   padding: 6px 0px;

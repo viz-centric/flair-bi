@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -26,14 +26,14 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("datasources");
                             $translatePartialLoader.addPart("global");
                             return $translate.refresh();
                         }
                     ],
                     datasourceFilter: [
-                        function() {
+                        function () {
                             return null;
                         }
                     ]
@@ -65,7 +65,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("datasources");
                             return $translate.refresh();
                         }
@@ -73,7 +73,7 @@
                     entity: [
                         "$stateParams",
                         "Datasources",
-                        function($stateParams, Datasources) {
+                        function ($stateParams, Datasources) {
                             return Datasources.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -81,7 +81,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "datasources",
                                 params: $state.params,
@@ -104,7 +104,7 @@
                 resolve: {
                     dashboardFilter: [
                         "$stateParams",
-                        function($stateParams) {
+                        function ($stateParams) {
                             return {
                                 "dashboardDatasource.id": $stateParams.id
                             };
@@ -113,7 +113,6 @@
                 }
             })
             .state("datasources-detail.edit", {
-                parent: "datasources-detail",
                 url: "/detail/edit",
                 data: {
                     authorities: ["UPDATE_DATASOURCES_APPLICATION"]
@@ -122,7 +121,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -134,7 +133,7 @@
                                 resolve: {
                                     entity: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -143,7 +142,7 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go(
                                         "^",
                                         {},
@@ -152,7 +151,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -160,7 +159,6 @@
                 ]
             })
             .state("datasources.new", {
-                parent: "datasources",
                 url: "/new",
                 data: {
                     authorities: ["WRITE_DATASOURCES_APPLICATION"]
@@ -169,7 +167,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -179,7 +177,7 @@
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {
-                                    entity: function() {
+                                    entity: function () {
                                         return {
                                             name: null,
                                             lastUpdated: null,
@@ -191,12 +189,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("datasources", null, {
                                         reload: "datasources"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("datasources");
                                 }
                             );
@@ -204,7 +202,6 @@
                 ]
             })
             .state("datasources.edit", {
-                parent: "datasources",
                 url: "/{id}/edit",
                 data: {
                     authorities: ["UPDATE_DATASOURCES_APPLICATION"]
@@ -213,7 +210,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -225,7 +222,7 @@
                                 resolve: {
                                     entity: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -234,12 +231,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("datasources", null, {
                                         reload: "datasources"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -247,7 +244,6 @@
                 ]
             })
             .state("datasources.delete", {
-                parent: "datasources",
                 url: "/{id}/delete",
                 data: {
                     authorities: ["DELETE_DATASOURCES_APPLICATION"]
@@ -256,7 +252,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -267,7 +263,7 @@
                                 resolve: {
                                     entity: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -275,7 +271,7 @@
                                     ],
                                     deleteInfo: [
                                         "Datasources",
-                                        function(Datasources) {
+                                        function (Datasources) {
                                             return Datasources.deleteInfo({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -284,12 +280,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("datasources", null, {
                                         reload: "datasources"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );

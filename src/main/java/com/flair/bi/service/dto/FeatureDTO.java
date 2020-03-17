@@ -30,4 +30,6 @@ public class FeatureDTO {
 
     private Long functionId;
 
+    private Boolean favouriteFilter;
+
 }

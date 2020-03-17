@@ -35,12 +35,6 @@
                 }
             },
             resolve: {
-                authorize: [
-                    "Auth",
-                    function(Auth) {
-                        return Auth.authorize();
-                    }
-                ],
                 translatePartialLoader: [
                     "$translate",
                     "$translatePartialLoader",

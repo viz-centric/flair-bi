@@ -3,10 +3,10 @@
 
     var jhiAlertError = {
         template: '<div class="alerts" ng-cloak="">' +
-        '<div ng-repeat="alert in $ctrl.alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
-        '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close($ctrl.alerts)"><pre>{{ alert.msg }}</pre></uib-alert>' +
-        '</div>' +
-        '</div>',
+            '<div ng-repeat="alert in $ctrl.alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+            '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close($ctrl.alerts)"><pre>{{ alert.msg }}</pre></uib-alert>' +
+            '</div>' +
+            '</div>',
         controller: jhiAlertErrorController
     };
 
@@ -55,7 +55,7 @@
                     var entityKey = httpResponse.headers(headers[1]);
                     if (errorHeader && typeof entityKey === 'string') {
                         var entityName = $translate.instant('global.menu.entities.' + entityKey);
-                        addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
+                        addErrorAlert(errorHeader, errorHeader, { entityName: entityName });
                     } else if (httpResponse.data && httpResponse.data.fieldErrors) {
                         for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
                             var fieldError = httpResponse.data.fieldErrors[i];
@@ -68,7 +68,7 @@
                             if ($translate.instant(featureSpecificText)) {
                                 errorKey = featureSpecificText;
                             }
-                            addErrorAlert(defaultMessage, errorKey, {fieldName: fieldName});
+                            addErrorAlert(defaultMessage, errorKey, { fieldName: fieldName });
                         }
                     } else if (httpResponse.data && httpResponse.data.message) {
                         addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);

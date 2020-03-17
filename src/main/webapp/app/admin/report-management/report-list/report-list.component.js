@@ -12,18 +12,28 @@
             }
         });
 
-    reportList.$inject = ['User', 'schedulerService', 'ChannelService',
-        'AlertService', '$rootScope', '$state',
-        'AccountDispatch', 'ReportManagementUtilsService', 'ComponentDataService', '$uibModal', '$location', '$stateParams'];
+    reportList.$inject = ['schedulerService',
+        '$rootScope',
+        'AccountDispatch',
+        'ReportManagementUtilsService',
+        'ComponentDataService',
+        '$stateParams'];
 
-    function reportList(User, schedulerService, ChannelService,
-        AlertService, $rootScope, $state, AccountDispatch, ReportManagementUtilsService, ComponentDataService, $uibModal, $location, $stateParams) {
+    function reportList(schedulerService,
+        $rootScope,
+        AccountDispatch,
+        ReportManagementUtilsService,
+        ComponentDataService,
+        $stateParams) {
         var vm = this;
 
         vm.reports = [];
 
         vm.page = 1;
         vm.totalItems = 0;
+
+        vm.fromDate = null;
+        vm.toDate = null;
 
         vm.links = null;
         vm.loadPage = loadPage;
@@ -45,7 +55,7 @@
         vm.dateFormat = 'yyyy-MM-dd';
         vm.user = null;
 
-        activate();
+        vm.$onInit = activate;
         ///////////////////////////////////////
 
         function activate() {

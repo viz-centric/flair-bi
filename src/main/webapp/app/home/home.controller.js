@@ -103,9 +103,10 @@
         }
 
         function getReleaseAlerts() {
-        alertsService.getAllReleaseAlerts().then(function(result){
+            alertsService.getAllReleaseAlerts().then(function(result){
                 vm.allReleaseAlerts=result.data;
                 vm.totalReleaseAlerts=0;
+                vm.menuItems = adminListService.getHomeList();
             });
         }
 

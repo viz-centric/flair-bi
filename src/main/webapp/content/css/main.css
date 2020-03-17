@@ -6425,7 +6425,10 @@ input.select2-active {
 =======
     margin-right: 5px;
     margin-top: 5px; }
+<<<<<<< HEAD
 >>>>>>> 28865138... 1)Data constraint UI issue 2)Scheduler webhooks list going out of modal for non admin user 3)scheduler icons are big in task logger 4) show report workbench for non admin user
+=======
+>>>>>>> 45d33bd9... syntax error : merge conflict issue
 
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;

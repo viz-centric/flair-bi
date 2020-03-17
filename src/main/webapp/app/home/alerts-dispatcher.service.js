@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('AlertsDispatcherService', AlertsDispatcherService);
 
-    alertsService.$inject = [];
+    AlertsDispatcherService.$inject = [];
 
-    function AlertsDispatcherService($) {
+    function AlertsDispatcherService() {
         var releaseTotalAlertsCount=0;
         var service = {
             setReleaseTotalAlertsCount:setReleaseTotalAlertsCount,

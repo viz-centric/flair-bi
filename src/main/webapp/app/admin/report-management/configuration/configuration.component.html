@@ -4,7 +4,7 @@
         <div class="col-xs-2">
 
             <ul class="nav tabs-left">
-                <li class="tab email-tab  ng-class:{'tab-active':vm.alertTab =='email'}"
+                <li class="tab-left email-tab  ng-class:{'tab-active':vm.alertTab =='email'}"
                     ng-click="vm.configurationTabClick('email')">
                     <a class="text-center" data-toggle="tab">
                         <i class="fa fa-envelope active" id="email-setting" aria-hidden="true"></i>
@@ -12,7 +12,7 @@
                     </a>
                     <div class="blue-line"></div>
                 </li>
-                <li class="tab team-tab  ng-class:{'tab-active':vm.alertTab =='team'}"
+                <li class="tab-left team-tab  ng-class:{'tab-active':vm.alertTab =='team'}"
                     ng-click="vm.configurationTabClick('team')">
                     <a class="text-center" data-toggle="tab">
                         <img id="microsoft-team" src="../../../content/svgs/Teams.svg">
@@ -21,7 +21,7 @@
                     <div class="blue-line"></div>
                 </li>
                 <li ng-click="vm.configurationTabClick('jira')"
-                    class="tab jira-tab  ng-class:{'tab-active':vm.alertTab =='jira'}">
+                    class="tab-left jira-tab  ng-class:{'tab-active':vm.alertTab =='jira'}">
                     <a class="text-center" data-toggle="tab">
 
                         <svg id="jira">
@@ -146,7 +146,5 @@
 
             </div>
         </div>
-
     </div>
-
 </div>

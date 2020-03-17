@@ -6667,6 +6667,11 @@ input.select2-active {
   z-index: 10;
   transition: 400ms all ease; }
 
+#report-management .tabs-left {
+  background: #fff; }
+  #report-management .tabs-left .tab-left {
+    border: 1px solid #ededed; }
+
 #report-management .svg-icon {
   width: 19px;
   height: 19px;
@@ -6676,7 +6681,7 @@ input.select2-active {
 #report-management .alerts-tabs {
   display: flex;
   position: relative;
-  margin-left: 13px;
+  margin-left: -1px;
   z-index: 0; }
   #report-management .alerts-tabs .tab {
     min-width: 0;
@@ -6703,7 +6708,7 @@ input.select2-active {
   #report-management .alerts-tabs .tab:hover > .blue-line {
     width: 100% !important; }
   #report-management .alerts-tabs .tab-active {
-    background: #fff; }
+    background: #ededed; }
   #report-management .alerts-tabs .tab-active > .blue-line {
     width: 100% !important; }
 
@@ -6714,7 +6719,7 @@ input.select2-active {
   width: 100% !important; }
 
 #report-management .tab-active {
-  background: #fff; }
+  background: #ededed; }
 
 #report-management .tab-active > .blue-line {
   width: 100% !important; }
@@ -6726,7 +6731,7 @@ input.select2-active {
 #report-management .configuration .fbibox-content {
   background-color: #ffffff;
   color: inherit;
-  padding: 1px;
+  padding: 0px;
   margin-top: 20px; }
 
 #report-management #email-setting {

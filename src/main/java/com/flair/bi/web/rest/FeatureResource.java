@@ -190,7 +190,7 @@ public class FeatureResource {
      * or with status 500 (Internal Server Error) if the feature couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @GetMapping("/features/markFavouriteFilter/")
+    @PutMapping("/features/markFavouriteFilter/")
     @Timed
     public ResponseEntity<?> markFavouriteFilter(@RequestParam  Boolean favouriteFilter, @RequestParam Long id) throws URISyntaxException {
         log.debug("REST request to mark favourite filter : {}", favouriteFilter,id);

@@ -366,7 +366,7 @@
             <div id="release-container" class="release-container" ng-show="vm.alertTab =='releases'">
                 <release-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts" />
             </div>
-            <div ng-show="vm.totalReleaseAlerts==0">
+            <div ng-show="vm.totalReleaseAlerts==0 && vm.alertTab =='releases'">
                 <no-data-found-small-component  message="No releases available"></no-data-found-small-component >
             </div>
             <div id="notification-container" class="notification-container" alert="vm.alertTab" ng-show="vm.alertTab =='notifications'">

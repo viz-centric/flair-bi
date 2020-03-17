@@ -6635,17 +6635,17 @@ input.select2-active {
   bottom: 0;
   right: 0; }
 
-.report-management .filters .report-name {
-  height: 35px; }
-
-.report-management .filters .search-icon {
-  margin-top: 35px;
-  width: 25px;
-  height: 25px;
-  fill: #439dd3; }
-
-.report-management .filters .flair-checkbox .checkbox-icon {
-  vertical-align: 6px; }
+.report-management {
+  margin-top: 16px; }
+  .report-management .filters .report-name {
+    height: 35px; }
+  .report-management .filters .search-icon {
+    margin-top: 35px;
+    width: 25px;
+    height: 25px;
+    fill: #439dd3; }
+  .report-management .filters .flair-checkbox .checkbox-icon {
+    vertical-align: 6px; }
 
 .report-actions svg {
   width: 19px;

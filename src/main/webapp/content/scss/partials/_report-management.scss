@@ -41,6 +41,12 @@
     z-index: 10;
     transition: 400ms all ease;
   }
+  .tabs-left{
+    background:#fff;
+    .tab-left{
+      border: 1px solid #ededed;
+    }
+  }
   .svg-icon{
     width: 19px;
     height: 19px;
@@ -51,7 +57,7 @@
   .alerts-tabs {
     display: flex;
     position: relative;
-    margin-left: 13px;
+    margin-left:-1px;
     z-index: 0;
     .tab {
       min-width: 0;
@@ -112,7 +118,7 @@
     .fbibox-content {
       background-color: #ffffff;
       color: inherit;
-      padding: 1px;
+      padding: 0px;
       margin-top: 20px;
     }
   }
@@ -145,6 +151,8 @@
   #openTicketScheduler {
     color: lighten($icons-color, 20%);
     fill: $icons-color;
+    height: 19px;
+    width:19px;
   }
   #refreshTicket {
     padding: 6px 0px;

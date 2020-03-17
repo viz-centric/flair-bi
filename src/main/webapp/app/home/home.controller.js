@@ -6,13 +6,12 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = ['$scope', 'Principal', 'LoginService',
-        '$state', 'Information', '$rootScope', 'alertsService', 'screenDetectService', 'adminListService', 'AccountDispatch', 'proxyGrpcService'
+        '$state', 'Information', 'ViewWatches', 'Views', 'Dashboards','$rootScope','alertsService','screenDetectService','adminListService','AccountDispatch','proxyGrpcService','AlertsDispatcherService'
     ];
 
     function HomeController($scope, Principal, LoginService,
-        $state, Information, $rootScope, alertsService, screenDetectService, adminListService, AccountDispatch, proxyGrpcService) {
+        $state, Information, ViewWatches, Views, Dashboards,$rootScope,alertsService,screenDetectService,adminListService,AccountDispatch,proxyGrpcService,AlertsDispatcherService) {
         var vm = this;
-
         vm.account = null;
         vm.isAuthenticated = null;
         vm.login = LoginService.open;
@@ -98,13 +97,15 @@
             getAccount();
             onRecentlyBox();
             angular.element($("#on-recently-box1")).triggerHandler("click");
-            vm.menuItems = adminListService.getHomeList();
+            vm.menuItems=adminListService.getHomeList();
+            registerOnSetTotalReleaseAlerts();
         }
 
         function getReleaseAlerts() {
-            alertsService.getAllReleaseAlerts().then(function (result) {
-                vm.allReleaseAlerts = result.data;
-            });
+        alertsService.getAllReleaseAlerts().then(function(result){
+                vm.allReleaseAlerts=result.data;
+                vm.totalReleaseAlerts=0;
+                vm.menuItems = adminListService.getHomeList();
         }
 
         function getScheduledReports() {
@@ -125,6 +126,16 @@
             } else {
                 return flag == false ? 'block' : 'none';
             }
+        }
+
+        function registerOnSetTotalReleaseAlerts() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:setTotalReleaseAlerts",
+                function() {
+                    vm.totalReleaseAlerts=AlertsDispatcherService.getReleaseTotalAlertsCount();
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
         }
 
 

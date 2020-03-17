@@ -12,9 +12,9 @@
             }
         });
 
-    releaseSetController.$inject = ['$scope', '$state','alertsService'];
+    releaseSetController.$inject = ['$scope', '$state','alertsService','AlertsDispatcherService','$rootScope'];
 
-    function releaseSetController($scope, $state,alertsService) {
+    function releaseSetController($scope, $state,alertsService,AlertsDispatcherService,$rootScope) {
         var vm = this;
         vm.toggleNotifications=toggleNotifications;
         vm.pageSize = 5;
@@ -32,6 +32,12 @@
             vm.alerts=vm.releaseAlert.alerts;
             vm.count=vm.releaseAlert.count;
             vm.noOfPages=Math.ceil(vm.count/vm.pageSize);
+            setTotalReleaseAlerts(vm.count);
+        }
+
+        function setTotalReleaseAlerts(count){
+            AlertsDispatcherService.setReleaseTotalAlertsCount(count);
+            $rootScope.$broadcast('flairbiApp:setTotalReleaseAlerts');
         }
         
         function toggleNotifications(){
@@ -55,6 +61,7 @@
         function onGetReleaseAlertsCountSuccess(result){
             vm.count=result.data;
             vm.noOfPages=Math.ceil(vm.count/vm.pageSize);
+            setTotalReleaseAlerts(vm.count);
         }
 
         function onGetReleaseAlertsCountError(error){

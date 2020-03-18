@@ -5,12 +5,10 @@
         .module('flairbiApp')
         .controller('FilterController', FilterController);
 
-    FilterController.$inject = ['$scope', '$timeout', '$state', 'Auth', 'Principal', 'ProfileService', 'LoginService',
-        'Visualizations', 'Views', '$stateParams', '$rootScope', 'ExecutorFactory'
+    FilterController.$inject = ['$scope', '$timeout', '$rootScope', 'ExecutorFactory', '$transitions'
     ];
 
-    function FilterController($scope, $timeout, $state, Auth, Principal, ProfileService, LoginService,
-        Visualizations, Views, $stateParams, $rootScope, ExecutorFactory) {
+    function FilterController($scope, $timeout, $rootScope, ExecutorFactory, $transitions) {
         var vm = this;
         vm.filterData = [];
         vm.fieldList = [];
@@ -154,7 +152,7 @@
                     for (var a = 0; a < 150; a++) {
                         try {
                             $('.search_test')[idSel.split("_")[0]].sumo.remove(a);
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                     if ($(this).val().toString().trim() != "") {
                         vm.filterSQL = '';
@@ -237,7 +235,7 @@
             for (var f = 0; f < $('.search_test').length; f++) {
                 try {
                     $('.search_test')[f].sumo.unSelectAll();
-                } catch (e) {}
+                } catch (e) { }
             }
         })
 
@@ -263,10 +261,9 @@
                 up: false
             });
         })
-
-        $rootScope.$on('$stateChangeStart',
-            function (event, toState, toParams, fromState, fromParams, options) {
-                $("#filterarea").hide();
-            })
+        //TODO can we write this somehow different?
+        $transitions.onStart({ to: '**' }, function (_transition) {
+            $("#filterarea").hide();
+        });
     }
 })();

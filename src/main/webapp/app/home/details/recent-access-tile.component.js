@@ -22,7 +22,6 @@
         ////////////////
 
         vm.$onInit = function () {
-            console.log(vm.account);
         };
         vm.$onChanges = function (_changesObj) { };
         vm.$onDestroy = function () { };

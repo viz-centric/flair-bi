@@ -13,12 +13,11 @@
             }
         });
 
-    WelcomeTileController.$inject = ['$rootScope', 'adminListService'];
-    function WelcomeTileController($rootScope, adminListService) {
+    WelcomeTileController.$inject = ['adminListService'];
+    function WelcomeTileController(adminListService) {
         var vm = this;
 
-        vm.expandTile = expandTile;
-        vm.expandFlairInsight = { id: 4 };
+
         vm.onRecentlyBox1 = onRecentlyBox1;
         vm.onRecentlyBox2 = onRecentlyBox2;
         vm.menuItems = [];
@@ -33,9 +32,6 @@
         vm.$onChanges = function (_changesObj) { };
         vm.$onDestroy = function () { };
 
-        function expandTile(info) {
-            $rootScope.$broadcast('flairbiApp:onClickTile', info.id);
-        }
 
         function onRecentlyBox() {
             var $innerWrapper = $('.recently-block');

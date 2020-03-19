@@ -19,7 +19,6 @@
 
 
         vm.datasources = [];
-
         vm.transition = transition;
         vm.page = 1;
         vm.currentSearch = null;

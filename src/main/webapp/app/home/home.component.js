@@ -10,19 +10,19 @@
         });
 
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService',
+    HomeController.$inject = ['$scope', 'Principal',
         '$state', 'Information', 'alertsService', 'screenDetectService', 'adminListService',
-        'AccountDispatch', 'proxyGrpcService', 'AlertsDispatcherService', 'ViewWatches'
+        'AccountDispatch', 'proxyGrpcService', 'AlertsDispatcherService',
+        '$transitions'
     ];
 
-    function HomeController($scope, Principal, LoginService,
+    function HomeController($scope, Principal,
         $state, Information, alertsService, screenDetectService, adminListService,
-        AccountDispatch, proxyGrpcService, AlertsDispatcherService, ViewWatches) {
+        AccountDispatch, proxyGrpcService, AlertsDispatcherService,
+        $transitions) {
         var vm = this;
         vm.account = null;
         vm.isAuthenticated = null;
-        vm.login = LoginService.open;
-        vm.register = register;
         vm.recentlyCreatedViews = [];
         vm.expandTile = expandTile;
         vm.toggleAlerts = toggleAlerts;
@@ -30,7 +30,6 @@
         vm.allReleaseAlerts = [];
         vm.reports = [];
         vm.alertTab = '';
-        vm.expandFlairInsight = { id: 4 };
 
         var tileMapping = {
             0: 'home',
@@ -43,7 +42,9 @@
             7: 'home.recentAccessViews',
             8: 'home.recentAccessBookmarks'
         },
-            reverseTileMapping = reverse(tileMapping);
+            reverseTileMapping = reverse(tileMapping),
+            tileUpdateHookUnsub = angular.noop,
+            authenticationSuccessUnsub = angular.noop;
 
 
         function reverse(obj) {
@@ -56,18 +57,27 @@
             return newObj;
         }
 
-        vm.$onInit = function () {
+        function updateTile(state) {
             vm.currentTile = {
-                id: reverseTileMapping[$state.current.name],
-                state: $state.current.name
+                id: reverseTileMapping[state.name],
+                state: state.name
             };
-            vm.viewWatches = ViewWatches.query({
-                page: 0,
-                size: 5,
-                sort: 'watchTime,desc'
+        }
+
+        vm.$onInit = function () {
+            tileUpdateHookUnsub = $transitions.onEnter({ to: 'home.**' }, function (transition) {
+                updateTile(transition.to());
             });
+            authenticationSuccessUnsub = $scope.$on('authenticationSuccess', function () {
+                getAccount();
+            });
+            updateTile($state.current);
             activate();
         }
+        vm.$onDestroy = function () {
+            tileUpdateHookUnsub();
+            authenticationSuccessUnsub();
+        };
 
         function toggleAlerts(alertTab) {
             vm.alertTab = alertTab;
@@ -99,12 +109,7 @@
 
         function activate() {
             loadInformation();
-            $scope.$on('authenticationSuccess', function () {
-                getAccount();
-            });
-
             getAccount();
-            angular.element($("#on-recently-box1")).triggerHandler("click");
             vm.menuItems = adminListService.getHomeList();
             registerOnSetTotalReleaseAlerts();
         }
@@ -119,10 +124,6 @@
 
         function getScheduledReports() {
             proxyGrpcService.getSchedulerReportsAndEngineData(3, 0);
-        }
-
-        function register() {
-            $state.go('register');
         }
 
         function loadInformation() {

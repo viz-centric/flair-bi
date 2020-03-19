@@ -1,8 +1,6 @@
 (function () {
     'use strict';
 
-
-
     angular
         .module('flairbiApp')
         .component('bookmarksTileComponent', {

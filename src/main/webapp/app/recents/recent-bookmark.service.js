@@ -10,7 +10,7 @@
     function recentBookmarkService($http) {
         var service = {
             saveRecentBookmark: saveRecentBookmark,
-            getRecentBookmark:getRecentBookmark
+            getRecentBookmark: getRecentBookmark
         };
 
         return service;
@@ -18,16 +18,16 @@
         ////////////////
         function saveRecentBookmark(bookmarkId, viewId) {
             return $http({
-                url: 'api/save-recent-bookmark/' + bookmarkId + '/'+viewId,
+                url: 'api/save-recent-bookmark/' + bookmarkId + '/' + viewId,
                 method: 'GET'
             });
         }
         //bookmark-watches
         function getRecentBookmark(predicate) {
             return $http({
-                url: 'api/bookmark-watches'+predicate,
+                url: 'api/bookmark-watches' + predicate,
                 method: 'GET',
-                data :predicate 
+                data: predicate
             });
         }
     }

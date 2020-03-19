@@ -1,5 +1,5 @@
 (function () {
-    'use strict'; 
+    'use strict';
 
     angular
         .module('flairbiApp')
@@ -13,16 +13,21 @@
             url: '/searched-results/{searchCriteria}',
             views: {
                 'content@': {
-                    templateUrl: 'app/searched-results/searched-results.html',
-                    controller: 'SearchedResultsController',
-                    controllerAs: 'vm'
-                   
+                    component: 'searchedResultsComponent'
                 },
                 'topnavbar@': {
                     templateUrl: 'app/home/home-topnavbar.html',
                     controller: 'HomeTopNavBarController',
                     controllerAs: 'vm'
                 }
+            },
+            resolve: {
+                mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('home');
+                    $translatePartialLoader.addPart('views');
+                    $translatePartialLoader.addPart('dashboards');
+                    return $translate.refresh();
+                }]
             }
         });
     }

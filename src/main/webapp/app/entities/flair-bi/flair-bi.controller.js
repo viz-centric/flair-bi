@@ -40,7 +40,8 @@
         "$translate",
         "$window",
         "VisualizationUtils",
-        "D3Utils"
+        "D3Utils",
+        "favouriteFilterService"
     ];
 
     function FlairBiController(
@@ -78,7 +79,8 @@
         $translate,
         $window,
         VisualizationUtils,
-        D3Utils
+        D3Utils,
+        favouriteFilterService
     ) {
         var vm = this;
         var editMode = false;
@@ -241,7 +243,8 @@
             if (data.headers.request === "filters") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
-                    metaData.data
+                    metaData.data,
+                    favouriteFilterService.getFavouriteFilter()
                 );
             } else {
                 var contentId = "content-" + data.headers.queryId;

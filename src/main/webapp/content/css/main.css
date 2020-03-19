@@ -5596,10 +5596,10 @@ ui bootstrap tweaks
 
 .filter-area .filter-element label {
   font-weight: 600;
-  margin-left: .5vw; }
+  margin-left: 0.5vw; }
 
 .filter-area .filter-element tags-input.filter-input {
-  margin: .5vw; }
+  margin: 0.5vw; }
 
 .filter-area .dimensions-container {
   padding: 10px 5px;
@@ -5611,7 +5611,51 @@ ui bootstrap tweaks
   padding-left: 2px; }
   .filter-area .filter-button .btn {
     margin-bottom: 10px;
-    margin-left: .5vw; }
+    margin-left: 0.5vw; }
+
+.filter-area .favouritefilter {
+  margin: auto; }
+
+.filter-element-widget {
+  margin-bottom: 5px;
+  padding-bottom: 5px; }
+  .filter-element-widget md-list {
+    padding: 0px;
+    max-height: 150px;
+    overflow-y: auto; }
+  .filter-element-widget md-list-item.active {
+    background-color: #1c84c6;
+    color: #ffffff; }
+  .filter-element-widget .md-list-item-inner p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; }
+  .filter-element-widget .md-button {
+    line-height: 24px !important;
+    min-height: 5px !important; }
+  .filter-element-widget .m-auto {
+    margin: auto !important; }
+  .filter-element-widget md-list-item {
+    min-height: 15px !important;
+    margin-bottom: 1px; }
+  .filter-element-widget md-list-item::before,
+  .filter-element-widget md-list-item .md-list-item-inner::before {
+    min-height: 15px !important; }
+  .filter-element-widget md-list-item .md-list-item-inner {
+    min-height: 15px !important;
+    margin-bottom: 1px; }
+  .filter-element-widget fieldset {
+    padding: 0.35em 0.625em 0.75em !important;
+    min-width: 0px !important;
+    border: 1px solid #c0c0c0 !important; }
+  .filter-element-widget legend {
+    width: auto;
+    font-size: 14px;
+    margin-bottom: 0px;
+    border-bottom: 0px; }
+  .filter-element-widget tags-input-grpc {
+    margin: 0.5vw 0 !important;
+    margin-top: 0px !important; }
 
 .steps-indicator {
   margin-bottom: 50px;

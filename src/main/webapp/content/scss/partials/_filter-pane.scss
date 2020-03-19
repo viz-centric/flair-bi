@@ -1,24 +1,89 @@
 .filter-area {
-    .filter-element {
-        label {
-            font-weight: 600;
-            margin-left: .5vw;
-        }
-        tags-input.filter-input {
-            margin: .5vw;
-        }
+  .filter-element {
+    label {
+      font-weight: 600;
+      margin-left: 0.5vw;
     }
-    .dimensions-container {
-        padding: 10px 5px;
-        height: 100%;
-        max-height: 75%;
+    tags-input.filter-input {
+      margin: 0.5vw;
     }
-    .filter-button {
-        margin: 0;
-        padding-left: 2px;
-        .btn {
-            margin-bottom: 10px;
-            margin-left: .5vw;
-        }
+  }
+  .dimensions-container {
+    padding: 10px 5px;
+    height: 100%;
+    max-height: 75%;
+  }
+  .filter-button {
+    margin: 0;
+    padding-left: 2px;
+    .btn {
+      margin-bottom: 10px;
+      margin-left: 0.5vw;
     }
+  }
+  .favouritefilter {
+    margin: auto;
+  }
+}
+
+.filter-element-widget {
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+
+  md-list {
+    padding: 0px;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+
+  md-list-item.active {
+    background-color: $blue;
+    color: $info-card-content;
+  }
+
+  .md-list-item-inner p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .md-button {
+    line-height: 24px !important;
+    min-height: 5px !important;
+  }
+
+  .m-auto {
+    margin: auto !important;
+  }
+
+  md-list-item {
+    min-height: 15px !important;
+    margin-bottom: 1px;
+  }
+
+  md-list-item::before,
+  md-list-item .md-list-item-inner::before {
+    min-height: 15px !important;
+  }
+
+  md-list-item .md-list-item-inner {
+    min-height: 15px !important;
+    margin-bottom: 1px;
+  }
+  fieldset {
+    padding: 0.35em 0.625em 0.75em !important;
+    min-width: 0px !important;
+    border: 1px solid #c0c0c0 !important;
+  }
+  legend {
+    width: auto;
+    font-size: 14px;
+    margin-bottom: 0px;
+    border-bottom: 0px;
+  }
+  
+  tags-input-grpc {
+    margin: 0.5vw 0 !important;
+    margin-top: 0px !important;
+  }
 }

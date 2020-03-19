@@ -3,20 +3,21 @@
 
     angular
         .module('flairbiApp')
-        .component('filterElementGrpcComponent', {
-            templateUrl: 'app/entities/flair-bi/filter/filter-element-grpc.component.html',
-            controller: filterElementGrpcController,
+        .component('filterElementGrpcWidgetComponent', {
+            templateUrl: 'app/entities/flair-bi/filter/filter-element-grpc-widget.component.html',
+            controller: filterElementGrpcWidgetController,
             controllerAs: 'vm',
             bindings: {
                 dimension: '=',
                 view: '=',
-                dimensions: '='
+                dimensions: '=',
+                list: '='
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService'];
+    filterElementGrpcWidgetController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'Features'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService) {
+    function filterElementGrpcWidgetController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, Features) {
         var vm = this;
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         vm.$onInit = activate;
@@ -27,13 +28,48 @@
         vm.onDateChange = onDateChange;
         vm.dateRangeReload = false;
         vm.removeTagFromFilterList = removeTagFromFilterList;
-        vm.addToFavourite = addToFavourite;
-        vm.checkFavouriteFilter = checkFavouriteFilter;
+        vm.addFilter = addFilter;
+        vm.isActive = isActive;
+
+        function isActive(filter) {
+            var myFilters = filterParametersService.getSelectedFilter()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
+            if (myFilters && myFilters.length > 0) {
+                if (myFilters.indexOf(filter) !== -1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        ///////////
+        function addFilter(filter) {
+            var filterParameters = filterParametersService.getSelectedFilter();
+            if (!filterParameters[vm.dimension.name]) {
+                filterParameters[vm.dimension.name] = [];
+            }
+
+            if (filterParameters[vm.dimension.name].indexOf(filter) !== -1) {
+                filterParameters[vm.dimension.name].splice(filterParameters[vm.dimension.name].indexOf(filter.name), 1);
+            }
+            else {
+                filterParameters[vm.dimension.name].push(filter);
+            }
+
+            filterParameters[vm.dimension.name]._meta = {
+                dataType: vm.dimension.type,
+                valueType: 'valueType'
+            };
+            filterParametersService.saveSelectedFilter(filterParameters);
+            vm.isActive(filter);
+
+            array_move(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
 
 
-        ////////////////
+        }/////
 
         function activate() {
+            receivedMetaData();
             var unsub = $scope.$on('flairbiApp:filter-input-refresh', function (e) {
                 refresh();
             });
@@ -44,6 +80,7 @@
 
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
+            vm.load("", vm.dimension, true);
         }
 
         function clear() {
@@ -52,28 +89,6 @@
 
         function resetTimezone(startDate) {
             return startDate;
-        }
-
-        function checkFavouriteFilter() {
-            return vm.dimension.favouriteFilter === true ? 'fa fa-star' : 'fa fa-star-o';
-        }
-        function addToFavourite(id) {
-            favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
-                .then(function (data) {
-                    vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
-                    var info = {
-                        text: "Dimensions " + opration + " from favourit filter",
-                        title: "Saved"
-                    }
-                    $rootScope.showSuccessToast(info);
-                }).catch(function (error) {
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
-                });
         }
 
         function onDateChange(startDate, endDate) {
@@ -95,6 +110,27 @@
             }
             return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
+
+        function receivedMetaData() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:filters-meta-Data",
+                function (event, filter) {
+                    if (favouriteFilterService.getFavouriteFilter()) {
+                        var obj = filter[0];
+                        var dimensionName = '';
+                        for (var i in obj) {
+                            dimensionName = i;
+                            break;
+                        }
+                        var retVal = filter.map(function (item) {
+                            return item[dimensionName];
+                        });
+                        vm.list[dimensionName] = retVal;
+                    }
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
+        };
 
         function registerRemoveTag() {
             var unsubscribe = $scope.$on(
@@ -159,7 +195,7 @@
             $rootScope.$broadcast('flairbiApp:filter');
         }
 
-        function load(q, dimension) {
+        function load(q, dimension, favouriteFilter = false) {
             var vId = dimension.id;
             var query = {};
             query.fields = [{ name: dimension.name }];
@@ -176,7 +212,7 @@
             }
             query.distinct = true;
             query.limit = 100;
-            favouriteFilterService.setFavouriteFilter(false);
+            favouriteFilterService.setFavouriteFilter(favouriteFilter);
             proxyGrpcService.forwardCall(
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,
@@ -217,9 +253,12 @@
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
             if (myFilters && myFilters.length > 0) {
-                vm.dimension.selected = myFilters.map(function (item) {
+                vm.dimension.selected = myFilters.map(function (item, i) {
                     var newItem = {};
                     newItem['text'] = item;
+
+                    array_move(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
+
                     return newItem;
                 });
             } else {
@@ -254,6 +293,17 @@
                 valueType: 'dateRangeValueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
+        }
+
+        function array_move(arr, old_index, new_index) {
+            if (new_index >= arr.length) {
+                var k = new_index - arr.length + 1;
+                while (k--) {
+                    arr.push(undefined);
+                }
+            }
+            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+            return arr;
         }
 
     }

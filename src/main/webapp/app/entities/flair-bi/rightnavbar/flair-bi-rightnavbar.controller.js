@@ -59,8 +59,8 @@
         vm.onDataclose = onDataclose;
         vm.dropCallback = dropCallback;
         vm.getSelectedItem = getSelectedItem;
-
-
+        vm.onWidgetsOpen = onWidgetsOpen;
+        vm.onWidgetsClose = onWidgetsClose;
         activate();
 
 
@@ -83,6 +83,8 @@
             registerRightNavBarDataOpen();
             registerOnDataPropertiesUpdate();
             registerOnChartPropertiesUpdate();
+            registerToggleWidgetsOn();
+            registerToggleWidgetsOff();
         }
 
         ////////////////
@@ -224,6 +226,28 @@
         }
 
 
+        function registerToggleWidgetsOn() {
+            var toggleWidgetsUnsubscribeOn = $scope.$on(
+                "flairbiApp:toggleWidgets-on",
+                function (event, result) {
+                    openWidgets();
+                }
+            );
+            $scope.$on("$destroy", toggleWidgetsUnsubscribeOn);
+        }
+
+        function registerToggleWidgetsOff() {
+            var toggleWidgetsUnsubscribeOff = $scope.$on(
+                "flairbiApp:toggleWidgets-off",
+                function (event, result) {
+                    vm.toggleWidgets = false;
+                    hideSidebar();
+                }
+            );
+            $scope.$on("$destroy", toggleWidgetsUnsubscribeOff);
+        }
+
+
         function registerTogglePropertiesOff() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleProperties-off",
@@ -301,6 +325,27 @@
             $('#slider').css('display', 'block');
         }
 
+        function openWidgets() {
+            showSideBar();
+            vm.sideBarTab = "widgets";
+            vm.widgetsToggled = true;
+            Features.query({
+                datasource: vm.view.viewDashboard.dashboardDatasource.id,
+                favouriteFilter: true
+            })
+                .$promise
+                .then(function (features) {
+                    vm.FavouriteDimensions = features
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+            $('#slider').css('display', 'block');
+        }
+
         function clearFilters() {
             $rootScope.$broadcast("flairbiApp:clearFilters");
         }
@@ -327,6 +372,9 @@
         function loadDimensions() {
             vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
+            });
+            vm.FavouriteDimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION" && item.favouriteFilter === true;
             });
         }
 
@@ -428,6 +476,16 @@
         function onFiltersClose() {
             resetWidgetEntry();
             $rootScope.$broadcast("flairbiApp:toggleFilters-off");
+        }
+
+        function onWidgetsOpen() {
+            resetWidgetEntry();
+            $rootScope.$broadcast("flairbiApp:toggleWidgets-on");
+        }
+
+        function onWidgetsClose() {
+            resetWidgetEntry();
+            $rootScope.$broadcast("flairbiApp:toggleWidgets-off");
         }
 
         function onPropertiesOpen() {

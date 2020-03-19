@@ -1,19 +1,23 @@
-(function() {
+(function () {
     "use strict";
 
     angular
-        .module("flairbiApp")
-        .controller("HomeTopNavBarController", HomeTopNavBarController);
+        .module('flairbiApp')
+        .component('homeTopNavComponent', {
+            templateUrl: 'app/home/home-topnavbar.component.html',
+            controller: HomeTopNavBarController,
+            controllerAs: 'vm'
+        });
+
 
     HomeTopNavBarController.$inject = [
-        "$rootScope",
         "PERMISSIONS",
         "Principal",
         "$state",
         "$stateParams"
     ];
 
-    function HomeTopNavBarController($rootScope, PERMISSIONS, Principal,$state,$stateParams) {
+    function HomeTopNavBarController(PERMISSIONS, Principal, $state, $stateParams) {
         var vm = this;
 
         vm.search = search;
@@ -32,39 +36,44 @@
             PERMISSIONS.READ_API,
             PERMISSIONS.READ_PERMISSION_MANAGEMENT
         ];
-        vm.hasAnyOfAdministrationPermission = Principal.hasAnyAuthority(
-            vm.administrationPermissions
-        );
-        vm.floatSearch=floatSearch;
-        vm.isSearchPage=isSearchPage;
 
-        activate();
+        vm.floatSearch = floatSearch;
+        vm.isSearchPage = isSearchPage;
+
+        vm.$onInit = function () {
+            vm.hasAnyOfAdministrationPermission = Principal.hasAnyAuthority(
+                vm.administrationPermissions
+            );
+            activate();
+        }
+
+
 
         ////////////////
 
         function activate() {
-            if(vm.searchCriteria && isSearchPage()){
+            if (vm.searchCriteria && isSearchPage()) {
                 floatSearch();
             }
         }
 
-        function isSearchPage(){
-            if($state.current.name==='searched-results'){
+        function isSearchPage() {
+            if ($state.current.name === 'searched-results') {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
 
-        function floatSearch(){
+        function floatSearch() {
             $(".search-right-icon").addClass("search-right-icon-active");
             $(".home-header-search-box").show();
-            $(".home-header-search-box input").focus(); 
+            $(".home-header-search-box input").focus();
             $(".search-right-icon").hide();
         }
 
         function search() {
-            $state.go('searched-results',{searchCriteria: vm.searchCriteria});
+            $state.go('searched-results', { searchCriteria: vm.searchCriteria });
         }
 
         function reset() {

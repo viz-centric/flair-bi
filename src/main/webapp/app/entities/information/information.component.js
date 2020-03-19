@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").component("informationComponent", {
@@ -6,15 +6,16 @@
         controller: informationController,
         controllerAs: "vm",
         bindings: {
-            information: "="
+            information: "<",
+            active: '<'
         }
     });
 
-    informationController.$inject = ["HttpService","screenDetectService"];
+    informationController.$inject = ["HttpService", "screenDetectService"];
 
-    function informationController(HttpService,screenDetectService) {
+    function informationController(HttpService, screenDetectService) {
         var vm = this;
-        vm.isDesktop=isDesktop;
+        vm.isDesktop = isDesktop;
 
         vm.$onInit = activate;
         ////////////////
@@ -34,9 +35,9 @@
             vm.value = result.data;
         }
 
-        function onCallError() {}
+        function onCallError() { }
 
-        function isDesktop(){
+        function isDesktop() {
             return screenDetectService.isDesktop();
         }
     }

@@ -161,36 +161,11 @@
             }
         }
 
-        function toggle4Boxes(tileId) {
-            vm.show4Boxes = false;
-            angular.forEach(vm.toggleTables, function (value, key) {
-                if (key == 'tile-' + tileId) {
-                    vm.toggleTables['tile-' + tileId] = !vm.toggleTables['tile-' + tileId];
-                    value = !value;
-                } else {
-                    vm.toggleTables[key] = false;
-                }
-                vm.show4Boxes = vm.show4Boxes || value;
-            });
-            isTableVisible();
-        }
+    
 
-        function isTableVisible() {
-            if (vm.show4Boxes) {
-                $("#box-area").hide();
-            } else {
-                $("#box-area").show();
-            }
-        }
+        
 
-        function activeTile(tileId) {
-            removeActiveClass();
-            $('#information-card-' + tileId).addClass("information-card-active");
-        }
-
-        function removeActiveClass() {
-            $('.information-card').removeClass("information-card-active");
-        }
+       
 
         function fetchDashboards() {
             Dashboards.query(function (result) {

@@ -3,18 +3,18 @@
 
     angular
         .module('flairbiApp')
-        .controller('NavbarController', NavbarController);
+        .component('navbarComponent', {
+            templateUrl: 'app/layouts/navbar/navbar.component.html',
+            controller: NavbarController,
+            controllerAs: 'vm'
+        });
 
     NavbarController.$inject = ['$scope', '$state', 'Auth',
-        'Principal', 'ProfileService', 'LoginService',
-        'Visualizations',
-        'Views', '$stateParams', '$rootScope', 'ExecutorFactory', 'PERMISSIONS'
+        'Principal', 'ProfileService', 'PERMISSIONS'
     ];
 
     function NavbarController($scope, $state, Auth,
-        Principal, ProfileService, LoginService,
-        Visualizations,
-        Views, $stateParams, $rootScope, ExecutorFactory, PERMISSIONS) {
+        Principal, ProfileService, PERMISSIONS) {
         var vm = this;
         getAccount();
         vm.account = null;
@@ -30,22 +30,25 @@
             PERMISSIONS.READ_API,
             PERMISSIONS.READ_PERMISSION_MANAGEMENT
         ];
-        vm.$state = $state;
-        vm.hasAnyOfAdministrationPermission = Principal.hasAnyAuthority(vm.administrationPermissions);
-
-        $scope.$on('authenticationSuccess', function () {
-            getAccount();
-        });
-
-
-        ProfileService.getProfileInfo().then(function (response) {
-            vm.inProduction = response.inProduction;
-            vm.swaggerEnabled = response.swaggerEnabled;
-        });
-
         vm.logout = logout;
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
+        vm.$state = $state;
+        vm.hasAnyOfAdministrationPermission = Principal.hasAnyAuthority(vm.administrationPermissions);
+
+        var authenticationSuccessUnsub = angular.noop;
+
+        vm.$onInit = function () {
+            authenticationSuccessUnsub = $scope.$on('authenticationSuccess', function () {
+                getAccount();
+            });
+            ProfileService.getProfileInfo().then(function (response) {
+                vm.inProduction = response.inProduction;
+                vm.swaggerEnabled = response.swaggerEnabled;
+            });
+        }
+
+        vm.$onDestroy = authenticationSuccessUnsub;
 
         function logout() {
             collapseNavbar();

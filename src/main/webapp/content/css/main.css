@@ -828,6 +828,46 @@ ui-breadcrumbs .breadcrumb li.active {
 .btn-default {
   color: #404345 !important; }
 
+.date-range-btn {
+  background-color: #FFFFFF;
+  border: 0px solid #ededed;
+  color: #404345 !important;
+  padding: 6px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  transition-duration: 0.4s;
+  outline: none;
+  display: inline-flex; }
+  .date-range-btn p {
+    font-size: 12px;
+    color: #404345;
+    letter-spacing: 0.5px;
+    margin: 0px 0 1px; }
+
+.date-range-btn:hover {
+  background: #ededed;
+  border-bottom: 1px solid #439dd3; }
+
+.date-range-btn-active {
+  background: #ededed;
+  border-bottom: 1px solid #439dd3; }
+
+.dynamic-days {
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 0px;
+  color: inherit;
+  display: block;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  font-size: 14px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  margin-top: 7px; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -6418,6 +6458,7 @@ input.select2-active {
     padding: 4px 8px;
     margin-right: 5px;
     margin-top: 5px; }
+
 .scheduler-modal-body .cron-wrap .clearfix .form-group {
   margin: 5px;
   display: flex; }

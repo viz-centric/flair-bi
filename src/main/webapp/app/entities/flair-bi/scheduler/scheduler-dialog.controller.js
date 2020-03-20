@@ -104,11 +104,9 @@
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
             if(vm.isAdmin){
                 getWebhookList();
+                isConfigExist();
             }else{
                 getWebhookNames();
-            }
-            if(vm.isAdmin){
-                getSMTPSettings();
             }
             resetSelectedChannels();
             vm.users = User.query();
@@ -664,10 +662,10 @@
                     $rootScope.showErrorSingleToast(info);
                 });
         }
-        function getSMTPSettings() {
-            ChannelService.getEmailConfig(0)
+        function isConfigExist() {
+            ChannelService.isConfigExist(0)
                 .then(function (success) {
-                    vm.SMPTSetting = success.data;
+                    vm.isConfigExist = success.data;
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,

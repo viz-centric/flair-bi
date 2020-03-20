@@ -147,4 +147,11 @@ public class NotificationConfigurationResource {
 		return schedulerService.notifyOpenedJiraTicket(openJiraTicketDTO);
 	}
 
+	@GetMapping("/notification/isConfigExist/")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
+	Boolean isConfigExist(@RequestParam(required = false) Integer id) {
+		return schedulerService.isConfigExist(id);
+	}
+
 }

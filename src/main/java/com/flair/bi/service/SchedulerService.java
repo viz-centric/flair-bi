@@ -183,6 +183,10 @@ public class SchedulerService {
 		return notificationsGrpcService.notifyOpenedJiraTicket(openJiraTicketDTO);
 	}
 
+	public Boolean isConfigExist(Integer id){
+		return notificationsGrpcService.isConfigExist(id);
+	}
+
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
 			throws InvalidProtocolBufferException, QueryTransformerException {

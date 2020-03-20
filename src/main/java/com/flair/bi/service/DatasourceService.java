@@ -24,6 +24,21 @@ public interface DatasourceService {
      */
     List<Datasource> findAll(Predicate predicate);
 
+    /**
+     * Get all the datasources paginated.
+     * 
+     * @param predicate
+     * @param pageable
+     * @return
+     */
+    Page<Datasource> findAll(Predicate predicate, Pageable pageable);
+
+    /**
+     * Find all datasources that are logically deleted.
+     * 
+     * @param predicate
+     * @return
+     */
     List<Datasource> findAllAndDeleted(Predicate predicate);
 
     /**
@@ -35,7 +50,7 @@ public interface DatasourceService {
     Datasource findOne(Long id);
 
     /**
-     * Delete the  datasources by id.
+     * Delete the datasources by id.
      *
      * @param id the id of the entity
      */
@@ -49,11 +64,11 @@ public interface DatasourceService {
      * @param predicate predicate that defines deletion
      */
     void delete(Predicate predicate);
-    
+
     /**
      * Get searched datasources.
      *
-     * @param pageable pageable
+     * @param pageable  pageable
      * @param predicate predicate
      * @return the list of entities
      */

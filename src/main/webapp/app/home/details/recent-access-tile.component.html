@@ -1,0 +1,7 @@
+<div class="recently-accessed" ng-if="vm.show">
+    <div class="recently-accessed-row">
+        <div class="col-md-3 col-sm-6 recently-accessed-row-box" ng-repeat="viewWatch in vm.viewWatches">
+            <view-component class="view" permissions="vm.account.permissions" view="viewWatch.view"></view-component>
+        </div>
+    </div>
+</div>

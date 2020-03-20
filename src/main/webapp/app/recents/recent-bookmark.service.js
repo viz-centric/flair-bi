@@ -8,6 +8,7 @@
     recentBookmarkService.$inject = ['$http'];
 
     function recentBookmarkService($http) {
+
         var service = {
             saveRecentBookmark: saveRecentBookmark,
             getRecentBookmark: getRecentBookmark

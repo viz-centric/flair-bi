@@ -8,17 +8,17 @@
     AlertsDispatcherService.$inject = [];
 
     function AlertsDispatcherService() {
-        var releaseTotalAlertsCount=0;
+        var releaseTotalAlertsCount = 0;
         var service = {
-            setReleaseTotalAlertsCount:setReleaseTotalAlertsCount,
-            getReleaseTotalAlertsCount:getReleaseTotalAlertsCount
+            setReleaseTotalAlertsCount: setReleaseTotalAlertsCount,
+            getReleaseTotalAlertsCount: getReleaseTotalAlertsCount
         };
 
         return service;
 
         ////////////////
         function setReleaseTotalAlertsCount(count) {
-            releaseTotalAlertsCount=releaseTotalAlertsCount+count;
+            releaseTotalAlertsCount = releaseTotalAlertsCount + count;
         }
         function getReleaseTotalAlertsCount(count) {
             return releaseTotalAlertsCount;

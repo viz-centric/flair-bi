@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -63,90 +64,86 @@ public class DatasourcesResource {
     private final GrpcConnectionService grpcConnectionService;
 
     /**
-     * POST  /datasource : Create a new datasource.
+     * POST /datasource : Create a new datasource.
      *
      * @param request the datasource to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new datasource, or with status 400 (Bad Request) if the datasource has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the new
+     *         datasource, or with status 400 (Bad Request) if the datasource has
+     *         already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/datasources")
     @Timed
-    public ResponseEntity<?> createDatasources(@Valid @RequestBody CreateDatasourceRequest request) throws URISyntaxException {
+    public ResponseEntity<?> createDatasources(@Valid @RequestBody final CreateDatasourceRequest request)
+            throws URISyntaxException {
         log.debug("REST request to save datasource request {}", request);
 
-        Datasource datasource = request.getDatasource();
+        final Datasource datasource = request.getDatasource();
         if (datasource.getId() != null) {
-            return ResponseEntity.badRequest()
-                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new datasource cannot already have an ID"))
-                    .body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists",
+                    "A new datasource cannot already have an ID")).body(null);
         }
 
-        Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
-                datasource.getConnectionName(), datasource.getName())
-                .stream()
-                .findFirst();
+        final Optional<Datasource> existingDatasource = datasourceService
+                .findAllByConnectionAndName(datasource.getConnectionName(), datasource.getName()).stream().findFirst();
 
         if (existingDatasource.isPresent()) {
-            Datasource existing = existingDatasource.get();
-            boolean actionApplied = handleDatasourceCreateAction(datasource, request.getAction(), existing.getId());
+            final Datasource existing = existingDatasource.get();
+            final boolean actionApplied = handleDatasourceCreateAction(datasource, request.getAction(),
+                    existing.getId());
             if (!actionApplied) {
-                log.info("Same datasource already exists for id {} connection {} name {}",
-                        existing.getId(), existing.getConnectionName(), existing.getName());
-                return ResponseEntity.ok(CreateDatasourceResponse.builder()
-                        .error(CreateDatasourceResponse.Error.SAME_NAME_EXISTS)
-                        .datasourceName(existing.getName())
-                        .build());
+                log.info("Same datasource already exists for id {} connection {} name {}", existing.getId(),
+                        existing.getConnectionName(), existing.getName());
+                return ResponseEntity
+                        .ok(CreateDatasourceResponse.builder().error(CreateDatasourceResponse.Error.SAME_NAME_EXISTS)
+                                .datasourceName(existing.getName()).build());
             }
         }
 
-        Datasource result = datasourceService.save(datasource);
+        final Datasource result = datasourceService.save(datasource);
         return ResponseEntity.created(new URI("/api/datasource/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
-     * PUT  /datasource : Updates an existing datasource.
+     * PUT /datasource : Updates an existing datasource.
      *
      * @param request the datasource to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated datasource,
-     * or with status 400 (Bad Request) if the datasource is not valid,
-     * or with status 500 (Internal Server Error) if the datasource couldn't be updated
+     * @return the ResponseEntity with status 200 (OK) and with body the updated
+     *         datasource, or with status 400 (Bad Request) if the datasource is not
+     *         valid, or with status 500 (Internal Server Error) if the datasource
+     *         couldn't be updated
      */
     @PutMapping("/datasources")
     @Timed
-    public ResponseEntity<?> updateDatasources(@Valid @RequestBody CreateDatasourceRequest request) {
+    public ResponseEntity<?> updateDatasources(@Valid @RequestBody final CreateDatasourceRequest request) {
         log.debug("REST request to update Datasource : {}", request);
-        Datasource datasource = request.getDatasource();
+        final Datasource datasource = request.getDatasource();
         if (datasource.getId() == null) {
-            return ResponseEntity.badRequest()
-                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idnotexist", "Please provide a resource ID to update the datasource."))
-                    .body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idnotexist",
+                    "Please provide a resource ID to update the datasource.")).body(null);
         }
 
-        Optional<Datasource> existingDatasource = datasourceService.findAllByConnectionAndName(
-                datasource.getConnectionName(), datasource.getName())
-                .stream()
-                .filter(it -> !it.getId().equals(datasource.getId()))
-                .findFirst();
+        final Optional<Datasource> existingDatasource = datasourceService
+                .findAllByConnectionAndName(datasource.getConnectionName(), datasource.getName()).stream()
+                .filter(it -> !it.getId().equals(datasource.getId())).findFirst();
 
         if (existingDatasource.isPresent()) {
-            Datasource existing = existingDatasource.get();
+            final Datasource existing = existingDatasource.get();
             log.warn("Updating datasource but already exists with the same name {} connection {} id {}",
                     existing.getName(), existing.getConnectionName(), existing.getId());
 
-            return ResponseEntity.badRequest()
-                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "flairbiApp.datasources.error.datasources.same_name_connection_already_exists"))
-                    .body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME,
+                    "flairbiApp.datasources.error.datasources.same_name_connection_already_exists")).body(null);
         }
 
-        Datasource result = datasourceService.save(datasource);
+        final Datasource result = datasourceService.save(datasource);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, datasource.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, datasource.getId().toString())).body(result);
     }
 
-    private boolean handleDatasourceCreateAction(Datasource datasource, CreateDatasourceRequest.Action action, Long existingDatasourceId) {
+    private boolean handleDatasourceCreateAction(final Datasource datasource,
+            final CreateDatasourceRequest.Action action, final Long existingDatasourceId) {
         if (action == CreateDatasourceRequest.Action.DELETE) {
             log.info("Update/create datasource and deleting existing with connection {} and table {} existing {}",
                     datasource.getConnectionName(), datasource.getName(), existingDatasourceId);
@@ -162,68 +159,79 @@ public class DatasourcesResource {
     }
 
     /**
-     * GET  /datasources : get all the datasources.
+     * GET /datasources : get all the datasources.
      *
-     * @param predicate predicate
-     * @return the ResponseEntity with status 200 (OK) and the list of datasources in body
+     * @param predicate      predicate
+     * @param pageable       pageable
+     * @param shouldPaginate if datasources should be paginated
+     * @return the ResponseEntity with status 200 (OK) and the list of datasources
+     *         in body
+     * @throws URISyntaxException
      */
     @GetMapping("/datasources")
     @Timed
-    public List<DatasourceDTO> getAllDatasources(@QuerydslPredicate(root = Datasource.class) Predicate predicate) {
+    public ResponseEntity<List<DatasourceDTO>> getAllDatasources(
+            @QuerydslPredicate(root = Datasource.class) final Predicate predicate, @ApiParam final Pageable pageable,
+            @RequestParam(name = "paginate", defaultValue = "false", required = false) final boolean shouldPaginate)
+            throws URISyntaxException {
         log.debug("REST request to get all Datasource");
-        List<Datasource> datasourceList = datasourceService.findAll(predicate);
-        List<ConnectionDTO> connectionServiceAllConnections = grpcConnectionService.getAllConnections(new ConnectionFilterParamsDTO());
-        return datasourceList.stream()
-                .map(datasource -> {
-                    Optional<ConnectionDTO> optionalConnection = connectionServiceAllConnections.stream()
-                            .filter(it -> Objects.equals(it.getLinkId(), datasource.getConnectionName()))
-                            .findFirst();
-                    return DatasourceDTO.builder()
-                            .connectionName(datasource.getConnectionName())
-                            .connectionReadableName(optionalConnection.map(i -> i.getName()).orElse(""))
-                            .dashboardSet(datasource.getDashboardSet())
-                            .datasourceConstraints(datasource.getDatasourceConstraints())
-                            .features(datasource.getFeatures())
-                            .hierarchies(datasource.getHierarchies())
-                            .lastUpdated(datasource.getLastUpdated())
-                            .id(datasource.getId())
-                            .name(datasource.getName())
-                            .queryPath(datasource.getQueryPath())
-                            .connectionId(optionalConnection.map(i -> i.getId()).orElse(0L))
-                            .status(datasource.getStatus())
-                            .build();
-                })
-                .collect(Collectors.toList());
+        final List<ConnectionDTO> connectionServiceAllConnections = grpcConnectionService
+                .getAllConnections(new ConnectionFilterParamsDTO());
+        if (shouldPaginate) {
+            final Page<Datasource> page = datasourceService.findAll(predicate, pageable);
+            final HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/datasources");
+            return ResponseEntity.status(200).headers(headers)
+                    .body(convert(page.getContent(), connectionServiceAllConnections));
+        } else {
+            final List<Datasource> datasourceList = datasourceService.findAll(predicate);
+            return ResponseEntity.ok(convert(datasourceList, connectionServiceAllConnections));
+        }
+    }
+
+    private List<DatasourceDTO> convert(final List<Datasource> datasourceList,
+            final List<ConnectionDTO> connectionServiceAllConnections) {
+        return datasourceList.stream().map(datasource -> {
+            final Optional<ConnectionDTO> optionalConnection = connectionServiceAllConnections.stream()
+                    .filter(it -> Objects.equals(it.getLinkId(), datasource.getConnectionName())).findFirst();
+            return DatasourceDTO.builder().connectionName(datasource.getConnectionName())
+                    .connectionReadableName(optionalConnection.map(i -> i.getName()).orElse(""))
+                    .dashboardSet(datasource.getDashboardSet())
+                    .datasourceConstraints(datasource.getDatasourceConstraints()).features(datasource.getFeatures())
+                    .hierarchies(datasource.getHierarchies()).lastUpdated(datasource.getLastUpdated())
+                    .id(datasource.getId()).name(datasource.getName()).queryPath(datasource.getQueryPath())
+                    .connectionId(optionalConnection.map(i -> i.getId()).orElse(0L)).status(datasource.getStatus())
+                    .build();
+        }).collect(Collectors.toList());
     }
 
     /**
-     * GET  /datasources/:id : get the "id" datasources.
+     * GET /datasources/:id : get the "id" datasources.
      *
      * @param id the id of the datasources to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the datasources, or with status 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the
+     *         datasources, or with status 404 (Not Found)
      */
     @GetMapping("/datasources/{id}")
     @Timed
-    public ResponseEntity<Datasource> getDatasources(@PathVariable Long id) {
+    public ResponseEntity<Datasource> getDatasources(@PathVariable final Long id) {
         log.debug("REST request to get Datasource : {}", id);
-        Datasource datasource = datasourceService.findOne(id);
+        final Datasource datasource = datasourceService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(datasource));
     }
 
     /**
-     * DELETE  /datasources/:id : delete the "id" datasources.
+     * DELETE /datasources/:id : delete the "id" datasources.
      *
      * @param id the id of the datasources to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/datasources/{id}")
     @Timed
-    public ResponseEntity<Void> deleteDatasources(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDatasources(@PathVariable final Long id) {
         log.debug("REST request to delete Datasource : {}", id);
         datasourceService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
-
 
     @GetMapping("/datasources/count")
     @Timed
@@ -232,53 +240,51 @@ public class DatasourcesResource {
     }
 
     /**
-     * DELETE  /datasources : get all the datasources.
+     * DELETE /datasources : get all the datasources.
      *
      * @param predicate predicate
-     * @return the ResponseEntity with status 200 (OK) and the list of datasources in body
+     * @return the ResponseEntity with status 200 (OK) and the list of datasources
+     *         in body
      */
     @DeleteMapping("/datasources")
     @Timed
-    public ResponseEntity<Void> deleteDatasources(@QuerydslPredicate(root = Datasource.class) Predicate predicate) {
+    public ResponseEntity<Void> deleteDatasources(
+            @QuerydslPredicate(root = Datasource.class) final Predicate predicate) {
         log.debug("REST request to get all Datasource");
         datasourceService.delete(predicate);
         return ResponseEntity.ok(null);
     }
 
-
     @GetMapping("/datasources/{id}/deleteInfo")
-    public ResponseEntity<List<DeleteInfo>> getDatasourceDeleteInfo(@PathVariable Long id) {
+    public ResponseEntity<List<DeleteInfo>> getDatasourceDeleteInfo(@PathVariable final Long id) {
 
-        List<Dashboard> dashboards =
-            dashboardService.findAllByDatasourceIds(Collections.singletonList(id));
+        final List<Dashboard> dashboards = dashboardService.findAllByDatasourceIds(Collections.singletonList(id));
 
-        List<DeleteInfo> deleteInfos = new ArrayList<>();
+        final List<DeleteInfo> deleteInfos = new ArrayList<>();
 
         dashboards.forEach(x -> deleteInfos.add(new DeleteInfo("Dashboard", x.getDashboardName())));
 
-
         return ResponseEntity.ok(deleteInfos);
     }
-    
+
     @PostMapping("/datasources/listTables")
     @Timed
-    public ResponseEntity<?> listTables(@RequestBody ListTablesRequest listTablesRequest) {
+    public ResponseEntity<?> listTables(@RequestBody final ListTablesRequest listTablesRequest) {
         log.debug("REST request to get list tables {}", listTablesRequest);
 
-        ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
-            listTablesRequest.getSearchTerm(),
-            listTablesRequest.getConnection(),
-            50);
+        final ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
+                listTablesRequest.getSearchTerm(), listTablesRequest.getConnection(), 50);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/datasources/search")
     @Timed
-    public ResponseEntity<List<Datasource>> getSearchedDatasources(@ApiParam Pageable pageable, @QuerydslPredicate(root = Datasource.class) Predicate predicate) throws URISyntaxException {
+    public ResponseEntity<List<Datasource>> getSearchedDatasources(@ApiParam final Pageable pageable,
+            @QuerydslPredicate(root = Datasource.class) final Predicate predicate) throws URISyntaxException {
         log.debug("REST request to get Searched Datasources");
-        Page<Datasource> page=datasourceService.search(pageable,predicate);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/datasources");
+        final Page<Datasource> page = datasourceService.search(pageable, predicate);
+        final HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/datasources");
         return ResponseEntity.status(200).headers(headers).body(page.getContent());
     }
 
@@ -297,8 +303,9 @@ public class DatasourcesResource {
         enum Error {
             OK, SAME_NAME_EXISTS;
         }
-        private Error error;
-        private String datasourceName;
+
+        private final Error error;
+        private final String datasourceName;
     }
 
     @Data
@@ -306,6 +313,7 @@ public class DatasourcesResource {
         enum Action {
             EDIT, DELETE;
         }
+
         @NotNull
         private Datasource datasource;
         private Action action;

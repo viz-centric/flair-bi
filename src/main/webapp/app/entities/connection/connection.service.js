@@ -1,11 +1,11 @@
-(function() {
+(function () {
     "use strict";
 
-    angular.module("flairbiApp").factory("Connections", ConnectionTypes);
+    angular.module("flairbiApp").factory("Connections", Connections);
 
-    ConnectionTypes.$inject = ["$resource"];
+    Connections.$inject = ["$resource"];
 
-    function ConnectionTypes($resource) {
+    function Connections($resource) {
         var resourceUrl = "api/connection/:id/";
 
         return $resource(
@@ -18,7 +18,7 @@
                 },
                 get: {
                     method: "GET",
-                    transformResponse: function(data) {
+                    transformResponse: function (data) {
                         if (data) {
                             data = angular.fromJson(data);
                         }

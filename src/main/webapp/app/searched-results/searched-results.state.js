@@ -16,9 +16,7 @@
                     component: 'searchedResultsComponent'
                 },
                 'topnavbar@': {
-                    templateUrl: 'app/home/home-topnavbar.html',
-                    controller: 'HomeTopNavBarController',
-                    controllerAs: 'vm'
+                    component: 'homeTopNavComponent'
                 }
             },
             resolve: {

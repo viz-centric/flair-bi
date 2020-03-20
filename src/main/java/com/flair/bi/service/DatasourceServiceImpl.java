@@ -48,9 +48,16 @@ public class DatasourceServiceImpl implements DatasourceService {
     public List<Datasource> findAll(Predicate predicate) {
         log.debug("Request to get all Datasource");
         BooleanBuilder b = new BooleanBuilder(predicate);
-        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
-                .or(QDatasource.datasource.status.isNull()));
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
         return (List<Datasource>) datasourceRepository.findAll(b);
+    }
+
+    @Override
+    public Page<Datasource> findAll(Predicate predicate, Pageable pageable) {
+        log.debug("Request to get all Datasource");
+        final BooleanBuilder b = new BooleanBuilder(predicate);
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
+        return datasourceRepository.findAll(b, pageable);
     }
 
     @Override
@@ -73,7 +80,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     }
 
     /**
-     * Delete the  datasources by id.
+     * Delete the datasources by id.
      *
      * @param id the id of the entity
      */
@@ -90,12 +97,11 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Long getCount(Predicate predicate) {
         log.debug("Request to get Datasource count with predicate {}", predicate);
         BooleanBuilder b = new BooleanBuilder(predicate);
-        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
-                .or(QDatasource.datasource.status.isNull()));
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
         return datasourceRepository.count(b);
     }
 
-     /**
+    /**
      * Delete datasources by given predicate
      *
      * @param predicate predicate that defines deletion
@@ -103,8 +109,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Override
     public void delete(Predicate predicate) {
         BooleanBuilder b = new BooleanBuilder(predicate);
-        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
-                .or(QDatasource.datasource.status.isNull()));
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
         final Iterable<Datasource> datasources = datasourceRepository.findAll(b);
         for (Datasource datasource : datasources) {
             datasource.setStatus(DatasourceStatus.DELETED);
@@ -112,15 +117,14 @@ public class DatasourceServiceImpl implements DatasourceService {
         datasourceRepository.save(datasources);
     }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Page<Datasource> search(Pageable pageable, Predicate predicate) {
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Datasource> search(Pageable pageable, Predicate predicate) {
         log.debug("Request to get Seached Datasource");
         BooleanBuilder b = new BooleanBuilder(predicate);
-        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED)
-                .or(QDatasource.datasource.status.isNull()));
+        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
         return datasourceRepository.findAll(b, pageable);
-	}
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -134,4 +138,5 @@ public class DatasourceServiceImpl implements DatasourceService {
         delete(QDatasource.datasource.connectionName.eq(connectionName)
                 .and(QDatasource.datasource.name.eq(datasourceName)));
     }
+
 }

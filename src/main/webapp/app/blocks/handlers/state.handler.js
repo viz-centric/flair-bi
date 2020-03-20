@@ -26,7 +26,10 @@
                 // Update the language
                 JhiLanguageService.getCurrent().then(function (language) {
                     $translate.use(language);
-                });
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             });
 
             $transitions.onSuccess({

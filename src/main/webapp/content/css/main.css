@@ -6631,6 +6631,9 @@ input.select2-active {
 
 .common-create-popup md-input-container .md-input {
   border-radius: 0px; }
+  
+.md-datepicker-calendar-pane {
+    z-index: 99999; }
 
 .share-link-modal .copy-clipboard {
   width: 16px;

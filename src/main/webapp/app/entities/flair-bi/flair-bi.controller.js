@@ -37,7 +37,7 @@
         "$window",
         "VisualizationUtils",
         "D3Utils",
-        "favouriteFilterService"
+        '$transitions'
     ];
 
     function FlairBiController(
@@ -72,7 +72,7 @@
         $window,
         VisualizationUtils,
         D3Utils,
-        favouriteFilterService
+        $transitions
     ) {
         var vm = this;
         var editMode = false;
@@ -235,8 +235,7 @@
             if (data.headers.request === "filters") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
-                    metaData.data,
-                    favouriteFilterService.getFavouriteFilter()
+                    metaData.data
                 );
             } else {
                 var contentId = "content-" + data.headers.queryId;

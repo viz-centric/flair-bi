@@ -1,0 +1,71 @@
+<div class="table-responsive tile-area-table viewsTable">
+    <div class="search-box inner-addon left-addon b-b-xs">
+        <i class="glyphicon glyphicon-search"></i>
+        <input type="text" ng-model="vm.search.viewName" class="form-control" placeholder="Search View..." />
+    </div>
+    <br />
+    <table class="table table-striped table-bordered flair-table-v1">
+        <thead>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id">
+                    <span>ID</span>
+                    <span class="fa fa-sort"></span>
+                </th>
+                <th jh-sort-by="viewName">
+                    <span>View Name</span>
+                    <span class="fa fa-sort"></span>
+                </th>
+                <th jh-sort-by="description">
+                    <span>Description</span>
+                    <span class="fa fa-sort"></span>
+                </th>
+                <th>
+                    <span>Dashboard</span>
+                </th>
+                <th>
+                    <span>Published</span>
+                </th>
+                <th jh-sort-by="lastModifiedDate">
+                    <span>Last Modified Date</span>
+                    <span class="fa fa-sort"></span>
+                </th>
+                <th><span>Actions</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="view in vm.views | filter:vm.search track by $index">
+                <td>
+                    <a ui-sref="dashboards-overview({id:dashboard.id})">{{view.id}}</a>
+                </td>
+                <td>{{view.viewName}}</td>
+                <td>{{view.description}}</td>
+                <td>{{view.viewDashboard.dashboardName}}</td>
+                <td>{{view.published}}</td>
+                <td>{{view.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td class="text-right button-centered">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit" ui-sref="flair-bi-build({id:view.id, dashboardId:view.viewDashboard.id})"
+                            class="btn btn-default btn-sm">
+                            <span class="fa fa-gavel build-icon fa-2x"></span>
+                        </button> &nbsp;
+                        <button type="submit"
+                            ui-sref="dashboards-overview.view-detail({id: view.viewDashboard.id,viewId: view.id})"
+                            class="btn btn-default btn-sm">
+                            <span class="fa fa-eye view-icon fa-2x"></span>
+                        </button> &nbsp;
+                        <button type="submit"
+                            ui-sref="dashboards-overview.view-detail.edit({id: view.viewDashboard.id,viewId: view.id})"
+                            class="btn btn-default btn-sm">
+                            <span class="fa fa-edit edit-icon fa-2x"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center" ng-show="vm.views.length > 0">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page"
+            ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>

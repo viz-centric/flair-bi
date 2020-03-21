@@ -1,0 +1,50 @@
+<div ng-cloak="" ng-show="!vm.searchMode">
+
+    <div class="home-container container-margin-top">
+        <div class="home-left-container">
+            <div class="row tile-area">
+                <div ng-style="{'display': vm.isTileVisible(info.isDesktop)}" ng-click="vm.expandTile(info)"
+                    class="tile" ng-repeat="info in vm.information | orderBy: 'order'">
+                    <information-component information="info" active="vm.currentTile.id === info.id" />
+                </div>
+            </div>
+            <div ui-view="details"></div>
+            <div ui-view="details2"></div>
+        </div>
+        <div class="home-right-container alerts">
+            <div class="alerts-tabs">
+                <div id="notifications-tab"
+                    class="tab notifications-tab  ng-class:{'tab-active':vm.alertTab =='notifications'}"
+                    ng-click="vm.toggleAlerts('notifications')">
+                    <p class="home_label">Notifications</span>
+                        <div>
+                            <svg class="alarm-icon">
+                                <use xlink:href="#alarm" />
+                            </svg>
+                        </div>
+                        <div class="blue-line"></div>
+                </div>
+                <div id="releases-tab" class="tab releases-tab  ng-class:{'tab-active':vm.alertTab =='releases'}"
+                    ng-click="vm.toggleAlerts('releases')">
+                    <p class="home_label">Releases</span>
+                        <div>
+                            <svg class="release-icon">
+                                <use xlink:href="#release-icon" />
+                            </svg>
+                        </div>
+                        <div class="blue-line"></div>
+                </div>
+            </div>
+            <div id="release-container" class="release-container" ng-show="vm.alertTab =='releases'">
+                <release-set-component release-alert="release" ng-repeat="release in vm.allReleaseAlerts" />
+            </div>
+            <div ng-show="vm.totalReleaseAlerts==0 && vm.alertTab =='releases'">
+                <no-data-found-small-component message="No releases available"></no-data-found-small-component>
+            </div>
+            <div id="notification-container" class="notification-container" alert="vm.alertTab"
+                ng-show="vm.alertTab =='notifications'">
+                <notification-set-component />
+            </div>
+        </div>
+    </div>
+</div>

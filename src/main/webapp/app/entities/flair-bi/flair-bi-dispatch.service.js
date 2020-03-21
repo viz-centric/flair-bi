@@ -168,7 +168,7 @@
                     bookmark.featureCriteria.forEach(function(criteria) {
                         filter[
                             criteria.feature.name
-                        ] = criteria.value.split(",");
+                        ] = criteria.value.split("||");
                     });
                     filterParametersService.save(filter);
                     isBookmarkApplied=true;

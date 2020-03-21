@@ -64,7 +64,7 @@
         function statesAuth(transition, isAuthenticated) {
             var $state = transition.router.stateService;
             if (!isAuthenticated) {
-                return $state.target('accessdenied');
+                return $state.target('login');
             }
         }
 

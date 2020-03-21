@@ -627,7 +627,7 @@
                                     result['displayColor'] = [];
                                     result['colorSet'] = colorSet;
 
-                                    for (var i = 0, j = ''; i < result.maxDim; i++ , j = i + 1) {
+                                    for (var i = 0, j = ''; i < result.maxDim; i++, j = i + 1) {
                                         result['dimension'].push(dimensions[i].feature.name);
                                         result['showLabelForDimension'].push(false);
                                         result['labelColorForDimension'].push(VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Colour of labels'));

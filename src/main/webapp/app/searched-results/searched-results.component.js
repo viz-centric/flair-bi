@@ -3,20 +3,25 @@
 
     angular
         .module('flairbiApp')
-        .controller('SearchedResultsController', SearchedResultsController);
+        .component('searchedResultsComponent', {
+            templateUrl: 'app/searched-results/searched-results.component.html',
+            controller: SearchedResultsController,
+            controllerAs: 'vm'
+        });
 
-        SearchedResultsController.$inject = ['$scope','$stateParams','Views','Principal','Dashboards','$rootScope','$translate'];
+    SearchedResultsController.$inject = ['$stateParams', 'Views', 'Principal', 'Dashboards', '$rootScope', '$translate'];
 
-    function SearchedResultsController($scope,$stateParams,Views,Principal,Dashboards,$rootScope,$translate) {
+    function SearchedResultsController($stateParams, Views, Principal, Dashboards, $rootScope, $translate) {
         var vm = this;
-        activate();
+
+        vm.$onInit = activate;
 
         ////////////////
 
         function activate() {
             getAccount();
             search($stateParams.searchCriteria);
-         }
+        }
 
         function getAccount() {
             Principal.identity(true).then(function (account) {

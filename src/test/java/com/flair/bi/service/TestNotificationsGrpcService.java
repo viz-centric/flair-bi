@@ -162,9 +162,15 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 		return null;
 	}
 
-	@Override
+    @Override
+    public Boolean isConfigExist(Integer id) {
+        return null;
+    }
+
+    @Override
 	public List<String> getTeamNames(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

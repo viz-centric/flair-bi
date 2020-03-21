@@ -22,7 +22,8 @@
             getJiraConfig: getJiraConfig,
             createJiraTicket: createJiraTicket,
             getJiraTickets: getJiraTickets,
-            notifyOpenedJiraTicket: notifyOpenedJiraTicket
+            notifyOpenedJiraTicket: notifyOpenedJiraTicket,
+            isConfigExist:isConfigExist
         };
 
         return service;
@@ -116,6 +117,12 @@
                 url: 'api/notification/notifyOpenedJiraTicket',
                 method: 'POST',
                 data: body
+            });
+        }
+        function isConfigExist(id) {
+            return $http({
+                url: 'api/notification/isConfigExist/?id=' + id,
+                method: 'GET'
             });
         }
     }

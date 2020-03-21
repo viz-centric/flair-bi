@@ -1,5 +1,5 @@
 (function () {
-    'use strict'; 
+    'use strict';
 
     angular
         .module('flairbiApp')
@@ -13,10 +13,7 @@
             url: '/recently-accessed/{id}',
             views: {
                 'content@': {
-                    templateUrl: 'app/recents/recently-accessed.html',
-                    controller: 'recentlyAccessedController',
-                    controllerAs: 'vm'
-                   
+                    component: 'recentlyAccessedComponent'
                 }
             }
         }).state('recently-created', {
@@ -24,10 +21,7 @@
             url: '/recently-created/{id}',
             views: {
                 'content@': {
-                    templateUrl: 'app/recents/recently-created.html',
-                    controller: 'recentlyCreatedController',
-                    controllerAs: 'vm'
-                   
+                    component: 'recentlyCreatedComponent'
                 }
             }
         });

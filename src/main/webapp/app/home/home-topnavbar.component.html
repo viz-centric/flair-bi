@@ -2,9 +2,9 @@
     <nav class="navbar navbar-static-top" role="navigation">
         <div class="navbar-header">
             <div class="row home-row">
-                <div class="logo" ui-sref="home">
+                <a class="logo" ui-sref="home">
                     <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
-                </div>
+                </a>
                 <div class="col-md-3 home-header-search-box" style="left: 62px;display:none;">
                     <form role="form" ng-submit="vm.search()">
                         <div class="input-group">
@@ -15,7 +15,8 @@
                                     </svg>
                                 </button>
                             </span>
-                            <input required ng-model="vm.searchCriteria" type="search" class="form-control search-site" placeholder="Search views and dashboards">
+                            <input required ng-model="vm.searchCriteria" type="search" class="form-control search-site"
+                                placeholder="Search views and dashboards">
                             <span class="input-group-btn">
                                 <button ng-click="vm.reset()" type="reset" class="btn" ng-show="vm.showSearchCancel()">
                                     <i class="fa fa-times" aria-hidden="true"></i>

@@ -68,4 +68,6 @@ public interface INotificationsGrpcService {
 	String disableTicketCreationRequest(Integer schedulerTaskLogId);
 
 	String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO);
+
+	Boolean isConfigExist(Integer id);
 }

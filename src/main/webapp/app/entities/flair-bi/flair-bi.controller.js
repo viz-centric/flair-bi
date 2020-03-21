@@ -19,7 +19,6 @@
         "ExportService",
         "$interval",
         "ShareLinkService",
-        "$document",
         "VisualMetadataContainer",
         "PrintService",
         "$state",
@@ -27,20 +26,18 @@
         "datasource",
         "Views",
         "configuration",
-        "$filter",
         "VisualDispatchService",
         "filterParametersService",
-        "Features",
         "stompClientService",
         "visualizationRenderService",
         "HttpService",
         "AuthServerProvider",
-        "AlertService",
         "QueryValidationService",
         "$translate",
         "$window",
         "VisualizationUtils",
-        "D3Utils"
+        "D3Utils",
+        '$transitions'
     ];
 
     function FlairBiController(
@@ -57,7 +54,6 @@
         ExportService,
         $interval,
         ShareLinkService,
-        $document,
         VisualMetadataContainer,
         PrintService,
         $state,
@@ -65,20 +61,18 @@
         datasource,
         Views,
         configuration,
-        $filter,
         VisualDispatchService,
         filterParametersService,
-        Features,
         stompClientService,
         visualizationRenderService,
         HttpService,
         AuthServerProvider,
-        AlertService,
         QueryValidationService,
         $translate,
         $window,
         VisualizationUtils,
-        D3Utils
+        D3Utils,
+        $transitions
     ) {
         var vm = this;
         var editMode = false;
@@ -770,7 +764,9 @@
         }
 
         function registerStateChangeStartEvent() {
-            $scope.$on("$stateChangeStart", function (event, next, current) {
+            $transitions.onStart({ to: '**' }, function (transition) {
+                var $state = transition.router.stateService,
+                    next = transition.$to();
                 angular.element("#loader-spinner").hide();
                 $rootScope.isLiveState = false;
                 setDefaultColorFullScreen();
@@ -782,7 +778,7 @@
                     $rootScope.hideHeader = $rootScope.isFullScreen;
                 }
                 if (VisualDispatchService.getViewEditedBeforeSave()) {
-                    event.preventDefault();
+                    transition.abort();
                     swal(
                         "Unsaved Changes",
                         VisualDispatchService.getSavePromptMessage(),
@@ -805,12 +801,10 @@
                                 VisualDispatchService.setViewEditedBeforeSave(false);
                                 $state.go(next);
                                 break;
-
                             case "save":
                                 $rootScope.$broadcast("FlairBi:saveAllWidgets");
                                 $state.go(next);
                                 break;
-
                             default:
                                 return;
                         }

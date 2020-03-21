@@ -838,19 +838,17 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             function receivedMetaData(){
             var unsubscribe = scope.$on(
                 "flairbiApp:filters-meta-Data",
-                function(event,metaData,isFavouriteFilter) {
-                    if(!isFavouriteFilter){
-                        var obj = metaData[0];
-                        var dimensionName = '';
-                        for(var i in obj){
-                            dimensionName = i;
-                            break;
-                        }
-                        var retVal = metaData.map(function (item) {
-                                return item[dimensionName];
-                        });
-                        suggestionListG.receivedMetaData(retVal);
+                function(event,metaData) {
+                    var obj = metaData[0];
+                    var dimensionName = '';
+                    for(var i in obj){
+                        dimensionName = i;
+                        break;
                     }
+                    var retVal = metaData.map(function (item) {
+                            return item[dimensionName];
+                    });
+                    suggestionListG.receivedMetaData(retVal);
                 }
             );
             scope.$on("$destroy", unsubscribe);

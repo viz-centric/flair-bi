@@ -14,9 +14,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', 'FilterStateManagerService', '$rootScope', '$filter'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, FilterStateManagerService, $rootScope, $filter) {
         var vm = this;
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         vm.$onInit = activate;
@@ -27,8 +27,6 @@
         vm.onDateChange = onDateChange;
         vm.dateRangeReload = false;
         vm.removeTagFromFilterList = removeTagFromFilterList;
-        vm.addToFavourite = addToFavourite;
-        vm.checkFavouriteFilter = checkFavouriteFilter;
 
 
         ////////////////
@@ -52,28 +50,6 @@
 
         function resetTimezone(startDate) {
             return startDate;
-        }
-
-        function checkFavouriteFilter() {
-            return vm.dimension.favouriteFilter === true ? 'fa fa-star' : 'fa fa-star-o';
-        }
-        function addToFavourite(id) {
-            favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
-                .then(function (data) {
-                    vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
-                    var info = {
-                        text: "Dimensions " + opration + " from favourit filter",
-                        title: "Saved"
-                    }
-                    $rootScope.showSuccessToast(info);
-                }).catch(function (error) {
-                    var info = {
-                        text: error.data.message,
-                        title: "Error"
-                    }
-                    $rootScope.showErrorSingleToast(info);
-                });
         }
 
         function onDateChange(startDate, endDate) {
@@ -176,7 +152,6 @@
             }
             query.distinct = true;
             query.limit = 100;
-            favouriteFilterService.setFavouriteFilter(false);
             proxyGrpcService.forwardCall(
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,

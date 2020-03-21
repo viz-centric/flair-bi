@@ -21,24 +21,16 @@
                 </ui-select-choices>
             </ui-select>
         </div>
-     
-        <div ng-if="vm.canDisplayDateRangeControls(vm.condition)">
-            <filter-date-range-constraints dimension="vm.dimension" reload="vm.dateRangeReload"
-                on-date-change="vm.onDateChange(startDate, endDate,activeTab)" condition="vm.condition">
-            </filter-date-range-constraints>
-        </div>
-        <div ng-if="!vm.canDisplayDateRangeControls(vm.condition)">
-            <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
-                <input type="text" class="form-control" ng-model="vm.condition.value" />
-            </div>
-            <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-2 between-label field">
-                <span class="control-label">and</span>
-            </div>
-            <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
-                <input type="text" class="form-control" ng-model="vm.condition.secondValue" />
-            </div>
-        </div>
 
+        <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
+            <input type="text" class="form-control" ng-model="vm.condition.value" />
+        </div>
+        <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-2 between-label field">
+            <span class="control-label">and</span>
+        </div>
+        <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
+            <input type="text" class="form-control" ng-model="vm.condition.secondValue" />
+        </div>
         <div ng-if="vm.condition['@type'] === 'Compare'" class="col-md-3 field">
             <ui-select required ng-model="vm.condition.comparatorType" theme="bootstrap">
                 <ui-select-match>
@@ -52,28 +44,23 @@
         <div ng-if="vm.condition['@type'] === 'Compare' || vm.condition['@type'] === 'Like'" class="col-md-3 field">
             <input type="text" class="form-control" ng-model="vm.condition.value" />
         </div>
-        <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'"
-            class="col-md-5 field">
-            <tags-input-grpc placeholder="Add Values" use-strings="true" min-length="1" ng-model="vm.condition.values"
-                replace-spaces-with-dashes="false">
-                <auto-complete-grpc match-class=" filter-autocomplete "
-                    source="vm.load($query, vm.condition.featureName)" min-length="0
+        <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'" class="col-md-5 field">
+            <tags-input-grpc placeholder="Add Values" use-strings="true" min-length="1" ng-model="vm.condition.values" replace-spaces-with-dashes="false">
+                <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.condition.featureName)" min-length="0
                 " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
             </tags-input-grpc>
         </div>
         <div class="col-md-2 field">
-            <div ng-show="vm.showAdd" class="data-constraint-operation-button add-button icon"
-                ng-click="vm.addComposition()">
+            <div ng-show="vm.showAdd" class="data-constraint-operation-button add-button icon" ng-click="vm.addComposition()">
                 <svg class="flair-add-icon flair-oprations-icon">
-                    <use xlink:href="#flair-add-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    </use>
+                     <use xlink:href="#flair-add-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                     </use>
                 </svg>
             </div>
-            <div ng-show="vm.showDelete" class="data-constraint-operation-button remove-button icon"
-                ng-click="vm.removeCondition()">
+            <div ng-show="vm.showDelete" class="data-constraint-operation-button remove-button icon" ng-click="vm.removeCondition()">
                 <svg class="flair-delete-icon flair-oprations-icon">
-                    <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    </use>
+                     <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                     </use>
                 </svg>
             </div>
         </div>
@@ -81,8 +68,7 @@
 </div>
 
 <div class="condition-component-wrapper" ng-if="vm.condition['@type'] === 'Or' || vm.condition['@type'] === 'And'">
-    <condition-component show-add="true" show-delete="true" features="vm.features"
-        condition="vm.condition.firstExpression" datasource-id="vm.datasourceId"></condition-component>
+    <condition-component show-add="true" show-delete="true" features="vm.features" condition="vm.condition.firstExpression" datasource-id="vm.datasourceId"></condition-component>
     <div class="row" style="margin-left: 0;margin-bottom: 14px;">
         <div class="col-md-2">
             <ui-select ng-model="vm.condition['@type']">
@@ -93,6 +79,5 @@
             </ui-select>
         </div>
     </div>
-    <condition-component show-add="true" show-delete="true" features="vm.features"
-        condition="vm.condition.secondExpression" datasource-id="vm.datasourceId"></condition-component>
+    <condition-component show-add="true" show-delete="true" features="vm.features" condition="vm.condition.secondExpression" datasource-id="vm.datasourceId"></condition-component>
 </div>

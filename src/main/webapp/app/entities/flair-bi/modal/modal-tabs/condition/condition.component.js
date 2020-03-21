@@ -39,7 +39,6 @@
         vm.dataType = "";
         vm.$onInit = activate;
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
-        vm.dateRangeReload = false;
         vm.dimension = vm.features[0];
         ////////////////
 
@@ -55,8 +54,8 @@
             if (startDate && endDate) {
                 startDate = resetTimezone(startDate);
                 endDate = resetTimezone(endDate);
-                vm.condition.value = startDate;
-                vm.condition.secondValue = endDate;
+                vm.condition.valueType = {value: startDate, type: vm.dataType, '@type': 'valueType'};
+                vm.condition.secondValueType = {value: endDate, type: vm.dataType, '@type': 'valueType'};
                 vm.condition.activeTab = activeTab;
             }
         }

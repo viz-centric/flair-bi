@@ -59,11 +59,12 @@
             };
         }
 
-        function createBetweenExpressionBody(value, secondValue, featureName, dataType) {
+        function createBetweenExpressionBody(value, secondValue, featureName, dataType,activeTab) {
           var result = {
             '@type': 'Between',
             value: value,
             secondValue: secondValue,
+            activeTab : activeTab,
             featureName: featureName
           };
           if (dataType) {
@@ -120,6 +121,7 @@
                     value: value
                 },
                 secondValue: value,
+                activeTab : value
             };
         }
 
@@ -136,7 +138,7 @@
                 var dataType = meta.dataType || '';
                 console.log('filter-parameters: date range value type values', values);
                 if (values.length === 2) {
-                    return createBetweenExpressionBody(values[0], values[1], name, dataType);
+                    return createBetweenExpressionBody(values[0], values[1], name, dataType,values[2]);
                 } else {
                     return createCompareExpressionBody(values[0], name, dataType);
                 }

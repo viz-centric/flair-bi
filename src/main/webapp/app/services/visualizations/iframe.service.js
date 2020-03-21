@@ -22,7 +22,6 @@
                         .style('position', 'relative');
 
                     $rootScope.updateWidget[record.id] = iframe;
-
             }
         }
     }

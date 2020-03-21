@@ -1,0 +1,77 @@
+<div class="table-responsive tile-area-table flairInsightsTable">
+    <div class="search-box inner-addon left-addon b-b-xs">
+        <i class="glyphicon glyphicon-search"></i>
+        <input type="text" ng-model="vm.reportName" name="reportName" class="form-control"
+            placeholder="Enter Report..." />
+        <button type="button" ng-click="vm.searchReports()" class="btn btn-default btn-sm search-btn">Search</button>
+    </div>
+    <br />
+    <table class="table table-striped flair-table-v1">
+        <thead>
+            <tr>
+                <th>
+                    <span data-translate="reportManagement.no"></span>
+                </th>
+                <th>
+                    <span data-translate="reportManagement.reportName"></span>
+                </th>
+                <th>
+                    <span data-translate="reportManagement.dashboardName"></span>
+                </th>
+                <th>
+                    <span data-translate="reportManagement.isThresholdAlert"></span>
+                </th>
+                <th>
+                    <span data-translate="reportManagement.run"></span>
+                </th>
+                <th>
+                    <span data-translate="reportManagement.createdBy"></span>
+                </th>
+                <th>
+                    <span data-translate="reportManagement.action"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="report in vm.reports">
+                <td>{{$index+1+ (vm.page-1) * vm.itemsPerPage}}</td>
+                <td>{{report.report.title_name}}</td>
+                <td>{{report.report.dashboard_name}}</td>
+                <td>{{report.report.thresholdAlert?'Yes':'No'}}</td>
+                <td>{{report.schedule.cron_exp | CronParser}}</td>
+                <td>{{report.report.userid}}</td>
+                <td>
+                    <div class="btn-group flex-btn-group-container report-actions">
+                        <button uib-tooltip="Run Now" ng-click="vm.executeNow(report.report_line_item.visualizationid)"
+                            class="btn btn-default btn-sm">
+                            <svg class="execute-now">
+                                <use xlink:href="#execute-now"></use>
+                            </svg>
+                        </button>
+                        <button uib-tooltip="Go to View" ng-click="vm.goToBuildPage(report.report.build_url)"
+                            class="btn btn-default btn-sm">
+                            <span class="fa fa-eye views-icon fa-2x"></span>
+                        </button>
+                        <button type="submit" uib-tooltip="Logs"
+                            ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})"
+                            class="btn btn-default btn-sm">
+                            <svg>
+                                <use xlink:href="#admin-logs"></use>
+                            </svg>
+                        </button>
+                        <button uib-tooltip="Edit" ng-click="vm.updateReport(report.report_line_item.visualizationid)"
+                            class="btn btn-default btn-sm">
+                            <span class="fa fa-edit edit-icon fa-2x"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center" ng-if="vm.totalItems>0">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage">
+        </jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page"
+            ng-change="vm.loadPage(vm.page)" items-per-page="vm.itemsPerPage"></uib-pagination>
+    </div>
+</div>

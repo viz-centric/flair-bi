@@ -10,16 +10,16 @@
     function alertsService($http) {
         var service = {
             getReleaseAlerts: getReleaseAlerts,
-            getReleaseAlertsCount:getReleaseAlertsCount,
-            getAllReleaseAlerts:getAllReleaseAlerts
+            getReleaseAlertsCount: getReleaseAlertsCount,
+            getAllReleaseAlerts: getAllReleaseAlerts
         };
 
         return service;
 
         ////////////////
-        function getReleaseAlerts(id,offset) {
+        function getReleaseAlerts(id, offset) {
             return $http({
-                url: 'api/release-alerts/'+ id+'/'+offset,
+                url: 'api/release-alerts/' + id + '/' + offset,
                 method: 'GET'
             });
         }

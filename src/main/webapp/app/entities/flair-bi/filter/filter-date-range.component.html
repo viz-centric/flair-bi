@@ -1,20 +1,20 @@
-<div style="padding: 0 6px 0 6px">
-    <div class="btn-group btn-group-sm"
-         data-toggle="buttons"
-         role="group"
-         aria-label="Date range">
-        <button type="button"
-                class="btn btn-default"
-                ng-class="{'active':vm.dateRangeTab == 0}"
-                ng-click="vm.onDateRangeClick(0)">Day</button>
-        <button type="button"
-                class="btn btn-default"
-                ng-class="{'active':vm.dateRangeTab == 1}"
-                ng-click="vm.onDateRangeClick(1)">Range</button>
-        <button type="button"
-                class="btn btn-default"
-                ng-class="{'active':vm.dateRangeTab == 2}"
-                ng-click="vm.onDateRangeClick(2)">Dynamic</button>
+<div style="padding: 6px 6px 0 6px">
+    <div>
+        <div type="tab"
+                class="date-range-btn"
+                ng-class="{'date-range-btn-active':vm.dateRangeTab == 0}"
+                ng-click="vm.onDateRangeClick(0)">
+                <p class="flex-text">Day</span></div>
+        <div type="tab"
+                class="date-range-btn"
+                ng-class="{'date-range-btn-active':vm.dateRangeTab == 1}"
+                ng-click="vm.onDateRangeClick(1)">
+                <p class="flex-text">Range</span></div>
+        <div type="tab"
+                class="date-range-btn"
+                ng-class="{'date-range-btn-active':vm.dateRangeTab == 2}"
+                ng-click="vm.onDateRangeClick(2)">
+                <p class="flex-text">Dynamic</span></div>
     </div>
     <div 
          ng-if="vm.dateRangeTab === 0">
@@ -28,14 +28,12 @@
     </div>
     <div 
          ng-if="vm.dateRangeTab === 1">
-        <label class="control-label" for="startDate">Date:</label>
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate"
                          ng-model="vm.currentDimension.selected"
                          ng-change="vm.onInputChange()"
                          md-placeholder="Start date"></md-datepicker>
         </div>
-        <label class="control-label" for="endDate">End date:</label>
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="endDate"
                          ng-model="vm.currentDimension.selected2"
@@ -52,7 +50,6 @@
         </div>
         <div 
             ng-if="vm.currentDynamicDateRangeConfig.isCustom">
-            <label for="customDateRange">Days:</label>
             <input type="text"
                    class="form-control"
                    id="customDateRange"

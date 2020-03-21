@@ -568,7 +568,7 @@
         function deleteFeature(feature) {
             swal(
                 "Are you sure?",
-                "You want to delete selected feature", {
+                "Do you want to delete selected feature?", {
                 dangerMode: true,
                 buttons: true,
             })
@@ -723,8 +723,3 @@
         }
     }
 })();
-
-
-
-
-

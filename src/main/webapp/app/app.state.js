@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -8,14 +8,12 @@
         "$locationProvider"
     ];
 
-    function stateConfig($stateProvider, $locationProvider) {
+    function stateConfig($stateProvider) {
         $stateProvider.state("app", {
             abstract: true,
             views: {
                 "navbar@": {
-                    templateUrl: "app/layouts/navbar/navbar.html",
-                    controller: "NavbarController",
-                    controllerAs: "vm"
+                    component: 'navbarComponent'
                 },
                 "explorationNav@": {
                     templateUrl:
@@ -24,9 +22,7 @@
                     controllerAs: "vm"
                 },
                 "footer@": {
-                    templateUrl: "app/layouts/footer/footer.html",
-                    controller: "FooterController",
-                    controllerAs: "vm"
+                    component: 'footerComponent'
                 },
                 "topnavbar@": {
                     templateUrl: "app/layouts/topnavbar/topnavbar.html",
@@ -38,7 +34,7 @@
                 translatePartialLoader: [
                     "$translate",
                     "$translatePartialLoader",
-                    function($translate, $translatePartialLoader) {
+                    function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart("global");
                         return $translate.refresh();
                     }

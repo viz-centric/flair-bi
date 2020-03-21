@@ -29,7 +29,7 @@
         function login(credentials) {
             return $http
                 .post("api/authenticate", credentials)
-                .then(function (response) {
+                .then(function(response) {
                     $localStorage.authenticationToken = response.id_token;
                     return response;
                 });

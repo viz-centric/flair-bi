@@ -3,11 +3,15 @@
 
     angular
         .module('flairbiApp')
-        .controller('recentlyCreatedController', recentlyCreatedController);
+        .component('recentlyCreatedComponent', {
+            templateUrl: 'app/recents/recently-created.component.html',
+            controller: recentlyCreatedController,
+            controllerAs: 'vm'
+        });
 
-    recentlyCreatedController.$inject = ['$scope','$stateParams','ViewWatches','Views','Principal','recentBookmarkService'];
+    recentlyCreatedController.$inject = ['$stateParams', 'Views', 'Principal', 'recentBookmarkService'];
 
-    function recentlyCreatedController($scope,$stateParams,ViewWatches,Views,Principal,recentBookmarkService) {
+    function recentlyCreatedController($stateParams, Views, Principal, recentBookmarkService) {
         var vm = this;
         vm.recentlyCreated = {
             'bookmark': {
@@ -29,18 +33,18 @@
                 }
             }
         };
-        vm.toggleTabs=toggleTabs;
-        
-        activate();
+        vm.toggleTabs = toggleTabs;
+
+        vm.$onInit = activate;
 
         ////////////////
 
         function activate() {
             getAccount();
             toggleTabs($stateParams.id);
-         }
+        }
 
-        function getRecentCreatedViews(){
+        function getRecentCreatedViews() {
             vm.recentlyCreatedViews = Views.recentlyCreated({});
         }
 
@@ -52,23 +56,19 @@
             });
         }
 
-        function toggleTabs(id){
+        function toggleTabs(id) {
             vm.recentlyCreated[id].getData();
-            vm.tabId=id;
-            if($("#tab-"+id).hasClass("tab-active")){
-                $("#tab-"+id).removeClass("tab-active");
-            }else{
+            vm.tabId = id;
+            if ($("#tab-" + id).hasClass("tab-active")) {
+                $("#tab-" + id).removeClass("tab-active");
+            } else {
                 $(".tab").removeClass("tab-active");
-                $("#tab-"+id).addClass("tab-active");
+                $("#tab-" + id).addClass("tab-active");
             }
         }
 
-        function getRecentCreatedBookmark(){
-            recentBookmarkService.getRecentBookmark({
-                    page: 0,
-                    size: 5,
-                    sort: 'watchCreatedTime,desc'
-            }).then(function (result) {
+        function getRecentCreatedBookmark() {
+            recentBookmarkService.getRecentBookmark('?page=0&size=5&sort=watchCreatedTime,desc').then(function (result) {
                 vm.bookmarkWatches = result.data;
             });
         }

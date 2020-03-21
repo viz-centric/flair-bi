@@ -3,11 +3,15 @@
 
     angular
         .module('flairbiApp')
-        .controller('recentlyAccessedController', recentlyAccessedController);
+        .component('recentlyAccessedComponent', {
+            templateUrl: 'app/recents/recently-accessed.component.html',
+            controller: recentlyAccessedController,
+            controllerAs: 'vm'
+        });
 
-    recentlyAccessedController.$inject = ['$scope','$stateParams','ViewWatches','Views','Principal','recentBookmarkService'];
+    recentlyAccessedController.$inject = ['$stateParams', 'ViewWatches', 'Views', 'Principal', 'recentBookmarkService'];
 
-    function recentlyAccessedController($scope,$stateParams,ViewWatches,Views,Principal,recentBookmarkService) {
+    function recentlyAccessedController($stateParams, ViewWatches, Views, Principal, recentBookmarkService) {
         var vm = this;
         vm.recentlyAccessed = {
             'bookmark': {
@@ -25,28 +29,27 @@
                 }
             },
             'overall-most-popular-views': {
-                getData: function(){
+                getData: function () {
                     getOverAllMostPopularViews();
                 }
             },
             'overall-most-popular-bookmarks': {
-                getData: function(){
+                getData: function () {
                     getOverAllMostPopularBookmarks();
                 }
             },
         };
-        vm.toggleTabs=toggleTabs;
-        
-        activate();
+        vm.toggleTabs = toggleTabs;
+        vm.$onInit = activate;
 
         ////////////////
 
         function activate() {
             getAccount();
             toggleTabs($stateParams.id);
-         }
+        }
 
-        function getRecentViews(){
+        function getRecentViews() {
             vm.viewWatches = ViewWatches.query({
                 page: 0,
                 size: 5,
@@ -54,8 +57,8 @@
             });
         }
 
-        function getOverAllMostPopularViews(){
-            vm.mostPopularViews =Views.mostPopular({});
+        function getOverAllMostPopularViews() {
+            vm.mostPopularViews = Views.mostPopular({});
         }
 
         function getAccount() {
@@ -65,24 +68,24 @@
             });
         }
 
-        function toggleTabs(id){
+        function toggleTabs(id) {
             vm.recentlyAccessed[id].getData();
-            vm.tabId=id;
-            if($("#tab-"+id).hasClass("tab-active")){
-                $("#tab-"+id).removeClass("tab-active");
-            }else{
+            vm.tabId = id;
+            if ($("#tab-" + id).hasClass("tab-active")) {
+                $("#tab-" + id).removeClass("tab-active");
+            } else {
                 $(".tab").removeClass("tab-active");
-                $("#tab-"+id).addClass("tab-active");
+                $("#tab-" + id).addClass("tab-active");
             }
         }
 
-        function getRecentBookmark(){
+        function getRecentBookmark() {
             recentBookmarkService.getRecentBookmark("?page=0&size=5&sort=watchTime,desc").then(function (result) {
                 vm.bookmarkWatches = result.data;
             });
         }
 
-        function getOverAllMostPopularBookmarks(){
+        function getOverAllMostPopularBookmarks() {
             recentBookmarkService.getRecentBookmark("?page=0&size=5&sort=watchCount,desc").then(function (result) {
                 vm.mostPopularBookmarks = result.data;
             });

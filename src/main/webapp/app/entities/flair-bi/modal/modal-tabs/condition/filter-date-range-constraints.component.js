@@ -90,7 +90,6 @@
         ////////////////
 
         function onInit() {
-            reset();
             setDateRangeSubscription();
         }
 
@@ -102,6 +101,7 @@
 
         function onDateRangeClick(tabIndex) {
             vm.dateRangeTab = tabIndex;
+            onInputChange();
         }
 
         function onCustomDynamicDateRangeChange() {
@@ -110,6 +110,9 @@
 
         function getStartDateRangeInterval() {
             var config = vm.currentDynamicDateRangeConfig;
+            if (!config) {
+                return null;
+            }
             if (config.toDate || config.isCustom) {
                 return null;
             } else if (config.period.days) {
@@ -120,9 +123,30 @@
             return null;
         }
 
+        function adjustStartDateRangeInterval() {
+            var config = vm.currentDynamicDateRangeConfig;
+            if (!config) {
+                return null;
+            }
+            if (config.toDate || config.isCustom) {
+                return null;
+            } else if (config.period.days || config.period.months) {
+                var toDate = moment(new Date())
+                    .subtract(config.period.days, 'days')
+                    .subtract(config.period.months, 'months')
+                    .toDate();
+                console.log('to date', toDate);
+                return toDate;
+            }
+            return null;
+        }
+
         function getStartDateRange() {
             var date = new Date();
             var config = vm.currentDynamicDateRangeConfig;
+            if (!config) {
+                return null;
+            }
             if (config.isCustom) {
                 date.setDate(date.getDate() - vm.customDynamicDateRange);
                 return date;
@@ -139,60 +163,71 @@
         }
 
         function onInputChange() {
+            console.log('filter-date-range-constraints: input change', vm.dateRangeTab);
+            var startDate;
+            var endDate;
+            var startDateFormatted = "";
+            var endDateFormatted = "";
             if (vm.dateRangeTab === TAB_DAY) {
-                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
-                var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected))));
+                startDateFormatted = startDate = formatDate(resetTimezone(startOfDay(strToDate(vm.currentDimension.selected))));
+                endDateFormatted = endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected))));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
-                vm.onDateChange({
-                    startDate: startDate,
-                    endDate: endDate,
-                    activeTab: vm.dateRangeTab
-                });
             } else if (vm.dateRangeTab === TAB_RANGE) {
-                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
-                var endDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected2)));
+                startDateFormatted = startDate = formatDate(resetTimezone(startOfDay(strToDate(vm.currentDimension.selected))));
+                endDateFormatted = endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected2))));
                 console.log('filter-date-range-component: input change range', typeof startDate, startDate,
                     typeof endDate, endDate);
-                vm.onDateChange({
-                    startDate: startDate,
-                    endDate: endDate,
-                    activeTab: vm.dateRangeTab
-                });
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
                 var startDateRange = getStartDateRange();
-                var startDate;
                 if (startDateRange) {
                     startDate = formatDate(resetTimezone(startOfDay(strToDate(startDateRange))));
+                    startDateFormatted = startDate;
                 } else {
                     var startDateRangeInterval = getStartDateRangeInterval();
+                    if (!startDateRangeInterval) {
+                        return;
+                    }
                     startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                    var adjustedDate = adjustStartDateRangeInterval();
+                    startDateFormatted = formatDate(resetTimezone(startOfDay(adjustedDate)));
                 }
-                var endDate = '__FLAIR_NOW()';
+                endDateFormatted = formatDate(resetTimezone(endOfDay(strToDate(new Date()))));
+                endDate = '__FLAIR_NOW()';
                 console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
                     typeof endDate, endDate);
-                vm.onDateChange({
-                    startDate: startDate,
-                    endDate: endDate,
-                    activeTab: vm.dateRangeTab
-                });
             }
+            vm.onDateChange({
+                startDate: startDate,
+                endDate: endDate,
+                metadata: {
+                    startDateFormatted: startDateFormatted,
+                    endDateFormatted: endDateFormatted,
+                    tab: vm.dateRangeTab
+                }
+            });
         }
 
         function setDateRangeSubscription() {
         }
 
         function onDimensionChange(condition) {
-            console.log('date component: on changes before', vm.condition);
-            if (!condition.valueType) {
-                return;
+            console.log('date component: on changes before', condition);
+            var selected;
+            var selected2;
+            var tab = vm.dateRangeTab;
+            if (!condition.metadata || !condition.metadata.startDateFormatted) {
+                selected = formatDate(resetTimezone(strToDate(new Date())));
+                selected2 = formatDate(resetTimezone(strToDate(new Date())));
+            } else {
+                selected = formatDate(resetTimezone(strToDate(condition.metadata.startDateFormatted)));
+                selected2 = formatDate(resetTimezone(strToDate(condition.metadata.endDateFormatted)));
+                tab = condition.metadata.tab;
             }
-            vm.currentDimension = {
-                selected: resetTimezone(strToDate(condition.valueType.value)),
-                selected2: resetTimezone(strToDate(condition.secondValueType.value)),
-            };
-            vm.dateRangeTab = condition.activeTab;
-            console.log('date component: on changes after-', vm.currentDimension.selected);
+            vm.currentDimension = {selected: selected, selected2: selected2};
+            vm.dateRangeTab = tab;
+            console.log('date component: on changes after', vm.currentDimension.selected, vm.currentDimension.selected2);
+            onInputChange();
         }
 
         function onReloadChange() {

@@ -21,6 +21,7 @@
     function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService) {
         var vm = this;
         vm.load = load;
+        vm.showInfo = false;
         vm.dimension = {};
 
 
@@ -35,6 +36,7 @@
         vm.removeCondition = removeCondition;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.onDateChange = onDateChange;
+        vm.getMetadataTooltip = getMetadataTooltip;
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
@@ -48,15 +50,19 @@
             }
         }
 
-        function onDateChange(startDate, endDate, activeTab) {
+        function getMetadataTooltip(metadata) {
+            return 'from ' + metadata.startDateFormatted + ' to ' + metadata.endDateFormatted;
+        }
+
+        function onDateChange(startDate, endDate, metadata) {
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
-                typeof endDate, endDate);
+                typeof endDate, endDate, metadata);
             if (startDate && endDate) {
                 startDate = resetTimezone(startDate);
                 endDate = resetTimezone(endDate);
                 vm.condition.valueType = {value: startDate, type: vm.dataType, '@type': 'valueType'};
                 vm.condition.secondValueType = {value: endDate, type: vm.dataType, '@type': 'valueType'};
-                vm.condition.activeTab = activeTab;
+                vm.condition.metadata = metadata;
             }
         }
 
@@ -88,7 +94,9 @@
                         //     });
                         // }
                     }
-                    if (isDate.length > 0) {
+                    var hasDates = isDate.length > 0;
+                    vm.showInfo = hasDates;
+                    if (hasDates) {
                         return true;
                     }
                 }

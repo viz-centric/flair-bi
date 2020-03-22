@@ -13,15 +13,34 @@ exports.config = {
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    browserName: 'chrome'
+    browserName: 'chrome',
+    // shardTestFiles: true,
+    // maxInstances: 2,
+    chromeOptions: {
+      args: [
+        // disable chrome's wakiness
+        '--disable-infobars',
+        '--disable-extensions',
+        'verbose',
+        '--start-fullscreen',
+        'log-path=/tmp/chromedriver.log',
+        'incognito'
+      ],
+      prefs: {
+        // disable chrome's annoying password manager
+        'profile.password_manager_enabled': false,
+        'credentials_enable_service': false,
+        'password_manager_enabled': false
+      }
+    }
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  baseUrl: 'http://localhost:8002/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
-    print: function() {}
+    print: function () { }
   },
   onPrepare() {
     require('ts-node').register({

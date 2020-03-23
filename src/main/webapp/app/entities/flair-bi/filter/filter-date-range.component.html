@@ -16,9 +16,9 @@
                 ng-click="vm.onDateRangeClick(2)">
                 <p class="flex-text">Dynamic</span></div>
     </div>
-    <br/>
-    <div class="form-group"
+    <div 
          ng-if="vm.dateRangeTab === 0">
+    
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate1"
                          ng-model="vm.currentDimension.selected"
@@ -26,7 +26,7 @@
                          md-placeholder="Enter date"></md-datepicker>
         </div>
     </div>
-    <div class="form-group"
+    <div 
          ng-if="vm.dateRangeTab === 1">
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate"
@@ -42,13 +42,13 @@
         </div>
     </div>
     <div ng-if="vm.dateRangeTab === 2">
-        <div class="form-group">
-            <select class="dynamic-days"
-                    ng-model="vm.currentDynamicDateRangeConfig"
+        <div 
+             style="padding: 10px 0 0 0">
+            <select ng-model="vm.currentDynamicDateRangeConfig"
                     ng-change="vm.onInputChange()"
                     ng-options="config.title for config in vm.dynamicDateRangeConfig"></select>
         </div>
-        <div class="form-group"
+        <div 
             ng-if="vm.currentDynamicDateRangeConfig.isCustom">
             <input type="text"
                    class="form-control"

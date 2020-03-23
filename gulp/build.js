@@ -7,7 +7,6 @@ var fs = require('fs'),
     sourcemaps = require('gulp-sourcemaps'),
     rev = require('gulp-rev'),
     htmlmin = require('gulp-htmlmin'),
-    ngAnnotate = require('gulp-ng-annotate'),
     prefix = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
     uglify = require('gulp-uglify'),
@@ -15,14 +14,15 @@ var fs = require('fs'),
     revReplace = require("gulp-rev-replace"),
     plumber = require('gulp-plumber'),
     gulpIf = require('gulp-if'),
-    handleErrors = require('./handle-errors');
+    handleErrors = require('./handle-errors'),
+    babel = require('gulp-babel');
 
 var config = require('./config');
 
 var initTask = lazypipe()
     .pipe(sourcemaps.init);
 var jsTask = lazypipe()
-    .pipe(ngAnnotate);
+    .pipe(babel);
 var cssTask = lazypipe()
     .pipe(prefix)
     .pipe(cssnano);
@@ -32,19 +32,19 @@ module.exports = function () {
     var manifest = gulp.src(config.revManifest);
 
     return gulp.src([config.app + '**/*.html',
-        '!' + config.app + 'app/**/*.html',
-        '!' + config.app + 'swagger-ui/**/*',
-        '!' + config.bower + '**/*.html'])
-        .pipe(plumber({errorHandler: handleErrors}))
+    '!' + config.app + 'app/**/*.html',
+    '!' + config.app + 'swagger-ui/**/*',
+    '!' + config.bower + '**/*.html'])
+        .pipe(plumber({ errorHandler: handleErrors }))
         //init sourcemaps and prepend semicolon
         .pipe(useref({}, initTask))
         //append html templates
         .pipe(gulpIf('**/app.js', footer(templates)))
         .pipe(gulpIf('*.js', jsTask()))
         .pipe(gulpIf('*.css', cssTask()))
-        .pipe(gulpIf('*.html', htmlmin({collapseWhitespace: true})))
+        .pipe(gulpIf('*.html', htmlmin({ collapseWhitespace: true })))
         .pipe(gulpIf('**/*.!(html)', rev()))
-        .pipe(revReplace({manifest: manifest}))
+        .pipe(revReplace({ manifest: manifest }))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.dist));
 };

@@ -281,7 +281,7 @@
                         <button uib-tooltip="Go to View" ng-click="vm.goToBuildPage(report.report.build_url)" class="btn btn-default btn-sm">
                             <span class="fa fa-eye views-icon fa-2x"></span>
                         </button>
-                        <button type="submit" uib-tooltip="Logs" ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid})" class="btn btn-default btn-sm">
+                        <button type="submit" uib-tooltip="Logs" ui-sref="report-management-log({visualizationid:report.report_line_item.visualizationid,reportType:report.report.thresholdAlert})" class="btn btn-default btn-sm">
                             <svg >
                                <use xlink:href="#admin-logs"></use>
                             </svg>

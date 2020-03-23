@@ -80,7 +80,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
     background-image: linear-gradient(
-        top,
+        'to top', 
         $active-background-color 0%,
         #fff 90%
     );
@@ -226,7 +226,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#eeeeee', endColorstr = '#cccccc', GradientType = 0);
     background-image: linear-gradient(
-        top,
+        'to top',
         $active-background-color 0%,
         $active-background-color 60%
     );
@@ -295,7 +295,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
         -moz-linear-gradient(center bottom, #fff 85%, $active-background-color
                     99%);
     background: url("select2-spinner.gif") no-repeat 100%,
-        linear-gradient(top, #fff 85%, $active-background-color 99%);
+        linear-gradient('to top', #fff 85%, $active-background-color 99%);
 }
 
 .select2-container-active .select2-choice,
@@ -348,7 +348,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff', GradientType=0);
     background-image: linear-gradient(
-        bottom,
+        'to bottom',
         #fff 0%,
         $active-background-color 50%
     );
@@ -559,17 +559,17 @@ disabled look for disabled choices in the results dropdown
         color-stop(15%, #fff)
     );
     background-image: -webkit-linear-gradient(
-        top,
+        'to top',
         $active-background-color 1%,
         #fff 15%
     );
     background-image: -moz-linear-gradient(
-        top,
+        'to top',
         $active-background-color 1%,
         #fff 15%
     );
     background-image: linear-gradient(
-        top,
+        'to top',
         $active-background-color 1%,
         #fff 15%
     );
@@ -661,21 +661,21 @@ disabled look for disabled choices in the results dropdown
         color-stop(100%, $active-background-color)
     );
     background-image: -webkit-linear-gradient(
-        top,
+        'to top',
         #f4f4f4 20%,
         #f0f0f0 50%,
         #e8e8e8 52%,
         $active-background-color 100%
     );
     background-image: -moz-linear-gradient(
-        top,
+        'to top',
         #f4f4f4 20%,
         #f0f0f0 50%,
         #e8e8e8 52%,
         $active-background-color 100%
     );
     background-image: linear-gradient(
-        top,
+        'to top',
         #f4f4f4 20%,
         #f0f0f0 50%,
         #e8e8e8 52%,

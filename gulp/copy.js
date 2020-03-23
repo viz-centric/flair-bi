@@ -31,7 +31,7 @@ function i18n() {
 }
 
 function languages() {
-    var locales = yorc.languages.map(function (locale) {
+    var locales = yorc.languages.map((locale) => {
         return config.bower + 'angular-i18n/angular-locale_' + locale + '.js';
     });
     return gulp.src(locales)
@@ -40,8 +40,8 @@ function languages() {
         .pipe(gulp.dest(config.app + 'i18n/'));
 }
 
-function fonts(done) {
-    mergeStream(gulp.src(config.bower + 'bootstrap/fonts/*.*')
+function fonts() {
+    return mergeStream(gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({ errorHandler: handleErrors }))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(gulp.dest(config.dist + 'content/fonts/'))
@@ -82,7 +82,6 @@ function fonts(done) {
             }))
             .pipe(gulp.dest(config.dist))
     );
-    done();
 }
 
 function common() {

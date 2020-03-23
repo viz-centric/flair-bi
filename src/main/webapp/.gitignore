@@ -5,6 +5,8 @@
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
+
+build
 *~
 \#*\#
 /.emacs.desktop

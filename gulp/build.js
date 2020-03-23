@@ -14,15 +14,14 @@ var fs = require('fs'),
     revReplace = require("gulp-rev-replace"),
     plumber = require('gulp-plumber'),
     gulpIf = require('gulp-if'),
-    handleErrors = require('./handle-errors'),
-    babel = require('gulp-babel');
+    handleErrors = require('./handle-errors');
 
 var config = require('./config');
 
 var initTask = lazypipe()
     .pipe(sourcemaps.init);
 var jsTask = lazypipe()
-    .pipe(babel);
+    .pipe(uglify);
 var cssTask = lazypipe()
     .pipe(prefix)
     .pipe(cssnano);
@@ -40,7 +39,7 @@ module.exports = function () {
         .pipe(useref({}, initTask))
         //append html templates
         .pipe(gulpIf('**/app.js', footer(templates)))
-        .pipe(gulpIf('*.js', jsTask()))
+        // .pipe(gulpIf('*.js', jsTask()))
         .pipe(gulpIf('*.css', cssTask()))
         .pipe(gulpIf('*.html', htmlmin({ collapseWhitespace: true })))
         .pipe(gulpIf('**/*.!(html)', rev()))

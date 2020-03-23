@@ -14,7 +14,9 @@ var gulp = require('gulp'),
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
-    gulpIf = require('gulp-if');
+    gulpIf = require('gulp-if'),
+    babel = require('gulp-babel'),
+    bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./gulp/handle-errors'),
     serve = require('./gulp/serve'),
@@ -84,7 +86,6 @@ gulp.task('inject:dep', gulp.series('inject:test', 'inject:vendor'));
 
 gulp.task('inject', gulp.series('inject:dep', 'inject:app'));
 
-
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
         .pipe(htmlmin({
@@ -106,6 +107,8 @@ gulp.task('ngconstant:dev', function (done) {
         .pipe(gulp.dest(config.app + 'app/'));
     done();
 });
+
+
 
 gulp.task('ngconstant:prod', function (done) {
     ngConstant(constants.prodConstants)
@@ -151,7 +154,7 @@ gulp.task('install', gulp.series('inject:dep', 'ngconstant:dev', 'copy:languages
 
 gulp.task('serve', gulp.series('install', serve));
 
-gulp.task('build', gulp.series('clean', 'copy', 'inject:vendor', 'ngconstant:prod', 'copy:languages', 'inject:app', 'assets:prod'));
+gulp.task('build', gulp.series('clean', gulp.parallel('copy', 'copy:languages'), 'inject:vendor', 'ngconstant:prod', 'inject:app', 'assets:prod'));
 
 gulp.task('default', gulp.series('serve'));
 

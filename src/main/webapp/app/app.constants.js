@@ -4,7 +4,7 @@
     angular
         .module('flairbiApp')
         .constant('VERSION', "2.4.1-SNAPSHOT")
-        .constant('DEBUG_INFO_ENABLED', true)
+        .constant('DEBUG_INFO_ENABLED', false)
         .constant('PERMISSION_TYPES', {
 	"APPLICATION": "APPLICATION",
 	"DASHBOARD": "DASHBOARD",

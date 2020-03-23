@@ -1,0 +1,13 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "plugins": [
+        [
+            "angularjs-annotate",
+            {
+                "explicitOnly": false
+            }
+        ]
+    ]
+}

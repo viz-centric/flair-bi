@@ -3953,7 +3953,8 @@ jhi-alert .alerts .alert-danger {
 .flair-oprations-icon {
   width: 16px;
   height: 16px;
-  margin-top: 12px; }
+  margin-top: 12px;
+  fill: #439dd3; }
 
 /* MODAL */
 .modal-header {

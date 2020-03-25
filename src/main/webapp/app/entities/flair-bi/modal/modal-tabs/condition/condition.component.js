@@ -23,31 +23,64 @@
         vm.load = load;
         vm.showInfo = false;
         vm.dimension = {};
-
-
         vm.simpleTypes = CONDITION_TYPES.filter(function (item) {
             return item.type === 'simple';
         });
         vm.compositeTypes = CONDITION_TYPES.filter(function (item) {
             return item.type === 'composite';
         });
+        vm.dateRangeSupportedTypes = [];
+        vm.dateRangeUnsupportedTypes = [];
         vm.compareTypes = COMPARE_TYPES;
         vm.addComposition = addComposition;
         vm.removeCondition = removeCondition;
+        vm.getComparisonTypes = getComparisonTypes;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.onDateChange = onDateChange;
         vm.getMetadataTooltip = getMetadataTooltip;
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
-        var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
+        const COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
+        const SIMPLE_DATE_TYPES_FOR_DATES = ['Between', 'Compare'];
+        const SIMPLE_DATE_TYPES_OTHER = ['Compare', 'Contains', 'NotContains', 'Like'];
         vm.dimension = vm.features[0];
         ////////////////
 
         function activate() {
-            if (vm.condition) {
+            vm.dateRangeSupportedTypes = vm.simpleTypes
+                .filter(function (item) {
+                    return SIMPLE_DATE_TYPES_FOR_DATES.indexOf(item['@type']) > -1;
+                });
 
+            vm.dateRangeUnsupportedTypes = vm.simpleTypes
+                .filter(function (item) {
+                    return SIMPLE_DATE_TYPES_OTHER.indexOf(item['@type']) > -1;
+                });
+        }
+
+        function getComparisonTypes(condition) {
+            if (!condition) {
+                return [];
             }
+
+            const dimensions = vm.features.filter(element => {
+                return element.name === condition.featureName;
+            });
+
+            if (dimensions.length === 0) {
+                return [];
+            }
+
+            const dimension = dimensions[0];
+            const dataType = dimension.type;
+            const isDateType = COMPARABLE_DATA_TYPES.indexOf(dataType) > -1;
+
+            if (isDateType) {
+                return vm.dateRangeSupportedTypes;
+            }
+
+            return vm.dateRangeUnsupportedTypes;
         }
 
         function getMetadataTooltip(metadata) {
@@ -84,19 +117,6 @@
                             return element;
                         }
                     });
-                    for (var index = 0; index < vm.features.length; index++) {
-                        // if (vm.features[index].type.toLowerCase() == "varchar" && vm.features[index].name === dimension.featureName) {
-                        //     vm.simpleTypes = vm.simpleTypes.filter(function (val) {
-                        //         return val["@type"] !== "Between";
-                        //     })
-                        //     return false;
-                        // }
-                        // else {
-                        //     vm.simpleTypes = CONDITION_TYPES.filter(function (item) {
-                        //         return item.type === 'simple';
-                        //     });
-                        // }
-                    }
                     var hasDates = isDate.length > 0;
                     vm.showInfo = hasDates;
                     if (hasDates) {

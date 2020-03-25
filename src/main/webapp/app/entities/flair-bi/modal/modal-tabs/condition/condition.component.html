@@ -22,12 +22,14 @@
             </ui-select>
         </div>
      
-        <div ng-if="vm.canDisplayDateRangeControls(vm.condition)">
-            <filter-date-range-constraints dimension="vm.dimension" reload="vm.dateRangeReload"
-                on-date-change="vm.onDateChange(startDate, endDate,activeTab)" condition="vm.condition">
+        <div ng-if="vm.canDisplayDateRangeControls(vm.condition)" class="col-md-4 field">
+            <filter-date-range-constraints dimension="vm.dimension"
+                                           reload="vm.dateRangeReload"
+                                           on-date-change="vm.onDateChange(startDate, endDate, metadata)"
+                                           condition="vm.condition">
             </filter-date-range-constraints>
         </div>
-        <div ng-if="!vm.canDisplayDateRangeControls(vm.condition)">
+        <div ng-if="!vm.canDisplayDateRangeControls(vm.condition)" class="col-md-4 field">
             <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
                 <input type="text" class="form-control" ng-model="vm.condition.value" />
             </div>
@@ -73,6 +75,14 @@
                 ng-click="vm.removeCondition()">
                 <svg class="flair-delete-icon flair-oprations-icon">
                     <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    </use>
+                </svg>
+            </div>
+            <div ng-show="vm.canDisplayDateRangeControls(vm.condition)"
+                 class="data-constraint-operation-button icon"
+                 title="{{vm.getMetadataTooltip(vm.condition.metadata)}}">
+                <svg class="flair-info-icon flair-oprations-icon">
+                    <use xlink:href="#information" xmlns:xlink="http://www.w3.org/1999/xlink">
                     </use>
                 </svg>
             </div>

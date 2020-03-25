@@ -2437,11 +2437,11 @@ tags-input-grpc .tags .tag-item {
   line-height: 25px;
   border: 1px solid #acacac;
   border-radius: 3px;
-  background: -webkit-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+  background: -webkit-linear-gradient("to top", #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
   background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%); }
 
 tags-input-grpc .tags .tag-item.selected {
-  background: -webkit-linear-gradient(top, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
+  background: -webkit-linear-gradient("to top", #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
   background: linear-gradient(to bottom, #febbbb 0%, #fe9090 45%, #ff5c5c 100%); }
 
 tags-input-grpc .tags .tag-item .remove-button {
@@ -3953,7 +3953,8 @@ jhi-alert .alerts .alert-danger {
 .flair-oprations-icon {
   width: 16px;
   height: 16px;
-  margin-top: 12px; }
+  margin-top: 12px;
+  fill: #439dd3; }
 
 /* MODAL */
 .modal-header {
@@ -5865,7 +5866,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
   background-image: -webkit-linear-gradient(center bottom, #f0f0f2 0%, #fff 90%);
   background-image: -moz-linear-gradient(center bottom, #f0f0f2 0%, #fff 90%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
-  background-image: linear-gradient(top, #f0f0f2 0%, #fff 90%); }
+  background-image: linear-gradient("to top", #f0f0f2 0%, #fff 90%); }
 
 .select2-container.select2-allowclear .select2-choice .select2-chosen {
   margin-right: 42px; }
@@ -5970,7 +5971,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
   background-image: -webkit-linear-gradient(center bottom, #f0f0f2 0%, #f0f0f2 60%);
   background-image: -moz-linear-gradient(center bottom, #f0f0f2 0%, #f0f0f2 60%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#eeeeee', endColorstr = '#cccccc', GradientType = 0);
-  background-image: linear-gradient(top, #f0f0f2 0%, #f0f0f2 60%); }
+  background-image: linear-gradient("to top", #f0f0f2 0%, #f0f0f2 60%); }
 
 .select2-container .select2-choice .select2-arrow b {
   display: block;
@@ -6020,7 +6021,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
   background: url("select2-spinner.gif") no-repeat 100%, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, #fff), color-stop(0.99, #f0f0f2));
   background: url("select2-spinner.gif") no-repeat 100%, -webkit-linear-gradient(center bottom, #fff 85%, #f0f0f2 99%);
   background: url("select2-spinner.gif") no-repeat 100%, -moz-linear-gradient(center bottom, #fff 85%, #f0f0f2 99%);
-  background: url("select2-spinner.gif") no-repeat 100%, linear-gradient(top, #fff 85%, #f0f0f2 99%); }
+  background: url("select2-spinner.gif") no-repeat 100%, linear-gradient("to top", #fff 85%, #f0f0f2 99%); }
 
 .select2-container-active .select2-choice,
 .select2-container-active .select2-choices {
@@ -6054,7 +6055,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
   background-image: -webkit-linear-gradient(center top, #fff 0%, #f0f0f2 50%);
   background-image: -moz-linear-gradient(center top, #fff 0%, #f0f0f2 50%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff', GradientType=0);
-  background-image: linear-gradient(bottom, #fff 0%, #f0f0f2 50%); }
+  background-image: linear-gradient("to bottom", #fff 0%, #f0f0f2 50%); }
 
 .select2-dropdown-open .select2-choice .select2-arrow {
   background: transparent;
@@ -6229,9 +6230,9 @@ disabled look for disabled choices in the results dropdown
   overflow: hidden;
   background-color: #fff;
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(1%, #f0f0f2), color-stop(15%, #fff));
-  background-image: -webkit-linear-gradient(top, #f0f0f2 1%, #fff 15%);
-  background-image: -moz-linear-gradient(top, #f0f0f2 1%, #fff 15%);
-  background-image: linear-gradient(top, #f0f0f2 1%, #fff 15%); }
+  background-image: -webkit-linear-gradient("to top", #f0f0f2 1%, #fff 15%);
+  background-image: -moz-linear-gradient("to top", #f0f0f2 1%, #fff 15%);
+  background-image: linear-gradient("to top", #f0f0f2 1%, #fff 15%); }
 
 .select2-locked {
   padding: 3px 5px 3px 5px !important; }
@@ -6299,9 +6300,9 @@ input.select2-active {
   background-color: #e4e4e4;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#f4f4f4', GradientType=0);
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), color-stop(100%, #f0f0f2));
-  background-image: -webkit-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%);
-  background-image: -moz-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%);
-  background-image: linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%); }
+  background-image: -webkit-linear-gradient("to top", #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%);
+  background-image: -moz-linear-gradient("to top", #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%);
+  background-image: linear-gradient("to top", #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%); }
 
 .select2-container-multi
 .select2-choices
@@ -6675,9 +6676,9 @@ input.select2-active {
 
 .common-create-popup md-input-container .md-input {
   border-radius: 0px; }
-  
+
 .md-datepicker-calendar-pane {
-    z-index: 99999; }
+  z-index: 99999; }
 
 .share-link-modal .copy-clipboard {
   width: 16px;

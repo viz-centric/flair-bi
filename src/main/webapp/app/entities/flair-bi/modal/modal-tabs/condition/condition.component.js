@@ -16,11 +16,12 @@
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService'];
+    conditionComponent.$inject = ['$scope', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService'];
 
-    function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService) {
+    function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService) {
         var vm = this;
         vm.load = load;
+        vm.showInfo = false;
         vm.dimension = {};
 
 
@@ -35,11 +36,11 @@
         vm.removeCondition = removeCondition;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.onDateChange = onDateChange;
+        vm.getMetadataTooltip = getMetadataTooltip;
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
-        vm.dateRangeReload = false;
         vm.dimension = vm.features[0];
         ////////////////
 
@@ -49,15 +50,22 @@
             }
         }
 
-        function onDateChange(startDate, endDate, activeTab) {
+        function getMetadataTooltip(metadata) {
+            if(metadata){
+                return 'from ' + metadata.startDateFormatted + ' to ' + metadata.endDateFormatted;
+            }
+            return '';
+        }
+
+        function onDateChange(startDate, endDate, metadata) {
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
-                typeof endDate, endDate);
+                typeof endDate, endDate, metadata);
             if (startDate && endDate) {
                 startDate = resetTimezone(startDate);
                 endDate = resetTimezone(endDate);
-                vm.condition.value = startDate;
-                vm.condition.secondValue = endDate;
-                vm.condition.activeTab = activeTab;
+                vm.condition.valueType = {value: startDate, type: vm.dataType, '@type': 'valueType'};
+                vm.condition.secondValueType = {value: endDate, type: vm.dataType, '@type': 'valueType'};
+                vm.condition.metadata = metadata;
             }
         }
 
@@ -89,7 +97,9 @@
                         //     });
                         // }
                     }
-                    if (isDate.length > 0) {
+                    var hasDates = isDate.length > 0;
+                    vm.showInfo = hasDates;
+                    if (hasDates) {
                         return true;
                     }
                 }
@@ -112,6 +122,7 @@
             });
             var query = { "distinct": true, "limit": 100 };
             query.fields = [{ name: featureName }];
+            favouriteFilterService.setFavouriteFilter(false);
             if (q) {
                 query.conditionExpressions = [{
                     sourceType: 'FILTER',

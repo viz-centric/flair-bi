@@ -46,6 +46,7 @@
              style="padding: 10px 0 0 0">
             <select ng-model="vm.currentDynamicDateRangeConfig"
                     ng-change="vm.onInputChange()"
+                    class="form-control"
                     ng-options="config.title for config in vm.dynamicDateRangeConfig"></select>
         </div>
         <div 

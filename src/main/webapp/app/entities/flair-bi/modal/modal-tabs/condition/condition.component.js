@@ -16,9 +16,9 @@
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService'];
+    conditionComponent.$inject = ['$scope', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService'];
 
-    function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService) {
+    function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService) {
         var vm = this;
         vm.load = load;
         vm.showInfo = false;
@@ -51,7 +51,10 @@
         }
 
         function getMetadataTooltip(metadata) {
-            return 'from ' + metadata.startDateFormatted + ' to ' + metadata.endDateFormatted;
+            if(metadata){
+                return 'from ' + metadata.startDateFormatted + ' to ' + metadata.endDateFormatted;
+            }
+            return '';
         }
 
         function onDateChange(startDate, endDate, metadata) {
@@ -119,6 +122,7 @@
             });
             var query = { "distinct": true, "limit": 100 };
             query.fields = [{ name: featureName }];
+            favouriteFilterService.setFavouriteFilter(false);
             if (q) {
                 query.conditionExpressions = [{
                     sourceType: 'FILTER',

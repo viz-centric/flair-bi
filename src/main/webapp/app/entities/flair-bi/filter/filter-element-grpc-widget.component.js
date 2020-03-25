@@ -63,7 +63,7 @@
             filterParametersService.saveSelectedFilter(filterParameters);
             vm.isActive(filter);
 
-            array_move(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+            displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
 
 
         }/////
@@ -257,7 +257,7 @@
                     var newItem = {};
                     newItem['text'] = item;
 
-                    array_move(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
+                    displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
 
                     return newItem;
                 });
@@ -278,6 +278,8 @@
                 valueType: 'valueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
+            displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(tag['text']), filterParameters[vm.dimension.name].length - 1);
+
         }
 
         function addDateRangeFilter(date) {
@@ -295,7 +297,7 @@
             filterParametersService.saveSelectedFilter(filterParameters);
         }
 
-        function array_move(arr, old_index, new_index) {
+        function displaySelectedFilterAtTop(arr, old_index, new_index) {
             if (new_index >= arr.length) {
                 var k = new_index - arr.length + 1;
                 while (k--) {
@@ -305,6 +307,5 @@
             arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
             return arr;
         }
-
     }
 })();

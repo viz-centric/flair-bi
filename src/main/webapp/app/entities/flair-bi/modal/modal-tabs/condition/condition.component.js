@@ -54,6 +54,7 @@
             if(metadata){
                 return 'from ' + metadata.startDateFormatted + ' to ' + metadata.endDateFormatted;
             }
+            return '';
         }
 
         function onDateChange(startDate, endDate, metadata) {

@@ -188,7 +188,7 @@
                 data: {
                     authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT]
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function ($state, $uibModal) {
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams,$state, $uibModal) {
                     $uibModal.open({
                         component: 'userManagementDialogComponent',
                         backdrop: 'static',

@@ -3,6 +3,7 @@ import { LoginPage } from '../login/login.po';
 import { HomePage } from '../home/home.po';
 import { userData } from '../user-data';
 import { CreateDatasourcePage } from './create-datasource.po';
+import { data } from '../postgres-data';
 
 describe('Postgres data source', () => {
 
@@ -26,7 +27,17 @@ describe('Postgres data source', () => {
 
         createNewDatasource
             .selectConnectionType('postgres')
-            .next();
+            .next()
+            .enterData(data)
+            .testConnection()
+            .next()
+            .next()
+            .searchDatasource('trans');
+        browser.sleep(2000);
+        createNewDatasource
+            .selectDatasource('transactions')
+            .showData()
+            .createDatasource();
     });
 
 

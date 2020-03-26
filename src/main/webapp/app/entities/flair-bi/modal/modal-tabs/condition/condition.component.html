@@ -16,7 +16,7 @@
                 <ui-select-match placeholder="Type">
                     {{$select.selected.displayName}}
                 </ui-select-match>
-                <ui-select-choices repeat="item['@type'] as item in vm.simpleTypes">
+                <ui-select-choices repeat="item['@type'] as item in vm.getComparisonTypes(vm.condition)">
                     {{item.displayName}}
                 </ui-select-choices>
             </ui-select>

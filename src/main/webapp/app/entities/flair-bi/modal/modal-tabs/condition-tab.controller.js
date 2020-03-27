@@ -44,7 +44,13 @@
             vm.conditionExpression = {
                 uuid: CryptoService.UUIDv4(),
                 '@type': 'Compare',
-                comparatorType: 'EQ'
+                comparatorType: 'EQ',
+                valueType: {
+                    '@type': 'valueType',
+                    value: '',
+                    type: ''
+                },
+                valueTypes: []
             };
         }
 
@@ -139,7 +145,13 @@
                             secondExpression: {
                                 uuid: CryptoService.UUIDv4(),
                                 '@type': 'Compare',
-                                comparatorType: 'EQ'
+                                comparatorType: 'EQ',
+                                valueType: {
+                                    '@type': 'valueType',
+                                    value: '',
+                                    type: ''
+                                },
+                                valueTypes: []
                             }
                         };
                         newCurrent.uuid = current.uuid;

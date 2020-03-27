@@ -3,13 +3,15 @@ import { LoginPage } from '../login/login.po';
 import { HomePage } from '../home/home.po';
 import { userData } from '../user-data';
 import { CreateDatasourcePage } from './create-datasource.po';
-import { data } from '../postgres-data';
+import { connectionData } from '../postgres-data';
+import { ConnectionsPage } from './connections.po';
 
-describe('Postgres data source', () => {
+describe('[Postgres] data source', () => {
 
     let loginPage: LoginPage,
         homePage: HomePage,
-        createNewDatasource: CreateDatasourcePage;
+        createNewDatasource: CreateDatasourcePage,
+        connectionsPage: ConnectionsPage;
 
     beforeEach(() => {
         loginPage = new LoginPage();
@@ -17,27 +19,43 @@ describe('Postgres data source', () => {
         loginPage.login(userData.admin);
 
         homePage = new HomePage();
-        homePage.createNewDatasource();
+        homePage.navigateTo();
 
         createNewDatasource = new CreateDatasourcePage();
+        connectionsPage = new ConnectionsPage();
     });
 
-    it('Create new data source', () => {
+    it('create new data source', () => {
+        homePage.createNewDatasource();
+
         expect(browser.getCurrentUrl()).toEqual(createNewDatasource.getPageUrl());
 
         createNewDatasource
             .selectConnectionType('postgres')
             .next()
-            .enterData(data)
+            .enterData(connectionData)
             .testConnection()
             .next()
             .next()
-            .searchDatasource('trans');
-        browser.sleep(2000);
-        createNewDatasource
+            .searchDatasource('trans')
             .selectDatasource('transactions')
             .showData()
-            .createDatasource();
+            .createDatasource()
+            .finish();
+
+        expect(browser.getCurrentUrl()).toEqual(connectionsPage.getPageUrl());
+        expect(connectionsPage.hasConnection(connectionData.connectionName)).toBeTruthy();
+    });
+
+    it('create new dashboard', () => {
+
+        homePage.createNewDashboard();
+    
+
+    });
+
+    it('create new view', () => {
+
     });
 
 

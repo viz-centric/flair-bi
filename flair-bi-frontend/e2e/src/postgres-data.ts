@@ -133,7 +133,7 @@ export class PostgresData {
 
 }
 
-export let data =
+export let connectionData =
     new PostgresData("postgres-e2e-connection",
         "localhost",
         "5432",

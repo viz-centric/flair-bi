@@ -16,6 +16,7 @@ export class HomePage extends BasePage {
 
     private newDatasource: ElementFinder = $('a.new-data-sou')
     private newDashboard: ElementFinder = $('a.new-dash');
+    private viewDashboardsBtn: ElementFinder = $('a[ui-sref="dashboards"]');
 
     navigateTo(): Promise<unknown> {
         return browser.get(browser.baseUrl) as Promise<unknown>;
@@ -32,6 +33,10 @@ export class HomePage extends BasePage {
 
     createNewDashboard(): void {
         this.newDashboard.click();
+    }
+
+    viewDashboards(): void {
+        this.viewDashboardsBtn.click();
     }
 
     goToAccount(): void {

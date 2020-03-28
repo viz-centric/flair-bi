@@ -13,7 +13,7 @@ describe('[Postgres] data source', () => {
         createNewDatasource: CreateDatasourcePage,
         connectionsPage: ConnectionsPage;
 
-    beforeEach(() => {
+    beforeAll(() => {
         loginPage = new LoginPage();
         loginPage.navigateTo();
         loginPage.login(userData.admin);
@@ -50,7 +50,7 @@ describe('[Postgres] data source', () => {
     it('create new dashboard', () => {
 
         homePage.createNewDashboard();
-    
+
 
     });
 
@@ -59,7 +59,7 @@ describe('[Postgres] data source', () => {
     });
 
 
-    afterEach(async () => {
+    afterAll(async () => {
         browser.executeScript('window.sessionStorage.clear();');
         browser.executeScript('window.localStorage.clear();');
         browser.driver.manage().deleteAllCookies();

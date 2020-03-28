@@ -6,8 +6,7 @@
 
     <div class="row">
         <div class="add-chart-property-container">
-            <div class="property-button" uib-tooltip="Add Dimension" tooltip-placement="bottom"
-                ng-click="vm.addFieldDimension()" ng-disabled="!vm.visual.nextFieldDimension()">
+            <div class="property-button" uib-tooltip="Add Dimension" tooltip-placement="bottom" ng-click="vm.addFieldDimension()" ng-disabled="!vm.visual.nextFieldDimension()">
                 <a data-toggle="tab" class="tab">
                     <svg class="flaticon-entity-dimension">
                         <use xlink:href="#entity-dimension" />
@@ -15,8 +14,7 @@
                     <i class="fa fa-plus"></i>
                 </a>
             </div>
-            <div class="property-button" uib-tooltip="Add Measure" tooltip-placement="bottom"
-                ng-click="vm.addFieldMeasure()" ng-disabled="!vm.visual.nextFieldMeasure()">
+            <div class="property-button" uib-tooltip="Add Measure" tooltip-placement="bottom"  ng-click="vm.addFieldMeasure()" ng-disabled="!vm.visual.nextFieldMeasure()">
                 <a data-toggle="tab" class="tab">
                     <svg class="flaticon-entity-measure">
                         <use xlink:href="#entity-measure" />
@@ -31,25 +29,23 @@
     <div class="row">
         <div class="entity-states" id="nestable">
             <ol class="entity-list">
-                <li ng-click="vm.selectField(field)" class="dd-item"
-                    ng-repeat="field in vm.visual.fields | orderBy: 'fieldType.order'">
+                <li ng-click="vm.selectField(field)" class="dd-item" ng-repeat="field in vm.visual.fields | orderBy: 'fieldType.order'">
                     <div class="entity-type">
                         <span class="entity-icon" ng-if="field.fieldType.featureType ==='DIMENSION'">
-                            <svg class="flaticon-entity-dimension">
-                                <use xlink:href="#entity-dimension" />
-                            </svg>
-                        </span>
+                                <svg class="flaticon-entity-dimension">
+                                    <use xlink:href="#entity-dimension" />
+                                </svg>
+                            </span>
                         <span class="entity-icon" ng-if="field.fieldType.featureType ==='MEASURE'">
-                            <svg class="flaticon-entity-measure">
-                                <use xlink:href="#entity-measure" />
-                            </svg>
-                        </span>
+                                <svg class="flaticon-entity-measure">
+                                    <use xlink:href="#entity-measure" />
+                                </svg>
+                            </span>
                         <span class="entity-field-name">{{field.feature.name}}</span>
                         <span class="pull-right" ng-if="field.fieldType.constraint ==='REQUIRED'">
-                            <i class="fa fa-lock"></i>
+                            <i class="fa fa-lock"></i> 
                         </span>
-                        <span class="pull-right" ng-if="field.fieldType.constraint ==='OPTIONAL'"
-                            ng-click="vm.removeField(field)">
+                        <span class="pull-right" ng-if="field.fieldType.constraint ==='OPTIONAL'" ng-click="vm.removeField(field)">
                             <i class="fa fa-trash"></i>
                         </span>
                     </div>
@@ -61,24 +57,20 @@
     <div class="row field-property-options">
         <div ng-if="vm.showPropertyTypes()">
             <div class="form-group">
-                <label class="control-label"
-                    ng-if="vm.selectedField.fieldType.featureType ==='DIMENSION'">Dimension</label>
+                <label class="control-label" ng-if="vm.selectedField.fieldType.featureType ==='DIMENSION'">Dimension</label>
                 <label class="control-label" ng-if="vm.selectedField.fieldType.featureType ==='MEASURE'">Measure</label>
                 <ui-select ng-model="vm.selectedField.feature" theme="bootstrap">
                     <ui-select-match placeholder="Select {{vm.selectedField.fieldType.featureType}}" allow-clear="true">
                         {{vm.selectedField.feature.name}}
                     </ui-select-match>
-                    <ui-select-choices
-                        repeat="feature as feature in vm.features | filter: {featureType: vm.selectedField.fieldType.featureType}">
+                    <ui-select-choices repeat="feature as feature in vm.features | filter: {featureType: vm.selectedField.fieldType.featureType}">
                         {{feature.name}}
                     </ui-select-choices>
                 </ui-select>
-
             </div>
             <div class="form-group" ng-if="vm.selectedField.fieldType.featureType === 'DIMENSION'">
                 <label class="control-label"> Hierarchy </label>
-                <ui-select ng-disabled="vm.selectedField.feature === null" ng-model="vm.selectedField.hierarchy"
-                    theme="bootstrap">
+                <ui-select ng-disabled="vm.selectedField.feature === null" ng-model="vm.selectedField.hierarchy" theme="bootstrap">
                     <ui-select-match placeholder="Select Hierarchy" allow-clear="true">
                         {{vm.selectedField.hierarchy.name}}
                     </ui-select-match>
@@ -87,10 +79,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-
-            <property-component propstype="data" display="vm.selectedField.feature.name" form-class="form-group"
-                ng-repeat="property in vm.selectedField.properties | orderBy: 'order'" property="property"
-                features="vm.features" />
+            <property-component propstype="data" display="vm.selectedField.feature.name" form-class="form-group" ng-repeat="property in vm.selectedField.properties | orderBy: 'order'" property="property" />
         </div>
     </div>
     <!-- end of row  -->

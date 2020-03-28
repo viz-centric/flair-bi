@@ -92,4 +92,3 @@ id|property_type_name|property_type_description|d_type|checkbox_default_value|te
 691|Value on Points|Show value on points|CHECKBOX|true|null|null|null|flairadmin|null
 692|Axis Scale Label|Axis Scale Label|SELECT|null|null|null|null|flairadmin|STRING
 693|Sort|Sorting of the data|SELECT|null|null|null|null|flairadmin|STRING
-694|Alternative Dimensions|Select Alternative Dimensions|TEXT|null|null|null|null|flairadmin|STRING

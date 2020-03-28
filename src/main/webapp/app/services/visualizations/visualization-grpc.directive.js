@@ -220,10 +220,6 @@
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
                 if (vm.canBuild) {
-                    if(result){
-                        vm.data.fields=result;
-
-                    }
                     build(true);
                 }
             });

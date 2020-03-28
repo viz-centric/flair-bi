@@ -113,8 +113,9 @@
                 <ui-select ng-model="vm.dashboards.dashboardDatasource" name="dashboardDatasources" required
                     ng-keypress="vm.search($select.search)">
                     <ui-select-match placeholder="{{ 'flairbiApp.dashboards.selectDatasource' | translate }}">
-                        {{$select.selected.name}} <span
-                            ng-if="$select.selected.connectionReadableName">({{$select.selected.connectionReadableName}})</span>
+                        <span ng-if="!$select.selected.connectionReadableName">{{$select.selected.name}}</span>
+                        <span ng-if="$select.selected.connectionReadableName">{{$select.selected.name}}
+                            ({{$select.selected.connectionReadableName}})</span>
                     </ui-select-match>
                     <ui-select-choices
                         repeat="datasource in vm.datasources | filter: $select.search track by datasource.id">

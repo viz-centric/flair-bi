@@ -23,7 +23,7 @@ export class DashboardDialog extends BasePage {
 
     constructor() {
         super();
-        this._path = "dashboards/create/new";
+        this._path = "dashboards/new";
     }
 
     getPath(): string {

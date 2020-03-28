@@ -14,9 +14,9 @@ export class HomePage extends BasePage {
     private flairInsightTile: ElementFinder = element(by.id('information-card-4'));
     private bookmarksTile: ElementFinder = element(by.id('information-card-5'));
 
-    private newDatasource: ElementFinder = $('a.new-data-sou')
-    private newDashboard: ElementFinder = $('a.new-dash');
-    private viewDashboardsBtn: ElementFinder = $('a[ui-sref="dashboards"]');
+    private newDatasource: ElementFinder = $('*[ui-sref="connection.new"]')
+    private newDashboard: ElementFinder = $('*[ui-sref="dashboards.new"]');
+    private viewDashboardsBtn: ElementFinder = $('*[ui-sref="dashboards"]');
 
     navigateTo(): Promise<unknown> {
         return browser.get(browser.baseUrl) as Promise<unknown>;

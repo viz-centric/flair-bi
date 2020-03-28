@@ -13,16 +13,14 @@ describe('[Postgres] data source', () => {
         createNewDatasource: CreateDatasourcePage,
         connectionsPage: ConnectionsPage;
 
-    beforeAll(() => {
+    beforeEach(async () => {
         loginPage = new LoginPage();
-        loginPage.navigateTo();
-        loginPage.login(userData.admin);
-
         homePage = new HomePage();
-        homePage.navigateTo();
-
         createNewDatasource = new CreateDatasourcePage();
         connectionsPage = new ConnectionsPage();
+
+        await loginPage.navigateTo();
+        loginPage.login(userData.admin);
     });
 
     it('create new data source', () => {
@@ -47,19 +45,8 @@ describe('[Postgres] data source', () => {
         expect(connectionsPage.hasConnection(connectionData.connectionName)).toBeTruthy();
     });
 
-    it('create new dashboard', () => {
 
-        homePage.createNewDashboard();
-
-
-    });
-
-    it('create new view', () => {
-
-    });
-
-
-    afterAll(async () => {
+    afterEach(async () => {
         browser.executeScript('window.sessionStorage.clear();');
         browser.executeScript('window.localStorage.clear();');
         browser.driver.manage().deleteAllCookies();

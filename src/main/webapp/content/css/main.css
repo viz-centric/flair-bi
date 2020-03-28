@@ -4729,6 +4729,15 @@ jhi-alert .alerts .alert-danger {
     border-radius: 25px;
     padding: 10px;
     background: rgba(234, 234, 234, 0.6); }
+  .data-constrains-properties .data-constaraint-conditions-container fieldset {
+    padding: 0.35em 0.625em 0.75em !important;
+    min-width: 0px !important;
+    border: 1px solid #c0c0c0 !important; }
+  .data-constrains-properties .data-constaraint-conditions-container legend {
+    width: auto;
+    font-size: 14px;
+    margin-bottom: 0px;
+    border-bottom: 0px; }
   .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields {
     display: flex; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field {

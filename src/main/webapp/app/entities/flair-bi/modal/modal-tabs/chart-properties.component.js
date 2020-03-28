@@ -8,7 +8,8 @@
             controller: chartPropertiesController,
             controllerAs: 'vm',
             bindings: {
-                visual: '='
+                visual: '=',
+                features: '='
 
             }
         });

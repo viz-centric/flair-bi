@@ -127,6 +127,17 @@
             padding: 10px;
             background: $data-constraint-background;
         }
+        fieldset {
+            padding: 0.35em 0.625em 0.75em !important;
+            min-width: 0px !important;
+            border: 1px solid #c0c0c0 !important;
+          }
+          legend {
+            width: auto;
+            font-size: 14px;
+            margin-bottom: 0px;
+            border-bottom: 0px;
+          } 
         .simple-condition{
             .fields{
                 display: flex;

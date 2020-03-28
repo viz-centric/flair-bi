@@ -41,7 +41,7 @@
                 data: {
                     authorities: [],
                     pageTitle: "flairbiApp.views.detail.title",
-                    displayName: "Details"
+                    displayName: "View details"
                 },
                 views: {
                     "content-header@": {

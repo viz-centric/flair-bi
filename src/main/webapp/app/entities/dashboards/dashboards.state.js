@@ -102,7 +102,7 @@
                 data: {
                     authorities: [],
                     pageTitle: "flairbiApp.dashboards.detail.title",
-                    displayName: "{{entity.dashboardName}}"
+                    displayName: "Overview"
                 },
                 views: {
                     "content-header@": {
@@ -162,18 +162,28 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function ($stateParams, $state, $uibModal) {
+                    '$translate',
+                    '$rootScope',
+                    function ($stateParams, $state, $uibModal, $translate, $rootScope) {
                         $uibModal
                             .open({
-                                templateUrl:
-                                    "app/entities/dashboards/dashboards-dialog.html",
-                                controller: "DashboardsDialogController",
-                                controllerAs: "vm",
+                                component: 'dashboardsDialogComponent',
                                 backdrop: "static",
-                                size: "md"
+                                size: "md",
+                                resolve: {
+                                    dashboard: ['Dashboards', (Dashboards) => {
+                                        return Dashboards.get({ id: $stateParams.id }).$promise;
+                                    }],
+                                    dashboardReleases: ['Dashboards', (Dashboards) => {
+                                        return Dashboards.releases({ id: $stateParams.id }).$promise;
+                                    }],
+                                    title: () => { return 'Edit Dashboard' }
+                                }
                             })
                             .result.then(
-                                function () {
+                                function (result) {
+                                    var info = { text: $translate.instant('flairbiApp.dashboards.updated', { param: result.id }), title: "Updated" }
+                                    $rootScope.showSuccessToast(info);
                                     $state.go(
                                         "^",
                                         {},
@@ -190,33 +200,49 @@
                 ]
             })
             .state("dashboards.new", {
-                // TODO : this is just a work around not a permanent fix
-                url: "/create/new",
+                url: "/new",
                 data: {
                     authorities: [PERMISSIONS.WRITE_DASHBOARDS],
                     displayName: false
                 },
                 onEnter: [
-                    "$stateParams",
+                    "$translate",
                     "$state",
                     "$uibModal",
-                    function ($stateParams, $state, $uibModal) {
+                    '$rootScope',
+                    'Principal',
+                    function ($translate, $state, $uibModal, $rootScope, Principal) {
                         $uibModal
                             .open({
-                                templateUrl:
-                                    "app/entities/dashboards/dashboards-dialog.html",
-                                controller: "DashboardsDialogController",
-                                controllerAs: "vm",
+                                component: 'dashboardsDialogComponent',
                                 backdrop: "static",
-                                size: "md"
+                                size: "md",
+                                resolve: {
+                                    dashboard: () => {
+                                        return {
+                                            'dashboardName': null,
+                                            'category': null,
+                                            'description': null,
+                                            'published': false,
+                                            'image': null,
+                                            'imageContentType': null,
+                                            'id': null
+                                        }
+                                    },
+                                    dashboardReleases: () => { return []; },
+                                    title: () => { return 'Create Dashboard' }
+                                }
                             })
                             .result.then(
-                                function () {
+                                (result) => {
+                                    Principal.identity(true);
+                                    var info = { text: $translate.instant('flairbiApp.dashboards.created', { param: result.id }), title: "Saved" }
+                                    $rootScope.showSuccessToast(info);
                                     $state.go("dashboards", null, {
                                         reload: "dashboards"
                                     });
                                 },
-                                function () {
+                                () => {
                                     $state.go("dashboards");
                                 }
                             );
@@ -232,26 +258,32 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function ($stateParams, $state, $uibModal) {
+                    '$translate',
+                    '$rootScope',
+                    function ($stateParams, $state, $uibModal, $translate, $rootScope) {
                         $uibModal
                             .open({
-                                templateUrl:
-                                    "app/entities/dashboards/dashboards-dialog.html",
-                                controller: "DashboardsDialogController",
-                                controllerAs: "vm",
+                                component: 'dashboardsDialogComponent',
                                 backdrop: "static",
-                                size: "lg"
-                            })
-                            .result.then(
-                                function () {
-                                    $state.go("dashboards", null, {
-                                        reload: "dashboards"
-                                    });
-                                },
-                                function () {
-                                    $state.go("^");
+                                size: "lg",
+                                resolve: {
+                                    dashboard: ['Dashboards', (Dashboards) => {
+                                        return Dashboards.get({ id: $stateParams.id }).$promise;
+                                    }],
+                                    dashboardReleases: ['Dashboards', (Dashboards) => {
+                                        return Dashboards.releases({ id: $stateParams.id }).$promise;
+                                    }],
+                                    title: () => { return 'Edit Dashboard' }
                                 }
-                            );
+                            })
+                            .result
+                            .then((result) => {
+                                var info = { text: $translate.instant('flairbiApp.dashboards.updated', { param: result.id }), title: "Updated" }
+                                $rootScope.showSuccessToast(info);
+                                $state.go("dashboards", null, {
+                                    reload: "dashboards"
+                                });
+                            }, () => { $state.go('^') });
                     }
                 ]
             })

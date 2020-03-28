@@ -1,0 +1,141 @@
+<div class="inmodal in modal-content common-create-popup">
+    <form name="editForm" ng-submit="vm.save()" novalidate="" role="form" show-validation="">
+        <div class="modal-header">
+            <svg class="common-edit-icon">
+                <use xlink:href="#edit-dashboard" />
+            </svg>
+            <div class="header-text">
+                {{vm.dialogMode}}
+            </div>
+            <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
+                <use xlink:href="#cancle" />
+            </svg>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.dashboards.dashboardName"
+                    for="field_dashboardName">Dashboard Name</label>
+                <input auto-focus class="form-control" id="field_dashboardName" name="dashboardName" ng-maxlength="20"
+                    ng-model="vm.dashboards.dashboardName" required="" type="text" />
+                <div ng-show="editForm.dashboardName.$invalid">
+                    <p class="help-block" data-translate="entity.validation.required"
+                        ng-show="editForm.dashboardName.$error.required">This field is required.</p>
+                    <p class="help-block" data-translate="entity.validation.maxlength"
+                        ng-show="editForm.dashboardName.$error.maxlength" translate-value-max="20">This field cannot be
+                        longer than 20 characters.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.dashboards.category"
+                    for="field_category">Category</label>
+                <input class="form-control" id="field_category" name="category" ng-maxlength="20"
+                    ng-model="vm.dashboards.category" required="" type="text" />
+                <div ng-show="editForm.category.$invalid">
+                    <p class="help-block" data-translate="entity.validation.required"
+                        ng-show="editForm.category.$error.required">This field is required.</p>
+                    <p class="help-block" data-translate="entity.validation.maxlength"
+                        ng-show="editForm.category.$error.maxlength" translate-value-max="20">This field cannot be
+                        longer than 20 characters.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label" data-translate="flairbiApp.dashboards.description"
+                    for="field_description">Description</label>
+                <input class="form-control" id="field_description" name="description" ng-maxlength="100"
+                    ng-model="vm.dashboards.description" type="text" />
+                <div ng-show="editForm.description.$invalid">
+                    <p class="help-block" data-translate="entity.validation.maxlength"
+                        ng-show="editForm.description.$error.maxlength" translate-value-max="100">This field cannot be
+                        longer than 100 characters.</p>
+                </div>
+            </div>
+            <div class="form-group" ng-if="vm.dashboards.currentRelease">
+                <label class="control-label" for="published"> Is published </label>
+                <!-- <input type="checkbox" ng-model="vm.dashboards.published" /> -->
+                <label class="flair-checkbox" ng-click="vm.togglePublish()">
+                    <i
+                        class="fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.dashboards.published,'fa-square-o-unchecked':!vm.dashboards.published} "></i>
+                    <i
+                        class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.dashboards.published,'fa-check-square-o-unchecked':!vm.dashboards.published}"></i>
+                </label>
+            </div>
+            <div class="form-group" ng-if="vm.dashboards.currentRelease">
+                <label class="control-label" for="current_release">Release version</label>
+                <select class="form-control" id="field_current_release" name="current_release"
+                    ng-model="vm.dashboards.currentRelease"
+                    ng-options="release as release.versionNumber for release in vm.dashboardReleases track by release.versionNumber"
+                    required=""></select>
+                <div ng-show="editForm.published.$invalid">
+                    <p class="help-block" data-translate="entity.validation.required"
+                        ng-show="editForm.published.$error.required">This field is required.</p>
+                </div>
+            </div>
+            <div class="form-group" ngf-change="vm.setImage($file, vm.dashboards)" ngf-drop="" ngf-pattern="'image/*'">
+                <label class="control-label img-label" data-translate="flairbiApp.dashboards.image"
+                    for="field_image">Image </label>
+                <div class="row" ng-if="vm.dashboards.image || vm.dashboards.imageLocation">
+                    <img alt="dashboards image"
+                        data-ng-src="{{'data:' + vm.dashboards.imageContentType + ';base64,' + vm.dashboards.image}}"
+                        ng-if="vm.dashboards.image" style="max-height: 100px;" />
+
+                    <img alt="dashboards image" ng-src="{{vm.dashboards.imageLocation}}"
+                        ng-if="vm.dashboards.imageLocation" style="max-height: 100px;" />
+
+                    <div class="help-block clearfix col-md-7 col-sm-7 uploaded-image" ng-if="vm.dashboards.image">
+                        <span class=" image-disc pull-left">{{vm.dashboards.imageContentType}},
+                            {{vm.byteSize(vm.dashboards.image)}}</span>
+                        <button class="btn btn-danger btn-xs pull-right"
+                            ng-click="vm.dashboards.image=null;vm.dashboards.imageContentType=null;" type="button">
+                            <span class="glyphicon glyphicon-remove"></span> Remove Image
+                        </button>
+                    </div>
+                    <div ng-show="vm.isInValidImage">
+                        <p class="help-block">you can upload the image upto {{vm.maxImageSize}} MB </p>
+                    </div>
+                </div>
+                <div class="image-upload-holder">
+                    <div class="image-upload-inner">
+                        <div class="button" ngf-select name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                            data-translate="entity.action.addimage" ngf-min-height="100"
+                            ngf-change="vm.setImage($file, vm.dashboards)">
+                            <p>Add Image</p>
+                        </div>
+                    </div>
+                </div>
+                <input class="form-control" id="field_image" name="image" ng-model="vm.dashboards.image"
+                    type="hidden" />
+                <input class="form-control" id="field_imageContentType" name="imageContentType"
+                    ng-model="vm.dashboards.imageContentType" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label data-translate="flairbiApp.dashboards.dashboardDatasources"
+                    for="field_dashboardDatasources">Dashboard Datasources</label>
+                <ui-select ng-model="vm.dashboards.dashboardDatasource" name="dashboardDatasources" required
+                    ng-keypress="vm.search($select.search)">
+                    <ui-select-match placeholder="{{ 'flairbiApp.dashboards.selectDatasource' | translate }}">
+                        {{$select.selected.name}} <span
+                            ng-if="$select.selected.connectionReadableName">({{$select.selected.connectionReadableName}})</span>
+                    </ui-select-match>
+                    <ui-select-choices
+                        repeat="datasource in vm.datasources | filter: $select.search track by datasource.id">
+                        <div ng-bind="datasource.name + ' (' + datasource.connectionReadableName + ')'"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div ng-show="editForm.dashboardDatasources.$invalid">
+                <p class="help-block" data-translate="entity.validation.required"
+                    ng-show="editForm.dashboardDatasources.$error.required">This field is required.</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()" type="button">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                <span data-translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button class="btn btn-primary" ng-disabled="editForm.$invalid || vm.isSaving" type="submit">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;
+                <span data-translate="entity.action.save">Save</span>
+            </button>
+        </div>
+    </form>
+</div>

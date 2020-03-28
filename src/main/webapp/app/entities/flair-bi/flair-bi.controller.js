@@ -172,6 +172,7 @@
             registerSaveDataConstraints();
             setVizualizationServiceMode();
             connectWebSocket();
+            registerAlternateDimension();
             vm.features = featureEntities;
         }
 
@@ -300,6 +301,43 @@
                 "flairbiApp:saveDataConstraints",
                 function () {
                     saveFeatures(VisualDispatchService.getVisual().visual);
+                }
+            );
+            $scope.$on("$destroy", saveDataConstraints);
+        }
+
+        function registerAlternateDimension() {
+            var saveDataConstraints = $scope.$on(
+                "flairbiApp:registerAlternateDimension",
+                function (event, data) {
+
+                    Visualmetadata.get({
+                        id: data.id
+                    }, function (v) {
+                        var v = new VisualWrap(v);
+
+                        var dimension = vm.dimensions.filter(function (item) {
+                            return item.id === data.featureID;
+                        })
+
+                        v.fields = v.fields
+                            .filter(function (item) {
+                                if (item.feature && item.feature != null && item.feature.featureType === 'DIMENSION') {
+                                    item.feature.id = dimension[0].id;
+                                    item.feature.name = dimension[0].name;
+                                    item.feature.type = dimension[0].type;
+                                    item.feature.functionId = dimension[0].functionId;
+                                    item.feature.definition = dimension[0].definition;
+                                    item.feature.featureType = dimension[0].featureType;
+                                    return item;
+                                }
+                                else{
+                                    return item;
+                                }
+                            });
+                            refreshWidget(v,v.fields);
+
+                    });
                 }
             );
             $scope.$on("$destroy", saveDataConstraints);
@@ -1088,9 +1126,9 @@
             return new VisualWrap(newVM);
         }
 
-        function refreshWidget(v) {
+        function refreshWidget(v,fields) {
             $rootScope.$broadcast(
-                "update-widget-content-" + v.id || v.visualBuildId
+                "update-widget-content-" + v.id || v.visualBuildId,fields
             );
         }
 

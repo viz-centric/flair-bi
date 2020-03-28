@@ -1,3 +1,7 @@
+<form>
+    <fieldset>
+        <legend> {{vm.condition.featureName}}</legend>
+
 <div class="form-group simple-condition" ng-if="vm.condition['@type'] !== 'Or' && vm.condition['@type'] !== 'And'">
 
     <div class="fields">
@@ -106,3 +110,5 @@
     <condition-component show-add="true" show-delete="true" features="vm.features"
         condition="vm.condition.secondExpression" datasource-id="vm.datasourceId"></condition-component>
 </div>
+    </fieldset>
+</form>

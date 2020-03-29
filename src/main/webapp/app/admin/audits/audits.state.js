@@ -17,14 +17,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/audits/audits-content-header.html',
-                    controller: 'AuditsController',
-                    controllerAs: 'vm'
+                    template: '<audits-content-header-component></audits-content-header-component>'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/audits/audits.html',
-                    controller: 'AuditsController',
-                    controllerAs: 'vm'
+                    template: '<audits-component></audits-component>'
                 }
             },
             resolve: {

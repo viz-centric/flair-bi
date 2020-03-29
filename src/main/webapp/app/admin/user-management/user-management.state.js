@@ -19,14 +19,10 @@
                 },
                 views: {
                     'content-header@': {
-                        templateUrl: 'app/admin/user-management/user-management-content-header.html',
-                        controller: 'UserManagementController',
-                        controllerAs: 'vm'
+                        component: 'userManagementContentHeaderComponent'
                     },
                     'content@': {
-                        templateUrl: 'app/admin/user-management/user-management.html',
-                        controller: 'UserManagementController',
-                        controllerAs: 'vm'
+                        component: 'userManagementComponent'
                     }
                 },
                 params: {
@@ -65,14 +61,10 @@
                 },
                 views: {
                     'content-header@': {
-                        templateUrl: 'app/admin/user-management/user-management-properties-content-header.html',
-                        controller: 'UserManagementDetailController',
-                        controllerAs: 'vm'
+                        component: 'userManagementDetailContentHeaderComponent'
                     },
                     'content@': {
-                        templateUrl: 'app/admin/user-management/user-management-detail.html',
-                        controller: 'UserManagementDetailController',
-                        controllerAs: 'vm'
+                        component: 'userManagementDetailComponent'
                     }
                 },
                 resolve: {
@@ -81,27 +73,24 @@
                         return $translate.refresh();
                     }],
                     //Added resolve to remember current state before moving to new state
-                    PreviousState: ["$state", function ($state) {
-                            var currentStateData = {
-                                Name: $state.current.name,
-                                Params: $state.params,
-                                URL: $state.href($state.current.name, $state.params)
-                            };
-                            return currentStateData;
-                        }]
+                    previousState: ["$state", function ($state) {
+                        var currentStateData = {
+                            Name: $state.current.name,
+                            Params: $state.params,
+                            URL: $state.href($state.current.name, $state.params)
+                        };
+                        return currentStateData;
+                    }]
                 }
             })
             .state('user-management-detail.newConstraint', {
-                parent: 'user-management-detail',
                 url: '/newConstraint',
                 data: {
                     authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT],
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                onEnter: ['$stateParams', '$state', '$uibModal', function (_$stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/datasource-constraint/datasource-constraint-dialog.html',
-                        controller: 'DatasourceConstraintDialogController',
-                        controllerAs: 'vm',
+                        component: 'datasourceConstraintDialogComponent',
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
@@ -130,16 +119,13 @@
                 }
             })
             .state('user-management-detail.editConstraint', {
-                parent: 'user-management-detail',
                 url: '/editConstraint/:constraintId',
                 data: {
                     authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/datasource-constraint/datasource-constraint-dialog.html',
-                        controller: 'DatasourceConstraintDialogController',
-                        controllerAs: 'vm',
+                        component: 'datasourceConstraintDialogComponent',
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
@@ -165,7 +151,6 @@
                 }
             })
             .state('user-management-detail.deleteConstraint', {
-                parent: 'user-management-detail',
                 url: '/deleteConstraint/:constraintId',
                 data: {
                     authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT],
@@ -199,16 +184,13 @@
                 }
             })
             .state('user-management.new', {
-                parent: 'user-management',
                 url: '/new',
                 data: {
                     authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT]
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams,$state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/user-management/user-management-dialog.html',
-                        controller: 'UserManagementDialogController',
-                        controllerAs: 'vm',
+                        component: 'userManagementDialogComponent',
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
@@ -241,16 +223,13 @@
                 }]
             })
             .state('user-management.edit', {
-                parent: 'user-management',
                 url: '/{login}/edit',
                 data: {
                     authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT]
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/user-management/user-management-dialog.html',
-                        controller: 'UserManagementDialogController',
-                        controllerAs: 'vm',
+                        component: 'userManagementDialogComponent',
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
@@ -270,16 +249,13 @@
                 }]
             })
             .state('user-management.delete', {
-                parent: 'user-management',
                 url: '/{login}/delete',
                 data: {
                     authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT]
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
-                        controller: 'UserManagementDeleteController',
-                        controllerAs: 'vm',
+                        component: 'userManagementDeleteComponent',
                         size: 'md',
                         resolve: {
                             entity: ['User', function (User) {

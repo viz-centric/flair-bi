@@ -12,14 +12,19 @@
             }
         });
 
-    UserSearchController.$inject = ['$scope','User','$rootScope','ComponentDataService'];
+    UserSearchController.$inject = ['User', '$rootScope', 'ComponentDataService'];
 
-    function UserSearchController($scope, User,$rootScope,ComponentDataService) {
+    function UserSearchController(User, $rootScope, ComponentDataService) {
         var vm = this;
-        vm.searchUser=searchUser;
-        vm.onChangeUser=onChangeUser;
-        vm.user=vm.user?vm.user:{};
-        activate();
+        vm.searchUser = searchUser;
+        vm.onChangeUser = onChangeUser;
+
+
+        vm.$onInit = function () {
+            vm.user = vm.user ? vm.user : {};
+            activate();
+        }
+
 
         ////////////////
 
@@ -27,7 +32,7 @@
             ComponentDataService.setUser(null);
         }
 
-        function searchUser(e,searchedText) {
+        function searchUser(e, searchedText) {
             e.preventDefault();
             if (searchedText) {
                 User.search({
@@ -44,7 +49,7 @@
             }
         }
 
-        function onChangeUser(){
+        function onChangeUser() {
             ComponentDataService.setUser(vm.user);
         }
     }

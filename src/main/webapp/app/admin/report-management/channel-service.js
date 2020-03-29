@@ -9,7 +9,6 @@
 
     function ChannelService($http) {
         var service = {
-
             channelParameters: channelParameters,
             createTeamConfig: createTeamConfig,
             updateTeamConfig: updateTeamConfig,
@@ -17,12 +16,14 @@
             updateEmailConfig: updateEmailConfig,
             getEmailConfig: getEmailConfig,
             getTeamConfig: getTeamConfig,
+            getTeamNames: getTeamNames,
             deleteChannelConfig: deleteChannelConfig,
             createJiraConfig: createJiraConfig,
             getJiraConfig: getJiraConfig,
             createJiraTicket: createJiraTicket,
             getJiraTickets: getJiraTickets,
-            notifyOpenedJiraTicket: notifyOpenedJiraTicket
+            notifyOpenedJiraTicket: notifyOpenedJiraTicket,
+            isConfigExist:isConfigExist
         };
 
         return service;
@@ -74,6 +75,12 @@
                 method: 'GET'
             });
         }
+        function getTeamNames(id) {
+            return $http({
+                url: 'api/notification/getTeamNames/?id=' + id + '',
+                method: 'GET'
+            });
+        }
         function deleteChannelConfig(id) {
             return $http({
                 url: 'api/notification/deleteChannelConfig/?id=' + id + '',
@@ -110,6 +117,12 @@
                 url: 'api/notification/notifyOpenedJiraTicket',
                 method: 'POST',
                 data: body
+            });
+        }
+        function isConfigExist(id) {
+            return $http({
+                url: 'api/notification/isConfigExist/?id=' + id,
+                method: 'GET'
             });
         }
     }

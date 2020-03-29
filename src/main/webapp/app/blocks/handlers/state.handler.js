@@ -5,57 +5,44 @@
         .module('flairbiApp')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$translate', 'JhiLanguageService', 'translationHandler', '$window',
-        'Auth', 'Principal', 'VERSION'
+    stateHandler.$inject = ['$translate', 'JhiLanguageService', 'translationHandler', '$window', '$transitions'
     ];
 
-    function stateHandler($rootScope, $state, $sessionStorage, $translate, JhiLanguageService, translationHandler, $window,
-        Auth, Principal, VERSION) {
+    function stateHandler($translate, JhiLanguageService, translationHandler, $window, $transitions) {
         return {
             initialize: initialize
         };
 
         function initialize() {
-            $rootScope.VERSION = VERSION;
-
-            var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
-                $rootScope.toState = toState;
-                $rootScope.toStateParams = toStateParams;
-                $rootScope.fromState = fromState;
-
+            $transitions.onEnter({
+                to: '**'
+            }, function (transition) {
+                var toState = transition.$to();
                 // Redirect to a state with an external URL (http://stackoverflow.com/a/30221248/1098564)
                 if (toState.external) {
-                    event.preventDefault();
                     $window.open(toState.url, '_self');
-                }
-
-                if (Principal.isIdentityResolved()) {
-                    Auth.authorize();
                 }
 
                 // Update the language
                 JhiLanguageService.getCurrent().then(function (language) {
                     $translate.use(language);
-                });
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             });
 
-            var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-                var titleKey = 'global.title';
+            $transitions.onSuccess({
+                to: '**'
+            }, function (transition) {
+                var titleKey = 'global.title',
+                    toState = transition.$to();
 
                 // Set the page title key to the one configured in state or use default one
                 if (toState.data && toState.data.pageTitle) {
                     titleKey = toState.data.pageTitle;
                 }
                 translationHandler.updateTitle(titleKey);
-            });
-
-            $rootScope.$on('$destroy', function () {
-                if (angular.isDefined(stateChangeStart) && stateChangeStart !== null) {
-                    stateChangeStart();
-                }
-                if (angular.isDefined(stateChangeSuccess) && stateChangeSuccess !== null) {
-                    stateChangeSuccess();
-                }
             });
         }
     }

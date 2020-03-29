@@ -85,7 +85,6 @@
                 }
             })
             .state("property-type-detail.edit", {
-                parent: "property-type-detail",
                 url: "/detail/edit",
                 data: {},
                 onEnter: [
@@ -130,7 +129,6 @@
                 ]
             })
             .state("property-type.new", {
-                parent: "property-type",
                 url: "/new",
                 data: {},
                 onEnter: [
@@ -166,7 +164,6 @@
                 ]
             })
             .state("property-type.edit", {
-                parent: "property-type",
                 url: "/{id}/edit",
                 data: {},
                 onEnter: [
@@ -207,7 +204,6 @@
                 ]
             })
             .state("property-type.delete", {
-                parent: "property-type",
                 url: "/{id}/delete",
                 data: {},
                 onEnter: [

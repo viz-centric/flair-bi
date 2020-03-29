@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider','PERMISSIONS'];
+    stateConfig.$inject = ['$stateProvider', 'PERMISSIONS'];
 
-    function stateConfig($stateProvider,PERMISSIONS) {
+    function stateConfig($stateProvider, PERMISSIONS) {
         $stateProvider
             .state('report-management', {
                 parent: 'admin',
@@ -26,7 +26,7 @@
                         value: 'id,asc',
                         squash: true
                     },
-                    id:{
+                    id: {
                         value: 'report',
                         squash: true
                     }
@@ -36,9 +36,7 @@
                         templateUrl: 'app/admin/report-management/report-management-content-header.html',
                     },
                     'content@': {
-                        templateUrl: 'app/admin/report-management/report-management.html',
-                        controller: 'ReportManagementController',
-                        controllerAs: 'vm'
+                        component: 'reportManagementComponent'
                     }
                 },
                 resolve: {
@@ -112,7 +110,7 @@
             //     ]
             // })
             .state('report-management-log', {
-                parent:'report-management',
+                parent: 'report-management',
                 url: '/report/:visualizationid/:reportType',
                 data: {
                     authorities: [],
@@ -134,9 +132,7 @@
                         templateUrl: 'app/admin/report-management/report-management-logs-content-header.html',
                     },
                     'content@': {
-                        templateUrl: 'app/admin/report-management/report-management-logs.html',
-                        controller: 'ReportManagementLogsController',
-                        controllerAs: 'vm'
+                        component: 'reportManagementLogComponent'
                     }
                 },
                 resolve: {

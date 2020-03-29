@@ -10,13 +10,13 @@
             bindings: {
                 dimension: '=',
                 view: '=',
-                dimensions:'='
+                dimensions: '='
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService','$timeout','FilterStateManagerService','$rootScope','$filter','VisualDispatchService','stompClientService'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService,$timeout,FilterStateManagerService,$rootScope,$filter,VisualDispatchService,stompClientService) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService) {
         var vm = this;
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         vm.$onInit = activate;
@@ -26,7 +26,9 @@
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.onDateChange = onDateChange;
         vm.dateRangeReload = false;
-        vm.removeTagFromFilterList=removeTagFromFilterList;
+        vm.removeTagFromFilterList = removeTagFromFilterList;
+        vm.addToFavourite = addToFavourite;
+        vm.checkFavouriteFilter = checkFavouriteFilter;
 
 
         ////////////////
@@ -52,6 +54,28 @@
             return startDate;
         }
 
+        function checkFavouriteFilter() {
+            return vm.dimension.favouriteFilter === true ? 'fa fa-star' : 'fa fa-star-o';
+        }
+        function addToFavourite(id) {
+            favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
+                .then(function (data) {
+                    vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
+                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
+                    var info = {
+                        text: "Dimensions " + opration + " from favourit filter",
+                        title: "Saved"
+                    }
+                    $rootScope.showSuccessToast(info);
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+        }
+
         function onDateChange(startDate, endDate) {
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
@@ -75,14 +99,14 @@
         function registerRemoveTag() {
             var unsubscribe = $scope.$on(
                 "FlairBi:remove-filter",
-                function(event,filter) {
-                if(filter!=undefined){
-                    if(!isString(filter)){
-                        processRemoveTag(filter)
-                    }else{
-                        processRemoveFilter(filter);
+                function (event, filter) {
+                    if (filter != undefined) {
+                        if (!isString(filter)) {
+                            processRemoveTag(filter)
+                        } else {
+                            processRemoveFilter(filter);
+                        }
                     }
-                }
                 }
             );
 
@@ -109,7 +133,7 @@
                 applyFilter();
             } else {
                 if (filterParameters[filter].length != 0) {
-                    var found = $filter('filter')(vm.dimensions, {'name': filter})[0];
+                    var found = $filter('filter')(vm.dimensions, { 'name': filter })[0];
                     found.selected = [];
                     found.selected2 = [];
                     filterParameters[filter] = [];
@@ -138,13 +162,13 @@
         function load(q, dimension) {
             var vId = dimension.id;
             var query = {};
-            query.fields = [{name: dimension.name}];
+            query.fields = [{ name: dimension.name }];
             if (q) {
                 query.conditionExpressions = [{
                     sourceType: 'FILTER',
                     conditionExpression: {
                         '@type': 'Like',
-                        featureType: {featureName: dimension.name, type: dimension.type},
+                        featureType: { featureName: dimension.name, type: dimension.type },
                         caseInsensitive: true,
                         value: q
                     }
@@ -152,26 +176,27 @@
             }
             query.distinct = true;
             query.limit = 100;
+            favouriteFilterService.setFavouriteFilter(false);
             proxyGrpcService.forwardCall(
-              vm.view.viewDashboard.dashboardDatasource.id, {
-                  queryDTO: query,
-                  vId: vId
-              }
+                vm.view.viewDashboard.dashboardDatasource.id, {
+                queryDTO: query,
+                vId: vId
+            }
             );
         }
 
         function removed(tag) {
-            filterParametersService.saveSelectedFilter(removeTagFromFilterList(filterParametersService.getSelectedFilter(),tag));
+            filterParametersService.saveSelectedFilter(removeTagFromFilterList(filterParametersService.getSelectedFilter(), tag));
         }
 
-        function removeTagFromFilterList(filterParameters,tag){
-            var array = filterParameters[vm.dimension.name]? filterParameters[vm.dimension.name.toLowerCase()] : filterParameters[vm.dimension.name];
-            if(array){
+        function removeTagFromFilterList(filterParameters, tag) {
+            var array = filterParameters[vm.dimension.name] ? filterParameters[vm.dimension.name.toLowerCase()] : filterParameters[vm.dimension.name];
+            if (array) {
                 var index = array.indexOf(tag['text']);
                 if (index > -1) {
                     array.splice(index, 1);
-                    filterParameters[vm.dimension.name]=array;
-                    if(filterParameters[vm.dimension.name].length==0)
+                    filterParameters[vm.dimension.name] = array;
+                    if (filterParameters[vm.dimension.name].length == 0)
                         delete filterParameters[vm.dimension.name];
                     return filterParameters;
                 }
@@ -216,10 +241,10 @@
             filterParametersService.saveSelectedFilter(filterParameters);
         }
 
-        function addDateRangeFilter(date){
+        function addDateRangeFilter(date) {
             var filterParameters = filterParametersService.getSelectedFilter();
-            var dateRangeName=filterParametersService.buildDateRangeFilterName(vm.dimension.name);
-            delete filterParameters[ vm.dimension.name];
+            var dateRangeName = filterParametersService.buildDateRangeFilterName(vm.dimension.name);
+            delete filterParameters[vm.dimension.name];
             if (!filterParameters[dateRangeName]) {
                 filterParameters[dateRangeName] = [];
             }

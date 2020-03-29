@@ -12,10 +12,8 @@
             </svg>
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
-            <div ng-if="vm.WebhookList.length===0 || vm.SMPTSetting.id===0" class="alert alert-info alert-dismissible">
-
-                <strong><a class="alert-link" ui-sref="report-management({id:'configuration'})"> To add new email
-                        recipient and channel click here</a></strong>
+            <div ng-if="vm.isAdmin && !vm.isConfigExist" class="alert alert-info alert-dismissible">
+                <strong><a class="alert-link" ui-sref="report-management({id:'configuration'})">To configure Email,Team and Jira click here</a></strong>
             </div>
             <div class="">
                 <div class="row container" ng-if="vm.scheduleObj.emailReporter && !vm.emailReporterEdit">
@@ -72,23 +70,6 @@
                         </iframe>
                     </div>
                 </div>
-                <div class="row container" ng-if="vm.scheduleObj.emailReporter">
-                    <div class="col-xs-8">
-                        <div class="form-group scheduler-tags">
-                            <label class="control-label" for="emails">Share Report with Users*</label>
-                            <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
-                                on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true"
-                                minTags="5" min-length="1" ng-model="vm.selectedUsers"
-                                ng-required="vm.scheduleObj.assign_report.emails.length==0"
-                                replace-spaces-with-dashes="false">
-                                <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
-                                    min-length="0" load-on-focus="true " load-on-empty="true "
-                                    max-results-to-show="32 ">
-                                </auto-complete>
-                            </tags-input>
-                        </div>
-                    </div>
-                </div>
                 <fieldset>
                     <legend>Channel Configuration</legend>
                     <div class="row container">
@@ -120,20 +101,55 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-xs-8" ng-if="vm.channels.Teams">
+                        <div class="col-xs-8" ng-if="vm.isAdmin">
                             <div class="form-group scheduler-tags">
-                                <label class="control-label" for="emails">Select Webhooks*</label>
-                                <tags-input placeholder="Select a Webhooks" on-tag-added="vm.addWebhook($tag)"
-                                    on-tag-removed="vm.removeWebhook($tag)" class="filter-input"
-                                    add-from-autocomplete-only="true" minTags="5" min-length="1"
-                                    ng-model="vm.selectedWebhook" replace-spaces-with-dashes="false">
-                                    <auto-complete match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
+                                <label class="control-label" for="emails">Share Report with Users*</label>
+                                <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
+                                    on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true"
+                                    minTags="5" min-length="1" ng-model="vm.selectedUsers" 
+                                    ng-required="vm.scheduleObj.assign_report.emails.length==0"
+                                    replace-spaces-with-dashes="false">
+                                    <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
                                         min-length="0" load-on-focus="true " load-on-empty="true "
-                                        max-results-to-show="32 ">
+                                        max-results-to-show={{vm.maxListSize}}>
                                     </auto-complete>
                                 </tags-input>
+                                <span class="tooltip-position" uib-tooltip="More..." ng-click="vm.openCommunicationListModal()" ng-if="vm.selectedUsers.length>vm.maxListSize-1">
+                                    <svg class="more-icon">
+                                        <use xlink:href="#more-recipient" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        </use>
+                                    </svg>
+                                </span>
                             </div>
-
+                        </div>
+                        <div class="col-xs-8" ng-if="vm.channels.Teams && vm.isAdmin">
+                            <div class="form-group scheduler-tags">
+                                <label class="control-label" for="emails">Select Webhooks*</label>
+                                <tags-input placeholder="Select a Webhook" on-tag-added="vm.addWebhook($tag)"
+                                    on-tag-removed="vm.removeWebhook($tag)" class="filter-input" 
+                                    add-from-autocomplete-only="true" minTags="5" min-length="1" 
+                                    ng-model="vm.selectedWebhook" replace-spaces-with-dashes="false">
+                                    <auto-complete  match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
+                                        min-length="0" load-on-focus="true " load-on-empty="true "
+                                        max-results-to-show={{vm.maxListSize}}>
+                                    </auto-complete>
+                                </tags-input>
+                                <span class="tooltip-position" uib-tooltip="More..." ng-click="vm.openCommunicationListModal()" ng-if="vm.selectedWebhook.length>vm.maxListSize-1">
+                                    <svg class="more-icon">
+                                        <use xlink:href="#more-recipient" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-8" ng-if="vm.channels.Teams && !vm.isAdmin">
+                            <div class="form-group scheduler-webhooks">
+                                <label class="control-label">Configured Webhooks*</label>
+                                <div class="webhooks">
+                                    <div ng-repeat="webhooksName in vm.webhooksNames" class="label webhook">{{webhooksName}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row container">

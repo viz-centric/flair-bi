@@ -1,0 +1,77 @@
+(function () {
+    'use strict';
+
+    angular
+        .module('flairbiApp')
+        .component('navbarComponent', {
+            templateUrl: 'app/layouts/navbar/navbar.component.html',
+            controller: NavbarController,
+            controllerAs: 'vm'
+        });
+
+    NavbarController.$inject = ['$scope', '$state', 'Auth',
+        'Principal', 'ProfileService', 'PERMISSIONS'
+    ];
+
+    function NavbarController($scope, $state, Auth,
+        Principal, ProfileService, PERMISSIONS) {
+        var vm = this;
+        getAccount();
+        vm.account = null;
+        vm.isNavbarCollapsed = true;
+        vm.permissions = PERMISSIONS;
+        vm.administrationPermissions = [
+            PERMISSIONS.READ_USER_MANAGEMENT,
+            PERMISSIONS.READ_APPLICATION_METRICS,
+            PERMISSIONS.READ_HEALTH_CHECKS,
+            PERMISSIONS.READ_CONFIGURATION,
+            PERMISSIONS.READ_AUDITS,
+            PERMISSIONS.READ_LOGS,
+            PERMISSIONS.READ_API,
+            PERMISSIONS.READ_PERMISSION_MANAGEMENT
+        ];
+        vm.logout = logout;
+        vm.toggleNavbar = toggleNavbar;
+        vm.collapseNavbar = collapseNavbar;
+        vm.$state = $state;
+        vm.hasAnyOfAdministrationPermission = Principal.hasAnyAuthority(vm.administrationPermissions);
+
+        var authenticationSuccessUnsub = angular.noop;
+
+        vm.$onInit = function () {
+            authenticationSuccessUnsub = $scope.$on('authenticationSuccess', function () {
+                getAccount();
+            });
+            ProfileService.getProfileInfo().then(function (response) {
+                vm.inProduction = response.inProduction;
+                vm.swaggerEnabled = response.swaggerEnabled;
+            });
+        }
+
+        vm.$onDestroy = authenticationSuccessUnsub;
+
+        function logout() {
+            collapseNavbar();
+            Auth.logout()
+                .then(function () {
+                    $state.go('login');
+                });
+        }
+
+        function toggleNavbar() {
+            vm.isNavbarCollapsed = !vm.isNavbarCollapsed;
+        }
+
+        function collapseNavbar() {
+            vm.isNavbarCollapsed = true;
+        }
+
+        function getAccount() {
+            Principal.identity().then(function (account) {
+                vm.account = account;
+                vm.isAuthenticated = Principal.isAuthenticated;
+            });
+        }
+
+    }
+})();

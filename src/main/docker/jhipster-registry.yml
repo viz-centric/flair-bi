@@ -1,7 +1,14 @@
-version: '3'
+version: "3"
 services:
     flair-registry:
         container_name: flair-registry
-        image: flair-registry
+        image: flairbi/flair-registry:v5.0.7
         ports:
-        - 8761:8761
+            - 8761:8761
+        volumes:
+            - $HOME/Projects/test-config:/central-config
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev,native
+            - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64-SECRET=MjNiZjdiNDk5MGM4MjE4ODI4YzRiNjZkOTRhNTU3YmNkMWRmMWYxMzkzYjAzMzI5OWI0MzNjNzVmZjg0ZDRkNDkwOTNkNjlmNjU4Zjc0NmEyYTQ3NzViMWIzZTliYjNkNjI5ZQ==
+            # - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATION=file:///central-config/{application}
+            - BITBUCKET_URI=file:///central-config/

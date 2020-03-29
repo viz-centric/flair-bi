@@ -1,7 +1,8 @@
-<div uib-tooltip="{{vm.information.name}}" tooltip-placement="bottom" class="information-card" id=information-card-{{vm.information.id}}>
+<div uib-tooltip="{{vm.information.name}}" tooltip-placement="bottom" class="information-card"
+    id=information-card-{{vm.information.id}} ng-class="{'information-card-active': vm.active}">
     <div class="information-card-body">
         <svg>
-           <use xlink:href={{vm.information.icon}}></use>
+            <use xlink:href={{vm.information.icon}}></use>
         </svg>
         <div class="tile-value">
             <p ng-repeat="(key, value) in vm.value">{{value}}</p>

@@ -147,6 +147,10 @@ public class SchedulerService {
 		return notificationsGrpcService.getTeamConfig(id);
 	}
 
+	public List<String> getTeamNames(Integer id) {
+		return notificationsGrpcService.getTeamNames(id);
+	}
+
 	public String deleteChannelConfig(Integer id) {
 		return notificationsGrpcService.deleteChannelConfig(id);
 	}
@@ -177,6 +181,10 @@ public class SchedulerService {
 
 	public String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO) {
 		return notificationsGrpcService.notifyOpenedJiraTicket(openJiraTicketDTO);
+	}
+
+	public Boolean isConfigExist(Integer id){
+		return notificationsGrpcService.isConfigExist(id);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,

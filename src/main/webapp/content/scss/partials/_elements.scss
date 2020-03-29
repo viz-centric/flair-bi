@@ -45,7 +45,6 @@ input[type="search"] {
     >.ui-select-choices {
         margin-top: 0px;
         border-radius: 0;
-        position: relative;
         z-index: 999;
         .ui-select-choices-row {
             span.ui-select-choices-row-inner {
@@ -1426,6 +1425,13 @@ jhi-alert {
     }
 }
 
+.watermark-container-small {
+    svg {
+        width: 347px;
+        height: 291px;
+    }
+}
+
 .center-text {
     text-align: center;
 }
@@ -1517,4 +1523,5 @@ jhi-alert {
     width:16px;
     height:16px;
     margin-top: 12px;
+    fill: $primary-color;
 }

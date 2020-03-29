@@ -161,4 +161,16 @@ public class TestNotificationsGrpcService implements INotificationsGrpcService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public Boolean isConfigExist(Integer id) {
+        return null;
+    }
+
+    @Override
+	public List<String> getTeamNames(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

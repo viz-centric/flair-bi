@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular
@@ -29,7 +29,7 @@
         function login(credentials) {
             return $http
                 .post("api/authenticate", credentials)
-                .success(function(response) {
+                .then(function(response) {
                     $localStorage.authenticationToken = response.id_token;
                     return response;
                 });
@@ -39,7 +39,7 @@
             console.log('logout requested');
             return $http
                 .get("api/logout")
-                .success(function(response) {
+                .then(function (response) {
                     console.log('logout successful');
                     delete $localStorage.authenticationToken;
                     return response;

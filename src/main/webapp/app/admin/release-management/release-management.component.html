@@ -1,0 +1,54 @@
+<div class="fbibox">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Dashboard ID</span>
+                        </th>
+                        <th>
+                            <span>Dashboard Name</span>
+                        </th>
+                        <th>
+                            <span>Requested By</span>
+                        </th>
+                        <th>
+                            <span>View Information</span>
+                        </th>
+                        <th>
+                            <span>Comment</span>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="request in vm.viewRequests track by request.id">
+                        <td>{{request.release.dashboard.id}}</td>
+                        <td>{{request.release.dashboard.dashboardName}}</td>
+                        <td>{{request.requestedBy.login}}</td>
+                        <td>
+                            <div ng-repeat="viewRelease in request.release.viewReleases">
+                                View id - {{viewRelease.view.id}} <br> View name - {{viewRelease.view.viewName}}
+                            </div>
+                        </td>
+                        <td>{{request.comment ? request.comment : 'Not provided'}}</td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <div style="width: 80px; margin: 5px;" class="btn-danger btn-sm" ng-click="vm.disapprove(request)">
+                                    Disapprove
+                                </div>
+                                <div style="width: 80px; margin: 5px;" class="btn-primary btn-sm" ng-click="vm.approve(request)">
+                                    Approve
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div ng-hide="vm.showWaterMark">
+    <no-data-found-component message="No releases available"></no-data-found-component>
+</div>

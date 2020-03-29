@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -26,7 +26,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("visualmetadata");
                             $translatePartialLoader.addPart("barChartType");
                             $translatePartialLoader.addPart("global");
@@ -54,7 +54,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("visualmetadata");
                             $translatePartialLoader.addPart("barChartType");
                             return $translate.refresh();
@@ -63,7 +63,7 @@
                     entity: [
                         "$stateParams",
                         "Visualmetadata",
-                        function($stateParams, Visualmetadata) {
+                        function ($stateParams, Visualmetadata) {
                             return Visualmetadata.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -71,7 +71,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "visualmetadata",
                                 params: $state.params,
@@ -104,7 +104,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("visualmetadata");
                             $translatePartialLoader.addPart("barChartType");
                             return $translate.refresh();
@@ -113,7 +113,7 @@
                     entity: [
                         "$stateParams",
                         "Visualmetadata",
-                        function($stateParams, Visualmetadata) {
+                        function ($stateParams, Visualmetadata) {
                             return Visualmetadata.get({
                                 id: $stateParams.id
                             }).$promise;
@@ -121,7 +121,7 @@
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "visualmetadata",
                                 params: $state.params,
@@ -136,7 +136,6 @@
                 }
             })
             .state("visualmetadata-detail.edit", {
-                parent: "visualmetadata-detail",
                 url: "/detail/edit",
                 data: {
                     authorities: []
@@ -145,7 +144,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -157,7 +156,7 @@
                                 resolve: {
                                     entity: [
                                         "Visualmetadata",
-                                        function(Visualmetadata) {
+                                        function (Visualmetadata) {
                                             return Visualmetadata.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -166,7 +165,7 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go(
                                         "^",
                                         {},
@@ -175,7 +174,7 @@
                                         }
                                     );
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -183,7 +182,6 @@
                 ]
             })
             .state("visualmetadata.new", {
-                parent: "visualmetadata",
                 url: "/new",
                 data: {
                     authorities: [PERMISSIONS.WRITE_VISUAL_METADATA]
@@ -192,7 +190,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -202,7 +200,7 @@
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {
-                                    entity: function() {
+                                    entity: function () {
                                         return {
                                             height: null,
                                             width: null,
@@ -241,12 +239,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("visualmetadata", null, {
                                         reload: "visualmetadata"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("visualmetadata");
                                 }
                             );
@@ -254,7 +252,6 @@
                 ]
             })
             .state("visualmetadata.edit", {
-                parent: "visualmetadata",
                 url: "/{id}/edit",
                 data: {
                     authorities: []
@@ -263,7 +260,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -275,7 +272,7 @@
                                 resolve: {
                                     entity: [
                                         "Visualmetadata",
-                                        function(Visualmetadata) {
+                                        function (Visualmetadata) {
                                             return Visualmetadata.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -284,12 +281,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("visualmetadata", null, {
                                         reload: "visualmetadata"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -297,7 +294,6 @@
                 ]
             })
             .state("visualmetadata.delete", {
-                parent: "visualmetadata",
                 url: "/{id}/delete",
                 data: {
                     authorities: []
@@ -306,7 +302,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -317,7 +313,7 @@
                                 resolve: {
                                     entity: [
                                         "Visualmetadata",
-                                        function(Visualmetadata) {
+                                        function (Visualmetadata) {
                                             return Visualmetadata.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -326,12 +322,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("visualmetadata", null, {
                                         reload: "visualmetadata"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );

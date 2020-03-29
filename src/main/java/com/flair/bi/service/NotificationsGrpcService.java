@@ -1,55 +1,7 @@
 package com.flair.bi.service;
 
-import com.flair.bi.messages.report.AddEmailConfigsRequest;
+import com.flair.bi.messages.report.*;
 import com.flair.bi.messages.report.ConfigsResponse;
-import com.flair.bi.messages.report.AddTeamConfigsRequest;
-import com.flair.bi.messages.report.ChannelParameters;
-import com.flair.bi.messages.report.ConnectionProperties;
-import com.flair.bi.messages.report.CreateJiraTicketRequest;
-import com.flair.bi.messages.report.CreateJiraTicketResponse;
-import com.flair.bi.messages.report.DeleteChannelConfigRequest;
-import com.flair.bi.messages.report.DeleteScheduledReportRequest;
-import com.flair.bi.messages.report.DisableTicketCreationRequest;
-import com.flair.bi.messages.report.Email;
-import com.flair.bi.messages.report.EmailParameters;
-import com.flair.bi.messages.report.ExecuteReportRequest;
-import com.flair.bi.messages.report.ExecuteReportResponse;
-import com.flair.bi.messages.report.GetAllJiraRequest;
-import com.flair.bi.messages.report.GetAllJiraResponse;
-import com.flair.bi.messages.report.GetChannelPropertiesRequest;
-import com.flair.bi.messages.report.GetChannelPropertiesResponse;
-import com.flair.bi.messages.report.GetEmailConfigRequest;
-import com.flair.bi.messages.report.GetEmailConfigResponse;
-import com.flair.bi.messages.report.GetJiraConfigRequest;
-import com.flair.bi.messages.report.GetJiraConfigResponse;
-import com.flair.bi.messages.report.GetScheduleReportLogRequest;
-import com.flair.bi.messages.report.GetScheduleReportLogResponse;
-import com.flair.bi.messages.report.GetScheduleReportLogsRequest;
-import com.flair.bi.messages.report.GetScheduleReportLogsResponse;
-import com.flair.bi.messages.report.GetScheduledReportRequest;
-import com.flair.bi.messages.report.GetTeamConfigRequest;
-import com.flair.bi.messages.report.GetTeamConfigResponse;
-import com.flair.bi.messages.report.JiraConfigsRequest;
-import com.flair.bi.messages.report.JiraParameters;
-import com.flair.bi.messages.report.JiraTickets;
-import com.flair.bi.messages.report.NotifyOpenedJiraTicketRequest;
-import com.flair.bi.messages.report.OpenJiraTicket;
-import com.flair.bi.messages.report.RepUserCountReq;
-import com.flair.bi.messages.report.RepUserCountResp;
-import com.flair.bi.messages.report.RepUserReq;
-import com.flair.bi.messages.report.RepUserResp;
-import com.flair.bi.messages.report.Report;
-import com.flair.bi.messages.report.ReportLog;
-import com.flair.bi.messages.report.ReportServiceGrpc;
-import com.flair.bi.messages.report.ScheduleReport;
-import com.flair.bi.messages.report.ScheduleReportRequest;
-import com.flair.bi.messages.report.ScheduleReportResponse;
-import com.flair.bi.messages.report.SearchReportsRequest;
-import com.flair.bi.messages.report.SearchReportsResponse;
-import com.flair.bi.messages.report.TeamConfigParameters;
-import com.flair.bi.messages.report.UpdateEmailSMTPRequest;
-import com.flair.bi.messages.report.ConfigsResponse;
-import com.flair.bi.messages.report.UpdateTeamWebhookURLRequest;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.AssignReport;
 import com.flair.bi.service.dto.scheduler.CommunicationList;
@@ -501,6 +453,12 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 		return toTeamConfigParametersDTOList(response.getRecordsList());
 	}
 
+	@Override
+	public List<String> getTeamNames(Integer id) {
+		GetTeamNamesResponse response = getReportStub().getTeamNames(GetTeamConfigRequest.newBuilder().setId(id).build());
+		return response.getRecordsList();
+	}
+
 	private List<TeamConfigParametersDTO> toTeamConfigParametersDTOList(List<TeamConfigParameters> list) {
 		return list.stream().map(item -> toTeamConfigParametersDTO(item)).collect(toList());
 
@@ -615,5 +573,10 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
 				.addAllChannels(Arrays.asList(openJiraTicketDTO.getChannels()))
 				.build();
 	}
+    @Override
+    public Boolean isConfigExist(Integer id) {
+        IsConfigExistResponse response =getReportStub().isConfigExist(IsConfigExistRequest.newBuilder().setId(id).build());
+        return response.getIsConfigExist();
+    }
 
 }

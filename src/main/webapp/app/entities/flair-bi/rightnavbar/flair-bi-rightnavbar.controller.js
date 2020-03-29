@@ -8,14 +8,20 @@
     FlairBiRightNavBarController.$inject = ['Visualizations', '$rootScope',
         'entity', 'Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
-        'Hierarchies','$timeout',"filterParametersService","FilterStateManagerService",
-        "Visualmetadata","VisualDispatchService","VisualMetadataContainer","$translate"
+        'Hierarchies', '$timeout', "filterParametersService", "FilterStateManagerService",
+        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
         entity, Features, $uibModal,
         $state, $scope, featureEntities,
-        Hierarchies,$timeout,filterParametersService,FilterStateManagerService,Visualmetadata,VisualDispatchService,VisualMetadataContainer,$translate) {
+        Hierarchies, $timeout,
+        filterParametersService,
+        FilterStateManagerService,
+        Visualmetadata,
+        VisualDispatchService,
+        VisualMetadataContainer,
+        $translate) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -29,36 +35,36 @@
         vm.onVizualizationsClose = onVizualizationsClose;
         vm.deleteFeature = deleteFeature;
         vm.deleteHierarchy = deleteHierarchy;
-        vm.ngIfResources = ngIfResources;    
+        vm.ngIfResources = ngIfResources;
         vm.activeTab = "dimensions";
         vm.navbarToggled = false;
-        vm.onFiltersOpen=onFiltersOpen;
+        vm.onFiltersOpen = onFiltersOpen;
         vm.clearFilters = clearFilters;
         vm.ngIfClearFilters = ngIfClearFilters;
-        vm.ngIfFilters = ngIfFilters; 
+        vm.ngIfFilters = ngIfFilters;
         vm.filterToggled = false;
         var showOpt = true;
         vm.sideBarTab = "";
-        vm.selected=null;
-        vm.propertiesToggled=false;
-        vm.onPropertiesOpen=onPropertiesOpen;
+        vm.selected = null;
+        vm.propertiesToggled = false;
+        vm.onPropertiesOpen = onPropertiesOpen;
         vm.propTab = "viz-properties";
         vm.propertiesToggled = false;
         vm.validate = validate;
         vm.save = save;
         vm.clear = clear;
-        var editMode=false;
-        vm.dataToggled=false;
-        vm.onDataOpen=onDataOpen;
-        vm.onDataclose=onDataclose;
-        vm.dropCallback=dropCallback;
-        vm.getSelectedItem=getSelectedItem;
-
-
+        var editMode = false;
+        vm.dataToggled = false;
+        vm.onDataOpen = onDataOpen;
+        vm.onDataclose = onDataclose;
+        vm.dropCallback = dropCallback;
+        vm.getSelectedItem = getSelectedItem;
+        vm.onWidgetsOpen = onWidgetsOpen;
+        vm.onWidgetsClose = onWidgetsClose;
         activate();
 
 
-         
+
         ////////////////
 
         function activate() {
@@ -77,18 +83,20 @@
             registerRightNavBarDataOpen();
             registerOnDataPropertiesUpdate();
             registerOnChartPropertiesUpdate();
+            registerToggleWidgetsOn();
+            registerToggleWidgetsOff();
         }
 
         ////////////////
 
-        function getSelectedItem(item){
+        function getSelectedItem(item) {
             onDragEnd(item);
         }
 
         function onDragEnd(item) {
-            $rootScope.$broadcast("flairbiApp:onDragEnd",item);
+            $rootScope.$broadcast("flairbiApp:onDragEnd", item);
         }
-        function dropCallback(index, item, external, type){
+        function dropCallback() {
             return false;
         }
 
@@ -99,16 +107,16 @@
                 ceil: 1,
                 step: 0.1,
                 precision: 1,
-                onChange: function(id) {
-                    vm.visual.bodyProperties.opacity=vm.slider.value;
+                onChange: function (id) {
+                    vm.visual.bodyProperties.opacity = vm.slider.value;
                 },
-                translate: function(value) {
-                return 100 * value+'%';
+                translate: function (value) {
+                    return 100 * value + '%';
                 }
             }
         };
 
-        function setProperties(visual,view) {
+        function setProperties(visual, view) {
             vm.visual = visual;
             vm.visual.titleProperties.titleText =
                 vm.visual.titleProperties.titleText.trim() == ""
@@ -118,8 +126,8 @@
             vm.features = Features.query({
                 datasource: view.viewDashboard.dashboardDatasource.id
             });
-            vm.view=view;
-            vm.slider.value=parseFloat(vm.visual.bodyProperties.opacity);
+            vm.view = view;
+            vm.slider.value = parseFloat(vm.visual.bodyProperties.opacity);
         }
 
         function clear() {
@@ -134,12 +142,12 @@
                         viewId: vm.view.id,
                         visualMetadata: vm.visual
                     },
-                    function(result){
+                    function (result) {
                         vm.isSaving = false;
                         VisualDispatchService.setViewEditedBeforeSave(false);
-                        VisualMetadataContainer.update(vm.visual.id,result,'id');
+                        VisualMetadataContainer.update(vm.visual.id, result, 'id');
                         vm.visual = result;
-                        var info = {text:$translate.instant('flairbiApp.visualmetadata.updated',{param:result.id}),title: "Updated"}
+                        var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: result.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
                     },
                     onSaveError
@@ -150,12 +158,12 @@
                         viewId: vm.view.id,
                         visualMetadata: vm.visual
                     },
-                    function(result){
+                    function (result) {
                         vm.isSaving = false;
                         VisualDispatchService.setViewEditedBeforeSave(false);
-                        VisualMetadataContainer.update(vm.visual.visualBuildId,result,'visualBuildId');
+                        VisualMetadataContainer.update(vm.visual.visualBuildId, result, 'visualBuildId');
                         vm.visual = result;
-                        var info = {text:$translate.instant('flairbiApp.visualmetadata.created',{param:result.id}),title: "Created"}
+                        var info = { text: $translate.instant('flairbiApp.visualmetadata.created', { param: result.id }), title: "Created" }
                         $rootScope.showSuccessToast(info);
                     },
                     onSaveError
@@ -167,26 +175,26 @@
             vm.isSaving = false;
         }
 
-        function validate() {}
+        function validate() { }
 
-        function isRightSideBarOpen(){
+        function isRightSideBarOpen() {
             return $('#slider').is(":visible");
         }
 
-        function openProperties(){
+        function openProperties() {
             showSideBar();
             vm.propertiesToggled = true;
             vm.sideBarTab = "properties";
             vm.propTab = "viz-properties";
-            $('#slider').css('display','block');
+            $('#slider').css('display', 'block');
             $('#properties').scrollTop(0)
-            $timeout(function() {
-                 $scope.$broadcast('reCalcViewDimensions');
-            }); 
+            $timeout(function () {
+                $scope.$broadcast('reCalcViewDimensions');
+            });
         }
 
         function registerFilterRefresh() {
-            var unsubscribe = $scope.$on("flairbiApp:filter", function() {
+            var unsubscribe = $scope.$on("flairbiApp:filter", function () {
                 refresh();
             });
             $scope.$on("$destroy", unsubscribe);
@@ -195,7 +203,7 @@
         function registerToggleFilterOn() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleFilters-on",
-                function() {
+                function () {
                     openFilters();
                 }
             );
@@ -206,8 +214,8 @@
         function registerToggleFilterOff() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleFilters-off",
-                function() {
-                    $timeout(function() {
+                function () {
+                    $timeout(function () {
                         vm.filterToggled = false;
                         hideSidebar();
                     });
@@ -218,11 +226,33 @@
         }
 
 
+        function registerToggleWidgetsOn() {
+            var toggleWidgetsUnsubscribeOn = $scope.$on(
+                "flairbiApp:toggleWidgets-on",
+                function (event, result) {
+                    openWidgets();
+                }
+            );
+            $scope.$on("$destroy", toggleWidgetsUnsubscribeOn);
+        }
+
+        function registerToggleWidgetsOff() {
+            var toggleWidgetsUnsubscribeOff = $scope.$on(
+                "flairbiApp:toggleWidgets-off",
+                function (event, result) {
+                    vm.toggleWidgets = false;
+                    hideSidebar();
+                }
+            );
+            $scope.$on("$destroy", toggleWidgetsUnsubscribeOff);
+        }
+
+
         function registerTogglePropertiesOff() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleProperties-off",
-                function() {
-                    $timeout(function() {
+                function () {
+                    $timeout(function () {
                         vm.propertiesToggled = false;
                         hideSidebar();
                     });
@@ -235,12 +265,12 @@
         function registerTogglePropertiesOn() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleProperties-on",
-                function() {
-                        var data=VisualDispatchService.getVisual();
-                        if(data!=undefined){
-                            setProperties(data.visual,data.view);
-                        }
-                    $timeout(function() {
+                function () {
+                    var data = VisualDispatchService.getVisual();
+                    if (data != undefined) {
+                        setProperties(data.visual, data.view);
+                    }
+                    $timeout(function () {
                         openProperties();
                     });
                 }
@@ -250,51 +280,70 @@
         }
 
         function registerOnDataPropertiesUpdate() {
-            var unsubscribe = $scope.$on("flairbiApp:on-data-properties-update", function(
+            var unsubscribe = $scope.$on("flairbiApp:on-data-properties-update", function (
                 event,
                 updatedField
             ) {
-            var index = -1;
-            vm.visual.fields.filter(function(field) {
-                if(field.feature.name === updatedField.fieldName){
-                    field.properties.some(function(item, i) {
-                        return item.order === updatedField.property.order ? index = i : false;
-                    });
-                    field.properties[index].value=updatedField.value;
-                }
-            });
+                var index = -1;
+                vm.visual.fields.filter(function (field) {
+                    if (field.feature.name === updatedField.fieldName) {
+                        field.properties.some(function (item, i) {
+                            return item.order === updatedField.property.order ? index = i : false;
+                        });
+                        field.properties[index].value = updatedField.value;
+                    }
+                });
             });
             $scope.$on("$destroy", unsubscribe);
         }
 
         function registerOnChartPropertiesUpdate() {
-            var unsubscribe = $scope.$on("flairbiApp:on-chart-properties-update", function(
+            var unsubscribe = $scope.$on("flairbiApp:on-chart-properties-update", function (
                 event,
                 updatedChart
             ) {
-            var index = -1;
-            vm.visual.properties.some(function(item, i) {
-                return item.order === updatedChart.property.order ? index = i : false;
-            });
-            vm.visual.properties[index].value=updatedChart.value;
+                var index = -1;
+                vm.visual.properties.some(function (item, i) {
+                    return item.order === updatedChart.property.order ? index = i : false;
+                });
+                vm.visual.properties[index].value = updatedChart.value;
             });
             $scope.$on("$destroy", unsubscribe);
         }
         function ngIfFilters() {
-            return showOpt && !$rootScope.exploration;
+            return showOpt;
         }
 
         function ngIfClearFilters() {
-            return showOpt && !$rootScope.exploration;
+            return showOpt;
         }
 
         function openFilters() {
             showSideBar();
-            vm.sideBarTab="filters";
+            vm.sideBarTab = "filters";
             vm.filterToggled = true;
-            $('#slider').css('display','block');
-            //setContainerHeight();
-             
+            $('#slider').css('display', 'block');
+        }
+
+        function openWidgets() {
+            showSideBar();
+            vm.sideBarTab = "widgets";
+            vm.widgetsToggled = true;
+            Features.query({
+                datasource: vm.view.viewDashboard.dashboardDatasource.id,
+                favouriteFilter: true
+            })
+                .$promise
+                .then(function (features) {
+                    vm.FavouriteDimensions = features
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+            $('#slider').css('display', 'block');
         }
 
         function clearFilters() {
@@ -321,16 +370,19 @@
         }
 
         function loadDimensions() {
-            vm.dimensions = featureEntities.filter(function(item) {
+            vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
+            });
+            vm.FavouriteDimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION" && item.favouriteFilter === true;
             });
         }
 
         function registerToggleRightNavBarOff() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleRightNavBar-off",
-                function() {
-                    $timeout(function() {
+                function () {
+                    $timeout(function () {
                         vm.navbarToggled = false;
                         hideSidebar();
                     });
@@ -343,7 +395,7 @@
         function registerToggleRightNavBarOn() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:toggleRightNavBar-on",
-                function() {
+                function () {
                     openVisualizations();
                 }
             );
@@ -351,21 +403,21 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function showSideBar(){
-            if(!isRightSideBarOpen()){
-                var wg=$("#widget-container").width();
-                var sb=$("#slider").width();
-                $("#widget-container").width(wg-sb-1);
+        function showSideBar() {
+            if (!isRightSideBarOpen()) {
+                var wg = $("#widget-container").width();
+                var sb = $("#slider").width();
+                $("#widget-container").width(wg - sb - 1);
                 VisualDispatchService.reloadGrids();
             }
         }
 
-        function hideSidebar(){
+        function hideSidebar() {
             $('#widget-container').css('width', '100%').css('width', '-=16px');
         }
 
         function registerEditModeToggle() {
-            var unsubscribe = $scope.$on("FlairBi:button-toggle", function(
+            var unsubscribe = $scope.$on("FlairBi:button-toggle", function (
                 event,
                 result
             ) {
@@ -379,11 +431,11 @@
         }
 
         function openVisualizations() {
-                showSideBar();
-                vm.sideBarTab = "vizualizations";
-                //setContainerHeight();
-                vm.navbarToggled = true;
-                $('#slider').css('display','block');                 
+            showSideBar();
+            vm.sideBarTab = "vizualizations";
+            //setContainerHeight();
+            vm.navbarToggled = true;
+            $('#slider').css('display', 'block');
         }
 
 
@@ -399,11 +451,11 @@
 
         function onDataOpen() {
             resetWidgetEntry();
-            vm.sideBarTab="data";
-            vm.dataToggled=true;
+            vm.sideBarTab = "data";
+            vm.dataToggled = true;
             showSideBar();
             //setContainerHeight();
-            $('#slider').css('display','block');  
+            $('#slider').css('display', 'block');
 
         }
 
@@ -413,7 +465,7 @@
 
         function onDataclose() {
             resetWidgetEntry();
-            vm.dataToggled=false;
+            vm.dataToggled = false;
         }
 
         function onFiltersOpen() {
@@ -426,6 +478,16 @@
             $rootScope.$broadcast("flairbiApp:toggleFilters-off");
         }
 
+        function onWidgetsOpen() {
+            resetWidgetEntry();
+            $rootScope.$broadcast("flairbiApp:toggleWidgets-on");
+        }
+
+        function onWidgetsClose() {
+            resetWidgetEntry();
+            $rootScope.$broadcast("flairbiApp:toggleWidgets-off");
+        }
+
         function onPropertiesOpen() {
             resetWidgetEntry();
             $rootScope.$broadcast('flairbiApp:toggleProperties-on');
@@ -436,50 +498,50 @@
             $rootScope.$broadcast('flairbiApp:toggleProperties-off');
         }
 
-        function setContainerHeight(){
-           setTimeout(function(){
-                var containerHeight=document.getElementById('widget-container').offsetHeight;
-                var sidebarHeight =document.getElementById('slider').offsetHeight;
-                if(sidebarHeight>containerHeight){ 
-                    $(".widget-container-resized").css('min-height',sidebarHeight+'px');
-                }else{
-                    $(".widget-container-resized").css('min-height',containerHeight+'px');    
+        function setContainerHeight() {
+            setTimeout(function () {
+                var containerHeight = document.getElementById('widget-container').offsetHeight;
+                var sidebarHeight = document.getElementById('slider').offsetHeight;
+                if (sidebarHeight > containerHeight) {
+                    $(".widget-container-resized").css('min-height', sidebarHeight + 'px');
+                } else {
+                    $(".widget-container-resized").css('min-height', containerHeight + 'px');
                 }
-                }, 1000);
+            }, 1000);
         }
 
         $(document).on("click", function (event) {
-                if (isRightSideBarOpen()) {
-                    //var p=$(event.target).parents();
-                    var gridLen= $(event.target).parents().is('.grid-back,.grid-front,.grid-stack-item,.grid-stack,.viz-header,.viz-header-content,.grid-stack-item-content,.viz-settings')==true?1:0;
-                    var trigger = $(".right-sidebar-container"); 
-                    var cpicker=$(event.target).parents().hasClass('md-dialog-container')==true?1:0; 
-                    var dlen=$(event.target).parents().hasClass('entity-type')==true?1:0;  
-                    var dcLen=$(event.target).parents().hasClass('data-constraint-operation-button')==true?1:0;
-                    var pLen=$(event.target).parents().hasClass('md-color-picker-clear')==true?1:0;
-                    var cdatepicker=$(event.target).parents().is('.md-calendar-date,.md-calendar-month-label')==true?1:0;
-                    var len=$(event.target).parents('.tag-item').length+$(event.target).parents('.suggestion-item').length+
-                            $(event.target).parents('.suggestion-list').length+pLen+dcLen+dlen+cpicker+gridLen+cdatepicker;
-                        if (trigger !== event.target && !trigger.has(event.target).length && len == 0) {
-                            $('#slider').css('display', 'none');
-                            onVizualizationsClose();
-                            onFiltersClose();
-                            onPropertiesClose();
-                            onDataclose();
-                            VisualDispatchService.reloadGrids();
-                            VisualDispatchService.removeOpacity();
-                        }
+            if (isRightSideBarOpen()) {
+                //var p=$(event.target).parents();
+                var gridLen = $(event.target).parents().is('.grid-back,.grid-front,.grid-stack-item,.grid-stack,.viz-header,.viz-header-content,.grid-stack-item-content,.viz-settings') == true ? 1 : 0;
+                var trigger = $(".right-sidebar-container");
+                var cpicker = $(event.target).parents().hasClass('md-dialog-container') == true ? 1 : 0;
+                var dlen = $(event.target).parents().hasClass('entity-type') == true ? 1 : 0;
+                var dcLen = $(event.target).parents().hasClass('data-constraint-operation-button') == true ? 1 : 0;
+                var pLen = $(event.target).parents().hasClass('md-color-picker-clear') == true ? 1 : 0;
+                var cdatepicker = $(event.target).parents().is('.md-calendar-date,.md-calendar-month-label') == true ? 1 : 0;
+                var len = $(event.target).parents('.tag-item').length + $(event.target).parents('.suggestion-item').length +
+                    $(event.target).parents('.suggestion-list').length + pLen + dcLen + dlen + cpicker + gridLen + cdatepicker;
+                if (trigger !== event.target && !trigger.has(event.target).length && len == 0) {
+                    $('#slider').css('display', 'none');
+                    onVizualizationsClose();
+                    onFiltersClose();
+                    onPropertiesClose();
+                    onDataclose();
+                    VisualDispatchService.reloadGrids();
+                    VisualDispatchService.removeOpacity();
                 }
-                $( ".filter-drop-downs" ).hide();
+            }
+            $(".filter-drop-downs").hide();
         });
 
         function deleteHierarchy(hierarchy) {
             swal(
-                    "Are you sure?",
-                    "You want to delete selected hierarchy", {
-                        dangerMode: true,
-                        buttons: true,
-                    })
+                "Are you sure?",
+                "You want to delete selected hierarchy", {
+                dangerMode: true,
+                buttons: true,
+            })
                 .then(function (value) {
                     if (value) {
                         if (hierarchy.id) {
@@ -505,11 +567,11 @@
 
         function deleteFeature(feature) {
             swal(
-                    "Are you sure?",
-                    "You want to delete selected feature", {
-                        dangerMode: true,
-                        buttons: true,
-                    })
+                "Are you sure?",
+                "Do you want to delete selected feature?", {
+                dangerMode: true,
+                buttons: true,
+            })
                 .then(function (value) {
                     if (value) {
                         if (feature.id) {
@@ -652,7 +714,7 @@
         function registerRightNavBarDataOpen() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:onData-open",
-                function() {
+                function () {
                     onDataOpen();
                 }
             );
@@ -661,8 +723,3 @@
         }
     }
 })();
-
-
-
-
-

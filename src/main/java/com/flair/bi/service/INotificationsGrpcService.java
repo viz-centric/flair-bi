@@ -49,6 +49,8 @@ public interface INotificationsGrpcService {
 
 	List<TeamConfigParametersDTO> getTeamConfig(Integer id);
 
+	List<String> getTeamNames(Integer id);
+
 	String deleteChannelConfig(Integer id);
 
 	String createJiraConfig(JiraParametersDTO jiraParametersDTO);
@@ -66,4 +68,6 @@ public interface INotificationsGrpcService {
 	String disableTicketCreationRequest(Integer schedulerTaskLogId);
 
 	String notifyOpenedJiraTicket(OpenJiraTicketDTO openJiraTicketDTO);
+
+	Boolean isConfigExist(Integer id);
 }

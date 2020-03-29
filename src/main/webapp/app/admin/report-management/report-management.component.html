@@ -1,0 +1,50 @@
+<div id="report-management">
+    <div class="alerts">
+        <div class="alerts-tabs">
+            <div id="configuration-tab" ng-if="vm.isAdmin"
+                class="tab configuration-tab  ng-class:{'tab-active':vm.alertTab =='configuration'}"
+                ng-click="vm.reportManagementTabClick('configuration')">
+                <p class="home_label">Configuration</span>
+                    <div>
+                        <svg class="svg-icon">
+                            <use xlink:href="#admin-configuration"></use>
+                        </svg>
+                    </div>
+                    <div class="blue-line"></div>
+            </div>
+            <div id="report-tab" class="tab report-tab  ng-class:{'tab-active':vm.alertTab =='report'}"
+                ng-click="vm.reportManagementTabClick('report')">
+                <p class="home_label">Reports</span>
+                    <div>
+                        <svg class="svg-icon">
+                            <use xlink:href="#new-email-report"></use>
+                        </svg>
+                    </div>
+                    <div class="blue-line"></div>
+            </div>
+            <div id="tasklogger-tab" class="tab tasklogger-tab  ng-class:{'tab-active':vm.alertTab =='tasklogger'}"
+                ng-click="vm.reportManagementTabClick('tasklogger')">
+                <p class="home_label">Task Logger</span>
+                    <div>
+                        <svg class="svg-icon">
+                            <use xlink:href="#admin-logs"></use>
+                        </svg>
+                    </div>
+                    <div class="blue-line"></div>
+            </div>
+        </div>
+        <div id="configuration-container" class="configuration-container" alert="vm.alertTab"
+            ng-if="vm.isAdmin && vm.alertTab =='configuration'">
+            <configuration-component />
+        </div>
+        <div id="report-container" class="report-container" alert="vm.alertTab" ng-if="vm.alertTab =='report'">
+            <report-list-component></report-list-component>
+        </div>
+        <div id="tasklogger-container" class="tasklogger-container" alert="vm.alertTab"
+            ng-if="vm.alertTab=='tasklogger'">
+            <task-logger-component></task-logger-component>
+        </div>
+    </div>
+    <br>
+</div>
+</div>

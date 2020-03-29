@@ -85,6 +85,12 @@ public class NotificationConfigurationResource {
 		return schedulerService.getTeamConfig(id);
 	}
 
+	@GetMapping("/notification/getTeamNames/")
+	@Timed
+	public List<String> getTeamNames(@RequestParam(required = false) Integer id) {
+		return schedulerService.getTeamNames(id);
+	}
+
 	@DeleteMapping("/notification/deleteChannelConfig")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'DELETE','APPLICATION')")
@@ -139,6 +145,13 @@ public class NotificationConfigurationResource {
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'WRITE','APPLICATION')")
 	public String notifyOpenedJiraTicket(@Valid @RequestBody OpenJiraTicketDTO openJiraTicketDTO) {
 		return schedulerService.notifyOpenedJiraTicket(openJiraTicketDTO);
+	}
+
+	@GetMapping("/notification/isConfigExist/")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
+	Boolean isConfigExist(@RequestParam(required = false) Integer id) {
+		return schedulerService.isConfigExist(id);
 	}
 
 }

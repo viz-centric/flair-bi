@@ -26,6 +26,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -54,7 +57,7 @@ public class SchedulerResource {
 
 	@Value("${flair-notifications.password}")
 	private String password;
-	
+
 	@Value("${flair-notifications.host}")
 	private String host;
 
@@ -72,15 +75,15 @@ public class SchedulerResource {
 
 	@Value("${flair-notifications.scheduled-reports-url}")
 	private String scheduledReportsUrl;
-	
+
 	@Value("${flair-notifications.scheduled-reports-count-url}")
 	private String scheduledReportsCountUrl;
-	
+
 	@Value("${flair-notifications.scheduled-report-param-url}")
 	private String scheduledReportParamUrl;
 
 	private final VisualMetadataService visualMetadataService;
-	
+
 	private final DatasourceService datasourceService;
 
 	private final SchedulerService schedulerService;
@@ -90,40 +93,41 @@ public class SchedulerResource {
 	public ResponseEntity<SchedulerResponse> scheduleReport(@Valid @RequestBody SchedulerDTO schedulerDTO)
 			throws Exception {
 		log.info("Creating schedule report {}", schedulerDTO);
-		VisualMetadata visualMetadata = visualMetadataService.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
-		Datasource datasource =datasourceService.findOne(schedulerDTO.getDatasourceid());
-		if(!schedulerDTO.getEmailReporter() || !SecurityUtils.iAdmin()) {
-			schedulerDTO.getAssign_report().getCommunication_list().setEmail(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
+		VisualMetadata visualMetadata = visualMetadataService
+				.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
+		Datasource datasource = datasourceService.findOne(schedulerDTO.getDatasourceid());
+		if (!SecurityUtils.iAdmin()) {
+			schedulerDTO.getAssign_report().getCommunication_list()
+					.setEmail(schedulerService.getEmailList(SecurityUtils.getCurrentUserLogin()));
 		}
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
-		schedulerDTO.getReport().setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
+		schedulerDTO.getReport()
+				.setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
 		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query;
 		try {
-			query = schedulerService.buildQuery(schedulerDTO.getQueryDTO(),visualMetadata, datasource, schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
+			query = schedulerService.buildQuery(schedulerDTO.getQueryDTO(), visualMetadata, datasource,
+					schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
 		} catch (QueryTransformerException e) {
 			log.error("Error validating a query " + schedulerDTO.getQueryDTO(), e);
 			SchedulerResponse response = new SchedulerResponse();
 			response.setMessage("Validation failed " + e.getValidationMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
-		SchedulerNotificationDTO schedulerNotificationDTO= new SchedulerNotificationDTO(schedulerDTO.getReport(),
-				schedulerDTO.getReport_line_item(),
-				schedulerDTO.getAssign_report(),
-				schedulerDTO.getSchedule(),
-				query,
+		SchedulerNotificationDTO schedulerNotificationDTO = new SchedulerNotificationDTO(schedulerDTO.getReport(),
+				schedulerDTO.getReport_line_item(), schedulerDTO.getAssign_report(), schedulerDTO.getSchedule(), query,
 				schedulerDTO.getConstraints());
 
 		schedulerService.setChannelCredentials(schedulerNotificationDTO);
-        log.info("Sending schedule report {}", schedulerNotificationDTO);
+		log.info("Sending schedule report {}", schedulerNotificationDTO);
 
-        GetSchedulerReportDTO schedulerReportDTO;
-        if (schedulerDTO.getPutcall()) {
-            schedulerReportDTO = schedulerService.updateSchedulerReport(schedulerNotificationDTO);
-        } else {
-            schedulerReportDTO = schedulerService.createSchedulerReport(schedulerNotificationDTO);
-        }
+		GetSchedulerReportDTO schedulerReportDTO;
+		if (schedulerDTO.getPutcall()) {
+			schedulerReportDTO = schedulerService.updateSchedulerReport(schedulerNotificationDTO);
+		} else {
+			schedulerReportDTO = schedulerService.createSchedulerReport(schedulerNotificationDTO);
+		}
 
 		log.info("Receiving schedule report {}", schedulerReportDTO);
 
@@ -133,32 +137,32 @@ public class SchedulerResource {
 		return ResponseEntity.ok(response);
 	}
 
-
-    @GetMapping("/schedule/reports/{pageSize}/{page}")
-    @Timed
-    public ResponseEntity<List<SchedulerNotificationDTO>> getSchedulerReports(@PathVariable Integer pageSize,@PathVariable Integer page)
-        throws URISyntaxException {
-		SchedulerReportsDTO reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);
+	@GetMapping("/schedule/reports/{pageSize}/{page}")
+	@Timed
+	public ResponseEntity<List<SchedulerNotificationDTO>> getSchedulerReports(@PathVariable Integer pageSize,
+			@PathVariable Integer page) throws URISyntaxException {
+		SchedulerReportsDTO reports = schedulerService.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(),
+				pageSize, page);
 		return ResponseEntity.ok(reports.getReports());
-    }
-    
-    @GetMapping("/schedule/reports/count")
-    @Timed
-    public CountDTO getScheduledReportsCount() {
+	}
+
+	@GetMapping("/schedule/reports/count")
+	@Timed
+	public CountDTO getScheduledReportsCount() {
 		Integer count = schedulerService.getScheduledReportsCount(SecurityUtils.getCurrentUserLogin());
 		return new CountDTO(new Long(count));
-    }
+	}
 
 	@GetMapping("/schedule/{visualizationid}")
 	@Timed
 	public ResponseEntity<GetSchedulerReportDTO> getSchedulerReport(@PathVariable String visualizationid) {
-	    log.info("Get scheduled report {}", visualizationid);
+		log.info("Get scheduled report {}", visualizationid);
 		GetSchedulerReportDTO responseDTO = schedulerService.getSchedulerReport(visualizationid);
 
 		log.info("Get scheduled report {} finished", visualizationid);
 		return ResponseEntity.ok(responseDTO);
 	}
-	
+
 	@DeleteMapping("/schedule/{visualizationid}")
 	@Timed
 	public ResponseEntity<GetSchedulerReportDTO> deleteSchedulerReport(@PathVariable String visualizationid) {
@@ -179,7 +183,8 @@ public class SchedulerResource {
 
 	@GetMapping("/schedule/report/logs/{visualizationid}/{pageSize}/{page}")
 	@Timed
-	public ResponseEntity<GetSchedulerReportLogsDTO> reportLogs(@PathVariable String visualizationid, @PathVariable Integer pageSize, @PathVariable Integer page) {
+	public ResponseEntity<GetSchedulerReportLogsDTO> reportLogs(@PathVariable String visualizationid,
+			@PathVariable Integer pageSize, @PathVariable Integer page) {
 		log.info("Get report logs for vis {} page size {} page {}", visualizationid, pageSize, page);
 		GetSchedulerReportLogsDTO result = schedulerService.scheduleReportLogs(visualizationid, pageSize, page);
 		log.info("Get report logs result {}", result);
@@ -188,15 +193,20 @@ public class SchedulerResource {
 		}
 		return ResponseEntity.ok(result);
 	}
+
 	@GetMapping("/schedule/searchReports/")
 	@Timed
-	public GetSearchReportsDTO searchReports(@RequestParam String userName,@RequestParam String reportName,@RequestParam String startDate,@RequestParam String endDate,@RequestParam Integer pageSize,@RequestParam Integer page,@RequestParam Boolean thresholdAlert) {
-		log.info("Search reports username {} report {} start date {} end date {} page size {} page {}",
-				userName, reportName, startDate, endDate, pageSize, page);
+	public GetSearchReportsDTO searchReports(@RequestParam(value = "userName") String userName,
+			@RequestParam(value = "reportName") String reportName, @RequestParam(value = "startDate") String startDate,
+			@RequestParam(value = "endDate") String endDate,
+			@RequestParam(value = "thresholdAlert") Boolean thresholdAlert, @ApiParam Pageable pageable) {
+		log.info("Search reports username {} report {} start date {} end date {} page size {} page {}", userName,
+				reportName, startDate, endDate, pageable.getPageSize(), pageable.getPageNumber());
 		if (!SecurityUtils.iAdmin()) {
 			userName = SecurityUtils.getCurrentUserLogin();
 		}
-		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert);
+		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate,
+				pageable.getPageSize(), pageable.getPageNumber(), thresholdAlert);
 		log.info("Search reports result {}", result);
 		return result;
 	}
@@ -211,12 +221,9 @@ public class SchedulerResource {
 
 		if (reportLogDto.getError() != null) {
 			return ResponseEntity.unprocessableEntity()
-					.body(ApiErrorResponse.builder()
-							.error(reportLogDto.getError())
-							.build());
+					.body(ApiErrorResponse.builder().error(reportLogDto.getError()).build());
 		}
-		GetSchedulerTaskResponse result = GetSchedulerTaskResponse.builder()
-				.reportLog(reportLogDto.getReportLog())
+		GetSchedulerTaskResponse result = GetSchedulerTaskResponse.builder().reportLog(reportLogDto.getReportLog())
 				.build();
 		return ResponseEntity.ok(result);
 	}

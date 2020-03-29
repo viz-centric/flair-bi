@@ -17,12 +17,10 @@
             },
             views: {
                 'content-header@': {
-                    templateUrl: 'app/admin/logs/logs-content-header.html',
+                    component: 'logsContentHeaderComponent'
                 },
                 'content@': {
-                    templateUrl: 'app/admin/logs/logs.html',
-                    controller: 'LogsController',
-                    controllerAs: 'vm'
+                    component: 'logsComponent'
                 }
             },
             resolve: {

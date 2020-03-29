@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").config(stateConfig);
@@ -26,7 +26,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("featureCriteria");
                             $translatePartialLoader.addPart("global");
                             return $translate.refresh();
@@ -53,7 +53,7 @@
                     translatePartialLoader: [
                         "$translate",
                         "$translatePartialLoader",
-                        function($translate, $translatePartialLoader) {
+                        function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart("featureCriteria");
                             return $translate.refresh();
                         }
@@ -61,14 +61,14 @@
                     entity: [
                         "$stateParams",
                         "FeatureCriteria",
-                        function($stateParams, FeatureCriteria) {
+                        function ($stateParams, FeatureCriteria) {
                             return FeatureCriteria.get({ id: $stateParams.id })
                                 .$promise;
                         }
                     ],
                     previousState: [
                         "$state",
-                        function($state) {
+                        function ($state) {
                             var currentStateData = {
                                 name: $state.current.name || "feature-criteria",
                                 params: $state.params,
@@ -83,7 +83,6 @@
                 }
             })
             .state("feature-criteria-detail.edit", {
-                parent: "feature-criteria-detail",
                 url: "/detail/edit",
                 data: {
                     authorities: ["ROLE_USER"]
@@ -92,7 +91,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -104,7 +103,7 @@
                                 resolve: {
                                     entity: [
                                         "FeatureCriteria",
-                                        function(FeatureCriteria) {
+                                        function (FeatureCriteria) {
                                             return FeatureCriteria.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -113,10 +112,10 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("^", {}, { reload: false });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -124,7 +123,6 @@
                 ]
             })
             .state("feature-criteria.new", {
-                parent: "feature-criteria",
                 url: "/new",
                 data: {
                     authorities: ["ROLE_USER"]
@@ -133,7 +131,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -143,7 +141,7 @@
                                 backdrop: "static",
                                 size: "lg",
                                 resolve: {
-                                    entity: function() {
+                                    entity: function () {
                                         return {
                                             value: null,
                                             id: null
@@ -152,12 +150,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("feature-criteria", null, {
                                         reload: "feature-criteria"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("feature-criteria");
                                 }
                             );
@@ -165,7 +163,6 @@
                 ]
             })
             .state("feature-criteria.edit", {
-                parent: "feature-criteria",
                 url: "/{id}/edit",
                 data: {
                     authorities: ["ROLE_USER"]
@@ -174,7 +171,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -186,7 +183,7 @@
                                 resolve: {
                                     entity: [
                                         "FeatureCriteria",
-                                        function(FeatureCriteria) {
+                                        function (FeatureCriteria) {
                                             return FeatureCriteria.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -195,12 +192,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("feature-criteria", null, {
                                         reload: "feature-criteria"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );
@@ -208,7 +205,6 @@
                 ]
             })
             .state("feature-criteria.delete", {
-                parent: "feature-criteria",
                 url: "/{id}/delete",
                 data: {
                     authorities: ["ROLE_USER"]
@@ -217,7 +213,7 @@
                     "$stateParams",
                     "$state",
                     "$uibModal",
-                    function($stateParams, $state, $uibModal) {
+                    function ($stateParams, $state, $uibModal) {
                         $uibModal
                             .open({
                                 templateUrl:
@@ -228,7 +224,7 @@
                                 resolve: {
                                     entity: [
                                         "FeatureCriteria",
-                                        function(FeatureCriteria) {
+                                        function (FeatureCriteria) {
                                             return FeatureCriteria.get({
                                                 id: $stateParams.id
                                             }).$promise;
@@ -237,12 +233,12 @@
                                 }
                             })
                             .result.then(
-                                function() {
+                                function () {
                                     $state.go("feature-criteria", null, {
                                         reload: "feature-criteria"
                                     });
                                 },
-                                function() {
+                                function () {
                                     $state.go("^");
                                 }
                             );

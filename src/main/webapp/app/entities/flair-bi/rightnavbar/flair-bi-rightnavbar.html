@@ -362,7 +362,9 @@
                                             placeholder="Search Visualizations..." />
                                     </div>
                                     <div class="visualContainer properties">
-                                        <div uib-tooltip={{visual.name}} ng-if="visual.name!='Text Object' && visual.name!='Word Cloud' && visual.name!='Box Plot'" tooltip-placement="auto" class="visual-items"
+                                        <div uib-tooltip={{visual.name}}
+                                            ng-if="visual.name!='Text Object' && visual.name!='Word Cloud' && visual.name!='Box Plot'"
+                                            tooltip-placement="auto" class="visual-items"
                                             ng-repeat="visual in vm.visualizations  | filter: {name: searchVisual} track by visual.id"
                                             ng-click="vm.addVisual(visual)">
                                             <a class="visual-sub-items" href>
@@ -543,6 +545,10 @@
 
             </div>
 
+            <div ng-show="vm.sideBarTab == 'widgets'">
+                <filter-pane-widget-component view="vm.view" dimensions="vm.FavouriteDimensions"></filter-pane-widget-component>
+            </div>
+
             <div class="properties-sidebar" ng-show="vm.sideBarTab == 'properties'">
 
                 <ul class="nav nav-tabs right-nav-option-tabs">
@@ -569,7 +575,7 @@
                     <div ng-show="vm.propTab == 'viz-properties'">
                         <title-properties-component visual="vm.visual"></title-properties-component>
                         <body-properties-component visual="vm.visual" slider="vm.slider"></body-properties-component>
-                        <chart-properties-component visual="vm.visual"></chart-properties-component>
+                        <chart-properties-component features="vm.features" visual="vm.visual"></chart-properties-component>
 
                     </div>
 
@@ -623,6 +629,12 @@
             ng-click="vm.onFiltersOpen()" ng-class="{selected: vm.sideBarTab == 'filters'}">
             <svg class="flaticons-filter">
                 <use xlink:href="#filter" />
+            </svg>
+        </button>
+        <button uib-tooltip="Favourite Filters" tooltip-placement="left" ng-toggled="vm.widgetsToggled" ng-if="vm.ngIfFilters()"
+            ng-click="vm.onWidgetsOpen()" ng-class="{selected: vm.sideBarTab == 'widgets'}">
+            <svg class="favourite-filters">
+                <use xlink:href="#favourite-filters" />
             </svg>
         </button>
 

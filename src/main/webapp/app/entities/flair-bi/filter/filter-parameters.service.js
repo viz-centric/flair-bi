@@ -5,13 +5,12 @@
         .module('flairbiApp')
         .factory('filterParametersService', filterParametersService);
 
-    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES'];
+    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES'];
 
-    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES) {
+    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES) {
 
         var paramObject = {};
         var dateRangePrefix='date-range';
-        var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var selectedFilters={};
         var dynamicDateRangeToolTip={};
 

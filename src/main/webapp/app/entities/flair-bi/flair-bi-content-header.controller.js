@@ -65,7 +65,8 @@
 
         var editMode = false;
         var showOpt = true;
-
+        var dynamicDateRangeFun='FLAIR';
+        vm.toolTipTexts={};
         vm.configuration = configuration;
         vm.states = states;
         vm.clearFilters = clearFilters;
@@ -405,6 +406,7 @@
                 "flairbiApp:filter-add",
                 function () {
                     vm.filters = filterParametersService.get();
+                    setToolTipTexts(vm.filters);
                     FilterStateManagerService.add(
                         angular.copy(filterParametersService.get())
                     );
@@ -416,15 +418,28 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
+        function setToolTipTexts(filters){
+            angular.forEach(filters, function (value, key) {
+                vm.toolTipTexts[key]=getFiltersToolTipName(key);
+            });
+            filterParametersService.resetDynamicDateRangeToolTip();
+        }
+
         function getKeyName(name) {
             return isDateRange(name) ? name.split('|')[1] : name;
         }
 
         function getFiltersToolTipName(name) {
             if (isDateRange(name)) {
+                var dateRangeToolTipText="Date Range : ";
                 var filters = filterParametersService.get();
-                var toolTipText = "Date Range : " + filterParametersService.changeDateFormat(filters[name][0]) + " AND " + filterParametersService.changeDateFormat(filters[name][1]);
-                return toolTipText;
+                if((filters[name][0].indexOf(dynamicDateRangeFun) !== -1) || (filters[name][1].indexOf(dynamicDateRangeFun) !== -1)){
+                    dateRangeToolTipText = dateRangeToolTipText + filterParametersService.getDynamicDateRangeToolTip(name);
+                    return dateRangeToolTipText;
+                }else{
+                    dateRangeToolTipText = dateRangeToolTipText + filterParametersService.changeDateFormat(filters[name][0]) + " AND " + filterParametersService.changeDateFormat(filters[name][1]);
+                    return dateRangeToolTipText;
+                }
             } else {
                 return name;
             }

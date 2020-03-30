@@ -14,9 +14,9 @@
             }
         });
 
-    FilterDateRangeController.$inject = ['$scope'];
+    FilterDateRangeController.$inject = ['$scope','filterParametersService'];
 
-    function FilterDateRangeController($scope) {
+    function FilterDateRangeController($scope,filterParametersService) {
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
@@ -169,6 +169,7 @@
                     startDate: startDate,
                     endDate: endDate
                 });
+                filterParametersService.saveDynamicDateRangeToolTip(vm.dimension.name,vm.currentDynamicDateRangeConfig,vm.customDynamicDateRange)
             }
         }
 

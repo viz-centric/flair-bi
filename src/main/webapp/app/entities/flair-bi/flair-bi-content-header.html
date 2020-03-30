@@ -130,7 +130,7 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()">
+                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()" style="pointer-events: none;">
                             <span uib-tooltip="Full Screen" tooltip-placement="bottom">
                                 <svg class="full-screen">
                                     <use xlink:href="#full-screen" />
@@ -485,7 +485,7 @@
             <li ng-if="value.length > 0" ng-show="vm.currentPage==vm.getFloor($index)" style="outline:none;"
                 ng-click="vm.toggleFilters($event)" class="list-inline-item"
                 ng-repeat="(key, value) in vm.filters track by $index">
-                <a class="btn btn-info btn-sm filter" title="{{vm.getFiltersToolTipName(key)}}">
+                <a class="btn btn-info btn-sm filter" title="{{vm.toolTipTexts[key]}}">
                     <span class="filter-name">{{vm.getKeyName(key)}}</span><span ng-click="vm.removeFilter($event,key)"
                         class="remove glyphicon glyphicon-remove-sign glyphicon-white"></span>
                 </a>

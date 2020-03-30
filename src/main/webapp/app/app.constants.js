@@ -55,6 +55,11 @@
 	"UPDATE_VISUALIZATION_COLORS": "UPDATE_VISUALIZATION_COLORS_APPLICATION",
 	"DELETE_VISUALIZATION_COLORS": "DELETE_VISUALIZATION_COLORS_APPLICATION"
 })
+		.constant('COMPARABLE_DATA_TYPES', [
+			'timestamp',
+			'date',
+			'datetime'
+		])
         .constant('CONDITION_TYPES', [
 	{
 		"displayName": "Or",

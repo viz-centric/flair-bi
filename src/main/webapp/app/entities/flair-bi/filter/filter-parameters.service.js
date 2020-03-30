@@ -13,6 +13,7 @@
         var dateRangePrefix='date-range';
         var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var selectedFilters={};
+        var dynamicDateRangeToolTip={};
 
         var service = {
             get: get,
@@ -25,7 +26,10 @@
             buildDateRangeFilterName:buildDateRangeFilterName,
             getSelectedFilter:getSelectedFilter,
             saveSelectedFilter:saveSelectedFilter,
-            getComparableDataTypes:getComparableDataTypes
+            getComparableDataTypes:getComparableDataTypes,
+            saveDynamicDateRangeToolTip:saveDynamicDateRangeToolTip,
+            getDynamicDateRangeToolTip:getDynamicDateRangeToolTip,
+            resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip
         };
 
 
@@ -233,6 +237,25 @@
 
         function getComparableDataTypes(){
             return COMPARABLE_DATA_TYPES;
+        }
+
+        function saveDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
+            if(currentDynamicDateRangeConfig.isCustom){
+                dynamicDateRangeToolTip[buildDateRangeFilterName(dimensionName)]='Last '+customDynamicDateRange; 
+            }else{
+                dynamicDateRangeToolTip[buildDateRangeFilterName(dimensionName)]=currentDynamicDateRangeConfig.title;
+            }
+        }
+        function getDynamicDateRangeToolTip(dimensionName){
+            if(dynamicDateRangeToolTip[dimensionName]){
+                return dynamicDateRangeToolTip[dimensionName];
+            }else{
+                return '';
+            }
+
+        }
+        function resetDynamicDateRangeToolTip(){
+            dynamicDateRangeToolTip={};
         }
     }
 })();

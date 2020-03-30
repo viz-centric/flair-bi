@@ -18,6 +18,8 @@ export class HomePage extends BasePage {
     private newDashboard: ElementFinder = $('*[ui-sref="dashboards.new"]');
     private viewDashboardsBtn: ElementFinder = $('*[ui-sref="dashboards"]');
 
+    private connectionBtn: ElementFinder = $('*[ui-sref="connection"]');
+
     navigateTo(): Promise<unknown> {
         return browser.get(browser.baseUrl) as Promise<unknown>;
     }
@@ -42,6 +44,10 @@ export class HomePage extends BasePage {
     goToAccount(): void {
         this.profileDropdown.click();
         this.accountButton.click();
+    }
+
+    dataConnection(): void {
+        this.connectionBtn.click();
     }
 
     getPath(): string {

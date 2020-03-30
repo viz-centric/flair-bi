@@ -6,8 +6,18 @@ export class PostgresData {
     private _connectionParams: string;
     private _username: string;
     private _password: string;
+    private _datasource: string;
 
-    constructor(connectionName: string, serverAddress: string, port: string, databaseName: string, connectionParams: string, username: string, password: string) {
+
+
+    constructor(connectionName: string,
+        serverAddress: string,
+        port: string,
+        databaseName: string,
+        connectionParams: string,
+        username: string,
+        password: string,
+        datasource: string) {
         this._connectionName = connectionName;
         this._serverAddress = serverAddress;
         this._port = port;
@@ -15,6 +25,7 @@ export class PostgresData {
         this._connectionParams = connectionParams;
         this._username = username;
         this._password = password;
+        this._datasource = datasource;
     }
 
 
@@ -75,6 +86,14 @@ export class PostgresData {
     }
 
     /**
+     * Getter datasource
+     * @return {string}
+     */
+    public get datasource(): string {
+        return this._datasource;
+    }
+
+    /**
      * Setter connectionName
      * @param {string} value
      */
@@ -130,6 +149,14 @@ export class PostgresData {
         this._password = value;
     }
 
+    /**
+     * Setter datasource
+     * @param {string} value
+     */
+    public set datasource(value: string) {
+        this._datasource = value;
+    }
+
 
 }
 
@@ -140,4 +167,5 @@ export let connectionData =
         "services",
         "",
         "postgres",
-        "admin");
+        "admin",
+        "transactions");

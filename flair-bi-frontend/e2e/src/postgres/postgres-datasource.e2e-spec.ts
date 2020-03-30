@@ -4,7 +4,7 @@ import { HomePage } from '../home/home.po';
 import { userData } from '../user-data';
 import { CreateDatasourcePage } from './create-datasource.po';
 import { connectionData } from '../postgres-data';
-import { ConnectionsPage } from './connections.po';
+import { ConnectionsPage } from '../connection/connections.po';
 
 describe('[Postgres] data source', () => {
 
@@ -35,14 +35,23 @@ describe('[Postgres] data source', () => {
             .testConnection()
             .next()
             .next()
-            .searchDatasource('trans')
-            .selectDatasource('transactions')
+            .searchDatasource(connectionData.datasource.substr(0, 5))
+            .selectDatasource(connectionData.datasource)
             .showData()
             .createDatasource()
             .finish();
 
         expect(browser.getCurrentUrl()).toEqual(connectionsPage.getPageUrl());
         expect(connectionsPage.hasConnection(connectionData.connectionName)).toBeTruthy();
+    });
+
+    it('delete existing datasource', () => {
+        homePage.dataConnection();
+
+        connectionsPage.openDeleteDialog(connectionData.connectionName)
+            .delete();
+
+        expect(connectionsPage.hasConnection(connectionData.connectionName)).toBeFalsy();
     });
 
 

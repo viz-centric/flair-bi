@@ -118,6 +118,7 @@
                             var clusteredverticalbar = $rootScope.updateWidget[record.id];
                             clusteredverticalbar.isLiveEnabled(record.isLiveEnabled)
                                 .config(getProperties(VisualizationUtils, record))
+                                .data(record.data)
                                 .update(record.data);
                         }
                     } else {

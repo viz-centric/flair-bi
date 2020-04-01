@@ -29,7 +29,7 @@
         function confirmDelete(login) {
             User.delete({ login: login },
                 function () {
-                    vm.close(true);
+                    vm.close();
                     var info = { text: $translate.instant('userManagement.deleted', { param: vm.user.login }), title: "Deleted" }
                     $rootScope.showSuccessToast(info);
                 }, function () {

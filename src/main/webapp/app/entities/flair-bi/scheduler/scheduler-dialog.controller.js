@@ -108,7 +108,6 @@
                 getWebhookNames();
             }
             resetSelectedChannels();
-            vm.users = User.query();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard = dashboard;
@@ -334,16 +333,7 @@
         }
 
         function loadUsers(q) {
-            if(vm.selectedUsers.length<vm.maxListSize){
-                var retVal = vm.users.map(function (item) {
-                    return item.firstName + " " + item.email;
-                });
-                return retVal;
-            }
-            else
-            {
-                return emptyList;
-            }
+            return schedulerService.searchUsers(q,10);
         }
 
         function loadWebhooks() {
@@ -695,9 +685,6 @@
                     },
                     report: function(){
                         return vm.scheduleObj;
-                    },
-                    users: function(){
-                        return vm.users;
                     },
                     webhookList: function(){
                         return vm.WebhookList;

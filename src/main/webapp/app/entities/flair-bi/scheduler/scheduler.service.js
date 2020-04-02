@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('schedulerService', schedulerService);
 
-    schedulerService.$inject = ['$http'];
+    schedulerService.$inject = ['$http','User','$q'];
 
-    function schedulerService($http) {
+    function schedulerService($http,User,$q) {
         var service = {
             scheduleReport: scheduleReport,
             getScheduledReportsCount: getScheduledReportsCount,
@@ -18,7 +18,8 @@
             getScheduleReportLogs: getScheduleReportLogs,
             filterScheduledReports: filterScheduledReports,
             getReportLogByMetaId: getReportLogByMetaId,
-            disableTicketCreation: disableTicketCreation
+            disableTicketCreation: disableTicketCreation,
+            searchUsers:searchUsers
         };
 
         return service;
@@ -88,6 +89,23 @@
             return $http({
                 url: 'api/notification/disableTicketCreationRequest/?schedulerTaskLogId=' + schedulerTaskLogId + '',
                 method: 'GET'
+            });
+        }
+        function searchUsers(q,limit){
+            return $q(function(resolve, reject) {
+                var promise=User.search({page: 0,size:limit,login: q}).$promise;
+                promise.then(function (data) {
+                    var retVal = data.map(function (item) {
+                        return item.firstName + " " + item.email;
+                    });
+                    if (retVal) {
+                    resolve(retVal);
+                    } else {
+                    reject(emptyList);
+                    }
+                },function(){
+                    reject(emptyList);
+                });
             });
         }
     }

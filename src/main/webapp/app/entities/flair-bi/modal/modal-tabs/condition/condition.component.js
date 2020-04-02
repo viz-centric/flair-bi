@@ -16,9 +16,9 @@
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService'];
+    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService'];
 
-    function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService) {
+    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService) {
         var vm = this;
         vm.load = load;
         vm.showInfo = false;
@@ -45,7 +45,6 @@
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
-        const COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         const SIMPLE_DATE_TYPES_FOR_DATES = ['Between', 'Compare'];
         const SIMPLE_DATE_TYPES_OTHER = ['Compare', 'Contains', 'NotContains', 'Like'];
         vm.dimension = vm.features[0];

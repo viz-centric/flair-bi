@@ -86,18 +86,16 @@ public class UserService {
     }
 
     public User createUser(String login, String password, String firstName, String lastName, String email,
-                           String langKey, String userType) {
-        return createUser(login, password, firstName, lastName, email, langKey,
-                userType, null);
+            String langKey, String userType) {
+        return createUser(login, password, firstName, lastName, email, langKey, userType, null);
     }
 
     public User createUser(String login, String password, String firstName, String lastName, String email,
-                           String langKey, String userType, Set<String> authorities) {
+            String langKey, String userType, Set<String> authorities) {
 
         Set<String> foundAuthorityNames = ImmutableSet.of();
         if (authorities != null) {
-            foundAuthorityNames = AuthoritiesConstants.ALL.stream()
-                    .filter(authority -> authorities.contains(authority))
+            foundAuthorityNames = AuthoritiesConstants.ALL.stream().filter(authority -> authorities.contains(authority))
                     .collect(Collectors.toSet());
         }
         if (foundAuthorityNames.isEmpty()) {
@@ -134,8 +132,7 @@ public class UserService {
         }
         if (managedUserVM.getUserGroups() != null) {
             Set<UserGroup> userGroups = new HashSet<>();
-            managedUserVM.getUserGroups()
-                .forEach(userGroup -> userGroups.add(userGroupRepository.findOne(userGroup)));
+            managedUserVM.getUserGroups().forEach(userGroup -> userGroups.add(userGroupRepository.findOne(userGroup)));
             user.setUserGroups(userGroups);
         }
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
@@ -162,7 +159,7 @@ public class UserService {
     }
 
     public void updateUser(Long id, String login, String firstName, String lastName, String email, boolean activated,
-                           String langKey, Set<String> userGroups) {
+            String langKey, Set<String> userGroups) {
 
         Optional.of(userRepository.findOne(id)).ifPresent(user -> {
             user.setLogin(login);
@@ -190,10 +187,14 @@ public class UserService {
 
     public void changePassword(String password) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
-            String encryptedPassword = passwordEncoder.encode(password);
-            user.setPassword(encryptedPassword);
-            userRepository.save(user);
-            log.debug("Changed password for User: {}", user);
+            if (user.getUserType().equals(Constants.INTERNAL_USER)) {
+                final String encryptedPassword = passwordEncoder.encode(password);
+                user.setPassword(encryptedPassword);
+                userRepository.save(user);
+                log.debug("Changed password for User: {}", user);
+            } else {
+                log.warn("External users cannot change password. User: {}", user);
+            }
         });
     }
 
@@ -234,15 +235,15 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<User> findAllWithAuthorities(Pageable pageable, Predicate predicate) {
-    	BooleanBuilder booleanBuilder = new BooleanBuilder(predicate);
-        Page<User> users = userRepository.findAll(booleanBuilder,pageable);
+        BooleanBuilder booleanBuilder = new BooleanBuilder(predicate);
+        Page<User> users = userRepository.findAll(booleanBuilder, pageable);
         users.getContent().forEach(x -> x.retrieveAllUserPermissions().size());
         return users;
     }
 
     /**
-     * Persistent Token are used for providing automatic authentication, they
-     * should be automatically deleted after 30 days.
+     * Persistent Token are used for providing automatic authentication, they should
+     * be automatically deleted after 30 days.
      * <p>
      * This is scheduled to get fired everyday, at midnight.
      * </p>

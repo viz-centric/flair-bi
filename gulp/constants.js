@@ -53,6 +53,7 @@ var sharedConstants = {
             DELETE_VISUALIZATION_COLORS: "DELETE_VISUALIZATION_COLORS_APPLICATION"
 
         },
+        COMPARABLE_DATA_TYPES: ['timestamp', 'date', 'datetime'],
         CONDITION_TYPES: [{
             displayName: "Or",
             '@type': "Or",

@@ -65,7 +65,7 @@
                             <ui-select-match placeholder="Select Fields" allow-clear="true">
                                 {{constraint.featureName}}
                             </ui-select-match>
-                            <ui-select-choices repeat="feature.name as feature in vm.features">
+                            <ui-select-choices repeat="feature.name as feature in vm.features | filter: $select.search track by feature.id">
                                 {{feature.name}}
                             </ui-select-choices>
                         </ui-select>

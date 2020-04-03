@@ -17,6 +17,7 @@ export class HomePage extends BasePage {
     private newDatasource: ElementFinder = $('*[ui-sref="connection.new"]')
     private newDashboard: ElementFinder = $('*[ui-sref="dashboards.new"]');
     private viewDashboardsBtn: ElementFinder = $('*[ui-sref="dashboards"]');
+    private userMngBtn: ElementFinder = $('*[ui-sref="user-management"');
 
     private connectionBtn: ElementFinder = $('*[ui-sref="connection"]');
 
@@ -48,6 +49,10 @@ export class HomePage extends BasePage {
 
     dataConnection(): void {
         this.connectionBtn.click();
+    }
+
+    userManagement(): void {
+        this.userMngBtn.click();
     }
 
     getPath(): string {

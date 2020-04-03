@@ -1,15 +1,13 @@
-import { ElementFinder, $ } from 'protractor';
 import { Dialog } from './dialog.po';
 
-export class DeleteDialog extends Dialog {
+export class CreateEditDialog extends Dialog {
 
 
-    delete(): void {
+    save(): void {
         this._submitBtn.click();
     }
 
     cancel(): void {
         this._dismissBtn.click();
     }
-
 }

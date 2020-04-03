@@ -1,6 +1,7 @@
 import { BasePage } from '../base.po';
-import { $, element, by, ElementFinder } from 'protractor';
+import { $, element, by, ElementFinder, ElementArrayFinder } from 'protractor';
 import { DashboardDetailsPage } from './dashboard-details.po';
+import { ViewsPage } from '../views/views.po';
 
 export class DashboardsPage extends BasePage {
 
@@ -13,7 +14,7 @@ export class DashboardsPage extends BasePage {
     private _editOption = (name: string) => this._dashboardCardOptions(name).element(by.css('.item:nth-child(2)'));
     private _releaseOption = (name: string) => this._dashboardCardOptions(name).element(by.css('.item:nth-child(3)'));
 
-    private _dashboards: ElementFinder = element(by.repeater('dashboards in vm.dashboards'));
+    private _dashboards: ElementArrayFinder = element.all(by.repeater('dashboards in vm.dashboards'));
 
     private _submitBtn: ElementFinder = $('button[type="submit"]');
     private _cancelBtn: ElementFinder = $('button[data-dismiss]:nth-child(1)');
@@ -56,6 +57,20 @@ export class DashboardsPage extends BasePage {
     cancel(): DashboardsPage {
         this._cancelBtn.click();
         return this;
+    }
+
+    async showViews(name: string): Promise<ViewsPage> {
+        let anchor: ElementFinder = this._dashboards.filter((el) => {
+            return el.element(by.cssContainingText('h4.item', name))
+                .isPresent();
+        })
+            .first()
+            .element(by.css('a[ui-sref="dashboards-overview({id:vm.dashboard.id})"]'));
+
+        const href = await anchor.getAttribute('href');
+        await anchor.click();
+
+        return new ViewsPage(href.replace(this.getPageUrl() + "/", ""));
     }
 
 

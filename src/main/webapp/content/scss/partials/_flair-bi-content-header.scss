@@ -350,6 +350,11 @@
 .flairbi-content-header-fullscreen {
     padding: 0;
     padding-top: 6px;
+    position: fixed;
+    top: 0px;
+    z-index: 30;
+    left: 15px;
+    right: 15px;
 }
 
 .dashboard-filter-header {

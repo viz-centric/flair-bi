@@ -1806,6 +1806,9 @@ a {
   min-height: 0;
   border: 1px solid #e1e3e3; }
 
+.datasource-constraints {
+  margin-top: 55px !important; }
+
 .search-result-area .search-result-title {
   margin-left: 13px;
   margin-bottom: 20px;

@@ -15,7 +15,7 @@
                 "question": "Are you sure you want to delete new Data Source Constraint {{ id }}?"
             },
             "detail": {
-                "title": "new Data Source Constraint"
+                "title": "New Data Source Constraint"
             },
             "errorFetching":"Error fetching Datasource Constraints",
             "constraintDefinition": "Constraint Definition",

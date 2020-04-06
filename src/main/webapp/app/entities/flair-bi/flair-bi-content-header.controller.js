@@ -253,7 +253,7 @@
         }
 
         function hideFullScreenFiltersHeader() {
-            $("#grid-container").css("margin-top", "-10px");
+            $("#grid-container").css("margin-top", "43px");
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;
             } else {

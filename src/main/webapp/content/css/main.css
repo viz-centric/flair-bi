@@ -1806,6 +1806,9 @@ a {
   min-height: 0;
   border: 1px solid #e1e3e3; }
 
+.datasource-constraints {
+  margin-top: 55px !important; }
+
 .search-result-area .search-result-title {
   margin-left: 13px;
   margin-bottom: 20px;
@@ -4226,7 +4229,12 @@ jhi-alert .alerts .alert-danger {
 
 .flairbi-content-header-fullscreen {
   padding: 0;
-  padding-top: 6px; }
+  padding-top: 6px;
+  position: fixed;
+  top: 0px;
+  z-index: 30;
+  left: 15px;
+  right: 15px; }
 
 .dashboard-filter-header {
   height: 35px;

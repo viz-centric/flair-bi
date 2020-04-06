@@ -1,25 +1,26 @@
-
-<div>
-    <h2><span data-translate="flairbiApp.datasourceConstraint.detail.title">Datasource Constraint</span> {{vm.datasourceConstraint.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="dl-horizontal jh-entity-details">
-        <dt><span data-translate="flairbiApp.datasourceConstraint.constraintDefinition">Constraint Definition</span></dt>
-        <dd>
-            <span>{{vm.datasourceConstraint.constraintDefinition}}</span>
-        </dd>
-        <dt><span data-translate="flairbiApp.datasourceConstraint.user">User</span></dt>
-        <dd>
-            {{vm.datasourceConstraint.user.login}}
-        </dd>
-        <dt><span data-translate="flairbiApp.datasourceConstraint.datasources">Datasources</span></dt>
-        <dd>
-            <a ui-sref="datasources-detail({id:vm.datasourceConstraint.datasource.id})">{{vm.datasourceConstraint.datasource.name}}</a>
-        </dd>
-    </dl>
-
+<div class="fbibox datasource-constraints">
+    <div class="fbibox-content">
+        <h2><span data-translate="flairbiApp.datasourceConstraint.detail.title">Datasource Constraint</span> {{vm.datasourceConstraint.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="dl-horizontal jh-entity-details">
+            <dt><span data-translate="flairbiApp.datasourceConstraint.constraintDefinition">Constraint Definition</span></dt>
+            <dd>
+                <span>{{vm.datasourceConstraint.constraintDefinition}}</span>
+            </dd>
+            <dt><span data-translate="flairbiApp.datasourceConstraint.user">User</span></dt>
+            <dd>
+                {{vm.datasourceConstraint.user.login}}
+            </dd>
+            <dt><span data-translate="flairbiApp.datasourceConstraint.datasources">Datasources</span></dt>
+            <dd>
+                <a ui-sref="datasources-detail({id:vm.datasourceConstraint.datasource.id})">{{vm.datasourceConstraint.datasource.name}}</a>
+            </dd>
+        </dl>
+    </div>
+    <br/>
     <button type="submit"
-            ui-sref="{{ vm.previousState }}"
+            ui-sref="user-management-detail({login:vm.datasourceConstraint.user.login})"
             class="btn btn-info">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>

@@ -30,7 +30,7 @@
                 <label data-translate="flairbiApp.datasourceConstraint.datasources" for="field_datasources">Data
                     Sources</label>
                 <ui-select ng-keyup="vm.search($event,$select.search)" id="field_datasources" name="datasources"
-                    ng-model="vm.datasourceConstraint.datasource" required ng-change="vm.datasourceChange()">
+                    ng-model="vm.datasourceConstraint.datasource" required ng-change="vm.datasourceChange(vm.datasourceConstraint.datasource.id)">
                     <ui-select-match placeholder="{{ 'flairbiApp.datasourceConstraint.selectDatasource' | translate }}">
                         {{$select.selected.name}}</ui-select-match>
                     <ui-select-choices repeat="datasource in vm.datasources">

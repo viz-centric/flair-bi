@@ -85,6 +85,7 @@
                         }
                     }
                 );
+                datasourceChange(vm.datasourceConstraint.datasource.id);
             }
         }
 
@@ -108,14 +109,11 @@
             }
         }
 
-        function datasourceChange() {
-            if (
-                vm.datasourceConstraint.datasource &&
-                vm.datasourceConstraint.datasource.id
-            ) {
+        function datasourceChange(id) {
+            if (id) {
                 Features.query(
                     {
-                        datasource: vm.datasourceConstraint.datasource.id,
+                        datasource: id,
                         featureType: "DIMENSION"
                     },
                     function (result) {
@@ -193,6 +191,8 @@
 
         function featureChange(type,constraint){
             constraint.type=type;
+            constraint.selected=new Array();
+            constraint.values=new Array();
         }
 
         function load(q,constraint) {

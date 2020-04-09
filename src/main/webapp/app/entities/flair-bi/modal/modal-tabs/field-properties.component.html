@@ -32,6 +32,8 @@
         <div class="entity-states" id="nestable">
             <ol class="entity-list">
                 <li ng-click="vm.selectField(field)" class="dd-item"
+                    data-field-type="{{ field.fieldType.featureType }}"
+                    data-field-constraint="{{ field.fieldType.constraint }}"
                     ng-repeat="field in vm.visual.fields | orderBy: 'fieldType.order'">
                     <div class="entity-type">
                         <span class="entity-icon" ng-if="field.fieldType.featureType ==='DIMENSION'">

@@ -3,6 +3,7 @@ import { ElementArrayFinder, element, by, ElementFinder, $, browser, ExpectedCon
 import { CreateEditViewDialog } from './create-edit-view.dialog';
 import { ViewDetailsPage } from './view-details.po';
 import { DeleteDialog } from '../common/delete-dialog.po';
+import { ViewBuildPage } from './view-build.po';
 
 export class ViewsPage extends BasePage {
 
@@ -32,12 +33,21 @@ export class ViewsPage extends BasePage {
 
     createView(): CreateEditViewDialog {
         this._createViewBtn.click();
-        return new CreateEditViewDialog();
+        return new CreateEditViewDialog(this._id);
     }
 
     hasView(name: string): Promise<boolean> {
         return this._view(name)
             .isPresent() as Promise<boolean>;
+    }
+
+    async build(name: string): Promise<ViewBuildPage> {
+        let view = this._view(name);
+        const id = await view.element(by.css('div.view')).getAttribute('id');
+        await view
+            .element(by.css('a.build'))
+            .click();
+        return new ViewBuildPage(this._id, id.replace('view-', ''));
     }
 
     async settings(name: string): Promise<ViewDetailsPage> {

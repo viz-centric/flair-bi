@@ -1,6 +1,8 @@
 import { BasePage } from '../base.po';
 import { $, ElementFinder, element, by, ExpectedConditions, browser } from 'protractor'
 import { DashboardData } from './dashboard-data';
+import { DashboardsPage } from './dashboards.po';
+import { DashboardDetailsPage } from './dashboard-details.po';
 
 export class DashboardDialog extends BasePage {
 
@@ -65,14 +67,14 @@ export class DashboardDialog extends BasePage {
         return this;
     }
 
-    save(): DashboardDialog {
+    save(): DashboardsPage {
         this._saveBtn.click();
-        return this;
+        return new DashboardsPage(new DashboardDetailsPage(''));
     }
 
-    cancel(): DashboardDialog {
+    cancel(): DashboardsPage {
         this._cancelBtn.click();
-        return this;
+        return new DashboardsPage(new DashboardDetailsPage(''));
     }
 
     enterData(data: DashboardData): DashboardDialog {

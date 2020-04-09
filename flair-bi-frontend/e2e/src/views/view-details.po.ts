@@ -27,7 +27,7 @@ export class ViewDetailsPage extends BasePage {
 
     edit(): CreateEditViewDialog {
         this._editBtn.click();
-        return new CreateEditViewDialog();
+        return new CreateEditViewDialog(this._dashboardId);
     }
 
 }

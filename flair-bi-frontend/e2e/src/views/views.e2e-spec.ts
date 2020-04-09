@@ -36,7 +36,8 @@ describe('Views e2e tests', () => {
     it('Should create new view', async () => {
         home.viewDashboards();
 
-        let page: ViewsPage = await dashboards.showViews(dashboardName);
+        let page: ViewsPage = await dashboards
+            .showViews(dashboardName);
 
         page.createView()
             .enter(newView)

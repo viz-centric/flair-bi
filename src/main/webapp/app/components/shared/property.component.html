@@ -2,13 +2,14 @@
     ng-if="vm.property.type !== 'COLOR_PICKER' &&  vm.property.propertyType.name !=='Text colour expression' && vm.property.propertyType.name !=='Cell colour expression' && vm.property.propertyType.name !=='Icon Expression' && vm.property.propertyType.name !=='Display colour expression' && vm.property.propertyType.name !== 'Alternative Dimensions'">
 
     <label class="{{vm.labelClasses}}"
-        for="propertyType_{{vm.property.propertyType.name}}">{{vm.property.propertyType.name}}</label>
+        for="propertyType_{{vm.property.propertyType.name.replace(' ', '-')|lowercase}}">{{vm.property.propertyType.name}}</label>
 
     <input ng-keyup="vm.setProperty(vm.property.value)" ng-model="vm.property.value" ng-if="vm.property.type === 'TEXT'"
         type="text" class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}"
-        id="propertyType_{{vm.property.propertyType.name}}" />
+        id="propertyType_{{vm.property.propertyType.name.replace(' ', '-')|lowercase}}" />
 
-    <select ng-click="vm.setProperty(vm.property.value)"
+    <select id="propertyType_{{vm.property.propertyType.name.replace(' ', '-')|lowercase}}"
+        ng-click="vm.setProperty(vm.property.value)"
         ng-class="{'legend-position': vm.property.propertyType.name=='Legend position'}"
         ng-if="vm.property.type === 'SELECT' && vm.property.propertyType.name!='Font weight'"
         ng-model="vm.property.value"
@@ -16,7 +17,8 @@
         class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}">
     </select>
 
-    <select ng-click="vm.setProperty(vm.property.value)"
+    <select id="propertyType_{{vm.property.propertyType.name.replace(' ', '-')|lowercase}}"
+        ng-click="vm.setProperty(vm.property.value)"
         ng-if=" vm.property.propertyType.name=='Font weight' &&  vm.property.type === 'SELECT'"
         ng-model="vm.property.value" class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}">
         <option ng-repeat="value in vm.property.propertyType.possibleValues track by value.id"
@@ -25,11 +27,13 @@
         </option>
     </select>
 
-    <input ng-change="vm.setProperty(vm.property.value)" ng-model="vm.property.value"
+    <input id="propertyType_{{vm.property.propertyType.name.replace(' ', '-')|lowercase}}"
+        ng-change="vm.setProperty(vm.property.value)" ng-model="vm.property.value"
         ng-if="vm.property.type === 'NUMBER' && vm.property.propertyType.name !== 'Limit'" type="number"
         class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}" />
 
-    <input ng-change="vm.setProperty(vm.property.value)" ng-model="vm.property.value"
+    <input id="propertyType_{{vm.property.propertyType.name.replace(' ', '-')|lowercase}}"
+        ng-change="vm.setProperty(vm.property.value)" ng-model="vm.property.value"
         ng-if="vm.property.type === 'NUMBER' && vm.property.propertyType.name === 'Limit'" type="number"
         class="{{vm.inputClasses}}" name="{{vm.property.propertyType.name}}" min="1" max="1000" />
 
@@ -68,10 +72,9 @@
         <label class="{{vm.labelClasses}}"
             for="propertyType_{{vm.property.propertyType.name}}">{{vm.property.propertyType.name}}</label>
         <br />
-        <tags-input style="display: inline-block" placeholder="Select Dimension"
-            on-tag-added="vm.addFeatures($tag)" on-tag-removed="vm.removeFeatures($tag)" class="filter-input"
-            add-from-autocomplete-only="true" minTags="5" min-length="1" ng-model="vm.selectedWebhook"
-            replace-spaces-with-dashes="false">
+        <tags-input style="display: inline-block" placeholder="Select Dimension" on-tag-added="vm.addFeatures($tag)"
+            on-tag-removed="vm.removeFeatures($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
+            min-length="1" ng-model="vm.selectedWebhook" replace-spaces-with-dashes="false">
             <auto-complete match-class=" filter-autocomplete " source="vm.loadFeature($query)" min-length="0"
                 load-on-focus="true " load-on-empty="true " max-results-to-show={{vm.maxListSize}}>
             </auto-complete>

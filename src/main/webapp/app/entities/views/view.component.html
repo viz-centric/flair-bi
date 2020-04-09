@@ -1,4 +1,4 @@
-<div class="view">
+<div id="view-{{vm.view.id}}" class="view">
     <div class="info-card flair-text">
         <div class="info-card-content">
             <div class="card-menu" uib-dropdown is-open="false">
@@ -18,7 +18,7 @@
                                 </svg>
                             </a>
                         </div>
-                        <div  uib-tooltip="Setting" tooltip-placement="bottom" class="item" role="menuitem">
+                        <div uib-tooltip="Setting" tooltip-placement="bottom" class="item" role="menuitem">
                             <a
                                 ui-sref="dashboards-overview.view-detail({id: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="edit">
@@ -26,7 +26,7 @@
                                 </svg>
                             </a>
                         </div>
-                        <div  uib-tooltip="Release" tooltip-placement="bottom" class="item" role="menuitem">
+                        <div uib-tooltip="Release" tooltip-placement="bottom" class="item" role="menuitem">
                             <a ng-if="vm.requestPublish"
                                 ui-sref="request-view-publish({did: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="#release-icon">

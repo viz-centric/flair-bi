@@ -1,5 +1,8 @@
 import { browser, by, element, ElementFinder, $ } from 'protractor';
 import { BasePage } from '../base.po';
+import { DashboardDialog } from '../dashboard/dashboard-dialog.po';
+import { DashboardsPage } from '../dashboard/dashboards.po';
+import { DashboardDetailsPage } from '../dashboard/dashboard-details.po';
 
 export class HomePage extends BasePage {
 
@@ -34,12 +37,14 @@ export class HomePage extends BasePage {
         this.newDatasource.click();
     }
 
-    createNewDashboard(): void {
+    createNewDashboard(): DashboardDialog {
         this.newDashboard.click();
+        return new DashboardDialog();
     }
 
-    viewDashboards(): void {
+    viewDashboards(): DashboardsPage {
         this.viewDashboardsBtn.click();
+        return new DashboardsPage(new DashboardDetailsPage(""));
     }
 
     goToAccount(): void {

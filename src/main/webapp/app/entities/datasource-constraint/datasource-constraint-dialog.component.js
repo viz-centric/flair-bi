@@ -25,7 +25,8 @@
         "ComponentDataService",
         "proxyGrpcService",
         "AuthServerProvider",
-        "stompClientService"
+        "stompClientService",
+        "QueryValidationService"
     ];
 
     function DatasourceConstraintDialogController(
@@ -39,7 +40,8 @@
         ComponentDataService,
         proxyGrpcService,
         AuthServerProvider,
-        stompClientService
+        stompClientService,
+        QueryValidationService
     ) {
         var vm = this;
 
@@ -53,9 +55,10 @@
         vm.features = [];
         vm.search = search;
         vm.load = load;
-        vm.featureChange=featureChange;
-        vm.added=added;
-        vm.removed=removed;
+        vm.featureChange = featureChange;
+        vm.added = added;
+        vm.removed = removed;
+        vm.validate = validate;
 
 
         vm.$onInit = function () {
@@ -235,7 +238,6 @@
         }
 
         function onExchangeMetadataError(data) {
-            angular.element("#loader-spinner").hide();
             var body = JSON.parse(data.body || '{}');
             if (body.description === "io exception") {
                 var msg = $translate.instant('flairbiApp.visualmetadata.errorOnReceivingMataData') + " : " + body.cause.message;
@@ -274,6 +276,31 @@
             if (index > -1) {
                 constraint.values.splice(index, 1);
             }
+        }
+
+        function generateReductionCondition(){
+            vm.query = '';
+            angular.forEach(vm.datasourceConstraint.constraintDefinition.featureConstraints, function(value, key) {
+              if(key==0){
+                vm.query += 'WHERE ';
+                vm.query += value.featureName;
+                vm.query += value['@type']===vm.constraintTypes[0] ? ' IN ' : ' NOT IN ';
+                vm.query += '(';
+                vm.query += value.values.join(",");
+                vm.query += ')';
+              }else{
+                vm.query += ' AND ';
+                vm.query += value.featureName;
+                vm.query += value['@type']===vm.constraintTypes[0] ? ' IN ' : ' NOT IN ';
+                vm.query += '(';
+                vm.query += value.values.join(",");
+                vm.query += ')';
+              }
+            });
+        }
+
+        function validate(){
+            generateReductionCondition();
         }
     }
 })();

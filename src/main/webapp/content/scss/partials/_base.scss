@@ -1007,3 +1007,9 @@ ui-breadcrumbs .breadcrumb li.active {
     -webkit-box-shadow: none;
     margin-top: 7px;
 }
+.query{
+    border: 2px dotted $border-color;
+    border-radius:25px;
+    padding: 10px;
+    background: $data-constraint-background;
+}

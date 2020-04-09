@@ -71,7 +71,7 @@
                         </ui-select>
                     </div>
                     <div class="col-md-4">
-                        <tags-input-grpc placeholder="Search for {{vm.dimension.name}}" ng-disabled="!vm.datasourceConstraint.datasource" on-tag-added="vm.added($tag,constraint)"
+                        <tags-input-grpc placeholder="Search for {{constraint.featureName}}" ng-disabled="!vm.datasourceConstraint.datasource" on-tag-added="vm.added($tag,constraint)"
                             on-tag-removed="vm.removed($tag,constraint)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
                             min-length="1" ng-model="constraint.selected" replace-spaces-with-dashes="false">
                             <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query,constraint)"
@@ -98,9 +98,17 @@
                     </div>
                 </div>
             </div>
-
+            <div class="form-group">
+                <div ng-show="vm.query" class="query">
+                    <label class="control-label">SQL Condition :  </label> <kbd>{{vm.query}}</kbd>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
+            <button style="float: left;" type="button" class="btn btn-primary" ng-click="vm.validate()">
+                <span class="glyphicon glyphicon-glass"></span>&nbsp;
+                <span>validate</span>
+            </button>
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
                     data-translate="entity.action.cancel">Cancel</span>

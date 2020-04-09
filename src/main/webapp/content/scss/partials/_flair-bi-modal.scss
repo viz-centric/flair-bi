@@ -121,12 +121,6 @@
         height: 425px;
         overflow-y: auto;
         overflow-x: hidden;
-        .query{
-            border: 2px dotted $border-color;
-            border-radius:25px;
-            padding: 10px;
-            background: $data-constraint-background;
-        }
         fieldset {
             padding: 0.35em 0.625em 0.75em !important;
             min-width: 0px !important;

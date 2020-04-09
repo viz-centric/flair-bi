@@ -868,6 +868,12 @@ ui-breadcrumbs .breadcrumb li.active {
   -webkit-box-shadow: none;
   margin-top: 7px; }
 
+.query {
+  border: 2px dotted #e1e3e3;
+  border-radius: 25px;
+  padding: 10px;
+  background: rgba(234, 234, 234, 0.6); }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -4732,11 +4738,6 @@ jhi-alert .alerts .alert-danger {
   height: 425px;
   overflow-y: auto;
   overflow-x: hidden; }
-  .data-constrains-properties .data-constaraint-conditions-container .query {
-    border: 2px dotted #e1e3e3;
-    border-radius: 25px;
-    padding: 10px;
-    background: rgba(234, 234, 234, 0.6); }
   .data-constrains-properties .data-constaraint-conditions-container fieldset {
     padding: 0.35em 0.625em 0.75em !important;
     min-width: 0px !important;

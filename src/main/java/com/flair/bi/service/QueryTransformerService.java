@@ -46,10 +46,12 @@ public class QueryTransformerService {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
 
-        return toQuery(queryDTO, params.getConnectionName(), params.getVId(), params.getUserId(), params.getDatasourceId());
+        return toQuery(queryDTO, params.getConnectionName(), params.getVId(),
+                params.getUserId(), params.getDatasourceId());
     }
 
-    private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId, Long datasourceId) {
+    private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId,
+                          Long datasourceId) {
         Map<String, Feature> features = Optional.ofNullable(datasourceId)
                 .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
                         .stream()
@@ -62,10 +64,13 @@ public class QueryTransformerService {
         Query.Builder builder = Query.newBuilder();
         builder
                 .setSource(queryDTO.getSource())
-                .setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT))
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(toProtoFields(fields))
                 .addAllGroupBy(toProtoFields(groupBy));
+
+        if (queryDTO.getLimit() != null) {
+            builder.setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT));
+        }
 
         if (vId != null) {
             builder.setQueryId(vId);
@@ -123,11 +128,14 @@ public class QueryTransformerService {
         return having.stream()
                 .map(h -> {
                     FieldDTO fieldDTO = transformFieldNoAlias(features, h.getFeature());
-                    return Query.HavingHolder.newBuilder()
+                    Query.HavingHolder.Builder builder = Query.HavingHolder.newBuilder()
                             .setFeature(toProtoField(fieldDTO))
                             .setValue(h.getValue())
-                            .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
-                            .build();
+                            .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()));
+                    if (h.getValueQuery() != null) {
+                        builder.setValueQuery(toQuery(h.getValueQuery(), "", "", "", 0L));
+                    }
+                    return builder.build();
                 })
                 .collect(toList());
     }

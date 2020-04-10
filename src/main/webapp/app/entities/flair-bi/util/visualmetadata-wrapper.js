@@ -21,6 +21,7 @@
         visual.fieldPropertyExists = fieldPropertyExists;
         visual.getFieldPropertyValue = getFieldPropertyValue;
         visual.getQueryParameters = getQueryParameters;
+        visual.getQueryParametersWithFields = getQueryParametersWithFields;
         visual.hasDimension = hasDimension;
         visual.canBuild = canBuild;
         visual.getSharePath = getSharePath;
@@ -257,18 +258,11 @@
 
 
     function getQueryParameters(filters, conditionExpression,offset) {
-        var query = {};
-
         var dimensions = this.fields
             .filter(isDimension);
 
         var measures = this.fields
             .filter(isMeasure);
-
-        if (this.metadataVisual.name == "Table" || this.metadataVisual.name == "Pivot Table") {
-            query.offset= this.getChartPropertyValue('Limit', 20)*offset
-
-        }
 
         var dimensionFields = dimensions
             .map(function (item) {
@@ -283,7 +277,11 @@
                 return constructMeasureField(item);
             });
 
-        query.fields = dimensionFields.concat(measureFields);
+        const query = getQueryParametersWithFields(dimensionFields.concat(measureFields), filters, conditionExpression);
+
+        if (this.metadataVisual.name == "Table" || this.metadataVisual.name == "Pivot Table") {
+            query.offset = this.getChartPropertyValue('Limit', 20) * offset;
+        }
 
         var aggExists = !!measureFields
             .filter(function (item) {
@@ -295,10 +293,6 @@
         }
 
         query.limit = this.getChartPropertyValue('Limit', 20);
-
-        if (conditionExpression && conditionExpression.conditionExpression && !angular.equals(conditionExpression, {})) {
-            query.conditionExpressions = [conditionExpression];
-        }
 
         var ordersListSortMeasures = measures
             .filter(function (item) {
@@ -341,6 +335,18 @@
             });
 
         query.orders = ordersListSortMeasures.concat(ordersListSortDimensions);
+
+        return query;
+    }
+
+    function getQueryParametersWithFields(fields, filters, conditionExpression) {
+        const query = {
+            fields,
+        };
+
+        if (conditionExpression && conditionExpression.conditionExpression && !angular.equals(conditionExpression, {})) {
+            query.conditionExpressions = [conditionExpression];
+        }
 
         return query;
     }

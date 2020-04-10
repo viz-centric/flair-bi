@@ -19,6 +19,7 @@
             save: save,
             clear: clear,
             getConditionExpression: getConditionExpression,
+            getConditionExpressionForParams: getConditionExpressionForParams,
             getFiltersCount:getFiltersCount,
             getDateRangePrefix:getDateRangePrefix,
             changeDateFormat:changeDateFormat,
@@ -160,21 +161,22 @@
         }
 
         function getConditionExpression(additionalFeaturesArray) {
+            return getConditionExpressionForParams(additionalFeaturesArray, Object.assign({}, paramObject));
+        }
+
+        function getConditionExpressionForParams(params, sourceParams) {
+            const finalParams = (params || []).reduce((total, currentValue) => {
+                return Object.assign(currentValue, total);
+            }, Object.assign({}, sourceParams || {}));
+
             var body;
             var condition = {
                 expression: null
             };
-            var finalParams = Object.assign({}, paramObject);
-            if (additionalFeaturesArray) {
-                for (var i in additionalFeaturesArray) {
-                    var additionalFeaturesItem = additionalFeaturesArray[i];
-                    finalParams = Object.assign(additionalFeaturesItem, finalParams);
-                }
-            }
             for (var name in finalParams) {
                 if (finalParams.hasOwnProperty(name)
-                  && finalParams[name]
-                  && finalParams[name].length > 0) {
+                    && finalParams[name]
+                    && finalParams[name].length > 0) {
                     var values = finalParams[name];
                     if (!condition.expression) {
                         body = createBodyExpr(values, name);

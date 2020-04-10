@@ -34,34 +34,38 @@ public final class QueryGrpcUtils {
 
     public static Connection toProtoConnection(ConnectionDTO connection) {
         return Optional.ofNullable(connection)
-            .map(c -> {
-                Connection.Builder builder = Connection.newBuilder()
-                    .setConnectionPassword(orEmpty(c.getConnectionPassword()))
-                    .setConnectionUsername(c.getConnectionUsername())
-                    .setConnectionType(c.getConnectionTypeId())
-                    .setName(c.getName())
-                    .putAllDetails(c.getDetails());
-                if (c.getConnectionParameters() != null) {
-                    builder.putAllConnectionParameters(c.getConnectionParameters());
-                }
-                if (c.getId() != null) {
-                    builder.setId(c.getId());
-                }
-                if (c.getLinkId() != null) {
-                    builder.setLinkId(c.getLinkId());
-                }
-                return builder.build();
-            })
-            .orElse(null);
+                .map(c -> {
+                    Connection.Builder builder = Connection.newBuilder()
+                            .setConnectionPassword(orEmpty(c.getConnectionPassword()))
+                            .setConnectionUsername(c.getConnectionUsername())
+                            .setConnectionType(c.getConnectionTypeId())
+                            .setName(c.getName())
+                            .putAllDetails(c.getDetails());
+                    if (c.getConnectionParameters() != null) {
+                        builder.putAllConnectionParameters(c.getConnectionParameters());
+                    }
+                    if (c.getId() != null) {
+                        builder.setId(c.getId());
+                    }
+                    if (c.getLinkId() != null) {
+                        builder.setLinkId(c.getLinkId());
+                    }
+                    return builder.build();
+                })
+                .orElse(null);
     }
 
-    public static QueryDTO mapToQueryDTO(Query request){
+    public static QueryDTO mapToQueryDTO(Query request) {
         QueryDTO queryDTO = new QueryDTO();
         queryDTO.setSource(request.getSource());
         queryDTO.setFields(toFieldDTOs(request.getFieldsList()));
         queryDTO.setGroupBy(toFieldDTOs(request.getGroupByList()));
-        queryDTO.setLimit(request.getLimit());
-        queryDTO.setOffset(request.getOffset());
+        if (request.getLimit() != 0) {
+            queryDTO.setLimit(request.getLimit());
+        }
+        if (request.getOffset() != 0) {
+            queryDTO.setOffset(request.getOffset());
+        }
         queryDTO.setDistinct(request.getDistinct());
         queryDTO.setOrders(getListSortDTO(request.getOrdersList()));
         queryDTO.setHaving(getListHavingDTO(request.getHavingList()));
@@ -92,32 +96,32 @@ public final class QueryGrpcUtils {
                 .collect(Collectors.toList());
     }
 
-    private static List<SortDTO> getListSortDTO(List<Query.SortHolder> orders){
+    private static List<SortDTO> getListSortDTO(List<Query.SortHolder> orders) {
         return orders.stream().map(order -> {
             SortDTO sortDTO = new SortDTO();
             sortDTO.setFeature(toFieldDTO(order.getFeature()));
-            sortDTO.setDirection(order.getDirectionValue() == 0 ? SortDTO.Direction.ASC: SortDTO.Direction.DESC);
+            sortDTO.setDirection(order.getDirectionValue() == 0 ? SortDTO.Direction.ASC : SortDTO.Direction.DESC);
             return sortDTO;
         }).collect(Collectors.toList());
     }
 
-    private static List<ConditionExpressionDTO> getListConditionExpressionDTO(List<Query.ConditionExpressionHolder> conditionExpressions){
+    private static List<ConditionExpressionDTO> getListConditionExpressionDTO(List<Query.ConditionExpressionHolder> conditionExpressions) {
         return conditionExpressions.stream().map(conditionExpressionHolder -> {
             ConditionExpressionDTO conditionExpressionDTO = new ConditionExpressionDTO();
             conditionExpressionDTO.setSourceType(getFilterSourceType(conditionExpressionHolder.getSourceTypeValue()));
             conditionExpressionDTO.setConditionExpression((conditionExpressionHolder.getExpressionTypeValue() > 1) ?
-                    createConditionExpression(conditionExpressionHolder.getConditionExpression(), conditionExpressionHolder.getExpressionTypeValue()):
+                    createConditionExpression(conditionExpressionHolder.getConditionExpression(), conditionExpressionHolder.getExpressionTypeValue()) :
                     createAndOrConditionExpression(conditionExpressionHolder.getConditionExpression(), conditionExpressionHolder.getExpressionTypeValue(), conditionExpressionHolder.getAndOrExpressionType()));
             return conditionExpressionDTO;
         }).collect(Collectors.toList());
     }
 
     private static ConditionExpressionDTO.SourceType getFilterSourceType(Integer value) {
-        if(value == 0) {
+        if (value == 0) {
             return ConditionExpressionDTO.SourceType.BASE;
-        } else if(value == 1) {
+        } else if (value == 1) {
             return ConditionExpressionDTO.SourceType.FILTER;
-        }else if(value == 2) {
+        } else if (value == 2) {
             return ConditionExpressionDTO.SourceType.REDUCTION;
         }
         return null;
@@ -140,7 +144,7 @@ public final class QueryGrpcUtils {
     private static ConditionExpression createAndOrConditionExpression(String conditionExpressionString, Integer expressionType, Query.ConditionExpressionHolder.AndOrExpressionType andOrExpressionType) {
         JsonParser parser = new JsonParser();
         JsonElement jsonTree = parser.parse(conditionExpressionString);
-        if(jsonTree.isJsonObject()) {
+        if (jsonTree.isJsonObject()) {
             ConditionExpression firstExpression = JacksonUtil.fromString(
                     jsonTree.getAsJsonObject().get(GrpcConstants.FIRST_EXPRESSION).toString(),
                     getConditionExpressionInstance(andOrExpressionType.getFirstExpressionTypeValue()).getClass()
@@ -152,7 +156,7 @@ public final class QueryGrpcUtils {
             );
 
             return (expressionType == 0) ?
-                    createAndConditionExpression(firstExpression, secondExpression):
+                    createAndConditionExpression(firstExpression, secondExpression) :
                     createOrConditionExpression(firstExpression, secondExpression);
         }
         return null;
@@ -173,7 +177,7 @@ public final class QueryGrpcUtils {
     }
 
     private static ConditionExpression getConditionExpressionInstance(Integer type) {
-        switch(type) {
+        switch (type) {
             case 0:
                 return GrpcConstants.andConditionExpression;
             case 1:

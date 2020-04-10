@@ -5,7 +5,6 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
-import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
@@ -15,7 +14,6 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
-import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
@@ -204,6 +202,15 @@ public class SchedulerService {
 
 		Optional.ofNullable(constraint).map(DatasourceConstraint::build)
 				.ifPresent(queryDTO.getConditionExpressions()::add);
+
+		if (queryDTO.getHaving() != null && queryDTO.getHaving().size() > 0) {
+			queryDTO.getHaving().stream()
+					.filter(h -> h.getValueQuery() != null)
+					.map(h -> h.getValueQuery())
+					.forEach((q -> {
+						q.setSource(queryDTO.getSource());
+					}));
+		}
 
 		Query query = queryTransformerService.toQuery(queryDTO,
 				QueryTransformerParams.builder()

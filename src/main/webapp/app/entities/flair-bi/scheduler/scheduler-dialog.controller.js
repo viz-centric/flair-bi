@@ -22,6 +22,7 @@
         vm.timezoneGroups = TIMEZONES;
         vm.channels = SCHEDULER_CHANNELS;
         vm.COMPARISIONS = COMPARISIONS;
+        vm.AGGREGATION_TYPES = AGGREGATION_TYPES;
         vm.TIME_UNIT = TIME_UNIT;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -44,7 +45,10 @@
         vm.emailReporterEdit = false;
         vm.thresholdAlert = thresholdAlert;
         vm.modalTitle = thresholdAlert ? 'Schedule Threshold Alert Report' : 'Schedule Report'
-        vm.condition = {};
+        vm.condition = {
+            thresholdMode: 'absolute',
+            dynamicThreshold: {}
+        };
         vm.timeConditions = {};
         vm.features = [];
         vm.timeCompatibleDimensions = [];
@@ -237,7 +241,25 @@
 
         function setHavingDTO(query) {
             if (query.having) {
-                const operation = JSON.parse(query.having[0].operation || '{}');
+                const valueQuery = query.having[0].valueQuery;
+                if (valueQuery) {
+                    const conditionExpression = JSON.parse(valueQuery.conditionExpressions[0].conditionExpression);
+                    const field = valueQuery.fields[0];
+                    vm.condition.thresholdMode = 'dynamic';
+                    vm.condition.dynamicThreshold = {
+                        field: valueQuery.fields[0].name,
+                        aggregation: vm.AGGREGATION_TYPES.find(function (item) {
+                            return item.opt === field.aggregation;
+                        }),
+                        dimension: vm.timeCompatibleDimensions.find(function (item) {
+                            return item.definition === conditionExpression.featureName;
+                        }),
+                        unit: vm.TIME_UNIT.find(function (unit) {
+                            return unit.value === conditionExpression.valueType.interval.split(' ')[1];
+                        }),
+                        value: conditionExpression.valueType.interval.split(' ')[0],
+                    };
+                }
                 vm.condition.featureName = query.having[0].feature.name;
                 vm.condition.value = operation.value;
                 vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
@@ -373,6 +395,22 @@
                 };
                 additionalFeatures.push(featureData);
             }
+            return additionalFeatures;
+        }
+
+        function getDynamicAlertConditionalExpressions() {
+            var additionalFeatures = [];
+            var featureData = {};
+            var featureDefinition = vm.condition.dynamicThreshold.dimension.definition;
+            featureData[featureDefinition] = [
+                vm.condition.dynamicThreshold.value + ' ' + vm.condition.dynamicThreshold.unit.value
+            ];
+            featureData[featureDefinition]._meta = {
+                operator: '-',
+                initialValue: '__FLAIR_NOW()',
+                valueType: 'intervalValueType'
+            };
+            additionalFeatures.push(featureData);
             return additionalFeatures;
         }
 
@@ -557,7 +595,6 @@
         }
 
         function getHavingDTO() {
-            var having = [];
             var havingField = getMeasureField();
             var havingDTO = {
                 feature: havingField,
@@ -567,8 +604,18 @@
                 },
                 comparatorType: vm.condition.compare.opt
             };
-            having.push(havingDTO);
-            return having;
+            if (vm.condition.thresholdMode === 'dynamic') {
+                havingDTO.valueQuery = visualMetaData.getQueryParametersWithFields(
+                    [{
+                        name: vm.condition.dynamicThreshold.field,
+                        aggregation: vm.condition.dynamicThreshold.aggregation.opt,
+                        alias: vm.condition.dynamicThreshold.field
+                    }],
+                    filterParametersService.get(),
+                    filterParametersService.getConditionExpressionForParams(getDynamicAlertConditionalExpressions())
+                );
+            }
+            return [havingDTO];
         }
 
         function getMeasureField() {

@@ -6,16 +6,19 @@ import { DashboardData } from '../dashboard/dashboard-data';
 import { ViewData } from './view.data';
 import { ViewsPage } from './views.po';
 import { ViewBuildPage } from './view-build.po';
-import { Visualization } from './visualization';
+import { VisualizationWidget } from './visualization.widget';
 import { SettingsPanel } from './settings.panel';
-import { VizDimension } from './dimension';
-import { Sort } from './sort.enum';
-import { VizMeasure } from './measure';
-import { AggregationType } from './aggregation-type.enum';
+import { VizDimensionData } from './viz-dimension.data';
+import { Sort } from '../common/sort.enum';
+import { VizMeasureData } from './viz-measure.data';
+import { AggregationType } from '../common/aggregation-type.enum';
+import { PostgresData } from '../postgres-data';
+import { CreateDatasourcePage } from '../postgres/create-datasource.po';
 
 describe('Visualizations e2e tests', () => {
 
     let home: HomePage,
+        postgres: PostgresData,
         login: LoginPage,
         dashboard: DashboardData,
         view: ViewData;
@@ -24,16 +27,27 @@ describe('Visualizations e2e tests', () => {
     beforeEach(async () => {
         home = new HomePage();
         login = new LoginPage();
-
-        dashboard = new DashboardData('e2e-widget-create', 'create-widget-e2e', '', 'transactions (posts)');
+        postgres = new PostgresData("postgres-e2e-connection-viz",
+            "localhost",
+            "5432",
+            "services",
+            "",
+            "postgres",
+            "admin",
+            "transactions");
+        dashboard = new DashboardData('e2e-widget-create', 'create-widget-e2e', '', `${postgres.datasource} (${postgres.connectionName})`);
         view = new ViewData('e2e-view-widget', 'testing');
-
         await login.navigateTo();
         login.login(userData.admin);
     });
 
 
     it('creates clustered vertical bar and assigns dimensions', async () => {
+        // home.createNewDatasource()
+        //     .createPostgres(postgres);
+
+        // await home.navigateTo();
+
         let viewPage: ViewsPage =
             await home.createNewDashboard()
                 .enterData(dashboard)
@@ -47,7 +61,7 @@ describe('Visualizations e2e tests', () => {
 
         expect(browser.getCurrentUrl()).toEqual(buildPage.getPageUrl());
 
-        let widget: Visualization = await buildPage.toggleEdit()
+        let widget: VisualizationWidget = await buildPage.toggleEdit()
             .visualizations()
             .clusteredVerticalBarChart();
 
@@ -57,12 +71,13 @@ describe('Visualizations e2e tests', () => {
 
         settingsPanel
             .dataProperties()
-            .assignDimension(new VizDimension('city', 'City', Sort.ASCENDING))
-            .assignMeasure(new VizMeasure('price', 'Price per city', AggregationType.COUNT))
+            .assignDimension(new VizDimensionData('city', 'City', Sort.ASCENDING))
+            .assignMeasure(new VizMeasureData('price', 'Price per city', AggregationType.COUNT))
             .save();
 
         expect(await widget.isDataRendered()).toBeTruthy();
         expect(await widget.getColumnNumber()).toEqual(15);
+
     });
 
     afterEach(() => {

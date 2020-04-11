@@ -1,7 +1,8 @@
 import { ElementFinder, $, by, browser, element, ElementArrayFinder, ExpectedConditions } from 'protractor';
 import { VisualizationSettingsDropdown } from './visualization-settings.dropdown';
+import { VisualizationData } from './visualization.data';
 
-export class Visualization {
+export class VisualizationWidget {
 
     private _element: ElementFinder;
 
@@ -16,7 +17,7 @@ export class Visualization {
         this._backPanel = this._element.element(by.css('div.grid-back'));
     }
 
-    flip(): Visualization {
+    flip(): VisualizationWidget {
         let el = this._frontPanel.element(by.css('.viz-header-content a[ng-click="vm.flipCard(v)"]'));
         browser.actions()
             .mouseMove(el);
@@ -24,7 +25,7 @@ export class Visualization {
         return this;
     }
 
-    refresh(): Visualization {
+    refresh(): VisualizationWidget {
         let el = this._frontPanel.element(by.css('.viz-header-content *[ng-click="vm.refreshWidget(v)"]'));
         browser.actions()
             .mouseMove(el);
@@ -40,7 +41,7 @@ export class Visualization {
         return new VisualizationSettingsDropdown(this._frontPanel.element(by.css('.viz-header-content')));
     }
 
-    toggleLive(): Visualization {
+    toggleLive(): VisualizationWidget {
         let el = this._frontPanel.element(by.css('.viz-header-content .live'));
         browser.actions()
             .mouseMove(el);

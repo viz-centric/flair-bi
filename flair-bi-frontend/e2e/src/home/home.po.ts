@@ -3,6 +3,7 @@ import { BasePage } from '../base.po';
 import { DashboardDialog } from '../dashboard/dashboard-dialog.po';
 import { DashboardsPage } from '../dashboard/dashboards.po';
 import { DashboardDetailsPage } from '../dashboard/dashboard-details.po';
+import { CreateDatasourcePage } from '../postgres/create-datasource.po';
 
 export class HomePage extends BasePage {
 
@@ -33,8 +34,9 @@ export class HomePage extends BasePage {
         this.logoutButton.click();
     }
 
-    createNewDatasource(): void {
+    createNewDatasource(): CreateDatasourcePage {
         this.newDatasource.click();
+        return new CreateDatasourcePage();
     }
 
     createNewDashboard(): DashboardDialog {

@@ -55,6 +55,21 @@ export class CreateDatasourcePage extends BasePage {
         return this;
     }
 
+    createPostgres(data: PostgresData): CreateDatasourcePage {
+        return this
+            .selectConnectionType('postgres')
+            .next()
+            .enterData(data)
+            .testConnection()
+            .next()
+            .next()
+            .searchDatasource(data.datasource.substr(0, 5))
+            .selectDatasource(data.datasource)
+            .showData()
+            .createDatasource()
+            .finish();
+    }
+
     enterData(connectionType: PostgresData): CreateDatasourcePage {
         this.connectionName.sendKeys(connectionType.connectionName);
         this.serverAddress.sendKeys(connectionType.serverAddress);

@@ -1,5 +1,5 @@
-import { VizMeasure } from './measure';
-import { VizDimension } from './dimension';
+import { VizMeasureData } from './viz-measure.data';
+import { VizDimensionData } from './viz-dimension.data';
 import { ElementFinder, $, ElementArrayFinder, $$, element, by } from 'protractor';
 
 export class SettingsPanel {
@@ -37,7 +37,7 @@ export class SettingsPanel {
     private _dimIndex: number = 0;
     private _measIndex: number = 0;
 
-    assignDimension(dim: VizDimension): SettingsPanel {
+    assignDimension(dim: VizDimensionData): SettingsPanel {
         this._dimensions.get(this._dimIndex++).click();
         this._selectedField.click();
         this._features(dim.dimension).click();
@@ -51,7 +51,7 @@ export class SettingsPanel {
         return this;
     }
 
-    assignMeasure(meas: VizMeasure): SettingsPanel {
+    assignMeasure(meas: VizMeasureData): SettingsPanel {
         this._measures.get(this._measIndex++).click();
         this._selectedField.click();
         this._features(meas.measure).click();

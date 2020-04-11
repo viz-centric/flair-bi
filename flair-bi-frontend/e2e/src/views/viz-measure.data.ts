@@ -1,6 +1,6 @@
-import { AggregationType } from './aggregation-type.enum';
+import { AggregationType } from '../common/aggregation-type.enum';
 
-export class VizMeasure {
+export class VizMeasureData {
 
     private _measure: string;
     private _displayName: string;

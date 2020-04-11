@@ -2,6 +2,8 @@ import { BasePage } from '../base.po';
 import { element, by, $, $$, ElementFinder, ElementArrayFinder } from 'protractor';
 import { VisualizationsPanel } from './visualizations.panel';
 import { DataPanel } from './data.panel';
+import { FiltersPanel } from './filters.panel';
+import { FavouriteFilters } from './favourite-filters.panel';
 
 export class ViewBuildPage extends BasePage {
 
@@ -63,6 +65,16 @@ export class ViewBuildPage extends BasePage {
     visualizations(): VisualizationsPanel {
         this._rightBarSetting('Visualizations').click();
         return new VisualizationsPanel();
+    }
+
+    filters(): FiltersPanel {
+
+        return new FiltersPanel();
+
+    }
+    favouriteFilters(): FavouriteFilters {
+
+        return new FavouriteFilters();
     }
 
 

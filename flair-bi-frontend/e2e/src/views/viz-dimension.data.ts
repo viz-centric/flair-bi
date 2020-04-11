@@ -1,6 +1,6 @@
-import { Sort } from './sort.enum';
+import { Sort } from '../common/sort.enum';
 
-export class VizDimension {
+export class VizDimensionData {
     private _dimension: string;
     private _displayName: string;
     private _sort: Sort;

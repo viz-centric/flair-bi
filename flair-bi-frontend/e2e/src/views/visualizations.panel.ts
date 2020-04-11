@@ -1,5 +1,5 @@
 import { ElementArrayFinder, element, by, ElementFinder, browser, ExpectedConditions } from 'protractor';
-import { Visualization } from './visualization';
+import { VisualizationWidget } from './visualization.widget';
 
 export class VisualizationsPanel {
 
@@ -13,17 +13,17 @@ export class VisualizationsPanel {
             return attr === name;
         }).first();
 
-    async clusteredVerticalBarChart(): Promise<Visualization> {
+    async clusteredVerticalBarChart(): Promise<VisualizationWidget> {
         return this.widget('Clustered Vertical Bar Chart');
     }
 
-    private async widget(name: string): Promise<Visualization> {
+    private async widget(name: string): Promise<VisualizationWidget> {
         this._visualization(name).click();
         await browser.sleep(2000);
         let elem: ElementFinder = await this._visualMetadas
             .last();
 
-        return new Visualization(elem);
+        return new VisualizationWidget(elem);
     }
 
 }

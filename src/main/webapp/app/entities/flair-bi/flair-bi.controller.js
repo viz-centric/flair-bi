@@ -331,11 +331,11 @@
                                     item.feature.featureType = dimension[0].featureType;
                                     return item;
                                 }
-                                else{
+                                else {
                                     return item;
                                 }
                             });
-                            refreshWidget(v,v.fields);
+                        refreshWidget(v, v.fields);
 
                     });
                 }
@@ -952,7 +952,7 @@
                 var header = [];
                 for (var key in item) {
                     if (Object.prototype.hasOwnProperty.call(item, key)) {
-                        var val = item[key];
+                        var val = item[key] === null ? "null" : item[key];
                         if (index == 0) {
                             header.push(key);
                         }
@@ -1126,9 +1126,9 @@
             return new VisualWrap(newVM);
         }
 
-        function refreshWidget(v,fields) {
+        function refreshWidget(v, fields) {
             $rootScope.$broadcast(
-                "update-widget-content-" + v.id || v.visualBuildId,fields
+                "update-widget-content-" + v.id || v.visualBuildId, fields
             );
         }
 

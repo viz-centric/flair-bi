@@ -13,7 +13,8 @@
         </div>
         <div class="modal-body flair-remove-padding scheduler-modal-body">
             <div ng-if="vm.isAdmin && !vm.isConfigExist" class="alert alert-info alert-dismissible">
-                <strong><a class="alert-link" ui-sref="report-management({id:'configuration'})">To configure Email,Team and Jira click here</a></strong>
+                <strong><a class="alert-link" ui-sref="report-management({id:'configuration'})">To configure Email,Team
+                        and Jira click here</a></strong>
             </div>
             <div class="">
                 <div class="row container" ng-if="vm.scheduleObj.emailReporter && !vm.emailReporterEdit">
@@ -105,8 +106,9 @@
                             <div class="form-group scheduler-tags">
                                 <label class="control-label" for="emails">Share Report with Users*</label>
                                 <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
-                                    on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true"
-                                    minTags="5" min-length="1" ng-model="vm.selectedUsers" 
+                                    on-tag-removed="vm.removed($tag)" class="filter-input"
+                                    add-from-autocomplete-only="true" minTags="5" min-length="1"
+                                    ng-model="vm.selectedUsers"
                                     ng-required="vm.scheduleObj.assign_report.emails.length==0"
                                     replace-spaces-with-dashes="false">
                                     <auto-complete match-class=" filter-autocomplete " source="vm.loadUsers($query)"
@@ -114,7 +116,9 @@
                                         max-results-to-show={{vm.maxListSize}}>
                                     </auto-complete>
                                 </tags-input>
-                                <span class="tooltip-position" uib-tooltip="More..." ng-click="vm.openCommunicationListModal()" ng-if="vm.selectedUsers.length>vm.maxListSize-1">
+                                <span class="tooltip-position" uib-tooltip="More..."
+                                    ng-click="vm.openCommunicationListModal()"
+                                    ng-if="vm.selectedUsers.length>vm.maxListSize-1">
                                     <svg class="more-icon">
                                         <use xlink:href="#more-recipient" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         </use>
@@ -126,15 +130,17 @@
                             <div class="form-group scheduler-tags">
                                 <label class="control-label" for="emails">Select Webhooks*</label>
                                 <tags-input placeholder="Select a Webhook" on-tag-added="vm.addWebhook($tag)"
-                                    on-tag-removed="vm.removeWebhook($tag)" class="filter-input" 
-                                    add-from-autocomplete-only="true" minTags="5" min-length="1" 
+                                    on-tag-removed="vm.removeWebhook($tag)" class="filter-input"
+                                    add-from-autocomplete-only="true" minTags="5" min-length="1"
                                     ng-model="vm.selectedWebhook" replace-spaces-with-dashes="false">
-                                    <auto-complete  match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
+                                    <auto-complete match-class=" filter-autocomplete " source="vm.loadWebhooks($query)"
                                         min-length="0" load-on-focus="true " load-on-empty="true "
                                         max-results-to-show={{vm.maxListSize}}>
                                     </auto-complete>
                                 </tags-input>
-                                <span class="tooltip-position" uib-tooltip="More..." ng-click="vm.openCommunicationListModal()" ng-if="vm.selectedWebhook.length>vm.maxListSize-1">
+                                <span class="tooltip-position" uib-tooltip="More..."
+                                    ng-click="vm.openCommunicationListModal()"
+                                    ng-if="vm.selectedWebhook.length>vm.maxListSize-1">
                                     <svg class="more-icon">
                                         <use xlink:href="#more-recipient" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         </use>
@@ -146,7 +152,8 @@
                             <div class="form-group scheduler-webhooks">
                                 <label class="control-label">Configured Webhooks*</label>
                                 <div class="webhooks">
-                                    <div ng-repeat="webhooksName in vm.webhooksNames" class="label webhook">{{webhooksName}}
+                                    <div ng-repeat="webhooksName in vm.webhooksNames" class="label webhook">
+                                        {{webhooksName}}
                                     </div>
                                 </div>
                             </div>
@@ -253,18 +260,18 @@
                             <label class="control-label">
                                 Frequency*
                             </label>
-                            <cron-generator config="vm.cronConfig" ng-model="cronExpression"></cron-generator>
+                            <cron-generator config="vm.cronConfig" ng-model="vm.cronExpression"></cron-generator>
                         </div>
                     </div>
                     <br />
                     <div class="row container">
                         <div class="col-xs-5">
                             Scheduled Report:
-                            <span class="text-success"><b>{{vm.cronstrue}}</b></span>
+                            <span class="text-success"><b>{{vm.cronExpression | cronstrue}}</b></span>
                         </div>
                         <div class="col-xs-5">
                             Cron Expression:
-                            <span id="example-val" class="text-success"><b>{{cronExpression}}</b></span>
+                            <span id="example-val" class="text-success"><b>{{vm.cronExpression}}</b></span>
                         </div>
                     </div>
                     <br />
@@ -275,7 +282,8 @@
                                 <div class="input-group">
                                     <input id="startDate" ng-required="vm.scheduleObj.schedule.start_date == null"
                                         type="text" class="form-control" name="startDate"
-                                        datetime-picker="{{dateformat}}" ng-model="vm.scheduleObj.schedule.start_date"
+                                        uib-datepicker-popup="{{vm.dateformat}}"
+                                        ng-model="vm.scheduleObj.schedule.start_date"
                                         is-open="vm.datePickerOpenStatus.startDate" />
                                     <span class="input-group-btn flair-date-icon">
                                         <button type="button" class="btn btn-default"
@@ -292,7 +300,7 @@
                                 <div class="input-group">
                                     <input id="endDate" ng-required="vm.scheduleObj.schedule.end_date == null"
                                         type="text" class="form-control" name="endDate" enable-time="false"
-                                        datetime-picker="{{vm.endDateFormat}}"
+                                        uib-datepicker-popup="{{vm.endDateFormat}}"
                                         ng-model="vm.scheduleObj.schedule.end_date"
                                         is-open="vm.datePickerOpenStatus.endDate" />
                                     <span class="input-group-btn flair-date-icon">

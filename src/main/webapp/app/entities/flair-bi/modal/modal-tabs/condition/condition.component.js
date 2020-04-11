@@ -16,9 +16,9 @@
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService'];
+    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService'];
 
-    function conditionComponent($scope, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService) {
+    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService) {
         var vm = this;
         vm.load = load;
         vm.showInfo = false;
@@ -32,16 +32,19 @@
         vm.dateRangeSupportedTypes = [];
         vm.dateRangeUnsupportedTypes = [];
         vm.compareTypes = COMPARE_TYPES;
+        vm.onConditionValueChange = onConditionValueChange;
         vm.addComposition = addComposition;
         vm.removeCondition = removeCondition;
         vm.getComparisonTypes = getComparisonTypes;
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.onDateChange = onDateChange;
+        vm.onContainsAdded = onContainsAdded;
+        vm.onContainsRemoved = onContainsRemoved;
+        vm.onFeatureSelect = onFeatureSelect;
         vm.getMetadataTooltip = getMetadataTooltip;
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
-        const COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         const SIMPLE_DATE_TYPES_FOR_DATES = ['Between', 'Compare'];
         const SIMPLE_DATE_TYPES_OTHER = ['Compare', 'Contains', 'NotContains', 'Like'];
         vm.dimension = vm.features[0];
@@ -64,15 +67,10 @@
                 return [];
             }
 
-            const dimensions = vm.features.filter(element => {
-                return element.name === condition.featureName;
-            });
-
-            if (dimensions.length === 0) {
+            const dimension = getDimension(condition);
+            if (!dimension) {
                 return [];
             }
-
-            const dimension = dimensions[0];
             const dataType = dimension.type;
             const isDateType = COMPARABLE_DATA_TYPES.indexOf(dataType) > -1;
 
@@ -83,11 +81,45 @@
             return vm.dateRangeUnsupportedTypes;
         }
 
+        function getDimension(condition) {
+            return vm.features.find(element => {
+                return element.name === condition.featureName;
+            });
+        }
+
         function getMetadataTooltip(metadata) {
-            if(metadata){
+            if (metadata) {
                 return 'from ' + metadata.startDateFormatted + ' to ' + metadata.endDateFormatted;
             }
             return '';
+        }
+
+        function onFeatureSelect(item, data) {
+            vm.condition.valueType.type = item.type;
+        }
+
+        function onContainsAdded(tag) {
+            const dimension = getDimension(vm.condition);
+            vm.condition.valueTypes.push({
+                '@type': 'valueType',
+                value: tag.text,
+                type: dimension.type
+            })
+        }
+
+        function onContainsRemoved(tag) {
+            console.log('on contains removed', tag);
+            const valueType = vm.condition.valueTypes.find((item) => {
+                return item.value === tag.text;
+            });
+            if (valueType) {
+                const idx = vm.condition.valueTypes.indexOf(valueType);
+                vm.condition.valueTypes.splice(idx, 1);
+            }
+        }
+
+        function onConditionValueChange() {
+            vm.condition.value = vm.condition.valueType.value;
         }
 
         function onDateChange(startDate, endDate, metadata) {

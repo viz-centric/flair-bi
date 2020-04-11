@@ -6,17 +6,20 @@
 
     <div class="fields">
         <div class="col-md-3 field">
-            <ui-select required ng-model="vm.condition.featureName" theme="bootstrap">
+            <ui-select required ng-model="vm.condition.featureName"
+                       on-select="vm.onFeatureSelect($item, $model)"
+                       theme="bootstrap">
                 <ui-select-match placeholder="Feature">
                     {{vm.condition.featureName}}
                 </ui-select-match>
-                <ui-select-choices repeat="feature.name as feature in vm.features">
+                <ui-select-choices repeat="feature.name as feature in vm.features | filter: $select.search track by feature.id">
                     {{feature.name}}
                 </ui-select-choices>
             </ui-select>
         </div>
         <div class="col-md-3 field">
-            <ui-select required ng-model="vm.condition['@type']" theme="bootstrap">
+            <ui-select required ng-model="vm.condition['@type']"
+                       theme="bootstrap">
                 <ui-select-match placeholder="Type">
                     {{$select.selected.displayName}}
                 </ui-select-match>
@@ -33,17 +36,6 @@
                                            condition="vm.condition">
             </filter-date-range-constraints>
         </div>
-        <div ng-if="!vm.canDisplayDateRangeControls(vm.condition)" class="col-md-4 field">
-            <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
-                <input type="text" class="form-control" ng-model="vm.condition.value" />
-            </div>
-            <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-2 between-label field">
-                <span class="control-label">and</span>
-            </div>
-            <div ng-if="vm.condition['@type'] === 'Between'" class="col-md-3 field">
-                <input type="text" class="form-control" ng-model="vm.condition.secondValue" />
-            </div>
-        </div>
 
         <div ng-if="vm.condition['@type'] === 'Compare'" class="col-md-3 field">
             <ui-select required ng-model="vm.condition.comparatorType" theme="bootstrap">
@@ -56,12 +48,17 @@
             </ui-select>
         </div>
         <div ng-if="vm.condition['@type'] === 'Compare' || vm.condition['@type'] === 'Like'" class="col-md-3 field">
-            <input type="text" class="form-control" ng-model="vm.condition.value" />
+            <input type="text" class="form-control"
+                   ng-model="vm.condition.valueType.value"
+                   ng-change="vm.onConditionValueChange()"/>
         </div>
         <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'"
             class="col-md-5 field">
-            <tags-input-grpc placeholder="Add Values" use-strings="true" min-length="1" ng-model="vm.condition.values"
-                replace-spaces-with-dashes="false">
+            <tags-input-grpc placeholder="Add Values" use-strings="true" min-length="1"
+                             ng-model="vm.condition.values"
+                             on-tag-added="vm.onContainsAdded($tag)"
+                             on-tag-removed="vm.onContainsRemoved($tag)"
+                             replace-spaces-with-dashes="false">
                 <auto-complete-grpc match-class=" filter-autocomplete "
                     source="vm.load($query, vm.condition.featureName)" min-length="0
                 " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>

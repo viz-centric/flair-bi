@@ -868,6 +868,12 @@ ui-breadcrumbs .breadcrumb li.active {
   -webkit-box-shadow: none;
   margin-top: 7px; }
 
+.query {
+  border: 2px dotted #e1e3e3;
+  border-radius: 25px;
+  padding: 10px;
+  background: rgba(234, 234, 234, 0.6); }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1805,6 +1811,9 @@ a {
 .angular-ui-tree-empty {
   min-height: 0;
   border: 1px solid #e1e3e3; }
+
+.datasource-constraints {
+  margin-top: 55px !important; }
 
 .search-result-area .search-result-title {
   margin-left: 13px;
@@ -4226,7 +4235,12 @@ jhi-alert .alerts .alert-danger {
 
 .flairbi-content-header-fullscreen {
   padding: 0;
-  padding-top: 6px; }
+  padding-top: 6px;
+  position: fixed;
+  top: 0px;
+  z-index: 30;
+  left: 15px;
+  right: 15px; }
 
 .dashboard-filter-header {
   height: 35px;
@@ -4724,11 +4738,6 @@ jhi-alert .alerts .alert-danger {
   height: 425px;
   overflow-y: auto;
   overflow-x: hidden; }
-  .data-constrains-properties .data-constaraint-conditions-container .query {
-    border: 2px dotted #e1e3e3;
-    border-radius: 25px;
-    padding: 10px;
-    background: rgba(234, 234, 234, 0.6); }
   .data-constrains-properties .data-constaraint-conditions-container fieldset {
     padding: 0.35em 0.625em 0.75em !important;
     min-width: 0px !important;

@@ -5,16 +5,15 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$uibModal','AccountDispatch'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$uibModal','AccountDispatch', 'COMPARABLE_DATA_TYPES'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$uibModal,AccountDispatch) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$uibModal,AccountDispatch, COMPARABLE_DATA_TYPES) {
         $scope.cronExpression = '10 4 11 * *';
         $scope.cronOptions = {
             hideAdvancedTab: true
         };
         $scope.isCronDisabled = false;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
-        var TIME_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         var vm = this;
         var emptyList=[];
         vm.cronConfig = { quartz: false };
@@ -109,7 +108,6 @@
                 getWebhookNames();
             }
             resetSelectedChannels();
-            vm.users = User.query();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard = dashboard;
@@ -173,7 +171,7 @@
 
         function isTimeType(feature) {
             var type = feature && feature.type;
-            return TIME_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
 
         function getVisualmetadata(scheduledObj) {
@@ -335,16 +333,7 @@
         }
 
         function loadUsers(q) {
-            if(vm.selectedUsers.length<vm.maxListSize){
-                var retVal = vm.users.map(function (item) {
-                    return item.firstName + " " + item.email;
-                });
-                return retVal;
-            }
-            else
-            {
-                return emptyList;
-            }
+            return schedulerService.searchUsers(q,10);
         }
 
         function loadWebhooks() {
@@ -696,9 +685,6 @@
                     },
                     report: function(){
                         return vm.scheduleObj;
-                    },
-                    users: function(){
-                        return vm.users;
                     },
                     webhookList: function(){
                         return vm.WebhookList;

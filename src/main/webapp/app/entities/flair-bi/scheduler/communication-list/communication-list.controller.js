@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('CommunicationListController', CommunicationListController);
 
-    CommunicationListController.$inject = ['$scope','$stateParams','$rootScope','CommunicationDispatcherService','users','webhookList','vizIdPrefix','report','$uibModalInstance'];
+    CommunicationListController.$inject = ['$scope','$stateParams','$rootScope','CommunicationDispatcherService','webhookList','vizIdPrefix','report','$uibModalInstance','schedulerService'];
 
-    function CommunicationListController($scope,$stateParams,$rootScope,CommunicationDispatcherService,users,webhookList,vizIdPrefix,report,$uibModalInstance) {
+    function CommunicationListController($scope,$stateParams,$rootScope,CommunicationDispatcherService,webhookList,vizIdPrefix,report,$uibModalInstance,schedulerService) {
         var vm = this;
         vm.added = added;
         vm.removed=removed;
@@ -18,7 +18,6 @@
         vm.saveCommunicationList=saveCommunicationList;
         vm.vizIdPrefix = vizIdPrefix;
         vm.report=report;
-        vm.users=users;
         vm.webhookList=webhookList;
         vm.clear = clear;
         activate();
@@ -96,10 +95,7 @@
         }
 
         function loadUsers(q) {
-            var retVal = vm.users.map(function (item) {
-                return item.firstName + " " + item.email;
-            });
-            return retVal;
+            return schedulerService.searchUsers(q,50);
         }
 
         function saveCommunicationList(){

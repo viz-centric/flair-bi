@@ -1,15 +1,21 @@
-(function() {
+(function () {
     "use strict";
 
     angular
-        .module("flairbiApp")
-        .controller("DashboardsDialogController", DashboardsDialogController);
+        .module('flairbiApp')
+        .component('dashboardsDialogComponent', {
+            templateUrl: 'app/entities/dashboards/dashboards-dialog.component.html',
+            controller: DashboardsDialogController,
+            controllerAs: 'vm',
+            bindings: {
+                resolve: '<',
+                dismiss: '&',
+                close: '&'
+            }
+        });
 
     DashboardsDialogController.$inject = [
-        "$timeout",
         "$scope",
-        "$stateParams",
-        "$uibModalInstance",
         "$state",
         "DataUtils",
         "Dashboards",
@@ -21,10 +27,7 @@
     ];
 
     function DashboardsDialogController(
-        $timeout,
         $scope,
-        $stateParams,
-        $uibModalInstance,
         $state,
         DataUtils,
         Dashboards,
@@ -39,41 +42,17 @@
         vm.byteSize = DataUtils.byteSize;
         vm.openFile = DataUtils.openFile;
         vm.save = save;
-        vm.views = Views.query();
-        vm.dashboardReleases = [] ;
-        vm.dialogMode =
-            $state.current.url.includes("edit") == true
-                ? "Edit Dashboard"
-                : "Create Dashboard";
+        vm.dashboardReleases = [];
 
-        $timeout(function() {
-            angular.element(".form-group:eq(1)>input").focus();
-        });
-        vm.isInValidImage=false;
-        vm.search=search;
-        vm.togglePublish=togglePublish;
+        vm.isInValidImage = false;
+        vm.search = search;
+        vm.togglePublish = togglePublish;
 
-        active();
-
-        function active(){
-            if($state.current.url.includes("edit") == true){
-                getDashboard();
-                getDashboardReleases();
-            }else{
-               vm.dashboards={'dashboardName': null,'category': null,'description': null,'published': false,'image': null,'imageContentType': null,'id': null}; 
-            }
-        }
-
-        function getDashboardReleases(){
-            return Dashboards.releases({id: $stateParams.id},function(result){
-                vm.dashboardReleases=result;
-            });
-        }
-
-        function getDashboard() {
-            return Dashboards.get({id: $stateParams.id},function(result){
-                vm.dashboards=result;
-            });
+        vm.$onInit = () => {
+            vm.dialogMode = vm.resolve.title;
+            vm.dashboards = vm.resolve.dashboard;
+            vm.dashboardReleases = vm.resolve.dashboardReleases;
+            vm.views = Views.query();
         }
 
         function checkValidImage(bytes) {
@@ -84,17 +63,17 @@
                     .replace('bytes', '')
                     .trim();
                 var imageSizeInMb = Math.floor(parseInt(imageSizeInBytes) / 1000000);
-                if (imageSizeInMb <= parseInt($rootScope.appProperies.maxImageSize)) 
+                if (imageSizeInMb <= parseInt($rootScope.appProperies.maxImageSize))
                     vm.isInValidImage = false;
-                    vm.isSaving = false;
-                }else{
-                    vm.isInValidImage = true;
-                    vm.isSaving = true;
-                }
+                vm.isSaving = false;
+            } else {
+                vm.isInValidImage = true;
+                vm.isSaving = true;
+            }
         }
 
         function clear() {
-            $uibModalInstance.dismiss("cancel");
+            vm.dismiss();
         }
 
         function save() {
@@ -108,39 +87,30 @@
 
         function onSaveSuccess(result) {
             $scope.$emit("flairbiApp:dashboardsUpdate", result);
-            $uibModalInstance.close(result);
+            vm.close({ $value: result });
             vm.isSaving = false;
-            //fetch new permission for dashboards
-            if($state.current.url.includes("new")){
-                Principal.identity(true);
-                var info = {text:$translate.instant('flairbiApp.dashboards.created',{param:result.id}),title: "Saved"}
-                $rootScope.showSuccessToast(info);
-            }else{
-                var info = {text:$translate.instant('flairbiApp.dashboards.updated',{param:result.id}),title: "Updated"}
-                $rootScope.showSuccessToast(info);
-            }
         }
 
         function onSaveError(error) {
             vm.isSaving = false;
-            if(error.data.message=='uniqueError'){
+            if (error.data.message == 'uniqueError') {
                 $rootScope.showErrorSingleToast({
-                    text: $translate.instant('flairbiApp.dashboards.'+error.data.message)
-                });        
-            }else{
+                    text: $translate.instant('flairbiApp.dashboards.' + error.data.message)
+                });
+            } else {
                 $rootScope.showErrorSingleToast({
                     text: $translate.instant('flairbiApp.dashboards.errorSaving')
-                });                
+                });
             }
         }
 
-        vm.setImage = function($file, dashboards) {
+        vm.setImage = function ($file, dashboards) {
             if ($file && $file.$error === "pattern") {
                 return;
             }
             if ($file) {
-                DataUtils.toBase64($file, function(base64Data) {
-                    $scope.$apply(function() {
+                DataUtils.toBase64($file, function (base64Data) {
+                    $scope.$apply(function () {
                         dashboards.image = base64Data;
                         dashboards.imageLocation = null;
                         //dashboards.imageContentType = $file.type;
@@ -168,8 +138,8 @@
             }
         }
 
-        function togglePublish(){
-            vm.dashboards.published=!vm.dashboards.published;
+        function togglePublish() {
+            vm.dashboards.published = !vm.dashboards.published;
         }
     }
 })();

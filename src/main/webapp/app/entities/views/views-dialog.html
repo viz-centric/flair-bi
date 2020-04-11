@@ -2,75 +2,91 @@
     <form name="editForm" ng-submit="vm.save()" novalidate="" role="form" show-validation="">
         <div class="modal-header">
             <svg class="common-edit-icon">
-              <use xlink:href="#edit-dashboard" />
+                <use xlink:href="#edit-dashboard" />
             </svg>
             <div class="header-text">
                 {{vm.dialogMode}}
             </div>
             <svg class="common-cancle-icon" data-dismiss="modal" ng-click="vm.clear()">
-              <use xlink:href="#cancle" />
-              </svg>
-      </div>
-        
+                <use xlink:href="#cancle" />
+            </svg>
+        </div>
+
         <div class="modal-body">
             <div class="form-group">
-                <label class="control-label" data-translate="flairbiApp.views.viewName" for="field_viewName">View Name</label>
-                <input class="form-control" id="field_viewName" name="viewName" ng-maxlength="20" ng-model="vm.views.viewName" required=""
-                    type="text" />
+                <label class="control-label" data-translate="flairbiApp.views.viewName" for="field_viewName">View
+                    Name</label>
+                <input class="form-control" id="field_viewName" name="viewName" ng-maxlength="20"
+                    ng-model="vm.views.viewName" required="" type="text" />
                 <div ng-show="editForm.viewName.$invalid">
-                    <p class="help-block" data-translate="entity.validation.required" ng-show="editForm.viewName.$error.required">This field is required.</p>
-                    <p class="help-block" data-translate="entity.validation.maxlength" ng-show="editForm.viewName.$error.maxlength" translate-value-max="20">This field cannot be longer than 20 characters.</p>
+                    <p class="help-block" data-translate="entity.validation.required"
+                        ng-show="editForm.viewName.$error.required">This field is required.</p>
+                    <p class="help-block" data-translate="entity.validation.maxlength"
+                        ng-show="editForm.viewName.$error.maxlength" translate-value-max="20">This field cannot be
+                        longer than 20 characters.</p>
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label" data-translate="flairbiApp.views.description" for="field_description">Description</label>
-                <input class="form-control" id="field_description" name="description" ng-maxlength="100" ng-model="vm.views.description"
-                    type="text" />
+                <label class="control-label" data-translate="flairbiApp.views.description"
+                    for="field_description">Description</label>
+                <input class="form-control" id="field_description" name="description" ng-maxlength="100"
+                    ng-model="vm.views.description" type="text" />
                 <div ng-show="editForm.description.$invalid">
-                    <p class="help-block" data-translate="entity.validation.maxlength" ng-show="editForm.description.$error.maxlength" translate-value-max="100">This field cannot be longer than 100 characters.</p>
+                    <p class="help-block" data-translate="entity.validation.maxlength"
+                        ng-show="editForm.description.$error.maxlength" translate-value-max="100">This field cannot be
+                        longer than 100 characters.</p>
                 </div>
             </div>
             <div class="form-group" ng-if="vm.views.currentRelease">
-              <label class="control-label" for="published"> Is published </label>
-              <input type="checkbox" ng-model="vm.views.published"/>
+                <label class="control-label" for="published"> Is published </label>
+                <input type="checkbox" ng-model="vm.views.published" />
             </div>
             <div class="form-group" ngf-change="vm.setImage($file, vm.views)" ngf-drop="" ngf-pattern="'image/*'">
-                <label class="control-label img-label" data-translate="flairbiApp.views.image" for="field_image">Image</label>
+                <label class="control-label img-label" data-translate="flairbiApp.views.image"
+                    for="field_image">Image</label>
                 <div class="row" ng-if="vm.views.imageLocation || vm.views.image">
-                    <img alt="views image" data-ng-src="{{'data:' + vm.views.imageContentType + ';base64,' + vm.views.image}}" ng-if="vm.views.image"
-                        style="max-height: 100px;" />
+                    <img alt="views image"
+                        data-ng-src="{{'data:' + vm.views.imageContentType + ';base64,' + vm.views.image}}"
+                        ng-if="vm.views.image" style="max-height: 100px;" />
                     <img alt="views image" ng-src="{{vm.views.imageLocation}}" ng-if="vm.views.imageLocation"
                         style="max-height: 100px;" />
                     <div class="help-block clearfix col-md-7 col-sm-7 uploaded-image" ng-if="vm.views.image">
-                        <span class="image-disc pull-left">{{vm.views.imageContentType}}, {{vm.byteSize(vm.views.image)}}</span>
-                        <button class="btn btn-danger btn-xs pull-right" ng-click="vm.views.image=null;vm.views.imageContentType=null;" type="button">
+                        <span class="image-disc pull-left">{{vm.views.imageContentType}},
+                            {{vm.byteSize(vm.views.image)}}</span>
+                        <button class="btn btn-danger btn-xs pull-right"
+                            ng-click="vm.views.image=null;vm.views.imageContentType=null;" type="button">
                             <span class="glyphicon glyphicon-remove"></span> Remove Image
                         </button>
                     </div>
                 </div>
                 <div class="image-upload-holder">
                     <div class="image-upload-inner">
-                        <div class="button" ngf-select name="file" ngf-pattern="'image/*'"
-                          ngf-accept="'image/*'" data-translate="entity.action.addimage" ngf-min-height="100"ngf-change="vm.setImage($file, vm.views)">
-                           <p>Add Image</p> 
-                         </div>
+                        <div class="button" ngf-select name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                            data-translate="entity.action.addimage" ngf-min-height="100"
+                            ngf-change="vm.setImage($file, vm.views)">
+                            <p>Add Image</p>
+                        </div>
                     </div>
                 </div>
                 <input class="form-control" id="field_image" name="image" ng-model="vm.views.image" type="hidden" />
-                <input class="form-control" id="field_imageContentType" name="imageContentType" ng-model="vm.views.imageContentType" type="hidden"
-                />
+                <input class="form-control" id="field_imageContentType" name="imageContentType"
+                    ng-model="vm.views.imageContentType" type="hidden" />
             </div>
-            <div class="form-group">
-                <label data-translate="flairbiApp.views.view_dashboard" for="field_view_dashboard">View Dashboard</label>
+            <div ng-if="false" class="form-group">
+                <label data-translate="flairbiApp.views.view_dashboard" for="field_view_dashboard">View
+                    Dashboard</label>
                 <ui-select id="field_view_dashboard" ng-model="vm.views.viewDashboard">
-                  <ui-select-match placeholder="Select Dashboard ...">{{$select.selected.dashboardName}}</ui-select-match>
-                  <ui-select-choices repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
-                    <div ng-bind="dashboard.dashboardName"></div>
-                  </ui-select-choices>
-                </ui-select>    
+                    <ui-select-match placeholder="Select Dashboard ...">{{$select.selected.dashboardName}}
+                    </ui-select-match>
+                    <ui-select-choices
+                        repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
+                        <div ng-bind="dashboard.dashboardName"></div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div ng-show="editForm.view_dashboard.$invalid">
-                <p class="help-block" data-translate="entity.validation.required" ng-show="editForm.view_dashboard.$error.required">This field is required.</p>
+                <p class="help-block" data-translate="entity.validation.required"
+                    ng-show="editForm.view_dashboard.$error.required">This field is required.</p>
             </div>
         </div>
         <div class="modal-footer">
@@ -78,7 +94,8 @@
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
                 <span data-translate="entity.action.cancel">Cancel</span>
             </button>
-            <button class="btn btn-primary" ng-click="moveToOverview()" ng-disabled="editForm.$invalid || vm.isSaving" type="submit">
+            <button class="btn btn-primary" ng-click="moveToOverview()" ng-disabled="editForm.$invalid || vm.isSaving"
+                type="submit">
                 <span class="glyphicon glyphicon-save"></span>&nbsp;
                 <span data-translate="entity.action.save">Save</span>
             </button>

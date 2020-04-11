@@ -14,11 +14,10 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES) {
         var vm = this;
-        var COMPARABLE_DATA_TYPES = ['timestamp', 'date', 'datetime'];
         vm.$onInit = activate;
         vm.load = load;
         vm.added = added;

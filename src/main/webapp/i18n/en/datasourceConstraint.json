@@ -3,7 +3,7 @@
         "datasourceConstraint": {
             "home": {
                 "title": "Data Source Constraints",
-                "createLabel": "Create a New Data Source Constraint",
+                "createLabel": "Create Constraint",
                 "createOrEditLabel": "Create or Edit a Data Source Constraint"
             },
             "created": "A new Data Source Constraint is created with identifier {{ param }}",
@@ -15,7 +15,7 @@
                 "question": "Are you sure you want to delete new Data Source Constraint {{ id }}?"
             },
             "detail": {
-                "title": "New Data Source Constraint"
+                "title": "Datasource Constraint"
             },
             "errorFetching":"Error fetching Datasource Constraints",
             "constraintDefinition": "Constraint Definition",

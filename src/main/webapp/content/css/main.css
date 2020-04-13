@@ -1745,6 +1745,10 @@ a {
     .permissions-fbibox .fbibox-content .tree-handle .permission-icon {
       font-size: 18px;
       color: #439dd3; }
+    .permissions-fbibox .fbibox-content .tree-handle .datasource-constraints-icon {
+      width: 16px;
+      height: 16px;
+      fill: #439dd3; }
     .permissions-fbibox .fbibox-content .tree-handle .square-icon {
       margin-top: 4px; }
     .permissions-fbibox .fbibox-content .tree-handle .close-icon {
@@ -1811,9 +1815,6 @@ a {
 .angular-ui-tree-empty {
   min-height: 0;
   border: 1px solid #e1e3e3; }
-
-.datasource-constraints {
-  margin-top: 55px !important; }
 
 .search-result-area .search-result-title {
   margin-left: 13px;

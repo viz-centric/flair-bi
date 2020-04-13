@@ -20,12 +20,12 @@
     </div>
     <br/>
     <button type="submit"
-            ui-sref="user-management-detail({login:vm.datasourceConstraint.user.login})"
-            class="btn btn-info">
+            ui-sref="datasource-constraints({login:vm.datasourceConstraint.user.login})"
+            class="btn btn-primary">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>
 
-    <button type="button" ui-sref="datasource-constraint-detail.edit({id:vm.datasourceConstraint.id})" class="btn btn-primary">
+    <button type="button" ui-sref="datasource-constraints-edit({id:vm.datasourceConstraint.id})" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
         <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
     </button>

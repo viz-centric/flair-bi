@@ -2,17 +2,15 @@
     <div class="containder-fluid">
         <div class="row">
             <div class="dashboards-header-text header-text col-md-8 col-sm-6 com-xs-12">
-                <h2>Data Source Constraints</h2>
+                <h2 data-translate="flairbiApp.datasourceConstraint.home.title">Data Source Constraints</h2>
                 <div class="bread-crumb">
                     <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
                 </div>
             </div>
             <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs">
-                <button has-authority="{{vm.permissions.WRITE_DASHBOARDS}}" class="btn btn-primary" ui-sref="dashboards.new">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span data-translate="user-management-detail.newConstraint">
-                        Create new Constraint
-                    </span>
+                <button class="btn btn-primary pull-right" ui-sref="datasource-constraints-new">
+                        <span class="fa fa-plus"></span>
+                        <span data-translate="flairbiApp.datasourceConstraint.home.createLabel">Create Constraint</span>
                 </button>
             </div>
         </div>

@@ -20,14 +20,14 @@
             }
         });
 
-    UserManagementDetailController.$inject = ['$stateParams', 'User', 'DatasourceConstraint'];
+    UserManagementDetailController.$inject = ['$stateParams', 'User', 'DatasourceConstraint','RouteHistoryService'];
 
-    function UserManagementDetailController($stateParams, User, DatasourceConstraint) {
+    function UserManagementDetailController($stateParams, User, DatasourceConstraint,RouteHistoryService) {
         var vm = this;
 
         vm.$onInit = activate;
-
         vm.load = load;
+        vm.back = back;
 
 
         function activate() {
@@ -54,5 +54,10 @@
                 vm.user = result;
             });
         }
+
+        function back() {
+            RouteHistoryService.back();
+        }
+
     }
 })();

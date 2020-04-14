@@ -8,13 +8,14 @@
             DatasourceConstraintController
         );
 
-    DatasourceConstraintController.$inject = ["DatasourceConstraint","$translate","$rootScope","$stateParams"];
+    DatasourceConstraintController.$inject = ["DatasourceConstraint","$translate","$rootScope","$stateParams","RouteHistoryService"];
 
-    function DatasourceConstraintController(DatasourceConstraint,$translate,$rootScope,$stateParams) {
+    function DatasourceConstraintController(DatasourceConstraint,$translate,$rootScope,$stateParams,RouteHistoryService) {
         var vm = this;
 
         vm.datasourceConstraints = [];
         vm.login = $stateParams.login;
+        vm.back = back;
 
         loadAll();
 
@@ -29,6 +30,10 @@
                     text: $translate.instant('flairbiApp.datasourceConstraint.errorFetching')
                 });
             });
+        }
+
+        function back() {
+            RouteHistoryService.back();
         }
     }
 })();

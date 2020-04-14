@@ -5654,6 +5654,14 @@ ui bootstrap tweaks
       color: #439dd3;
       font-size: 16px; }
 
+.user-management-table .datasource-constraints-icon {
+  width: 16px;
+  height: 20px; }
+
+.user-management-table .click-here-dc-icon {
+  color: #439dd3;
+  font-size: 1.5em; }
+
 .filter-area .filter-element label {
   font-weight: 600;
   margin-left: 0.5vw; }

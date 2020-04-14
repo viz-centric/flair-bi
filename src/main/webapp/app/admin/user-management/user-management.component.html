@@ -1,4 +1,4 @@
-<div class="fbibox">
+<div class="fbibox user-management-table">
     <div class="fbibox-content">
         <div class="table-responsive">
             <table class="table table-striped flair-table-v1">
@@ -19,9 +19,16 @@
                         <th>
                             <span>Status</span>
                         </th>
-                        <th jh-sort-by="langKey">
+                        <th jh-sort-by="langKey" ng-show="!vm.isAdmin">
                             <span data-translate="userManagement.langKey">Lang Key</span>
                             <span class="fa fa-sort"></span>
+                        </th>
+                        <th ng-show="vm.isAdmin">
+                            <span uib-tooltip="Datasource Constraints" tooltip-placement="bottom">        
+                                <svg class="datasource-constraints-icon">
+                                    <use xlink:href="#data-constraints" />
+                                </svg>
+                            </span>                        
                         </th>
                         <th>
                             <span data-translate="userManagement.profiles">Profiles</span>
@@ -54,7 +61,11 @@
                                     <i class="fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':user.activated,'fa-check-square-o-unchecked':!user.activated}"></i>
                             </label>
                         </td>
-                        <td>{{user.langKey}}</td>
+                        <td ng-show="!vm.isAdmin">{{user.langKey}}</td>
+                        <td ng-show="vm.isAdmin">
+                            <span ui-sref="datasource-constraints({login:user.login})"  class="fa fa-share-square-o click-here-dc-icon">
+                            </span>
+                        </td>
                         <td>
                             <div class="m-b-xs roles" ng-repeat="userGroup in user.userGroups">
                                 <span class="role-label label label-info">{{ userGroup }}</span>

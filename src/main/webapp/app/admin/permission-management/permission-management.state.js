@@ -122,7 +122,7 @@
                 data: {
                     authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
                     pageTitle: "flairbiApp.datasourceConstraint.detail.title",
-                    displayName: false
+                    displayName: "Datasource constraint detail"
                 },
                 views: {
                     "content-header@": {

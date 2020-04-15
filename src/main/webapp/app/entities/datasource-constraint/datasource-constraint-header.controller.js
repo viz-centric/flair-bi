@@ -8,9 +8,10 @@
             DatasourceConstraintHeaderController
         );
 
-    DatasourceConstraintHeaderController.$inject = [];
+    DatasourceConstraintHeaderController.$inject = ["$stateParams"];
 
-    function DatasourceConstraintHeaderController() {
+    function DatasourceConstraintHeaderController($stateParams) {
         var vm = this;
+        vm.id = $stateParams.id;
     }
 })();

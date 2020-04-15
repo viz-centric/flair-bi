@@ -181,32 +181,19 @@
                 url: '/new',
                 data: {
                     authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT],
-                    //displayName: "Datasource constraints"
-                    displayName: false
+                    displayName: "New datasource constraint"
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function (_$stateParams, $state, $uibModal) {
-                    $uibModal.open({
-                        component: 'datasourceConstraintDialogComponent',
-                        backdrop: 'static',
-                        size: 'lg',
-                        resolve: {
-                            entity: function () {
-                                return {
-                                    constraintDefinition: {
-                                        featureConstraints: [{}]
-                                    },
-                                    id: null
-                                };
-                            }
-                        }
-                    }).result.then(function () {
-                        $state.go('^', null, {
-                            reload: true
-                        });
-                    }, function () {
-                        $state.go('^');
-                    });
-                }],
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        component: "datasourceConstraintDialogComponent",
+                    }
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('datasourceConstraint');
@@ -215,32 +202,23 @@
                 }
             })
             .state('datasource-constraints-edit', {
-                parent: 'datasource-constraints-detail',
-                url: '/edit',
+                parent: 'datasource-constraints',
+                url: '/edit/{id}',
                 data: {
                     authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT],
-                    displayName: "Datasource constraints"
+                    displayName: "Update datasource constraint"
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
-                    $uibModal.open({
-                        component: 'datasourceConstraintDialogComponent',
-                        backdrop: 'static',
-                        size: 'lg',
-                        resolve: {
-                            entity: ['DatasourceConstraint', function (DatasourceConstraint) {
-                                return DatasourceConstraint.get({
-                                    id: $stateParams.id
-                                }).$promise;
-                            }]
-                        }
-                    }).result.then(function () {
-                        $state.go('^', null, {
-                            reload: true
-                        });
-                    }, function () {
-                        $state.go('^');
-                    });
-                }],
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        component: "datasourceConstraintDialogComponent",
+                    }
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('datasourceConstraint');

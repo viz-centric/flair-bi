@@ -26,7 +26,9 @@
         "proxyGrpcService",
         "AuthServerProvider",
         "stompClientService",
-        "QueryValidationService"
+        "QueryValidationService",
+        "$stateParams",
+        "$state"
     ];
 
     function DatasourceConstraintDialogController(
@@ -41,7 +43,9 @@
         proxyGrpcService,
         AuthServerProvider,
         stompClientService,
-        QueryValidationService
+        QueryValidationService,
+        $stateParams,
+        $state
     ) {
         var vm = this;
 
@@ -62,7 +66,6 @@
 
 
         vm.$onInit = function () {
-            vm.datasourceConstraint = vm.resolve.entity;
             activate();
             $timeout(function () {
                 angular.element(".form-group:eq(1)>input").focus();
@@ -73,22 +76,10 @@
 
         function activate() {
             connectWebSocket();
-            if (
-                vm.datasourceConstraint.constraintDefinition &&
-                vm.datasourceConstraint.constraintDefinition.featureConstraints
-            ) {
-                vm.datasourceConstraint.constraintDefinition.featureConstraints.forEach(
-                    function (item) {
-                        if (item.values) {
-                            item.selected = item.values.map(function (item) {
-                                var newItem = {};
-                                newItem['text'] = item;
-                                return newItem;
-                            });
-                        }
-                    }
-                );
-                datasourceChange(vm.datasourceConstraint.datasource.id);
+            if($stateParams.id){
+                getDatasourceConstraint();
+            }else{
+                vm.datasourceConstraint = {constraintDefinition:{featureConstraints: [{}]},id: null}
             }
         }
 
@@ -153,6 +144,7 @@
             onSave(result);
             var info = { text: $translate.instant('flairbiApp.datasourceConstraint.created', { param: result.id }), title: "Saved" }
             $rootScope.showSuccessToast(info);
+            $state.go('^');
         }
 
         function onUpdateSuccess(result) {
@@ -301,6 +293,31 @@
 
         function validate(){
             generateReductionCondition();
+        }
+
+        function getDatasourceConstraint(){
+            DatasourceConstraint.get({
+                id: $stateParams.id
+            },function(result){
+                vm.datasourceConstraint=result;
+                if (
+                    vm.datasourceConstraint.constraintDefinition &&
+                    vm.datasourceConstraint.constraintDefinition.featureConstraints
+                ) {
+                    vm.datasourceConstraint.constraintDefinition.featureConstraints.forEach(
+                        function (item) {
+                            if (item.values) {
+                                item.selected = item.values.map(function (item) {
+                                    var newItem = {};
+                                    newItem['text'] = item;
+                                    return newItem;
+                                });
+                            }
+                        }
+                    );
+                    datasourceChange(vm.datasourceConstraint.datasource.id);
+                }
+            });
         }
     }
 })();

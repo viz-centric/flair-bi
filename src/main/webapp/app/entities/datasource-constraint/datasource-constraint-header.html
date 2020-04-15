@@ -7,7 +7,7 @@
                     <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" >></ui-breadcrumbs>
                 </div>
             </div>
-            <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs">
+            <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs" ng-show="vm.id">
                 <button class="btn btn-primary pull-right" ui-sref="datasource-constraints-new">
                         <span class="fa fa-plus"></span>
                         <span data-translate="flairbiApp.datasourceConstraint.home.createLabel">Create Constraint</span>

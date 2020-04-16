@@ -73,7 +73,6 @@
     "sockjs": "^0.3.4",
     "stomp-websocket": "^2.3.4",
     "angular-jwt": "^0.1.10",
-    "cronstrue": "^0.8.0",
     "flair-visualizations": "master",
     "datatables.net-dt": "^3.2.2"
   },

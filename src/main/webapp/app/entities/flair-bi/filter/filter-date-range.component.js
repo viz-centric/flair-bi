@@ -219,7 +219,7 @@
                 return null;
             }
             // console.log('str to date', date, typeof date);
-            return new Date(date);
+            return Date.parse(date) ? new Date(date) : null;
         }
 
         function endOfDay(date) {

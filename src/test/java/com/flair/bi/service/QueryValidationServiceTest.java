@@ -35,7 +35,8 @@ public class QueryValidationServiceTest {
         query.setHaving(asList(new HavingDTO(
                 new FieldDTO("name", "MAX", "namemax"),
                 "190",
-                HavingDTO.ComparatorType.GT
+                HavingDTO.ComparatorType.GT,
+                null
         )));
         query.setOrders(asList(new SortDTO(
                 new FieldDTO("order"),
@@ -94,7 +95,7 @@ public class QueryValidationServiceTest {
         QueryDTO query = new QueryDTO();
         FieldDTO field = new FieldDTO();
         field.setName("TEST-");
-        query.setHaving(asList(new HavingDTO(field, "100", HavingDTO.ComparatorType.GT)));
+        query.setHaving(asList(new HavingDTO(field, "100", HavingDTO.ComparatorType.GT, null)));
         QueryValidationResult result = service.validate(query);
         assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
         assertEquals(asList(QueryValidationError.of("TEST-", "FieldNameInvalid")), result.getErrors());
@@ -105,7 +106,7 @@ public class QueryValidationServiceTest {
         QueryDTO query = new QueryDTO();
         FieldDTO field = new FieldDTO();
         field.setName("TEST");
-        query.setHaving(asList(new HavingDTO(field, "100-", HavingDTO.ComparatorType.GT)));
+        query.setHaving(asList(new HavingDTO(field, "100-", HavingDTO.ComparatorType.GT, null)));
         QueryValidationResult result = service.validate(query);
         assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
         assertEquals(asList(QueryValidationError.of("100-", "HavingValueInvalid")), result.getErrors());

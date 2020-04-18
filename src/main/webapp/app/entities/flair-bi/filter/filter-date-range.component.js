@@ -242,7 +242,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS');
         }
 
     }

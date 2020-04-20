@@ -23,6 +23,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QueryExpDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -208,7 +209,9 @@ public class SchedulerService {
 					.filter(h -> h.getValueQuery() != null)
 					.map(h -> h.getValueQuery())
 					.forEach((q -> {
-						q.setSource(queryDTO.getSource());
+						q.setQuery(toValueQuery(q));
+						q.setSign(q.getSign());
+						q.setFactor(q.getFactor());
 					}));
 		}
 
@@ -224,6 +227,10 @@ public class SchedulerService {
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
 
+	}
+
+	private QueryDTO toValueQuery(QueryExpDTO queryExp) {
+		return new QueryDTO(queryExp.getQuery());
 	}
 
 	public emailsDTO[] getEmailList(String login) {

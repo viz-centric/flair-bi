@@ -3,6 +3,7 @@ package com.flair.bi.web.rest.util;
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
+import com.flair.bi.messages.QueryExpr;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -10,6 +11,8 @@ import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QueryExpDTO;
+import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.dto.SortDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -58,6 +61,7 @@ public final class QueryGrpcUtils {
     public static QueryDTO mapToQueryDTO(Query request) {
         QueryDTO queryDTO = new QueryDTO();
         queryDTO.setSource(request.getSource());
+        queryDTO.setQuerySource(getQuerySourceDTO(request.getQuerySource()));
         queryDTO.setFields(toFieldDTOs(request.getFieldsList()));
         queryDTO.setGroupBy(toFieldDTOs(request.getGroupByList()));
         if (request.getLimit() != 0) {
@@ -71,6 +75,13 @@ public final class QueryGrpcUtils {
         queryDTO.setHaving(getListHavingDTO(request.getHavingList()));
         queryDTO.setConditionExpressions(getListConditionExpressionDTO(request.getConditionExpressionsList()));
         return queryDTO;
+    }
+
+    private static QuerySourceDTO getQuerySourceDTO(Query.QuerySource querySource) {
+        if (querySource == null) {
+            return null;
+        }
+        return new QuerySourceDTO(querySource.getSource(), querySource.getAlias());
     }
 
     private static List<FieldDTO> toFieldDTOs(List<Query.Field> fieldsList) {
@@ -94,6 +105,14 @@ public final class QueryGrpcUtils {
                         .build()
                 )
                 .collect(Collectors.toList());
+    }
+
+    private static QueryExpDTO toQueryExpr(QueryExpr queryExpr) {
+        QueryDTO query = null;
+        if (queryExpr.getQuery() != null) {
+            query = mapToQueryDTO(queryExpr.getQuery());
+        }
+        return new QueryExpDTO(query, queryExpr.getSign(), queryExpr.getFactor());
     }
 
     private static List<SortDTO> getListSortDTO(List<Query.SortHolder> orders) {

@@ -4,9 +4,12 @@ import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.messages.Query;
+import com.flair.bi.messages.QueryExpr;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QueryExpDTO;
+import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -69,6 +72,10 @@ public class QueryTransformerService {
                 .addAllFields(toProtoFields(fields))
                 .addAllGroupBy(toProtoFields(groupBy));
 
+        if (queryDTO.getQuerySource() != null) {
+            builder.setQuerySource(toQuerySource(queryDTO.getQuerySource()));
+        }
+
         if (queryDTO.getLimit() != null) {
             builder.setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT));
         }
@@ -111,6 +118,13 @@ public class QueryTransformerService {
         return builder.build();
     }
 
+    private Query.QuerySource toQuerySource(QuerySourceDTO querySource) {
+        return Query.QuerySource.newBuilder()
+                .setSource(querySource.getSource())
+                .setAlias(querySource.getAlias())
+                .build();
+    }
+
     private List<Query.Field> toProtoFields(List<FieldDTO> fields) {
         return fields.stream()
                 .map(this::toProtoField)
@@ -136,6 +150,17 @@ public class QueryTransformerService {
                             .build();
                 })
                 .collect(toList());
+    }
+
+    private QueryExpr toQueryExpr(QueryExpDTO queryExp) {
+        QueryExpr.Builder builder = QueryExpr.newBuilder()
+                .setSign(queryExp.getSign())
+                .setFactor(queryExp.getFactor());
+        if (queryExp.getQuery() != null) {
+            builder.setQuery(toQuery(queryExp.getQuery(), null, null, null, null));
+        }
+        return builder
+                .build();
     }
 
     private List<FieldDTO> transformSelectFields(Map<String, Feature> features, List<FieldDTO> fields) {

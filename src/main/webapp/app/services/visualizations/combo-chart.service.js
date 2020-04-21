@@ -100,7 +100,8 @@
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
                     result['isFilterGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Filter Grid');
                     result['showSorting'] = VisualizationUtils.getPropertyValue(record.properties, 'Allow Sorting');
-                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'];
+                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension']; 
+                    result['alternateDimension'] = VisualizationUtils.getPropertyValue(record.properties, 'Alternative Dimensions');
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
                     result['fontStyle'] = [];
@@ -151,7 +152,7 @@
                 }
                 function createChart() {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="combo-' + element[0].id + '" ></div>')
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" vizID=' + record.id + ' id="combo-' + element[0].id + '" ></div>')
                     var div = $('#combo-' + element[0].id)
 
                     var combo = flairVisualizations.combo()
@@ -177,6 +178,7 @@
                             var combo = $rootScope.updateWidget[record.id];
                             combo.isLiveEnabled(record.isLiveEnabled)
                                 .config(getProperties(VisualizationUtils, record))
+                                .data(record.data)
                                 .update(record.data);
 
                         }

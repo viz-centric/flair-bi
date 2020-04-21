@@ -5,18 +5,17 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'User', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', '$state', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS','CommunicationDispatcherService','$uibModal','AccountDispatch'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, User, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, $state, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS,CommunicationDispatcherService,$uibModal,AccountDispatch) {
-        $scope.cronExpression = '10 4 11 * *';
-        $scope.cronOptions = {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES) {
+        var vm = this;
+        var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
+        vm.cronExpression = '10 4 11 * *';
+        vm.cronOptions = {
             hideAdvancedTab: true
         };
-        $scope.isCronDisabled = false;
-        var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
-        var TIME_DATA_TYPES = ['timestamp', 'date', 'datetime'];
-        var vm = this;
-        var emptyList=[];
+        vm.isCronDisabled = false;
+        var emptyList = [];
         vm.cronConfig = { quartz: false };
         vm.clear = clear;
         vm.schedule = schedule;
@@ -35,6 +34,7 @@
         vm.removeWebhook = removeWebhook;
         vm.loadWebhooks = loadWebhooks;
         vm.getLabelClass = getLabelClass;
+        vm.dateformat = 'yyyy-MM-dd';
         vm.endDateFormat = 'yyyy-MM-dd';
         vm.deleteReport = deleteReport;
         vm.changeDashboard = changeDashboard;
@@ -50,10 +50,10 @@
         vm.timeCompatibleDimensions = [];
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.setChannel = setChannel;
-        vm.openCommunicationListModal=openCommunicationListModal;
-        vm.maxListSize=10;
-        vm.selectedUsers=[];
-        vm.selectedWebhook=[];
+        vm.openCommunicationListModal = openCommunicationListModal;
+        vm.maxListSize = 10;
+        vm.selectedUsers = [];
+        vm.selectedWebhook = [];
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
@@ -97,19 +97,18 @@
         ////////////////
 
         function activate() {
-            vm.isAdmin =  AccountDispatch.isAdmin();
+            vm.isAdmin = AccountDispatch.isAdmin();
             registerSetCommunicationList();
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
-            if(vm.isAdmin){
+            if (vm.isAdmin) {
                 getWebhookList();
                 isConfigExist();
-            }else{
+            } else {
                 getWebhookNames();
             }
             resetSelectedChannels();
-            vm.users = User.query();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
                 vm.dashboard = dashboard;
@@ -173,7 +172,7 @@
 
         function isTimeType(feature) {
             var type = feature && feature.type;
-            return TIME_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
 
         function getVisualmetadata(scheduledObj) {
@@ -216,7 +215,7 @@
 
         function updateScheduledObj(data) {
             vm.scheduleObj.assign_report.channel = data.assign_report.channel;
-            $scope.cronExpression = data.schedule.cron_exp;
+            vm.cronExpression = data.schedule.cron_exp;
             vm.scheduleObj.schedule.start_date = new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date = new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body = data.report.mail_body;
@@ -252,7 +251,7 @@
         }
 
         function addEmailList(emailsR) {
-            var emails=emailsR.slice(0, vm.maxListSize);
+            var emails = emailsR.slice(0, vm.maxListSize);
             vm.selectedUsers = emails.map(function (item) {
                 var newItem = {};
                 newItem['text'] = item.user_name + " " + item.user_email;
@@ -261,7 +260,7 @@
         }
 
         function addWebhhokList(webhooksR) {
-            var webhooks =webhooksR.slice(0, vm.maxListSize);
+            var webhooks = webhooksR.slice(0, vm.maxListSize);
             vm.selectedWebhook = webhooks.map(function (item) {
                 var newItem = {};
                 var webhook = vm.WebhookList.filter(function (val) {
@@ -335,33 +334,20 @@
         }
 
         function loadUsers(q) {
-            if(vm.selectedUsers.length<vm.maxListSize){
-                var retVal = vm.users.map(function (item) {
-                    return item.firstName + " " + item.email;
-                });
-                return retVal;
-            }
-            else
-            {
-                return emptyList;
-            }
+            return schedulerService.searchUsers(q, 10);
         }
 
         function loadWebhooks() {
-            if(vm.selectedWebhook.length<vm.maxListSize){
+            if (vm.selectedWebhook.length < vm.maxListSize) {
                 var retVal = vm.WebhookList.map(function (item) {
                     return item.webhookName;
                 });
                 return retVal;
             }
-            else{
+            else {
                 return emptyList;
             }
         }
-
-        $scope.$watch('cronExpression', function () {
-            vm.cronstrue = cronstrue.toString($scope.cronExpression);
-        });
 
         function clear() {
             $uibModalInstance.close();
@@ -443,7 +429,7 @@
         }
 
         function setCronExpression() {
-            vm.scheduleObj.schedule.cron_exp = $scope.cronExpression;
+            vm.scheduleObj.schedule.cron_exp = vm.cronExpression;
         }
 
         function validateAndSetHaving() {
@@ -653,7 +639,7 @@
         function getWebhookNames() {
             ChannelService.getTeamNames(0)
                 .then(function (success) {
-                    vm.webhooksNames=success.data;
+                    vm.webhooksNames = success.data;
                 }).catch(function (error) {
                     var info = {
                         text: error.data.message,
@@ -683,7 +669,7 @@
             // }
         }
 
-        function openCommunicationListModal(){
+        function openCommunicationListModal() {
             $uibModal.open({
                 animation: true,
                 templateUrl: 'app/entities/flair-bi/scheduler/communication-list/communication-list.html',
@@ -694,13 +680,10 @@
                     vizIdPrefix: function () {
                         return vm.vizIdPrefix;
                     },
-                    report: function(){
+                    report: function () {
                         return vm.scheduleObj;
                     },
-                    users: function(){
-                        return vm.users;
-                    },
-                    webhookList: function(){
+                    webhookList: function () {
                         return vm.WebhookList;
                     }
                 }
@@ -712,12 +695,12 @@
         function registerSetCommunicationList() {
             var setCommunicationList = $scope.$on(
                 "flairbiApp:Scheduler:Set-Communication-List",
-                function() {
-                    var communicationList=CommunicationDispatcherService.getCommunicationList();
-                    vm.scheduleObj.assign_report.communication_list.email=communicationList.emails;
-                    vm.scheduleObj.assign_report.communication_list.teams=communicationList.webhooks;
-                    vm.selectedUsers=[];
-                    vm.selectedWebhook=[];
+                function () {
+                    var communicationList = CommunicationDispatcherService.getCommunicationList();
+                    vm.scheduleObj.assign_report.communication_list.email = communicationList.emails;
+                    vm.scheduleObj.assign_report.communication_list.teams = communicationList.webhooks;
+                    vm.selectedUsers = [];
+                    vm.selectedWebhook = [];
                     addWebhhokList(communicationList.webhooks);
                     addEmailList(communicationList.emails);
                     CommunicationDispatcherService.resetCommunicationList();

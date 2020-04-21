@@ -34,7 +34,7 @@
     "moment": "~2.24.0",
     "pace": "~1.0.2",
     "metisMenu": "~2.0.2",
-    "fontawesome": "~4.5.0",
+    "fontawesome": "~4.7.0",
     "jquery-ui": "^1.12.1",
     "oclazyload": "^1.0.9",
     "gridstack": "^0.2.6",
@@ -73,7 +73,6 @@
     "sockjs": "^0.3.4",
     "stomp-websocket": "^2.3.4",
     "angular-jwt": "^0.1.10",
-    "cronstrue": "^0.8.0",
     "flair-visualizations": "master",
     "datatables.net-dt": "^3.2.2"
   },

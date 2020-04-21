@@ -7,122 +7,68 @@
                     <h2>User Information</h2>
                 </div>
                 <div class="fbibox-content">
-                        <div class="table-responsive">
-                                <table class="table property-information-table flair-table-v2">
-                                    <tbody>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.login">Login</td>
-                                            <td>{{vm.user.login}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.firstName">First Name</td>
-                                            <td>{{vm.user.firstName}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.lastName">Last Name</td>
-                                            <td>{{vm.user.lastName}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.email">Email</td>
-                                            <td>{{vm.user.email}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.activated">Activated</td>
-                                            <td>{{vm.user.activated}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.langKey">Language Key</td>
-                                            <td>{{vm.user.langKey}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.createdBy">Created By</td>
-                                            <td>{{vm.user.createdBy}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.createdDate">Created Date</td>
-                                            <td>{{vm.user.createdDate | date:'dd/MM/yy HH:mm' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.lastModifiedBy">Last Modified By</td>
-                                            <td>{{vm.user.lastModifiedBy}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.lastModifiedDate">Last Modified Date</td>
-                                            <td>{{vm.user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="data-label" data-translate="userManagement.profiles">Profiles</td>
-                                            <td>
-                                                <ul class="list-unstyled">
-                                                    <li class="m-b-xs" ng-repeat="userGroup in vm.user.userGroups">
-                                                        <span class="label label-info">{{userGroup}}</span>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                </div>
-            </div>
-        </div>
-        <div class="dataconstraint-container">
-            <div class="fbibox">
-                <div class="fbibox-title">
-                    <h2>Data Access Controls </h2>
-                    <button class="btn btn-primary pull-right" ui-sref="user-management-detail.newConstraint">
-                            <span class="fa fa-plus"></span>
-                            <span>Create a New Constraint</span>
-                    </button>
-                </div>
-                <div class="fbibox-content">
-                        <div class="table-responsive">
-                                <table class="jh-table table table-striped flair-table-v1">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <span>Constraint Id</span>
-                                            </th>
-                                            <th>
-                                                <span>Data Source Name</span>
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="datasourceConstraint in vm.datasourceConstraints">
-                                            <td>
-                                                <a>{{datasourceConstraint.id}}</a>
-                                            </td>
-                                            <td>
-                                                <a ui-sref="datasources-detail({id: datasourceConstraint.datasource.id})">{{datasourceConstraint.datasource.name}}</a>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="btn-group flex-btn-group-container">
-                                                    <button type="submit" class="btn btn-default btn-sm" ui-sref="datasource-constraint-detail({id: datasourceConstraint.id})">
-                                                        <span class="fa fa-eye view-icon fa-2x"></span>
-                                                    </button>
-                                                    &nbsp;
-                                                    <button type="submit" class="btn btn-default btn-sm" ui-sref="user-management-detail.editConstraint({constraintId: datasourceConstraint.id})">
-                                                        <span class="fa fa-edit edit-icon fa-2x"></span>
-                                                    </button>
-                                                    &nbsp;
-                                                    <button type="submit" class="btn btn-default btn-sm" ui-sref="user-management-detail.deleteConstraint({constraintId: datasourceConstraint.id})">
-                                                        <span class="fa fa-trash delete-icon fa-2x"></span>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="table-responsive">
+                            <table class="table property-information-table flair-table-v2">
+                                <tbody>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.login">Login</td>
+                                        <td>{{vm.user.login}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.firstName">First Name</td>
+                                        <td>{{vm.user.firstName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.lastName">Last Name</td>
+                                        <td>{{vm.user.lastName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.email">Email</td>
+                                        <td>{{vm.user.email}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.activated">Activated</td>
+                                        <td>{{vm.user.activated}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.langKey">Language Key</td>
+                                        <td>{{vm.user.langKey}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.createdBy">Created By</td>
+                                        <td>{{vm.user.createdBy}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.createdDate">Created Date</td>
+                                        <td>{{vm.user.createdDate | date:'dd/MM/yy HH:mm' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.lastModifiedBy">Last Modified By</td>
+                                        <td>{{vm.user.lastModifiedBy}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.lastModifiedDate">Last Modified Date</td>
+                                        <td>{{vm.user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="data-label" data-translate="userManagement.profiles">Profiles</td>
+                                        <td>
+                                            <ul class="list-unstyled">
+                                                <li class="m-b-xs" ng-repeat="userGroup in vm.user.userGroups">
+                                                    <span class="label label-info">{{userGroup}}</span>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<a href="{{vm.prevRoute}}" class="btn btn-info m-b-lg">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;
-        <span data-translate="entity.action.back"> Back</span>
-</a>
+<button type="submit" ng-click="vm.back()"
+        class="btn btn-primary">
+    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+</button>

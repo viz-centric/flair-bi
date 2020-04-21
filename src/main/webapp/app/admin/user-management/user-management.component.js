@@ -56,6 +56,7 @@
             });
             Principal.identity().then(function (account) {
                 vm.currentAccount = account;
+                vm.isAdmin = account.userGroups && account.userGroups.indexOf("ROLE_ADMIN")>-1 ? true:false;
             });
         }
 

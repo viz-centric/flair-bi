@@ -219,7 +219,7 @@
                 return null;
             }
             // console.log('str to date', date, typeof date);
-            return new Date(date);
+            return Date.parse(date) ? new Date(date) : null;
         }
 
         function endOfDay(date) {
@@ -242,7 +242,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS');
         }
 
     }

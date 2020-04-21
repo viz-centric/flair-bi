@@ -57,6 +57,11 @@
                 font-size: 18px;
                 color: $primary-color;
             }
+            .datasource-constraints-icon{
+                width: 16px;
+                height: 16px;
+                fill: $primary-color;
+            }
             .square-icon{
                 margin-top: 4px;
             }
@@ -198,5 +203,4 @@
     min-height: 0;
     border: 1px solid $border-color;
 }
-
 

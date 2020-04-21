@@ -25,6 +25,11 @@
                     </div>
                     <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === user.login}" ng-repeat="user in vm.users | filter: vm.filterUser">
                         <span>{{user.login}}</span>
+                        <button type="submit" ui-sref="datasource-constraints({login:user.login})">
+                            <svg class="datasource-constraints-icon">
+                                <use xlink:href="#data-constraints" />
+                            </svg>
+                        </button>
                         <button type="submit" ng-click="vm.getUserPermissions(user.login)">
                             <span class="fa fa-share-square-o permission-icon fa-2x square-icon"></span>
                         </button>

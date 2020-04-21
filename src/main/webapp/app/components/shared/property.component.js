@@ -77,6 +77,7 @@
 
         function setCheckboxProperty(value) {
             value = !value;
+            vm.property.value=value;
             VisualDispatchService.setViewEditedBeforeSave(true);
             if (vm.propstype === 'data') {
                 VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");

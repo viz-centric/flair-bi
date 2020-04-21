@@ -868,6 +868,12 @@ ui-breadcrumbs .breadcrumb li.active {
   -webkit-box-shadow: none;
   margin-top: 7px; }
 
+.query {
+  border: 2px dotted #e1e3e3;
+  border-radius: 25px;
+  padding: 10px;
+  background: rgba(234, 234, 234, 0.6); }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1739,6 +1745,10 @@ a {
     .permissions-fbibox .fbibox-content .tree-handle .permission-icon {
       font-size: 18px;
       color: #439dd3; }
+    .permissions-fbibox .fbibox-content .tree-handle .datasource-constraints-icon {
+      width: 16px;
+      height: 16px;
+      fill: #439dd3; }
     .permissions-fbibox .fbibox-content .tree-handle .square-icon {
       margin-top: 4px; }
     .permissions-fbibox .fbibox-content .tree-handle .close-icon {
@@ -4226,7 +4236,12 @@ jhi-alert .alerts .alert-danger {
 
 .flairbi-content-header-fullscreen {
   padding: 0;
-  padding-top: 6px; }
+  padding-top: 6px;
+  position: fixed;
+  top: 0px;
+  z-index: 30;
+  left: 15px;
+  right: 15px; }
 
 .dashboard-filter-header {
   height: 35px;
@@ -4724,11 +4739,6 @@ jhi-alert .alerts .alert-danger {
   height: 425px;
   overflow-y: auto;
   overflow-x: hidden; }
-  .data-constrains-properties .data-constaraint-conditions-container .query {
-    border: 2px dotted #e1e3e3;
-    border-radius: 25px;
-    padding: 10px;
-    background: rgba(234, 234, 234, 0.6); }
   .data-constrains-properties .data-constaraint-conditions-container fieldset {
     padding: 0.35em 0.625em 0.75em !important;
     min-width: 0px !important;
@@ -5643,6 +5653,14 @@ ui bootstrap tweaks
     .constraint-field .user-data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
+
+.user-management-table .datasource-constraints-icon {
+  width: 16px;
+  height: 20px; }
+
+.user-management-table .click-here-dc-icon {
+  color: #439dd3;
+  font-size: 1.5em; }
 
 .filter-area .filter-element label {
   font-weight: 600;

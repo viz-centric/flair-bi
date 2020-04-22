@@ -8,7 +8,7 @@
                             From
                             Date</h4>
                         <input type="text" class="form-control" name="fromDate" enable-time="false"
-                            datetime-picker="{{vm.dateFormat}}" ng-model="vm.fromDate"
+                            uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.fromDate"
                             is-open="vm.datePickerOpenStatus.fromDate" />
                         <span class="input-group-btn flair-date-icon">
                             <button type="button" class="btn btn-default"
@@ -25,7 +25,7 @@
                             To
                             Date</h4>
                         <input type="text" class="form-control" name="toDate" enable-time="false"
-                            datetime-picker="{{vm.dateFormat}}" ng-model="vm.toDate"
+                            uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.toDate"
                             is-open="vm.datePickerOpenStatus.toDate" />
                         <span class="input-group-btn flair-date-icon">
                             <button type="button" class="btn btn-default"

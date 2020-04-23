@@ -169,8 +169,19 @@
                     startDate: startDate,
                     endDate: endDate
                 });
-                filterParametersService.saveDynamicDateRangeToolTip(vm.dimension.name,vm.currentDynamicDateRangeConfig,vm.customDynamicDateRange)
+                filterParametersService.saveDynamicDateRangeToolTip(getDynamicDateRangeToolTip(vm.dimension.name,vm.currentDynamicDateRangeConfig,vm.customDynamicDateRange));
             }
+        }
+
+        function getDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
+            var dynamicDateRangeToolTip = {name:'',text:''};
+                dynamicDateRangeToolTip.name = filterParametersService.buildDateRangeFilterName(dimensionName);
+            if(currentDynamicDateRangeConfig.isCustom){
+                dynamicDateRangeToolTip.text = 'Last '+customDynamicDateRange; 
+            }else{
+                dynamicDateRangeToolTip.text = currentDynamicDateRangeConfig.title;
+            }
+            return dynamicDateRangeToolTip;
         }
 
         function setDateRangeSubscription() {

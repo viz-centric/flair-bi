@@ -40,6 +40,9 @@ public class FeatureBookmark implements Serializable {
     @Column(name = "date_range")
     private boolean dateRange;
 
+    @Column(name = "dynamic_tooltip")
+    private String dynamicTooltip;
+
     @PreRemove
     public void preRemove() {
         this.datasource = null;
@@ -126,7 +129,15 @@ public class FeatureBookmark implements Serializable {
 		this.dateRange = dateRange;
 	}
 
-	@Override
+    public String getDynamicTooltip() {
+        return dynamicTooltip;
+    }
+
+    public void setDynamicTooltip(String dynamicTooltip) {
+        this.dynamicTooltip = dynamicTooltip;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

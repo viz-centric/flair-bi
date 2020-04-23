@@ -60,6 +60,7 @@
                 lasso: false,
                 filter: {}
             };
+            resetDynamicDateRangeToolTip();
         }
 
         function createBetweenExpressionBody(value, secondValue, featureName, dataType,activeTab) {
@@ -238,13 +239,10 @@
             return COMPARABLE_DATA_TYPES;
         }
 
-        function saveDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
-            if(currentDynamicDateRangeConfig.isCustom){
-                dynamicDateRangeToolTip[buildDateRangeFilterName(dimensionName)]='Last '+customDynamicDateRange; 
-            }else{
-                dynamicDateRangeToolTip[buildDateRangeFilterName(dimensionName)]=currentDynamicDateRangeConfig.title;
-            }
+        function saveDynamicDateRangeToolTip(dynamicDateRangeToolTipTemp){
+            dynamicDateRangeToolTip[dynamicDateRangeToolTipTemp.name] = dynamicDateRangeToolTipTemp.text;
         }
+
         function getDynamicDateRangeToolTip(dimensionName){
             if(dynamicDateRangeToolTip[dimensionName]){
                 return dynamicDateRangeToolTip[dimensionName];

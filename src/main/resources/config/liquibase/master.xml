@@ -66,6 +66,7 @@
     <include file="config/liquibase/changelog/20170908231600_added_DatasourceConstraint_seed.xml" relativeToChangelogFile="false"/>
 	<include file="config/liquibase/changelog/20190906113649_added_feature_bookmark_daterange.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200316100000_added_features_favourite_filter.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200421113649_added_feature_bookmark_dynamic_tooltip.xml" relativeToChangelogFile="false" />
 
 </databaseChangeLog>
 <!--@formatter:on-->

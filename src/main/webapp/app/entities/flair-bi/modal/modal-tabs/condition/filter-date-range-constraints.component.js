@@ -81,7 +81,6 @@
         vm.currentDimension = {};
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
-        vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
         vm.onCustomDynamicDateRangeChange = onCustomDynamicDateRangeChange;
         vm.dateRangeTab = 0;
         vm.currentDynamicDateRangeConfig = null;
@@ -155,11 +154,6 @@
                 return date;
             }
             return null;
-        }
-
-        function onDynamicDateRangeChanged(config) {
-            vm.currentDynamicDateRangeConfig = config;
-            onInputChange();
         }
 
         function onInputChange() {

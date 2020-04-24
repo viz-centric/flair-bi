@@ -853,6 +853,12 @@ ui-breadcrumbs .breadcrumb li.active {
   background: #ededed;
   border-bottom: 1px solid #439dd3; }
 
+.date-range-component {
+  padding: 6px 6px 0 6px; }
+
+.dynamic-date-range-select {
+  padding: 10px 0 0 0; }
+
 .dynamic-days {
   background-color: #FFFFFF;
   background-image: none;

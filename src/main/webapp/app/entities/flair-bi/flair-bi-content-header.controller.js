@@ -652,6 +652,7 @@
 
         function clearFilters() {
             vm.selectedBookmark = null;
+            $rootScope.activePage.activePageNo = 0;
             $rootScope.$broadcast("flairbiApp:clearFilters");
         }
 
@@ -670,7 +671,6 @@
         }
 
         function ngIfClearFilters() {
-            $rootScope.activePage.activePageNo = 0;
             return showOpt && !$rootScope.exploration;
         }
 

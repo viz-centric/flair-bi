@@ -203,7 +203,9 @@
                 metadata: {
                     startDateFormatted: startDateFormatted,
                     endDateFormatted: endDateFormatted,
-                    tab: vm.dateRangeTab
+                    tab: vm.dateRangeTab,
+                    currentDynamicDateRangeConfig : vm.currentDynamicDateRangeConfig,
+                    customDynamicDateRange : vm.customDynamicDateRange
                 }
             });
         }
@@ -226,6 +228,8 @@
             }
             vm.currentDimension = {selected: selected, selected2: selected2};
             vm.dateRangeTab = tab;
+            vm.currentDynamicDateRangeConfig = condition.metadata.currentDynamicDateRangeConfig;
+            vm.customDynamicDateRange = condition.metadata.customDynamicDateRange;
             console.log('date component: on changes after', vm.currentDimension.selected, vm.currentDimension.selected2);
             onInputChange();
         }

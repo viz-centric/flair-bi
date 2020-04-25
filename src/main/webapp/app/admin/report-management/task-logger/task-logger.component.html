@@ -112,8 +112,8 @@
     <div class="text-center" ng-if="vm.totalJiraTickets>0">
         <jhi-item-count page="vm.jiraPage" total="vm.jiraQueryCount" items-per-page="vm.JiraItemsPerPage">
         </jhi-item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
-            ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></uib-pagination>
+        <ul uib-pagination class="pagination-sm" total-items="vm.totalJiraTickets" ng-model="vm.jiraPage"
+            ng-change="vm.jiraLoadPage(vm.jiraPage)" items-per-page="vm.JiraItemsPerPage"></ul>
     </div>
 
 </div>

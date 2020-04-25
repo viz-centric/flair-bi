@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.project.bi</groupId>
     <artifactId>flairbi</artifactId>
-    <version>2.5.1-SNAPSHOT</version>
+    <version>2.5.3-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flairbi</name>
     <prerequisites>

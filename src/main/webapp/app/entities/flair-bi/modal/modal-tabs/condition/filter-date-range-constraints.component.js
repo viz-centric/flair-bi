@@ -15,64 +15,12 @@
             }
         });
 
-    FilterDateRangeConstraintsController.$inject = ['$scope'];
+    FilterDateRangeConstraintsController.$inject = ['$scope','DYNAMIC_DATE_RANGE_CONFIG'];
 
-    function FilterDateRangeConstraintsController($scope) {
+    function FilterDateRangeConstraintsController($scope,DYNAMIC_DATE_RANGE_CONFIG) {
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
-
-        var DYNAMIC_DATE_RANGE_CONFIG = [
-            {
-                title: 'Last 7 days',
-                period: {
-                    months: 0,
-                    days: 7
-                }
-            },
-            {
-                title: 'Last 30 days',
-                period: {
-                    months: 1,
-                    days: 0
-                }
-            },
-            {
-                title: 'Last 90 days',
-                period: {
-                    months: 3,
-                    days: 0
-                }
-            },
-            {
-                title: 'Last 365 days',
-                period: {
-                    months: 12,
-                    days: 0
-                }
-            },
-            {
-                title: 'Week to date',
-                toDate: 'isoWeek'
-            },
-            {
-                title: 'Month to date',
-                toDate: 'month'
-            },
-            {
-                title: 'Quarter to date',
-                toDate: 'quarter'
-            },
-            {
-                title: 'Year to date',
-                toDate: 'year'
-            },
-            {
-                title: 'Custom X days',
-                isCustom: true
-            }
-        ];
-
         var vm = this;
 
         vm.$onInit = onInit;

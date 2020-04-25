@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES) {
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -20,7 +20,7 @@
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
-        vm.channels = scheduler_channels;
+        vm.channels = SCHEDULER_CHANNELS;
         vm.COMPARISIONS = COMPARISIONS;
         vm.TIME_UNIT = TIME_UNIT;
         vm.datePickerOpenStatus = {};

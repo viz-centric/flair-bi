@@ -14,14 +14,14 @@
             }
         });
 
-    ticketSchedulerDialog.$inject = ['$rootScope', 'ChannelService', 'scheduler_channels'];
+    ticketSchedulerDialog.$inject = ['$rootScope', 'ChannelService', 'SCHEDULER_CHANNELS'];
 
-    function ticketSchedulerDialog($rootScope, ChannelService, scheduler_channels) {
+    function ticketSchedulerDialog($rootScope, ChannelService, SCHEDULER_CHANNELS) {
         var vm = this;
         vm.clear = vm.close;
         vm.webhookList = vm.resolve.data;
         vm.notifyOpenedJiraTicket = notifyOpenedJiraTicket;
-        vm.channels = scheduler_channels;
+        vm.channels = SCHEDULER_CHANNELS;
         vm.setChannel = setChannel;
         vm.selectedChannel = [];
         vm.webhook = 0;

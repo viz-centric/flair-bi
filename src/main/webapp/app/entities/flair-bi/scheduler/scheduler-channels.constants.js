@@ -3,6 +3,6 @@
 
     angular
         .module('flairbiApp')
-        .constant('scheduler_channels', {'Email':false,'Teams':false}
+        .constant('SCHEDULER_CHANNELS', {'Email':false,'Teams':false}
         );
 })();

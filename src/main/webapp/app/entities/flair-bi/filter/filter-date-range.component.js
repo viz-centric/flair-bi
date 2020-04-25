@@ -200,7 +200,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
         }
 
     }

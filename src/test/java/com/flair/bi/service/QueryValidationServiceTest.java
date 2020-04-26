@@ -4,6 +4,7 @@ import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.dto.SortDTO;
+import com.project.bi.query.expression.operations.ScalarOperation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,9 +35,8 @@ public class QueryValidationServiceTest {
         query.setGroupBy(asList(new FieldDTO("order", "COUNT", "alias")));
         query.setHaving(asList(new HavingDTO(
                 new FieldDTO("name", "MAX", "namemax"),
-                "190",
                 HavingDTO.ComparatorType.GT,
-                null
+                new ScalarOperation("190")
         )));
         query.setOrders(asList(new SortDTO(
                 new FieldDTO("order"),
@@ -95,7 +95,7 @@ public class QueryValidationServiceTest {
         QueryDTO query = new QueryDTO();
         FieldDTO field = new FieldDTO();
         field.setName("TEST-");
-        query.setHaving(asList(new HavingDTO(field, "100", HavingDTO.ComparatorType.GT, null)));
+        query.setHaving(asList(new HavingDTO(field, HavingDTO.ComparatorType.GT, new ScalarOperation("100"))));
         QueryValidationResult result = service.validate(query);
         assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
         assertEquals(asList(QueryValidationError.of("TEST-", "FieldNameInvalid")), result.getErrors());
@@ -106,10 +106,10 @@ public class QueryValidationServiceTest {
         QueryDTO query = new QueryDTO();
         FieldDTO field = new FieldDTO();
         field.setName("TEST");
-        query.setHaving(asList(new HavingDTO(field, "100-", HavingDTO.ComparatorType.GT, null)));
+        query.setHaving(asList(new HavingDTO(field, HavingDTO.ComparatorType.GT, null)));
         QueryValidationResult result = service.validate(query);
         assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("100-", "HavingValueInvalid")), result.getErrors());
+        assertEquals(asList(QueryValidationError.of("", "HavingValueInvalid")), result.getErrors());
     }
 
     @Test

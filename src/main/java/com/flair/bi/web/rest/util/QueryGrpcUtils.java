@@ -19,6 +19,7 @@ import com.project.bi.query.expression.condition.impl.ContainsConditionExpressio
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
+import com.project.bi.query.expression.operations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,7 +85,7 @@ public final class QueryGrpcUtils {
         return havingList.stream()
                 .map(h -> HavingDTO.builder()
                         .feature(toFieldDTO(h.getFeature()))
-                        .value(h.getValue())
+                        .operation(createOperation(h.getOperation()))
                         .comparatorType(HavingDTO.ComparatorType.valueOf(h.getComparatorType().name()))
                         .build()
                 )
@@ -126,6 +127,13 @@ public final class QueryGrpcUtils {
         return JacksonUtil.fromString(
                 conditionExpressionString,
                 getConditionExpressionInstance(expressionType).getClass()
+        );
+    }
+
+    private static Operation createOperation(String operationJson) {
+        return JacksonUtil.fromString(
+                operationJson,
+                Operation.class
         );
     }
 

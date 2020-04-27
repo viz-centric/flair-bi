@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'scheduler_channels', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, scheduler_channels, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES) {
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -20,7 +20,7 @@
         vm.clear = clear;
         vm.schedule = schedule;
         vm.timezoneGroups = TIMEZONES;
-        vm.channels = scheduler_channels;
+        vm.channels = SCHEDULER_CHANNELS;
         vm.COMPARISIONS = COMPARISIONS;
         vm.TIME_UNIT = TIME_UNIT;
         vm.datePickerOpenStatus = {};
@@ -120,7 +120,7 @@
                         getThresholdMeasureList(visualMetaData.fields);
                         if ($rootScope.isThresholdAlert) {
                             vm.scheduleObj.report.thresholdAlert = true;
-                            vm.condition.value = $rootScope.ThresholdViz.measureValue;
+                            vm.condition.operation.value = $rootScope.ThresholdViz.measureValue;
                             vm.condition.featureName = $rootScope.ThresholdViz.measure;
                         }
                         buildScheduleObject(vm.visualMetaData, vm.datasource, vm.dashboard, vm.view);
@@ -237,8 +237,9 @@
 
         function setHavingDTO(query) {
             if (query.having) {
+                const operation = JSON.parse(query.having[0].operation || '{}');
                 vm.condition.featureName = query.having[0].feature.name;
-                vm.condition.value = query.having[0].value;
+                vm.condition.value = operation.value;
                 vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
                     return item.opt === query.having[0].comparatorType;
                 })[0];
@@ -560,7 +561,10 @@
             var havingField = getMeasureField();
             var havingDTO = {
                 feature: havingField,
-                value: vm.condition.value,
+                operation: {
+                    '@type': 'scalar',
+                    value: vm.condition.value
+                },
                 comparatorType: vm.condition.compare.opt
             };
             having.push(havingDTO);

@@ -56,7 +56,6 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/tinycolor/tinycolor.js',
             'src/main/webapp/bower_components/sockjs/sockjs.js',
             'src/main/webapp/bower_components/stomp-websocket/lib/stomp.min.js',
-            'src/main/webapp/bower_components/cronstrue/dist/cronstrue.js',
             'src/main/webapp/bower_components/d3/d3.js',
             'src/main/webapp/bower_components/angular/angular.js',
             'src/main/webapp/bower_components/angular-aria/angular-aria.js',

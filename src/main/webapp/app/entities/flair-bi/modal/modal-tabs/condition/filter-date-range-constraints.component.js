@@ -15,64 +15,12 @@
             }
         });
 
-    FilterDateRangeConstraintsController.$inject = ['$scope'];
+    FilterDateRangeConstraintsController.$inject = ['$scope','DYNAMIC_DATE_RANGE_CONFIG'];
 
-    function FilterDateRangeConstraintsController($scope) {
+    function FilterDateRangeConstraintsController($scope,DYNAMIC_DATE_RANGE_CONFIG) {
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
-
-        var DYNAMIC_DATE_RANGE_CONFIG = [
-            {
-                title: 'Last 7 days',
-                period: {
-                    months: 0,
-                    days: 7
-                }
-            },
-            {
-                title: 'Last 30 days',
-                period: {
-                    months: 1,
-                    days: 0
-                }
-            },
-            {
-                title: 'Last 90 days',
-                period: {
-                    months: 3,
-                    days: 0
-                }
-            },
-            {
-                title: 'Last 365 days',
-                period: {
-                    months: 12,
-                    days: 0
-                }
-            },
-            {
-                title: 'Week to date',
-                toDate: 'isoWeek'
-            },
-            {
-                title: 'Month to date',
-                toDate: 'month'
-            },
-            {
-                title: 'Quarter to date',
-                toDate: 'quarter'
-            },
-            {
-                title: 'Year to date',
-                toDate: 'year'
-            },
-            {
-                title: 'Custom X days',
-                isCustom: true
-            }
-        ];
-
         var vm = this;
 
         vm.$onInit = onInit;
@@ -81,7 +29,6 @@
         vm.currentDimension = {};
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
-        vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
         vm.onCustomDynamicDateRangeChange = onCustomDynamicDateRangeChange;
         vm.dateRangeTab = 0;
         vm.currentDynamicDateRangeConfig = null;
@@ -157,11 +104,6 @@
             return null;
         }
 
-        function onDynamicDateRangeChanged(config) {
-            vm.currentDynamicDateRangeConfig = config;
-            onInputChange();
-        }
-
         function onInputChange() {
             console.log('filter-date-range-constraints: input change', vm.dateRangeTab);
             var startDate;
@@ -203,7 +145,9 @@
                 metadata: {
                     startDateFormatted: startDateFormatted,
                     endDateFormatted: endDateFormatted,
-                    tab: vm.dateRangeTab
+                    tab: vm.dateRangeTab,
+                    currentDynamicDateRangeConfig : vm.currentDynamicDateRangeConfig,
+                    customDynamicDateRange : vm.customDynamicDateRange
                 }
             });
         }
@@ -226,6 +170,8 @@
             }
             vm.currentDimension = {selected: selected, selected2: selected2};
             vm.dateRangeTab = tab;
+            vm.currentDynamicDateRangeConfig = condition.metadata.currentDynamicDateRangeConfig;
+            vm.customDynamicDateRange = condition.metadata.customDynamicDateRange;
             console.log('date component: on changes after', vm.currentDimension.selected, vm.currentDimension.selected2);
             onInputChange();
         }
@@ -280,7 +226,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
         }
 
     }

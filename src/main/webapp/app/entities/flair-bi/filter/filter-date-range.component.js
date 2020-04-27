@@ -14,67 +14,14 @@
             }
         });
 
-    FilterDateRangeController.$inject = ['$scope','filterParametersService'];
+    FilterDateRangeController.$inject = ['$scope','filterParametersService','DYNAMIC_DATE_RANGE_CONFIG'];
 
-    function FilterDateRangeController($scope,filterParametersService) {
+    function FilterDateRangeController($scope,filterParametersService,DYNAMIC_DATE_RANGE_CONFIG) {
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
         setDateRangeSubscription();
-
-        var DYNAMIC_DATE_RANGE_CONFIG = [
-            {
-                title: 'Last 7 days',
-                period: {
-                    months: 0,
-                    days: 7
-                }
-            },
-            {
-                title: 'Last 30 days',
-                period: {
-                    months: 1,
-                    days: 0
-                }
-            },
-            {
-                title: 'Last 90 days',
-                period: {
-                    months: 3,
-                    days: 0
-                }
-            },
-            {
-                title: 'Last 365 days',
-                period: {
-                    months: 12,
-                    days: 0
-                }
-            },
-            {
-                title: 'Week to date',
-                toDate: 'isoWeek'
-            },
-            {
-                title: 'Month to date',
-                toDate: 'month'
-            },
-            {
-                title: 'Quarter to date',
-                toDate: 'quarter'
-            },
-            {
-                title: 'Year to date',
-                toDate: 'year'
-            },
-            {
-                title: 'Custom X days',
-                isCustom: true
-            }
-        ];
-
         var vm = this;
-
         vm.$onInit = onInit;
         vm.$onChanges = $onChanges;
         vm.currentDimension = {};
@@ -169,8 +116,19 @@
                     startDate: startDate,
                     endDate: endDate
                 });
-                filterParametersService.saveDynamicDateRangeToolTip(vm.dimension.name,vm.currentDynamicDateRangeConfig,vm.customDynamicDateRange)
+                filterParametersService.saveDynamicDateRangeToolTip(getDynamicDateRangeToolTip(vm.dimension.name,vm.currentDynamicDateRangeConfig,vm.customDynamicDateRange));
             }
+        }
+
+        function getDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
+            var dynamicDateRangeToolTip = {name:'',text:''};
+                dynamicDateRangeToolTip.name = filterParametersService.buildDateRangeFilterName(dimensionName);
+            if(currentDynamicDateRangeConfig.isCustom){
+                dynamicDateRangeToolTip.text = 'Last '+customDynamicDateRange; 
+            }else{
+                dynamicDateRangeToolTip.text = currentDynamicDateRangeConfig.title;
+            }
+            return dynamicDateRangeToolTip;
         }
 
         function setDateRangeSubscription() {
@@ -242,7 +200,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
         }
 
     }

@@ -818,6 +818,7 @@
                 } else {
                     $rootScope.hideHeader = $rootScope.isFullScreen;
                 }
+                filterParametersService.resetDynamicDateRangeToolTip();
                 if (VisualDispatchService.getViewEditedBeforeSave()) {
                     transition.abort();
                     swal(

@@ -16,6 +16,7 @@ import com.project.bi.query.expression.condition.impl.ContainsConditionExpressio
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
+import com.project.bi.query.expression.operations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -125,7 +126,7 @@ public class QueryTransformerService {
                     FieldDTO fieldDTO = transformFieldNoAlias(features, h.getFeature());
                     return Query.HavingHolder.newBuilder()
                             .setFeature(toProtoField(fieldDTO))
-                            .setValue(h.getValue())
+                            .setOperation(getJsonFromOperation(h.getOperation()))
                             .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
                             .build();
                 })
@@ -219,6 +220,10 @@ public class QueryTransformerService {
 
     private String getJsonFromConditionExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {
         return JacksonUtil.toString(sanitizeConditionalExpression(conditionExpression, features));
+    }
+
+    private String getJsonFromOperation(Operation operation) {
+        return JacksonUtil.toString(operation);
     }
 
     private ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {

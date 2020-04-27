@@ -183,6 +183,7 @@
 
         function addFilterFromBookmark(selectedBookmark) {
             var filter = {};
+            var dynamicDateRangeToolTip = {name:'',text:''};
             var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function (criteria) {
                 var isTemporal = selectedBookmark.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
@@ -190,6 +191,11 @@
                     ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
                     : criteria.feature.name;
                 var valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
+                if(isTemporal && selectedBookmark.dynamicTooltip){
+                    dynamicDateRangeToolTip.name = featureName;
+                    dynamicDateRangeToolTip.text = selectedBookmark.dynamicTooltip;
+                    filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
+                }
                 filter[featureName] = criteria.value.split("||");
                 filter[featureName]._meta = {
                     dataType: criteria.feature.type,
@@ -422,7 +428,6 @@
             angular.forEach(filters, function (value, key) {
                 vm.toolTipTexts[key]=getFiltersToolTipName(key);
             });
-            filterParametersService.resetDynamicDateRangeToolTip();
         }
 
         function getKeyName(name) {
@@ -569,6 +574,7 @@
             var params = filterParametersService.get();
             var filterCriterias = [];
             var dateRange = false;
+            var dateRangeFeatureName = "";
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
                     var param = params[key];
@@ -583,6 +589,7 @@
                             if (isDateRange(key)) {
                                 dateRange = true;
                                 featureName = key.split('|')[1].toLowerCase();
+                                dateRangeFeatureName = key; 
                             } else {
                                 featureName = key.toLowerCase();
                             }
@@ -607,7 +614,8 @@
                                 name: null,
                                 featureCriteria: filterCriterias,
                                 datasource: vm.view.viewDashboard.dashboardDatasource,
-                                dateRange: dateRange
+                                dateRange: dateRange,
+                                dynamicTooltip : filterParametersService.getDynamicDateRangeToolTip(dateRangeFeatureName)
                             };
                         }
                     }
@@ -644,6 +652,7 @@
 
         function clearFilters() {
             vm.selectedBookmark = null;
+            $rootScope.activePage.activePageNo = 0;
             $rootScope.$broadcast("flairbiApp:clearFilters");
         }
 
@@ -662,7 +671,6 @@
         }
 
         function ngIfClearFilters() {
-            $rootScope.activePage.activePageNo = 0;
             return showOpt && !$rootScope.exploration;
         }
 

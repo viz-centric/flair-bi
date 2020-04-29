@@ -85,11 +85,9 @@ public class QueryValidationService {
         if (validationError.isPresent()) {
             return validationError;
         }
-        if (!StringUtils.isEmpty(having.getValue())
-                && !FIELD_REGEX.matcher(having.getValue()).matches()) {
+        if (having.getOperation() == null) {
             return Optional.ofNullable(
-                    QueryValidationError.of(having.getValue(),
-                            "HavingValueInvalid")
+                    QueryValidationError.of("", "HavingValueInvalid")
             );
         }
         return Optional.empty();

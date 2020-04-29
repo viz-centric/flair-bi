@@ -120,7 +120,7 @@
                         getThresholdMeasureList(visualMetaData.fields);
                         if ($rootScope.isThresholdAlert) {
                             vm.scheduleObj.report.thresholdAlert = true;
-                            vm.condition.value = $rootScope.ThresholdViz.measureValue;
+                            vm.condition.operation.value = $rootScope.ThresholdViz.measureValue;
                             vm.condition.featureName = $rootScope.ThresholdViz.measure;
                         }
                         buildScheduleObject(vm.visualMetaData, vm.datasource, vm.dashboard, vm.view);
@@ -237,8 +237,9 @@
 
         function setHavingDTO(query) {
             if (query.having) {
+                const operation = JSON.parse(query.having[0].operation || '{}');
                 vm.condition.featureName = query.having[0].feature.name;
-                vm.condition.value = query.having[0].value;
+                vm.condition.value = operation.value;
                 vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
                     return item.opt === query.having[0].comparatorType;
                 })[0];
@@ -560,7 +561,10 @@
             var havingField = getMeasureField();
             var havingDTO = {
                 feature: havingField,
-                value: vm.condition.value,
+                operation: {
+                    '@type': 'scalar',
+                    value: vm.condition.value
+                },
                 comparatorType: vm.condition.compare.opt
             };
             having.push(havingDTO);

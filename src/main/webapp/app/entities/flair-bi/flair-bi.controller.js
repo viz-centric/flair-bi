@@ -137,8 +137,6 @@
             $rootScope.updateWidget = {}
             if (!VisualDispatchService.getApplyBookmark()) {
                 filterParametersService.clear();
-            } else {
-                vm.filtersLength = filterParametersService.getFiltersCount();
             }
             VisualMetadataContainer.clear();
             VisualDispatchService.clearAll();
@@ -174,6 +172,9 @@
             connectWebSocket();
             registerAlternateDimension();
             vm.features = featureEntities;
+            registerToggleHeaderFilter();
+            registerToggleFullScreenFilter();
+            vm.filtersLength = filterParametersService.getFiltersCount();
         }
 
         function registerFilterCountChanged() {
@@ -774,6 +775,31 @@
             vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
             });
+        }
+
+        function registerToggleHeaderFilter() {
+            var toggleHeaderFiltersUnsubscribeOff = $scope.$on(
+                "flairbiApp:toggle-headers-filters",
+                function (event,result) {
+                    onFiltersCountChange();
+                    vm.showFSFilter = !result;
+                }
+            );
+            $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
+        }
+
+        function onFiltersCountChange(){
+            vm.filtersLength = filterParametersService.getFiltersCount();
+        }
+
+        function registerToggleFullScreenFilter() {
+            var toggleFullScreenFiltersUnsubscribeOff = $scope.$on(
+                "flairbiApp:toggle-fullscreen-header-filters",
+                function (event,result) {
+                    vm.showFSFilter = result;
+                }
+            );
+            $scope.$on("$destroy", toggleFullScreenFiltersUnsubscribeOff);
         }
 
         function registerToggleFilterOff() {

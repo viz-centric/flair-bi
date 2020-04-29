@@ -85,6 +85,8 @@
             registerOnChartPropertiesUpdate();
             registerToggleWidgetsOn();
             registerToggleWidgetsOff();
+            registerToggleHeaderFilter();
+            filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
         }
 
         ////////////////
@@ -198,6 +200,20 @@
                 refresh();
             });
             $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerToggleHeaderFilter() {
+            var toggleHeaderFiltersUnsubscribeOff = $scope.$on(
+                "flairbiApp:toggle-headers-filters",
+                function (event, isFiltersApplied) {
+                    setThinBarStyle(isFiltersApplied);
+                }
+            );
+            $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
+        }
+
+        function setThinBarStyle(isFiltersApplied){
+            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "58px"} : {"margin-top": "100px"} 
         }
 
         function registerToggleFilterOn() {

@@ -10,6 +10,7 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContext;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContextBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +32,8 @@ public class ClientGrpcConfig {
 
     public ClientGrpcConfig(GrpcProperties properties,
                             EurekaClient eurekaClient,
-                            @Value("${flair-engine.url}") String engineUrl,
-                            @Value("${flair-notifications.url}") String notificationsUrl) {
+                            @Value("${flair-engine.url:}") String engineUrl,
+                            @Value("${flair-notifications.url:}") String notificationsUrl) {
         this.properties = properties;
         this.eurekaClient = eurekaClient;
         this.serviceNames = ImmutableMap.of(
@@ -75,7 +76,7 @@ public class ClientGrpcConfig {
             NettyChannelBuilder nettyChannelBuilder;
 
             String serviceUrl = this.serviceNames.get(serviceName);
-            if (serviceUrl != null) {
+            if (!StringUtils.isEmpty(serviceUrl)) {
                 nettyChannelBuilder = NettyChannelBuilder.forTarget(serviceUrl);
 
                 log.info("GRPC config: Hostname url {}", serviceUrl);

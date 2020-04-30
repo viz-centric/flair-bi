@@ -1,5 +1,6 @@
 package com.flair.bi.websocket.grpc.config;
 
+import com.google.common.collect.ImmutableMap;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import io.grpc.ManagedChannel;
@@ -8,23 +9,37 @@ import io.grpc.netty.shaded.io.grpc.netty.NegotiationType;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContext;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContextBuilder;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.net.ssl.SSLException;
 import java.io.File;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @Configuration
-@RequiredArgsConstructor
 @Slf4j
 public class ClientGrpcConfig {
 
     private final GrpcProperties properties;
 
     private final EurekaClient eurekaClient;
+
+    private final Map<String, String> serviceNames;
+
+    public ClientGrpcConfig(GrpcProperties properties,
+                            EurekaClient eurekaClient,
+                            @Value("${flair-engine.url}") String engineUrl,
+                            @Value("${flair-notifications.url}") String notificationsUrl) {
+        this.properties = properties;
+        this.eurekaClient = eurekaClient;
+        this.serviceNames = ImmutableMap.of(
+                properties.getServer().getEngineServiceName(), engineUrl,
+                properties.getServer().getNotificationsServiceName(), notificationsUrl
+        );
+    }
 
     @Bean(name = "engineChannelFactory")
     public ManagedChannelFactory engineChannelFactory() {
@@ -57,18 +72,24 @@ public class ClientGrpcConfig {
             log.info("GRPC client config: Configuring GRPC message channel serviceName {} tlsEnabled {} trustCertCollectionFile {} clientCertChainFile {} clientPrivateKeyFile {}",
                     serviceName, tlsEnabled, trustCertCollectionFile, clientCertChainFile, clientPrivateKeyFile);
 
-            final InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka(
-                    serviceName,
-                    false);
+            NettyChannelBuilder nettyChannelBuilder;
 
-            final NettyChannelBuilder nettyChannelBuilder = NettyChannelBuilder.forAddress(
-                    tlsEnabled ? instanceInfo.getHostName() : instanceInfo.getIPAddr(),
-                    instanceInfo.getPort()
-            );
+            String serviceUrl = this.serviceNames.get(serviceName);
+            if (serviceUrl != null) {
+                nettyChannelBuilder = NettyChannelBuilder.forTarget(serviceUrl);
 
-            log.info("GRPC client config: Hostname {} IP {} port {} secure port {} secure vip {}",
-                    instanceInfo.getHostName(), instanceInfo.getIPAddr(), instanceInfo.getPort(), instanceInfo.getSecurePort(),
-                    instanceInfo.getSecureVipAddress());
+                log.info("GRPC config: Hostname url {}", serviceUrl);
+            } else {
+                InstanceInfo instanceInfo = eurekaClient.getNextServerFromEureka(serviceName, false);
+
+                nettyChannelBuilder = NettyChannelBuilder.forAddress(
+                        tlsEnabled ? instanceInfo.getHostName() : instanceInfo.getIPAddr(),
+                        instanceInfo.getPort());
+
+                log.info("GRPC config: Hostname {} IP {} port {} secure port {} secure vip {}",
+                        instanceInfo.getHostName(), instanceInfo.getIPAddr(), instanceInfo.getPort(), instanceInfo.getSecurePort(),
+                        instanceInfo.getSecureVipAddress());
+            }
 
             if (tlsEnabled) {
 

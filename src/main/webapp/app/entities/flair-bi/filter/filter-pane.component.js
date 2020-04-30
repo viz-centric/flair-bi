@@ -9,7 +9,8 @@
             controllerAs: 'vm',
             bindings: {
                 dimensions: '=',
-                view: '='
+                view: '=',
+                type: '@'
             }
         });
 

@@ -540,9 +540,11 @@
             </div>
 
             <div ng-show="vm.sideBarTab == 'filters'">
+                <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters"></filter-pane-component>
+            </div>
 
-                <filter-pane-component view="vm.view" dimensions="vm.dimensions"></filter-pane-component>
-
+            <div ng-show="vm.sideBarTab == 'applied-filters'">
+                <filter-pane-component view="vm.view" dimensions="vm.appliedFiltersDimensions" type="Applied Filters"></filter-pane-component>
             </div>
 
             <div ng-show="vm.sideBarTab == 'widgets'">
@@ -635,7 +637,7 @@
                 <use xlink:href="#favourite-filters" />
             </svg>
         </button>
-        <button uib-tooltip="Filters" tooltip-placement="left" style="display:none;">
+        <button uib-tooltip="Applied Filters" tooltip-placement="left" ng-click="vm.onAppliedFiltersOpen()" ng-class="{selected: vm.sideBarTab == 'applied-filters'}">
             <svg class="applied-filter">
                 <use xlink:href="#applied-filter" />
             </svg>

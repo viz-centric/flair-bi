@@ -3,7 +3,6 @@ package com.flair.bi.web.rest.util;
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
-import com.flair.bi.messages.QueryExpr;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -11,7 +10,6 @@ import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.QueryExpDTO;
 import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.dto.SortDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
@@ -102,17 +100,17 @@ public final class QueryGrpcUtils {
                         .feature(toFieldDTO(h.getFeature()))
                         .operation(createOperation(h.getOperation()))
                         .comparatorType(HavingDTO.ComparatorType.valueOf(h.getComparatorType().name()))
+                        .operation(toQueryDTO(h.getOperation()))
                         .build()
                 )
                 .collect(Collectors.toList());
     }
 
-    private static QueryExpDTO toQueryExpr(QueryExpr queryExpr) {
-        QueryDTO query = null;
-        if (queryExpr.getQuery() != null) {
-            query = mapToQueryDTO(queryExpr.getQuery());
+    private static Operation toQueryDTO(String operationsJson) {
+        if (!StringUtils.isEmpty(operationsJson)) {
+            return JacksonUtil.fromString(operationsJson, Operation.class);
         }
-        return new QueryExpDTO(query, queryExpr.getSign(), queryExpr.getFactor());
+        return null;
     }
 
     private static List<SortDTO> getListSortDTO(List<Query.SortHolder> orders) {

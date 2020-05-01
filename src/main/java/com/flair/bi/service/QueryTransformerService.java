@@ -4,11 +4,9 @@ import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.messages.Query;
-import com.flair.bi.messages.QueryExpr;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.QueryExpDTO;
 import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
 import com.project.bi.query.expression.condition.ConditionExpression;
@@ -143,24 +141,13 @@ public class QueryTransformerService {
         return having.stream()
                 .map(h -> {
                     FieldDTO fieldDTO = transformFieldNoAlias(features, h.getFeature());
-                    Query.HavingHolder.Builder builder = Query.HavingHolder.newBuilder()
+                    return Query.HavingHolder.newBuilder()
                             .setFeature(toProtoField(fieldDTO))
                             .setOperation(getJsonFromOperation(h.getOperation()))
                             .setComparatorType(Query.HavingHolder.ComparatorType.valueOf(h.getComparatorType().name()))
                             .build();
                 })
                 .collect(toList());
-    }
-
-    private QueryExpr toQueryExpr(QueryExpDTO queryExp) {
-        QueryExpr.Builder builder = QueryExpr.newBuilder()
-                .setSign(queryExp.getSign())
-                .setFactor(queryExp.getFactor());
-        if (queryExp.getQuery() != null) {
-            builder.setQuery(toQuery(queryExp.getQuery(), null, null, null, null));
-        }
-        return builder
-                .build();
     }
 
     private List<FieldDTO> transformSelectFields(Map<String, Feature> features, List<FieldDTO> fields) {

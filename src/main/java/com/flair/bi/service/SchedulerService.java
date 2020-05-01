@@ -23,6 +23,9 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.expression.operations.CompositeOperation;
+import com.project.bi.query.expression.operations.Operation;
+import com.project.bi.query.expression.operations.QueryOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -204,12 +208,11 @@ public class SchedulerService {
 				.ifPresent(queryDTO.getConditionExpressions()::add);
 
 		if (queryDTO.getHaving() != null && queryDTO.getHaving().size() > 0) {
-			queryDTO.getHaving().stream()
-					.filter(h -> h.getValueQuery() != null)
-					.map(h -> h.getValueQuery())
-					.forEach((q -> {
-						q.setSource(queryDTO.getSource());
-					}));
+			List<Operation> operationList = queryDTO.getHaving().stream()
+					.filter(h -> h.getOperation() != null)
+					.map(h -> h.getOperation())
+					.collect(Collectors.toList());
+			processOperations(queryDTO, operationList);
 		}
 
 		Query query = queryTransformerService.toQuery(queryDTO,
@@ -224,6 +227,20 @@ public class SchedulerService {
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
 
+	}
+
+	private void processOperations(QueryDTO queryDTO, List<Operation> operationList) {
+		operationList
+				.forEach((op -> {
+					if (op instanceof QueryOperation) {
+						QueryOperation queryOperation = (QueryOperation) op;
+						queryOperation.getValue().setQuerySource(queryDTO.getQuerySource());
+						queryOperation.getValue().setSource(queryDTO.getSource());
+					} else if (op instanceof CompositeOperation) {
+						CompositeOperation compositeOperation = (CompositeOperation) op;
+						processOperations(queryDTO, compositeOperation.getOperations());
+					}
+				}));
 	}
 
 	public emailsDTO[] getEmailList(String login) {

@@ -111,6 +111,24 @@
             };
         }
 
+        function createCompareFeaturePropertyExpressionBody(value, featureName) {
+            const featureNameArr = featureName.split('.');
+            const valueArr = value.split('.');
+            return {
+                '@type': 'Compare',
+                comparatorType: 'GTE',
+                valueType: {
+                    '@type': 'featureValueType',
+                    value: valueArr[1],
+                    table: valueArr[0]
+                },
+                featureProperty: {
+                    property: featureNameArr[1],
+                    table: featureNameArr[0]
+                }
+            };
+        }
+
         function createCompareExpressionBodyForInterval(value, featureName, interval, operator) {
             return {
                 '@type': 'Between',
@@ -139,7 +157,10 @@
                 name = name.split('|')[1];
                 setDatesInRightSideFilters(values[0], values[1]);
             }
-            if (valueType === 'dateRangeValueType') {
+            if (valueType === 'compare') {
+                console.log('filter-parameters: compare value type values', values);
+                return createCompareFeaturePropertyExpressionBody(values[0], values[1]);
+            } else if (valueType === 'dateRangeValueType') {
                 var dataType = meta.dataType || '';
                 console.log('filter-parameters: date range value type values', values);
                 if (values.length === 2) {
@@ -162,23 +183,26 @@
         }
 
         function getConditionExpression(additionalFeaturesArray) {
-            return getConditionExpressionForParams(additionalFeaturesArray, Object.assign({}, paramObject));
+            const params = paramObject || {};
+            const paramsArray = Object.keys(params).map((key) => {
+                const o = {};
+                o[key] = params[key];
+                return o;
+            });
+            return getConditionExpressionForParams(additionalFeaturesArray, paramsArray);
         }
 
         function getConditionExpressionForParams(params, sourceParams) {
-            const finalParams = (params || []).reduce((total, currentValue) => {
-                return Object.assign(currentValue, total);
-            }, Object.assign({}, sourceParams || {}));
+            const finalParams = (params || []).concat(sourceParams || []);
 
             var body;
             var condition = {
                 expression: null
             };
-            for (var name in finalParams) {
-                if (finalParams.hasOwnProperty(name)
-                    && finalParams[name]
-                    && finalParams[name].length > 0) {
-                    var values = finalParams[name];
+            for (var data of finalParams) {
+                var name = Object.keys(data)[0];
+                var values = data[name];
+                if (values.length > 0) {
                     if (!condition.expression) {
                         body = createBodyExpr(values, name);
                         condition = new ConditionExpression(CryptoService.UUIDv4, body);

@@ -23,6 +23,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.expression.operations.CompositeOperation;
 import com.project.bi.query.expression.operations.Operation;
 import com.project.bi.query.expression.operations.QueryOperation;
@@ -192,7 +193,7 @@ public class SchedulerService {
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
 			throws InvalidProtocolBufferException, QueryTransformerException {
-		queryDTO.setSource(datasource.getName());
+		queryDTO.setQuerySource(new QuerySourceDTO(datasource.getName(), "A"));
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
 				datasource.getId());
@@ -212,7 +213,7 @@ public class SchedulerService {
 					.filter(h -> h.getOperation() != null)
 					.map(h -> h.getOperation())
 					.collect(Collectors.toList());
-			processOperations(queryDTO, operationList);
+			processOperations(queryDTO, operationList, 0);
 		}
 
 		Query query = queryTransformerService.toQuery(queryDTO,
@@ -229,16 +230,18 @@ public class SchedulerService {
 
 	}
 
-	private void processOperations(QueryDTO queryDTO, List<Operation> operationList) {
+	private void processOperations(QueryDTO queryDTO, List<Operation> operationList, int nestLevel) {
 		operationList
 				.forEach((op -> {
 					if (op instanceof QueryOperation) {
 						QueryOperation queryOperation = (QueryOperation) op;
-						queryOperation.getValue().setQuerySource(queryDTO.getQuerySource());
-						queryOperation.getValue().setSource(queryDTO.getSource());
+						queryOperation.getValue().setQuerySource(
+								new QuerySourceDTO(queryDTO.getQuerySource().getSource(),
+										String.valueOf((char) (65 + nestLevel))
+								));
 					} else if (op instanceof CompositeOperation) {
 						CompositeOperation compositeOperation = (CompositeOperation) op;
-						processOperations(queryDTO, compositeOperation.getOperations());
+						processOperations(queryDTO, compositeOperation.getOperations(), nestLevel + 1);
 					}
 				}));
 	}

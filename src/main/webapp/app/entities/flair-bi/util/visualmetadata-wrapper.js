@@ -23,6 +23,7 @@
         visual.getQueryParameters = getQueryParameters;
         visual.getQueryParametersWithFields = getQueryParametersWithFields;
         visual.hasDimension = hasDimension;
+        visual.getFieldDimensions = getFieldDimensions;
         visual.canBuild = canBuild;
         visual.getSharePath = getSharePath;
         visual.nextFieldDimension = nextFieldDimension;
@@ -48,6 +49,12 @@
 
 
         return nextFeature(dimensionFields, dimensionFieldTypes);
+    }
+
+    function getFieldDimensions() {
+        return this.fields.filter(function (item) {
+            return item.fieldType.featureType === 'DIMENSION';
+        });
     }
 
     function nextFeature(fields, fieldTypes) {

@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES) {
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -241,13 +241,21 @@
 
         function setHavingDTO(query) {
             if (query.having) {
-                const valueQuery = query.having[0].valueQuery;
-                if (valueQuery) {
-                    const conditionExpression = JSON.parse(valueQuery.conditionExpressions[0].conditionExpression);
-                    const field = valueQuery.fields[0];
+                vm.condition.featureName = query.having[0].feature.name;
+                vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
+                    return item.opt === query.having[0].comparatorType;
+                })[0];
+
+                const operation = JSON.parse(query.having[0].operation || '{}');
+                if (operation['@type'] === 'arithmetic') {
+                    const innerQuery = operation.operations[0].value;
+                    console.log('innerQuery', innerQuery);
+                    const scalar = operation.operations[1].value;
+                    const conditionExpression = innerQuery.conditionExpressions[0].conditionExpression.firstExpression;
+                    const field = innerQuery.fields[0];
                     vm.condition.thresholdMode = 'dynamic';
                     vm.condition.dynamicThreshold = {
-                        field: valueQuery.fields[0].name,
+                        field: field.name,
                         aggregation: vm.AGGREGATION_TYPES.find(function (item) {
                             return item.opt === field.aggregation;
                         }),
@@ -259,12 +267,10 @@
                         }),
                         value: conditionExpression.valueType.interval.split(' ')[0],
                     };
+                    vm.condition.value = 100 - Math.round(scalar * 100);
+                } else {
+                    vm.condition.value = operation.value;
                 }
-                vm.condition.featureName = query.having[0].feature.name;
-                vm.condition.value = operation.value;
-                vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
-                    return item.opt === query.having[0].comparatorType;
-                })[0];
             }
         }
 
@@ -399,7 +405,6 @@
         }
 
         function getDynamicAlertConditionalExpressions() {
-            var additionalFeatures = [];
             var featureData = {};
             var featureDefinition = vm.condition.dynamicThreshold.dimension.definition;
             featureData[featureDefinition] = [
@@ -410,8 +415,16 @@
                 initialValue: '__FLAIR_NOW()',
                 valueType: 'intervalValueType'
             };
-            additionalFeatures.push(featureData);
-            return additionalFeatures;
+
+            const featureData2 = {};
+            const dimension = visualMetaData.getFieldDimensions()[0];
+            const featureDef = dimension.feature.definition;
+            featureData2[featureDefinition] = ['A.' + featureDef, 'B.' + featureDef];
+            featureData2[featureDefinition]._meta = {
+                valueType: 'compare'
+            };
+
+            return [featureData, featureData2];
         }
 
         function buildQueryDTO(visualMetaData) {
@@ -605,15 +618,31 @@
                 comparatorType: vm.condition.compare.opt
             };
             if (vm.condition.thresholdMode === 'dynamic') {
-                havingDTO.valueQuery = visualMetaData.getQueryParametersWithFields(
+                const dynamicAlertConditionalExpressions = getDynamicAlertConditionalExpressions();
+                const conditionExpressionForParams = filterParametersService.getConditionExpressionForParams(dynamicAlertConditionalExpressions);
+                const query = visualMetaData.getQueryParametersWithFields(
                     [{
                         name: vm.condition.dynamicThreshold.field,
                         aggregation: vm.condition.dynamicThreshold.aggregation.opt,
                         alias: vm.condition.dynamicThreshold.field
                     }],
                     filterParametersService.get(),
-                    filterParametersService.getConditionExpressionForParams(getDynamicAlertConditionalExpressions())
+                    conditionExpressionForParams
                 );
+                havingDTO.operation = {
+                    '@type': 'arithmetic',
+                    value: 'MULTIPLY',
+                    operations: [
+                        {
+                            '@type': 'query',
+                            value: query,
+                        },
+                        {
+                            '@type': 'scalar',
+                            value: (100 - vm.condition.value) / 100,
+                        }
+                    ]
+                };
             }
             return [havingDTO];
         }
@@ -627,7 +656,6 @@
                     return vm.visualMetaData.constructHavingField(item);
                 })[0];
         }
-
 
         function getThresholdMeasureList(fields) {
             fields.filter(function (item) {

@@ -65,13 +65,16 @@ public class QueryTransformerService {
 
         Query.Builder builder = Query.newBuilder();
         builder
-                .setSource(queryDTO.getSource())
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(toProtoFields(fields))
                 .addAllGroupBy(toProtoFields(groupBy));
 
         if (queryDTO.getQuerySource() != null) {
             builder.setQuerySource(toQuerySource(queryDTO.getQuerySource()));
+        }
+
+        if (queryDTO.getSource() != null) {
+            builder.setSource(queryDTO.getSource());
         }
 
         if (queryDTO.getLimit() != null) {

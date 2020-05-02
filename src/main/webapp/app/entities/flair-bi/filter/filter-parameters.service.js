@@ -116,7 +116,7 @@
             const valueArr = value.split('.');
             return {
                 '@type': 'Compare',
-                comparatorType: 'GTE',
+                comparatorType: 'EQ',
                 valueType: {
                     '@type': 'featureValueType',
                     value: valueArr[1],

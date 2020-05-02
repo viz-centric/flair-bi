@@ -7,6 +7,7 @@ import com.flair.bi.messages.Query;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -47,10 +48,12 @@ public class QueryTransformerService {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
 
-        return toQuery(queryDTO, params.getConnectionName(), params.getVId(), params.getUserId(), params.getDatasourceId());
+        return toQuery(queryDTO, params.getConnectionName(), params.getVId(),
+                params.getUserId(), params.getDatasourceId());
     }
 
-    private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId, Long datasourceId) {
+    private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId,
+                          Long datasourceId) {
         Map<String, Feature> features = Optional.ofNullable(datasourceId)
                 .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
                         .stream()
@@ -62,11 +65,21 @@ public class QueryTransformerService {
 
         Query.Builder builder = Query.newBuilder();
         builder
-                .setSource(queryDTO.getSource())
-                .setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT))
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(toProtoFields(fields))
                 .addAllGroupBy(toProtoFields(groupBy));
+
+        if (queryDTO.getQuerySource() != null) {
+            builder.setQuerySource(toQuerySource(queryDTO.getQuerySource()));
+        }
+
+        if (queryDTO.getSource() != null) {
+            builder.setSource(queryDTO.getSource());
+        }
+
+        if (queryDTO.getLimit() != null) {
+            builder.setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT));
+        }
 
         if (vId != null) {
             builder.setQueryId(vId);
@@ -104,6 +117,13 @@ public class QueryTransformerService {
             );
         });
         return builder.build();
+    }
+
+    private Query.QuerySource toQuerySource(QuerySourceDTO querySource) {
+        return Query.QuerySource.newBuilder()
+                .setSource(querySource.getSource())
+                .setAlias(querySource.getAlias())
+                .build();
     }
 
     private List<Query.Field> toProtoFields(List<FieldDTO> fields) {

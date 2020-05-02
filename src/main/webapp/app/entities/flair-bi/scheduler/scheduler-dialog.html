@@ -176,6 +176,110 @@
                 <fieldset>
                     <legend>Scheduler Configuration</legend>
                     <div class="row container threshold-alert-condition form-group"
+                         ng-if="vm.scheduleObj.report.thresholdAlert">
+                        <div class="col-xs-1">
+                            <label class="control-label">
+                                Threshold Type
+                            </label>
+                        </div>
+                        <div class="col-xs-1">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio"
+                                           name="thresholdTypeRadio"
+                                           ng-model="vm.condition.thresholdMode"
+                                           value="absolute">
+                                    Absolute
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-1">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio"
+                                           name="thresholdTypeRadio"
+                                           ng-model="vm.condition.thresholdMode"
+                                           value="dynamic">
+                                    Dynamic
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row container threshold-alert-condition form-group"
+                         ng-if="vm.condition.thresholdMode === 'dynamic'">
+                        <div class="col-xs-2">
+                            <label class="control-label">
+                                Threshold field*
+                            </label>
+                            <ui-select class="condition-val"
+                                       required
+                                       ng-model="vm.condition.dynamicThreshold.field">
+                                <ui-select-match placeholder="Search Measure">
+                                    {{vm.condition.dynamicThreshold.field}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="feature in vm.features | filter: $select.search track by feature">
+                                    <div ng-bind="feature"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label class="control-label">
+                                Agg. type*
+                            </label>
+                            <ui-select required
+                                       class="condition-val"
+                                       ng-model="vm.condition.dynamicThreshold.aggregation" theme="bootstrap">
+                                <ui-select-match placeholder="Compare">
+                                    {{vm.condition.dynamicThreshold.aggregation.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="compare in vm.AGGREGATION_TYPES">
+                                    {{compare.value}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label class="control-label">
+                                Dimension*
+                            </label>
+                            <ui-select class="condition-val"
+                                       required
+                                       ng-model="vm.condition.dynamicThreshold.dimension">
+                                <ui-select-match placeholder="Search Dimension">
+                                    {{vm.condition.dynamicThreshold.dimension.definition}}
+                                </ui-select-match>
+                                <ui-select-choices
+                                        repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature.id">
+                                    <div ng-bind="feature.definition"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-1">
+                            <label class="control-label">
+                                Unit*
+                            </label>
+                            <ui-select required
+                                       class="condition-val"
+                                       ng-model="vm.condition.dynamicThreshold.unit" theme="bootstrap">
+                                <ui-select-match placeholder="Unit">
+                                    {{vm.condition.dynamicThreshold.unit.title}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="unit in vm.TIME_UNIT">
+                                    {{unit.title}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-xs-1">
+                            <label class="control-label">
+                                Value*
+                            </label>
+                            <input required
+                                   type="text"
+                                   class="form-control condition-val"
+                                   ng-model="vm.condition.dynamicThreshold.value" />
+                        </div>
+                    </div>
+                    <div class="row container threshold-alert-condition form-group"
                         ng-if="vm.scheduleObj.report.thresholdAlert">
                         <div class="col-xs-3">
                             <label class="control-label">

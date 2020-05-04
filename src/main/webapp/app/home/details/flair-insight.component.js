@@ -28,6 +28,7 @@
         vm.goToBuildPage = goToBuildPage;
         vm.executeNow = executeNow;
         vm.searchReports = searchReports;
+        vm.loadPage = loadPage;
 
         vm.page = 1;
 
@@ -80,6 +81,10 @@
 
         function executeNow(id) {
             ReportManagementUtilsService.executeNow(id);
+        }
+        function loadPage(page) {
+            vm.page = page;
+            getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
         }
     }
 })();

@@ -28,6 +28,7 @@
                         colorSet = D3Utils.getDefaultColorset();
 
                     result['dimension'] = D3Utils.getNames(dimension);
+                    result['dimensionType'] = D3Utils.getTypes(dimension);
                     result['measure'] = D3Utils.getNames(measures);
                     result['chartType'] = VisualizationUtils.getPropertyValue(record.properties, 'Info graphic Type').toLowerCase();
                     var displayColor = VisualizationUtils.getFieldPropertyValue(dimension[0], 'Display colour');

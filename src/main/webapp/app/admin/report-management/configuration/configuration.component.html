@@ -15,7 +15,9 @@
                 <li class="tab-left team-tab  ng-class:{'tab-active':vm.alertTab =='team'}"
                     ng-click="vm.configurationTabClick('team')">
                     <a class="text-center" data-toggle="tab">
-                        <img id="microsoft-team" src="../../../content/svgs/Teams.svg">
+                        <svg id="microsoft-team">
+                            <use xlink:href="#ms-team"></use>
+                        </svg>
                         <h3> Teams </h3>
                     </a>
                     <div class="blue-line"></div>

@@ -75,8 +75,8 @@
         }
 
         function loadPage(page) {
-            vm.page = page;
-            vm.transition();
+            vm.pagingParams.page = page;
+            getScheduledReportsLogs(vm.visualizationid);
         }
 
         function transition() {

@@ -4,7 +4,7 @@
             class="favouritefilter"></i></label>
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension" reload="vm.dateRangeReload"
-            on-date-change="vm.onDateChange(startDate, endDate)">
+            on-date-change="vm.onDateChange(startDate, endDate, metadata)">
         </filter-date-range>
 
     </div>

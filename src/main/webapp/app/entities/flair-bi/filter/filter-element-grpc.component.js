@@ -75,7 +75,8 @@
                 });
         }
 
-        function onDateChange(startDate, endDate) {
+        function onDateChange(startDate, endDate,metadata) {
+            vm.dimension.metadata = metadata;
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));

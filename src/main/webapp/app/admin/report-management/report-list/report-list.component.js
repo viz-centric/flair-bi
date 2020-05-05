@@ -37,7 +37,7 @@
 
         vm.links = null;
         vm.loadPage = loadPage;
-        vm.itemsPerPage = 5;
+        vm.itemsPerPage = 20;
         vm.parseCron = parseCron;
         vm.executeNow = executeNow;
         vm.goToBuildPage = goToBuildPage;

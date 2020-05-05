@@ -42,15 +42,17 @@
             vm.reverse = vm.pagingParams.ascending;
             vm.itemsPerPage = paginationConstants.itemsPerPage;
             vm.account = AccountDispatch.getAccount();
+            vm.isAdmin = AccountDispatch.isAdmin();
             vm.reportName = vm.reportName || '';
-            getScheduledReports(vm.account.login, vm.reportName);
+            getScheduledReports(vm.isAdmin ? "" : vm.account.loginn, vm.reportName);
+
         };
         vm.$onChanges = function (_changesObj) { };
         vm.$onDestroy = function () { };
 
         function searchReports() {
             vm.reportName = vm.reportName ? vm.reportName : "";
-            getScheduledReports(vm.account.login, vm.reportName);
+            getScheduledReports(vm.isAdmin ? "" : vm.account.login, vm.reportName);
         }
 
         function getScheduledReports(userName, reportName) {
@@ -84,7 +86,7 @@
         }
         function loadPage(page) {
             vm.page = page;
-            getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
         }
     }
 })();

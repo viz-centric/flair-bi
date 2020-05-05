@@ -165,10 +165,10 @@
                 })[0];
 
             if (featureDrillDown) {
-                return {name: drillDown(featureDrillDown, fieldDimension.hierarchy, filters)};
+                return { name: drillDown(featureDrillDown, fieldDimension.hierarchy, filters) };
             }
         }
-        return {name: fieldDimension.feature.name};
+        return { name: fieldDimension.feature.name };
     }
 
     /**
@@ -224,6 +224,12 @@
         return item.feature && item.feature != null && item.feature.featureType === 'DIMENSION';
     }
 
+    function getDimension(item) {
+        return item.sort(function (a, b) {
+            return a.fieldType.order - b.fieldType.order;
+        })
+    }
+
     /**
      * Helper function to check if feature is measure
      *
@@ -258,20 +264,32 @@
     function constructHavingField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
         if (agg !== null && agg !== 'NONE') {
-            return {name: fieldMeasure.feature.definition, aggregation: agg};
+            return { name: fieldMeasure.feature.definition, aggregation: agg };
         }
         return null;
     }
 
 
-    function getQueryParameters(filters, conditionExpression,offset) {
+    function getQueryParameters(filters, conditionExpression, offset) {
+
         var dimensions = this.fields
             .filter(isDimension);
+
+
+        var d = getDimension(dimensions);
+
 
         var measures = this.fields
             .filter(isMeasure);
 
         var dimensionFields = dimensions
+            .map(function (item) {
+                var result = constructDimensionField(item, filters);
+                item.feature.selectedName = result.name;
+                return result;
+            });
+
+        var dFields = d
             .map(function (item) {
                 var result = constructDimensionField(item, filters);
                 item.feature.selectedName = result.name;
@@ -311,12 +329,12 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        feature: {name: item.feature.name}
+                        feature: { name: item.feature.name }
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        feature: {name: item.feature.name}
+                        feature: { name: item.feature.name }
                     }
                 }
             });
@@ -331,12 +349,12 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        feature: {name: item.feature.selectedName}
+                        feature: { name: item.feature.selectedName }
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        feature: {name: item.feature.selectedName}
+                        feature: { name: item.feature.selectedName }
                     }
                 }
             });

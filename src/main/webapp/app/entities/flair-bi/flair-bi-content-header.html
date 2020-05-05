@@ -87,15 +87,34 @@
                         </top-nav-button-component>
                     </div>
                 </div>
+                <!-- below div is just for time being . it needs to be removed -->
+                <div class="col-md-1 hidden-sm hidden-xs visual-edit" ng-if="!vm.canEdit" style="pointer-events: none;">
+                    <div class="options-2" ng-if="!vm.configuration.readOnly">
+                        <top-nav-button-component>
+                            <span uib-tooltip="Edit" tooltip-placement="bottom">
+                                <svg class="viz-dashboard-edit-on" >
+                                    <use xlink:href="#viz-dashboard-edit-off" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
+                    </div>
+                </div>
                 <div class="col-md-1 hidden-sm hidden-xs visual-edit" ng-if="vm.canEdit">
                     <div class="options-2" ng-if="!vm.configuration.readOnly">
-                        <top-nav-button-component click="vm.editState(vm.editOn)">
-                            <img class="vizEditButton md-primary edit" ng-if="!vm.editOn" uib-tooltip="Edit"
-                                src="../../../content/svgs/editOff.svg" alt="edit off" tooltip-placement="bottom">
-                            <img class="vizEditButton md-primary edit" ng-if="vm.editOn" uib-tooltip="Edit"
-                                src="../../../content/svgs/editOn.svg" alt="edit on" tooltip-placement="bottom">
+                        <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="vm.editOn">
+                            <span uib-tooltip="Edit" tooltip-placement="bottom">
+                                <svg class="viz-dashboard-edit-on">
+                                    <use xlink:href="#viz-dashboard-edit-on" />
+                                </svg>
+                            </span>
                         </top-nav-button-component>
-
+                        <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="!vm.editOn">
+                            <span uib-tooltip="Edit" tooltip-placement="bottom">
+                                <svg class="viz-dashboard-edit-on" >
+                                    <use xlink:href="#viz-dashboard-edit-off" />
+                                </svg>
+                            </span>
+                        </top-nav-button-component>
                     </div>
                 </div>
                 <div class="col-md-1 hidden-sm hidden-xs visual-edit">

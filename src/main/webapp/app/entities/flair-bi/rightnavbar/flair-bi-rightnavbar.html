@@ -1,5 +1,5 @@
 <div class="right-sidebar-container">
-    <div id="slider" class="flair-scroll-gray">
+    <div id="slider" class="flair-scroll-gray" ng-style="vm.thinbarStyle">
         <div class="overflow">
             <div ng-show="vm.sideBarTab == 'vizualizations'" ng-cloak>
                 <div hidden>
@@ -540,9 +540,11 @@
             </div>
 
             <div ng-show="vm.sideBarTab == 'filters'">
+                <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters"></filter-pane-component>
+            </div>
 
-                <filter-pane-component view="vm.view" dimensions="vm.dimensions"></filter-pane-component>
-
+            <div ng-show="vm.sideBarTab == 'applied-filters'">
+                <filter-pane-component view="vm.view" dimensions="vm.appliedFiltersDimensions" type="Applied Filters"></filter-pane-component>
             </div>
 
             <div ng-show="vm.sideBarTab == 'widgets'">
@@ -607,7 +609,7 @@
     </div>
     <!-- end of slider -->
 
-    <nav id="leftside-thinbar" class="resource-tabs navbar-default">
+    <nav id="leftside-thinbar" class="resource-tabs navbar-default" ng-style="vm.thinbarStyle">
         <button uib-tooltip="Visualizations" tooltip-placement="left" ng-show="vm.ngIfResources()"
             ng-toggled="vm.navbarToggled"
             ng-class="{selected: vm.sideBarTab == 'vizualizations',optiondisabled:!vm.ngIfResources()}"
@@ -624,9 +626,7 @@
                 <use xlink:href="#data-properties" />
             </svg>
         </button>
-
-        <button uib-tooltip="Filters" tooltip-placement="left" ng-toggled="vm.filterToggled" ng-if="vm.ngIfFilters()"
-            ng-click="vm.onFiltersOpen()" ng-class="{selected: vm.sideBarTab == 'filters'}">
+        <button uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()" ng-toggled="vm.filterToggled" ng-if="vm.ngIfFilters()" ng-class="{selected: vm.sideBarTab == 'filters'}">
             <svg class="flaticons-filter">
                 <use xlink:href="#filter" />
             </svg>
@@ -637,12 +637,16 @@
                 <use xlink:href="#favourite-filters" />
             </svg>
         </button>
-
+        <button uib-tooltip="Applied Filters" tooltip-placement="left" ng-click="vm.onAppliedFiltersOpen()" ng-class="{selected: vm.sideBarTab == 'applied-filters'}">
+            <svg class="applied-filter">
+                <use xlink:href="#applied-filter" />
+            </svg>
+        </button>
         <button uib-tooltip="Properties" tooltip-placement="left" ng-show="vm.ngIfResources()"
             ng-disabled="!vm.propertiesToggled" ng-toggled="vm.propertiesToggled" ng-click="vm.onPropertiesOpen()"
             ng-class="{selected: vm.sideBarTab == 'properties',optiondisabled:!vm.propertiesToggled}">
             <svg class="flaticons-settings">
-                <use xlink:href="#fbi-box-settings" />
+                <use xlink:href="#settings-right-thinbar" />
             </svg>
         </button>
 

@@ -38,13 +38,16 @@
         }
 
         function reset() {
-            vm.dateRangeTab = 0;
-            vm.currentDynamicDateRangeConfig = null;
-            vm.customDynamicDateRange = 0;
+            if(!vm.dimension.metadata){
+                vm.dimension.metadata = {};
+                vm.dimension.metadata.dateRangeTab = 0;
+                vm.dimension.metadata.currentDynamicDateRangeConfig = null;
+                vm.dimension.metadata.customDynamicDateRange = 0;
+            }
         }
 
         function onDateRangeClick(tabIndex) {
-            vm.dateRangeTab = tabIndex;
+            vm.dimension.metadata.dateRangeTab = tabIndex;
         }
 
         function onCustomDynamicDateRangeChange() {
@@ -52,7 +55,7 @@
         }
 
         function getStartDateRangeInterval() {
-            var config = vm.currentDynamicDateRangeConfig;
+            var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
             if (config.toDate || config.isCustom) {
                 return null;
             } else if (config.period.days) {
@@ -65,9 +68,9 @@
 
         function getStartDateRange() {
             var date = new Date();
-            var config = vm.currentDynamicDateRangeConfig;
+            var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
             if (config.isCustom) {
-                date.setDate(date.getDate() - vm.customDynamicDateRange);
+                date.setDate(date.getDate() - vm.dimension.metadata.customDynamicDateRange);
                 return date;
             } else if (config.toDate) {
                 date = moment(date).startOf(config.toDate).toDate();
@@ -77,21 +80,26 @@
         }
 
         function onDynamicDateRangeChanged(config) {
-            vm.currentDynamicDateRangeConfig = config;
+            vm.dimension.metadata.currentDynamicDateRangeConfig = config;
             onInputChange();
         }
 
         function onInputChange() {
-            if (vm.dateRangeTab === TAB_DAY) {
+            if (vm.dimension.metadata.dateRangeTab === TAB_DAY) {
                 var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
                 var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected))));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
                     startDate: startDate,
-                    endDate: endDate
+                    endDate: endDate,
+                    metadata: {
+                        dateRangeTab: vm.dimension.metadata.dateRangeTab,
+                        currentDynamicDateRangeConfig : null,
+                        customDynamicDateRange : 0
+                    }
                 });
-            } else if (vm.dateRangeTab === TAB_RANGE) {
+            } else if (vm.dimension.metadata.dateRangeTab === TAB_RANGE) {
                 var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
                 var endDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected2)));
                 console.log('filter-date-range-component: input change range', typeof startDate, startDate,
@@ -99,8 +107,13 @@
                 vm.onDateChange({
                     startDate: startDate,
                     endDate: endDate,
+                    metadata: {
+                        dateRangeTab: vm.dimension.metadata.dateRangeTab,
+                        currentDynamicDateRangeConfig : null,
+                        customDynamicDateRange : 0
+                    }
                 });
-            } else if (vm.dateRangeTab === TAB_DYNAMIC) {
+            } else if (vm.dimension.metadata.dateRangeTab === TAB_DYNAMIC) {
                 var startDateRange = getStartDateRange();
                 var startDate;
                 if (startDateRange) {
@@ -114,9 +127,14 @@
                     typeof endDate, endDate);
                 vm.onDateChange({
                     startDate: startDate,
-                    endDate: endDate
+                    endDate: endDate,
+                    metadata: {
+                        dateRangeTab: vm.dimension.metadata.dateRangeTab,
+                        currentDynamicDateRangeConfig : vm.dimension.metadata.currentDynamicDateRangeConfig,
+                        customDynamicDateRange : vm.dimension.metadata.customDynamicDateRange
+                    }
                 });
-                filterParametersService.saveDynamicDateRangeToolTip(getDynamicDateRangeToolTip(vm.dimension.name,vm.currentDynamicDateRangeConfig,vm.customDynamicDateRange));
+                filterParametersService.saveDynamicDateRangeToolTip(getDynamicDateRangeToolTip(vm.dimension.name,vm.dimension.metadata.currentDynamicDateRangeConfig,vm.dimension.metadata.customDynamicDateRange));
             }
         }
 

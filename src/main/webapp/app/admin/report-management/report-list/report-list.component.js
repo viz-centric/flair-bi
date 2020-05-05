@@ -37,7 +37,7 @@
 
         vm.links = null;
         vm.loadPage = loadPage;
-        vm.itemsPerPage = 5;
+        vm.itemsPerPage = 20;
         vm.parseCron = parseCron;
         vm.executeNow = executeNow;
         vm.goToBuildPage = goToBuildPage;
@@ -60,7 +60,7 @@
 
         function activate() {
             getAccount();
-            getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
         }
 
         function getAccount() {
@@ -70,6 +70,7 @@
 
         function searchReports() {
             var user = ComponentDataService.getUser() ? ComponentDataService.getUser().login : "";
+            user = vm.isAdmin ? "" : user;
             vm.reportName = vm.reportName ? vm.reportName : "";
             vm.fromDate = vm.fromDate ? vm.fromDate : "";
             vm.toDate = vm.toDate ? vm.toDate : "";
@@ -100,7 +101,7 @@
         }
         function loadPage(page) {
             vm.page = page;
-            getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
         }
         function parseCron(cronExp) {
             return cronstrue.toString(cronExp);
@@ -120,7 +121,7 @@
                     title: "Cancelled"
                 }
                 $rootScope.showSuccessToast(info);
-                getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
+                getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
             }).catch(function (error) {
                 var info = {
                     text: error.data.message,
@@ -131,7 +132,7 @@
         }
         function updateReport(visualizationid) {
             ReportManagementUtilsService.updateReport(visualizationid);
-            getScheduledReports(vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
         }
 
     }

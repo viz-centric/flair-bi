@@ -1708,7 +1708,8 @@ nav .nav .logo-element {
 a {
   color: #404345;
   text-decoration: none; }
-  a:hover, a:focus {
+  a:hover,
+  a:focus {
     color: #393b3d;
     text-decoration: #393b3d; }
 
@@ -4555,12 +4556,14 @@ jhi-alert .alerts .alert-danger {
             height: 12px; }
   #grid-container.worksheet {
     margin: 43px 0 10px 0; }
-  #grid-container.worksheet-fullscreen {
-    margin-top: -10px; }
   #grid-container.filters-applied {
     margin-top: 85px; }
   #grid-container.filters-not-applied {
     margin-top: 43px; }
+  #grid-container.filters-applied-fullscreen, #grid-container.fullscreen-show-filter {
+    margin-top: 87px; }
+  #grid-container.filters-not-applied-fullscreen, #grid-container.fullscreen-hide-filter {
+    margin-top: 52px; }
   #grid-container .vizEditButton {
     width: 15px;
     height: 18px; }
@@ -6115,61 +6118,22 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
 .select2-results ul.select2-result-sub > li .select2-result-label {
   padding-left: 20px; }
 
-.select2-results
-ul.select2-result-sub
-ul.select2-result-sub
-> li
-.select2-result-label {
+.select2-results ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
   padding-left: 40px; }
 
-.select2-results
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-> li
-.select2-result-label {
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
   padding-left: 60px; }
 
-.select2-results
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-> li
-.select2-result-label {
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
   padding-left: 80px; }
 
-.select2-results
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-> li
-.select2-result-label {
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
   padding-left: 100px; }
 
-.select2-results
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-> li
-.select2-result-label {
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
   padding-left: 110px; }
 
-.select2-results
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-ul.select2-result-sub
-> li
-.select2-result-label {
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
   padding-left: 120px; }
 
 .select2-results li {
@@ -6302,10 +6266,7 @@ disabled look for disabled choices in the results dropdown
             box-shadow: none;**/
   background: transparent !important; }
 
-.select2-container-multi
-.select2-choices
-.select2-search-field
-input.select2-active {
+.select2-container-multi .select2-choices .select2-search-field input.select2-active {
   background: #fff url("select2-spinner.gif") no-repeat 100% !important; }
 
 .select2-default {
@@ -6337,10 +6298,7 @@ input.select2-active {
   background-image: -moz-linear-gradient("to top", #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%);
   background-image: linear-gradient("to top", #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #f0f0f2 100%); }
 
-.select2-container-multi
-.select2-choices
-.select2-search-choice
-.select2-chosen {
+.select2-container-multi .select2-choices .select2-search-choice .select2-chosen {
   cursor: default; }
 
 .select2-container-multi .select2-choices .select2-search-choice-focus {
@@ -6360,16 +6318,10 @@ input.select2-active {
 .select2-container-multi .select2-search-choice-close {
   left: 3px; }
 
-.select2-container-multi
-.select2-choices
-.select2-search-choice
-.select2-search-choice-close:hover {
+.select2-container-multi .select2-choices .select2-search-choice .select2-search-choice-close:hover {
   background-position: right -11px; }
 
-.select2-container-multi
-.select2-choices
-.select2-search-choice-focus
-.select2-search-choice-close {
+.select2-container-multi .select2-choices .select2-search-choice-focus .select2-search-choice-close {
   background-position: right -11px; }
 
 /* disabled styles */
@@ -6379,18 +6331,13 @@ input.select2-active {
   border: 1px solid #ddd;
   cursor: default; }
 
-.select2-container-multi.select2-container-disabled
-.select2-choices
-.select2-search-choice {
+.select2-container-multi.select2-container-disabled .select2-choices .select2-search-choice {
   padding: 3px 5px 3px 5px;
   border: 1px solid #ddd;
   background-image: none;
   background-color: #f4f4f4; }
 
-.select2-container-multi.select2-container-disabled
-.select2-choices
-.select2-search-choice
-.select2-search-choice-close {
+.select2-container-multi.select2-container-disabled .select2-choices .select2-search-choice .select2-search-choice-close {
   display: none;
   background: none; }
 

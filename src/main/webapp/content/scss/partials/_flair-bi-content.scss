@@ -170,15 +170,25 @@
     &.worksheet {
         margin: 43px 0 10px 0;
     }
-    &.worksheet-fullscreen {
-        margin-top: -10px;
-    }
     &.filters-applied {
         margin-top: 85px;
     }
     &.filters-not-applied{
         margin-top: 43px;
     }
+    &.filters-applied-fullscreen {
+        margin-top: 87px;
+    }
+    &.filters-not-applied-fullscreen{
+        margin-top: 52px;
+    }
+    &.fullscreen-hide-filter{
+        @extend .filters-not-applied-fullscreen
+    }
+    &.fullscreen-show-filter{
+        @extend .filters-applied-fullscreen
+    }
+
     .vizEditButton{
         width: 15px;
         height: 18px;

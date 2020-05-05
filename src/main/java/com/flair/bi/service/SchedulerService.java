@@ -5,7 +5,6 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.messages.Query;
-import com.flair.bi.service.dto.scheduler.ChannelParametersDTO;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
@@ -15,7 +14,6 @@ import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
 import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
-import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
@@ -25,6 +23,10 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.expression.operations.CompositeOperation;
+import com.project.bi.query.expression.operations.Operation;
+import com.project.bi.query.expression.operations.QueryOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -190,7 +193,7 @@ public class SchedulerService {
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
 			throws InvalidProtocolBufferException, QueryTransformerException {
-		queryDTO.setSource(datasource.getName());
+		queryDTO.setQuerySource(new QuerySourceDTO(datasource.getName(), "A"));
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
 				datasource.getId());
@@ -205,6 +208,14 @@ public class SchedulerService {
 		Optional.ofNullable(constraint).map(DatasourceConstraint::build)
 				.ifPresent(queryDTO.getConditionExpressions()::add);
 
+		if (queryDTO.getHaving() != null && queryDTO.getHaving().size() > 0) {
+			List<Operation> operationList = queryDTO.getHaving().stream()
+					.filter(h -> h.getOperation() != null)
+					.map(h -> h.getOperation())
+					.collect(Collectors.toList());
+			processOperations(queryDTO, operationList, 0);
+		}
+
 		Query query = queryTransformerService.toQuery(queryDTO,
 				QueryTransformerParams.builder()
 						.datasourceId(datasource.getId())
@@ -217,6 +228,22 @@ public class SchedulerService {
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
 
+	}
+
+	private void processOperations(QueryDTO queryDTO, List<Operation> operationList, int nestLevel) {
+		operationList
+				.forEach((op -> {
+					if (op instanceof QueryOperation) {
+						QueryOperation queryOperation = (QueryOperation) op;
+						queryOperation.getValue().setQuerySource(
+								new QuerySourceDTO(queryDTO.getQuerySource().getSource(),
+										String.valueOf((char) (65 + nestLevel))
+								));
+					} else if (op instanceof CompositeOperation) {
+						CompositeOperation compositeOperation = (CompositeOperation) op;
+						processOperations(queryDTO, compositeOperation.getOperations(), nestLevel + 1);
+					}
+				}));
 	}
 
 	public emailsDTO[] getEmailList(String login) {

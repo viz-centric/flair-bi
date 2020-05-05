@@ -222,7 +222,8 @@
         }
 
         function toggleFSFilter() {
-            vm.showFSFilter = vm.filtersLength == 0 ? false : !vm.showFSFilter;
+            vm.showFSFilter = filterParametersService.getFiltersCount() == 0 ? false : !vm.showFSFilter;
+            $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters",vm.showFSFilter);
         }
 
         function ifFSFilterToggled() {
@@ -231,7 +232,7 @@
 
         function setFullScreen() {
             $rootScope.isFullScreen = true;
-            hideFullScreenFiltersHeader();
+            hideFiltersHeaderAndSideBar();
             $rootScope.$broadcast("FlairBi:button-toggle", false);
             VisualDispatchService.reloadGrids();
         }
@@ -247,23 +248,10 @@
         function hideFiltersHeaderAndSideBar() {
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;
-                $("#leftside-thinbar").css("margin-top", "58px");
-                $("#slider").css("margin-top", "58px");
-                $("#grid-container").css("margin-top", "43px");
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters",true);
             } else {
                 vm.showFSFilter = true;
-                $("#leftside-thinbar").css("margin-top", "100px");
-                $("#slider").css("margin-top", "100px");
-                $("#grid-container").css("margin-top", "85px");
-            }
-        }
-
-        function hideFullScreenFiltersHeader() {
-            $("#grid-container").css("margin-top", "43px");
-            if (vm.filtersLength == 0) {
-                vm.showFSFilter = false;
-            } else {
-                vm.showFSFilter = true;
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters",false);
             }
         }
 
@@ -458,12 +446,7 @@
             vm.noOfPages = Math.ceil(filterParametersService.getFiltersCount() / vm.pageSize) - 1;
             vm.filtersLength = filterParametersService.getFiltersCount();
             $rootScope.$broadcast("flairbiApp:filter-count-changed");
-            if ($rootScope.isFullScreen == false) {
-                hideFiltersHeaderAndSideBar();
-            }
-            else {
-                hideFullScreenFiltersHeader();
-            }
+            hideFiltersHeaderAndSideBar();
         }
 
         function toggleFilters($event) {

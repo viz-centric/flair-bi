@@ -21,7 +21,9 @@
         visual.fieldPropertyExists = fieldPropertyExists;
         visual.getFieldPropertyValue = getFieldPropertyValue;
         visual.getQueryParameters = getQueryParameters;
+        visual.getQueryParametersWithFields = getQueryParametersWithFields;
         visual.hasDimension = hasDimension;
+        visual.getFieldDimensions = getFieldDimensions;
         visual.canBuild = canBuild;
         visual.getSharePath = getSharePath;
         visual.nextFieldDimension = nextFieldDimension;
@@ -47,6 +49,12 @@
 
 
         return nextFeature(dimensionFields, dimensionFieldTypes);
+    }
+
+    function getFieldDimensions() {
+        return this.fields.filter(function (item) {
+            return item.fieldType.featureType === 'DIMENSION';
+        });
     }
 
     function nextFeature(fields, fieldTypes) {
@@ -157,10 +165,10 @@
                 })[0];
 
             if (featureDrillDown) {
-                return {name: drillDown(featureDrillDown, fieldDimension.hierarchy, filters)};
+                return { name: drillDown(featureDrillDown, fieldDimension.hierarchy, filters) };
             }
         }
-        return {name: fieldDimension.feature.name};
+        return { name: fieldDimension.feature.name };
     }
 
     /**
@@ -216,6 +224,12 @@
         return item.feature && item.feature != null && item.feature.featureType === 'DIMENSION';
     }
 
+    function getDimension(item) {
+        return item.sort(function (a, b) {
+            return a.fieldType.order - b.fieldType.order;
+        })
+    }
+
     /**
      * Helper function to check if feature is measure
      *
@@ -250,27 +264,32 @@
     function constructHavingField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
         if (agg !== null && agg !== 'NONE') {
-            return {name: fieldMeasure.feature.definition, aggregation: agg};
+            return { name: fieldMeasure.feature.definition, aggregation: agg };
         }
         return null;
     }
 
 
-    function getQueryParameters(filters, conditionExpression,offset) {
-        var query = {};
+    function getQueryParameters(filters, conditionExpression, offset) {
 
         var dimensions = this.fields
             .filter(isDimension);
 
+
+        var d = getDimension(dimensions);
+
+
         var measures = this.fields
             .filter(isMeasure);
 
-        if (this.metadataVisual.name == "Table" || this.metadataVisual.name == "Pivot Table") {
-            query.offset= this.getChartPropertyValue('Limit', 20)*offset
-
-        }
-
         var dimensionFields = dimensions
+            .map(function (item) {
+                var result = constructDimensionField(item, filters);
+                item.feature.selectedName = result.name;
+                return result;
+            });
+
+        var dFields = d
             .map(function (item) {
                 var result = constructDimensionField(item, filters);
                 item.feature.selectedName = result.name;
@@ -283,7 +302,11 @@
                 return constructMeasureField(item);
             });
 
-        query.fields = dimensionFields.concat(measureFields);
+        const query = getQueryParametersWithFields(dimensionFields.concat(measureFields), filters, conditionExpression);
+
+        if (this.metadataVisual.name == "Table" || this.metadataVisual.name == "Pivot Table") {
+            query.offset = this.getChartPropertyValue('Limit', 20) * offset;
+        }
 
         var aggExists = !!measureFields
             .filter(function (item) {
@@ -296,10 +319,6 @@
 
         query.limit = this.getChartPropertyValue('Limit', 20);
 
-        if (conditionExpression && conditionExpression.conditionExpression && !angular.equals(conditionExpression, {})) {
-            query.conditionExpressions = [conditionExpression];
-        }
-
         var ordersListSortMeasures = measures
             .filter(function (item) {
                 var property = getProperty(item.properties, 'Sort', null);
@@ -310,12 +329,12 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        feature: {name: item.feature.name}
+                        feature: { name: item.feature.name }
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        feature: {name: item.feature.name}
+                        feature: { name: item.feature.name }
                     }
                 }
             });
@@ -330,17 +349,29 @@
                 if (property === 'Ascending') {
                     return {
                         direction: 'ASC',
-                        feature: {name: item.feature.selectedName}
+                        feature: { name: item.feature.selectedName }
                     }
                 } else {
                     return {
                         direction: 'DESC',
-                        feature: {name: item.feature.selectedName}
+                        feature: { name: item.feature.selectedName }
                     }
                 }
             });
 
         query.orders = ordersListSortMeasures.concat(ordersListSortDimensions);
+
+        return query;
+    }
+
+    function getQueryParametersWithFields(fields, filters, conditionExpression) {
+        const query = {
+            fields,
+        };
+
+        if (conditionExpression && conditionExpression.conditionExpression && !angular.equals(conditionExpression, {})) {
+            query.conditionExpressions = [conditionExpression];
+        }
 
         return query;
     }

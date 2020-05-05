@@ -2,25 +2,25 @@
     <div>
         <div type="tab"
                 class="date-range-btn"
-                ng-class="{'date-range-btn-active':vm.dateRangeTab == 0}"
+                ng-class="{'date-range-btn-active':vm.dimension.metadata.dateRangeTab == 0}"
                 ng-click="vm.onDateRangeClick(0)">
                 <p class="flex-text">Day</p>
         </div>
         <div type="tab"
                 class="date-range-btn"
-                ng-class="{'date-range-btn-active':vm.dateRangeTab == 1}"
+                ng-class="{'date-range-btn-active':vm.dimension.metadata.dateRangeTab == 1}"
                 ng-click="vm.onDateRangeClick(1)">
                 <p class="flex-text">Range</p>
         </div>
         <div type="tab"
                 class="date-range-btn"
-                ng-class="{'date-range-btn-active':vm.dateRangeTab == 2}"
+                ng-class="{'date-range-btn-active':vm.dimension.metadata.dateRangeTab == 2}"
                 ng-click="vm.onDateRangeClick(2)">
                 <p class="flex-text">Dynamic</p>
         </div>
     </div>
     <div 
-         ng-if="vm.dateRangeTab === 0">
+         ng-if="vm.dimension.metadata.dateRangeTab === 0">
     
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate1"
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div 
-         ng-if="vm.dateRangeTab === 1">
+         ng-if="vm.dimension.metadata.dateRangeTab === 1">
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate"
                          ng-model="vm.currentDimension.selected"
@@ -44,20 +44,20 @@
                          md-placeholder="End Date"></md-datepicker>
         </div>
     </div>
-    <div ng-if="vm.dateRangeTab === 2">
+    <div ng-if="vm.dimension.metadata.dateRangeTab === 2">
         <div class="dynamic-date-range-select">
-            <select ng-model="vm.currentDynamicDateRangeConfig"
+            <select ng-model="vm.dimension.metadata.currentDynamicDateRangeConfig"
                     ng-change="vm.onInputChange()"
                     class="form-control"
                     ng-options="config.title for config in vm.dynamicDateRangeConfig"></select>
         </div>
         <div 
-            ng-if="vm.currentDynamicDateRangeConfig.isCustom">
+            ng-if="vm.dimension.metadata.currentDynamicDateRangeConfig.isCustom">
             <input type="text"
                    class="form-control"
                    id="customDateRange"
                    ng-change="vm.onCustomDynamicDateRangeChange()"
-                   ng-model="vm.customDynamicDateRange">
+                   ng-model="vm.dimension.metadata.customDynamicDateRange">
         </div>
     </div>
 </div>

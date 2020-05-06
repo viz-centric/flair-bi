@@ -123,7 +123,7 @@
         }
 
         function enableTicketCreation(log) {
-            if (!log.isTicketCreated) {
+            if (!log.isTicketCreated && log.taskStatus === "success") {
                 log.enableTicketCreation = !log.enableTicketCreation;
                 schedulerService.disableTicketCreation(log.schedulerTaskMetaId).then(
                     function (response) {
@@ -138,6 +138,9 @@
             }
         }
         function getLabelClass(log) {
+            if(vm.reportType && !log.thresholdMet){
+                return 'hidden';
+            }
             if (log.isTicketCreated || log.taskStatus !== "success") {
                 return REPORTMANAGEMENTCONSTANTS.disabledTicketCreation;
             }

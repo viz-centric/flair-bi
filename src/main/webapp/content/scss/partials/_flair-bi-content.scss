@@ -9,6 +9,12 @@
     .jhi-alert {
         margin: 0 10px 0 10px;
     }
+    .loader-spinner {
+        img.vizualization {
+          height: 25px !important;
+          widows: 25px !important;
+        }
+      }
     .grid-stack-item {
         .visualization-card {
             display: flex;

@@ -4441,6 +4441,9 @@ jhi-alert .alerts .alert-danger {
     border: 1px dashed #e1e3e3 !important; }
   #grid-container .jhi-alert {
     margin: 0 10px 0 10px; }
+  #grid-container .loader-spinner img.vizualization {
+    height: 25px !important;
+    widows: 25px !important; }
   #grid-container .grid-stack-item .visualization-card {
     display: flex;
     flex-flow: column;

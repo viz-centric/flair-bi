@@ -29,7 +29,6 @@ import com.flair.bi.messages.UpdateConnectionResponse;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
 import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +36,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 @Profile("!test")
 public class EngineGrpcService implements IEngineGrpcService {
 
@@ -113,24 +111,19 @@ public class EngineGrpcService implements IEngineGrpcService {
 
     @Override
     public RunQueryResponse runQuery(Query query, boolean metaRetrieved) {
-        return getQueryStub().runQuery(RunQueryRequest.newBuilder()
-            .setQuery(query)
-            .setRetrieveMeta(metaRetrieved)
-            .build());
+        return getQueryStub()
+                .runQuery(RunQueryRequest.newBuilder().setQuery(query).setRetrieveMeta(metaRetrieved).build());
     }
 
     @Override
     public TestConnectionResponse testConnection(Connection connection) {
-        TestConnectionRequest request = TestConnectionRequest.newBuilder()
-                .setConnection(connection)
-                .build();
+        TestConnectionRequest request = TestConnectionRequest.newBuilder().setConnection(connection).build();
         return getConnectionStub().testConnection(request);
     }
 
     @Override
     public QueryAllResponse queryAll(String connectionLinkId, Query query, Connection connection) {
-        QueryAllRequest.Builder builder = QueryAllRequest.newBuilder()
-                .setQuery(query);
+        QueryAllRequest.Builder builder = QueryAllRequest.newBuilder().setQuery(query);
         if (StringUtils.isNotEmpty(connectionLinkId)) {
             builder.setConnectionLinkId(connectionLinkId);
         }
@@ -147,34 +140,29 @@ public class EngineGrpcService implements IEngineGrpcService {
 
     @Override
     public SaveConnectionResponse saveConnection(Connection connection) {
-        return getConnectionStub().saveConnection(SaveConnectionRequest.newBuilder()
-            .setConnection(connection)
-            .build());
+        return getConnectionStub().saveConnection(SaveConnectionRequest.newBuilder().setConnection(connection).build());
     }
 
     @Override
     public GetConnectionResponse getConnection(Long connectionId) {
-        return getConnectionStub().getConnection(GetConnectionRequest.newBuilder()
-            .setId(connectionId)
-            .build());
+        return getConnectionStub().getConnection(GetConnectionRequest.newBuilder().setId(connectionId).build());
     }
 
     @Override
     public DeleteConnectionResponse deleteConnection(Long connectionId) {
-        return getConnectionStub().deleteConnection(DeleteConnectionRequest.newBuilder()
-            .setConnectionId(connectionId)
-            .build());
+        return getConnectionStub()
+                .deleteConnection(DeleteConnectionRequest.newBuilder().setConnectionId(connectionId).build());
     }
 
     @Override
     public UpdateConnectionResponse updateConnection(Connection connection) {
-        return getConnectionStub().updateConnection(UpdateConnectionRequest.newBuilder()
-            .setConnection(connection)
-            .build());
+        return getConnectionStub()
+                .updateConnection(UpdateConnectionRequest.newBuilder().setConnection(connection).build());
     }
 
     @Override
-    public ListTablesResponse listTables(String connectionLinkId, String tableNameLike, int maxEntries, Connection connection) {
+    public ListTablesResponse listTables(String connectionLinkId, String tableNameLike, int maxEntries,
+            Connection connection) {
         ListTablesRequest.Builder builder = ListTablesRequest.newBuilder();
         if (connection != null) {
             builder.setConnection(connection);
@@ -183,9 +171,7 @@ public class EngineGrpcService implements IEngineGrpcService {
             builder.setConnectionLinkId(connectionLinkId);
         }
         builder.setMaxEntries(maxEntries);
-        return getConnectionStub().listTables(builder
-            .setTableNameLike(tableNameLike)
-            .build());
+        return getConnectionStub().listTables(builder.setTableNameLike(tableNameLike).build());
     }
 
 }

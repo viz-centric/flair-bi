@@ -111,11 +111,10 @@
             "assign": "Assign",
             "remove": "Remove",
             "close": "Close",
-            "cancel": "Cancel",
-            "canceljob":"Cancel Job",
-            "runNow":"Run Now",
-            "copy":"Copy",
-            "search":"Search"
+            "canceljob": "Cancel Job",
+            "runNow": "Run Now",
+            "copy": "Copy",
+            "search": "Search"
         },
         "detail": {
             "field": "Field",
@@ -161,9 +160,9 @@
             "failed": "Query validation request failed. Please try again later."
         }
     },
-    "component":{
-        "user":"User",
-        "selectUser":"Select User"
+    "component": {
+        "user": "User",
+        "selectUser": "Select User"
     },
     "footer": "This is your footer"
 }

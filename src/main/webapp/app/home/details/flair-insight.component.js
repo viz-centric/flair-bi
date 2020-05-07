@@ -40,7 +40,7 @@
         vm.$onInit = function () {
             vm.predicate = vm.pagingParams.predicate;
             vm.reverse = vm.pagingParams.ascending;
-            vm.itemsPerPage = paginationConstants.itemsPerPage;
+            vm.itemsPerPage = 2//paginationConstants.itemsPerPage;
             vm.account = AccountDispatch.getAccount();
             vm.isAdmin = AccountDispatch.isAdmin();
             vm.reportName = vm.reportName || '';

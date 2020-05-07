@@ -21,6 +21,7 @@ nav.navbar-static-top {
     z-index: 30;
     left: 0px;
     right: 0px;
+    min-height: 35px;
     .navbar-header {
         flex: 1;
         .btn-default {
@@ -65,11 +66,12 @@ nav.navbar-static-top {
         }
         .logo {
             position: absolute;
-            top: 6px;
+            top: 0px;
             left: 0px;
             border-right: 1px #ced0d1 solid;
+            height:30px;
             img {
-                width: 48px;
+                width: 25px;
                 height: 36px;
                 margin-right: 5px;
             }

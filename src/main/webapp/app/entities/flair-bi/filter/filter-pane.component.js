@@ -10,7 +10,8 @@
             bindings: {
                 dimensions: '=',
                 view: '=',
-                type: '@'
+                type: '@',
+                tab: '='
             }
         });
 
@@ -22,6 +23,7 @@
         vm.filter = filter;
         vm.onClearClick = onClearClick;
         vm.selectedFilters = {};
+        vm.list={};
         activate();
 
         ////////////////

@@ -96,7 +96,7 @@
                     metadata: {
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
                         currentDynamicDateRangeConfig : null,
-                        customDynamicDateRange : 0,
+                        customDynamicDateRange : 0
                     }
                 });
             } else if (vm.dimension.metadata.dateRangeTab === TAB_RANGE) {

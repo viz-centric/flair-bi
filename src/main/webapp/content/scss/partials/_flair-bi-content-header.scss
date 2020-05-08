@@ -1,8 +1,10 @@
 .flairbi-content-header {
     background-color: $content-header-color;
     margin: 0 -15px;
-    padding: 5px;
-    border-bottom: 1px #e1e3e3 solid;
+    padding:0 5px;
+   // border-bottom: 1px #e1e3e3 solid;
+    min-height: 40px;
+   // background-color: #b7b4e4;
     &.get-sticky {
         position: fixed;
         top: 0px;
@@ -13,23 +15,60 @@
             left: 15px;
         }
     }
+    .dropdown-options-v5 {
+        margin-left:0px;
+        padding-top: 0px;
+        .input-box {
+            display: flex;
+            border: 1px solid rgb(228, 228, 228);
+            border-radius: 8px;
+            margin-top: 5px;
+            
+        }
+    }
+    .form-inline{
+        display: flex;
+        height: 35px;
+        align-items: center;
+        button.btn-primary, button.btn-primary:focus{
+            background-color: transparent;
+            border-color: transparent;
+            transition: background-color 500ms linear;
+            height: 25px;
+            font-size: 15px;
+            padding: 5px 5px;
+            margin: 5px 5px;
+            font-weight: bold;
+            color: #000;
+            border: none;
+        }
+        .field-icon-left{
+            height: 15px;
+            width: 20px;
+            padding-top: 2px;
+        }
+    }
+  
     .header-first {
         display: flex;
         .view-name {
             margin-left: 11px;
         }
         .logo {
-            
-            width: 54px;
+            width: 30px;
             margin-left: 5px;
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            height: 40px;
             img {
-                width: 36px;
-                height: 36px;
+                width: 25px;
+                height: 40px;
             }
         }
         .line{
                 width: 1px;
-                height: 39px;
+                height: 35px;
                 background: #e4e4e4;
                 float: left;
                 margin: 4px 5px 0 5px;
@@ -37,7 +76,8 @@
     }
     h2 {
         margin: 0px;
-        line-height: 39px;
+        line-height: 40px;
+        font-size: 20px
     }
     .configuration-options {
 
@@ -55,8 +95,18 @@
         }
         .apply-bookmarks {
             display: flex;
-            height: 39px;
+            height: 35px;
             align-items: center;
+            .input-box {
+                input {
+                    margin: 3px;
+                    border: none;
+                    background: none;
+                    width: auto;
+                    height: 20px;
+                    padding: 3px 12px;
+                }
+            }
         }
         .dropdown-options-v2 >.dropdown-menu{
                 right: -20px;
@@ -78,14 +128,14 @@
         //       transform: translateY(-50%);
         // }
         .options-1::before{
-              content: "";
-              height: 35px;
-              display: block;
-              border-left: 1px lighten($icons-color, 40%) solid;
-              position: absolute;
-              left: 5%;
-              top: 50%;
-              transform: translateY(-50%);
+            //   content: "";
+            //   height: 35px;
+            //   display: block;
+            //   border-left: 1px lighten($icons-color, 40%) solid;
+            //   position: absolute;
+            //   left: 5%;
+            //   top: 50%;
+            //   transform: translateY(-50%);
         }
         .options-2 {
             display: flex;
@@ -167,11 +217,11 @@
                 }
             }
             svg {
-                width: 38px;
-                height: 35px;
+                width: 25px;
+                height: 15px;
+                padding: 0 0px;
                 fill: $icons-color;
-                padding: 0 8px;
-                margin-top: 3px;
+                margin-top: 10px;
                 transition: background-color 0.5s ease;
                 border-radius: 50px;
                 &:hover {
@@ -223,12 +273,17 @@
                 margin: 4px 5px 0 5px;
             }
             .logo {
-                img {
-                    height: 36px;
-                    width: 36px;
-                    margin-right: 10px;
-                    margin-left: 10px;
-                }
+                width: 30px;
+            margin-left: 5px;
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            height: 40px;
+            img {
+                width: 25px;
+                height: 40px;
+            }
+                
             }
             .dropdown-options-v5 {
                 margin-left:0px;
@@ -313,7 +368,7 @@
         }
     } 
     .full-screen-topbar-filter-toggled {
-        height: 50px;
+        height: 35px;
     }
     menu-component {
         .menu-container .menu {
@@ -349,7 +404,7 @@
 
 .flairbi-content-header-fullscreen {
     padding: 0;
-    padding-top: 6px;
+   // padding-top: 6px;
     position: fixed;
     top: 0px;
     z-index: 30;
@@ -360,9 +415,10 @@
 .dashboard-filter-header {
     height: 35px;
     display: flex;
+    border-bottom: 1px #e1e3e3 solid;
     border-top: 1px #e1e3e3 solid;
     margin-left: -10px;
-    margin-top: 7px;
+    margin-top: 0px;
     .item {
         align-self: center;
     }
@@ -420,7 +476,7 @@
     .prev-arrow {}
     .next-arrow {}
     .list-inline {
-        margin: 7px 0px;
+        margin: 3px 0px;
         position: relative;
         .list-inline-item {
             max-width: 116px;

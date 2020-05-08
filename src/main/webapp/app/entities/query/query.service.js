@@ -1,10 +1,10 @@
-(function() {
+(function () {
     "use strict";
-    angular.module("flairbiApp").factory("Query", Release);
+    angular.module("flairbiApp").factory("Query", Query);
 
-    Release.$inject = ["$resource"];
+    Query.$inject = ["$resource"];
 
-    function Release($resource) {
+    function Query($resource) {
         var resourceUrl = "api/query/:id";
 
         return $resource(
@@ -13,7 +13,7 @@
             {
                 executeQuery: {
                     method: "POST",
-                    url: "fbiengine/api/queries/:connectionLinkId"
+                    url: "/api/query/execute"
                 },
                 testConnection: {
                     method: "POST",

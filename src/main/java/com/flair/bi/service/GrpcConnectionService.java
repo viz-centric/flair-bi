@@ -19,7 +19,6 @@ import com.flair.bi.web.rest.dto.ConnectionPropertyDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,62 +29,46 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class GrpcConnectionService {
 
     private final IEngineGrpcService grpcService;
 
     public List<ConnectionTypeDTO> getAllConnectionTypes() {
         ConnectionTypesResponses connectionTypes = grpcService.getAllConnectionTypes();
-        return connectionTypes.getConnectionTypesList()
-            .stream()
-            .map(conn -> toDto(conn))
-            .collect(Collectors.toList());
+        return connectionTypes.getConnectionTypesList().stream().map(conn -> toDto(conn)).collect(Collectors.toList());
     }
 
     private ConnectionTypeDTO toDto(ConnectionType conn) {
-        return new ConnectionTypeDTO().setId(conn.getId())
-            .setName(conn.getName())
-            .setBundleClass(conn.getBundleClass())
-            .setConnectionPropertiesSchema(new ConnectionPropertiesSchemaDTO()
-                .setConnectionDetailsClass(conn.getConnectionPropertiesSchema().getConnectionDetailsClass())
-                .setConnectionDetailsType(conn.getConnectionPropertiesSchema().getConnectionDetailsType())
-                .setImagePath(conn.getConnectionPropertiesSchema().getImagePath())
-                .setConnectionProperties(conn.getConnectionPropertiesSchema()
-                    .getConnectionPropertiesList()
-                    .stream()
-                    .map(t -> new ConnectionPropertyDTO()
-                        .setDefaultValue(t.getDefaultValue())
-                        .setDisplayName(t.getDisplayName())
-                        .setFieldName(t.getFieldName())
-                        .setFieldType(t.getFieldType())
-                        .setOrder(t.getOrder())
-                        .setRequired(t.getRequired()))
-                    .collect(Collectors.toList())));
+        return new ConnectionTypeDTO().setId(conn.getId()).setName(conn.getName()).setBundleClass(conn.getBundleClass())
+                .setConnectionPropertiesSchema(new ConnectionPropertiesSchemaDTO()
+                        .setConnectionDetailsClass(conn.getConnectionPropertiesSchema().getConnectionDetailsClass())
+                        .setConnectionDetailsType(conn.getConnectionPropertiesSchema().getConnectionDetailsType())
+                        .setImagePath(conn.getConnectionPropertiesSchema().getImagePath()).setConnectionProperties(
+                                conn.getConnectionPropertiesSchema().getConnectionPropertiesList().stream()
+                                        .map(t -> new ConnectionPropertyDTO().setDefaultValue(t.getDefaultValue())
+                                                .setDisplayName(t.getDisplayName()).setFieldName(t.getFieldName())
+                                                .setFieldType(t.getFieldType()).setOrder(t.getOrder())
+                                                .setRequired(t.getRequired()))
+                                        .collect(Collectors.toList())));
     }
 
     public List<ConnectionDTO> getAllConnections(ConnectionFilterParamsDTO filterParams) {
         ConnectionResponses connections = grpcService.getAllConnections();
-        return connections.getConnectionList()
-            .stream()
-            .filter(filterConnectionByParams(filterParams))
-            .map(conn -> toDto(conn))
-            .collect(Collectors.toList());
+        return connections.getConnectionList().stream().filter(filterConnectionByParams(filterParams))
+                .map(conn -> toDto(conn)).collect(Collectors.toList());
     }
 
     public TestConnectionResultDTO testConnection(ConnectionDTO connection) {
         TestConnectionResponse result = grpcService.testConnection(QueryGrpcUtils.toProtoConnection(connection));
-        return new TestConnectionResultDTO()
-                .setSuccess(!StringUtils.isEmpty(result.getResult()));
+        return new TestConnectionResultDTO().setSuccess(!StringUtils.isEmpty(result.getResult()));
     }
 
-    public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection, int maxEntries) {
-        ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries, QueryGrpcUtils.toProtoConnection(connection));
-        return new ListTablesResponseDTO()
-            .setTableNames(result.getTablesList()
-                .stream()
-                .map(table -> table.getTableName())
-                .collect(Collectors.toList()));
+    public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection,
+            int maxEntries) {
+        ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries,
+                QueryGrpcUtils.toProtoConnection(connection));
+        return new ListTablesResponseDTO().setTableNames(
+                result.getTablesList().stream().map(table -> table.getTableName()).collect(Collectors.toList()));
     }
 
     public ConnectionDTO saveConnection(ConnectionDTO connection) {

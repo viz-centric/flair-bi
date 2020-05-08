@@ -336,6 +336,7 @@ input[type="search"] {
             border: none;
             background: none;
             width: 77%;
+            height: 25px;
         }
         
         .field-icon-left {
@@ -343,14 +344,14 @@ input[type="search"] {
             width:25px;
             display: block;
             float: left;
-            margin: 12px 0 0 10px;
+            margin: 6px 0 0 2px;
         }
         .field-icon-right {
             height: 14px;
             width:25px;
             display: block;
             float: left;
-            margin:12px 10px 0 0;
+            margin:6px 2px 0 0;
             cursor: pointer;
         }
         .field-icon-right:focus {
@@ -578,15 +579,15 @@ input[type="search"] {
     .menu {
         display: flex;
         align-items: center;
-        width: 50px;
+        width: 30px;
         height: 40px;
         .menu-label {
             font-weight: 500;
             margin-right: 5px;
         }
         svg {
-            width: 63px;
-            height: 38px;
+            width: 25px;
+            height: 40px;
             fill: $icons-color;
         }
         .more {

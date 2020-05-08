@@ -115,6 +115,7 @@
         vm.ifFSFilterToggled = ifFSFilterToggled;
         vm.changeDashboard = changeDashboard;
         vm.changeView = changeView;
+        vm.changeViewAndUpdateDashboard = changeViewAndUpdateDashboard;
         vm.dashboardId = $stateParams.dashboardId;
         vm.viewId = $stateParams.id;
         vm.isShowDisabled = isShowDisabled;
@@ -297,6 +298,12 @@
         function changeView(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
+        }
+
+        function changeViewAndUpdateDashboard(item){
+            vm.selectedView = item;
+            vm.viewId = item.id;
+            vm.build();
         }
 
         function buildUrl() {

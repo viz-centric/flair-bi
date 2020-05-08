@@ -1,9 +1,15 @@
 package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.flair.bi.messages.QueryResponse;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.IEngineGrpcService;
 import com.flair.bi.service.dto.TestConnectionResultDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +31,8 @@ public class QueryResource {
 
     private final GrpcConnectionService grpcConnectionService;
 
+    private final GrpcQueryService gprcService;
+
     @PostMapping("/test")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
@@ -34,6 +42,13 @@ public class QueryResource {
         TestConnectionResultDTO result = grpcConnectionService.testConnection(request.getConnection());
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/execute")
+    @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+    public ResponseEntity<String> executeQuery(@RequestBody QueryAllRequestDTO requestDTO) {
+        return ResponseEntity.ok(gprcService.queryAll(SecurityUtils.getCurrentUserLogin(), requestDTO).getData());
     }
 
     @Data

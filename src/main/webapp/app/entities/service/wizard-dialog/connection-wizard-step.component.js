@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").component("connectionWizardStep", {
@@ -14,11 +14,11 @@
         }
     });
 
-    ConnectionWizardStepController.$inject = ["$scope","$rootScope", "Query"];
-    function ConnectionWizardStepController($scope,$rootScope, Query) {
+    ConnectionWizardStepController.$inject = ["$scope", "$rootScope", "Query"];
+    function ConnectionWizardStepController($scope, $rootScope, Query) {
         var vm = this;
-        vm.nextStep=nextStep;
-        vm.previousStep=previousStep;
+        vm.nextStep = nextStep;
+        vm.previousStep = previousStep;
         vm.testConnection = testConnection;
 
         vm.testResult = '';
@@ -26,9 +26,9 @@
 
         ////////////////
 
-        vm.$onInit = function() {};
-        vm.$onChanges = function(changesObj) {};
-        vm.$onDestroy = function() {};
+        vm.$onInit = function () { };
+        vm.$onChanges = function (changesObj) { };
+        vm.$onDestroy = function () { };
 
         function connectionSelected(item, model) {
             if (item) {
@@ -38,11 +38,11 @@
             }
         }
 
-        function nextStep(){
+        function nextStep() {
             $rootScope.$broadcast('flairbiApp:data-connection:next-page');
         }
 
-        function previousStep(){
+        function previousStep() {
             vm.testResult = null;
             $rootScope.$broadcast('flairbiApp:data-connection:previous-page');
         }
@@ -57,22 +57,24 @@
         }
 
         function testConnection() {
-            vm.testResult = "loading";
+            vm.loading = true;
             var body = {};
 
             body.connection = prepareConnection();
 
             Query.testConnection(
                 body,
-                function(data) {
+                function (data) {
                     if (data.success) {
                         vm.testResult = "success";
                     } else {
                         vm.testResult = "error";
                     }
+                    vm.loading = false;
                 },
-                function() {
+                function () {
                     vm.testResult = "error";
+                    vm.loading = false;
                 }
             );
         }

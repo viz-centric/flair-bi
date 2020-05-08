@@ -215,7 +215,7 @@
         }
 
         function setThinBarStyle(isFiltersApplied){
-            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "58px"} : {"margin-top": "100px"} 
+            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "40px"} : {"margin-top": "75px"} 
         }
 
         function registerToggleAppliedFilterOn() {

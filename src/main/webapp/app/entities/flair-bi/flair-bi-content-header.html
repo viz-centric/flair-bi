@@ -1,62 +1,108 @@
 <div
     class="flairbi-content-header ng-class:{'flairbi-content-header-fullscreen':$root.isFullScreen == true, 'get-sticky':$root.isFullScreen == false}">
+
     <div class="row" ng-if="$root.isFullScreen == false">
-        <div class="col-md-4 col-sm-6 col-xs-6 header-first">
+        <div class="col-md-6 col-sm-6 col-xs-6 header-first">
             <a class="logo" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </a>
             <div class="line" style="margin-left: -1px;"></div>
-            <div class="view-name flair-text">
-                <h2>
-                    {{vm.view.viewName}}
-                    <span ng-if="vm.states.versionNumber" uib-tooltip="Relese Version  {{vm.states.versionNumber}}"
-                        tooltip-placement="right">
-                        <svg class="information version-info-icon">
-                            <use xlink:href="#information" />
-                        </svg>
-                    </span>
-                </h2>
-            </div>
-        </div>
-        <div class="configuration-options">
-            <div class="col-md-2 col-sm-6 col-xs-6 visual-bookmark">
-                <div class="apply-bookmarks">
-                    <div class="dropdown-options-v5">
-                        <a class="dropdown-toggle" type="button" id="dropdownBookMark" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="true">
-                            <div class="input-box">
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span>
                                 <svg class="field-icon-left">
-                                    <use xlink:href="#bookmark-small" />
+                                    <use xlink:href="#dashboard-header" />
                                 </svg>
-                                <input type="text" ng-model="vm.selectedBookmark.name" class="form-control"
-                                    placeholder="Apply bookmark" />
-                                <svg ng-click="vm.clearFilters()" class="field-icon-right">
-                                    <use xlink:href="#cancle" />
-                                </svg>
-                            </div>
-                        </a>
-                        <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownBookMark"
-                            ng-show="vm.bookmarks.length>0">
+                            </span>
+                            {{vm.selectedDashboard.dashboardName}}
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
-                                <i class="glyphicon glyphicon-search"></i>
-                                <input type="text" ng-model="searchBookmark" class="form-control  rounded-corner"
-                                    placeholder="Search Bookmark..." />
+                                <!-- <i class="glyphicon glyphicon-search"></i> -->
+                                <input type="text" ng-model="searchDashboard" class="form-control"
+                                    placeholder="Search Dashboard..." />
                             </div>
-                            <div class="dropdown-sub-menu"
-                                ng-repeat="bookmark in vm.bookmarks | filter:{name:searchBookmark}">
-                                <a ng-click="vm.applyBookmark(bookmark)" title={{bookmark.name}}>
-                                    <span>{{bookmark.name}}</span>
+                            <li class="dropdown-sub-menu"
+                                ng-repeat="dashboard in vm.dashboards | filter:{dashboardName:searchDashboard}">
+                                <a ng-click="vm.changeDashboard(dashboard)" title={{dashboard.dashboardName}}>
+                                    <span>{{dashboard.dashboardName}}</span>
                                 </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- <div class="form-group">
+                    <label>&gt;</label>
+                </div> -->
+                <div class="form-group">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <svg class="field-icon-left">
+                                <use xlink:href="#eye" />
+                            </svg>
+                            <span ng-if="vm.selectedView.viewName!==''"> {{vm.selectedView.viewName}}</span>
+                            <span ng-if="!vm.selectedView"> Select View</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <div class="search-box-list inner-addon left-addon b-b-xs">
+                                <!-- <i class="glyphicon glyphicon-search"></i> -->
+                                <input type="text" ng-model="searchView" class="form-control"
+                                    placeholder="Search View..." />
+                            </div>
+                            <li class="dropdown-sub-menu" ng-repeat="view in vm.views | filter:{viewName:searchView}">
+                                <a ng-click="vm.changeViewAndUpdateDashboard(view)" title={{view.viewName}}>
+                                    <span>{{view.viewName}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="configuration-options col-md-6">
+            <div class="row">
+                <div class="col-md-11 col-sm-12 col-xs-12 5visual-arrow">
+                    <div class="options-1">
+                        <div class="col-md-5">
+                            <div class="apply-bookmarks">
+                                <div class="dropdown-options-v5">
+                                    <a class="dropdown-toggle" type="button" id="dropdownBookMark"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <div class="input-box">
+                                            <svg class="field-icon-left">
+                                                <use xlink:href="#bookmark-small" />
+                                            </svg>
+                                            <input type="text" ng-model="vm.selectedBookmark.name" class="form-control"
+                                                placeholder="Apply bookmark" />
+                                            <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                                <use xlink:href="#cancle" />
+                                            </svg>
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-menu flair-scroll-gray" aria-labelledby="dropdownBookMark"
+                                        ng-show="vm.bookmarks.length>0">
+                                        <div class="search-box-list inner-addon left-addon b-b-xs">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                            <input type="text" ng-model="searchBookmark"
+                                                class="form-control  rounded-corner" placeholder="Search Bookmark..." />
+                                        </div>
+                                        <div class="dropdown-sub-menu"
+                                            ng-repeat="bookmark in vm.bookmarks | filter:{name:searchBookmark}">
+                                            <a ng-click="vm.applyBookmark(bookmark)" title={{bookmark.name}}>
+                                                <span>{{bookmark.name}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
-                    </div>
 
-
-                </div>
-            </div>
-            <div>
-                <div class="col-md-2 col-sm-6 col-xs-4 visual-arrow">
-                    <div class="options-1">
                         <top-nav-button-component is-disabled="!vm.ngIfSave()" click="vm.onWriteToPg()">
                             <span uib-tooltip="Save" tooltip-placement="bottom">
                                 <svg class="flaticons-save-button">
@@ -85,40 +131,22 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                    </div>
-                </div>
-                <!-- below div is just for time being . it needs to be removed -->
-                <div class="col-md-1 hidden-sm hidden-xs visual-edit" ng-if="!vm.canEdit" style="pointer-events: none;">
-                    <div class="options-2" ng-if="!vm.configuration.readOnly">
-                        <top-nav-button-component>
-                            <span uib-tooltip="Edit" tooltip-placement="bottom">
-                                <svg class="viz-dashboard-edit-on" >
-                                    <use xlink:href="#viz-dashboard-edit-off" />
-                                </svg>
-                            </span>
-                        </top-nav-button-component>
-                    </div>
-                </div>
-                <div class="col-md-1 hidden-sm hidden-xs visual-edit" ng-if="vm.canEdit">
-                    <div class="options-2" ng-if="!vm.configuration.readOnly">
-                        <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="vm.editOn">
-                            <span uib-tooltip="Edit" tooltip-placement="bottom">
-                                <svg class="viz-dashboard-edit-on">
-                                    <use xlink:href="#viz-dashboard-edit-on" />
-                                </svg>
-                            </span>
-                        </top-nav-button-component>
-                        <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="!vm.editOn">
-                            <span uib-tooltip="Edit" tooltip-placement="bottom">
-                                <svg class="viz-dashboard-edit-on" >
-                                    <use xlink:href="#viz-dashboard-edit-off" />
-                                </svg>
-                            </span>
-                        </top-nav-button-component>
-                    </div>
-                </div>
-                <div class="col-md-1 hidden-sm hidden-xs visual-edit">
-                    <div class="options-2" ng-if="!vm.configuration.readOnly">
+                        <div ng-if="!vm.configuration.readOnly">
+                            <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="vm.editOn">
+                                <span uib-tooltip="Edit" tooltip-placement="bottom">
+                                    <svg class="viz-dashboard-edit-on">
+                                        <use xlink:href="#viz-dashboard-edit-on" />
+                                    </svg>
+                                </span>
+                            </top-nav-button-component>
+                            <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="!vm.editOn">
+                                <span uib-tooltip="Edit" tooltip-placement="bottom">
+                                    <svg class="viz-dashboard-edit-on" >
+                                        <use xlink:href="#viz-dashboard-edit-off" />
+                                    </svg>
+                                </span>
+                            </top-nav-button-component>
+                        </div>
                         <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
                             <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
                                 <svg class="alarm-icon-on">
@@ -131,10 +159,6 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                    </div>
-                </div>
-                <div class="col-md-2 col-sm-6 col-xs-8 visual-msc">
-                    <div class="options-3">
                         <top-nav-button-component click="vm.bookmark()" class="options-3-item">
                             <span uib-tooltip="Bookmark" tooltip-placement="bottom">
                                 <svg class="flaticons-bookmark">
@@ -158,15 +182,16 @@
                         </top-nav-button-component>
                     </div>
                 </div>
-            </div>
 
-            <div>
-                <div class="options-4">
-                    <menu-component></menu-component>
+                <div>
+                    <div class="options-4">
+                        <menu-component></menu-component>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="row full-screen-topbar ng-class:{'full-screen-topbar-filter-toggled':vm.showFSFilter == false}"
         ng-if="$root.isFullScreen == true">
@@ -242,7 +267,7 @@
                 </div>
             </div>
             <div class="show item hidden-xs hidden-sm ">
-                <a class="btn btn-primary" ng-disabled="vm.isShowDisabled()" ng-click="vm.build()">
+                <a class="btn btn-primary  btn-sm" ng-disabled="vm.isShowDisabled()" ng-click="vm.build()">
                     <span class="ng-scope">Show</span>
                 </a>
             </div>
@@ -530,4 +555,5 @@
     <!-- slide -->
     <div id="ps-slideContainer"></div>
 
+</div>
 </div>

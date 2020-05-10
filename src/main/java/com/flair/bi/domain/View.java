@@ -18,6 +18,7 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -111,7 +112,7 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
     @Column(name = "watch_count", nullable = false)
     private int watchCount = 0;
 
-    @OneToMany(mappedBy = "view", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "view", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ViewFeatureCriteria> viewFeatureCriterias = new HashSet<>();
 
     public View add(ViewRelease viewRelease) {

@@ -17,11 +17,12 @@
             <column name="value" type="varchar(1024)">
                 <constraints nullable="false" />
             </column>
-
+            <column name="tooltip" type="varchar(1024)">
+                <constraints nullable="true" />
+            </column>
             <column name="feature_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-
             <column name="view_id" type="bigint">
                 <constraints nullable="false" />
             </column>

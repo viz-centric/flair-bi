@@ -19,5 +19,6 @@ public class CreateViewFeatureCriteriaRequest {
         private String value;
         @NotNull
         private Long featureId;
+        private String tooltip;
     }
 }

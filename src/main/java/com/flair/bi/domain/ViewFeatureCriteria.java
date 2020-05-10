@@ -3,6 +3,7 @@ package com.flair.bi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+@ToString(exclude = {"feature", "view"})
 @Data
 @Entity
 @Table(name = "view_feature_criteria")
@@ -29,6 +31,9 @@ public class ViewFeatureCriteria implements Serializable {
     @NotNull
     @Column(nullable = false)
     private String value;
+
+    @Column
+    private String tooltip;
 
     @ManyToOne(optional = false)
     @NotNull

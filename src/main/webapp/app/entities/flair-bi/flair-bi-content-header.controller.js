@@ -176,7 +176,38 @@
                 applyBookmark(vm.selectedBookmark);
                 VisualDispatchService.setFeatureBookmark({});
                 recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
+            } else if (vm.view.viewFeatureCriterias) {
+                applyViewFeatureCriteria(vm.view.viewFeatureCriterias);
             }
+        }
+
+        function applyViewFeatureCriteria(viewFeatureCriterias) {
+            const filters = {};
+            const temporalDataTypes = filterParametersService.getComparableDataTypes();
+            const dynamicDateRangeToolTip = {name: '', text: ''};
+            viewFeatureCriterias.forEach(criteria => {
+                const feature = criteria.feature;
+                const isTemporal = temporalDataTypes.indexOf(feature.type.toLowerCase()) > -1;
+                const filterName = isTemporal
+                    ? filterParametersService.buildDateRangeFilterName(feature.name)
+                    : feature.name;
+                if (isTemporal && criteria.tooltip) {
+                    dynamicDateRangeToolTip.name = criteria.feature.name;
+                    dynamicDateRangeToolTip.text = criteria.tooltip;
+                    filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
+                }
+                const valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
+                filters[filterName] = criteria.value.split('||');
+                filters[filterName]._meta = {
+                    dataType: feature.type,
+                    valueType: valueType
+                };
+            });
+            console.log('Applying view feature criterias', filters);
+            filterParametersService.save(filters);
+            $rootScope.$broadcast('flairbiApp:filter-input-refresh');
+            $rootScope.$broadcast('flairbiApp:filter');
+            $rootScope.$broadcast('flairbiApp:filter-add');
         }
 
         function addFilterFromBookmark(selectedBookmark) {
@@ -581,8 +612,8 @@
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
                     const param = params[key].concat();
-                    const isDateRangeKey = isDateRange(key);
-                    if (isDateRangeKey) {
+                    const isItemDateRange = isDateRange(key);
+                    if (isItemDateRange) {
                         param[0] = filterParametersService.changeDateFormat(param[0]);
                         param[1] = filterParametersService.changeDateFormat(param[1]);
                     }
@@ -590,10 +621,11 @@
                         value: params[key].join('||'),
                         metaData: isDateRange(key) ? filterParametersService.buildFilterCriteriasForDynamicDateRange(key) : null,
                         dateRange: isDateRange(key),
-                        isDateRange: isDateRangeKey,
+                        isDateRange: isItemDateRange,
+                        key,
                         feature: vm.features.filter(function (item) {
                             var featureName = "";
-                            if (isDateRange(key)) {
+                            if (isItemDateRange) {
                                 featureName = key.split('|')[1].toLowerCase();
                             } else {
                                 featureName = key.toLowerCase();
@@ -639,28 +671,31 @@
                 );
         }
 
-        function refresh() {
-            vm.nextDisabled = !FilterStateManagerService.hasNext();
-            vm.previousDisabled = !FilterStateManagerService.hasPrevious();
-            // TODO: save filters
+        function saveViewFeatureCriterias() {
             const filterCriteriasInfo = getFilterCriterias();
             const features = filterCriteriasInfo.filterCriterias
                 .filter((item) => item.isDateRange)
                 .map((item) => ({
                     value: item.value,
-                    featureId: item.feature.id
+                    featureId: item.feature.id,
+                    tooltip: filterParametersService.getDynamicDateRangeToolTip(item.key)
                 }));
 
             console.log('sending view feature criteria request', features);
 
-            ViewFeatureCriteria.save(
-                {
+            ViewFeatureCriteria.save({
                     features,
                     viewId: vm.view.id
                 },
                 onViewFeatureCriteriaSaveSuccess,
                 onViewFeatureCriteriaSaveError
             );
+        }
+
+        function refresh() {
+            vm.nextDisabled = !FilterStateManagerService.hasNext();
+            vm.previousDisabled = !FilterStateManagerService.hasPrevious();
+            saveViewFeatureCriterias();
         }
 
         function onViewFeatureCriteriaSaveSuccess(result) {

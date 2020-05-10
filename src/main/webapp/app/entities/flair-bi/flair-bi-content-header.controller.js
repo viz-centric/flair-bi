@@ -33,6 +33,7 @@
         "$window",
         "recentBookmarkService",
         "Auth",
+        'ViewFeatureCriteria',
         "DYNAMIC_DATE_RANGE_CONFIG"
     ];
 
@@ -61,6 +62,7 @@
         $window,
         recentBookmarkService,
         Auth,
+        ViewFeatureCriteria,
         DYNAMIC_DATE_RANGE_CONFIG
     ) {
         var vm = this;
@@ -459,7 +461,7 @@
         }
 
         function isDateRange(name) {
-            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0 ? true : false;
+            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0;
         }
 
         function setNoOfPages() {
@@ -573,20 +575,22 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function bookmark() {
+        function getFilterCriterias() {
             var params = filterParametersService.get();
             var filterCriterias = [];
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
-                    var param = params[key];
-                    if (isDateRange(key)) {
-                        params[key][0] = filterParametersService.changeDateFormat(params[key][0]);
-                        params[key][1] = filterParametersService.changeDateFormat(params[key][1]);
+                    const param = params[key].concat();
+                    const isDateRangeKey = isDateRange(key);
+                    if (isDateRangeKey) {
+                        param[0] = filterParametersService.changeDateFormat(param[0]);
+                        param[1] = filterParametersService.changeDateFormat(param[1]);
                     }
                     filterCriterias.push({
                         value: params[key].join('||'),
                         metaData: isDateRange(key) ? filterParametersService.buildFilterCriteriasForDynamicDateRange(key) : null,
                         dateRange: isDateRange(key),
+                        isDateRange: isDateRangeKey,
                         feature: vm.features.filter(function (item) {
                             var featureName = "";
                             if (isDateRange(key)) {
@@ -599,6 +603,11 @@
                     });
                 }
             }
+            return {filterCriterias, dateRange, dateRangeFeatureName};
+        }
+
+        function bookmark() {
+            const filterCriteriasInfo = getFilterCriterias();
 
             $uibModal
                 .open({
@@ -613,7 +622,7 @@
                             return {
                                 id: null,
                                 name: null,
-                                featureCriteria: filterCriterias,
+                                featureCriteria: filterCriteriasInfo.filterCriterias,
                                 datasource: vm.view.viewDashboard.dashboardDatasource
                             };
                         }
@@ -633,6 +642,33 @@
         function refresh() {
             vm.nextDisabled = !FilterStateManagerService.hasNext();
             vm.previousDisabled = !FilterStateManagerService.hasPrevious();
+            // TODO: save filters
+            const filterCriteriasInfo = getFilterCriterias();
+            const features = filterCriteriasInfo.filterCriterias
+                .filter((item) => item.isDateRange)
+                .map((item) => ({
+                    value: item.value,
+                    featureId: item.feature.id
+                }));
+
+            console.log('sending view feature criteria request', features);
+
+            ViewFeatureCriteria.save(
+                {
+                    features,
+                    viewId: vm.view.id
+                },
+                onViewFeatureCriteriaSaveSuccess,
+                onViewFeatureCriteriaSaveError
+            );
+        }
+
+        function onViewFeatureCriteriaSaveSuccess(result) {
+            console.log('view feature criteria success', result);
+        }
+
+        function onViewFeatureCriteriaSaveError(data) {
+            console.log('view feature criteria error', data);
         }
 
         function next() {

@@ -215,7 +215,7 @@
         }
 
         function setThinBarStyle(isFiltersApplied){
-            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "58px"} : {"margin-top": "100px"} 
+            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "40px"} : {"margin-top": "75px"} 
         }
 
         function registerToggleAppliedFilterOn() {
@@ -376,20 +376,9 @@
             showSideBar();
             vm.sideBarTab = "widgets";
             vm.widgetsToggled = true;
-            Features.query({
-                datasource: vm.view.viewDashboard.dashboardDatasource.id,
-                favouriteFilter: true
-            })
-                .$promise
-                .then(function (features) {
-                    vm.FavouriteDimensions = features
-                })
-                .catch(function (error) {
-                    $rootScope.showErrorSingleToast({
-                        text: error.data.message,
-                        title: "Error"
-                    });
-                });
+            vm.favouriteDimensions = vm.dimensions.filter(function (item) {
+                return  item.favouriteFilter===true;
+            });
             $('#slider').css('display', 'block');
         }
 

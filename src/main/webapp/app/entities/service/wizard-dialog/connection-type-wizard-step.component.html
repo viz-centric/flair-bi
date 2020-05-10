@@ -2,14 +2,16 @@
     <p class="wizard-help-text"> Select one of the below supported connections</p>
     <div class="form-group">
         <div class="flex-container f-row available-connections-container">
-            <div ng-class="{'bg-highlighted': vm.connectionType.id === ct.id}" class="f-item no-grow no-shirnk" ng-repeat="ct in vm.connectionTypes">
-                <connection-type-component ng-click="vm.selectCt(ct, $index)" index="$index" selected-index="vm.selectedIndex" connection-type="ct"></connection-type-component>
+            <div ng-class="{'bg-highlighted': vm.connectionType.id === ct.id}" class="f-item no-grow no-shirnk"
+                ng-repeat="ct in vm.connectionTypes">
+                <connection-type-component ng-click="vm.selectCt(ct, $index)" index="$index"
+                    selected-index="vm.selectedIndex" connection-type="ct"></connection-type-component>
             </div>
         </div>
     </div>
     <div class="wizard-navigate-buttons">
-        <button class="btn btn-primary" type="submit" ng-click="vm.loadConnections()" ng-disabled="connectionType.$invalid || !vm.connectionType"
-            wz-next value="Next">
+        <button class="btn btn-primary" type="submit" ng-click="vm.loadConnections()"
+            ng-disabled="connectionType.$invalid || !vm.connectionType" wz-next value="Next">
             <span class="glyphicon glyphicon-circle-arrow-right"></span>
             Next
         </button>

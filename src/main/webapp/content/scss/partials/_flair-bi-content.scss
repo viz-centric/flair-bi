@@ -9,6 +9,12 @@
     .jhi-alert {
         margin: 0 10px 0 10px;
     }
+    .loader-spinner {
+        img.vizualization {
+          height: 25px !important;
+          widows: 25px !important;
+        }
+      }
     .grid-stack-item {
         .visualization-card {
             display: flex;
@@ -171,10 +177,10 @@
         margin: 43px 0 10px 0;
     }
     &.filters-applied {
-        margin-top: 85px;
+        margin-top: 65px;
     }
     &.filters-not-applied{
-        margin-top: 43px;
+        margin-top: 30px;
     }
     &.filters-applied-fullscreen {
         margin-top: 87px;

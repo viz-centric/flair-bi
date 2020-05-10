@@ -2,6 +2,9 @@ package com.flair.bi.security;
 
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.flair.bi.security.okta.OktaUser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +14,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
 
-    public enum roles{
-    	ROLE_ADMIN,
-    	ROLE_USER,
-    	ROLE_DEVELOPMENT
+    public enum roles {
+        ROLE_ADMIN, ROLE_USER, ROLE_DEVELOPMENT
     }
 
     /**
@@ -38,9 +41,11 @@ public final class SecurityUtils {
             } else if (authentication.getPrincipal() instanceof String) {
                 if (authentication instanceof OAuth2Authentication) {
                     OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) authentication;
-                    if (oAuth2Authentication.getUserAuthentication().getDetails() instanceof LinkedHashMap<?, ?>) {
-                        userName = (String) ((LinkedHashMap<?, ?>) oAuth2Authentication.getUserAuthentication()
-                            .getDetails()).get("email");
+                    if (oAuth2Authentication.getUserAuthentication().getDetails() instanceof Map<?, ?>) {
+                        final Map<?, ?> authDetails = (Map<?, ?>) oAuth2Authentication.getUserAuthentication()
+                                .getDetails();
+                        final OktaUser user = OktaUser.from(authDetails);
+                        userName = user.getUsername();
                     }
                 } else {
                     userName = authentication.getPrincipal().toString();
@@ -60,14 +65,10 @@ public final class SecurityUtils {
     public static boolean isAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        return authentication != null
-            && authentication.getAuthorities()
-            .stream()
-            .noneMatch(grantedAuthority ->
-                grantedAuthority.getAuthority()
-                    .equals(AuthoritiesConstants.ANONYMOUS));
+        return authentication != null && authentication.getAuthorities().stream()
+                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS));
     }
-    
+
     /**
      * Check if a user is authenticated.
      *
@@ -76,16 +77,12 @@ public final class SecurityUtils {
     public static boolean iAdmin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        return authentication != null
-            && authentication.getAuthorities()
-            .stream()
-            .noneMatch(grantedAuthority ->
-                grantedAuthority.getAuthority()
-                    .equals(AuthoritiesConstants.ADMIN));
+        return authentication != null && authentication.getAuthorities().stream()
+                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ADMIN));
     }
-    
-    public static  EnumSet<roles> getPredefinedGroups(){
-		return EnumSet.of(roles.ROLE_ADMIN,roles.ROLE_DEVELOPMENT,roles.ROLE_USER);
+
+    public static EnumSet<roles> getPredefinedGroups() {
+        return EnumSet.of(roles.ROLE_ADMIN, roles.ROLE_DEVELOPMENT, roles.ROLE_USER);
     }
 
 }

@@ -28,8 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,15 +48,13 @@ public class GrpcQueryService {
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
         queryDTO.setSource(datasource.getName());
 
-        log.debug("Sending run query request for datasource {} id {}",
-            queryDTO.getSource(), datasource.getConnectionName());
+        log.debug("Sending run query request for datasource {} id {}", queryDTO.getSource(),
+                datasource.getConnectionName());
 
         Query query;
         try {
             query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                    .connectionName(datasource.getConnectionName())
-                    .datasourceId(datasource.getId())
-                    .build());
+                    .connectionName(datasource.getConnectionName()).datasourceId(datasource.getId()).build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + queryDTO, e);
             throw new RuntimeException(e);
@@ -76,50 +72,43 @@ public class GrpcQueryService {
 
         log.debug("Sending run query result {}", resultString);
 
-        Map<String, Object> map = Optional.ofNullable(resultString)
-            .filter(r -> StringUtils.isNotEmpty(resultString))
-            .map(r -> {
-                try {
-                    return (Map<String, Object>)objectMapper.readValue(resultString, Map.class);
-                } catch (IOException e) {
-                    log.error("Error parsing run query result for query {}", queryDTO, e);
-                    return null;
-                }
-            })
-            .orElse(null);
+        Map<String, Object> map = Optional.ofNullable(resultString).filter(r -> StringUtils.isNotEmpty(resultString))
+                .map(r -> {
+                    try {
+                        return (Map<String, Object>) objectMapper.readValue(resultString, Map.class);
+                    } catch (IOException e) {
+                        log.error("Error parsing run query result for query {}", queryDTO, e);
+                        return null;
+                    }
+                }).orElse(null);
 
-        return new RunQueryResponseDTO()
-            .setResult(map);
+        return new RunQueryResponseDTO().setResult(map);
     }
 
     public QueryValidationResponseDTO sendValidateQuery(Long datasourceId, QueryDTO queryDTO, String visualMetadataId,
-                                                        ConditionExpression conditionExpression, String userId) {
+            ConditionExpression conditionExpression, String userId) {
         Datasource datasource = getDatasource(datasourceId);
 
-        Optional.ofNullable(conditionExpression)
-            .map(x -> {
-                ConditionExpressionDTO dto = new ConditionExpressionDTO();
-                dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
-                dto.setConditionExpression(x);
-                return dto;
-            })
-            .ifPresent(queryDTO.getConditionExpressions()::add);
+        Optional.ofNullable(conditionExpression).map(x -> {
+            ConditionExpressionDTO dto = new ConditionExpressionDTO();
+            dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
+            dto.setConditionExpression(x);
+            return dto;
+        }).ifPresent(queryDTO.getConditionExpressions()::add);
 
-        DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId, datasource.getId());
-        Optional.ofNullable(constraint)
-            .map(DatasourceConstraint::build)
-            .ifPresent(queryDTO.getConditionExpressions()::add);
+        DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
+                datasource.getId());
+        Optional.ofNullable(constraint).map(DatasourceConstraint::build)
+                .ifPresent(queryDTO.getConditionExpressions()::add);
 
         queryDTO.setSource(datasource.getName());
 
         Query query;
         try {
-            query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                    .connectionName(datasource.getConnectionName())
-                    .vId(visualMetadataId != null ? visualMetadataId : "")
-                    .userId(userId)
-                    .datasourceId(datasource.getId())
-                    .build());
+            query = queryTransformerService.toQuery(queryDTO,
+                    QueryTransformerParams.builder().connectionName(datasource.getConnectionName())
+                            .vId(visualMetadataId != null ? visualMetadataId : "").userId(userId)
+                            .datasourceId(datasource.getId()).build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + queryDTO, e);
             throw new RuntimeException(e);
@@ -130,54 +119,52 @@ public class GrpcQueryService {
         log.debug("Received gRPC response {}", queryResponse);
 
         return new QueryValidationResponseDTO()
-            .setValidationResultType(queryResponse.getValidationResult().getType().name())
-            .setRawQuery(queryResponse.getRawQuery())
-            .setError(queryResponse.getValidationResult().getData());
+                .setValidationResultType(queryResponse.getValidationResult().getType().name())
+                .setRawQuery(queryResponse.getRawQuery()).setError(queryResponse.getValidationResult().getData());
     }
-
 
     private Datasource getDatasource(Long datasourceId) {
         return Optional.ofNullable(datasourceService.findOne(datasourceId))
-            .orElseThrow(() -> new EntityNotFoundException("Datasource with id " + datasourceId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Datasource with id " + datasourceId + " not found"));
     }
 
-	public void sendGetDataStream(Long datasourcesId, String userId, VisualMetadata visualMetadata, QueryDTO queryDTO, String visualMetadataId,String type) throws InterruptedException {
+    public void sendGetDataStream(Long datasourcesId, String userId, VisualMetadata visualMetadata, QueryDTO queryDTO,
+            String visualMetadataId, String type) throws InterruptedException {
         Datasource datasource = getDatasource(datasourcesId);
 
-        DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId, datasource.getId());
+        DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
+                datasource.getId());
 
-        Optional.ofNullable(visualMetadata)
-            .map(VisualMetadata::getConditionExpression)
-            .map(x -> {
-                ConditionExpressionDTO dto = new ConditionExpressionDTO();
-                dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
-                dto.setConditionExpression(x);
-                return dto;
-            })
-            .ifPresent(queryDTO.getConditionExpressions()::add);
+        Optional.ofNullable(visualMetadata).map(VisualMetadata::getConditionExpression).map(x -> {
+            ConditionExpressionDTO dto = new ConditionExpressionDTO();
+            dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
+            dto.setConditionExpression(x);
+            return dto;
+        }).ifPresent(queryDTO.getConditionExpressions()::add);
 
-        Optional.ofNullable(constraint)
-            .map(DatasourceConstraint::build)
-            .ifPresent(queryDTO.getConditionExpressions()::add);
+        Optional.ofNullable(constraint).map(DatasourceConstraint::build)
+                .ifPresent(queryDTO.getConditionExpressions()::add);
 
         queryDTO.setSource(datasource.getName());
 
-        if (visualMetadata != null && type==null) {
+        if (visualMetadata != null && type == null) {
             callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
-        } else if(visualMetadata != null && type.equals("share-link")){
+        } else if (visualMetadata != null && type.equals("share-link")) {
             callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
         } else {
             callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
         }
     }
-    
+
     public void sendQueryAll(String userId, QueryAllRequestDTO requestDTO) {
+        fbEngineWebSocketService.pushGRPCMetaDeta(queryAll(userId, requestDTO));
+    }
+
+    public QueryResponse queryAll(String userId, QueryAllRequestDTO requestDTO) {
         Query query;
         try {
-            query = queryTransformerService.toQuery(requestDTO.getQuery(), QueryTransformerParams.builder()
-                    .userId(userId)
-                    .datasourceId(requestDTO.getSourceId())
-                    .build());
+            query = queryTransformerService.toQuery(requestDTO.getQuery(),
+                    QueryTransformerParams.builder().userId(userId).datasourceId(requestDTO.getSourceId()).build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + requestDTO.getQuery(), e);
             throw new RuntimeException(e);
@@ -186,29 +173,18 @@ public class GrpcQueryService {
         Connection connection = toProtoConnection(requestDTO.getConnection());
         QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
 
-        fbEngineWebSocketService.pushGRPCMetaDeta(QueryResponse.newBuilder()
-                .setUserId(queryAllResponse.getUserId())
-                .setQueryId(queryAllResponse.getQueryId())
-                .setData(queryAllResponse.getData())
-                .build());
+        return QueryResponse.newBuilder().setUserId(queryAllResponse.getUserId())
+                .setQueryId(queryAllResponse.getQueryId()).setData(queryAllResponse.getData()).build();
+
     }
-    
-    private String getVid(String userId){
-		StringBuilder vId= new StringBuilder();
-		vId.append(userId).append("-").append(new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()));
-		return vId.toString();
-    }
-    
-    
-    private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, QueryDTO queryDTO, String vId, String request, String userId) throws InterruptedException {
+
+    private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, QueryDTO queryDTO, String vId,
+            String request, String userId) throws InterruptedException {
         Query query;
         try {
-            query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                    .datasourceId(datasource.getId())
-                    .connectionName(datasource.getConnectionName())
-                    .vId(vId)
-                    .userId(userId)
-                    .build());
+            query = queryTransformerService.toQuery(queryDTO,
+                    QueryTransformerParams.builder().datasourceId(datasource.getId())
+                            .connectionName(datasource.getConnectionName()).vId(vId).userId(userId).build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + queryDTO + " error " + e.getValidationMessage());
             fbEngineWebSocketService.pushGRPCMetaDataError(userId, Status.FAILED_PRECONDITION);
@@ -249,13 +225,14 @@ public class GrpcQueryService {
         requestObserver.onCompleted();
 
     }
-    
-    public void callGrpcBiDirectionalAndPushInSocket(SchedulerNotificationDTO schedulerNotificationResponseDTO, Query query, String request, String userId) throws InterruptedException {
+
+    public void callGrpcBiDirectionalAndPushInSocket(SchedulerNotificationDTO schedulerNotificationResponseDTO,
+            Query query, String request, String userId) throws InterruptedException {
         StreamObserver<QueryResponse> responseObserver = new StreamObserver<QueryResponse>() {
             @Override
             public void onNext(QueryResponse queryResponse) {
                 log.debug("Finished trip with===" + queryResponse.toString());
-                fbEngineWebSocketService.pushGRPCMetaDeta(schedulerNotificationResponseDTO,queryResponse, request);
+                fbEngineWebSocketService.pushGRPCMetaDeta(schedulerNotificationResponseDTO, queryResponse, request);
             }
 
             @Override

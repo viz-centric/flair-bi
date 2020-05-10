@@ -10,7 +10,9 @@
             bindings: {
                 dimension: '=',
                 view: '=',
-                dimensions: '='
+                dimensions: '=',
+                tab: '=',
+                list: '='
             }
         });
 
@@ -28,6 +30,8 @@
         vm.removeTagFromFilterList = removeTagFromFilterList;
         vm.addToFavourite = addToFavourite;
         vm.checkFavouriteFilter = checkFavouriteFilter;
+        vm.addFilter = addFilter;
+        vm.isActive = isActive;
 
 
         ////////////////
@@ -43,7 +47,77 @@
 
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
+            receivedMetaData();
+            if(isFavouriteFilter())
+                vm.load("", vm.dimension);
         }
+
+
+        function receivedMetaData() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:filters-meta-Data",
+                function (event, filter) {
+                    if (favouriteFilterService.getFavouriteFilter()) {
+                        var obj = filter[0];
+                        var dimensionName = '';
+                        for (var i in obj) {
+                            dimensionName = i;
+                            break;
+                        }
+                        var retVal = filter.map(function (item) {
+                            return item[dimensionName];
+                        });
+                        vm.list[dimensionName] = retVal;
+                    }
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
+        };
+
+
+        function isActive(filter) {
+            var myFilters = filterParametersService.getSelectedFilter()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
+            if (myFilters && myFilters.length > 0) {
+                if (myFilters.indexOf(filter) !== -1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+
+        function addFilter(filter) {
+            var filterParameters = filterParametersService.getSelectedFilter();
+            if (!filterParameters[vm.dimension.name]) {
+                filterParameters[vm.dimension.name] = [];
+            }
+
+            if (filterParameters[vm.dimension.name].indexOf(filter) !== -1) {
+                filterParameters[vm.dimension.name].splice(filterParameters[vm.dimension.name].indexOf(filter.name), 1);
+                removeTagFromSelectedList({text:filter});
+            }
+            else {
+                filterParameters[vm.dimension.name].push(filter);
+                if(!vm.dimension.selected){
+                    vm.dimension.selected = [];
+                    vm.dimension.selected.push({text:filter});
+                }else{
+                    vm.dimension.selected.push({text:filter});
+                }
+            }
+
+            filterParameters[vm.dimension.name]._meta = {
+                dataType: vm.dimension.type,
+                valueType: 'valueType'
+            };
+            filterParametersService.saveSelectedFilter(filterParameters);
+            vm.isActive(filter);
+            if(isFavouriteFilter())
+                displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+
+
+        }/////
 
         function clear() {
             vm.dateRangeReload = !vm.dateRangeReload;
@@ -77,6 +151,10 @@
 
         function onDateChange(startDate, endDate,metadata) {
             vm.dimension.metadata = metadata;
+            if(metadata!=2){
+                vm.dimension.selected = startDate;
+                vm.dimension.selected2 = endDate;
+            }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
@@ -176,13 +254,17 @@
             }
             query.distinct = true;
             query.limit = 100;
-            favouriteFilterService.setFavouriteFilter(false);
+            favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
             proxyGrpcService.forwardCall(
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,
                 vId: vId
             }
             );
+        }
+
+        function isFavouriteFilter(){
+            return vm.tab==='widgets'? true : false
         }
 
         function removed(tag) {
@@ -220,6 +302,8 @@
                 vm.dimension.selected = myFilters.map(function (item) {
                     var newItem = {};
                     newItem['text'] = item;
+                    if(isFavouriteFilter())
+                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
                     return newItem;
                 });
             } else {
@@ -239,6 +323,8 @@
                 valueType: 'valueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
+            if(isFavouriteFilter())
+                displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(tag['text']), filterParameters[vm.dimension.name].length - 1);
         }
 
         function addDateRangeFilter(date) {
@@ -254,6 +340,17 @@
                 valueType: 'dateRangeValueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
+        }
+
+        function displaySelectedFilterAtTop(arr, old_index, new_index) {
+            if (new_index >= arr.length) {
+                var k = new_index - arr.length + 1;
+                while (k--) {
+                    arr.push(undefined);
+                }
+            }
+            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+            return arr;
         }
 
     }

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     angular.module("flairbiApp").component("datasourceWizardStep", {
@@ -16,8 +16,8 @@
         }
     });
 
-    DatasourceWizardStepController.$inject = ["$scope","$timeout", "Datasources","$rootScope","$translate","Query","Connections","WizardHandler","$q","proxyGrpcService","AuthServerProvider","stompClientService","AlertService","QueryValidationService", "$uibModal"];
-    function DatasourceWizardStepController($scope,$timeout,Datasources,$rootScope,$translate,Query,Connections,WizardHandler,$q,proxyGrpcService,AuthServerProvider,stompClientService,AlertService,QueryValidationService, $uibModal) {
+    DatasourceWizardStepController.$inject = ["$scope", "$timeout", "Datasources", "$rootScope", "$translate", "Query", "Connections", "WizardHandler", "$q", "AlertService", "QueryValidationService", "$uibModal", 'Toastr'];
+    function DatasourceWizardStepController($scope, $timeout, Datasources, $rootScope, $translate, Query, Connections, WizardHandler, $q, AlertService, QueryValidationService, $uibModal, Toastr) {
         var vm = this;
         var delayedSearch;
 
@@ -25,24 +25,26 @@
         vm.openCalendar = openCalendar;
         vm.setDataSource = setDataSource;
         vm.onSearchKeyUp = onSearchKeyUp;
-        vm.search=search;
-        vm.tables=[];
-        vm.datasources.name=null;
-        vm.createDataSource=createDataSource;
-        vm.features=[];
-        vm.resetTest=resetTest;
-        vm.showData=showData;
+        vm.search = search;
+        vm.tables = [];
+        vm.datasources.name = null;
+        vm.createDataSource = createDataSource;
+        vm.features = [];
+        vm.resetTest = resetTest;
+        vm.showData = showData;
+        vm.data = [];
 
-        activate();
+
 
         ////////////////
 
-        vm.$onInit = function() {};
-        vm.$onChanges = function(changesObj) {};
-        vm.$onDestroy = function() {};
+        vm.$onInit = function () {
+            activate();
+        };
+        vm.$onChanges = function (_) { };
+        vm.$onDestroy = function () { };
 
         function activate() {
-            connectWebSocket();
             $scope.$on('$destroy', function () {
                 clearDelayedSearch();
             })
@@ -51,8 +53,8 @@
         function openCalendar(date) {
             vm.datePickerOpenStatus[date] = true;
         }
-        function setDataSource(name){
-            vm.datasources.name=name;
+        function setDataSource(name) {
+            vm.datasources.name = name;
         }
 
         function clearDelayedSearch() {
@@ -88,7 +90,7 @@
                         }
                     },
                     function () {
-                        $rootScope.showErrorSingleToast({
+                        Toastr.error({
                             text: $translate.instant('flairbiApp.datasources.error.datasources.all')
                         });
                     });
@@ -105,17 +107,17 @@
             return conn;
         }
 
-        function setInputText(searchedText){
-            vm.datasources.name=searchedText;
-            vm.datasource=vm.datasources.name;
+        function setInputText(searchedText) {
+            vm.datasources.name = searchedText;
+            vm.datasource = vm.datasources.name;
         }
 
         function createDataSource() {
             saveConnection(
-                function(conn) {
+                function (conn) {
                     saveDatasource(conn.linkId);
                 },
-                function() {}
+                function () { }
             );
         }
 
@@ -124,11 +126,11 @@
                 var connection = prepareConnection();
                 return Connections.save(
                     connection,
-                    function(result) {
+                    function (result) {
                         vm.connection = result;
                         return cb(result);
                     },
-                    function(error) {
+                    function (error) {
                         return err(error);
                     }
                 );
@@ -138,7 +140,7 @@
         }
 
         function sendSaveDatasource(customAction) {
-            Datasources.save({datasource: vm.datasources, action: customAction})
+            Datasources.save({ datasource: vm.datasources, action: customAction })
                 .$promise
                 .then(function (resultData) {
                     if (resultData.error === 'SAME_NAME_EXISTS') {
@@ -155,7 +157,7 @@
                 .catch(function (error) {
                     rollbackConnection();
                     if (error.data.message == 'uniqueError') {
-                        $rootScope.showErrorSingleToast({
+                        Toastr.error({
                             text: $translate.instant('flairbiApp.datasources.' + error.data.message)
                         });
                     }
@@ -181,14 +183,14 @@
                     }
                 })
                 .result.then(
-                function (result) {
-                    if (result.result === 'edit') {
-                        editDatasource();
-                    } else if (result.result === 'delete') {
-                        deleteDatasource();
+                    function (result) {
+                        if (result.result === 'edit') {
+                            editDatasource();
+                        } else if (result.result === 'delete') {
+                            deleteDatasource();
+                        }
                     }
-                }
-            );
+                );
 
             return $q.defer().promise;
         }
@@ -203,13 +205,11 @@
 
         function fetchFeatures(datasourceId) {
             var deferred = $q.defer();
-
             vm.queryDTO = {
                 metaRetrieved: true,
                 limit: 1,
                 distinct: false
             };
-
             Connections.fetchFeatures(
                 { datasourceId: datasourceId },
                 vm.queryDTO,
@@ -221,7 +221,6 @@
                     deferred.reject();
                 }
             );
-
             return deferred.promise;
         }
 
@@ -233,7 +232,7 @@
                     name: prop,
                     featureType:
                         typeof data[prop] === "string" ||
-                        data[prop] instanceof String
+                            data[prop] instanceof String
                             ? "DIMENSION"
                             : "MEASURE",
                     type: metaData[prop],
@@ -246,8 +245,8 @@
             if (!vm.selectedConnection) {
                 Connections.delete(
                     { id: vm.connection.id },
-                    function() {},
-                    function() {}
+                    function () { },
+                    function () { }
                 );
             }
         }
@@ -256,83 +255,36 @@
             $rootScope.$broadcast('flairbiApp:data-connection:previous-page');
         }
 
-        function showData(){
-            var body = {};
+        function showData() {
+            vm.loading = true;
+            var body = {
+                query: {
+                    fields: [],
+                    distinct: true,
+                    limit: 10,
+                    source: vm.datasources.name,
+                },
+                sourceId: vm.datasources.id
+            };
             if (vm.selectedConnection) {
                 body.connectionLinkId = vm.connection.linkId;
             } else {
                 body.connection = prepareConnection();
             }
-
-            var query = {};
-            query.fields = [];
-            query.distinct = true;
-            query.limit = 10;
-            query.source = vm.datasources.name;
-            body.query = query;
-            body.sourceId = vm.datasources.id;
-            proxyGrpcService.queryAll(body);
-        }
-
-        function connectWebSocket() {
-            stompClientService.connect(
-                { token: AuthServerProvider.getToken() },
-                function() {
-                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
-                    stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
+            Query.executeQuery(body).$promise.then(function (data) {
+                vm.data = data.data;
+                if (vm.data.length <= 0) {
+                    Toastr.warning({
+                        title: $translate.instant('flairbiApp.datasources.noDataFound')
+                    });
                 }
-            );
-
-            $scope.$on("$destroy", function (event) {
-                stompClientService.disconnect();
-            });
-        }
-
-        function onExchangeMetadataError(data) {
-            var body = JSON.parse(data.body || '{}');
-            var error = QueryValidationService.getQueryValidationError(body.description);
-            if (error) {
-                AlertService.error(error.msgKey, error.params);
-            }
-        }
-
-        function onExchangeMetadata(data) {
-            var metaData = JSON.parse(data.body);
-            toggleSampleData(metaData.data.length);
-            createHeader(metaData.data[0]);
-            addDataInTable(metaData.data);
-
-        }
-
-        function createHeader(cols){
-            $("#datasource-table-col").empty();
-            var row=$("#datasource-table-col");
-            angular.forEach(cols, function(value, key){
-                 row.append("<th>"+key+"</th>");
-            });
-        }
-
-        function addDataInTable(data){
-            $("#datasource-table > tbody").empty();
-            var tBody=$("#datasource-table > tbody");
-            angular.forEach(data, function(row, index){
-                var tr=$("<tr></tr>");
-                angular.forEach(row, function(value, key){
-                     tr.append("<td>"+value+"</td>");
+                vm.loading = false;
+            }, function (_) {
+                Toastr.error({
+                    title: $translate.instant('flairbiApp.datasources.dataError')
                 });
-                tBody.append(tr);
+                vm.loading = false;
             });
-        }
-
-        function toggleSampleData(size){
-           if(size>0){
-                angular.element("#sample-data-holder").show();
-           }else{
-                angular.element("#sample-data-holder").hide();
-                var sm = [];
-                sm.title=$translate.instant('flairbiApp.datasources.noDataFound')
-                $rootScope.showWarningToast(sm);
-           }
         }
     }
 })();

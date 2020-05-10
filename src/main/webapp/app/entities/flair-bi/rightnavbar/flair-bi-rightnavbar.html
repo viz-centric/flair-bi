@@ -540,15 +540,15 @@
             </div>
 
             <div ng-show="vm.sideBarTab == 'filters'">
-                <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters"></filter-pane-component>
+                <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters" tab="vm.sideBarTab"></filter-pane-component>
             </div>
 
             <div ng-show="vm.sideBarTab == 'applied-filters'">
-                <filter-pane-component view="vm.view" dimensions="vm.appliedFiltersDimensions" type="Applied Filters"></filter-pane-component>
+                <filter-pane-component view="vm.view" dimensions="vm.appliedFiltersDimensions" type="Applied Filters" tab="vm.sideBarTab"></filter-pane-component>
             </div>
 
             <div ng-show="vm.sideBarTab == 'widgets'">
-                <filter-pane-widget-component view="vm.view" dimensions="vm.FavouriteDimensions"></filter-pane-widget-component>
+                <filter-pane-component view="vm.view" dimensions="vm.favouriteDimensions" type="Favourite Filters" tab="vm.sideBarTab"></filter-pane-component>
             </div>
 
             <div class="properties-sidebar" ng-show="vm.sideBarTab == 'properties'">

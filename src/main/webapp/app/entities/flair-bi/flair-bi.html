@@ -141,7 +141,7 @@
                                                     </span>
                                                 </a>
                                             </div>
-                                            <div class="item" role="menuitem">
+                                            <div  ng-if="vm.hideThreshold(v)" class="item" role="menuitem">
                                                 <a href ng-click="vm.openSchedulerDialog(v,true)">
                                                     <span uib-tooltip="Schedule&nbsp;Threshold&nbsp;Alert&nbsp;Report"
                                                         tooltip-placement="top">

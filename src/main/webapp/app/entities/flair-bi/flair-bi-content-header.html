@@ -43,12 +43,11 @@
                             <svg class="field-icon-left">
                                 <use xlink:href="#eye" />
                             </svg>
-                            <span ng-if="vm.selectedView.viewName!==''"> {{vm.selectedView.viewName}}</span>
+                            <span ng-if="vm.selectedView.viewName"> {{vm.selectedView.viewName}}</span>
                             <span ng-if="!vm.selectedView"> Select View</span>
                         </button>
                         <ul class="dropdown-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
-                                <!-- <i class="glyphicon glyphicon-search"></i> -->
                                 <input type="text" ng-model="searchView" class="form-control"
                                     placeholder="Search View..." />
                             </div>

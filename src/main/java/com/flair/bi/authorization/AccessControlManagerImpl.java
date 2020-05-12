@@ -91,8 +91,6 @@ class AccessControlManagerImpl implements AccessControlManager {
      */
     @Override
     public boolean hasAccess(String resource, Action action, String scope) {
-
-
         return hasAccess(new Permission(resource, action, scope));
     }
 

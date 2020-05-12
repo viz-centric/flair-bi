@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$sessionStorage', '$q', '$translate', 'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'];
+    Auth.$inject = ['$sessionStorage', '$q', '$translate', 'Principal', 'AuthServerProvider', 'Account', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'];
 
-    function Auth($sessionStorage, $q, $translate, Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish) {
+    function Auth($sessionStorage, $q, $translate, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish) {
         var service = {
             activateAccount: activateAccount,
             changePassword: changePassword,

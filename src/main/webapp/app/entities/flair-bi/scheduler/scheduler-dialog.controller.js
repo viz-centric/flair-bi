@@ -473,7 +473,7 @@
                 });
             } else {
                 var info = {
-                    text: "Please select aggregate function from settings",
+                    text: "Scheduling threshold alerting on Visualisation with NONE aggregate type is prohibited",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);

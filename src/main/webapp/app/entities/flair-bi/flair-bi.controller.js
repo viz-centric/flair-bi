@@ -38,7 +38,8 @@
         "VisualizationUtils",
         "D3Utils",
         '$transitions',
-        "favouriteFilterService"
+        "favouriteFilterService",
+        "schedulerService"
     ];
 
     function FlairBiController(
@@ -74,7 +75,8 @@
         VisualizationUtils,
         D3Utils,
         $transitions,
-        favouriteFilterService
+        favouriteFilterService,
+        schedulerService
     ) {
         var vm = this;
         var editMode = false;
@@ -128,6 +130,7 @@
         vm.recreateVisual = recreateVisual;
         vm.openSchedulerDialog = openSchedulerDialog;
         vm.showVizLoader = showVizLoader;
+        vm.hideThreshold = hideThreshold;
         vm.filtersLength = 0;
         activate();
 
@@ -471,6 +474,23 @@
             return features.length > 0 ? false : true;
         }
 
+        function getScheduleReport(visualizationid) {
+            schedulerService
+                .getScheduleReport(addPrefix(visualizationid))
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        de
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+        }
+
         function saveFeatures(v) {
             v.isCardRevealed = true;
             vm.isSaving = true;
@@ -485,6 +505,9 @@
                         VisualMetadataContainer.update(v.id, result, 'id');
                         var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: v.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
+
+                        getScheduleReport(v.id);
+
                     },
                     onSaveFeaturesError
                 );
@@ -780,7 +803,7 @@
         function registerToggleHeaderFilter() {
             var toggleHeaderFiltersUnsubscribeOff = $scope.$on(
                 "flairbiApp:toggle-headers-filters",
-                function (event,result) {
+                function (event, result) {
                     onFiltersCountChange();
                     vm.showFSFilter = !result;
                 }
@@ -788,14 +811,14 @@
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
         }
 
-        function onFiltersCountChange(){
+        function onFiltersCountChange() {
             vm.filtersLength = filterParametersService.getFiltersCount();
         }
 
         function registerToggleFullScreenFilter() {
             var toggleFullScreenFiltersUnsubscribeOff = $scope.$on(
                 "flairbiApp:toggle-fullscreen-header-filters",
-                function (event,result) {
+                function (event, result) {
                     vm.showFSFilter = result;
                 }
             );
@@ -1282,6 +1305,13 @@
 
         function ngIfSettings() {
             return editMode;
+        }
+
+        function hideThreshold(v) {
+            if (v.metadataVisual.name === "KPI") {
+                return false
+            }
+            return true;
         }
 
         function ngIfDelete() {

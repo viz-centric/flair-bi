@@ -417,7 +417,7 @@
             };
 
             const featureData2 = {};
-            const dimension = visualMetaData.getFieldDimensions()[0];
+            const dimension =  vm.visualMetaData.getFieldDimensions()[0];
             const featureDef = dimension.feature.definition;
             featureData2[featureDefinition] = ['A.' + featureDef, 'B.' + featureDef];
             featureData2[featureDefinition]._meta = {
@@ -620,7 +620,7 @@
             if (vm.condition.thresholdMode === 'dynamic') {
                 const dynamicAlertConditionalExpressions = getDynamicAlertConditionalExpressions();
                 const conditionExpressionForParams = filterParametersService.getConditionExpressionForParams(dynamicAlertConditionalExpressions);
-                const query = visualMetaData.getQueryParametersWithFields(
+                const query = vm.visualMetaData.getQueryParametersWithFields(
                     [{
                         name: vm.condition.dynamicThreshold.field,
                         aggregation: vm.condition.dynamicThreshold.aggregation.opt,

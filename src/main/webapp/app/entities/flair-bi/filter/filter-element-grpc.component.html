@@ -1,4 +1,4 @@
-<div class="filter-element form-group" ng-show="vm.tab != 'widgets'">
+<div class="filter-element form-group">
     <label class="control-label">{{vm.dimension.name}} </label>
     <label class="pull-right"> <i ng-click="vm.addToFavourite(vm.dimension.id)" ng-class="vm.checkFavouriteFilter()" aria-hidden="true"
             class="favouritefilter"></i></label>
@@ -22,7 +22,9 @@
     </div>
 </div>
 
-<div class="filter-element form-group filter-element-widget" ng-if="vm.tab == 'widgets'">>
+
+<!-- TODO: This code needs to be reused in futur -->
+<!-- <div class="filter-element form-group filter-element-widget" ng-if="vm.tab == 'widgets'">>
     <form>
         <fieldset>
             <legend>{{vm.dimension.name}}:</legend>
@@ -49,4 +51,4 @@
             </div>
         </fieldset>
     </form>
-</div>
+</div> -->

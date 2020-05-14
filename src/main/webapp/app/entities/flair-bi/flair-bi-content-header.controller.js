@@ -32,7 +32,8 @@
         "$stateParams",
         "$window",
         "recentBookmarkService",
-        "Auth"
+        "Auth",
+        "DYNAMIC_DATE_RANGE_CONFIG"
     ];
 
     function FlairBiContentHeaderController(
@@ -59,7 +60,8 @@
         $stateParams,
         $window,
         recentBookmarkService,
-        Auth
+        Auth,
+        DYNAMIC_DATE_RANGE_CONFIG
     ) {
         var vm = this;
 
@@ -169,9 +171,7 @@
             }
             if (VisualDispatchService.getApplyBookmark()) {
                 vm.selectedBookmark = VisualDispatchService.getFeatureBookmark();
-                if (vm.selectedBookmark.dateRange) {
-                    addFilterFromBookmark(vm.selectedBookmark);
-                }
+                addFilterFromBookmark(vm.selectedBookmark);
                 $rootScope.$broadcast(
                     "flairbiApp:filter-input-refresh"
                 );
@@ -184,18 +184,23 @@
 
         function addFilterFromBookmark(selectedBookmark) {
             var filter = {};
-            var dynamicDateRangeToolTip = {name:'',text:''};
             var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function (criteria) {
-                var isTemporal = selectedBookmark.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
+                var isTemporal = criteria.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
                 var featureName = isTemporal
                     ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
                     : criteria.feature.name;
                 var valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
-                if(isTemporal && selectedBookmark.dynamicTooltip){
+                if(criteria.metaData && isTemporal){
+                    var dynamicDateRangeToolTip = {name:'',text:''};
                     dynamicDateRangeToolTip.name = featureName;
-                    dynamicDateRangeToolTip.text = selectedBookmark.dynamicTooltip;
+                    var dynamics = criteria.metaData.split("||");
+                    dynamicDateRangeToolTip.text = dynamics[0]==="true" ? 'Last ' + dynamics[1] : dynamics[2];
                     filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
+                    $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data" ,buildDynamicDateRangeObject(criteria.feature.name,dynamics[2],dynamics[1]));
+                }else if(isTemporal && !criteria.metaData){
+                    var daterange = criteria.value.split("||");
+                    $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data" ,buildDateRange(criteria.feature.name,daterange));
                 }
                 filter[featureName] = criteria.value.split("||");
                 filter[featureName]._meta = {
@@ -204,6 +209,19 @@
                 };
             });
             filterParametersService.save(filter);
+        }
+
+        function buildDynamicDateRangeObject(dimensionName,title,customDynamicDateRange){
+            var metaData = {dimensionName: dimensionName, metadata : { currentDynamicDateRangeConfig : {},customDynamicDateRange:customDynamicDateRange,dateRangeTab : 2 }};
+            vm.configs = DYNAMIC_DATE_RANGE_CONFIG.filter(function (item) {
+                return  item.title===title;
+            });
+            metaData.metadata.currentDynamicDateRangeConfig = vm.configs[0];
+            return metaData;
+        }
+
+        function buildDateRange(dimensionName,daterange){
+            return {dimensionName: dimensionName, daterange: {selected:daterange[0],selected2:daterange[1]}};
         }
 
         function openSettings() {
@@ -563,8 +581,6 @@
         function bookmark() {
             var params = filterParametersService.get();
             var filterCriterias = [];
-            var dateRange = false;
-            var dateRangeFeatureName = "";
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
                     var param = params[key];
@@ -574,12 +590,12 @@
                     }
                     filterCriterias.push({
                         value: params[key].join('||'),
+                        metaData: isDateRange(key) ? filterParametersService.buildFilterCriteriasForDynamicDateRange(key) : null,
+                        dateRange: isDateRange(key),
                         feature: vm.features.filter(function (item) {
                             var featureName = "";
                             if (isDateRange(key)) {
-                                dateRange = true;
                                 featureName = key.split('|')[1].toLowerCase();
-                                dateRangeFeatureName = key; 
                             } else {
                                 featureName = key.toLowerCase();
                             }
@@ -603,9 +619,7 @@
                                 id: null,
                                 name: null,
                                 featureCriteria: filterCriterias,
-                                datasource: vm.view.viewDashboard.dashboardDatasource,
-                                dateRange: dateRange,
-                                dynamicTooltip : filterParametersService.getDynamicDateRangeToolTip(dateRangeFeatureName)
+                                datasource: vm.view.viewDashboard.dashboardDatasource
                             };
                         }
                     }

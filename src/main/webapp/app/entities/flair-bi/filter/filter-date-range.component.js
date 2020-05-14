@@ -24,7 +24,6 @@
         var vm = this;
         vm.$onInit = onInit;
         vm.$onChanges = $onChanges;
-        vm.currentDimension = {};
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
@@ -43,6 +42,8 @@
                 vm.dimension.metadata.dateRangeTab = 0;
                 vm.dimension.metadata.currentDynamicDateRangeConfig = null;
                 vm.dimension.metadata.customDynamicDateRange = 0;
+                vm.dimension.selected = resetTimezone(strToDate(null));
+                vm.dimension.selected2 = resetTimezone(strToDate(null))
             }
         }
 
@@ -86,8 +87,8 @@
 
         function onInputChange() {
             if (vm.dimension.metadata.dateRangeTab === TAB_DAY) {
-                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
-                var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.currentDimension.selected))));
+                var startDate = formatDate(resetTimezone(strToDate(vm.dimension.selected)));
+                var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.dimension.selected))));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -100,8 +101,8 @@
                     }
                 });
             } else if (vm.dimension.metadata.dateRangeTab === TAB_RANGE) {
-                var startDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected)));
-                var endDate = formatDate(resetTimezone(strToDate(vm.currentDimension.selected2)));
+                var startDate = formatDate(resetTimezone(strToDate(vm.dimension.selected)));
+                var endDate = formatDate(resetTimezone(strToDate(vm.dimension.selected2)));
                 console.log('filter-date-range-component: input change range', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
@@ -152,9 +153,9 @@
         function setDateRangeSubscription() {
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
                 console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate, 'timezone', new Date(dateRange.startDate).getTimezoneOffset());
-                vm.currentDimension.selected = strToDate(dateRange.startDate);
-                vm.currentDimension.selected2 = strToDate(dateRange.endDate);
-                console.log('filter-date-range: event filter-set-date-ranges after', vm.currentDimension.selected);
+                vm.dimension.selected = strToDate(dateRange.startDate);
+                vm.dimension.selected2 = strToDate(dateRange.endDate);
+                console.log('filter-date-range: event filter-set-date-ranges after', vm.dimension.selected);
             });
 
             $scope.$on('$destroy', unsubscribe);
@@ -162,11 +163,9 @@
 
         function onDimensionChange(dimension) {
             console.log('date component: on changes before', dimension);
-            vm.currentDimension = {
-                selected: resetTimezone(strToDate(dimension.selected)),
-                selected2: resetTimezone(strToDate(dimension.selected2)),
-            };
-            console.log('date component: on changes after-', vm.currentDimension.selected);
+            vm.dimension.selected = resetTimezone(strToDate(dimension.selected));
+            vm.dimension.selected2 = resetTimezone(strToDate(dimension.selected2));
+            console.log('date component: on changes after-', vm.dimension.selected);
         }
 
         function onReloadChange() {

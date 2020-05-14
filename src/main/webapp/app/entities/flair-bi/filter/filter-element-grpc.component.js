@@ -47,35 +47,32 @@
 
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
-            //receivedMetaData();
+            receivedMetaData();
             if(isFavouriteFilter())
                 vm.load("", vm.dimension);
         }
 
 
-        
-        // TODO: This code needs to be reused in futur
-
-        // function receivedMetaData() {
-        //     var unsubscribe = $scope.$on(
-        //         "flairbiApp:filters-meta-Data",
-        //         function (event, filter) {
-        //             if (favouriteFilterService.getFavouriteFilter()) {
-        //                 var obj = filter[0];
-        //                 var dimensionName = '';
-        //                 for (var i in obj) {
-        //                     dimensionName = i;
-        //                     break;
-        //                 }
-        //                 var retVal = filter.map(function (item) {
-        //                     return item[dimensionName];
-        //                 });
-        //                 vm.list[dimensionName] = retVal;
-        //             }
-        //         }
-        //     );
-        //     $scope.$on("$destroy", unsubscribe);
-        // };
+        function receivedMetaData() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:filters-meta-Data",
+                function (event, filter) {
+                    if (favouriteFilterService.getFavouriteFilter()) {
+                        var obj = filter[0];
+                        var dimensionName = '';
+                        for (var i in obj) {
+                            dimensionName = i;
+                            break;
+                        }
+                        var retVal = filter.map(function (item) {
+                            return item[dimensionName];
+                        });
+                        vm.list[dimensionName] = retVal;
+                    }
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
+        };
 
 
         function isActive(filter) {
@@ -257,7 +254,7 @@
             }
             query.distinct = true;
             query.limit = 100;
-            //favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
+            favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
             proxyGrpcService.forwardCall(
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,

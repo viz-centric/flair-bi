@@ -131,7 +131,7 @@
                     },
                     function (error) {
                         $rootScope.showErrorSingleToast({
-                            text: 'Error occured while disabling ticket creation',
+                            text: 'Error occurred while disabling ticket creation',
                             title: "Error"
                         });
                     });

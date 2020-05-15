@@ -67,7 +67,7 @@
                     vm.finishResult = "success";
 
                     $rootScope.showSuccessToast({
-                        text: "Dimentions and Measures are configured successfully",
+                        text: "Dimensions and Measures are configured successfully",
                         title: "Saved"
                     });
 

@@ -9,7 +9,7 @@
         'entity', 'Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies', '$timeout', "filterParametersService", "FilterStateManagerService",
-        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate"
+        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
@@ -21,7 +21,7 @@
         Visualmetadata,
         VisualDispatchService,
         VisualMetadataContainer,
-        $translate) {
+        $translate, schedulerService) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -62,6 +62,7 @@
         vm.getSelectedItem = getSelectedItem;
         vm.onWidgetsOpen = onWidgetsOpen;
         vm.onWidgetsClose = onWidgetsClose;
+        vm.vizIdPrefix = 'threshold_alert_:';
         activate();
 
 
@@ -139,6 +140,40 @@
             //$uibModalInstance.dismiss("cancel");
         }
 
+        function getScheduleReport(visualizationid) {
+            schedulerService
+                .getScheduleReport(visualizationid)
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        var info = { text: 'Visualization configuration changes please reschedule the report.', title: "Updated" }
+                        $rootScope.showSuccessToast(info);
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+
+            schedulerService
+                .getScheduleReport(vm.vizIdPrefix + visualizationid)
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        var info = { text: 'Visualization configuration changes please reschedule the report.', title: "Updated" }
+                        $rootScope.showSuccessToast(info);
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+        }
+
         function save() {
             vm.isSaving = true;
             if (vm.visual.id) {
@@ -154,6 +189,8 @@
                         vm.visual = result;
                         var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: result.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
+
+                        getScheduleReport(vm.visual.id);
                     },
                     onSaveError
                 );
@@ -215,8 +252,8 @@
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
         }
 
-        function setThinBarStyle(isFiltersApplied){
-            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "40px"} : {"margin-top": "75px"} 
+        function setThinBarStyle(isFiltersApplied) {
+            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
         }
 
         function registerToggleAppliedFilterOn() {
@@ -355,15 +392,15 @@
             $('#slider').css('display', 'block');
         }
 
-        function getAppliedFiltersDimentions(){
+        function getAppliedFiltersDimentions() {
             var filters = filterParametersService.get();
             vm.appliedFiltersDimensions = vm.dimensions.filter(function (item) {
-                return filters[getDimensionName(item.name,item.type)] ? true : false ;
+                return filters[getDimensionName(item.name, item.type)] ? true : false;
             });
         }
 
-        function getDimensionName(name,type) {
-            return type==='timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
+        function getDimensionName(name, type) {
+            return type === 'timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
         }
 
         function openFilters() {
@@ -541,7 +578,7 @@
             $rootScope.$broadcast("flairbiApp:toggleFilters-on");
         }
 
-        function onAppliedFiltersOpen(){
+        function onAppliedFiltersOpen() {
             resetWidgetEntry();
             $rootScope.$broadcast("flairbiApp:toggleAppliedFilters-on");
         }

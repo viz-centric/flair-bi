@@ -41,6 +41,7 @@
 /* IBox */
 /* User management*/
 /* Viz Settings */
+/* build page */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 100; }
 
@@ -1290,7 +1291,7 @@ nav.navbar-static-top {
   z-index: 10;
   height: calc(100% - 95px);
   overflow-y: hidden;
-  margin-right: 46px;
+  margin-right: 40px;
   margin-top: 58px; }
   #slider .row {
     margin: 0; }
@@ -2882,7 +2883,7 @@ input[type="search"] {
     border-radius: 0;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    top: 58px; }
+    top: 40px; }
   .dropdown-options-v2 svg {
     width: 25px;
     height: 25px;

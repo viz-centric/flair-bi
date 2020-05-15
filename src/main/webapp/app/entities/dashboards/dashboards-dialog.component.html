@@ -15,14 +15,14 @@
             <div class="form-group">
                 <label class="control-label" data-translate="flairbiApp.dashboards.dashboardName"
                     for="field_dashboardName">Dashboard Name</label>
-                <input auto-focus class="form-control" id="field_dashboardName" name="dashboardName" ng-maxlength="20"
+                <input auto-focus class="form-control" id="field_dashboardName" name="dashboardName" ng-maxlength="30"
                     ng-model="vm.dashboards.dashboardName" required="" type="text" />
                 <div ng-show="editForm.dashboardName.$invalid">
                     <p class="help-block" data-translate="entity.validation.required"
                         ng-show="editForm.dashboardName.$error.required">This field is required.</p>
                     <p class="help-block" data-translate="entity.validation.maxlength"
-                        ng-show="editForm.dashboardName.$error.maxlength" translate-value-max="20">This field cannot be
-                        longer than 20 characters.</p>
+                        ng-show="editForm.dashboardName.$error.maxlength" translate-value-max="30">This field cannot be
+                        longer than 30 characters.</p>
                 </div>
             </div>
             <div class="form-group">

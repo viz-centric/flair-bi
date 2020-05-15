@@ -150,6 +150,11 @@
             return dynamicDateRangeToolTip;
         }
 
+
+        //setDateRangeSubscription will be removed in next PR. 
+        //a)dates should be updated from flair-bi-rightnavbar.js using vm.dimensions
+        //b) this is duplicate event
+
         function setDateRangeSubscription() {
             var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
                 console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate, 'timezone', new Date(dateRange.startDate).getTimezoneOffset());

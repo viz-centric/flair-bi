@@ -77,14 +77,14 @@
             schedulerService.executeNow(vizID).then(
                 function (response) {
                     var info = {
-                        text: 'Report will be execute now',
+                        text: 'Report executed',
                         title: 'Success'
                     };
                     $rootScope.showSuccessToast(info);
                 },
                 function (error) {
                     var info = {
-                        text: 'error occured while cancelling scheduled report',
+                        text: 'A Webhook with this name already exists',
                         title: "Error"
                     };
                     $rootScope.showErrorSingleToast(info);

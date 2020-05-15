@@ -40,7 +40,7 @@
             ChannelService.notifyOpenedJiraTicket(jiraConfig)
                 .then(function () {
                     var info = {
-                        text: "Notification sent successfully for open tickets",
+                        text: "Notification sent successfully",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);

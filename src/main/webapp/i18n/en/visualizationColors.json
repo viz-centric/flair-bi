@@ -7,9 +7,9 @@
                 "createOrEditLabel": "Create or edit a Visualization Colors",
                 "search": "Search for Visualization Colors"
             },
-            "created": "A new Visualization Colors is created with identifier {{ param }}",
-            "updated": "A Visualization Colors is updated with identifier {{ param }}",
-            "deleted": "A Visualization Colors is deleted with identifier {{ param }}",
+            "created": "A new Visualization colour code added with identifier {{ param }}",
+            "updated": "Visualization colour code updated with identifier {{ param }}",
+            "deleted": "Visualization colour code deleted with identifier {{ param }}",
             "errorSaving":"Error saving Visualization Color",
             "errorDeleting":"Error deleting Visualization Color",
             "delete": {

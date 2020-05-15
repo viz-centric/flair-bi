@@ -179,8 +179,8 @@
         function registerSavePermissionsEvent() {
             var unsubscribe = $scope.$on('flairbiApp:savePermissions', function () {
                 swal(
-                    "Are you sure?",
-                    "You want to make changes to following permissions", {
+                    "Change permissions",
+                    "Confirm changes to following dashboard permissions", {
                     dangerMode: true,
                     buttons: true,
                 })

@@ -134,9 +134,9 @@
             favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
                 .then(function (data) {
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
+                    var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " from favourit filter",
+                        text: "Dimensions " + opration + " Bookmark filter panelr",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);

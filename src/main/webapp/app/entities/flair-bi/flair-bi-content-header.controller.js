@@ -171,12 +171,7 @@
             }
             if (VisualDispatchService.getApplyBookmark()) {
                 vm.selectedBookmark = VisualDispatchService.getFeatureBookmark();
-                addFilterFromBookmark(vm.selectedBookmark);
-                $rootScope.$broadcast(
-                    "flairbiApp:filter-input-refresh"
-                );
-                $rootScope.$broadcast("flairbiApp:filter");
-                $rootScope.$broadcast('flairbiApp:filter-add');
+                applyBookmark(vm.selectedBookmark);
                 VisualDispatchService.setFeatureBookmark({});
                 recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
             }

@@ -433,8 +433,6 @@
                             vm.dimensions[index]['metadata']=data.metadata;
                         }
                     }else{
-                        //vm.dimensions[index].selected = data.daterange.selected;
-                        //vm.dimensions[index].selected2 = data.daterange.selected2;
                         vm.dimensions[index].selected = strToDate(data.daterange.selected);
                         vm.dimensions[index].selected2 = strToDate(data.daterange.selected2);
                         vm.dimensions[index].metadata = {};

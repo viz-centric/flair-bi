@@ -37,12 +37,6 @@ public class FeatureBookmark implements Serializable {
     @NotNull
     private Datasource datasource;
 
-    @Column(name = "date_range")
-    private boolean dateRange;
-
-    @Column(name = "dynamic_tooltip")
-    private String dynamicTooltip;
-
     @PreRemove
     public void preRemove() {
         this.datasource = null;
@@ -119,22 +113,6 @@ public class FeatureBookmark implements Serializable {
     public FeatureBookmark datasources(Datasource datasource) {
         this.datasource = datasource;
         return this;
-    }
-
-	public boolean getDateRange() {
-		return dateRange;
-	}
-
-	public void setDateRange(boolean dateRange) {
-		this.dateRange = dateRange;
-	}
-
-    public String getDynamicTooltip() {
-        return dynamicTooltip;
-    }
-
-    public void setDynamicTooltip(String dynamicTooltip) {
-        this.dynamicTooltip = dynamicTooltip;
     }
 
     @Override

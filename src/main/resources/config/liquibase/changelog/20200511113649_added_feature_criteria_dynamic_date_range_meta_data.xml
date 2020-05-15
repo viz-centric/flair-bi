@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20200511113649" author="johib">
+        <dropColumn tableName="feature_bookmark">
+            <column name="dynamic_tooltip" type="varchar(255)"/>
+        </dropColumn>
+        <dropColumn tableName="feature_bookmark">
+            <column name="date_range" type="boolean"/>
+        </dropColumn>
+        <addColumn tableName="feature_criteria">
+            <column name="meta_data" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="feature_criteria">
+            <column name="date_range" type="boolean"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -13,6 +13,7 @@
         var dateRangePrefix='date-range';
         var selectedFilters={};
         var dynamicDateRangeToolTip={};
+        var dynamicDateRangeMetaData={};
 
         var service = {
             get: get,
@@ -29,7 +30,10 @@
             getComparableDataTypes:getComparableDataTypes,
             saveDynamicDateRangeToolTip:saveDynamicDateRangeToolTip,
             getDynamicDateRangeToolTip:getDynamicDateRangeToolTip,
-            resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip
+            resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip,
+            saveDynamicDateRangeMetaData : saveDynamicDateRangeMetaData,
+            getDynamicDateRangeMetaData : getDynamicDateRangeMetaData,
+            buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange
         };
 
 
@@ -279,6 +283,28 @@
         }
         function resetDynamicDateRangeToolTip(){
             dynamicDateRangeToolTip={};
+        }
+
+        function saveDynamicDateRangeMetaData(dimensionName,metaData){
+            dynamicDateRangeMetaData[dimensionName] = metaData;
+        }
+
+        function getDynamicDateRangeMetaData(dimensionName){
+            if(dynamicDateRangeMetaData[dimensionName]){
+                return dynamicDateRangeMetaData[dimensionName];
+            }else{
+                return '';
+            }
+        }
+
+        function buildFilterCriteriasForDynamicDateRange(dimensionName){
+            if(dynamicDateRangeMetaData[dimensionName]){
+                var metaData = dynamicDateRangeMetaData[dimensionName];
+                var isCustom = metaData.currentDynamicDateRangeConfig.isCustom ? "true" : "false";
+                return isCustom +"||"+ metaData.customDynamicDateRange +"||"+ metaData.currentDynamicDateRangeConfig.title;
+            }else{
+                return null;
+            }
         }
     }
 })();

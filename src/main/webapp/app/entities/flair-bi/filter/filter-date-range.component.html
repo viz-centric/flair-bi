@@ -24,7 +24,7 @@
     
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate1"
-                         ng-model="vm.currentDimension.selected"
+                         ng-model="vm.dimension.selected"
                          ng-change="vm.onInputChange()"
                          md-placeholder="Enter date"></md-datepicker>
         </div>
@@ -33,13 +33,13 @@
          ng-if="vm.dimension.metadata.dateRangeTab === 1">
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="startDate"
-                         ng-model="vm.currentDimension.selected"
+                         ng-model="vm.dimension.selected"
                          ng-change="vm.onInputChange()"
                          md-placeholder="Start date"></md-datepicker>
         </div>
         <div class="input-group">
           <md-datepicker class="md-datepicker-flair" id="endDate"
-                         ng-model="vm.currentDimension.selected2"
+                         ng-model="vm.dimension.selected2"
                          ng-change="vm.onInputChange()"
                          md-placeholder="End Date"></md-datepicker>
         </div>

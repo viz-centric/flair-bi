@@ -22,6 +22,7 @@
 
         vm.filter = filter;
         vm.onClearClick = onClearClick;
+        vm.onFilterClick = onFilterClick;
         vm.selectedFilters = {};
         vm.list={};
         activate();
@@ -47,6 +48,12 @@
 
         function onClearClick() {
             $rootScope.$broadcast("flairbiApp:clearFilters");
+            $rootScope.$broadcast("flairbiApp:clearFiltersClicked");
+        }
+
+        function onFilterClick() {
+            filter();
+            $rootScope.$broadcast("flairbiApp:filterClicked");
         }
 
         function clear() {

@@ -43,7 +43,7 @@ public class ViewFeatureCriteriaService {
         viewFeatureCriteria.setFeature(feature);
         viewFeatureCriteria.setView(view);
         viewFeatureCriteria.setValue(f.getValue());
-        viewFeatureCriteria.setTooltip(f.getTooltip());
+        viewFeatureCriteria.setMetadata(f.getMetadata());
         return viewFeatureCriteria;
     }
 }

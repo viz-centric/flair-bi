@@ -33,7 +33,7 @@ public class ViewFeatureCriteria implements Serializable {
     private String value;
 
     @Column
-    private String tooltip;
+    private String metadata;
 
     @ManyToOne(optional = false)
     @NotNull

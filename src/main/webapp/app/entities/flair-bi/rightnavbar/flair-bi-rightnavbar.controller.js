@@ -145,7 +145,7 @@
                 .then(function (success) {
                     var report = success.data.report;
                     if (report) {
-                        var info = { text: 'Visualization configuration changes please reschedule the report.', title: "Updated" }
+                        var info = { text: 'Visualization configuration has changed, please reschedule the report.', title: "Updated" }
                         $rootScope.showSuccessToast(info);
                     }
                 })
@@ -161,7 +161,7 @@
                 .then(function (success) {
                     var report = success.data.report;
                     if (report) {
-                        var info = { text: 'Visualization configuration changes please reschedule the report.', title: "Updated" }
+                        var info = { text: 'Visualization configuration has changed, please reschedule the report.', title: "Updated" }
                         $rootScope.showSuccessToast(info);
                     }
                 })
@@ -615,8 +615,8 @@
 
         function deleteHierarchy(hierarchy) {
             swal(
-                "Are you sure?",
-                "You want to delete selected hierarchy", {
+                "Delete Hierarchy",
+                "Confirm delete Hierarchy object.", {
                 dangerMode: true,
                 buttons: true,
             })
@@ -645,8 +645,8 @@
 
         function deleteFeature(feature) {
             swal(
-                "Are you sure?",
-                "Do you want to delete selected feature?", {
+                "Delete Custom field",
+                "Confirm delete dashboard data field.", {
                 dangerMode: true,
                 buttons: true,
             })

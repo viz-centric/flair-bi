@@ -48,7 +48,7 @@
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
             receivedMetaData();
-            if(isFavouriteFilter())
+            if (isFavouriteFilter())
                 vm.load("", vm.dimension);
         }
 
@@ -95,15 +95,15 @@
 
             if (filterParameters[vm.dimension.name].indexOf(filter) !== -1) {
                 filterParameters[vm.dimension.name].splice(filterParameters[vm.dimension.name].indexOf(filter.name), 1);
-                removeTagFromSelectedList({text:filter});
+                removeTagFromSelectedList({ text: filter });
             }
             else {
                 filterParameters[vm.dimension.name].push(filter);
-                if(!vm.dimension.selected){
+                if (!vm.dimension.selected) {
                     vm.dimension.selected = [];
-                    vm.dimension.selected.push({text:filter});
-                }else{
-                    vm.dimension.selected.push({text:filter});
+                    vm.dimension.selected.push({ text: filter });
+                } else {
+                    vm.dimension.selected.push({ text: filter });
                 }
             }
 
@@ -113,7 +113,7 @@
             };
             filterParametersService.saveSelectedFilter(filterParameters);
             vm.isActive(filter);
-            if(isFavouriteFilter())
+            if (isFavouriteFilter())
                 displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
 
 
@@ -134,9 +134,9 @@
             favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
                 .then(function (data) {
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
+                    var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " from favourit filter",
+                        text: "Dimensions " + opration + " Bookmark filter panel",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);
@@ -149,9 +149,9 @@
                 });
         }
 
-        function onDateChange(startDate, endDate,metadata) {
+        function onDateChange(startDate, endDate, metadata) {
             vm.dimension.metadata = metadata;
-            if(metadata!=2){
+            if (metadata != 2) {
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
             }
@@ -263,8 +263,8 @@
             );
         }
 
-        function isFavouriteFilter(){
-            return vm.tab==='widgets'? true : false
+        function isFavouriteFilter() {
+            return vm.tab === 'widgets' ? true : false
         }
 
         function removed(tag) {
@@ -302,7 +302,7 @@
                 vm.dimension.selected = myFilters.map(function (item) {
                     var newItem = {};
                     newItem['text'] = item;
-                    if(isFavouriteFilter())
+                    if (isFavouriteFilter())
                         displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
                     return newItem;
                 });
@@ -323,7 +323,7 @@
                 valueType: 'valueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
-            if(isFavouriteFilter())
+            if (isFavouriteFilter())
                 displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(tag['text']), filterParameters[vm.dimension.name].length - 1);
         }
 

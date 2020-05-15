@@ -1,12 +1,10 @@
 {
-	"flairbiApp":{
-		"releaseRequests":
-		{
-			"approve":"Request has been approved",
-			"reject":"Request has been rejected",
-			"errorRejecting":"error occured while rejecting",
-			"errorApproving":"error occured while approving"
+	"flairbiApp": {
+		"releaseRequests": {
+			"approve": "Release request approved",
+			"reject": "Release request rejected",
+			"errorRejecting": "Error occurred while rejecting release request",
+			"errorApproving": "Error occurred while approving release request"
 		}
 	}
-
 }

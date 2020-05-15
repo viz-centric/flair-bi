@@ -98,7 +98,7 @@
             ChannelService.createEmailConfig(SMPTConfig)
                 .then(function (success) {
                     var info = {
-                        text: "SMTP settings are saved successfully",
+                        text: "SMTP configuration updated successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);
@@ -122,7 +122,7 @@
             ChannelService.createJiraConfig(jiraConfig)
                 .then(function () {
                     var info = {
-                        text: "Jira settings are saved successfully",
+                        text: "Jira configuration updated successfully",
                         title: "Updated"
                     }
                     $rootScope.showSuccessToast(info);
@@ -199,10 +199,10 @@
         }
 
         function deleteChannelConfig(data, channel) {
-            var title = channel == "team" ? data.webhookName + " webhook URL" : "configuration";
+            var title = channel == "team" ? data.webhookName : "configuration";
             swal(
-                "Are you sure?",
-                "You want to delete " + title, {
+                "Delete Configuration",
+                "Confirm delete " + title, {
                 dangerMode: true,
                 buttons: true,
             })

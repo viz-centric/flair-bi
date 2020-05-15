@@ -480,7 +480,6 @@
                 .then(function (success) {
                     var report = success.data.report;
                     if (report) {
-                        de
                     }
                 })
                 .catch(function (error) {
@@ -753,7 +752,7 @@
                     function (error) { }
                 );
                 VisualDispatchService.setViewEditedBeforeSave(true);
-                VisualDispatchService.setSavePromptMessage("new visualization has been created and it has not been saved.Do you want to save?");
+                VisualDispatchService.setSavePromptMessage("You have unsaved changes made to the dashboard. Are you sure you wish to discard these changes?");
             });
             $scope.$on("$destroy", unsub);
         }
@@ -1245,7 +1244,7 @@
 
         function onResizeStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to the dashboard. Are you sure you wish to discard these changes?");
             delete $rootScope.updateWidget[ui.element.attr("id")];
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
@@ -1258,7 +1257,7 @@
 
         function onDragStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to the dashboard. Are you sure you wish to discard these changes?");
         }
 
         function onItemAdded(item) { }

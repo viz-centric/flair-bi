@@ -38,7 +38,7 @@
                     function (response) {
                         vm.reportData = response.data.reportLog;
                         var info = {
-                            text: 'Report will be execute now',
+                            text: 'Report executed',
                             title: 'Success'
                         };
                         connectWebSocket();
@@ -49,7 +49,7 @@
                     },
                     function (error) {
                         var info = {
-                            text: 'error occured while cancelling scheduled report',
+                            text: 'A Webhook with this name already exists',
                             title: "Error"
                         };
                         $rootScope.showErrorSingleToast(info);

@@ -6,9 +6,9 @@
             "createOrEditLabel": "Create or Edit a User"
         },
         "created": "A new user is created with login ID {{ param }}",
-        "updated": "User is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
-        "errorSaving":"Error saving user",
+        "updated": "User account {{ param }} configuration updated successfully.",
+        "deleted": "User account {{ param }} deleted successfully.",
+        "errorSaving":"Error while creating a new user account.",
         "delete": {
             "question": "Are you sure you want to delete user {{ login }}?"
         },
@@ -29,9 +29,9 @@
         "lastModifiedBy": "Modified By",
         "lastModifiedDate": "Modified Date",
         "selectUser": "Select User ...",
-        "activatedSuccess":"User has been Activated",
-        "deactivatedSuccess":"User has been Dectivated",
-        "errorUpdating":"Error occured updating user",
+        "activatedSuccess":"User account successfully activated",
+        "deactivatedSuccess":"User account deactivated",
+        "errorUpdating":"User configuration update error",
         "error": {
             "users.all": "Error loading users"
         }

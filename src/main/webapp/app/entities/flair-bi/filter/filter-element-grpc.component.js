@@ -305,7 +305,7 @@
                     var newItem = {};
                     newItem['text'] = item;
                     if(isFavouriteFilter())
-                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
+                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
                     return newItem;
                 });
             } else {

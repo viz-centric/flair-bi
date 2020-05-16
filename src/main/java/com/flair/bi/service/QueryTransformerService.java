@@ -264,14 +264,14 @@ public class QueryTransformerService {
             AndConditionExpression andConditionExpression = (AndConditionExpression) conditionExpression;
             andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression(), features));
             andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression(), features));
-        } else if (conditionExpression instanceof ContainsConditionExpression) {
-            ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
-            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, containsConditionExpression.getFeatureName()));
-            containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
         } else if (conditionExpression instanceof NotContainsConditionExpression) {
             NotContainsConditionExpression notContainsConditionExpression = (NotContainsConditionExpression) conditionExpression;
             notContainsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, notContainsConditionExpression.getFeatureName()));
             notContainsConditionExpression.setValues(sanitizeList(notContainsConditionExpression.getValues()));
+        } else if (conditionExpression instanceof ContainsConditionExpression) {
+            ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
+            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, containsConditionExpression.getFeatureName()));
+            containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
         } else if (conditionExpression instanceof LikeConditionExpression) {
             LikeConditionExpression likeConditionExpression = (LikeConditionExpression) conditionExpression;
             likeConditionExpression.setValue(sanitize(likeConditionExpression.getValue()));

@@ -80,6 +80,10 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
     @Column(name = "favourite_filter")
     private Boolean favouriteFilter;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "date_filter")
+    private DateFilterType dateFilter;
+
     public void clearFields() {
         getFields().forEach(x -> x.setFeature(null));
         getFields().clear();

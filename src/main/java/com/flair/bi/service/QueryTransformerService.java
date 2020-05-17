@@ -218,10 +218,10 @@ public class QueryTransformerService {
             return Query.ConditionExpressionHolder.ExpressionType.BETWEEN_VALUE;
         } else if (conditionExpression instanceof CompareConditionExpression) {
             return Query.ConditionExpressionHolder.ExpressionType.COMPARE_VALUE;
-        } else if (conditionExpression instanceof ContainsConditionExpression) {
-            return Query.ConditionExpressionHolder.ExpressionType.CONTAINS_VALUE;
         } else if (conditionExpression instanceof NotContainsConditionExpression) {
             return Query.ConditionExpressionHolder.ExpressionType.NOTCONTAINS_VALUE;
+        } else if (conditionExpression instanceof ContainsConditionExpression) {
+            return Query.ConditionExpressionHolder.ExpressionType.CONTAINS_VALUE;
         } else if (conditionExpression instanceof LikeConditionExpression) {
             return Query.ConditionExpressionHolder.ExpressionType.LIKE_VALUE;
         }

@@ -134,9 +134,9 @@
             favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
                 .then(function (data) {
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
+                    var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " from favourit filter",
+                        text: "Dimensions " + opration + " Bookmark filter panelr",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);
@@ -151,9 +151,11 @@
 
         function onDateChange(startDate, endDate,metadata) {
             vm.dimension.metadata = metadata;
-            if(metadata!=2){
+            if(metadata.dateRangeTab!=2){
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
+            }else{
+                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name),metadata);
             }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
@@ -303,7 +305,7 @@
                     var newItem = {};
                     newItem['text'] = item;
                     if(isFavouriteFilter())
-                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
+                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
                     return newItem;
                 });
             } else {

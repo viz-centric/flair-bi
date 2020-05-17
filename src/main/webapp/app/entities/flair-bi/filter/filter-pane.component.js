@@ -22,6 +22,7 @@
 
         vm.filter = filter;
         vm.onClearClick = onClearClick;
+        vm.onFilterClick = onFilterClick;
         vm.selectedFilters = {};
         vm.list={};
         activate();
@@ -47,6 +48,12 @@
 
         function onClearClick() {
             $rootScope.$broadcast("flairbiApp:clearFilters");
+            $rootScope.$broadcast("flairbiApp:clearFiltersClicked");
+        }
+
+        function onFilterClick() {
+            filter();
+            $rootScope.$broadcast("flairbiApp:filterClicked");
         }
 
         function clear() {
@@ -54,6 +61,10 @@
             vm.dimensions.forEach(function (item) {
                 item.selected = null;
                 item.selected2 = null;
+                item.metadata = {};
+                item.metadata.dateRangeTab = 0;
+                item.metadata.currentDynamicDateRangeConfig = null;
+                item.metadata.customDynamicDateRange = 0;
             });
             filterParametersService.clear();
             filterParametersService.saveSelectedFilter($rootScope.updateWidget);

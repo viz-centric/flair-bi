@@ -6,13 +6,13 @@
                 "createLabel": "Create Constraint",
                 "createOrEditLabel": "Create or Edit a Data Source Constraint"
             },
-            "created": "A new Data Source Constraint is created with identifier {{ param }}",
-            "updated": "A new Data Source Constraint is updated with identifier {{ param }}",
-            "deleted": "A new Data Source Constraint is deleted with identifier {{ param }}",
-            "errorSaving":"Error saving new Data Source Constraint",
-            "errorDeleting":"Error deleting new Data Source Constraint",
+            "created": "A new Datasource Constraint is created with identifier {{ param }}",
+            "updated": "A new DataSource Constraint is updated with identifier {{ param }}",
+            "deleted": "A new DataSource Constraint is deleted with identifier {{ param }}",
+            "errorSaving":"Error while saving new Datasource Constraint",
+            "errorDeleting":"Error while deleting new Datasource Constraint",
             "delete": {
-                "question": "Are you sure you want to delete new Data Source Constraint {{ id }}?"
+                "question": "Confirm deletion of Datasource Constraint {{ id }}?"
             },
             "detail": {
                 "title": "Datasource Constraint"

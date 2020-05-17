@@ -14,6 +14,7 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -96,109 +97,119 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
 	}
 
 	@Column(name = "image_location")
-	private String imageLocation;
+    private String imageLocation;
 
-	@Column(name = "image_content_type")
-	private String imageContentType;
+    @Column(name = "image_content_type")
+    private String imageContentType;
 
-	@ManyToOne
-	@NotNull
-	private Dashboard viewDashboard;
+    @ManyToOne
+    @NotNull
+    private Dashboard viewDashboard;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "view", cascade = { CascadeType.REMOVE }, orphanRemoval = true)
-	private Set<ViewWatch> viewWatches = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "view", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    private Set<ViewWatch> viewWatches = new HashSet<>();
 
-	@Column(name = "watch_count", nullable = false)
-	private int watchCount = 0;
+    @Column(name = "watch_count", nullable = false)
+    private int watchCount = 0;
 
-	public View add(ViewRelease viewRelease) {
-		viewRelease.setView(this);
-		releases.add(viewRelease);
-		return this;
-	}
+    @OneToMany(mappedBy = "view", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<ViewFeatureCriteria> viewFeatureCriterias = new HashSet<>();
 
-	public View remove(ViewRelease viewRelease) {
-		viewRelease.setView(null);
-		releases.remove(viewRelease);
-		return this;
-	}
+    public View add(ViewRelease viewRelease) {
+        viewRelease.setView(this);
+        releases.add(viewRelease);
+        return this;
+    }
 
-	public View viewName(String viewName) {
-		this.viewName = viewName;
-		return this;
-	}
+    public View remove(ViewRelease viewRelease) {
+        viewRelease.setView(null);
+        releases.remove(viewRelease);
+        return this;
+    }
 
-	public View description(String description) {
-		this.description = description;
-		return this;
-	}
+    public View viewName(String viewName) {
+        this.viewName = viewName;
+        return this;
+    }
 
-	public View imageContentType(String imageContentType) {
-		this.imageContentType = imageContentType;
-		return this;
-	}
+    public View description(String description) {
+        this.description = description;
+        return this;
+    }
 
-	public View viewDashboard(Dashboard dashboard) {
-		this.viewDashboard = dashboard;
-		return this;
-	}
+    public View imageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
+        return this;
+    }
 
-	public View published(Boolean published) {
-		this.published = published;
-		return this;
-	}
+    public View viewDashboard(Dashboard dashboard) {
+        this.viewDashboard = dashboard;
+        return this;
+    }
 
-	public View image(byte[] image) {
-		this.image = image;
-		return this;
-	}
+    public View published(Boolean published) {
+        this.published = published;
+        return this;
+    }
 
-	/**
-	 * Get the entity identifiers
-	 *
-	 * @return collection of entity resources
-	 */
-	@Override
-	@JsonIgnore
-	public List<String> getResources() {
-		return Collections.singletonList(this.id.toString());
-	}
+    public View image(byte[] image) {
+        this.image = image;
+        return this;
+    }
 
-	/**
-	 * List of available actions that can be performed against secured entity
-	 *
-	 * @return collection of {@link Action}
-	 */
-	@Override
-	@JsonIgnore
-	public List<Action> getActions() {
-		return Arrays.asList(Action.READ, Action.WRITE, Action.UPDATE, Action.DELETE, Action.READ_PUBLISHED,
-				Action.DELETE_PUBLISHED, Action.TOGGLE_PUBLISH, Action.REQUEST_PUBLISH, Action.MANAGE_PUBLISH);
-	}
+    /**
+     * Get the entity identifiers
+     *
+     * @return collection of entity resources
+     */
+    @Override
+    @JsonIgnore
+    public List<String> getResources() {
+        return Collections.singletonList(this.id.toString());
+    }
 
-	/**
-	 * Under which scope is this entity being protected
-	 *
-	 * @return scope or realm
-	 */
-	@Override
-	@JsonIgnore
-	public String getScope() {
-		return "VIEW";
-	}
+    /**
+     * List of available actions that can be performed against secured entity
+     *
+     * @return collection of {@link Action}
+     */
+    @Override
+    @JsonIgnore
+    public List<Action> getActions() {
+        return Arrays.asList(Action.READ,
+            Action.WRITE,
+            Action.UPDATE,
+            Action.DELETE,
+            Action.READ_PUBLISHED,
+            Action.DELETE_PUBLISHED,
+            Action.TOGGLE_PUBLISH,
+            Action.REQUEST_PUBLISH,
+            Action.MANAGE_PUBLISH);
+    }
 
-	@Override
-	public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
-		GranteePermissionReport<T> granteePermissionReport = new GranteePermissionReport<>();
-		granteePermissionReport.setGrantee(grantee);
-		granteePermissionReport.getInfo().put("viewName", this.viewName);
-		granteePermissionReport.getInfo().put("id", this.id);
-		granteePermissionReport.getInfo().put("permissionMetadata",
-				this.getPermissions().stream()
-						.map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
-						.collect(Collectors.toCollection(LinkedHashSet::new)));
+    /**
+     * Under which scope is this entity being protected
+     *
+     * @return scope or realm
+     */
+    @Override
+    @JsonIgnore
+    public String getScope() {
+        return "VIEW";
+    }
 
-		return granteePermissionReport;
-	}
+    @Override
+    public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
+        GranteePermissionReport<T> granteePermissionReport = new GranteePermissionReport<>();
+        granteePermissionReport.setGrantee(grantee);
+        granteePermissionReport.getInfo().put("viewName", this.viewName);
+        granteePermissionReport.getInfo().put("id", this.id);
+        granteePermissionReport.getInfo().put("permissionMetadata", this.getPermissions()
+            .stream()
+            .map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
+            .collect(Collectors.toCollection(LinkedHashSet::new)));
+
+        return granteePermissionReport;
+    }
 }

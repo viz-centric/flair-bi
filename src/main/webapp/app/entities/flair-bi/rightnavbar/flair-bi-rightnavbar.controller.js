@@ -89,6 +89,7 @@
             registerToggleWidgetsOff();
             registerToggleHeaderFilter();
             registerToggleAppliedFilterOn();
+            registerBookmarkUpdateDynamicDateRange();
             filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
         }
 
@@ -145,7 +146,7 @@
                 .then(function (success) {
                     var report = success.data.report;
                     if (report) {
-                        var info = { text: 'Visualization configuration changes please reschedule the report.', title: "Updated" }
+                        var info = { text: 'Visualization configuration has changed, please reschedule the report.', title: "Updated" }
                         $rootScope.showSuccessToast(info);
                     }
                 })
@@ -161,7 +162,7 @@
                 .then(function (success) {
                     var report = success.data.report;
                     if (report) {
-                        var info = { text: 'Visualization configuration changes please reschedule the report.', title: "Updated" }
+                        var info = { text: 'Visualization configuration has changed, please reschedule the report.', title: "Updated" }
                         $rootScope.showSuccessToast(info);
                     }
                 })
@@ -419,6 +420,38 @@
             $('#slider').css('display', 'block');
         }
 
+        function registerBookmarkUpdateDynamicDateRange() {
+            var bookmarkUpdateDynamicDateRange = $scope.$on(
+                "flairbiApp:bookmark-update-dynamic-date-range-meta-data",
+                function (event, data) {
+                    var index = -1;
+                    vm.dimensions.some(function (obj, i) {
+                        return obj.name === data.dimensionName ? index = i : false;
+                    });
+                    if(data.metadata){
+                        if (index > -1) {
+                            vm.dimensions[index]['metadata']=data.metadata;
+                        }
+                    }else{
+                        vm.dimensions[index].selected = strToDate(data.daterange.selected);
+                        vm.dimensions[index].selected2 = strToDate(data.daterange.selected2);
+                        vm.dimensions[index].metadata = {};
+                        vm.dimensions[index].metadata.dateRangeTab = 1;
+                        vm.dimensions[index].metadata.currentDynamicDateRangeConfig = null;
+                        vm.dimensions[index].metadata.customDynamicDateRange = 0;
+                    }
+                }
+            );
+            $scope.$on("$destroy", bookmarkUpdateDynamicDateRange);
+        }
+
+        function strToDate(date) {
+            if (!date) {
+                return null;
+            }
+            return Date.parse(date) ? new Date(date) : null;
+        }
+
         function clearFilters() {
             $rootScope.$broadcast("flairbiApp:clearFilters");
         }
@@ -445,9 +478,6 @@
         function loadDimensions() {
             vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
-            });
-            vm.FavouriteDimensions = featureEntities.filter(function (item) {
-                return item.featureType === "DIMENSION" && item.favouriteFilter === true;
             });
         }
 
@@ -615,8 +645,8 @@
 
         function deleteHierarchy(hierarchy) {
             swal(
-                "Are you sure?",
-                "You want to delete selected hierarchy", {
+                "Delete Hierarchy",
+                "Confirm delete Hierarchy object.", {
                 dangerMode: true,
                 buttons: true,
             })
@@ -645,8 +675,8 @@
 
         function deleteFeature(feature) {
             swal(
-                "Are you sure?",
-                "Do you want to delete selected feature?", {
+                "Delete Custom field",
+                "Confirm delete dashboard data field.", {
                 dangerMode: true,
                 buttons: true,
             })

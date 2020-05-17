@@ -61,7 +61,7 @@
                 ChannelService.createTeamConfig(teamConfig)
                     .then(function () {
                         var info = {
-                            text: "team's config is saved",
+                            text: "MS Team configuration updated successfully.",
                             title: "Saved"
                         }
                         $rootScope.showSuccessToast(info);
@@ -94,7 +94,7 @@
                 ChannelService.updateTeamConfig(teamConfig)
                     .then(function (success) {
                         var info = {
-                            text: "team webhook URL updated successfully",
+                            text: "Webhook URL updated successfully",
                             title: "Updated"
                         }
                         $rootScope.showSuccessToast(info);

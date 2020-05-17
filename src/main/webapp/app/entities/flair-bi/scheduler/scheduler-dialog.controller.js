@@ -61,6 +61,7 @@
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
+                "userid":"",
                 "connection_name": "",
                 "report_name": "",
                 "source_id": "",
@@ -102,6 +103,7 @@
 
         function activate() {
             vm.isAdmin = AccountDispatch.isAdmin();
+            vm.account = AccountDispatch.getAccount();
             registerSetCommunicationList();
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
@@ -223,6 +225,8 @@
             vm.scheduleObj.schedule.start_date = new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date = new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body = data.report.mail_body;
+            vm.scheduleObj.report.userid = data.report.userid;
+
             vm.scheduleObj.putcall = true;
             vm.scheduleObj.report.thresholdAlert = data.report.thresholdAlert;
             vm.scheduleObj.constraints = data.constraints;
@@ -417,7 +421,7 @@
             };
 
             const featureData2 = {};
-            const dimension = visualMetaData.getFieldDimensions()[0];
+            const dimension = vm.visualMetaData.getFieldDimensions()[0];
             const featureDef = dimension.feature.definition;
             featureData2[featureDefinition] = ['A.' + featureDef, 'B.' + featureDef];
             featureData2[featureDefinition]._meta = {
@@ -452,7 +456,7 @@
                 setCronExpression();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.status == 200 && (success.data.message == "report is updated" || success.data.message == "Report is scheduled successfully")) {
+                    if (success.status == 200 && (success.data.message == "Report updated" || success.data.message == "Report is scheduled successfully")) {
                         $uibModalInstance.close(vm.scheduleObj);
                         $rootScope.showSuccessToast({
                             text: success.data.message,
@@ -473,7 +477,7 @@
                 });
             } else {
                 var info = {
-                    text: "Please select aggregate function from settings",
+                    text: "Scheduling threshold alerting on Visualisation with NONE aggregate type is prohibited",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
@@ -545,20 +549,36 @@
         }
 
         function deleteReport(id) {
-            schedulerService.cancelScheduleReport(addPrefix(id)).then(function (success) {
-                var info = {
-                    text: success.data.message,
-                    title: "Cancelled"
+            var canDelete = true;
+            if (!vm.isAdmin) {
+                if (vm.scheduleObj.report.userid !== vm.account.login) {
+                    canDelete = false;
                 }
-                $rootScope.showSuccessToast(info);
-                vm.clear();
-            }).catch(function (error) {
+            }
+            if (canDelete) {
+                schedulerService.cancelScheduleReport(addPrefix(id)).then(function (success) {
+                    var info = {
+                        text: success.data.message,
+                        title: "Cancelled"
+                    }
+                    $rootScope.showSuccessToast(info);
+                    vm.clear();
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+            }
+            else {
                 var info = {
-                    text: error.data.message,
+                    text: "You don't have access to cancel this job",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
-            });
+            }
+
         }
 
         function loadDashboards() {
@@ -620,7 +640,7 @@
             if (vm.condition.thresholdMode === 'dynamic') {
                 const dynamicAlertConditionalExpressions = getDynamicAlertConditionalExpressions();
                 const conditionExpressionForParams = filterParametersService.getConditionExpressionForParams(dynamicAlertConditionalExpressions);
-                const query = visualMetaData.getQueryParametersWithFields(
+                const query = vm.visualMetaData.getQueryParametersWithFields(
                     [{
                         name: vm.condition.dynamicThreshold.field,
                         aggregation: vm.condition.dynamicThreshold.aggregation.opt,

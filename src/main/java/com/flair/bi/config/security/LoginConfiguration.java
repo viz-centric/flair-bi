@@ -1,20 +1,10 @@
 package com.flair.bi.config.security;
 
-import com.flair.bi.config.JHipsterProperties;
-import com.flair.bi.security.Http401UnauthorizedEntryPoint;
-import com.flair.bi.security.UserDetailsService;
-import com.flair.bi.security.jwt.JWTConfigurer;
-import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,38 +17,44 @@ import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-@EnableOAuth2Sso
+import com.flair.bi.ApplicationProperties;
+import com.flair.bi.security.Http401UnauthorizedEntryPoint;
+import com.flair.bi.security.UserDetailsService;
+import com.flair.bi.security.jwt.JWTConfigurer;
+import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Slf4j
-@Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
 public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final TokenProvider tokenProvider;
 	private final CorsFilter corsFilter;
-	private final JHipsterProperties jHipsterProperties;
+	private final Http401UnauthorizedEntryPoint entryPoint;
+	private final ApplicationProperties properties;
 
 	public LoginConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
 			UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter,
-			PasswordEncoder passwordEncoder, JHipsterProperties jHipsterProperties,
-			LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
-			LDAPUserDetailsContextMapper ldapUserDetailsContextMapper) throws Exception {
+			PasswordEncoder passwordEncoder, LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
+			LDAPUserDetailsContextMapper ldapUserDetailsContextMapper, Http401UnauthorizedEntryPoint entryPoint,
+			ApplicationProperties properties) throws Exception {
 		log.info("Creating Jwt and Ldap configuration");
 
 		this.tokenProvider = tokenProvider;
 		this.corsFilter = corsFilter;
-		this.jHipsterProperties = jHipsterProperties;
+		this.entryPoint = entryPoint;
+		this.properties = properties;
 
 		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+
 		authenticationManagerBuilder.ldapAuthentication().ldapAuthoritiesPopulator(ldapAuthoritiesPopulator)
 				.userDnPatterns("uid={0},ou=people").userDetailsContextMapper(ldapUserDetailsContextMapper)
-				.contextSource(getLDAPContextSource());
-	}
+				.passwordEncoder(passwordEncoder).contextSource(getLDAPContextSource());
 
-	@Bean
-	public Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint() {
-		return new Http401UnauthorizedEntryPoint();
 	}
 
 	@Override
@@ -67,10 +63,16 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/content/**").antMatchers("/swagger-ui/index.html").antMatchers("/test/**");
 	}
 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling()
-				.authenticationEntryPoint(http401UnauthorizedEntryPoint()).and()
+				.authenticationEntryPoint(entryPoint).and()
 				// disable CSRF
 				.csrf().disable().headers().frameOptions().disable().and()
 				// session management
@@ -123,7 +125,7 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
 	private LdapContextSource getLDAPContextSource() {
 		LdapContextSource contextSource = new LdapContextSource();
-		JHipsterProperties.LdapSettings ldapSettings = jHipsterProperties.getLdapsettings();
+		ApplicationProperties.LdapProperties ldapSettings = properties.getLdap();
 		contextSource.setUrl(ldapSettings.getUrl());
 		contextSource.setBase(ldapSettings.getBase());
 		contextSource.setUserDn(ldapSettings.getUserDn());

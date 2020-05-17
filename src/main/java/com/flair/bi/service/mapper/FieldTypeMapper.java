@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.service.dto.FieldTypeDTO;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
-import java.util.List;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.service.dto.FieldTypeDTO;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface FieldTypeMapper {

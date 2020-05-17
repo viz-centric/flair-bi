@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.*;
-import com.flair.bi.service.dto.FunctionsDTO;
-
-import org.mapstruct.*;
 import java.util.List;
+
+import org.mapstruct.Mapper;
+
+import com.flair.bi.domain.Functions;
+import com.flair.bi.service.dto.FunctionsDTO;
 
 /**
  * Mapper for the entity Functions and its DTO FunctionsDTO.

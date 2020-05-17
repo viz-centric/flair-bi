@@ -22,54 +22,54 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class FbGRPCResourceTest {
 
-    @Mock
-    private GrpcQueryService grpcQueryService;
+	@Mock
+	private GrpcQueryService grpcQueryService;
 
-    @Mock
-    SchedulerService schedulerService;
+	@Mock
+	SchedulerService schedulerService;
 
-    private FbGRPCResource resource;
+	private FbGRPCResource resource;
 
-    @Before
-    public void setUp() {
-        resource = new FbGRPCResource(grpcQueryService,schedulerService);
-    }
+	@Before
+	public void setUp() {
+		resource = new FbGRPCResource(grpcQueryService, schedulerService);
+	}
 
-    @Test
-    public void mirrorSocket() throws InterruptedException {
-        VisualMetadata visualMetadata = new VisualMetadata();
-        String visualId = "visual id";
-        QueryDTO queryDTO = new QueryDTO();
-        String userId = "user id";
-        long datasourcesId = 1L;
-        String type = null;
+	@Test
+	public void mirrorSocket() throws InterruptedException {
+		VisualMetadata visualMetadata = new VisualMetadata();
+		String visualId = "visual id";
+		QueryDTO queryDTO = new QueryDTO();
+		String userId = "user id";
+		long datasourcesId = 1L;
+		String type = null;
 
-        FbiEngineDTO fbiEngineDTO = new FbiEngineDTO();
-        fbiEngineDTO.setQueryDTO(queryDTO);
-        fbiEngineDTO.setVisualMetadata(visualMetadata);
-        fbiEngineDTO.setvId(visualId);
+		FbiEngineDTO fbiEngineDTO = new FbiEngineDTO();
+		fbiEngineDTO.setQueryDTO(queryDTO);
+		fbiEngineDTO.setVisualMetadata(visualMetadata);
+		fbiEngineDTO.setvId(visualId);
 
-        SimpMessageHeaderAccessor headerAccessor = mock(SimpMessageHeaderAccessor.class);
-        Principal token = mock(Principal.class);
-        when(token.getName()).thenReturn(userId);
-        when(headerAccessor.getUser()).thenReturn(token);
+		SimpMessageHeaderAccessor headerAccessor = mock(SimpMessageHeaderAccessor.class);
+		Principal token = mock(Principal.class);
+		when(token.getName()).thenReturn(userId);
+		when(headerAccessor.getUser()).thenReturn(token);
 
-        doAnswer(invocationOnMock -> {
-            Long datasourceIdArg = invocationOnMock.getArgumentAt(0, Long.class);
-            String userIdArg = invocationOnMock.getArgumentAt(1, String.class);
-            VisualMetadata visualMetadataArg = invocationOnMock.getArgumentAt(2, VisualMetadata.class);
-            QueryDTO queryDTOArg = invocationOnMock.getArgumentAt(3, QueryDTO.class);
-            String visualIdArg = invocationOnMock.getArgumentAt(4, String.class);
+		doAnswer(invocationOnMock -> {
+			Long datasourceIdArg = invocationOnMock.getArgument(0, Long.class);
+			String userIdArg = invocationOnMock.getArgument(1, String.class);
+			VisualMetadata visualMetadataArg = invocationOnMock.getArgument(2, VisualMetadata.class);
+			QueryDTO queryDTOArg = invocationOnMock.getArgument(3, QueryDTO.class);
+			String visualIdArg = invocationOnMock.getArgument(4, String.class);
 
-            assertEquals(datasourcesId, (long)datasourceIdArg);
-            assertEquals(userId, userIdArg);
-            assertEquals(visualMetadata, visualMetadataArg);
-            assertEquals(queryDTO, queryDTOArg);
-            assertEquals(visualId, visualIdArg);
-            return null;
-        }).when(grpcQueryService)
-            .sendGetDataStream(eq(datasourcesId), eq(userId), eq(visualMetadata), eq(queryDTO), eq(visualId),eq(type));
-        resource.mirrorSocket(datasourcesId, fbiEngineDTO, headerAccessor);
+			assertEquals(datasourcesId, (long) datasourceIdArg);
+			assertEquals(userId, userIdArg);
+			assertEquals(visualMetadata, visualMetadataArg);
+			assertEquals(queryDTO, queryDTOArg);
+			assertEquals(visualId, visualIdArg);
+			return null;
+		}).when(grpcQueryService).sendGetDataStream(eq(datasourcesId), eq(userId), eq(visualMetadata), eq(queryDTO),
+				eq(visualId), eq(type));
+		resource.mirrorSocket(datasourcesId, fbiEngineDTO, headerAccessor);
 
-    }
+	}
 }

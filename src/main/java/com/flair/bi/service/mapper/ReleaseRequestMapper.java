@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.ReleaseRequest;
-import com.flair.bi.web.rest.dto.ReleaseRequestDTO;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
-import java.util.List;
+import com.flair.bi.domain.ReleaseRequest;
+import com.flair.bi.web.rest.dto.ReleaseRequestDTO;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface ReleaseRequestMapper {

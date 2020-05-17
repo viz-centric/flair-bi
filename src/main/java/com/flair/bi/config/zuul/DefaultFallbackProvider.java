@@ -16,88 +16,48 @@ import java.io.InputStream;
 @Component
 public class DefaultFallbackProvider implements FallbackProvider {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Override
-    public ClientHttpResponse fallbackResponse(Throwable cause) {
-        log.warn(cause.getMessage());
-        return new ClientHttpResponse() {
-            @Override
-            public HttpStatus getStatusCode() throws IOException {
-                return HttpStatus.OK;
-            }
+	@Override
+	public String getRoute() {
+		return "*";
+	}
 
-            @Override
-            public int getRawStatusCode() throws IOException {
-                return HttpStatus.OK.value();
-            }
+	@Override
+	public ClientHttpResponse fallbackResponse(String route, Throwable cause) {
+		log.warn(cause.getMessage());
+		return new ClientHttpResponse() {
+			@Override
+			public HttpStatus getStatusCode() throws IOException {
+				return HttpStatus.OK;
+			}
 
-            @Override
-            public String getStatusText() throws IOException {
-                return HttpStatus.OK.toString();
-            }
+			@Override
+			public int getRawStatusCode() throws IOException {
+				return HttpStatus.OK.value();
+			}
 
-            @Override
-            public void close() {
-            }
+			@Override
+			public String getStatusText() throws IOException {
+				return HttpStatus.OK.toString();
+			}
 
-            @Override
-            public InputStream getBody() throws IOException {
-                return new ByteArrayInputStream("{\"factorA\":\"Sorry, Service is Down!\",\"factorB\":\"?\",\"id\":null}".getBytes());
-            }
+			@Override
+			public void close() {
+			}
 
-            @Override
-            public HttpHeaders getHeaders() {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                return headers;
-            }
-        };
-    }
+			@Override
+			public InputStream getBody() throws IOException {
+				return new ByteArrayInputStream(
+						"{\"factorA\":\"Sorry, Service is Down!\",\"factorB\":\"?\",\"id\":null}".getBytes());
+			}
 
-    @Override
-    public String getRoute() {
-        return "*";
-    }
-
-    /**
-     * Provides a fallback response.
-     *
-     * @return The fallback response.
-     */
-    @Override
-    public ClientHttpResponse fallbackResponse() {
-        return new ClientHttpResponse() {
-            @Override
-            public HttpStatus getStatusCode() throws IOException {
-                return HttpStatus.OK;
-            }
-
-            @Override
-            public int getRawStatusCode() throws IOException {
-                return HttpStatus.OK.value();
-            }
-
-            @Override
-            public String getStatusText() throws IOException {
-                return HttpStatus.OK.toString();
-            }
-
-            @Override
-            public void close() {
-            }
-
-            @Override
-            public InputStream getBody() throws IOException {
-                return new ByteArrayInputStream("{\"factorA\":\"Sorry, Service is Down!\",\"factorB\":\"?\",\"id\":null}".getBytes());
-            }
-
-            @Override
-            public HttpHeaders getHeaders() {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                return headers;
-            }
-        };
-    }
+			@Override
+			public HttpHeaders getHeaders() {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				return headers;
+			}
+		};
+	}
 }

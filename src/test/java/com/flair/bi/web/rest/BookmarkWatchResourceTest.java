@@ -42,6 +42,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @Ignore
 public class BookmarkWatchResourceTest extends AbstractIntegrationTest {
 
@@ -78,7 +79,7 @@ public class BookmarkWatchResourceTest extends AbstractIntegrationTest {
 		view.setId(10L);
 		bookmarkWatch.setView(view);
 		when(bookMarkWatchService.findAll(any(Pageable.class), any(Predicate.class))).thenReturn(
-				new PageImpl<>(Arrays.asList(bookmarkWatch), new PageRequest(1, 10, Sort.Direction.DESC, "user"), 10));
+				new PageImpl<>(Arrays.asList(bookmarkWatch), PageRequest.of(1, 10, Sort.Direction.DESC, "user"), 10));
 
 		restMvc.perform(get("/api/bookmark-watches").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))

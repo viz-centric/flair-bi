@@ -1,16 +1,12 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.domain.propertytype.PropertyType;
-import com.flair.bi.service.dto.PropertyTypeDTO;
-import com.flair.bi.service.mapper.PropertyTypeMapper;
-import com.flair.bi.service.properttype.PropertyTypeService;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.util.PaginationUtil;
-import com.flair.bi.web.rest.util.ResponseUtil;
-import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -24,11 +20,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import com.flair.bi.domain.propertytype.PropertyType;
+import com.flair.bi.service.dto.PropertyTypeDTO;
+import com.flair.bi.service.mapper.PropertyTypeMapper;
+import com.flair.bi.service.properttype.PropertyTypeService;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.util.PaginationUtil;
+import com.flair.bi.web.rest.util.ResponseUtil;
+
+import io.micrometer.core.annotation.Timed;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * REST endpoint for {@link PropertyType}

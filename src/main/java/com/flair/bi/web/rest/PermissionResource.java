@@ -1,6 +1,12 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.security.Permission;
@@ -8,9 +14,9 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * REST endpoint for Permissions

@@ -51,304 +51,291 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Ignore
 public class FeatureCriteriaResourceIntTest extends AbstractIntegrationTest {
 
-    private static final String DEFAULT_VALUE = "AAAAAAAAAA";
-    private static final String UPDATED_VALUE = "BBBBBBBBBB";
+	private static final String DEFAULT_VALUE = "AAAAAAAAAA";
+	private static final String UPDATED_VALUE = "BBBBBBBBBB";
 
-    @Autowired
-    private FeatureCriteriaRepository featureCriteriaRepository;
+	@Autowired
+	private FeatureCriteriaRepository featureCriteriaRepository;
 
-    @Autowired
-    private FeatureCriteriaService featureCriteriaService;
+	@Autowired
+	private FeatureCriteriaService featureCriteriaService;
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+	@Autowired
+	private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+	@Autowired
+	private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
-    @Autowired
-    private QuerydslPredicateArgumentResolver querydslPredicateArgumentResolver;
+	@Autowired
+	private QuerydslPredicateArgumentResolver querydslPredicateArgumentResolver;
 
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
+	@Autowired
+	private ExceptionTranslator exceptionTranslator;
 
-    @Autowired
-    private EntityManager em;
+	@Autowired
+	private EntityManager em;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Autowired
-    private FeatureCriteriaMapper featureCriteriaMapper;
+	@Autowired
+	private FeatureCriteriaMapper featureCriteriaMapper;
 
-    private MockMvc restFeatureCriteriaMockMvc;
+	private MockMvc restFeatureCriteriaMockMvc;
 
-    private FeatureCriteria featureCriteria;
+	private FeatureCriteria featureCriteria;
 
-    private User user;
-    
-    private  BookMarkWatchService bookMarkWatchService;
-    
-    private  ViewService viewService;
+	private User user;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        FeatureCriteriaResource featureCriteriaResource = new FeatureCriteriaResource(featureCriteriaService, featureCriteriaMapper,bookMarkWatchService,viewService);
-        this.restFeatureCriteriaMockMvc = MockMvcBuilders.standaloneSetup(featureCriteriaResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
+	private BookMarkWatchService bookMarkWatchService;
 
-    /**
-     * Create an entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static FeatureCriteria createEntity(EntityManager em, User user) {
-        FeatureCriteria featureCriteria = new FeatureCriteria()
-            .value(DEFAULT_VALUE);
-        Datasource datasource = DatasourceResourceIntTest.createEntity(em);
+	private ViewService viewService;
 
-        em.persist(datasource);
-        em.flush();
-        // Add required entity
-        Feature feature = new Feature();
-        feature.setFeatureType(FeatureType.DIMENSION);
-        feature.setDefinition("price");
-        feature.setType("type");
-        feature.setName("name");
-        feature.setDatasource(datasource);
-        em.persist(feature);
-        em.flush();
-        featureCriteria.setFeature(feature);
-        featureCriteria.setValue(DEFAULT_VALUE);
-        // Add required entity
-        FeatureBookmark featureBookmark = FeatureBookmarkResourceIntTest.createEntity(em, user);
-        em.persist(featureBookmark);
-        em.flush();
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		FeatureCriteriaResource featureCriteriaResource = new FeatureCriteriaResource(featureCriteriaService,
+				featureCriteriaMapper, bookMarkWatchService, viewService);
+		this.restFeatureCriteriaMockMvc = MockMvcBuilders.standaloneSetup(featureCriteriaResource)
+				.setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
+				.setControllerAdvice(exceptionTranslator).setMessageConverters(jacksonMessageConverter).build();
+	}
 
-        featureBookmark.addFeatureCriteria(featureCriteria);
-        return featureCriteria;
-    }
+	/**
+	 * Create an entity for this test.
+	 * <p>
+	 * This is a static method, as tests for other entities might also need it, if
+	 * they test an entity which requires the current entity.
+	 */
+	public static FeatureCriteria createEntity(EntityManager em, User user) {
+		FeatureCriteria featureCriteria = new FeatureCriteria().value(DEFAULT_VALUE);
+		Datasource datasource = DatasourceResourceIntTest.createEntity(em);
 
-    @Before
-    public void initTest() {
-        user = UserResourceIntTest.createEntity(userService);
-        featureCriteria = createEntity(em, user);
-    }
+		em.persist(datasource);
+		em.flush();
+		// Add required entity
+		Feature feature = new Feature();
+		feature.setFeatureType(FeatureType.DIMENSION);
+		feature.setDefinition("price");
+		feature.setType("type");
+		feature.setName("name");
+		feature.setDatasource(datasource);
+		em.persist(feature);
+		em.flush();
+		featureCriteria.setFeature(feature);
+		featureCriteria.setValue(DEFAULT_VALUE);
+		// Add required entity
+		FeatureBookmark featureBookmark = FeatureBookmarkResourceIntTest.createEntity(em, user);
+		em.persist(featureBookmark);
+		em.flush();
 
-    @Test
-    @Transactional
-    public void createFeatureCriteria() throws Exception {
-        int databaseSizeBeforeCreate = featureCriteriaRepository.findAll().size();
+		featureBookmark.addFeatureCriteria(featureCriteria);
+		return featureCriteria;
+	}
 
-        CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
-        dto.setValue(featureCriteria.getValue());
-        dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
-        dto.setFeatureBookmark(new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
+	@Before
+	public void initTest() {
+		user = UserResourceIntTest.createEntity(userService);
+		featureCriteria = createEntity(em, user);
+	}
 
-        // Create the FeatureCriteria
-        MvcResult mvcResult = restFeatureCriteriaMockMvc.perform(post("/api/feature-criteria")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isCreated())
-            .andReturn();
+	@Test
+	@Transactional
+	public void createFeatureCriteria() throws Exception {
+		int databaseSizeBeforeCreate = featureCriteriaRepository.findAll().size();
 
-        mvcResult.getResponse();
+		CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
+		dto.setValue(featureCriteria.getValue());
+		dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
+		dto.setFeatureBookmark(
+				new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
 
-        // Validate the FeatureCriteria in the database
-        List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
-        assertThat(featureCriteriaList).hasSize(databaseSizeBeforeCreate + 1);
-        FeatureCriteria testFeatureCriteria = featureCriteriaList.get(featureCriteriaList.size() - 1);
-        assertThat(testFeatureCriteria.getValue()).isEqualTo(DEFAULT_VALUE);
-    }
+		// Create the FeatureCriteria
+		MvcResult mvcResult = restFeatureCriteriaMockMvc.perform(post("/api/feature-criteria")
+				.contentType(TestUtil.APPLICATION_JSON_UTF8).content(TestUtil.convertObjectToJsonBytes(dto)))
+				.andExpect(status().isCreated()).andReturn();
 
-    @Test
-    @Transactional
-    public void createFeatureCriteriaWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = featureCriteriaRepository.findAll().size();
-        featureCriteriaService.save(featureCriteria);
-        // Create the FeatureCriteria with an existing ID
-        CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
-        dto.setValue(featureCriteria.getValue());
-        dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
-        dto.setFeatureBookmark(new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
-        dto.setId(featureCriteria.getId());
+		mvcResult.getResponse();
 
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restFeatureCriteriaMockMvc.perform(post("/api/feature-criteria")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isBadRequest());
+		// Validate the FeatureCriteria in the database
+		List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
+		assertThat(featureCriteriaList).hasSize(databaseSizeBeforeCreate + 1);
+		FeatureCriteria testFeatureCriteria = featureCriteriaList.get(featureCriteriaList.size() - 1);
+		assertThat(testFeatureCriteria.getValue()).isEqualTo(DEFAULT_VALUE);
+	}
 
-        // Validate the Alice in the database
-        List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
-        assertThat(featureCriteriaList).hasSize(databaseSizeBeforeCreate);
-    }
+	@Test
+	@Transactional
+	public void createFeatureCriteriaWithExistingId() throws Exception {
+		int databaseSizeBeforeCreate = featureCriteriaRepository.findAll().size();
+		featureCriteriaService.save(featureCriteria);
+		// Create the FeatureCriteria with an existing ID
+		CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
+		dto.setValue(featureCriteria.getValue());
+		dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
+		dto.setFeatureBookmark(
+				new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
+		dto.setId(featureCriteria.getId());
 
-    @Test
-    @Transactional
-    public void checkValueIsRequired() throws Exception {
-        int databaseSizeBeforeTest = featureCriteriaRepository.findAll().size();
-        // set the field null
+		// An entity with an existing ID cannot be created, so this API call must fail
+		restFeatureCriteriaMockMvc.perform(post("/api/feature-criteria").contentType(TestUtil.APPLICATION_JSON_UTF8)
+				.content(TestUtil.convertObjectToJsonBytes(dto))).andExpect(status().isBadRequest());
 
-        // Create the FeatureCriteria with an existing ID
-        CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
-        dto.setValue(null);
-        dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
-        dto.setFeatureBookmark(new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
+		// Validate the Alice in the database
+		List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
+		assertThat(featureCriteriaList).hasSize(databaseSizeBeforeCreate);
+	}
 
+	@Test
+	@Transactional
+	public void checkValueIsRequired() throws Exception {
+		int databaseSizeBeforeTest = featureCriteriaRepository.findAll().size();
+		// set the field null
 
-        // Create the FeatureCriteria, which fails.
+		// Create the FeatureCriteria with an existing ID
+		CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
+		dto.setValue(null);
+		dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
+		dto.setFeatureBookmark(
+				new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
 
-        restFeatureCriteriaMockMvc.perform(post("/api/feature-criteria")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isBadRequest());
+		// Create the FeatureCriteria, which fails.
 
-        List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
-        assertThat(featureCriteriaList).hasSize(databaseSizeBeforeTest);
-    }
+		restFeatureCriteriaMockMvc.perform(post("/api/feature-criteria").contentType(TestUtil.APPLICATION_JSON_UTF8)
+				.content(TestUtil.convertObjectToJsonBytes(dto))).andExpect(status().isBadRequest());
 
-    @Test
-    @Transactional
-    public void getAllFeatureCriteria() throws Exception {
-        // Initialize the database
-        featureCriteriaRepository.saveAndFlush(featureCriteria);
+		List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
+		assertThat(featureCriteriaList).hasSize(databaseSizeBeforeTest);
+	}
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-            user.getLogin(),
-            user.getPassword(),
-            user.getPermissions().stream().map(PermissionGrantedAuthority::new).collect(Collectors.toList())
-        ));
+	@Test
+	@Transactional
+	public void getAllFeatureCriteria() throws Exception {
+		// Initialize the database
+		featureCriteriaRepository.saveAndFlush(featureCriteria);
 
-        // Get all the featureCriteriaList
-        restFeatureCriteriaMockMvc.perform(get("/api/feature-criteria"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(featureCriteria.getId().intValue())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
-    }
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getLogin(),
+				user.getPassword(),
+				user.getPermissions().stream().map(PermissionGrantedAuthority::new).collect(Collectors.toList())));
 
-    @Test
-    @Transactional
-    public void getFeatureCriteria() throws Exception {
-        // Initialize the database
-        featureCriteriaRepository.saveAndFlush(featureCriteria);
+		// Get all the featureCriteriaList
+		restFeatureCriteriaMockMvc.perform(get("/api/feature-criteria")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(jsonPath("$.[*].id").value(hasItem(featureCriteria.getId().intValue())))
+				.andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
+	}
 
-        // Get the featureCriteria
-        restFeatureCriteriaMockMvc.perform(get("/api/feature-criteria/{id}", featureCriteria.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(featureCriteria.getId().intValue()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()));
-    }
+	@Test
+	@Transactional
+	public void getFeatureCriteria() throws Exception {
+		// Initialize the database
+		featureCriteriaRepository.saveAndFlush(featureCriteria);
 
-    @Test
-    @Transactional
-    public void getNonExistingFeatureCriteria() throws Exception {
-        // Get the featureCriteria
-        restFeatureCriteriaMockMvc.perform(get("/api/feature-criteria/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
-    }
+		// Get the featureCriteria
+		restFeatureCriteriaMockMvc.perform(get("/api/feature-criteria/{id}", featureCriteria.getId()))
+				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.andExpect(jsonPath("$.id").value(featureCriteria.getId().intValue()))
+				.andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()));
+	}
 
-    @Test
-    @Transactional
-    public void updateFeatureCriteria() throws Exception {
-        // Initialize the database
-        featureCriteriaService.save(featureCriteria);
+	@Test
+	@Transactional
+	public void getNonExistingFeatureCriteria() throws Exception {
+		// Get the featureCriteria
+		restFeatureCriteriaMockMvc.perform(get("/api/feature-criteria/{id}", Long.MAX_VALUE))
+				.andExpect(status().isNotFound());
+	}
 
-        int databaseSizeBeforeUpdate = featureCriteriaRepository.findAll().size();
+	@Test
+	@Transactional
+	public void updateFeatureCriteria() throws Exception {
+		// Initialize the database
+		featureCriteriaService.save(featureCriteria);
 
-        // Update the featureCriteria
-        FeatureCriteria updatedFeatureCriteria = featureCriteriaRepository.findOne(featureCriteria.getId());
-        updatedFeatureCriteria
-            .value(UPDATED_VALUE);
+		int databaseSizeBeforeUpdate = featureCriteriaRepository.findAll().size();
 
-        CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
-        dto.setValue(UPDATED_VALUE);
-        dto.setFeatureBookmark(new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(updatedFeatureCriteria.getFeatureBookmark().getId()));
-        dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(updatedFeatureCriteria.getFeature().getId()));
-        dto.setId(updatedFeatureCriteria.getId());
+		// Update the featureCriteria
+		FeatureCriteria updatedFeatureCriteria = featureCriteriaRepository.getOne(featureCriteria.getId());
+		updatedFeatureCriteria.value(UPDATED_VALUE);
 
-        restFeatureCriteriaMockMvc.perform(put("/api/feature-criteria")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isOk());
+		CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
+		dto.setValue(UPDATED_VALUE);
+		dto.setFeatureBookmark(new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(
+				updatedFeatureCriteria.getFeatureBookmark().getId()));
+		dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(updatedFeatureCriteria.getFeature().getId()));
+		dto.setId(updatedFeatureCriteria.getId());
 
-        // Validate the FeatureCriteria in the database
-        List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
-        assertThat(featureCriteriaList).hasSize(databaseSizeBeforeUpdate);
-        FeatureCriteria testFeatureCriteria = featureCriteriaList.get(featureCriteriaList.size() - 1);
-        assertThat(testFeatureCriteria.getValue()).isEqualTo(UPDATED_VALUE);
-    }
+		restFeatureCriteriaMockMvc.perform(put("/api/feature-criteria").contentType(TestUtil.APPLICATION_JSON_UTF8)
+				.content(TestUtil.convertObjectToJsonBytes(dto))).andExpect(status().isOk());
 
-    @Test
-    @Transactional
-    public void updateNonExistingFeatureCriteria() throws Exception {
-        int databaseSizeBeforeUpdate = featureCriteriaRepository.findAll().size();
+		// Validate the FeatureCriteria in the database
+		List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
+		assertThat(featureCriteriaList).hasSize(databaseSizeBeforeUpdate);
+		FeatureCriteria testFeatureCriteria = featureCriteriaList.get(featureCriteriaList.size() - 1);
+		assertThat(testFeatureCriteria.getValue()).isEqualTo(UPDATED_VALUE);
+	}
 
-        // Create the FeatureCriteria
-        CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
-        dto.setValue(featureCriteria.getValue());
-        dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
-        dto.setFeatureBookmark(new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
+	@Test
+	@Transactional
+	public void updateNonExistingFeatureCriteria() throws Exception {
+		int databaseSizeBeforeUpdate = featureCriteriaRepository.findAll().size();
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
-        restFeatureCriteriaMockMvc.perform(put("/api/feature-criteria")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(dto)))
-            .andExpect(status().isCreated());
+		// Create the FeatureCriteria
+		CreateUpdateFeatureCriteriaDTO dto = new CreateUpdateFeatureCriteriaDTO();
+		dto.setValue(featureCriteria.getValue());
+		dto.setFeature(new CreateUpdateFeatureCriteriaDTO.FeatureDTO(featureCriteria.getFeature().getId()));
+		dto.setFeatureBookmark(
+				new CreateUpdateFeatureCriteriaDTO.FeatureBookmarkDTO(featureCriteria.getFeatureBookmark().getId()));
 
-        // Validate the FeatureCriteria in the database
-        List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
-        assertThat(featureCriteriaList).hasSize(databaseSizeBeforeUpdate + 1);
-    }
+		// If the entity doesn't have an ID, it will be created instead of just being
+		// updated
+		restFeatureCriteriaMockMvc.perform(put("/api/feature-criteria").contentType(TestUtil.APPLICATION_JSON_UTF8)
+				.content(TestUtil.convertObjectToJsonBytes(dto))).andExpect(status().isCreated());
 
-    @Test
-    @Transactional
-    public void deleteFeatureCriteria() throws Exception {
-        // Initialize the database
+		// Validate the FeatureCriteria in the database
+		List<FeatureCriteria> featureCriteriaList = featureCriteriaRepository.findAll();
+		assertThat(featureCriteriaList).hasSize(databaseSizeBeforeUpdate + 1);
+	}
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-            user.getLogin(),
-            user.getPassword(),
-            user.getPermissions().stream().map(PermissionGrantedAuthority::new).collect(Collectors.toList())
-        ));
+	@Test
+	@Transactional
+	public void deleteFeatureCriteria() throws Exception {
+		// Initialize the database
 
-        featureCriteriaService.save(featureCriteria);
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getLogin(),
+				user.getPassword(),
+				user.getPermissions().stream().map(PermissionGrantedAuthority::new).collect(Collectors.toList())));
 
-        int databaseSizeBeforeDelete = featureCriteriaService.findAll(new BooleanBuilder()).size();
+		featureCriteriaService.save(featureCriteria);
 
-        // Get the featureCriteria
-        MvcResult mvcResult = restFeatureCriteriaMockMvc.perform(delete("/api/feature-criteria/{id}", featureCriteria.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+		int databaseSizeBeforeDelete = featureCriteriaService.findAll(new BooleanBuilder()).size();
+
+		// Get the featureCriteria
+		MvcResult mvcResult = restFeatureCriteriaMockMvc.perform(
+				delete("/api/feature-criteria/{id}", featureCriteria.getId()).accept(TestUtil.APPLICATION_JSON_UTF8))
 //            .andExpect(status().isOk())
-            .andReturn();
+				.andReturn();
 
-        mvcResult.getResponse();
+		mvcResult.getResponse();
 
-        // Validate the database is empty
-        List<FeatureCriteria> featureCriteriaList = featureCriteriaService.findAll(new BooleanBuilder());
-        assertThat(featureCriteriaList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+		// Validate the database is empty
+		List<FeatureCriteria> featureCriteriaList = featureCriteriaService.findAll(new BooleanBuilder());
+		assertThat(featureCriteriaList).hasSize(databaseSizeBeforeDelete - 1);
+	}
 
-    @Ignore
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(FeatureCriteria.class);
-        FeatureCriteria featureCriteria1 = new FeatureCriteria();
-        featureCriteria1.setId(1L);
-        FeatureCriteria featureCriteria2 = new FeatureCriteria();
-        featureCriteria2.setId(featureCriteria1.getId());
-        assertThat(featureCriteria1).isEqualTo(featureCriteria2);
-        featureCriteria2.setId(2L);
-        assertThat(featureCriteria1).isNotEqualTo(featureCriteria2);
-        featureCriteria1.setId(null);
-        assertThat(featureCriteria1).isNotEqualTo(featureCriteria2);
-    }
+	@Ignore
+	@Test
+	@Transactional
+	public void equalsVerifier() throws Exception {
+		TestUtil.equalsVerifier(FeatureCriteria.class);
+		FeatureCriteria featureCriteria1 = new FeatureCriteria();
+		featureCriteria1.setId(1L);
+		FeatureCriteria featureCriteria2 = new FeatureCriteria();
+		featureCriteria2.setId(featureCriteria1.getId());
+		assertThat(featureCriteria1).isEqualTo(featureCriteria2);
+		featureCriteria2.setId(2L);
+		assertThat(featureCriteria1).isNotEqualTo(featureCriteria2);
+		featureCriteria1.setId(null);
+		assertThat(featureCriteria1).isNotEqualTo(featureCriteria2);
+	}
 }

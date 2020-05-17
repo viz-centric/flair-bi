@@ -1,20 +1,14 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.authorization.AccessControlManager;
-import com.flair.bi.authorization.GranteePermissionReport;
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.security.Permission;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.security.UserGroupService;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.util.PaginationUtil;
-import com.flair.bi.web.rest.util.ResponseUtil;
-import com.flair.bi.web.rest.vm.ChangePermissionVM;
-import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -29,13 +23,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.authorization.GranteePermissionReport;
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.security.Permission;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.security.UserGroupService;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.util.PaginationUtil;
+import com.flair.bi.web.rest.util.ResponseUtil;
+import com.flair.bi.web.rest.vm.ChangePermissionVM;
+
+import io.micrometer.core.annotation.Timed;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 
 /**
  * REST endpoint for managing CRUD operations for {@link com.flair.bi.domain.security.UserGroup}

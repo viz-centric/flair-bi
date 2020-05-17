@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.*;
-import com.flair.bi.service.dto.VisualizationColorsDTO;
-
-import org.mapstruct.*;
 import java.util.List;
+
+import org.mapstruct.Mapper;
+
+import com.flair.bi.domain.VisualizationColors;
+import com.flair.bi.service.dto.VisualizationColorsDTO;
 
 /**
  * Mapper for the entity VisualizationColors and its DTO VisualizationColorsDTO.

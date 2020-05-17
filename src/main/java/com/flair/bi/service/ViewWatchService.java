@@ -25,53 +25,47 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ViewWatchService {
 
-    private final ViewWatchRepository viewWatchRepository;
+	private final ViewWatchRepository viewWatchRepository;
 
-    private final ViewRepository viewRepository;
+	private final ViewRepository viewRepository;
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    public Page<ViewWatch> findAll(Pageable pageable, Predicate predicate) {
-        return viewWatchRepository
-            .findAll(
-                QViewWatch.viewWatch.user.login.eq(SecurityUtils.getCurrentUserLogin()).and(predicate), pageable);
-    }
+	public Page<ViewWatch> findAll(Pageable pageable, Predicate predicate) {
+		return viewWatchRepository.findAll(
+				QViewWatch.viewWatch.user.login.eq(SecurityUtils.getCurrentUserLogin()).and(predicate), pageable);
+	}
 
-    public void saveViewWatch(String login, View view) {
-        if (null == login || null == view) {
-            return;
-        }
-        Optional<User> user = userRepository.findOneByLogin(login);
+	public void saveViewWatch(String login, View view) {
+		if (null == login || null == view) {
+			return;
+		}
+		Optional<User> user = userRepository.findOneByLogin(login);
 
-        ViewWatchId id = user.map(x -> {
-            ViewWatchId viewWatchId = new ViewWatchId();
-            viewWatchId.setUserId(x.getId());
-            viewWatchId.setViewId(view.getId());
-            return viewWatchId;
-        }).orElseThrow(IllegalArgumentException::new);
+		final ViewWatchId id = user.map(x -> {
+			ViewWatchId viewWatchId = new ViewWatchId();
+			viewWatchId.setUserId(x.getId());
+			viewWatchId.setViewId(view.getId());
+			return viewWatchId;
+		}).orElseThrow(IllegalArgumentException::new);
 
+		final ViewWatch viewWatch = viewWatchRepository.findById(id).map(x -> x.incrementWatchCount()).orElseGet(() -> {
+			ViewWatch x = new ViewWatch();
+			x.setId(id);
+			x.setWatchCount(1L);
+			x.setUser(user.orElseThrow(IllegalArgumentException::new));
+			x.setView(view);
+			return x;
+		});
 
-        ViewWatch viewWatch = viewWatchRepository.findOne(id);
-        view.setWatchCount(view.getWatchCount() + 1);
-        if (null == viewWatch) {
-            viewWatch = new ViewWatch();
-            viewWatch.setId(id);
-            viewWatch.setWatchCount(1L);
-            viewWatch.setUser(user.orElseThrow(IllegalArgumentException::new));
-            viewWatch.setView(view);
-        } else {
-            viewWatch.setWatchCount(viewWatch.getWatchCount() + 1L);
-        }
+		viewWatch.setWatchTime(ZonedDateTime.now());
+		viewRepository.save(view);
+		viewWatchRepository.save(viewWatch);
 
-        viewWatch.setWatchTime(ZonedDateTime.now());
+	}
 
-        viewRepository.save(view);
-        viewWatchRepository.save(viewWatch);
-
-    }
-
-    @Async
-    public void saveViewWatchAsync(String login, View view) {
-        saveViewWatch(login, view);
-    }
+	@Async
+	public void saveViewWatchAsync(String login, View view) {
+		saveViewWatch(login, view);
+	}
 }

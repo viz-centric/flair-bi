@@ -1,19 +1,11 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.QDatasource;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.GrpcConnectionService;
-import com.flair.bi.service.GrpcQueryService;
-import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
-import com.flair.bi.service.dto.DeleteInfo;
-import com.flair.bi.service.dto.RunQueryResponseDTO;
-import com.flair.bi.web.rest.dto.ConnectionDTO;
-import com.project.bi.query.dto.QueryDTO;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,10 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.QDatasource;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
+import com.flair.bi.service.dto.DeleteInfo;
+import com.flair.bi.service.dto.RunQueryResponseDTO;
+import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.project.bi.query.dto.QueryDTO;
+
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor

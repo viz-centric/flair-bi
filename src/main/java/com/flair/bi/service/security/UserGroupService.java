@@ -14,9 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service for managing user groups
@@ -27,88 +29,91 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserGroupService {
 
-    private final UserGroupRepository userGroupRepository;
+	private final UserGroupRepository userGroupRepository;
 
-    private final PermissionRepository permissionRepository;
+	private final PermissionRepository permissionRepository;
 
-    public List<UserGroup> findAll() {
-        log.debug("Request to get all UserGroups");
-        return userGroupRepository.findAll();
-    }
+	public List<UserGroup> findAll() {
+		log.debug("Request to get all UserGroups");
+		return userGroupRepository.findAll();
+	}
 
-    /**
-     * Save a UserGroup.
-     *
-     * @param userGroup the entity to save
-     * @return the persisted entity
-     */
-    public UserGroup save(UserGroup userGroup) {
-        log.debug("Request to save UserGroup: {}", userGroup);
-        //Default permissions required in order to create user_group(DASHBOARDS, VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: Start
-        Set<Permission> permissions = new HashSet<>();
-        //TODO: Improve performance by avoiding multiple database calls
-        permissions.add(permissionRepository.findOne(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION")));
-        permissions.add(permissionRepository.findOne(new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION")));
-        permissions.add(permissionRepository.findOne(new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")));
+	/**
+	 * Save a UserGroup.
+	 *
+	 * @param userGroup the entity to save
+	 * @return the persisted entity
+	 */
+	public UserGroup save(UserGroup userGroup) {
+		log.debug("Request to save UserGroup: {}", userGroup);
+		// Default permissions required in order to create user_group(DASHBOARDS,
+		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: Start
 
-        userGroup.getPermissions().clear();
-        userGroup.addPermissions(permissions);
-        //Default permissions required in order to create user_group(DASHBOARDS, VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: End
+		final Set<Permission> permissions = permissionRepository
+				.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
+						new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
+						new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
+				.stream().collect(Collectors.toSet());
 
-        return userGroupRepository.save(userGroup);
-    }
+		userGroup.getPermissions().clear();
+		userGroup.addPermissions(permissions);
+		// Default permissions required in order to create user_group(DASHBOARDS,
+		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: End
 
-    /**
-     * Get all the userGroups.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<UserGroup> findAll(Pageable pageable) {
-        log.debug("Request to get all UserGroups");
-        return userGroupRepository.findAll(pageable);
-    }
+		return userGroupRepository.save(userGroup);
+	}
 
-    /**
-     * Get the "name" userGroup.
-     *
-     * @param name the id of the entity
-     * @return the entity
-     */
-    @Transactional(readOnly = true)
-    public UserGroup findOne(String name) {
-        log.debug("Request to get UserGroup: {}", name);
-        return userGroupRepository.findOne(name);
-    }
+	/**
+	 * Get all the userGroups.
+	 *
+	 * @param pageable the pagination information
+	 * @return the list of entities
+	 */
+	@Transactional(readOnly = true)
+	public Page<UserGroup> findAll(Pageable pageable) {
+		log.debug("Request to get all UserGroups");
+		return userGroupRepository.findAll(pageable);
+	}
 
-    /**
-     * Delete the "name" dashboard.
-     *
-     * @param name the id of the entity
-     */
-    public void delete(String name) {
-        log.debug("Request to delete UserGroup: {}", name);
-        userGroupRepository.delete(name);
-    }
+	/**
+	 * Get the "name" userGroup.
+	 *
+	 * @param name the id of the entity
+	 * @return the entity
+	 */
+	@Transactional(readOnly = true)
+	public UserGroup findOne(String name) {
+		log.debug("Request to get UserGroup: {}", name);
+		return userGroupRepository.getOne(name);
+	}
 
-    /**
-     * This method checks if the role is predefined
-     * @param name name
-     * @return boolean
-     */
-    public boolean isPredefinedGroup(String name){
-    	return SecurityUtils.getPredefinedGroups()
-    				 .stream()
-    				 .anyMatch( e -> e.toString().equalsIgnoreCase(name));
-    }
-    
-    /**
-     * This method checks if the role is not predefined
-     * @param name name
-     * @return boolean
-     */
-    public boolean isNotPredefinedGroup(String name){
-    	return !isPredefinedGroup(name);
-    }
+	/**
+	 * Delete the "name" dashboard.
+	 *
+	 * @param name the id of the entity
+	 */
+	public void delete(String name) {
+		log.debug("Request to delete UserGroup: {}", name);
+		userGroupRepository.deleteById(name);
+	}
+
+	/**
+	 * This method checks if the role is predefined
+	 * 
+	 * @param name name
+	 * @return boolean
+	 */
+	public boolean isPredefinedGroup(String name) {
+		return SecurityUtils.getPredefinedGroups().stream().anyMatch(e -> e.toString().equalsIgnoreCase(name));
+	}
+
+	/**
+	 * This method checks if the role is not predefined
+	 * 
+	 * @param name name
+	 * @return boolean
+	 */
+	public boolean isNotPredefinedGroup(String name) {
+		return !isPredefinedGroup(name);
+	}
 }

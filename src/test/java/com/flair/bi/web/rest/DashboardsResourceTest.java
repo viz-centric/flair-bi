@@ -151,7 +151,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 		List<Dashboard> dashboards = Arrays.asList(d1, d2);
 
 		when(dashboardService.findAllByPrincipalPermissions(any(Pageable.class), any(Predicate.class)))
-				.thenReturn(new PageImpl<>(dashboards, new PageRequest(1, 2), 2));
+				.thenReturn(new PageImpl<>(dashboards, PageRequest.of(1, 2), 2));
 
 		ResponseEntity<Dashboard[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
 				getUrl() + "/api/dashboards", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
@@ -250,7 +250,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 		when(viewService.findOne(eq(7L))).thenReturn(view2);
 
 		doAnswer(invocationOnMock -> {
-			DashboardRelease dashboardRelease = invocationOnMock.getArgumentAt(0, DashboardRelease.class);
+			DashboardRelease dashboardRelease = invocationOnMock.getArgument(0, DashboardRelease.class);
 			ReleaseRequest releaseRequest = new ReleaseRequest();
 			releaseRequest.setComment(dashboardRelease.getComment());
 			releaseRequest.setRelease(dashboardRelease);

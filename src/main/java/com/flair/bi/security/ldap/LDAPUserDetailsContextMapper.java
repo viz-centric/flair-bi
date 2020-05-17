@@ -1,9 +1,7 @@
 package com.flair.bi.security.ldap;
 
-import com.flair.bi.domain.ExternalUser;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Collection;
+
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import com.flair.bi.domain.ExternalUser;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class is used to populate custom fields to LDAPUser object after authentication

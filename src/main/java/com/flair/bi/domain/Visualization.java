@@ -40,10 +40,10 @@ public class Visualization implements Serializable {
     @Column(name = "function_name", nullable = false)
     private String functionname;
 
-    @OneToMany(mappedBy = "visualization", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "visualization", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<FieldType> fieldTypes = new HashSet<>();
 
-    @OneToMany(mappedBy = "visualization", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "visualization", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<VisualizationPropertyType> propertyTypes = new HashSet<>();
 
     public Visualization addFieldType(FieldType fieldType) {

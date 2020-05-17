@@ -9,11 +9,16 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ExclusionFeatureConstraintExpression extends SimpleFeatureConstraintExpression {
 
-    @Override
-    public ConditionExpression build() {
-        NotContainsConditionExpression expression = new NotContainsConditionExpression();
-        expression.setValues(getValues());
-        expression.setFeatureName(getFeatureName());
-        return expression;
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 222972605702745817L;
+
+	@Override
+	public ConditionExpression build() {
+		NotContainsConditionExpression expression = new NotContainsConditionExpression();
+		expression.setValues(getValues());
+		expression.setFeatureName(getFeatureName());
+		return expression;
+	}
 }

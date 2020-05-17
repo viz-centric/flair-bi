@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.*;
-import com.flair.bi.service.dto.FileUploaderStatusDTO;
-
-import org.mapstruct.*;
 import java.util.List;
+
+import org.mapstruct.Mapper;
+
+import com.flair.bi.domain.FileUploaderStatus;
+import com.flair.bi.service.dto.FileUploaderStatusDTO;
 
 /**
  * Mapper for the entity FileUploaderStatus and its DTO FileUploaderStatusDTO.

@@ -14,24 +14,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HierarchyService {
 
-    private final HierarchyRepository hierarchyRepository;
+	private final HierarchyRepository hierarchyRepository;
 
-    @Transactional(readOnly = true)
-    public List<Hierarchy> findAll(Predicate predicate) {
-        return (List<Hierarchy>) hierarchyRepository.findAll(predicate);
-    }
+	@Transactional(readOnly = true)
+	public List<Hierarchy> findAll(Predicate predicate) {
+		return (List<Hierarchy>) hierarchyRepository.findAll(predicate);
+	}
 
-    @Transactional(readOnly = true)
-    public Hierarchy findOne(Long id) {
-        return hierarchyRepository.getOne(id);
-    }
+	@Transactional(readOnly = true)
+	public Hierarchy findOne(Long id) {
+		return hierarchyRepository.getOne(id);
+	}
 
-    public Hierarchy save(Hierarchy hierarchy) {
-        return hierarchyRepository.save(hierarchy);
-    }
+	public Hierarchy save(Hierarchy hierarchy) {
+		return hierarchyRepository.save(hierarchy);
+	}
 
-
-    public void delete(Long id) {
-        hierarchyRepository.delete(id);
-    }
+	public void delete(Long id) {
+		hierarchyRepository.deleteById(id);
+	}
 }

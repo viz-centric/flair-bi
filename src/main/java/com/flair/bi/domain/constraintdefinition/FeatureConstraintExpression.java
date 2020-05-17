@@ -10,10 +10,13 @@ import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = ExclusionFeatureConstraintExpression.class, name = "Exclusion"),
-    @JsonSubTypes.Type(value = InclusionFeatureConstraintExpression.class, name = "Inclusion")}
-)
+@JsonSubTypes({ @JsonSubTypes.Type(value = ExclusionFeatureConstraintExpression.class, name = "Exclusion"),
+		@JsonSubTypes.Type(value = InclusionFeatureConstraintExpression.class, name = "Inclusion") })
 public abstract class FeatureConstraintExpression implements Builder<ConditionExpression>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1638952283475523953L;
 
 }

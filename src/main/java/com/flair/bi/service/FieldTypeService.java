@@ -16,31 +16,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FieldTypeService {
 
-    private final FieldTypeRepository fieldTypeRepository;
+	private final FieldTypeRepository fieldTypeRepository;
 
-    private final PropertyTypeRepository propertyTypeRepository;
+	private final PropertyTypeRepository propertyTypeRepository;
 
-    public FieldType getOne(Long id) {
-        return fieldTypeRepository.getOne(id);
-    }
+	public FieldType getOne(Long id) {
+		return fieldTypeRepository.getOne(id);
+	}
 
-    public FieldType assignPropertyType(Long fieldTypeId, Long propertyTypeId) {
-        final PropertyType propertyType = propertyTypeRepository.findOne(propertyTypeId);
+	public FieldType assignPropertyType(Long fieldTypeId, Long propertyTypeId) {
+		final PropertyType propertyType = propertyTypeRepository.getOne(propertyTypeId);
 
-        if (null == propertyType) {
-            throw new EntityNotFoundException();
-        }
+		return fieldTypeRepository.findById(fieldTypeId).map(x -> x.addPropertyType(propertyType))
+				.map(fieldTypeRepository::save).orElseThrow(EntityNotFoundException::new);
+	}
 
-        return Optional.ofNullable(fieldTypeRepository.findOne(fieldTypeId))
-            .map(x -> x.addPropertyType(propertyType))
-            .map(fieldTypeRepository::save)
-            .orElseThrow(EntityNotFoundException::new);
-    }
-
-    public FieldType removePropertyType(Long fieldTypeId, Long propertyTypeId) {
-        return Optional.ofNullable(fieldTypeRepository.findOne(fieldTypeId))
-            .map(x -> x.removePropertyType(propertyTypeId))
-            .map(fieldTypeRepository::save)
-            .orElseThrow(EntityNotFoundException::new);
-    }
+	public FieldType removePropertyType(Long fieldTypeId, Long propertyTypeId) {
+		return fieldTypeRepository.findById(fieldTypeId).map(x -> x.removePropertyType(propertyTypeId))
+				.map(fieldTypeRepository::save).orElseThrow(EntityNotFoundException::new);
+	}
 }

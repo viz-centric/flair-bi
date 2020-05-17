@@ -1,15 +1,16 @@
 package com.flair.bi.service.mapper;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.dto.UserDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Mapper for the entity User and its DTO UserDTO.

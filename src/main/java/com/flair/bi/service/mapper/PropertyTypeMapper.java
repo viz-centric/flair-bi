@@ -1,12 +1,18 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.enumeration.InputType;
-import com.flair.bi.domain.propertytype.*;
-import com.flair.bi.service.dto.PropertyTypeDTO;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.List;
+import com.flair.bi.domain.enumeration.InputType;
+import com.flair.bi.domain.propertytype.CheckboxPropertyType;
+import com.flair.bi.domain.propertytype.ColorPickerPropertyType;
+import com.flair.bi.domain.propertytype.NumberPropertyType;
+import com.flair.bi.domain.propertytype.PropertyType;
+import com.flair.bi.domain.propertytype.SelectPropertyType;
+import com.flair.bi.domain.propertytype.TextPropertyType;
+import com.flair.bi.service.dto.PropertyTypeDTO;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface PropertyTypeMapper {

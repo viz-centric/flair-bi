@@ -1,13 +1,12 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.domain.FeatureBookmark;
-import com.flair.bi.service.FeatureBookmarkService;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.util.ResponseUtil;
-import com.querydsl.core.types.Predicate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import com.flair.bi.domain.FeatureBookmark;
+import com.flair.bi.service.FeatureBookmarkService;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.util.ResponseUtil;
+import com.querydsl.core.types.Predicate;
+
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * REST controller for managing FeatureBookmark.

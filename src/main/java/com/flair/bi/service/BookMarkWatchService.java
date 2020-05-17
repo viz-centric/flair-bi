@@ -37,83 +37,80 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
+
 @Service
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class BookMarkWatchService {
 
-    private final UserRepository userRepository;
-    
-    private final BookmarkWatchRepository bookmarkWatchRepository; 
-    
-    private final FeatureBookmarkRepository featureBookmarkRepository;
-    
-    private final JdbcTemplate jdbcTemplate;
-    
-    public Page<BookmarkWatch> findAll(Pageable pageable, Predicate predicate) {
-        return bookmarkWatchRepository
-            .findAll(
-                QBookmarkWatch.bookmarkWatch.user.login.eq(SecurityUtils.getCurrentUserLogin()).and(predicate), pageable);
-    }
+	private final UserRepository userRepository;
 
-    public void saveBookmarkWatch(Long bookmarkId,Long viewId,String login, View view) {
-        if (null == login || null == view || null==bookmarkId) {
-            return;
-        }
-        Optional<User> user = userRepository.findOneByLogin(login);
+	private final BookmarkWatchRepository bookmarkWatchRepository;
 
-	  BookmarkWatchId id = user.map(x -> {
-      	BookmarkWatchId bookmarkWatchId = new BookmarkWatchId();
-          bookmarkWatchId.setUserId(x.getId());
-          bookmarkWatchId.setBookmarkId(bookmarkId);
-          bookmarkWatchId.setViewId(viewId);
-          return bookmarkWatchId;
-      }).orElseThrow(IllegalArgumentException::new);
+	private final FeatureBookmarkRepository featureBookmarkRepository;
 
+	private final JdbcTemplate jdbcTemplate;
 
-	  BookmarkWatch bookmarkWatch = bookmarkWatchRepository.findOne(id);
-        if (null == bookmarkWatch) {
-        	bookmarkWatch = new BookmarkWatch();
-        	bookmarkWatch.setId(id);
-        	bookmarkWatch.setWatchCount(1L);
-        	bookmarkWatch.setUser(user.orElseThrow(IllegalArgumentException::new));
-        	bookmarkWatch.setView(view);
-        	FeatureBookmark featureBookmark=featureBookmarkRepository.findOne(bookmarkId);
-        	bookmarkWatch.setFeatureBookmark(featureBookmarkRepository.findOne(bookmarkId));
-        } else {
-        	bookmarkWatch.setWatchCount(bookmarkWatch.getWatchCount() + 1L);
-        }
+	public Page<BookmarkWatch> findAll(Pageable pageable, Predicate predicate) {
+		return bookmarkWatchRepository.findAll(
+				QBookmarkWatch.bookmarkWatch.user.login.eq(SecurityUtils.getCurrentUserLogin()).and(predicate),
+				pageable);
+	}
 
-        bookmarkWatch.setWatchTime(ZonedDateTime.now());
-        bookmarkWatch.setWatchCreatedTime(bookmarkWatch.getWatchCreatedTime());
-        bookmarkWatchRepository.save(bookmarkWatch);
+	public void saveBookmarkWatch(Long bookmarkId, Long viewId, String login, View view) {
+		if (null == login || null == view || null == bookmarkId) {
+			return;
+		}
+		Optional<User> user = userRepository.findOneByLogin(login);
 
-    }
+		BookmarkWatchId id = user.map(x -> {
+			BookmarkWatchId bookmarkWatchId = new BookmarkWatchId();
+			bookmarkWatchId.setUserId(x.getId());
+			bookmarkWatchId.setBookmarkId(bookmarkId);
+			bookmarkWatchId.setViewId(viewId);
+			return bookmarkWatchId;
+		}).orElseThrow(IllegalArgumentException::new);
 
-    @Async
-    public void saveBookmarkWatchAsync(Long bookmarkId,Long viewId,String login,View view) {
-    	saveBookmarkWatch(bookmarkId,viewId,login,view);
-    }
-    
+		BookmarkWatch bookmarkWatch = bookmarkWatchRepository.findById(id).map(x -> x.incrementWatchCount())
+				.orElseGet(() -> {
+					final BookmarkWatch x = new BookmarkWatch();
+					x.setId(id);
+					x.setWatchCount(1L);
+					x.setUser(user.orElseThrow(IllegalArgumentException::new));
+					x.setView(view);
+					Optional<FeatureBookmark> featureBookmark = featureBookmarkRepository.findById(bookmarkId);
+					featureBookmark.ifPresent(x::setFeatureBookmark);
+					return x;
+				});
+
+		bookmarkWatch.setWatchTime(ZonedDateTime.now());
+		bookmarkWatch.setWatchCreatedTime(bookmarkWatch.getWatchCreatedTime());
+		bookmarkWatchRepository.save(bookmarkWatch);
+
+	}
+
+	@Async
+	public void saveBookmarkWatchAsync(Long bookmarkId, Long viewId, String login, View view) {
+		saveBookmarkWatch(bookmarkId, viewId, login, view);
+	}
 
 	public int getCreatedBookmarkCount(long userId) {
-		List<Integer> counts=null;
-		int count=0;
-		try {			
-			counts =jdbcTemplate.query("select count(*) as count  from bookmark_watches where user_id=?",    
-					new Object[] {userId}, new RowMapper<Integer>() {
-						public Integer mapRow(ResultSet srs, int rowNum)
-								throws SQLException {
-							return srs.getInt("count") ;
+		List<Integer> counts = null;
+		int count = 0;
+		try {
+			counts = jdbcTemplate.query("select count(*) as count  from bookmark_watches where user_id=?",
+					new Object[] { userId }, new RowMapper<Integer>() {
+						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
+							return srs.getInt("count");
 						}
 					});
-			if(!counts.isEmpty() && counts!=null)
-			count=counts.get(0);
+			if (!counts.isEmpty() && counts != null)
+				count = counts.get(0);
 
 		} catch (Exception e) {
 			log.error("error occured while getting created bookmarks count" + e.getMessage());
-		} 
+		}
 		return count;
 	}
 

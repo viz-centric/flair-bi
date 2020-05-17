@@ -1,6 +1,6 @@
 package com.flair.bi.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
@@ -10,7 +10,7 @@ import com.flair.bi.domain.bookmarkwatch.QBookmarkWatch;
 
 
 public interface BookmarkWatchRepository extends JpaRepository<BookmarkWatch, BookmarkWatchId>,
-    QueryDslPredicateExecutor<BookmarkWatch>,
+    QuerydslPredicateExecutor<BookmarkWatch>,
     QuerydslBinderCustomizer<QBookmarkWatch> {
 
     /**

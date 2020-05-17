@@ -1,30 +1,12 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.QueryTransformerException;
-import com.flair.bi.service.SchedulerService;
-import com.flair.bi.service.dto.CountDTO;
-import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
-import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
-import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
-import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerLogDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
-import com.flair.bi.service.dto.scheduler.SchedulerResponse;
-import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
-import com.flair.bi.view.VisualMetadataService;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +20,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiParam;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.QueryTransformerException;
+import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogDTO;
+import com.flair.bi.service.dto.scheduler.GetSchedulerReportLogsDTO;
+import com.flair.bi.service.dto.scheduler.GetSearchReportsDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerLogDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
+import com.flair.bi.service.dto.scheduler.SchedulerResponse;
+import com.flair.bi.view.VisualMetadataService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
+import io.micrometer.core.annotation.Timed;
+import io.swagger.annotations.ApiParam;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api")

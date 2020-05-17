@@ -1,23 +1,25 @@
 package com.flair.bi.config.apidoc;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.config.JHipsterProperties;
-import lombok.extern.slf4j.Slf4j;
+import static springfox.documentation.builders.PathSelectors.regex;
+
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
+
+import com.flair.bi.config.Constants;
+
+import io.github.jhipster.config.JHipsterProperties;
+import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.Collections;
-
-import static springfox.documentation.builders.PathSelectors.regex;
 
 /**
  * Springfox Swagger configuration.

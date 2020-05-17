@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.FeatureCriteria;
-import com.flair.bi.web.rest.dto.CreateUpdateFeatureCriteriaDTO;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
-import java.util.List;
+import com.flair.bi.domain.FeatureCriteria;
+import com.flair.bi.web.rest.dto.CreateUpdateFeatureCriteriaDTO;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface FeatureCriteriaMapper {

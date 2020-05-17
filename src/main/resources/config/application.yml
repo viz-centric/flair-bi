@@ -1,15 +1,15 @@
 grpc:
-  server:
-    notifications-service-name: flair-notifications
-    engine-service-name: flair-engine-grpc
-  tls:
-    enabled: ${GRPC_SSL_ENABLED:false}
-    clientCertChainFile: ${GRPC_CERT:/app/clientCertChainFile.crt}
-    clientPrivateKeyFile: ${GRPC_KEY:/app/clientPrivateKeyFile.pem}
-    trustCertCollectionFile: ${GRPC_TRUST_CERT:/app/trustCertCollectionFile.crt}
-    notificationsClientCertChainFile: ${GRPC_NOTIF_CERT:/app/notificationsClientCertChainFile.crt}
-    notificationsClientPrivateKeyFile: ${GRPC_NOTIF_KEY:/app/notificationsClientPrivateKeyFile.pem}
-    notificationsTrustCertCollectionFile: ${GRPC_NOTIF_TRUST_CERT:/app/notificationsTrustCertCollectionFile.crt}
+    server:
+        notifications-service-name: flair-notifications
+        engine-service-name: flair-engine-grpc
+    tls:
+        enabled: ${GRPC_SSL_ENABLED:false}
+        clientCertChainFile: ${GRPC_CERT:/app/clientCertChainFile.crt}
+        clientPrivateKeyFile: ${GRPC_KEY:/app/clientPrivateKeyFile.pem}
+        trustCertCollectionFile: ${GRPC_TRUST_CERT:/app/trustCertCollectionFile.crt}
+        notificationsClientCertChainFile: ${GRPC_NOTIF_CERT:/app/notificationsClientCertChainFile.crt}
+        notificationsClientPrivateKeyFile: ${GRPC_NOTIF_KEY:/app/notificationsClientPrivateKeyFile.pem}
+        notificationsTrustCertCollectionFile: ${GRPC_NOTIF_TRUST_CERT:/app/notificationsTrustCertCollectionFile.crt}
 
 OAUTH_CLIENT_ID: ""
 OAUTH_CLIENT_SECRET: ""
@@ -17,9 +17,4 @@ OAUTH_ACCESS_TOKEN_URI: ""
 OAUTH_USER_AUTHORIZATION_URI: ""
 OAUTH_USER_INFO_URI: ""
 
----
-spring:
-  profiles: dev
-
-liquibase:
-  drop-first: false
+spring.cloud.loadbalancer.ribbon.enabled: false

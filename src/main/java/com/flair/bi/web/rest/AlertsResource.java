@@ -1,6 +1,16 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
 import com.flair.bi.service.dto.ReleasesAlertsFinalDTO;
@@ -10,17 +20,9 @@ import com.flair.bi.service.handler.OlderAlertHandler;
 import com.flair.bi.service.handler.ThisWeeksAlertHandler;
 import com.flair.bi.service.handler.TodaysAlertHandler;
 import com.flair.bi.service.handler.YesterdaysAlertHandler;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")

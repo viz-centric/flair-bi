@@ -19,7 +19,8 @@ import java.util.Optional;
 /**
  * Service for managing audit events.
  * <p>
- * This is the default implementation to support SpringBoot Actuator AuditEventRepository
+ * This is the default implementation to support SpringBoot Actuator
+ * AuditEventRepository
  * </p>
  */
 @Service
@@ -27,14 +28,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuditEventService {
 
-    private final PersistenceAuditEventRepository persistenceAuditEventRepository;
+	private final PersistenceAuditEventRepository persistenceAuditEventRepository;
 
-    private final AuditEventConverter auditEventConverter;
+	private final AuditEventConverter auditEventConverter;
 
-    public Page<AuditEvent> findAll(Pageable pageable) {
-        return persistenceAuditEventRepository.findAll(pageable)
-            .map(auditEventConverter::convertToAuditEvent);
-    }
+	public Page<AuditEvent> findAll(Pageable pageable) {
+		return persistenceAuditEventRepository.findAll(pageable).map(auditEventConverter::convertToAuditEvent);
+	}
 
 	public Page<AuditEvent> findByDatesAndPrincipal(LocalDateTime fromDate, LocalDateTime toDate, String principal,
 			Pageable pageable) {
@@ -48,16 +48,15 @@ public class AuditEventService {
 				.map(auditEventConverter::convertToAuditEvent);
 	}
 
-    public Optional<AuditEvent> find(Long id) {
-        return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map
-            (auditEventConverter::convertToAuditEvent);
-    }
+	public Optional<AuditEvent> find(Long id) {
+		return persistenceAuditEventRepository.findById(id).map(auditEventConverter::convertToAuditEvent);
+	}
 
-    @Transactional(readOnly = true)
-    public Long authenticationSuccessCount() {
-        BooleanExpression type = QPersistentAuditEvent.persistentAuditEvent.auditEventType.eq("AUTHENTICATION_SUCCESS");
-        BooleanExpression principal =
-            QPersistentAuditEvent.persistentAuditEvent.principal.eq(SecurityUtils.getCurrentUserLogin());
-        return persistenceAuditEventRepository.count(type.and(principal));
-    }
+	@Transactional(readOnly = true)
+	public Long authenticationSuccessCount() {
+		BooleanExpression type = QPersistentAuditEvent.persistentAuditEvent.auditEventType.eq("AUTHENTICATION_SUCCESS");
+		BooleanExpression principal = QPersistentAuditEvent.persistentAuditEvent.principal
+				.eq(SecurityUtils.getCurrentUserLogin());
+		return persistenceAuditEventRepository.count(type.and(principal));
+	}
 }

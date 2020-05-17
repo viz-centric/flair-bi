@@ -1,20 +1,24 @@
 package com.flair.bi.web.rest;
 
 
-import com.codahale.metrics.annotation.Timed;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.mapper.ReleaseRequestMapper;
 import com.flair.bi.web.rest.dto.ReleaseRequestDTO;
+
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * REST controller for managing Releases.

@@ -20,30 +20,32 @@ import java.util.List;
 @EqualsAndHashCode(of = "featureConstraints")
 public class ConstraintDefinition implements Builder<ConditionExpression>, Serializable {
 
-    private List<FeatureConstraintExpression> featureConstraints = new ArrayList<>();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2346593849803937348L;
+	private List<FeatureConstraintExpression> featureConstraints = new ArrayList<>();
 
+	@Override
+	public ConditionExpression build() {
 
-    @Override
-    public ConditionExpression build() {
+		ConditionExpression conditionExpression = null;
 
-        ConditionExpression conditionExpression = null;
+		boolean first = true;
+		for (FeatureConstraintExpression constraintExpression : featureConstraints) {
 
-        boolean first = true;
-        for (FeatureConstraintExpression constraintExpression : featureConstraints) {
+			if (first) {
+				conditionExpression = constraintExpression.build();
+				first = false;
+			} else {
+				AndConditionExpression composite = new AndConditionExpression();
+				composite.setFirstExpression(conditionExpression);
+				composite.setSecondExpression(constraintExpression.build());
+				conditionExpression = composite;
+			}
+		}
 
-            if (first) {
-                conditionExpression = constraintExpression.build();
-                first = false;
-            } else {
-                AndConditionExpression composite = new AndConditionExpression();
-                composite.setFirstExpression(conditionExpression);
-                composite.setSecondExpression(constraintExpression.build());
-                conditionExpression = composite;
-            }
-        }
+		return conditionExpression;
 
-
-        return conditionExpression;
-
-    }
+	}
 }

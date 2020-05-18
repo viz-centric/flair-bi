@@ -152,7 +152,7 @@
             var elements=$('div[visual-build-id-resize]');
                 for(var i in elements){
                 $rootScope.$broadcast(
-                "update-widget-content-" + elements[i].id || elements[i].id
+                "refresh-widget-content-" + elements[i].id || elements[i].id
                 );
             }
         }

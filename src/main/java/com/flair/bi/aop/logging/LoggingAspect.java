@@ -3,7 +3,6 @@ package com.flair.bi.aop.logging;
 import com.flair.bi.config.Constants;
 import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.web.rest.errors.ErrorConstants;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -52,7 +51,7 @@ public class LoggingAspect {
             log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName(), e.getCause() != null ? e.getCause() : "NULL");
         }
-		if (e.getMessage().contains("name_unique]")) {
+		if (e.getMessage() != null && e.getMessage().contains("name_unique]")) {
 			throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR, e);
 		}
     }

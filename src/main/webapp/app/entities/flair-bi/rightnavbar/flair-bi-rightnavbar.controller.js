@@ -632,10 +632,13 @@
                     $(event.target).parents('.suggestion-list').length + pLen + dcLen + dlen + cpicker + gridLen + cdatepicker;
                 if (trigger !== event.target && !trigger.has(event.target).length && len == 0) {
                     $('#slider').css('display', 'none');
+                   
+                    hideSidebar();
                     onVizualizationsClose();
                     onFiltersClose();
                     onPropertiesClose();
                     onDataclose();
+                   
                     VisualDispatchService.reloadGrids();
                     VisualDispatchService.removeOpacity();
                 }

@@ -252,10 +252,11 @@
                     text: msg
                 });
             } else {
-                var error = QueryValidationService.getQueryValidationError(body.description);
-                $rootScope.showErrorSingleToast({
-                    text: $translate.instant(error.msgKey, error.params)
-                });
+                const error = QueryValidationService.getQueryValidationError(body.description);
+                const headers = data.headers;
+                const text = $translate.instant('flairbiApp.visualmetadata.queryValidation.' + headers.error,
+                    { reason: headers.value }) || $translate.instant(error.msgKey, error.params);
+                $rootScope.showErrorSingleToast({text: text});
             }
         }
 

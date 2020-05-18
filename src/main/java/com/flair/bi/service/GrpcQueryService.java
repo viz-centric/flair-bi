@@ -16,6 +16,7 @@ import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.flair.bi.web.websocket.FbEngineWebSocketService;
+import com.google.common.collect.ImmutableMap;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
@@ -106,9 +107,12 @@ public class GrpcQueryService {
         Query query;
         try {
             query = queryTransformerService.toQuery(queryDTO,
-                    QueryTransformerParams.builder().connectionName(datasource.getConnectionName())
-                            .vId(visualMetadataId != null ? visualMetadataId : "").userId(userId)
-                            .datasourceId(datasource.getId()).build());
+                    QueryTransformerParams.builder()
+                            .connectionName(datasource.getConnectionName())
+                            .vId(visualMetadataId != null ? visualMetadataId : "")
+                            .userId(userId)
+                            .datasourceId(datasource.getId())
+                            .build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + queryDTO, e);
             throw new RuntimeException(e);
@@ -128,31 +132,30 @@ public class GrpcQueryService {
                 .orElseThrow(() -> new EntityNotFoundException("Datasource with id " + datasourceId + " not found"));
     }
 
-    public void sendGetDataStream(Long datasourcesId, String userId, VisualMetadata visualMetadata, QueryDTO queryDTO,
-            String visualMetadataId, String type) throws InterruptedException {
-        Datasource datasource = getDatasource(datasourcesId);
+    public void sendGetDataStream(SendGetDataDTO sendGetDataDTO) throws InterruptedException {
+        Datasource datasource = getDatasource(sendGetDataDTO.getDatasourcesId());
 
-        DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
+        DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(sendGetDataDTO.getUserId(),
                 datasource.getId());
 
-        Optional.ofNullable(visualMetadata).map(VisualMetadata::getConditionExpression).map(x -> {
+        Optional.ofNullable(sendGetDataDTO.getVisualMetadata()).map(VisualMetadata::getConditionExpression).map(x -> {
             ConditionExpressionDTO dto = new ConditionExpressionDTO();
             dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
             dto.setConditionExpression(x);
             return dto;
-        }).ifPresent(queryDTO.getConditionExpressions()::add);
+        }).ifPresent(sendGetDataDTO.getQueryDTO().getConditionExpressions()::add);
 
         Optional.ofNullable(constraint).map(DatasourceConstraint::build)
-                .ifPresent(queryDTO.getConditionExpressions()::add);
+                .ifPresent(sendGetDataDTO.getQueryDTO().getConditionExpressions()::add);
 
-        queryDTO.setSource(datasource.getName());
+        sendGetDataDTO.getQueryDTO().setSource(datasource.getName());
 
-        if (visualMetadata != null && type == null) {
-            callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "vizualization", userId);
-        } else if (visualMetadata != null && type.equals("share-link")) {
-            callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadata.getId(), "share-link", userId);
+        if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType() == null) {
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), "vizualization", sendGetDataDTO);
+        } else if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType().equals("share-link")) {
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), "share-link", sendGetDataDTO);
         } else {
-            callGrpcBiDirectionalAndPushInSocket(datasource, queryDTO, visualMetadataId, "filters", userId);
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadataId(), "filters", sendGetDataDTO);
         }
     }
 
@@ -178,16 +181,27 @@ public class GrpcQueryService {
 
     }
 
-    private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, QueryDTO queryDTO, String vId,
-            String request, String userId) throws InterruptedException {
+    private void callGrpcBiDirectionalAndPushInSocket(Datasource datasource, String vId,
+                                                      String request,
+                                                      SendGetDataDTO sendGetDataDTO) throws InterruptedException {
+        QueryDTO queryDTO = sendGetDataDTO.getQueryDTO();
+        String userId = sendGetDataDTO.getUserId();
         Query query;
         try {
             query = queryTransformerService.toQuery(queryDTO,
-                    QueryTransformerParams.builder().datasourceId(datasource.getId())
-                            .connectionName(datasource.getConnectionName()).vId(vId).userId(userId).build());
+                    QueryTransformerParams.builder()
+                            .datasourceId(datasource.getId())
+                            .connectionName(datasource.getConnectionName())
+                            .validationType(sendGetDataDTO.getValidationType())
+                            .vId(vId)
+                            .userId(userId)
+                            .build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + queryDTO + " error " + e.getValidationMessage());
-            fbEngineWebSocketService.pushGRPCMetaDataError(userId, Status.FAILED_PRECONDITION);
+            fbEngineWebSocketService.pushGRPCMetaDataError(userId, Status.FAILED_PRECONDITION,
+                    ImmutableMap.of("group", e.getValidationResult().getGroup().name().toLowerCase(),
+                            "error", e.getValidationResult().getErrors().get(0).getError(),
+                            "value", e.getValidationResult().getErrors().get(0).getValue()));
             return;
         }
 

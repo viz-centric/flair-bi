@@ -23,10 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.project.bi.query.SQLUtil.sanitize;
@@ -43,23 +43,28 @@ public class QueryTransformerService {
 
     public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) throws QueryTransformerException {
         log.debug("Map to query {} params {}", queryDTO.toString(), params);
-        QueryValidationResult validationResult = queryValidationService.validate(queryDTO);
+
+        Map<String, Feature> features = Optional.ofNullable(params.getDatasourceId())
+                .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
+                        .stream()
+                        .collect(Collectors.toMap(item -> item.getName(), item -> item)))
+                .orElseGet(() -> new ConcurrentHashMap<>());
+
+        QueryValidationResult validationResult = queryValidationService.validate(queryDTO,
+                QueryValidationParams.builder()
+                        .features(features)
+                        .validationType(params.getValidationType())
+                        .build());
         if (!validationResult.success()) {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
 
         return toQuery(queryDTO, params.getConnectionName(), params.getVId(),
-                params.getUserId(), params.getDatasourceId());
+                params.getUserId(), features);
     }
 
     private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId,
-                          Long datasourceId) {
-        Map<String, Feature> features = Optional.ofNullable(datasourceId)
-                .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
-                        .stream()
-                        .collect(Collectors.toMap(item -> item.getName(), item -> item)))
-                .orElseGet(() -> new HashMap<>());
-
+                          Map<String, Feature> features) {
         List<FieldDTO> fields = transformSelectFields(features, queryDTO.getFields());
         List<FieldDTO> groupBy = transformGroupByFields(features, queryDTO.getGroupBy());
 

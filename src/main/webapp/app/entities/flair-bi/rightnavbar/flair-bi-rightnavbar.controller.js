@@ -90,6 +90,7 @@
             registerToggleHeaderFilter();
             registerToggleAppliedFilterOn();
             registerBookmarkUpdateDynamicDateRange();
+            setDateRangeSubscription();
             filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
         }
 
@@ -424,17 +425,23 @@
             var bookmarkUpdateDynamicDateRange = $scope.$on(
                 "flairbiApp:bookmark-update-dynamic-date-range-meta-data",
                 function (event, data) {
-                    var index = -1;
-                    vm.dimensions.some(function (obj, i) {
-                        return obj.name === data.dimensionName ? index = i : false;
-                    });
-                    if(data.metadata){
-                        if (index > -1) {
-                            vm.dimensions[index]['metadata']=data.metadata;
-                        }
-                    }else{
-                        vm.dimensions[index].selected = strToDate(data.daterange.selected);
-                        vm.dimensions[index].selected2 = strToDate(data.daterange.selected2);
+                    var index = findDateRangeDimensionIndex(data.dimensionName);
+                    if(data.metadata && index > -1){
+                        vm.dimensions[index]['metadata']=data.metadata;
+                    }
+                }
+            );
+            $scope.$on("$destroy", bookmarkUpdateDynamicDateRange);
+        }
+
+        function setDateRangeSubscription() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:filter-set-date-ranges",
+                function (event, data) {
+                    var index = findDateRangeDimensionIndex(data.dimensionName);
+                    if (index > -1) {
+                        vm.dimensions[index].selected = strToDate(data.startDate);
+                        vm.dimensions[index].selected2 = strToDate(data.endDate);
                         vm.dimensions[index].metadata = {};
                         vm.dimensions[index].metadata.dateRangeTab = 1;
                         vm.dimensions[index].metadata.currentDynamicDateRangeConfig = null;
@@ -442,7 +449,15 @@
                     }
                 }
             );
-            $scope.$on("$destroy", bookmarkUpdateDynamicDateRange);
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function findDateRangeDimensionIndex(dimensionName){
+            var index = -1;
+            vm.dimensions.some(function (obj, i) {
+                return obj.name === dimensionName ? index = i : false;
+            });
+            return index;
         }
 
         function strToDate(date) {

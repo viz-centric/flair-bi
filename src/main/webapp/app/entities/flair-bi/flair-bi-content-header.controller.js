@@ -194,7 +194,7 @@
                         buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]));
                 } else {
                     const daterange = value.split("||");
-                    $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data",
+                    $rootScope.$broadcast("flairbiApp:filter-set-date-ranges",
                         buildDateRange(feature.name, daterange));
                 }
             }
@@ -248,7 +248,7 @@
         }
 
         function buildDateRange(dimensionName,daterange){
-            return {dimensionName: dimensionName, daterange: {selected:daterange[0],selected2:daterange[1]}};
+            return {dimensionName: dimensionName, startDate: daterange[0],endDate:daterange[1]};
         }
 
         function openSettings() {
@@ -518,10 +518,9 @@
         }
 
         function removeFilter($event, key) {
-
             $event.preventDefault();
             if (isDateRange(key)) {
-                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { startDate: '', endDate: '' });
+                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', {dimensionName: key.split('|')[1].toLowerCase(), startDate: null, endDate: null });
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));

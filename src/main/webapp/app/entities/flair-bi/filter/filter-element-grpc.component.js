@@ -169,11 +169,7 @@
         }
 
         function canDisplayDateRangeControls(dimension) {
-            var type = dimension && dimension.type;
-            if (!type) {
-                return false;
-            }
-            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+            return filterParametersService.isDateType(dimension);
         }
 
         function registerRemoveTag() {
@@ -309,8 +305,13 @@
                     return newItem;
                 });
             } else {
-                vm.dimension.selected = [];
-                vm.dimension.selected2 = [];
+                if(filterParametersService.isDateType(vm.dimension)){
+                    vm.dimension.selected = null;
+                    vm.dimension.selected2 = null;
+                }else{
+                    vm.dimension.selected = [];
+                    vm.dimension.selected2 = [];
+                }
             }
         }
 

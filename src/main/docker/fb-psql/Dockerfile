@@ -1,4 +1,4 @@
-FROM postgres:9.6-alpine
+FROM postgres:9.4-alpine
 
 
 ## COpy all SSL materials and change owner to postgres:postgres and chmod to 0600
@@ -19,7 +19,7 @@ RUN chown -R postgres:postgres /etc/pki/tls/certs/flairbi-psql.pem \
     && chmod 0600 /etc/pki/tls/certs/flairbi-psql.pem
 
 
-COPY ./postgresql.conf /var/lib/pgsql/9.6/data/postgresql.conf
+COPY ./postgresql.conf /var/lib/pgsql/9.4/data/postgresql.conf
 
-RUN chown -R postgres:postgres /var/lib/pgsql/9.6/data/postgresql.conf \
-    && chmod 0600 /var/lib/pgsql/9.6/data/postgresql.conf
+RUN chown -R postgres:postgres /var/lib/pgsql/9.4/data/postgresql.conf \
+    && chmod 0600 /var/lib/pgsql/9.4/data/postgresql.conf

@@ -47,6 +47,7 @@ public class AuditResource {
      * @param fromDate the start of the time period of AuditEvents to get
      * @param toDate   the end of the time period of AuditEvents to get
      * @param pageable the pagination information
+     * @param principal principal
      * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */

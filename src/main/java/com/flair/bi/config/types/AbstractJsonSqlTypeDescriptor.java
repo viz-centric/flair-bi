@@ -1,19 +1,24 @@
 package com.flair.bi.config.types;
 
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+
 import org.hibernate.type.descriptor.ValueExtractor;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.JavaTypeDescriptor;
 import org.hibernate.type.descriptor.sql.BasicExtractor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-
 public abstract class AbstractJsonSqlTypeDescriptor implements SqlTypeDescriptor {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6644306682556431568L;
+
+	@Override
     public int getSqlType() {
         return Types.OTHER;
     }

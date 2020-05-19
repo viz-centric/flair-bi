@@ -142,7 +142,7 @@ public class ViewsResource {
      * @param pageable       pageable if paginated wanted
      * @param shouldPaginate if query is paginated
      * @return the ResponseEntity with status 200 (OK) and the list of views in body
-     * @throws URISyntaxException
+     * @throws URISyntaxException when URI cannot be constructed
      */
     @GetMapping("/views")
     @Timed

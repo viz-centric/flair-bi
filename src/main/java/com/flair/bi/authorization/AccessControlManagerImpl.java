@@ -1,5 +1,19 @@
 package com.flair.bi.authorization;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.flair.bi.domain.QUser;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
@@ -10,30 +24,16 @@ import com.flair.bi.domain.security.QPermission;
 import com.flair.bi.domain.security.QPermissionEdge;
 import com.flair.bi.domain.security.QUserGroup;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.PermissionGrantedAuthority;
 import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.types.dsl.BooleanExpression;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor

@@ -28,17 +28,17 @@ public interface DatasourceService {
 	/**
 	 * Get all the data sources paginated.
 	 * 
-	 * @param predicate
-	 * @param pageable
-	 * @return
+	 * @param predicate predicate
+	 * @param pageable pageable
+	 * @return page of data sources
 	 */
 	Page<Datasource> findAll(Predicate predicate, Pageable pageable);
 
 	/**
 	 * Find all data sources that are logically deleted.
 	 * 
-	 * @param predicate
-	 * @return
+	 * @param predicate predicate
+	 * @return the list of entities
 	 */
 	List<Datasource> findAllAndDeleted(Predicate predicate);
 

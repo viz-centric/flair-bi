@@ -169,7 +169,7 @@ public class DatasourcesResource {
 	 * @param shouldPaginate if datasources should be paginated
 	 * @return the ResponseEntity with status 200 (OK) and the list of datasources
 	 *         in body
-	 * @throws URISyntaxException
+	 * @throws URISyntaxException if URI cannot be constructed
 	 */
 	@GetMapping("/datasources")
 	@Timed

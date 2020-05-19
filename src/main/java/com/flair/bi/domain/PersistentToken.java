@@ -11,8 +11,7 @@ import java.time.LocalDate;
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
- * @see com.flair.bi.security.CustomPersistentRememberMeServices
- * @deprecated TODO remove from database.
+ * @deprecated TODO remove from database because no longer session-based authentications is being used.
  */
 @Deprecated
 @Entity

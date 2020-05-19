@@ -198,7 +198,8 @@ public class FeatureResource {
     /**
      * PUT /feature : Updates an existing feature.
      *
-     * @param favouriteFilter,id the feature to update
+     * @param favouriteFilter filter
+     * @param id the feature to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated
      *         feature, or with status 400 (Bad Request) if the feature is not
      *         valid, or with status 500 (Internal Server Error) if the feature

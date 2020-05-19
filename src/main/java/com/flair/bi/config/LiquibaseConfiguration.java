@@ -46,15 +46,15 @@ public class LiquibaseConfiguration {
 		liquibase.setChangeLog("classpath:config/liquibase/master.xml");
 		liquibase.setContexts(liquibaseProperties.getContexts());
 		liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
-		liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
-		liquibase.setLiquibaseTablespace(liquibaseProperties.getLiquibaseTablespace());
-		liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
-		liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
+//		liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
+//		liquibase.setLiquibaseTablespace(liquibaseProperties.getLiquibaseTablespace());
+//		liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
+//		liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
 		liquibase.setDropFirst(liquibaseProperties.isDropFirst());
 		liquibase.setLabels(liquibaseProperties.getLabels());
 		liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
 		liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
-		liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
+//		liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
 		if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE))) {
 			liquibase.setShouldRun(false);
 		} else {

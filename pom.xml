@@ -48,13 +48,12 @@
 		<commons-lang.version>3.7</commons-lang.version>
 		<docker-maven-plugin>0.27.2</docker-maven-plugin>
 		<ektorp.version>1.5.0</ektorp.version>
-		<frontend-maven-plugin.version>1.10</frontend-maven-plugin.version>
-		<hibernate.version>5.2.4.Final</hibernate.version>
+		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
+
 		<hikaricp.version>2.4.6</hikaricp.version>
 		<jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 		<java.version>1.8</java.version>
 		<javax.inject.version>1</javax.inject.version>
-		<liquibase.version>3.5.3</liquibase.version>
 		<logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
 		<lombok.version>1.18.12</lombok.version>
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
@@ -74,7 +73,7 @@
 		<postgres.test.port>9999</postgres.test.port>
 		<postgres.test.pw>admin</postgres.test.pw>
 		<postgres.test.user>postgres</postgres.test.user>
-		<postgresql.version>42.2.10</postgresql.version>
+		<postgresql.version>9.4.1212</postgresql.version>
 		<!-- These remain empty unless the corresponding profile is active -->
 		<profile.no-liquibase />
 		<profile.swagger />
@@ -86,9 +85,9 @@
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 
 		<!-- Dependency versions -->
-		<jhipster-dependencies.version>3.3.0</jhipster-dependencies.version>
+		<jhipster-dependencies.version>3.7.1</jhipster-dependencies.version>
 		<!-- The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-		<spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+		<spring-boot.version>2.2.7.RELEASE</spring-boot.version>
 		<!-- The spring framework version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
 		<spring.version>5.2.5.RELEASE</spring.version>
 		<spring-cloud.version>Hoxton.M2</spring-cloud.version>
@@ -97,7 +96,10 @@
 		<!-- The javassist version should match the one managed by https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
 		<javassist.version>3.23.2-GA</javassist.version>
 		<!-- The liquibase version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-		<liquibase.version>3.24.0-GA</liquibase.version>
+		<!-- <liquibase.version>3.24.0-GA</liquibase.version>
+		<liquibase-hibernate5.version>3.8</liquibase-hibernate5.version> -->
+		
+		<liquibase.version>3.5.3</liquibase.version>
 		<liquibase-hibernate5.version>3.8</liquibase-hibernate5.version>
 
 		<!-- The hibernate version to be used to override default version of liquibase 
@@ -384,6 +386,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>

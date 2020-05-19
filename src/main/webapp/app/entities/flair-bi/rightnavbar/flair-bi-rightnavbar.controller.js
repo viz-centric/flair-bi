@@ -237,7 +237,7 @@
         }
 
         function registerFilterRefresh() {
-            var unsubscribe = $scope.$on("flairbiApp:filter", function () {
+            var unsubscribe = $scope.$on("flairbiApp:filters", function () {
                 refresh();
             });
             $scope.$on("$destroy", unsubscribe);

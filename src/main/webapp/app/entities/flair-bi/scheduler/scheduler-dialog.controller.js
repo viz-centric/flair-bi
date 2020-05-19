@@ -61,7 +61,7 @@
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
-                "userid":"",
+                "userid": "",
                 "connection_name": "",
                 "report_name": "",
                 "source_id": "",
@@ -104,6 +104,7 @@
         function activate() {
             vm.isAdmin = AccountDispatch.isAdmin();
             vm.account = AccountDispatch.getAccount();
+
             registerSetCommunicationList();
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
@@ -227,7 +228,25 @@
             vm.scheduleObj.report.mail_body = data.report.mail_body;
             vm.scheduleObj.report.userid = data.report.userid;
 
-            vm.scheduleObj.putcall = true;
+            vm.canEdit = AccountDispatch.hasAuthority(
+                "WRITE_" + data.report.view_id + "_VIEW"
+            );
+
+            vm.canDelete = AccountDispatch.hasAuthority(
+                "DELETE_" + data.report.view_id + "_VIEW"
+            );
+
+            vm.canUpdate = AccountDispatch.hasAuthority(
+                "UPDATE_" + data.report.view_id + "_VIEW"
+            );
+            vm.canRead = AccountDispatch.hasAuthority(
+                "READ_" + data.report.view_id + "_VIEW"
+            );
+
+            if (vm.canEdit && vm.canUpdate && vm.canRead) {
+                vm.scheduleObj.putcall = true;
+            }
+
             vm.scheduleObj.report.thresholdAlert = data.report.thresholdAlert;
             vm.scheduleObj.constraints = data.constraints;
             vm.scheduleObj.assign_report.communication_list.teams = data.assign_report.communication_list.teams;
@@ -456,10 +475,10 @@
                 setCronExpression();
                 schedulerService.scheduleReport(vm.scheduleObj).then(function (success) {
                     vm.isSaving = false;
-                    if (success.status == 200 && (success.data.message == "Report updated" || success.data.message == "Report is scheduled successfully")) {
+                    if (success.status == 200 && (success.data.message == "report is updated" || success.data.message == "Report is scheduled successfully")) {
                         $uibModalInstance.close(vm.scheduleObj);
                         $rootScope.showSuccessToast({
-                            text: success.data.message,
+                            text: "Report updated",
                             title: "Success"
                         });
                     } else {

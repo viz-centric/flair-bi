@@ -130,7 +130,7 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <div ng-if="!vm.configuration.readOnly">
+                        <div ng-if="vm.canEdit">
                             <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="vm.editOn">
                                 <span uib-tooltip="Edit" tooltip-placement="bottom">
                                     <svg class="viz-dashboard-edit-on">

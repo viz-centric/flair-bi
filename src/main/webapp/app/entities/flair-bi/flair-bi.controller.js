@@ -39,7 +39,8 @@
         "D3Utils",
         '$transitions',
         "favouriteFilterService",
-        "schedulerService"
+        "schedulerService",
+        "AccountDispatch"
     ];
 
     function FlairBiController(
@@ -76,7 +77,8 @@
         D3Utils,
         $transitions,
         favouriteFilterService,
-        schedulerService
+        schedulerService,
+        AccountDispatch
     ) {
         var vm = this;
         var editMode = false;
@@ -137,6 +139,26 @@
         ////////////////
 
         function activate() {
+
+            vm.canEdit = AccountDispatch.hasAuthority(
+                "WRITE_" + vm.view.id + "_VIEW"
+            );
+
+            vm.canDelete = AccountDispatch.hasAuthority(
+                "DELETE_" + vm.view.id + "_VIEW"
+            );
+
+            vm.canUpdate = AccountDispatch.hasAuthority(
+                "UPDATE_" + vm.view.id + "_VIEW"
+            );
+            vm.canRead = AccountDispatch.hasAuthority(
+                "READ_" + vm.view.id + "_VIEW"
+            );
+
+            if (vm.canEdit) {
+                vm.canCreateReport = true;
+            }
+
             $rootScope.updateWidget = {}
             if (!VisualDispatchService.getApplyBookmark()) {
                 filterParametersService.clear();
@@ -1314,7 +1336,10 @@
         }
 
         function ngIfDelete() {
-            return editMode;
+            if (editMode && vm.canEdit && vm.canUpdate && vm.canRead) {
+                return true;
+            }
+            return false;
         }
 
         function enableEditForNewWidget(mode) {

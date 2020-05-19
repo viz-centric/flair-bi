@@ -33,7 +33,8 @@
             resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip,
             saveDynamicDateRangeMetaData : saveDynamicDateRangeMetaData,
             getDynamicDateRangeMetaData : getDynamicDateRangeMetaData,
-            buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange
+            buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange,
+            isDateType : isDateType
         };
 
 
@@ -159,7 +160,6 @@
                 console.log('create body exp ', values, name);
                 values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
                 name = name.split('|')[1];
-                setDatesInRightSideFilters(values[0], values[1]);
             }
             if (valueType === 'compare') {
                 console.log('filter-parameters: compare value type values', values);
@@ -249,10 +249,6 @@
             return dateRangePrefix;
         }
 
-        function setDatesInRightSideFilters(startDate,endDate){
-            $rootScope.$broadcast('flairbiApp:filter-set-date-ranges',{startDate:startDate,endDate:endDate});
-        }
-
         function buildDateRangeFilterName(name){
             return dateRangePrefix+"|"+name;
         }
@@ -305,6 +301,14 @@
             }else{
                 return null;
             }
+        }
+
+        function isDateType(dimension) {
+            var type = dimension && dimension.type;
+            if (!type) {
+                return false;
+            }
+            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
     }
 })();

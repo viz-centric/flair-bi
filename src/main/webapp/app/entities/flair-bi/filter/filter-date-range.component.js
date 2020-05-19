@@ -20,10 +20,8 @@
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
-        setDateRangeSubscription();
         var vm = this;
         vm.$onInit = onInit;
-        vm.$onChanges = $onChanges;
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
@@ -42,8 +40,8 @@
                 vm.dimension.metadata.dateRangeTab = 0;
                 vm.dimension.metadata.currentDynamicDateRangeConfig = null;
                 vm.dimension.metadata.customDynamicDateRange = 0;
-                vm.dimension.selected = resetTimezone(strToDate(null));
-                vm.dimension.selected2 = resetTimezone(strToDate(null))
+                vm.dimension.selected = null;
+                vm.dimension.selected2 = null;
             }
         }
 
@@ -150,42 +148,6 @@
             return dynamicDateRangeToolTip;
         }
 
-
-        //setDateRangeSubscription will be removed in next PR. 
-        //a)dates should be updated from flair-bi-rightnavbar.js using vm.dimensions
-        //b) this is duplicate event
-
-        function setDateRangeSubscription() {
-            var unsubscribe = $scope.$on('flairbiApp:filter-set-date-ranges', function (event, dateRange) {
-                console.log('filter-date-range: event filter-set-date-ranges before', dateRange.startDate, 'timezone', new Date(dateRange.startDate).getTimezoneOffset());
-                vm.dimension.selected = strToDate(dateRange.startDate);
-                vm.dimension.selected2 = strToDate(dateRange.endDate);
-                console.log('filter-date-range: event filter-set-date-ranges after', vm.dimension.selected);
-            });
-
-            $scope.$on('$destroy', unsubscribe);
-        }
-
-        function onDimensionChange(dimension) {
-            console.log('date component: on changes before', dimension);
-            vm.dimension.selected = resetTimezone(strToDate(dimension.selected));
-            vm.dimension.selected2 = resetTimezone(strToDate(dimension.selected2));
-            console.log('date component: on changes after-', vm.dimension.selected);
-        }
-
-        function onReloadChange() {
-            onDimensionChange({selected: null, selected2: null});
-            reset();
-        }
-
-        function $onChanges(changesObj) {
-            if (changesObj.dimension) {
-                onDimensionChange(vm.dimension);
-            } else if (changesObj.reload) {
-                onReloadChange();
-            }
-        }
-
         function resetTimezone(date) {
             if (!date) {
                 return null;
@@ -198,7 +160,6 @@
             if (!date) {
                 return null;
             }
-            // console.log('str to date', date, typeof date);
             return Date.parse(date) ? new Date(date) : null;
         }
 

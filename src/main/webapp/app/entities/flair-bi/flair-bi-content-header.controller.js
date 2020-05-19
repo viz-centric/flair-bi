@@ -34,7 +34,8 @@
         "recentBookmarkService",
         "Auth",
         'ViewFeatureCriteria',
-        "DYNAMIC_DATE_RANGE_CONFIG"
+        "DYNAMIC_DATE_RANGE_CONFIG",
+        "AccountDispatch"
     ];
 
     function FlairBiContentHeaderController(
@@ -63,14 +64,15 @@
         recentBookmarkService,
         Auth,
         ViewFeatureCriteria,
-        DYNAMIC_DATE_RANGE_CONFIG
+        DYNAMIC_DATE_RANGE_CONFIG,
+        AccountDispatch
     ) {
         var vm = this;
 
         var editMode = false;
         var showOpt = true;
-        var dynamicDateRangeFun='FLAIR';
-        vm.toolTipTexts={};
+        var dynamicDateRangeFun = 'FLAIR';
+        vm.toolTipTexts = {};
         vm.configuration = configuration;
         vm.states = states;
         vm.clearFilters = clearFilters;
@@ -161,6 +163,8 @@
 
         activate();
 
+
+
         ////////////////
 
         function activate() {
@@ -188,13 +192,13 @@
                 if (metadata) {
                     const dynamics = metadata.split("||");
                     const tooltipText = dynamics[0] === "true" ? 'Last ' + dynamics[1] : dynamics[2];
-                    const dynamicDateRangeToolTip = {name: filterName, text: tooltipText};
+                    const dynamicDateRangeToolTip = { name: filterName, text: tooltipText };
                     filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
                     $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data",
                         buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]));
                 } else {
                     const daterange = value.split("||");
-                    $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data",
+                    $rootScope.$broadcast("flairbiApp:filter-set-date-ranges",
                         buildDateRange(feature.name, daterange));
                 }
             }
@@ -238,17 +242,17 @@
             filterParametersService.save(filter);
         }
 
-        function buildDynamicDateRangeObject(dimensionName,title,customDynamicDateRange){
-            var metaData = {dimensionName: dimensionName, metadata : { currentDynamicDateRangeConfig : {},customDynamicDateRange:customDynamicDateRange,dateRangeTab : 2 }};
+        function buildDynamicDateRangeObject(dimensionName, title, customDynamicDateRange) {
+            var metaData = { dimensionName: dimensionName, metadata: { currentDynamicDateRangeConfig: {}, customDynamicDateRange: customDynamicDateRange, dateRangeTab: 2 } };
             vm.configs = DYNAMIC_DATE_RANGE_CONFIG.filter(function (item) {
-                return  item.title===title;
+                return item.title === title;
             });
             metaData.metadata.currentDynamicDateRangeConfig = vm.configs[0];
             return metaData;
         }
 
-        function buildDateRange(dimensionName,daterange){
-            return {dimensionName: dimensionName, daterange: {selected:daterange[0],selected2:daterange[1]}};
+        function buildDateRange(dimensionName, daterange) {
+            return { dimensionName: dimensionName, daterange: { selected: daterange[0], selected2: daterange[1] } };
         }
 
         function openSettings() {
@@ -269,7 +273,7 @@
 
         function toggleFSFilter() {
             vm.showFSFilter = filterParametersService.getFiltersCount() == 0 ? false : !vm.showFSFilter;
-            $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters",vm.showFSFilter);
+            $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters", vm.showFSFilter);
         }
 
         function ifFSFilterToggled() {
@@ -294,10 +298,10 @@
         function hideFiltersHeaderAndSideBar() {
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters",true);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
             } else {
                 vm.showFSFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters",false);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
             }
         }
 
@@ -345,7 +349,7 @@
             vm.viewId = item.id;
         }
 
-        function changeViewAndUpdateDashboard(item){
+        function changeViewAndUpdateDashboard(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
             vm.build();
@@ -464,9 +468,9 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function setToolTipTexts(filters){
+        function setToolTipTexts(filters) {
             angular.forEach(filters, function (value, key) {
-                vm.toolTipTexts[key]=getFiltersToolTipName(key);
+                vm.toolTipTexts[key] = getFiltersToolTipName(key);
             });
         }
 
@@ -476,12 +480,12 @@
 
         function getFiltersToolTipName(name) {
             if (isDateRange(name)) {
-                var dateRangeToolTipText="Date Range : ";
+                var dateRangeToolTipText = "Date Range : ";
                 var filters = filterParametersService.get();
-                if((filters[name][0].indexOf(dynamicDateRangeFun) !== -1) || (filters[name][1].indexOf(dynamicDateRangeFun) !== -1)){
+                if ((filters[name][0].indexOf(dynamicDateRangeFun) !== -1) || (filters[name][1].indexOf(dynamicDateRangeFun) !== -1)) {
                     dateRangeToolTipText = dateRangeToolTipText + filterParametersService.getDynamicDateRangeToolTip(name);
                     return dateRangeToolTipText;
-                }else{
+                } else {
                     dateRangeToolTipText = dateRangeToolTipText + filterParametersService.changeDateFormat(filters[name][0]) + " AND " + filterParametersService.changeDateFormat(filters[name][1]);
                     return dateRangeToolTipText;
                 }
@@ -518,10 +522,9 @@
         }
 
         function removeFilter($event, key) {
-
             $event.preventDefault();
             if (isDateRange(key)) {
-                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { startDate: '', endDate: '' });
+                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', {dimensionName: key.split('|')[1].toLowerCase(), startDate: null, endDate: null });
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));
@@ -693,9 +696,9 @@
                 }));
 
             ViewFeatureCriteria.save({
-                    features,
-                    viewId: vm.view.id
-                });
+                features,
+                viewId: vm.view.id
+            });
         }
 
         function refresh() {

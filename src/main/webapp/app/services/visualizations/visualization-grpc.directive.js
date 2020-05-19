@@ -144,6 +144,7 @@
             registerFilterEvent();
             registerResizeWidgetEvent();
             registerUpdateWidgetEvent();
+            registerRefreshWidgetEvent();
             registerIdChanges();
 
         }
@@ -181,13 +182,13 @@
             if (forceQuery) {
                 angular.element("#loader-spinner").show();
                 proxyGrpcService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
+                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                     visualMetadata: vm.data
                 });
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                         visualmetadata: vm.data
                     });
                 } else {
@@ -220,11 +221,29 @@
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
                 if (vm.canBuild) {
-                    if(result){
-                        vm.data.fields=result;
-
+                    if (result) {
+                        vm.data.fields = result;
                     }
                     build(true);
+                }
+            });
+
+            $scope.$on('$destroy', unsubscribe);
+        }
+
+        function registerRefreshWidgetEvent() {
+            var unsubscribe = $scope.$on('refresh-widget-' + vm.id, function (event, result) {
+                if (vm.canBuild) {
+                    if (result) {
+                        vm.data.fields = result;
+
+                    }
+                    if (vm.data.data) {
+                        build(false);
+                    }
+                    else {
+                        build(true);
+                    }
                 }
             });
 

@@ -126,7 +126,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-xs-8" ng-if="vm.channels.Teams && vm.isAdmin">
+                        <div class="col-xs-8" ng-if="vm.channels.Teams">
                             <div class="form-group scheduler-tags">
                                 <label class="control-label" for="emails">Select Webhooks*</label>
                                 <tags-input placeholder="Select a Webhook" on-tag-added="vm.addWebhook($tag)"
@@ -148,7 +148,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-xs-8" ng-if="vm.channels.Teams && !vm.isAdmin">
+                        <!-- <div class="col-xs-8" ng-if="vm.channels.Teams && !vm.isAdmin">
                             <div class="form-group scheduler-webhooks">
                                 <label class="control-label">Configured Webhooks*</label>
                                 <div class="webhooks">
@@ -157,7 +157,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="row container">
                         <div class="col-xs-8">

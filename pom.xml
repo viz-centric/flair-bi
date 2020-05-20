@@ -96,9 +96,8 @@
 		<!-- The javassist version should match the one managed by https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
 		<javassist.version>3.23.2-GA</javassist.version>
 		<!-- The liquibase version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-		<!-- <liquibase.version>3.24.0-GA</liquibase.version>
-		<liquibase-hibernate5.version>3.8</liquibase-hibernate5.version> -->
-		
+		<!-- <liquibase.version>3.24.0-GA</liquibase.version> <liquibase-hibernate5.version>3.8</liquibase-hibernate5.version> -->
+
 		<liquibase.version>3.5.3</liquibase.version>
 		<liquibase-hibernate5.version>3.8</liquibase-hibernate5.version>
 
@@ -139,6 +138,11 @@
 
 		<!-- oauth2 -->
 		<dependency>
+			<groupId>com.okta.spring</groupId>
+			<artifactId>okta-spring-boot-starter</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-oauth2-client</artifactId>
 		</dependency>
@@ -146,7 +150,16 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth.boot</groupId>
+			<artifactId>spring-security-oauth2-autoconfigure</artifactId>
+		</dependency>
 		<!-- oauth2 -->
+
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>problem-spring-web</artifactId>
+		</dependency>
 
 		<!-- hazelcast -->
 		<dependency>

@@ -1,7 +1,15 @@
 package com.flair.bi.config.security;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,13 +20,15 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import com.flair.bi.ApplicationProperties;
-import com.flair.bi.security.Http401UnauthorizedEntryPoint;
 import com.flair.bi.security.UserDetailsService;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
@@ -26,28 +36,30 @@ import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableOAuth2Sso
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Slf4j
+@Import(SecurityProblemSupport.class)
 public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final TokenProvider tokenProvider;
 	private final CorsFilter corsFilter;
-	private final Http401UnauthorizedEntryPoint entryPoint;
 	private final ApplicationProperties properties;
+	private final SecurityProblemSupport problemSupport;
 
 	public LoginConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
 			UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter,
 			PasswordEncoder passwordEncoder, LdapAuthoritiesPopulator ldapAuthoritiesPopulator,
-			LDAPUserDetailsContextMapper ldapUserDetailsContextMapper, Http401UnauthorizedEntryPoint entryPoint,
-			ApplicationProperties properties) throws Exception {
+			LDAPUserDetailsContextMapper ldapUserDetailsContextMapper, ApplicationProperties properties,
+			SecurityProblemSupport problemSupport) throws Exception {
 		log.info("Creating Jwt and Ldap configuration");
 
 		this.tokenProvider = tokenProvider;
 		this.corsFilter = corsFilter;
-		this.entryPoint = entryPoint;
 		this.properties = properties;
+		this.problemSupport = problemSupport;
 
 		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 
@@ -71,14 +83,21 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class).exceptionHandling()
-				.authenticationEntryPoint(entryPoint).and()
+		http
+				// CORS Filter
+				.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+				// exception handling
+				.exceptionHandling().authenticationEntryPoint(problemSupport).accessDeniedHandler(problemSupport).and()
+				// Login for okta
+				.logout().logoutUrl("/api/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID").and()
 				// disable CSRF
 				.csrf().disable().headers().frameOptions().disable().and()
 				// session management
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
 				// permission configuration
-				.authorizeRequests().antMatchers("/flair-ws**").permitAll().antMatchers("/login**").permitAll()
+				.antMatcher("/**").authorizeRequests().antMatchers("/flair-ws**").permitAll()
+				.antMatchers("/", "/login**").permitAll()
 
 				.antMatchers("/v2/api-docs/**").permitAll().antMatchers("/swagger-resources/configuration/ui")
 				.permitAll()
@@ -115,8 +134,23 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.permitAll().antMatchers("/api/account/reset_password/finish").permitAll()
 				.antMatchers("/api/profile-info").permitAll().antMatchers("/api/external/**").permitAll()
 				// THIS ALWAYS GOES AT THE END SO THEY DONT OVERWRITE SEPARATE "/api" rules.
-				.antMatchers("/api/**").authenticated().and().apply(securityConfigurerAdapter());
+				.antMatchers("/api/**").authenticated().and().apply(securityConfigurerAdapter())
 
+		// oauth
+//				.and().oauth2Client().and().oauth2Login().successHandler(handler())
+		;
+
+	}
+
+	private AuthenticationSuccessHandler handler() {
+		return new AuthenticationSuccessHandler() {
+
+			@Override
+			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+					Authentication authentication) throws IOException, ServletException {
+				log.debug(authentication.toString());
+			}
+		};
 	}
 
 	private JWTConfigurer securityConfigurerAdapter() {

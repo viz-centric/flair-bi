@@ -3,6 +3,8 @@ package com.flair.bi.repository;
 import com.flair.bi.config.audit.AuditEventConverter;
 import com.flair.bi.domain.PersistentAuditEvent;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Repository;
@@ -35,9 +37,8 @@ public class CustomAuditEventRepository implements AuditEventRepository {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void add(AuditEvent event) {
 		if (!AUTHORIZATION_FAILURE.equals(event.getType()) && !ANONYMOUS_USER.equals(event.getPrincipal())) {
-
 			PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
-			persistentAuditEvent.setPrincipal(event.getPrincipal());
+			persistentAuditEvent.setPrincipal(StringUtils.abbreviate(event.getPrincipal(), 50));
 			persistentAuditEvent.setAuditEventType(event.getType());
 			Instant instant = event.getTimestamp();
 			persistentAuditEvent.setAuditEventDate(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));

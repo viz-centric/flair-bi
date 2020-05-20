@@ -37,10 +37,13 @@
 
         function logout() {
             console.log('logout requested');
-            return $q((resolve, _) => {
-                delete $localStorage.authenticationToken;
-                resolve();
-            });
+            return $http
+                .get("api/logout")
+                .then(function (response) {
+                    console.log('logout successful');
+                    delete $localStorage.authenticationToken;
+                    return response;
+                });
         }
     }
 })();

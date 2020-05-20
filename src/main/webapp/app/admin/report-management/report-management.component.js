@@ -22,6 +22,7 @@
 
         vm.reportManagementTabClick = reportManagementTabClick;
         vm.alertTab = $stateParams.id;
+        vm.showConfiguration = false;
         vm.$onInit = activate;
         ///////////////////////////////////////
 
@@ -35,6 +36,14 @@
         function getAccount() {
             vm.account = AccountDispatch.getAccount();
             vm.isAdmin = AccountDispatch.isAdmin();
+            if (!vm.isAdmin) {
+                if (vm.account.userGroups.indexOf("ROLE_DEVELOPMENT") !== -1) {
+                    vm.showConfiguration = true;
+                }
+            }
+            else{
+                vm.showConfiguration = true;
+            }
         }
     }
 })();

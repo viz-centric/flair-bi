@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,7 +40,7 @@ public class QueryTransformerServiceTest {
         QueryValidationResult result = QueryValidationResult.builder()
                 .errors(asList(QueryValidationError.of("value", "error")))
                 .build();
-        Mockito.when(queryValidationService.validate(eq(query))).thenReturn(result);
+        Mockito.when(queryValidationService.validate(eq(query), any(QueryValidationParams.class))).thenReturn(result);
 
         service.toQuery(query, params);
     }
@@ -62,7 +63,7 @@ public class QueryTransformerServiceTest {
                 .build();
 
         QueryValidationResult result = QueryValidationResult.builder().build();
-        Mockito.when(queryValidationService.validate(eq(query))).thenReturn(result);
+        Mockito.when(queryValidationService.validate(eq(query), any(QueryValidationParams.class))).thenReturn(result);
 
         Query resultQuery = service.toQuery(query, params);
         assertEquals("123", resultQuery.getUserId());

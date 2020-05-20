@@ -1,5 +1,6 @@
 package com.flair.bi.service.dto;
 
+import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.enumeration.FeatureType;
 import lombok.Data;
 
@@ -31,5 +32,7 @@ public class FeatureDTO {
     private Long functionId;
 
     private Boolean favouriteFilter;
+
+    private DateFilterType dateFilter;
 
 }

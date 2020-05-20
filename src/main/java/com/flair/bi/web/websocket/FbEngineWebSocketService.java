@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Async
 @Service
@@ -38,12 +39,19 @@ public class FbEngineWebSocketService {
         messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
     }
 
-    public void pushGRPCMetaDataError(String userId, Status status) {
+    public void pushGRPCMetaDataError(String userId, Status status, Map<String, Object> error) {
         HashMap<String, Object> header = new HashMap<>();
         header.put("userId", userId);
+        if (error != null) {
+            header.putAll(error);
+        }
         messagingTemplate.convertAndSendToUser(userId, "/exchange/metaDataError", status, header);
     }
-    
+
+    public void pushGRPCMetaDataError(String userId, Status status) {
+        pushGRPCMetaDataError(userId, status, null);
+    }
+
     /**
      * Send meta to users subscribed on channel "/user/exchange/sampleMetaData".
      * <p>

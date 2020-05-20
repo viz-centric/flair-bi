@@ -12,7 +12,7 @@ public class QueryValidationResult {
     private final List<QueryValidationError> errors;
 
     public enum Group {
-        SELECT, GROUP_BY, ORDER_BY, HAVING
+        SELECT, GROUP_BY, ORDER_BY, HAVING, CONDITIONS
     }
 
     public boolean success() {

@@ -40,7 +40,8 @@
             proxyGrpcService.forwardCall(vm.datasource.id, {
                 queryDTO: vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
                 visualMetadata: vm.visualMetadata,
-                type:'share-link'
+                type:'share-link',
+                validationType: 'REQUIRED_FIELDS'
             });
         }
 

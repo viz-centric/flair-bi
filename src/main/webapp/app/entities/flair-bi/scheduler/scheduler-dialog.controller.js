@@ -109,12 +109,12 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
-            if (vm.isAdmin) {
+            
                 getWebhookList();
                 isConfigExist();
-            } else {
+          
                 getWebhookNames();
-            }
+           
             resetSelectedChannels();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;

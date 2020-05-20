@@ -6,8 +6,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -171,19 +169,22 @@ public class FeatureResource {
             throws URISyntaxException {
         log.debug("REST request to save feature : {}", featureListDTO);
         Datasource datasource = datasourceService.findOne(featureListDTO.getDatasourceId());
-        Set<String> existingFeatureNames = featureService.getFeatures(QFeature.feature.datasource.eq(datasource))
-                .stream().map(f -> f.getName()).collect(Collectors.toSet());
-        List<Feature> features = featureListDTO.getFeatureList().stream().filter(item -> item.getIsSelected())
-                .filter(item -> !existingFeatureNames.contains(item.getName())).map(featureDTO -> {
-                    Feature feature = new Feature();
+        List<Feature> existingFeatures = featureService.getFeatures(QFeature.feature.datasource.eq(datasource));
+        List<Feature> features = featureListDTO.getFeatureList().stream()
+                .filter(item -> item.getIsSelected())
+                .map(featureDTO -> {
+                    Optional<Feature> existingFeature = getExistingFeature(existingFeatures, featureDTO.getName());
+                    Feature feature = existingFeature.orElseGet(() -> new Feature());
                     feature.setFeatureType(featureDTO.getFeatureType());
                     feature.setDefinition(featureDTO.getName());
                     feature.setName(featureDTO.getName());
                     feature.setType(featureDTO.getType());
                     feature.setFunctionId(featureDTO.getFunctionId());
                     feature.setDatasource(datasource);
+                    feature.setDateFilter(featureDTO.getDateFilter());
                     return feature;
-                }).collect(toList());
+                })
+                .collect(toList());
         List<FeatureValidationResult> validate = featureService.validate(features);
         List<FeatureValidationResult> errorFeatures = validate.stream().filter(r -> r != FeatureValidationResult.OK)
                 .collect(toList());
@@ -193,6 +194,12 @@ public class FeatureResource {
         }
         featureService.save(features);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    private Optional<Feature> getExistingFeature(List<Feature> features, String featureName) {
+        return features.stream()
+                .filter(f -> f.getName().equalsIgnoreCase(featureName))
+                .findFirst();
     }
 
     /**

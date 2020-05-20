@@ -14,6 +14,32 @@
     }
 
 }
+#information{
+    .panel-info{
+        border-color:$blue;
+    }
+    .panel-heading{
+        padding: 5px 15px;
+        background-color: $blue;
+        border-color:$blue;
+        color: $info-card-content;
+    }
+    .panel-body{
+        padding: 5px;
+        .info{
+            padding: 5px;
+            ul{
+                margin-bottom:0px;
+                li.list-group-item {
+                    padding: 7px 5px;
+                }
+                .access-icon{
+                    padding-right: 10px;
+                }
+            }
+        }
+    }
+}
 
 .permission-dashboard-item{
     height: 100%;

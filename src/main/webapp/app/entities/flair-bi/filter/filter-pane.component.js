@@ -15,15 +15,16 @@
             }
         });
 
-    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService','VisualDispatchService'];
+    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService'];
 
-    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService,VisualDispatchService) {
+    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService) {
         var vm = this;
 
         vm.filter = filter;
         vm.onClearClick = onClearClick;
         vm.selectedFilters = {};
-        vm.list={};
+        vm.list = {};
+        vm.dateFilter = [];
         activate();
 
         ////////////////
@@ -51,17 +52,32 @@
 
         function clear() {
             $rootScope.updateWidget = {};
-            vm.dimensions.forEach(function (item) {
-                item.selected = null;
-                item.selected2 = null;
-                item.metadata = {};
-                item.metadata.dateRangeTab = 0;
-                item.metadata.currentDynamicDateRangeConfig = null;
-                item.metadata.customDynamicDateRange = 0;
-            });
-            filterParametersService.clear();
-            filterParametersService.saveSelectedFilter($rootScope.updateWidget);
-            filter();
+            if (vm.dimensions) {
+                vm.dimensions.forEach(function (item) {
+                    if (item.dateFilter !== "ENABLED") {
+                        if (filterParametersService.isDateType(item)) {
+                            item.selected = null;
+                            item.selected2 = null;
+                            item.metadata = {};
+                            item.metadata.dateRangeTab = 0;
+                            item.metadata.currentDynamicDateRangeConfig = null;
+                            item.metadata.customDynamicDateRange = 0;
+                        } else {
+                            item.selected = null;
+                            item.selected2 = null;
+                        }
+
+                        $rootScope.$broadcast("FlairBi:remove-filter", item.name);
+                    }
+                    else {
+                        vm.dateFilter.push("date-range|" + item.name);
+                    }
+                });
+            }
+
+            // filterParametersService.clear(vm.dateFilter);
+            // filterParametersService.saveSelectedFilter($rootScope.updateWidget);
+            // filter();
         }
 
         function filter() {

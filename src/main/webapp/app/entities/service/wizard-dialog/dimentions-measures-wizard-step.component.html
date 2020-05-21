@@ -4,6 +4,14 @@
    <table class="table table-hover">
             <caption><strong>Configure Dimensions and Measures</strong></caption>
 
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center">Enable Date Time Filter</th>
+                </tr>
+            </thead>
+
             <tr  ng-repeat="feature in vm.features">
                 <td>
                     <div class="form-inline">
@@ -25,6 +33,23 @@
                                 <option value="DIMENSION">DIMENSION</option>
                                 <option value="MEASURE">MEASURE</option>
                             </select>    
+                        </div>
+                    </div>
+
+                </td>
+
+                <td class="text-center">
+                    <div class="form-inline">
+                        <div class="form-group"
+                             ng-if="vm.isTemporalFeature(feature)">
+                            <input id="feature_date_filter{{$index}}"
+                                   style="width: 15px;"
+                                   type="checkbox"
+                                   ng-model="feature.dateFilter"
+                                   ng-true-value="'ENABLED'"
+                                   ng-false-value="'DISABLED'"
+                                   class="form-control"
+                                   aria-label="Date filtering">
                         </div>
                     </div>
 

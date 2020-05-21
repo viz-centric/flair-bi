@@ -1,10 +1,11 @@
 package com.flair.bi.service.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.project.bi.query.dto.QueryDTO;
-import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import lombok.Data;
 
 /**
  * Request body that contains which widget is making request with which queries.
@@ -12,16 +13,16 @@ import javax.validation.constraints.NotNull;
 @Data
 public class FbiEngineDTO {
 
-    private VisualMetadata visualMetadata;
+	private VisualMetadata visualMetadata;
 
-    @NotNull
-    private QueryDTO queryDTO;
-    
-    private String vId;
-    
-    private String type;
+	@NotNull
+	private QueryDTO queryDTO;
 
-    private QueryValidationType validationType;
+	private String vId;
+
+	private String type;
+
+	private QueryValidationType validationType;
 
 	public String getvId() {
 		return vId;
@@ -30,5 +31,5 @@ public class FbiEngineDTO {
 	public void setvId(String vId) {
 		this.vId = vId;
 	}
-    
+
 }

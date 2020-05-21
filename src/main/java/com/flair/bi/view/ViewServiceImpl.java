@@ -1,25 +1,16 @@
 package com.flair.bi.view;
 
-import com.flair.bi.authorization.AccessControlManager;
-import com.flair.bi.domain.*;
-import com.flair.bi.domain.enumeration.Action;
-import com.flair.bi.domain.security.Permission;
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.repository.ViewReleaseRepository;
-import com.flair.bi.repository.ViewRepository;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.BookMarkWatchService;
-import com.flair.bi.service.ViewWatchService;
-import com.flair.bi.web.rest.errors.EntityNotFoundException;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.ektorp.DocumentNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +21,27 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.domain.QView;
+import com.flair.bi.domain.Release;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.domain.ViewState;
+import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.security.Permission;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.repository.UserRepository;
+import com.flair.bi.repository.ViewRepository;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.BookMarkWatchService;
+import com.flair.bi.service.ViewWatchService;
+import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for managing View.

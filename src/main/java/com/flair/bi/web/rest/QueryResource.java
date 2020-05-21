@@ -28,32 +28,32 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/query")
 public class QueryResource {
 
-    private final GrpcConnectionService grpcConnectionService;
+	private final GrpcConnectionService grpcConnectionService;
 
-    private final GrpcQueryService gprcService;
+	private final GrpcQueryService gprcService;
 
-    @PostMapping("/test")
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<TestConnectionResultDTO> testConnection(@Valid @RequestBody TestConnectionRequest request) {
-        log.info("Connection test {}", request);
+	@PostMapping("/test")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<TestConnectionResultDTO> testConnection(@Valid @RequestBody TestConnectionRequest request) {
+		log.info("Connection test {}", request);
 
-        TestConnectionResultDTO result = grpcConnectionService.testConnection(request.getConnection());
+		TestConnectionResultDTO result = grpcConnectionService.testConnection(request.getConnection());
 
-        return ResponseEntity.ok(result);
-    }
+		return ResponseEntity.ok(result);
+	}
 
-    @PostMapping("/execute")
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<String> executeQuery(@RequestBody QueryAllRequestDTO requestDTO) {
-        return ResponseEntity.ok(gprcService.queryAll(SecurityUtils.getCurrentUserLogin(), requestDTO).getData());
-    }
+	@PostMapping("/execute")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<String> executeQuery(@RequestBody QueryAllRequestDTO requestDTO) {
+		return ResponseEntity.ok(gprcService.queryAll(SecurityUtils.getCurrentUserLogin(), requestDTO).getData());
+	}
 
-    @Data
-    private static class TestConnectionRequest {
-        @NotNull
-        ConnectionDTO connection;
-    }
+	@Data
+	private static class TestConnectionRequest {
+		@NotNull
+		ConnectionDTO connection;
+	}
 
 }

@@ -29,37 +29,43 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AlertsResource {
 
-    private static final Map<Integer,AlertHandler> commandReleaseAlerts = new HashMap<Integer, AlertHandler>(){
-        private static final long serialVersionUID = 1L;
-    {
-           put(1,new TodaysAlertHandler()); put(2,new YesterdaysAlertHandler());
-           put(3,new ThisWeeksAlertHandler()); put(4,new LastWeeksAlertHandler());
-           put(5,new OlderAlertHandler());
-    }};
+	private static final Map<Integer, AlertHandler> commandReleaseAlerts = new HashMap<Integer, AlertHandler>() {
+		private static final long serialVersionUID = 1L;
+		{
+			put(1, new TodaysAlertHandler());
+			put(2, new YesterdaysAlertHandler());
+			put(3, new ThisWeeksAlertHandler());
+			put(4, new LastWeeksAlertHandler());
+			put(5, new OlderAlertHandler());
+		}
+	};
 
-    private final ReleaseRequestService releaseRequestService;
+	private final ReleaseRequestService releaseRequestService;
 
-    @GetMapping("/release-alerts/{id}/{offset}")
-    @Timed
-    public ResponseEntity<List<ReleasesAlertsDTO>> getReleaseAlerts(@PathVariable int id,@PathVariable int offset) {
-        AlertHandler alertHandler= commandReleaseAlerts.get(id);
-    	List<ReleasesAlertsDTO> releaseAlerts=alertHandler.getReleaseAlerts(offset,releaseRequestService);
+	@GetMapping("/release-alerts/{id}/{offset}")
+	@Timed
+	public ResponseEntity<List<ReleasesAlertsDTO>> getReleaseAlerts(@PathVariable int id, @PathVariable int offset) {
+		AlertHandler alertHandler = commandReleaseAlerts.get(id);
+		List<ReleasesAlertsDTO> releaseAlerts = alertHandler.getReleaseAlerts(offset, releaseRequestService);
 		return ResponseEntity.ok(releaseAlerts);
-    
-    }
 
-    
-    @GetMapping("/release-all-alerts")
-    @Timed
-    public ResponseEntity<List<ReleasesAlertsFinalDTO>> getAllReleaseAlerts() {
-    	List<ReleasesAlertsFinalDTO> alerts= new ArrayList<ReleasesAlertsFinalDTO>();
-    	alerts.add(new ReleasesAlertsFinalDTO(1,"Today",releaseRequestService.getTodaysReleasedAlerts(0), releaseRequestService.getTodaysReleasedAlertsCount()) );
-    	alerts.add(new ReleasesAlertsFinalDTO(2,"Yesterday",releaseRequestService.getYesterdaysReleasedAlerts(0), releaseRequestService.getYesterdaysReleasedCount()) );
-    	alerts.add(new ReleasesAlertsFinalDTO(3,"This Week",releaseRequestService.getThisWeekReleasedAlerts(0), releaseRequestService.getThisWeekReleasedCount()) );
-    	alerts.add(new ReleasesAlertsFinalDTO(4,"Last Week",releaseRequestService.getLastWeekReleasedAlerts(0), releaseRequestService.getLastWeekReleasedCount()) );
-    	alerts.add(new ReleasesAlertsFinalDTO(5,"Older",releaseRequestService.getOlderReleasedAlerts(0), releaseRequestService.getOlderReleasedCount()) );
+	}
+
+	@GetMapping("/release-all-alerts")
+	@Timed
+	public ResponseEntity<List<ReleasesAlertsFinalDTO>> getAllReleaseAlerts() {
+		List<ReleasesAlertsFinalDTO> alerts = new ArrayList<ReleasesAlertsFinalDTO>();
+		alerts.add(new ReleasesAlertsFinalDTO(1, "Today", releaseRequestService.getTodaysReleasedAlerts(0),
+				releaseRequestService.getTodaysReleasedAlertsCount()));
+		alerts.add(new ReleasesAlertsFinalDTO(2, "Yesterday", releaseRequestService.getYesterdaysReleasedAlerts(0),
+				releaseRequestService.getYesterdaysReleasedCount()));
+		alerts.add(new ReleasesAlertsFinalDTO(3, "This Week", releaseRequestService.getThisWeekReleasedAlerts(0),
+				releaseRequestService.getThisWeekReleasedCount()));
+		alerts.add(new ReleasesAlertsFinalDTO(4, "Last Week", releaseRequestService.getLastWeekReleasedAlerts(0),
+				releaseRequestService.getLastWeekReleasedCount()));
+		alerts.add(new ReleasesAlertsFinalDTO(5, "Older", releaseRequestService.getOlderReleasedAlerts(0),
+				releaseRequestService.getOlderReleasedCount()));
 		return ResponseEntity.ok(alerts);
-    }
-
+	}
 
 }

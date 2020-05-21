@@ -1,7 +1,8 @@
 package com.flair.bi.repository;
 
-import com.flair.bi.domain.Visualization;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.flair.bi.domain.Visualization;
 
 /**
  * Spring Data JPA repository for the Visualization entity.

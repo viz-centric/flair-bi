@@ -1,8 +1,9 @@
 package com.flair.bi.repository;
 
-import com.flair.bi.config.audit.AuditEventConverter;
-import com.flair.bi.domain.PersistentAuditEvent;
-import lombok.RequiredArgsConstructor;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.audit.AuditEvent;
@@ -11,12 +12,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import com.flair.bi.config.audit.AuditEventConverter;
+import com.flair.bi.domain.PersistentAuditEvent;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * An implementation of Spring Boot's AuditEventRepository.

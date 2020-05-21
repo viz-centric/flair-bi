@@ -115,7 +115,7 @@ public class NotificationConfigurationResource {
 	public JiraParametersDTO getJiraConfig(@RequestParam(required = false) Integer id) {
 		return schedulerService.getJiraConfig(id);
 	}
-	
+
 	@GetMapping("/notification/createJiraTicket/")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
@@ -126,8 +126,9 @@ public class NotificationConfigurationResource {
 	@GetMapping("/notification/getJiraTickets/")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
-	GetJiraTicketsDTO getJiraTickets(@RequestParam String status,@RequestParam Integer page,@RequestParam Integer pageSize) {
-		return schedulerService.getJiraTickets(status,page,pageSize);
+	GetJiraTicketsDTO getJiraTickets(@RequestParam String status, @RequestParam Integer page,
+			@RequestParam Integer pageSize) {
+		return schedulerService.getJiraTickets(status, page, pageSize);
 	}
 
 	@GetMapping("/notification/disableTicketCreationRequest/")

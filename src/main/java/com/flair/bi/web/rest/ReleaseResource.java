@@ -1,6 +1,5 @@
 package com.flair.bi.web.rest;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,32 +27,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReleaseResource {
 
-    private final ReleaseRequestService releaseRequestService;
+	private final ReleaseRequestService releaseRequestService;
 
-    private final ReleaseRequestMapper releaseRequestMapper;
+	private final ReleaseRequestMapper releaseRequestMapper;
 
-    @GetMapping
-    @Timed
-    public ResponseEntity<Collection<ReleaseRequestDTO>> getRequests() {
-        return ResponseEntity.ok(releaseRequestMapper.releaseRequestsToReleaseRequestDTOs(new ArrayList<>(releaseRequestService.getAllRequests())));
-    }
+	@GetMapping
+	@Timed
+	public ResponseEntity<Collection<ReleaseRequestDTO>> getRequests() {
+		return ResponseEntity.ok(releaseRequestMapper
+				.releaseRequestsToReleaseRequestDTOs(new ArrayList<>(releaseRequestService.getAllRequests())));
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ReleaseRequest> getRequest(@PathVariable Long id) {
-        return ResponseEntity.ok(releaseRequestService.getRequestById(id));
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<ReleaseRequest> getRequest(@PathVariable Long id) {
+		return ResponseEntity.ok(releaseRequestService.getRequestById(id));
+	}
 
-    @PutMapping("/{id}/approve")
-    public ResponseEntity<?> approveRequest(@PathVariable Long id) {
-        releaseRequestService.approveRelease(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+	@PutMapping("/{id}/approve")
+	public ResponseEntity<?> approveRequest(@PathVariable Long id) {
+		releaseRequestService.approveRelease(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
-    @PutMapping("/{id}/reject")
-    public ResponseEntity<?> rejectRequest(@PathVariable Long id) {
-        releaseRequestService.rejectRelease(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
+	@PutMapping("/{id}/reject")
+	public ResponseEntity<?> rejectRequest(@PathVariable Long id) {
+		releaseRequestService.rejectRelease(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 }

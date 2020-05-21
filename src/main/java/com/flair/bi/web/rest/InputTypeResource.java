@@ -16,12 +16,10 @@ import io.micrometer.core.annotation.Timed;
 @RequestMapping("/api")
 public class InputTypeResource {
 
-    @GetMapping("/inputTypes")
-    @Timed
-    public List<String> getAllInputTypes() {
-        return Stream.of(InputType.values())
-            .map(InputType::getValue)
-            .map(String::toUpperCase)
-            .collect(Collectors.toList());
-    }
+	@GetMapping("/inputTypes")
+	@Timed
+	public List<String> getAllInputTypes() {
+		return Stream.of(InputType.values()).map(InputType::getValue).map(String::toUpperCase)
+				.collect(Collectors.toList());
+	}
 }

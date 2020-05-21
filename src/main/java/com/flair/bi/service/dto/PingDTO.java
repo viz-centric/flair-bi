@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public final class PingDTO {
 
-    private String url;
+	private String url;
 
-    private boolean available;
+	private boolean available;
 }

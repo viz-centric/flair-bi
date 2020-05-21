@@ -1,20 +1,21 @@
 package com.flair.bi.service;
 
-import com.flair.bi.config.audit.AuditEventConverter;
-import com.flair.bi.domain.QPersistentAuditEvent;
-import com.flair.bi.repository.PersistenceAuditEventRepository;
-import com.flair.bi.security.SecurityUtils;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.util.Optional;
+import com.flair.bi.config.audit.AuditEventConverter;
+import com.flair.bi.domain.QPersistentAuditEvent;
+import com.flair.bi.repository.PersistenceAuditEventRepository;
+import com.flair.bi.security.SecurityUtils;
+import com.querydsl.core.types.dsl.BooleanExpression;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Service for managing audit events.

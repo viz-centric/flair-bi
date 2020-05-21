@@ -1,14 +1,8 @@
 package com.flair.bi.domain.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.enumeration.Action;
-import com.flair.bi.domain.listeners.PermissionListener;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
@@ -17,9 +11,17 @@ import javax.persistence.EntityListeners;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.listeners.PermissionListener;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -27,81 +29,74 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "permission")
-@EntityListeners({PermissionListener.class})
-@EqualsAndHashCode(of = {"key"})
+@EntityListeners({ PermissionListener.class })
+@EqualsAndHashCode(of = { "key" })
 public class Permission implements Serializable {
 
-    @EmbeddedId
-    private PermissionKey key = new PermissionKey();
+	@EmbeddedId
+	private PermissionKey key = new PermissionKey();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "permissions")
-    private Set<UserGroup> userGroups = new HashSet<>();
+	@JsonIgnore
+	@ManyToMany(mappedBy = "permissions")
+	private Set<UserGroup> userGroups = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "permissions")
-    private Set<User> users = new HashSet<>();
+	@JsonIgnore
+	@ManyToMany(mappedBy = "permissions")
+	private Set<User> users = new HashSet<>();
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "from", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<PermissionEdge> fromPermissionEdges = new HashSet<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "from", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<PermissionEdge> fromPermissionEdges = new HashSet<>();
+	@JsonIgnore
+	@OneToMany(mappedBy = "to", orphanRemoval = true, cascade = CascadeType.ALL)
+	private Set<PermissionEdge> toPermissionEdges = new HashSet<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "to", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<PermissionEdge> toPermissionEdges = new HashSet<>();
+	public Permission(String resource, Action action, String scope) {
+		this.key = new PermissionKey(resource, action, scope);
+	}
 
+	public static Permission fromStringValue(String value) {
+		String[] arr = value.split("_");
 
-    public Permission(String resource, Action action, String scope) {
-        this.key = new PermissionKey(resource, action, scope);
-    }
+		if (arr.length != 3) {
+			throw new IllegalArgumentException();
+		}
 
-    public static Permission fromStringValue(String value) {
-        String[] arr = value.split("_");
+		return new Permission(arr[1], Action.fromStringValue(arr[0]), arr[2]);
+	}
 
-        if (arr.length != 3) {
-            throw new IllegalArgumentException();
-        }
+	public String getStringValue() {
+		return key.getAction().getType() + "_" + key.getResource() + "_" + key.getScope();
 
+	}
 
-        return new Permission(arr[1], Action.fromStringValue(arr[0]), arr[2]);
-    }
+	public String getResource() {
+		return key.getResource();
+	}
 
-    public String getStringValue() {
-        return key.getAction().getType() +
-            "_" +
-            key.getResource() +
-            "_" +
-            key.getScope();
+	public void setResource(String resource) {
+		key.setResource(resource);
+	}
 
-    }
+	public Action getAction() {
+		return key.getAction();
+	}
 
-    public String getResource() {
-        return key.getResource();
-    }
+	public void setAction(Action action) {
+		key.setAction(action);
+	}
 
-    public void setResource(String resource) {
-        key.setResource(resource);
-    }
+	public String getScope() {
+		return key.getScope();
+	}
 
-    public Action getAction() {
-        return key.getAction();
-    }
+	public void setScope(String scope) {
+		key.setScope(scope);
+	}
 
-    public void setAction(Action action) {
-        key.setAction(action);
-    }
-
-    public String getScope() {
-        return key.getScope();
-    }
-
-    public void setScope(String scope) {
-        key.setScope(scope);
-    }
-
-    @Override
-    public String toString() {
-        return getStringValue();
-    }
+	@Override
+	public String toString() {
+		return getStringValue();
+	}
 }

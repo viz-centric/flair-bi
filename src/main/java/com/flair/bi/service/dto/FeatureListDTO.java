@@ -6,11 +6,12 @@ package com.flair.bi.service.dto;
 import java.util.List;
 
 public class FeatureListDTO {
-	
+
 	private Long datasourceId;
 	private List<FeatureDTO> featureList;
-	
-	public FeatureListDTO(){}
+
+	public FeatureListDTO() {
+	}
 
 	public Long getDatasourceId() {
 		return datasourceId;
@@ -32,9 +33,5 @@ public class FeatureListDTO {
 	public String toString() {
 		return "FeatureListDTO [datasourceId=" + datasourceId + ", featureList=" + featureList + "]";
 	}
-	
-	
-	
-	
 
 }

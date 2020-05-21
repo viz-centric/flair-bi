@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,10 +44,6 @@ public class DatasourceServiceImpl implements DatasourceService {
 	}
 
 	private void init(Datasource datasource) {
-//		Hibernate.initialize(datasource.getDashboardSet());
-//		Hibernate.initialize(datasource.getFeatures());
-//		Hibernate.initialize(datasource.getHierarchies());
-//		Hibernate.initialize(datasource.getDatasourceConstraints());
 	}
 
 	/**
@@ -159,7 +154,5 @@ public class DatasourceServiceImpl implements DatasourceService {
 		delete(QDatasource.datasource.connectionName.eq(connectionName)
 				.and(QDatasource.datasource.name.eq(datasourceName)));
 	}
-
-	
 
 }

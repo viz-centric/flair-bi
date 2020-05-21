@@ -6,6 +6,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import com.flair.bi.domain.security.PermissionEdge;
 import com.flair.bi.domain.security.PermissionEdgeKey;
 
-public interface PermissionEdgeRepository extends JpaRepository<PermissionEdge, PermissionEdgeKey>,
-    QuerydslPredicateExecutor<PermissionEdge> {
+public interface PermissionEdgeRepository
+		extends JpaRepository<PermissionEdge, PermissionEdgeKey>, QuerydslPredicateExecutor<PermissionEdge> {
 }

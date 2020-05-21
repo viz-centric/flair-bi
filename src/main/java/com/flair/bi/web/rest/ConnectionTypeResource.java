@@ -21,17 +21,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/connection-type")
 public class ConnectionTypeResource {
 
-    private final GrpcConnectionService grpcConnectionService;
+	private final GrpcConnectionService grpcConnectionService;
 
-    @GetMapping
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<ConnectionTypeDTO>> getConnections() {
-        log.debug("Get connection types");
-        List<ConnectionTypeDTO> connectionTypes = grpcConnectionService.getAllConnectionTypes();
+	@GetMapping
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<List<ConnectionTypeDTO>> getConnections() {
+		log.debug("Get connection types");
+		List<ConnectionTypeDTO> connectionTypes = grpcConnectionService.getAllConnectionTypes();
 
-        log.debug("Get connection types returned {}", connectionTypes);
-        return ResponseEntity.ok(connectionTypes);
-    }
+		log.debug("Get connection types returned {}", connectionTypes);
+		return ResponseEntity.ok(connectionTypes);
+	}
 
 }

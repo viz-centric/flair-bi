@@ -19,22 +19,22 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 @SuppressWarnings("unused")
 @Repository
 public interface FeatureBookmarkRepository extends JpaRepository<FeatureBookmark, Long>,
-    QuerydslPredicateExecutor<FeatureBookmark>,
-    QuerydslBinderCustomizer<QFeatureBookmark> {
+		QuerydslPredicateExecutor<FeatureBookmark>, QuerydslBinderCustomizer<QFeatureBookmark> {
 
-    @Query("select feature_bookmark from FeatureBookmark feature_bookmark where feature_bookmark.user.login = ?#{principal.username}")
-    List<FeatureBookmark> findByUserIsCurrentUser();
+	@Query("select feature_bookmark from FeatureBookmark feature_bookmark where feature_bookmark.user.login = ?#{principal.username}")
+	List<FeatureBookmark> findByUserIsCurrentUser();
 
-    /**
-     * Customize the {@link QuerydslBindings} for the given root.
-     *
-     * @param bindings the {@link QuerydslBindings} to customize, will never be {@literal null}.
-     * @param root     the entity root, will never be {@literal null}.
-     */
-    @Override
-    default void customize(QuerydslBindings bindings, QFeatureBookmark root) {
-        bindings.bind(root.datasource.id).first(SimpleExpression::eq);
-        bindings.bind(root.name).first(SimpleExpression::eq);
-        bindings.excluding(root.user);
-    }
+	/**
+	 * Customize the {@link QuerydslBindings} for the given root.
+	 *
+	 * @param bindings the {@link QuerydslBindings} to customize, will never be
+	 *                 {@literal null}.
+	 * @param root     the entity root, will never be {@literal null}.
+	 */
+	@Override
+	default void customize(QuerydslBindings bindings, QFeatureBookmark root) {
+		bindings.bind(root.datasource.id).first(SimpleExpression::eq);
+		bindings.bind(root.name).first(SimpleExpression::eq);
+		bindings.excluding(root.user);
+	}
 }

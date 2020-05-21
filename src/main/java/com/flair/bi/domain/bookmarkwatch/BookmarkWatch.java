@@ -1,14 +1,24 @@
 package com.flair.bi.domain.bookmarkwatch;
 
+import java.time.ZonedDateTime;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+
 import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.time.ZonedDateTime;
 
 @Getter
 @Setter

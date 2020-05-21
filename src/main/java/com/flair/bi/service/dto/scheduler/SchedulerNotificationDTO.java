@@ -1,4 +1,5 @@
 package com.flair.bi.service.dto.scheduler;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

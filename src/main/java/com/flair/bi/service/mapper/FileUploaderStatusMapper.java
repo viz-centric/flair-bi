@@ -13,11 +13,13 @@ import com.flair.bi.service.dto.FileUploaderStatusDTO;
 @Mapper(componentModel = "spring", uses = {})
 public interface FileUploaderStatusMapper {
 
-    FileUploaderStatusDTO fileUploaderStatusToFileUploaderStatusDTO(FileUploaderStatus fileUploaderStatus);
+	FileUploaderStatusDTO fileUploaderStatusToFileUploaderStatusDTO(FileUploaderStatus fileUploaderStatus);
 
-    List<FileUploaderStatusDTO> fileUploaderStatusesToFileUploaderStatusDTOs(List<FileUploaderStatus> fileUploaderStatuses);
+	List<FileUploaderStatusDTO> fileUploaderStatusesToFileUploaderStatusDTOs(
+			List<FileUploaderStatus> fileUploaderStatuses);
 
-    FileUploaderStatus fileUploaderStatusDTOToFileUploaderStatus(FileUploaderStatusDTO fileUploaderStatusDTO);
+	FileUploaderStatus fileUploaderStatusDTOToFileUploaderStatus(FileUploaderStatusDTO fileUploaderStatusDTO);
 
-    List<FileUploaderStatus> fileUploaderStatusDTOsToFileUploaderStatuses(List<FileUploaderStatusDTO> fileUploaderStatusDTOs);
+	List<FileUploaderStatus> fileUploaderStatusDTOsToFileUploaderStatuses(
+			List<FileUploaderStatusDTO> fileUploaderStatusDTOs);
 }

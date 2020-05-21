@@ -1,19 +1,20 @@
 package com.flair.bi.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.repository.FeatureRepository;
 import com.flair.bi.service.dto.FunctionsDTO;
 import com.querydsl.core.types.Predicate;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

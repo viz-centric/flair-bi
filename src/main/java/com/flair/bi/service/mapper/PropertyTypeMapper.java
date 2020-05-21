@@ -17,41 +17,41 @@ import com.flair.bi.service.dto.PropertyTypeDTO;
 @Mapper(componentModel = "spring", uses = {})
 public interface PropertyTypeMapper {
 
-    @Mapping(source = "type", target = "inputType")
-    PropertyTypeDTO propertyTypeToPropertyTypeDTO(PropertyType propertyType);
+	@Mapping(source = "type", target = "inputType")
+	PropertyTypeDTO propertyTypeToPropertyTypeDTO(PropertyType propertyType);
 
-    List<PropertyTypeDTO> propertyTypesToPropertyTypeDTOs(List<PropertyType> propertyTypes);
+	List<PropertyTypeDTO> propertyTypesToPropertyTypeDTOs(List<PropertyType> propertyTypes);
 
-    default PropertyType propertyTypeDTOToPropertyType(PropertyTypeDTO propertyTypeDTO) {
-        PropertyType propertyType;
+	default PropertyType propertyTypeDTOToPropertyType(PropertyTypeDTO propertyTypeDTO) {
+		PropertyType propertyType;
 
-        switch (InputType.valueOf(propertyTypeDTO.getInputType())) {
-            case TEXT:
-                propertyType = new TextPropertyType();
-                break;
-            case NUMBER:
-                propertyType = new NumberPropertyType();
-                break;
-            case COLOR_PICKER:
-                propertyType = new ColorPickerPropertyType();
-                break;
-            case SELECT:
-                propertyType = new SelectPropertyType();
-                break;
-            case CHECKBOX:
-                propertyType = new CheckboxPropertyType();
-            default:
-                throw new IllegalArgumentException();
-        }
+		switch (InputType.valueOf(propertyTypeDTO.getInputType())) {
+		case TEXT:
+			propertyType = new TextPropertyType();
+			break;
+		case NUMBER:
+			propertyType = new NumberPropertyType();
+			break;
+		case COLOR_PICKER:
+			propertyType = new ColorPickerPropertyType();
+			break;
+		case SELECT:
+			propertyType = new SelectPropertyType();
+			break;
+		case CHECKBOX:
+			propertyType = new CheckboxPropertyType();
+		default:
+			throw new IllegalArgumentException();
+		}
 
-        propertyType.setDescription(propertyTypeDTO.getDescription());
-        propertyType.setId(propertyTypeDTO.getId());
-        propertyType.setName(propertyTypeDTO.getName());
-        propertyType.setType(propertyTypeDTO.getInputType());
+		propertyType.setDescription(propertyTypeDTO.getDescription());
+		propertyType.setId(propertyTypeDTO.getId());
+		propertyType.setName(propertyTypeDTO.getName());
+		propertyType.setType(propertyTypeDTO.getInputType());
 
-        return propertyType;
-    }
+		return propertyType;
+	}
 
-    List<PropertyType> propertyTypeDTOsToPropertyTypes(List<PropertyTypeDTO> propertyTypeDTOS);
+	List<PropertyType> propertyTypeDTOsToPropertyTypes(List<PropertyTypeDTO> propertyTypeDTOS);
 
 }

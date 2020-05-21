@@ -1,5 +1,7 @@
 package com.flair.bi.domain;
 
+import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A Functions.
@@ -17,144 +17,138 @@ import java.util.Objects;
 @Table(name = "functions")
 public class Functions implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name")
+	private String name;
 
-    @Column(name = "description")
-    private String description;
+	@Column(name = "description")
+	private String description;
 
-    @Column(name = "value")
-    private String value;
+	@Column(name = "value")
+	private String value;
 
-    @Column(name = "dimension_use")
-    private Boolean dimensionUse;
+	@Column(name = "dimension_use")
+	private Boolean dimensionUse;
 
-    @Column(name = "measure_use")
-    private Boolean measureUse;
+	@Column(name = "measure_use")
+	private Boolean measureUse;
 
-    private String validation;
+	private String validation;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Functions name(String name) {
-        this.name = name;
-        return this;
-    }
+	public Functions name(String name) {
+		this.name = name;
+		return this;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public Functions description(String description) {
-        this.description = description;
-        return this;
-    }
+	public Functions description(String description) {
+		this.description = description;
+		return this;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public Functions value(String value) {
-        this.value = value;
-        return this;
-    }
+	public Functions value(String value) {
+		this.value = value;
+		return this;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    public Boolean isDimensionUse() {
-        return dimensionUse;
-    }
+	public Boolean isDimensionUse() {
+		return dimensionUse;
+	}
 
-    public Functions dimensionUse(Boolean dimensionUse) {
-        this.dimensionUse = dimensionUse;
-        return this;
-    }
+	public Functions dimensionUse(Boolean dimensionUse) {
+		this.dimensionUse = dimensionUse;
+		return this;
+	}
 
-    public void setDimensionUse(Boolean dimensionUse) {
-        this.dimensionUse = dimensionUse;
-    }
+	public void setDimensionUse(Boolean dimensionUse) {
+		this.dimensionUse = dimensionUse;
+	}
 
-    public Boolean isMeasureUse() {
-        return measureUse;
-    }
+	public Boolean isMeasureUse() {
+		return measureUse;
+	}
 
-    public Functions measureUse(Boolean measureUse) {
-        this.measureUse = measureUse;
-        return this;
-    }
+	public Functions measureUse(Boolean measureUse) {
+		this.measureUse = measureUse;
+		return this;
+	}
 
-    public void setMeasureUse(Boolean measureUse) {
-        this.measureUse = measureUse;
-    }
+	public void setMeasureUse(Boolean measureUse) {
+		this.measureUse = measureUse;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Functions functions = (Functions) o;
-        if (functions.id == null || id == null) {
-            return false;
-        }
-        return Objects.equals(id, functions.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Functions functions = (Functions) o;
+		if (functions.id == null || id == null) {
+			return false;
+		}
+		return Objects.equals(id, functions.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
 
-    @Override
-    public String toString() {
-        return "Functions{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            ", description='" + description + "'" +
-            ", value='" + value + "'" +
-            ", dimensionUse='" + dimensionUse + "'" +
-            ", measureUse='" + measureUse + "'" +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "Functions{" + "id=" + id + ", name='" + name + "'" + ", description='" + description + "'" + ", value='"
+				+ value + "'" + ", dimensionUse='" + dimensionUse + "'" + ", measureUse='" + measureUse + "'" + '}';
+	}
 
-    public String getValidation() {
-        return validation;
-    }
+	public String getValidation() {
+		return validation;
+	}
 
-    public void setValidation(String validation) {
-        this.validation = validation;
-    }
+	public void setValidation(String validation) {
+		this.validation = validation;
+	}
 
-    public Functions validation(String validation) {
-        this.validation = validation;
-        return this;
-    }
+	public Functions validation(String validation) {
+		this.validation = validation;
+		return this;
+	}
 }

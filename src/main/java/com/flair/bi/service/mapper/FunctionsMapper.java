@@ -13,11 +13,11 @@ import com.flair.bi.service.dto.FunctionsDTO;
 @Mapper(componentModel = "spring", uses = {})
 public interface FunctionsMapper {
 
-    FunctionsDTO functionsToFunctionsDTO(Functions functions);
+	FunctionsDTO functionsToFunctionsDTO(Functions functions);
 
-    List<FunctionsDTO> functionsToFunctionsDTOs(List<Functions> functions);
+	List<FunctionsDTO> functionsToFunctionsDTOs(List<Functions> functions);
 
-    Functions functionsDTOToFunctions(FunctionsDTO functionsDTO);
+	Functions functionsDTOToFunctions(FunctionsDTO functionsDTO);
 
-    List<Functions> functionsDTOsToFunctions(List<FunctionsDTO> functionsDTOs);
+	List<Functions> functionsDTOsToFunctions(List<FunctionsDTO> functionsDTOs);
 }

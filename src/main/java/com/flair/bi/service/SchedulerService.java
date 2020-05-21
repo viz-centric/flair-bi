@@ -1,5 +1,12 @@
 package com.flair.bi.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
@@ -27,14 +34,9 @@ import com.project.bi.query.dto.QuerySourceDTO;
 import com.project.bi.query.expression.operations.CompositeOperation;
 import com.project.bi.query.expression.operations.Operation;
 import com.project.bi.query.expression.operations.QueryOperation;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -49,13 +51,13 @@ public class SchedulerService {
 
 	@Value("${flair-notifications.port}")
 	private String port;
-	
+
 	@Value("${flair-notifications.scheduled-execute-now-report-param-url}")
 	private String executeImmediateUrl;
-    
+
 	@Value("${flair-notifications.scheduled-report-logs-param-url}")
 	private String scheduleReportLogsUrl;
-	
+
 	@Value("${flair-notifications.scheduled-search-reports-param-url}")
 	private String searchscheduledReportsURL;
 
@@ -81,20 +83,22 @@ public class SchedulerService {
 	private final DatasourceConstraintService datasourceConstraintService;
 
 	private final UserService userService;
-	
-    public void executeImmediateScheduledReport(String visualizationid) {
+
+	public void executeImmediateScheduledReport(String visualizationid) {
 		notificationsGrpcService.executeImmediateScheduledReport(visualizationid);
 	}
 
 	public GetSchedulerReportLogsDTO scheduleReportLogs(String visualizationid, Integer pageSize, Integer page) {
 		return notificationsGrpcService.getScheduleReportLogs(visualizationid, pageSize, page);
 	}
-	
-	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate, String endDate, Integer pageSize, Integer page,Boolean thresholdAlert) {
-		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert);
+
+	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate,
+			String endDate, Integer pageSize, Integer page, Boolean thresholdAlert) {
+		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page,
+				thresholdAlert);
 	}
-	
-	public String buildUrl(String host,String port,String apiUrl) {
+
+	public String buildUrl(String host, String port, String apiUrl) {
 		return host + ":" + port + apiUrl;
 	}
 
@@ -121,7 +125,7 @@ public class SchedulerService {
 	public Integer getScheduledReportsCount(String username) {
 		return notificationsGrpcService.getScheduledReportsCount(username);
 	}
-	
+
 	public GetChannelConnectionDTO getChannelParameters(String channel) {
 		return notificationsGrpcService.getChannelParameters(channel);
 	}
@@ -186,13 +190,12 @@ public class SchedulerService {
 		return notificationsGrpcService.notifyOpenedJiraTicket(openJiraTicketDTO);
 	}
 
-	public Boolean isConfigExist(Integer id){
+	public Boolean isConfigExist(Integer id) {
 		return notificationsGrpcService.isConfigExist(id);
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
-							 String visualizationId, String userId)
-			throws InvalidProtocolBufferException, QueryTransformerException {
+			String visualizationId, String userId) throws InvalidProtocolBufferException, QueryTransformerException {
 		queryDTO.setQuerySource(new QuerySourceDTO(datasource.getName(), "A"));
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
@@ -209,21 +212,15 @@ public class SchedulerService {
 				.ifPresent(queryDTO.getConditionExpressions()::add);
 
 		if (queryDTO.getHaving() != null && queryDTO.getHaving().size() > 0) {
-			List<Operation> operationList = queryDTO.getHaving().stream()
-					.filter(h -> h.getOperation() != null)
-					.map(h -> h.getOperation())
-					.collect(Collectors.toList());
+			List<Operation> operationList = queryDTO.getHaving().stream().filter(h -> h.getOperation() != null)
+					.map(h -> h.getOperation()).collect(Collectors.toList());
 			processOperations(queryDTO, operationList, 0);
 		}
 
 		Query query = queryTransformerService.toQuery(queryDTO,
-				QueryTransformerParams.builder()
-						.datasourceId(datasource.getId())
+				QueryTransformerParams.builder().datasourceId(datasource.getId())
 						.connectionName(datasource.getConnectionName())
-						.vId(visualizationId != null ? visualizationId : "")
-						.userId(userId)
-						.build()
-		);
+						.vId(visualizationId != null ? visualizationId : "").userId(userId).build());
 		String jsonQuery = JsonFormat.printer().print(query);
 		log.debug("jsonQuery==" + jsonQuery);
 		return jsonQuery;
@@ -231,32 +228,26 @@ public class SchedulerService {
 	}
 
 	private void processOperations(QueryDTO queryDTO, List<Operation> operationList, int nestLevel) {
-		operationList
-				.forEach((op -> {
-					if (op instanceof QueryOperation) {
-						QueryOperation queryOperation = (QueryOperation) op;
-						queryOperation.getValue().setQuerySource(
-								new QuerySourceDTO(queryDTO.getQuerySource().getSource(),
-										String.valueOf((char) (65 + nestLevel))
-								));
-					} else if (op instanceof CompositeOperation) {
-						CompositeOperation compositeOperation = (CompositeOperation) op;
-						processOperations(queryDTO, compositeOperation.getOperations(), nestLevel + 1);
-					}
-				}));
+		operationList.forEach((op -> {
+			if (op instanceof QueryOperation) {
+				QueryOperation queryOperation = (QueryOperation) op;
+				queryOperation.getValue().setQuerySource(new QuerySourceDTO(queryDTO.getQuerySource().getSource(),
+						String.valueOf((char) (65 + nestLevel))));
+			} else if (op instanceof CompositeOperation) {
+				CompositeOperation compositeOperation = (CompositeOperation) op;
+				processOperations(queryDTO, compositeOperation.getOperations(), nestLevel + 1);
+			}
+		}));
 	}
 
 	public emailsDTO[] getEmailList(String login) {
 		Optional<User> optionalUser = userService.getUserWithAuthoritiesByLogin(login);
-		return optionalUser
-				.map(user -> {
-					emailsDTO emailsDTO = new emailsDTO();
-					emailsDTO.setUser_email(user.getEmail());
-					emailsDTO.setUser_name(user.getFirstName() + " " + user.getLastName());
-					return emailsDTO;
-				})
-				.map(emails -> new emailsDTO[]{emails})
-				.orElseGet(() -> new emailsDTO[]{new emailsDTO()});
+		return optionalUser.map(user -> {
+			emailsDTO emailsDTO = new emailsDTO();
+			emailsDTO.setUser_email(user.getEmail());
+			emailsDTO.setUser_name(user.getFirstName() + " " + user.getLastName());
+			return emailsDTO;
+		}).map(emails -> new emailsDTO[] { emails }).orElseGet(() -> new emailsDTO[] { new emailsDTO() });
 	}
 
 	public void setChannelCredentials(SchedulerNotificationDTO schedulerNotificationDTO) {

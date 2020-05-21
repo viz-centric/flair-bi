@@ -1,14 +1,30 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.repository.DatasourceRepository;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.GrpcConnectionService;
-import com.flair.bi.service.dto.ListTablesResponseDTO;
-import com.flair.bi.web.rest.dto.ConnectionDTO;
-import com.flair.bi.web.rest.errors.ExceptionTranslator;
+import static com.flair.bi.domain.DatasourceStatus.DELETED;
+import static com.flair.bi.web.rest.TestUtil.sameInstant;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -25,24 +41,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.flair.bi.domain.DatasourceStatus.DELETED;
-import static com.flair.bi.web.rest.TestUtil.sameInstant;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.repository.DatasourceRepository;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.dto.ListTablesResponseDTO;
+import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.flair.bi.web.rest.errors.ExceptionTranslator;
 
 /**
  * Test class for the DatasourcesResource REST controller.

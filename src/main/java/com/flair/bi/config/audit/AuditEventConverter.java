@@ -1,14 +1,17 @@
 package com.flair.bi.config.audit;
 
-import com.flair.bi.domain.PersistentAuditEvent;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.*;
+import com.flair.bi.domain.PersistentAuditEvent;
 
 @Component
 public class AuditEventConverter {

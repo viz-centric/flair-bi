@@ -1,10 +1,6 @@
 package com.flair.bi.domain.viewwatch;
 
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.View;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.ZonedDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
-import java.time.ZonedDateTime;
+
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

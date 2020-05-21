@@ -16,11 +16,10 @@ import io.micrometer.core.annotation.Timed;
 @RequestMapping("/api")
 public class ConstraintResource {
 
-
-    @GetMapping("/constraints")
-    @Timed
-    public List<String> getAllConstraints() {
-        return Arrays.stream(Constraint.values()).map(Constraint::getValue).collect(Collectors.toList());
-    }
+	@GetMapping("/constraints")
+	@Timed
+	public List<String> getAllConstraints() {
+		return Arrays.stream(Constraint.values()).map(Constraint::getValue).collect(Collectors.toList());
+	}
 
 }

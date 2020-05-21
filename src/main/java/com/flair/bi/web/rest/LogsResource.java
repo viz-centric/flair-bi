@@ -25,21 +25,18 @@ import io.micrometer.core.annotation.Timed;
 @RequestMapping("/management")
 public class LogsResource {
 
-    @GetMapping("/logs")
-    @Timed
-    public List<LoggerVM> getList() {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        return context.getLoggerList()
-            .stream()
-            .map(LoggerVM::new)
-            .collect(Collectors.toList());
-    }
+	@GetMapping("/logs")
+	@Timed
+	public List<LoggerVM> getList() {
+		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+		return context.getLoggerList().stream().map(LoggerVM::new).collect(Collectors.toList());
+	}
 
-    @PutMapping("/logs")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Timed
-    public void changeLevel(@RequestBody LoggerVM jsonLogger) {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        context.getLogger(jsonLogger.getName()).setLevel(Level.valueOf(jsonLogger.getLevel()));
-    }
+	@PutMapping("/logs")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Timed
+	public void changeLevel(@RequestBody LoggerVM jsonLogger) {
+		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+		context.getLogger(jsonLogger.getName()).setLevel(Level.valueOf(jsonLogger.getLevel()));
+	}
 }

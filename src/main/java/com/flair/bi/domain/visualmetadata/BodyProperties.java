@@ -8,31 +8,31 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class BodyProperties {
 
-    private String backgroundColor;
-    private String border;
-    private String opacity;
+	private String backgroundColor;
+	private String border;
+	private String opacity;
 
-    public String getBackgroundColor() {
-        return backgroundColor;
-    }
+	public String getBackgroundColor() {
+		return backgroundColor;
+	}
 
-    public void setBackgroundColor(String backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
+	public void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
 
-    public String getBorder() {
-        return border;
-    }
+	public String getBorder() {
+		return border;
+	}
 
-    public void setBorder(String border) {
-        this.border = border;
-    }
+	public void setBorder(String border) {
+		this.border = border;
+	}
 
-    public String getOpacity() {
-        return opacity;
-    }
+	public String getOpacity() {
+		return opacity;
+	}
 
-    public void setOpacity(String opacity) {
-        this.opacity = opacity;
-    }
+	public void setOpacity(String opacity) {
+		this.opacity = opacity;
+	}
 }

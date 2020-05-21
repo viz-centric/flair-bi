@@ -25,14 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ViewFeatureCriteriaResource {
 
-    private final ViewFeatureCriteriaService viewFeatureCriteriaService;
+	private final ViewFeatureCriteriaService viewFeatureCriteriaService;
 
-    @PostMapping("/view-feature-criteria")
-    @Timed
-    public ResponseEntity<Set<ViewFeatureCriteria>> createViewFeatureCriteria(@Valid @RequestBody CreateViewFeatureCriteriaRequest viewFeatureCriteria) throws URISyntaxException {
-        log.debug("REST request to save ViewFeatureCriteria : {}", viewFeatureCriteria);
-        Set<ViewFeatureCriteria> result = viewFeatureCriteriaService.create(viewFeatureCriteria);
-        return ResponseEntity.ok(result);
-    }
+	@PostMapping("/view-feature-criteria")
+	@Timed
+	public ResponseEntity<Set<ViewFeatureCriteria>> createViewFeatureCriteria(
+			@Valid @RequestBody CreateViewFeatureCriteriaRequest viewFeatureCriteria) throws URISyntaxException {
+		log.debug("REST request to save ViewFeatureCriteria : {}", viewFeatureCriteria);
+		Set<ViewFeatureCriteria> result = viewFeatureCriteriaService.create(viewFeatureCriteria);
+		return ResponseEntity.ok(result);
+	}
 
 }

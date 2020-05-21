@@ -1,17 +1,18 @@
 package com.flair.bi.domain.constraintdefinition;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.project.bi.general.Builder;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter

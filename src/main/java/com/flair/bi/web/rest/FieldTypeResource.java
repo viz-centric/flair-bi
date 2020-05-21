@@ -20,17 +20,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FieldTypeResource {
 
-    private final FieldTypeService fieldTypeService;
+	private final FieldTypeService fieldTypeService;
 
-    @PostMapping("/fieldTypes/{id}/propertyTypes")
-    @Timed
-    public ResponseEntity<FieldType> assignPropertyType(@PathVariable Long id, @RequestBody IdentifierDTO<Long> propertyType) {
-        return ResponseEntity.ok(fieldTypeService.assignPropertyType(id, propertyType.getId()));
-    }
+	@PostMapping("/fieldTypes/{id}/propertyTypes")
+	@Timed
+	public ResponseEntity<FieldType> assignPropertyType(@PathVariable Long id,
+			@RequestBody IdentifierDTO<Long> propertyType) {
+		return ResponseEntity.ok(fieldTypeService.assignPropertyType(id, propertyType.getId()));
+	}
 
-    @DeleteMapping("/fieldTypes/{id}/propertyTypes/{propertyTypeId}")
-    @Timed
-    public ResponseEntity<FieldType> removePropertyType(@PathVariable Long id, @PathVariable Long propertyTypeId) {
-        return ResponseEntity.ok(fieldTypeService.removePropertyType(id, propertyTypeId));
-    }
+	@DeleteMapping("/fieldTypes/{id}/propertyTypes/{propertyTypeId}")
+	@Timed
+	public ResponseEntity<FieldType> removePropertyType(@PathVariable Long id, @PathVariable Long propertyTypeId) {
+		return ResponseEntity.ok(fieldTypeService.removePropertyType(id, propertyTypeId));
+	}
 }

@@ -1,10 +1,7 @@
 package com.flair.bi.aop.logging;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.exception.UniqueConstraintsException;
-import com.flair.bi.web.rest.errors.ErrorConstants;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -14,7 +11,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 
-import java.util.Arrays;
+import com.flair.bi.config.Constants;
+import com.flair.bi.exception.UniqueConstraintsException;
+import com.flair.bi.web.rest.errors.ErrorConstants;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
@@ -50,10 +52,10 @@ public class LoggingAspect {
 					joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(),
 					e.getCause() != null ? e.getCause() : "NULL", e.getMessage(), e);
 
-        } else {
-            log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName(), e.getCause() != null ? e.getCause() : "NULL");
-        }
+		} else {
+			log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
+					joinPoint.getSignature().getName(), e.getCause() != null ? e.getCause() : "NULL");
+		}
 		if (e.getMessage() != null && e.getMessage().contains("name_unique]")) {
 			throw new UniqueConstraintsException(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR, e);
 		}

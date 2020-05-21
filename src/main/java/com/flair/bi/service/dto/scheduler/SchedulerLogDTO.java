@@ -1,6 +1,7 @@
 package com.flair.bi.service.dto.scheduler;
 
 import com.project.bi.query.dto.QueryDTO;
+
 import lombok.Builder;
 import lombok.Data;
 

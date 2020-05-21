@@ -6,5 +6,5 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class TestConnectionResultDTO {
-    private boolean success;
+	private boolean success;
 }

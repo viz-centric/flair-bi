@@ -1,5 +1,17 @@
 package com.flair.bi.release;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
 import com.flair.bi.domain.Release;
@@ -13,18 +25,8 @@ import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
 import com.flair.bi.view.ViewService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional

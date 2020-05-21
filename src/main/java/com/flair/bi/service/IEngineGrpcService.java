@@ -14,30 +14,31 @@ import com.flair.bi.messages.RunQueryResponse;
 import com.flair.bi.messages.SaveConnectionResponse;
 import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionResponse;
+
 import io.grpc.stub.StreamObserver;
 
 public interface IEngineGrpcService {
-    QueryValidationResponse validate(Query query);
+	QueryValidationResponse validate(Query query);
 
-    StreamObserver<Query> getDataStream(StreamObserver<QueryResponse> responseObserver);
+	StreamObserver<Query> getDataStream(StreamObserver<QueryResponse> responseObserver);
 
-    ConnectionResponses getAllConnections();
+	ConnectionResponses getAllConnections();
 
-    RunQueryResponse runQuery(Query query, boolean metaRetrieved);
+	RunQueryResponse runQuery(Query query, boolean metaRetrieved);
 
-    TestConnectionResponse testConnection(Connection connection);
+	TestConnectionResponse testConnection(Connection connection);
 
-    QueryAllResponse queryAll(String connectionLinkId, Query query, Connection connection);
+	QueryAllResponse queryAll(String connectionLinkId, Query query, Connection connection);
 
-    ConnectionTypesResponses getAllConnectionTypes();
+	ConnectionTypesResponses getAllConnectionTypes();
 
-    SaveConnectionResponse saveConnection(Connection connection);
+	SaveConnectionResponse saveConnection(Connection connection);
 
-    GetConnectionResponse getConnection(Long connectionId);
+	GetConnectionResponse getConnection(Long connectionId);
 
-    DeleteConnectionResponse deleteConnection(Long connectionId);
+	DeleteConnectionResponse deleteConnection(Long connectionId);
 
-    UpdateConnectionResponse updateConnection(Connection connection);
+	UpdateConnectionResponse updateConnection(Connection connection);
 
-    ListTablesResponse listTables(String connectionLinkId, String tableNameLike, int maxEntries, Connection connection);
+	ListTablesResponse listTables(String connectionLinkId, String tableNameLike, int maxEntries, Connection connection);
 }

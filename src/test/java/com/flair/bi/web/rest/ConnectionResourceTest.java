@@ -1,5 +1,24 @@
 package com.flair.bi.web.rest;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.stubbing.Answer;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.service.DashboardService;
@@ -11,25 +30,6 @@ import com.flair.bi.service.dto.RunQueryResponseDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.google.common.collect.ImmutableMap;
 import com.project.bi.query.dto.QueryDTO;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.stubbing.Answer;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
 
 @Ignore
 public class ConnectionResourceTest extends AbstractIntegrationTest {

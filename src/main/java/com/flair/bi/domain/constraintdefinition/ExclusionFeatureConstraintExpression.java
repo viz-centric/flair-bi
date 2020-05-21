@@ -2,6 +2,7 @@ package com.flair.bi.domain.constraintdefinition;
 
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

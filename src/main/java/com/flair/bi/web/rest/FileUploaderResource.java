@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FileUploaderResource {
 
 	private final FileUploadService imageUploadService;
-	private final FileUploaderStatusService fileUploaderStatusService; 
+	private final FileUploaderStatusService fileUploaderStatusService;
 
 	@PostMapping("/file-upload")
 	@Timed
@@ -38,24 +38,26 @@ public class FileUploaderResource {
 	public ResponseEntity<ResponseDTO> scheduleReport(@Valid @RequestBody FileUploaderDTO fileUploaderDTO)
 			throws Exception {
 		try {
-			String location=imageUploadService.uploadedCSVFile(fileUploaderDTO.getFile(), fileUploaderDTO.getContentType(),getFileName(fileUploaderDTO.getFileName()),fileUploaderDTO.getFileName());
-			fileUploaderStatusService.save(new FileUploaderStatusDTO(fileUploaderDTO.getFileSystem(),getFileName(fileUploaderDTO.getFileName()), "csv", false,location));
+			String location = imageUploadService.uploadedCSVFile(fileUploaderDTO.getFile(),
+					fileUploaderDTO.getContentType(), getFileName(fileUploaderDTO.getFileName()),
+					fileUploaderDTO.getFileName());
+			fileUploaderStatusService.save(new FileUploaderStatusDTO(fileUploaderDTO.getFileSystem(),
+					getFileName(fileUploaderDTO.getFileName()), "csv", false, location));
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
 		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.CREATED, "file is uploaded successfully"));
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new ResponseDTO(HttpStatus.CREATED, "file is uploaded successfully"));
 	}
-	
-	private String getFileName(String name){
-		StringBuilder fileName= new StringBuilder();
+
+	private String getFileName(String name) {
+		StringBuilder fileName = new StringBuilder();
 		fileName.append(name);
 		fileName.append("_");
 		fileName.append(new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime()));
 		return fileName.toString();
-		
+
 	}
-	
-	
+
 }
-
-

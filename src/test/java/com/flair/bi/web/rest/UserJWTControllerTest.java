@@ -40,19 +40,14 @@ public class UserJWTControllerTest extends AbstractIntegrationTest {
 
 		User principal = new User();
 		User credentials = new User();
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, credentials);
-		when(authenticationManager.authenticate(any(Authentication.class)))
-				.thenReturn(authenticationToken);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal,
+				credentials);
+		when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authenticationToken);
 
-		when(tokenProvider.createToken(eq(authenticationToken), eq(true)))
-				.thenReturn("token");
+		when(tokenProvider.createToken(eq(authenticationToken), eq(true))).thenReturn("token");
 
-		ResponseEntity<Map> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/authenticate",
-						HttpMethod.POST,
-						new HttpEntity<>(loginVM),
-						Map.class);
+		ResponseEntity<Map> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/authenticate", HttpMethod.POST, new HttpEntity<>(loginVM), Map.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("token", response.getBody().get("id_token"));

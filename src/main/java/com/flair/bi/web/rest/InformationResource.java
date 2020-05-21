@@ -20,19 +20,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InformationResource {
 
-    private final InformationService informationService;
+	private final InformationService informationService;
 
-    @GetMapping("/information")
-    @Timed
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<Information>> getAllInformation() {
-        return ResponseEntity.ok(informationService.getAll());
-    }
-    
-    @GetMapping("/information/based-on-viewport/{isDesktop}")
-    @Timed
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<Information>> getAllInformation(@PathVariable Boolean isDesktop) {
-        return ResponseEntity.ok(informationService.getAll(isDesktop));
-    }
+	@GetMapping("/information")
+	@Timed
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<Information>> getAllInformation() {
+		return ResponseEntity.ok(informationService.getAll());
+	}
+
+	@GetMapping("/information/based-on-viewport/{isDesktop}")
+	@Timed
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<Information>> getAllInformation(@PathVariable Boolean isDesktop) {
+		return ResponseEntity.ok(informationService.getAll(isDesktop));
+	}
 }

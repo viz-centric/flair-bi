@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageUrlConfiguration implements WebMvcConfigurer {
 
-	
 	private final ApplicationProperties properties;
 
 	@Override

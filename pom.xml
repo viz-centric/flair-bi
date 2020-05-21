@@ -85,9 +85,9 @@
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 
 		<!-- Dependency versions -->
-		<jhipster-dependencies.version>3.3.0</jhipster-dependencies.version>
+		<jhipster-dependencies.version>3.7.1</jhipster-dependencies.version>
 		<!-- The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-		<spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+		<spring-boot.version>2.2.7.RELEASE</spring-boot.version>
 		<!-- The spring framework version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
 		<spring.version>5.2.5.RELEASE</spring.version>
 		<spring-cloud.version>Hoxton.M2</spring-cloud.version>
@@ -108,6 +108,8 @@
 		<jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 		<archunit-junit5.version>0.12.0</archunit-junit5.version>
 		<mapstruct.version>1.3.1.Final</mapstruct.version>
+
+		<okta-spring-boot-starter.version>1.4.0</okta-spring-boot-starter.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -145,7 +147,7 @@
 		<dependency>
 			<groupId>com.okta.spring</groupId>
 			<artifactId>okta-spring-boot-starter</artifactId>
-			<version>1.4.0</version>
+			<version>${okta-spring-boot-starter.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -216,12 +218,12 @@
 		<dependency>
 			<groupId>com.project.bi</groupId>
 			<artifactId>flair-messages</artifactId>
-			<version>0.3.13</version>
+			<version>${flair-messages.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.project.bi</groupId>
 			<artifactId>project-bi-common</artifactId>
-			<version>1.4.10</version>
+			<version>${project-bi-common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.querydsl</groupId>

@@ -1,15 +1,15 @@
 package com.flair.bi.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.propertytype.PropertyType;
 import com.flair.bi.repository.FieldTypeRepository;
 import com.flair.bi.repository.PropertyTypeRepository;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional

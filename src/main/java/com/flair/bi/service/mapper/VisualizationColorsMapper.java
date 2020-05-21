@@ -13,11 +13,13 @@ import com.flair.bi.service.dto.VisualizationColorsDTO;
 @Mapper(componentModel = "spring", uses = {})
 public interface VisualizationColorsMapper {
 
-    VisualizationColorsDTO visualizationColorsToVisualizationColorsDTO(VisualizationColors visualizationColors);
+	VisualizationColorsDTO visualizationColorsToVisualizationColorsDTO(VisualizationColors visualizationColors);
 
-    List<VisualizationColorsDTO> visualizationColorsToVisualizationColorsDTOs(List<VisualizationColors> visualizationColors);
+	List<VisualizationColorsDTO> visualizationColorsToVisualizationColorsDTOs(
+			List<VisualizationColors> visualizationColors);
 
-    VisualizationColors visualizationColorsDTOToVisualizationColors(VisualizationColorsDTO visualizationColorsDTO);
+	VisualizationColors visualizationColorsDTOToVisualizationColors(VisualizationColorsDTO visualizationColorsDTO);
 
-    List<VisualizationColors> visualizationColorsDTOsToVisualizationColors(List<VisualizationColorsDTO> visualizationColorsDTOs);
+	List<VisualizationColors> visualizationColorsDTOsToVisualizationColors(
+			List<VisualizationColorsDTO> visualizationColorsDTOs);
 }

@@ -16,9 +16,9 @@ import io.micrometer.core.annotation.Timed;
 @RequestMapping("/api")
 public class FeatureTypeResource {
 
-    @GetMapping("/featureTypes")
-    @Timed
-    public List<String> getAllFeatureTypes() {
-        return Arrays.stream(FeatureType.values()).map(FeatureType::getValue).collect(Collectors.toList());
-    }
+	@GetMapping("/featureTypes")
+	@Timed
+	public List<String> getAllFeatureTypes() {
+		return Arrays.stream(FeatureType.values()).map(FeatureType::getValue).collect(Collectors.toList());
+	}
 }

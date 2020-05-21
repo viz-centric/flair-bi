@@ -107,6 +107,7 @@
 
         var vm = this;
         var widgets = [];
+        var timeout = null;
         activate();
 
         function activate() {
@@ -146,7 +147,13 @@
             registerUpdateWidgetEvent();
             registerRefreshWidgetEvent();
             registerIdChanges();
+            registerTimeout();
+        }
 
+        function registerTimeout() {
+            $scope.$on('$destroy', () => {
+                clearDeferred();
+            });
         }
 
         function registerCanBuildChange() {
@@ -154,7 +161,9 @@
                 return vm.canBuild;
             }, function (newVal, oldVal) {
                 if (vm.canBuild) {
-                    build(true);
+                    deferred(() => {
+                        build(true);
+                    });
                 }
             });
         }
@@ -172,6 +181,17 @@
             });
         }
 
+        function clearDeferred() {
+            if (timeout) {
+                $timeout.cancel(timeout);
+            }
+        }
+
+        function deferred(func, delay) {
+            delay = delay || 500
+            clearDeferred();
+            timeout = $timeout(func, delay);
+        }
 
         /**
          * Build current visualization with data and filters
@@ -255,7 +275,9 @@
         function registerFilterEvent() {
             var unsubscribeFilter = $scope.$on('flairbiApp:filter', function (event) {
                 if (vm.canBuild) {
-                    build(true);
+                    deferred(() => {
+                        build(true);
+                    });
                 }
             });
 

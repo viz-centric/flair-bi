@@ -1,70 +1,72 @@
 
 <form name="editForm" role="form" show-validation >
     
-   <table class="table table-hover">
-            <caption><strong>Configure Dimensions and Measures</strong></caption>
-
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th>Enable Date Time Filter</th>
-                </tr>
-            </thead>
-
-            <tr  ng-repeat="feature in vm.features">
-                <td>
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <input style="width: 15px;" type="checkbox" class="form-control feature_checkbox" name={{feature.name}} 
-                            id={{feature.name}} ng-model="feature.isSelected" ng-change="vm.toggleCheckbox(feature)"/>
-                            <label class="control-label checkbox-inline" for="{{feature.name}}" ><strong>{{feature.name}}</strong></label>
-                        
-                        </div>
-                    </div>
-                </td>
-
-
-                <td>
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <label class="control-label"  for="feature_type{{$index}}">Feature Type</label>
-                            <select style="border-radius: 10px; margin-left: 20px;" class="form-control" id="feature_type{{$index}}" ng-model="feature.featureType" ng-change="vm.changeFeature(feature)">
-                                <option value="DIMENSION">DIMENSION</option>
-                                <option value="MEASURE">MEASURE</option>
-                            </select>    
-                        </div>
-                    </div>
-
-                </td>
-
-                <td>
-                    <div class="form-inline">
-                        <div class="form-group"
-                             ng-if="vm.isTemporalFeature(feature)">
-                            <input id="feature_date_filter{{$index}}"
-                                   style="width: 15px;"
-                                   type="checkbox"
-                                   ng-model="feature.dateFilter"
-                                   ng-true-value="'ENABLED'"
-                                   ng-false-value="'DISABLED'"
-                                   aria-label="Date filtering">
-                        </div>
-                    </div>
-
-                </td>
-            </tr>
-            
-    </table>
-
-    <div ng-show="vm.finishResult === 'error'" class="test-connection-label alert-danger animate-show-hide">
-    <i class="fa fa-times"></i> There is some issue. Please try later </div>
-
-    <div class="wizard-navigate-buttons">
-
-        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" wz-finish value="finish" ng-click="vm.finishWizard()">
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>
-            Finish
-        </button>
-    </div>
-</form>
+    <table class="table table-hover">
+             <caption><strong>Configure Dimensions and Measures</strong></caption>
+ 
+             <thead>
+                 <tr>
+                     <th></th>
+                     <th></th>
+                     <th class="text-center">Enable Date Time Filter</th>
+                 </tr>
+             </thead>
+ 
+             <tr  ng-repeat="feature in vm.features">
+                 <td>
+                     <div class="form-inline">
+                         <div class="form-group">
+                             <input style="width: 15px;" type="checkbox" class="form-control feature_checkbox" name={{feature.name}} 
+                             id={{feature.name}} ng-model="feature.isSelected" ng-change="vm.toggleCheckbox(feature)"/>
+                             <label class="control-label checkbox-inline" for="{{feature.name}}" ><strong>{{feature.name}}</strong></label>
+                         
+                         </div>
+                     </div>
+                 </td>
+ 
+ 
+                 <td>
+                     <div class="form-inline">
+                         <div class="form-group">
+                             <label class="control-label"  for="feature_type{{$index}}">Feature Type</label>
+                             <select style="border-radius: 10px; margin-left: 20px;" class="form-control" id="feature_type{{$index}}" ng-model="feature.featureType" ng-change="vm.changeFeature(feature)">
+                                 <option value="DIMENSION">DIMENSION</option>
+                                 <option value="MEASURE">MEASURE</option>
+                             </select>    
+                         </div>
+                     </div>
+ 
+                 </td>
+ 
+                 <td class="text-center">
+                     <div class="form-inline">
+                         <div class="form-group"
+                              ng-if="vm.isTemporalFeature(feature)">
+                             <input id="feature_date_filter{{$index}}"
+                                    style="width: 15px;"
+                                    type="checkbox"
+                                    ng-model="feature.dateFilter"
+                                    ng-true-value="'ENABLED'"
+                                    ng-false-value="'DISABLED'"
+                                    class="form-control"
+                                    aria-label="Date filtering">
+                         </div>
+                     </div>
+ 
+                 </td>
+             </tr>
+             
+     </table>
+ 
+     <div ng-show="vm.finishResult === 'error'" class="test-connection-label alert-danger animate-show-hide">
+     <i class="fa fa-times"></i> There is some issue. Please try later </div>
+ 
+     <div class="wizard-navigate-buttons">
+ 
+         <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary" wz-finish value="finish" ng-click="vm.finishWizard()">
+             <span class="glyphicon glyphicon-circle-arrow-right"></span>
+             Finish
+         </button>
+     </div>
+ </form>
+ 

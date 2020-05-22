@@ -51,8 +51,7 @@
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('report-management');
                         return $translate.refresh();
-                    }],
-                    $title: function() { return 'About'; }
+                    }]
 
                 }
 

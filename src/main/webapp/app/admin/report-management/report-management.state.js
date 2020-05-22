@@ -14,7 +14,7 @@
                 url: '/report-management/{id}?page&sort&:thresholdAlert',
                 data: {
                     authorities: [],
-                    pageTitle: 'Reports',
+                    pageTitle: 'reportManagement.home.title',
                     displayName: "report Management"
                 },
                 params: {

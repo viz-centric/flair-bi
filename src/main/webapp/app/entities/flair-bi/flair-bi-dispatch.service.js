@@ -54,7 +54,8 @@
             setSavePromptMessage:setSavePromptMessage,
             getSavePromptMessage:getSavePromptMessage,
             setViewEditedBeforeSave:setViewEditedBeforeSave,
-            getViewEditedBeforeSave:getViewEditedBeforeSave
+            getViewEditedBeforeSave:getViewEditedBeforeSave,
+            setIsSaved:setIsSaved
         };
 
         function setVisual(v) {
@@ -208,6 +209,9 @@
         }
         function getViewEditedBeforeSave(){
             return viewEditedBeforeSave;
+        }
+        function setIsSaved(flag){
+            visual.visual.isSaved = false;
         }
     }
 })();

@@ -177,6 +177,7 @@
 
         function save() {
             vm.isSaving = true;
+            vm.visual.isSaved = true;
             if (vm.visual.id) {
                 Visualmetadata.update(
                     {

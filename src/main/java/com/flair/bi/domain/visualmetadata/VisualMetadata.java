@@ -91,6 +91,8 @@ public class VisualMetadata extends AbstractAuditingEntity implements Serializab
     
     private Boolean isCardRevealed=true;
 
+    private Boolean isSaved = true;
+
     @JsonIgnore
     public String getVisualMetadataId() {
         return getVisualMetadataId(this.id);
@@ -366,7 +368,12 @@ public class VisualMetadata extends AbstractAuditingEntity implements Serializab
 	public void setIsCardRevealed(Boolean isCardRevealed) {
 		this.isCardRevealed = isCardRevealed;
 	}
-    
-    
 
+    public Boolean getIsSaved() {
+        return isSaved;
+    }
+
+    public void setIsSaved(Boolean isSaved) {
+        this.isSaved = isSaved;
+    }
 }

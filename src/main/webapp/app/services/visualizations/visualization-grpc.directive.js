@@ -177,6 +177,7 @@
                     vm.id = newVal;
                     registerResizeWidgetEvent();
                     registerUpdateWidgetEvent();
+                    registerRefreshWidgetEvent();
                 }
             });
         }

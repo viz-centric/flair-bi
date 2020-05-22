@@ -416,7 +416,7 @@
             vm.sideBarTab = "widgets";
             vm.widgetsToggled = true;
             vm.favouriteDimensions = vm.dimensions.filter(function (item) {
-                return  item.favouriteFilter===true;
+                return item.favouriteFilter === true;
             });
             $('#slider').css('display', 'block');
         }
@@ -426,8 +426,8 @@
                 "flairbiApp:bookmark-update-dynamic-date-range-meta-data",
                 function (event, data) {
                     var index = findDateRangeDimensionIndex(data.dimensionName);
-                    if(data.metadata && index > -1){
-                        vm.dimensions[index]['metadata']=data.metadata;
+                    if (data.metadata && index > -1) {
+                        vm.dimensions[index]['metadata'] = data.metadata;
                     }
                 }
             );
@@ -452,7 +452,7 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function findDateRangeDimensionIndex(dimensionName){
+        function findDateRangeDimensionIndex(dimensionName) {
             var index = -1;
             vm.dimensions.some(function (obj, i) {
                 return obj.name === dimensionName ? index = i : false;
@@ -491,9 +491,15 @@
         }
 
         function loadDimensions() {
-            vm.dimensions = featureEntities.filter(function (item) {
-                return item.featureType === "DIMENSION";
+            vm.dateDimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION" && item.dateFilter === "ENABLED";
             });
+
+            vm.allDimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION" && item.dateFilter !== "ENABLED";
+            });
+
+            vm.dimensions =  vm.dateDimensions.concat( vm.allDimensions);
         }
 
         function registerToggleRightNavBarOff() {
@@ -647,13 +653,13 @@
                     $(event.target).parents('.suggestion-list').length + pLen + dcLen + dlen + cpicker + gridLen + cdatepicker;
                 if (trigger !== event.target && !trigger.has(event.target).length && len == 0) {
                     $('#slider').css('display', 'none');
-                   
+
                     hideSidebar();
                     onVizualizationsClose();
                     onFiltersClose();
                     onPropertiesClose();
                     onDataclose();
-                   
+
                     VisualDispatchService.reloadGrids();
                     VisualDispatchService.removeOpacity();
                 }

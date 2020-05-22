@@ -6,6 +6,8 @@ spring:
             uri: ${CONFIG_URI:http://localhost:8761/config}
             username: ${CONFIG_USER:admin}
             password: ${CONFIG_PASS:admin}
+            name: flairbi
+            label: ${CONFIG_LABEL:master}
     profiles:
         active: dev
 

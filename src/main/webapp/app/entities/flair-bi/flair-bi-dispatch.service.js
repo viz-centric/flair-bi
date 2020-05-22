@@ -150,10 +150,12 @@
         }
         function reloadGrids(){
             var elements=$('div[visual-build-id-resize]');
-                for(var i in elements){
+       
+            for (let index = 0; index < elements.length; index++) {
                 $rootScope.$broadcast(
-                "refresh-widget-content-" + elements[i].id || elements[i].id
-                );
+                    "refresh-widget-content-" + elements[index].id || elements[index].id
+                    );
+                
             }
         }
 

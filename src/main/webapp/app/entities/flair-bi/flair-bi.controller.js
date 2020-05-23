@@ -175,6 +175,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerScopeDestroy();
             openSchedulerDialogForThreshold();
             openLiveModeDialog();
             updateTableChart();
@@ -662,6 +663,13 @@
                 vm.view.viewDashboard.dashboardName,
                 vm.view.viewName,
                 $window.location.href);
+        }
+
+        function registerScopeDestroy() {
+            $scope.$on("$destroy", function () {
+                filterParametersService.saveSelectedFilter({});
+                filterParametersService.clear();
+            });
         }
 
         function registerButtonToggleEvent() {

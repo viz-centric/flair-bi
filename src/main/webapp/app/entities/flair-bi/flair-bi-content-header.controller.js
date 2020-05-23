@@ -737,7 +737,6 @@
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
                     const param = params[key];
-                    console.log('param', param);
                     const isItemDateRange = isDateRange(key);
                     if (isItemDateRange) {
                         param[0] = filterParametersService.changeDateFormat(param[0]);
@@ -807,8 +806,6 @@
                     featureId: item.feature.id,
                     metadata: item.metaData
                 }));
-
-            console.log('saving view feature criteria', features);
 
             ViewFeatureCriteria.save({
                 features,

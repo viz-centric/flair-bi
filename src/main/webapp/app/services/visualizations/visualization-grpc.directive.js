@@ -161,9 +161,9 @@
                 return vm.canBuild;
             }, function (newVal, oldVal) {
                 if (vm.canBuild) {
-                    // deferred(() => {
+                    deferred(() => {
                         build(true);
-                    // });
+                    });
                 }
             });
         }
@@ -276,9 +276,9 @@
         function registerFilterEvent() {
             var unsubscribeFilter = $scope.$on('flairbiApp:filter', function (event) {
                 if (vm.canBuild) {
-                    // deferred(() => {
+                    deferred(() => {
                         build(true);
-                    // });
+                    });
                 }
             });
 

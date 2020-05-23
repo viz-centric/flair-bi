@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.domain.Datasource;
@@ -125,7 +126,8 @@ public class GrpcQueryService {
 				.setValidationResultType(queryResponse.getValidationResult().getType().name())
 				.setRawQuery(queryResponse.getRawQuery()).setError(queryResponse.getValidationResult().getData());
 	}
-
+	
+	@Transactional(readOnly = true)
 	private Datasource getDatasource(Long datasourceId) {
 		return Optional.ofNullable(datasourceService.findOne(datasourceId))
 				.orElseThrow(() -> new EntityNotFoundException("Datasource with id " + datasourceId + " not found"));

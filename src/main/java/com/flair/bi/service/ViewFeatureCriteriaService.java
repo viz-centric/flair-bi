@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.View;
@@ -15,6 +16,7 @@ import com.flair.bi.web.rest.dto.CreateViewFeatureCriteriaRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ViewFeatureCriteriaService {
 

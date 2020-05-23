@@ -27,9 +27,9 @@
     <include file="config/liquibase/changelog/20170907192607_added_entity_FeatureBookmark.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170908202540_added_entity_DatasourceConstraint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180323112600_added_dashboard_view_release_entities.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20180626113637_added_entity_Functions.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20180730112627_added_entity_VisualizationColors.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20181217113649_added_entity_FileUploaderStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180626113637_added_entity_Functions.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180730112627_added_entity_VisualizationColors.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181217113649_added_entity_FileUploaderStatus.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 
     <include file="config/liquibase/changelog/20170123190046_added_entity_constraints_Views.xml" relativeToChangelogFile="false"/>
@@ -70,8 +70,8 @@
     <include file="config/liquibase/changelog/20200511113649_added_feature_criteria_dynamic_date_range_meta_data.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/202005091918_added_entity_ViewFeatureCriteria.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200516100000_added_features_date_filter.xml" relativeToChangelogFile="false" />
+	<include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
 	<include file="config/liquibase/changelog/20200520230000_added_spring_session_tables.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
-
+    
 </databaseChangeLog>
 <!--@formatter:on-->

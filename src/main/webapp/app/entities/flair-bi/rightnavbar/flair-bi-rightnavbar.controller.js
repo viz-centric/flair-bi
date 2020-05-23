@@ -92,19 +92,6 @@
             registerBookmarkUpdateDynamicDateRange();
             setDateRangeSubscription();
             filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
-
-            // vm.dateDimensions.forEach(function (item) {
-            //     var startDate = new Date();
-            //     startDate.setDate(startDate.getDate() - 1);
-            //     item.selection = moment(startDate).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
-            //     item.selection2 = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
-            //     item.metadata = {
-            //         dateRangeTab: 1,
-            //         customDynamicDateRange: 1
-            //     };
-            //     addDateRangeFilter(item.selection, item.name, item.type);
-            //     addDateRangeFilter(item.selection2, item.name, item.type);
-            // });
         }
 
         ////////////////

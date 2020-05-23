@@ -248,13 +248,11 @@
         }
 
         function applyFeatureCriteria(isTemporal, metadata, feature, value, filterName) {
-            console.log('applying view filter cr', arguments);
             if (isTemporal) {
                 if (metadata) {
                     const dynamics = metadata.split("||");
                     const tooltipText = dynamics[0] === "true" ? 'Last ' + dynamics[1] : dynamics[2];
                     const dynamicDateRangeToolTip = { name: filterName, text: tooltipText };
-                    console.log('ddd filter name', filterName);
                     const dynamicDateRangeObject = buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]);
                     filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(filterName), dynamicDateRangeObject.metadata);
                     filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);

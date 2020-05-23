@@ -54,13 +54,11 @@
         }
 
         function save(newValue) {
-            console.log('filter save', newValue);
             paramObject = newValue;
             $rootScope.$broadcast('filterParametersService:filter-changed', paramObject);
         }
 
         function clear() {
-            console.log('filter clear', paramObject);
             paramObject = {};
             $rootScope.$broadcast('filterParametersService:filter-changed', paramObject);
             $rootScope.filterSelection = {
@@ -189,7 +187,6 @@
         }
 
         function getConditionExpression(additionalFeaturesArray) {
-            console.log('getConditionExpression', paramObject);
             const params = paramObject || {};
             const paramsArray = Object.keys(params).map((key) => {
                 const o = {};
@@ -257,12 +254,10 @@
         }
 
         function getSelectedFilter(){
-            console.log('getting selected filters', selectedFilters);
             return selectedFilters;
         }
 
         function saveSelectedFilter(selectedF){
-            console.log('saving selected filter', selectedF);
             selectedFilters=selectedF;
         }
 
@@ -299,7 +294,6 @@
         }
 
         function buildFilterCriteriasForDynamicDateRange(dimensionName){
-            console.log('buildFilterCriteriasForDynamicDateRange ', dimensionName, dynamicDateRangeMetaData[dimensionName])
             if(dynamicDateRangeMetaData[dimensionName]){
                 var metaData = dynamicDateRangeMetaData[dimensionName];
                 var isCustom = metaData.currentDynamicDateRangeConfig.isCustom ? "true" : "false";

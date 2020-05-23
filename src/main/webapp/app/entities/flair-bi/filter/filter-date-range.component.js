@@ -84,7 +84,6 @@
         }
 
         function onInputChange() {
-            console.log('input change ', vm.dimension);
             if (vm.dimension.metadata.dateRangeTab === TAB_DAY) {
                 var startDate = formatDate(resetTimezone(strToDate(vm.dimension.selected)));
                 var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.dimension.selected))));

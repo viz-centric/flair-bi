@@ -160,10 +160,6 @@
             }
 
             $rootScope.updateWidget = {}
-            // todo: remove
-            // if (!VisualDispatchService.getApplyBookmark()) {
-            //     filterParametersService.clear();
-            // }
             VisualMetadataContainer.clear();
             VisualDispatchService.clearAll();
 

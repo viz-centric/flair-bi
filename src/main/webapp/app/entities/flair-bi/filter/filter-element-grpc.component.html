@@ -3,10 +3,7 @@
     <label class="pull-right"> <i ng-click="vm.addToFavourite(vm.dimension.id)" ng-class="vm.checkFavouriteFilter()" aria-hidden="true"
             class="favouritefilter"></i></label>
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
-        <filter-date-range
-                dimension="vm.dimension"
-                reload="vm.dateRangeReload"
-                is-init-done="vm.filterDateRangeInitDone()"
+        <filter-date-range dimension="vm.dimension" reload="vm.dateRangeReload"
             on-date-change="vm.onDateChange(startDate, endDate, metadata)">
         </filter-date-range>
     </div>

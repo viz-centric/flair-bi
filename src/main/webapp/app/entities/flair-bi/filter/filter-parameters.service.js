@@ -299,6 +299,7 @@
         }
 
         function buildFilterCriteriasForDynamicDateRange(dimensionName){
+            console.log('buildFilterCriteriasForDynamicDateRange ', dimensionName, dynamicDateRangeMetaData[dimensionName])
             if(dynamicDateRangeMetaData[dimensionName]){
                 var metaData = dynamicDateRangeMetaData[dimensionName];
                 var isCustom = metaData.currentDynamicDateRangeConfig.isCustom ? "true" : "false";

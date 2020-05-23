@@ -11,7 +11,6 @@
                 dimension: '<',
                 reload: '<',
                 onDateChange: '&',
-                isInitDone: '&'
             }
         });
 
@@ -23,7 +22,6 @@
         var TAB_DYNAMIC = 2;
         var vm = this;
         vm.$onInit = onInit;
-        vm.$onChanges = onChanges;
         vm.onDateRangeClick = onDateRangeClick;
         vm.onInputChange = onInputChange;
         vm.onDynamicDateRangeChanged = onDynamicDateRangeChanged;
@@ -34,42 +32,6 @@
         ////////////////
 
         function onInit() {
-            if (vm.isInitDone) {
-                vm.isInitDone();
-            }
-        }
-
-        function initDateFeature() {
-            if (vm.dimension.dateFilter === 'ENABLED' && !vm.dimension.selected) {
-                console.log('setting default date range ' + vm.dimension.selected);
-                // console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
-                //     typeof endDate, endDate);
-                // vm.dimension.metadata = {};
-                // vm.dimension.metadata.dateRangeTab = TAB_RANGE;
-                // vm.dimension.metadata.currentDynamicDateRangeConfig = null;
-                // vm.dimension.metadata.customDynamicDateRange = 1;
-                const startDate = new Date();
-                startDate.setDate(startDate.getDate() - 1);
-                // vm.dimension.selected = startDate;
-                const endDate = new Date();
-                // vm.dimension.selected2 = endDate;
-
-                vm.onDateChange({
-                    startDate: formatDate(resetTimezone(strToDate(startDate))),
-                    endDate: formatDate(resetTimezone(strToDate(endDate))),
-                    metadata: {
-                        dateRangeTab: TAB_RANGE,
-                        currentDynamicDateRangeConfig: null,
-                        customDynamicDateRange: 1
-                    }
-                });
-            }
-        }
-
-        function onChanges(changesObj) {
-            if (changesObj.dimension) {
-                console.log('date time dimension change', changesObj.dimension);
-            }
         }
 
         function reset() {
@@ -122,6 +84,7 @@
         }
 
         function onInputChange() {
+            console.log('input change ', vm.dimension);
             if (vm.dimension.metadata.dateRangeTab === TAB_DAY) {
                 var startDate = formatDate(resetTimezone(strToDate(vm.dimension.selected)));
                 var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.dimension.selected))));
@@ -132,7 +95,7 @@
                     endDate: endDate,
                     metadata: {
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
-                        currentDynamicDateRangeConfig : null,
+                        currentDynamicDateRangeConfig : {},
                         customDynamicDateRange : 0
                     }
                 });
@@ -146,7 +109,7 @@
                     endDate: endDate,
                     metadata: {
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
-                        currentDynamicDateRangeConfig : null,
+                        currentDynamicDateRangeConfig : {},
                         customDynamicDateRange : 0
                     }
                 });

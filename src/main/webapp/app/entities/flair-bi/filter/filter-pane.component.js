@@ -26,26 +26,13 @@
         vm.selectedFilters = {};
         vm.list = {};
         vm.dateFilter = [];
-        vm.$onInit = activate;
-        vm.filterComponentInitDone = filterComponentInitDone;
-
-        var initializedFiltersCount = 0;
+        activate();
 
         ////////////////
 
         function activate() {
             filterClearSubscription();
             filterChangedSubscription();
-        }
-
-        function filterComponentInitDone(dimension) {
-            // console.log('filter pange filter init done', dimension);
-            initializedFiltersCount++;
-            if (initializedFiltersCount === vm.dimensions.length) {
-                console.log('all filters initialized');
-                // filter();
-                // $rootScope.$broadcast("flairbiApp:filters-ready");
-            }
         }
 
         function filterClearSubscription() {

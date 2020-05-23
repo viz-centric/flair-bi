@@ -12,8 +12,7 @@
                 view: '=',
                 dimensions: '=',
                 tab: '=',
-                list: '=',
-                isInitDone: '&'
+                list: '='
             }
         });
 
@@ -33,7 +32,6 @@
         vm.checkFavouriteFilter = checkFavouriteFilter;
         vm.addFilter = addFilter;
         vm.isActive = isActive;
-        vm.filterDateRangeInitDone = filterDateRangeInitDone;
 
 
         ////////////////
@@ -52,21 +50,8 @@
             receivedMetaData();
             if(isFavouriteFilter())
                 vm.load("", vm.dimension);
-
-            if (!canDisplayDateRangeControls(vm.dimension)) {
-                triggerInitDone();
-            }
         }
 
-        function filterDateRangeInitDone() {
-            triggerInitDone();
-        }
-
-        function triggerInitDone() {
-            if (vm.isInitDone) {
-                vm.isInitDone({dimension: vm.dimension});
-            }
-        }
 
         function receivedMetaData() {
             var unsubscribe = $scope.$on(

@@ -26,17 +26,34 @@
         vm.selectedFilters = {};
         vm.list = {};
         vm.dateFilter = [];
-        activate();
+        vm.$onInit = activate;
+        vm.filterComponentInitDone = filterComponentInitDone;
+
+        var initializedFiltersCount = 0;
 
         ////////////////
 
         function activate() {
+            filterClearSubscription();
+            filterChangedSubscription();
+        }
+
+        function filterComponentInitDone(dimension) {
+            // console.log('filter pange filter init done', dimension);
+            initializedFiltersCount++;
+            if (initializedFiltersCount === vm.dimensions.length) {
+                console.log('all filters initialized');
+                // filter();
+                // $rootScope.$broadcast("flairbiApp:filters-ready");
+            }
+        }
+
+        function filterClearSubscription() {
             var unsub = $scope.$on('flairbiApp:clearFilters', function () {
                 clear();
             });
 
             $scope.$on('$destroy', unsub);
-            filterChangedSubscription();
         }
 
         function filterChangedSubscription() {
@@ -61,30 +78,22 @@
             $rootScope.updateWidget = {};
             if (vm.dimensions) {
                 vm.dimensions.forEach(function (item) {
-                    if (item.dateFilter !== "ENABLED") {
+                    // if (item.dateFilter !== "ENABLED") {
+                        item.selected = null;
+                        item.selected2 = null;
                         if (filterParametersService.isDateType(item)) {
-                            item.selected = null;
-                            item.selected2 = null;
                             item.metadata = {};
                             item.metadata.dateRangeTab = 0;
                             item.metadata.currentDynamicDateRangeConfig = null;
                             item.metadata.customDynamicDateRange = 0;
-                        } else {
-                            item.selected = null;
-                            item.selected2 = null;
                         }
-
                         $rootScope.$broadcast("FlairBi:remove-filter", item.name);
-                    }
-                    else {
-                        vm.dateFilter.push("date-range|" + item.name);
-                    }
+                    // }
+                    // else {
+                    //     vm.dateFilter.push("date-range|" + item.name);
+                    // }
                 });
             }
-
-            // filterParametersService.clear(vm.dateFilter);
-            // filterParametersService.saveSelectedFilter($rootScope.updateWidget);
-            // filter();
         }
 
         function filter() {

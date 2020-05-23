@@ -160,6 +160,7 @@
             }
 
             $rootScope.updateWidget = {}
+            // todo: remove
             if (!VisualDispatchService.getApplyBookmark()) {
                 filterParametersService.clear();
             }

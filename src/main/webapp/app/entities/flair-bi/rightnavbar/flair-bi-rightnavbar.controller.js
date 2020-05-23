@@ -490,9 +490,49 @@
             $rootScope.$broadcast("flairbiApp:filter");
         }
 
+        function addDateRangeFilter(date, name, type) {
+            console.log('add date range filter', date, name, type)
+            var filterParameters = filterParametersService.getSelectedFilter();
+            var dateRangeName = filterParametersService.buildDateRangeFilterName(name);
+            if (!filterParameters[dateRangeName]) {
+                filterParameters[dateRangeName] = [];
+            }
+            filterParameters[dateRangeName].push(date);
+            filterParameters[dateRangeName]._meta = {
+                dataType: type,
+                valueType: 'dateRangeValueType'
+            };
+            filterParametersService.saveSelectedFilter(filterParameters);
+            filterParametersService.save(filterParametersService.getSelectedFilter());
+            filterParametersService.saveDynamicDateRangeToolTip(getDynamicDateRangeToolTip(name, {}, 1));
+        }
+
+        function getDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
+            var dynamicDateRangeToolTip = {name:'',text:''};
+            dynamicDateRangeToolTip.name = filterParametersService.buildDateRangeFilterName(dimensionName);
+            if(currentDynamicDateRangeConfig.isCustom){
+                dynamicDateRangeToolTip.text = 'Last '+customDynamicDateRange;
+            }else{
+                dynamicDateRangeToolTip.text = currentDynamicDateRangeConfig.title;
+            }
+            return dynamicDateRangeToolTip;
+        }
+
         function loadDimensions() {
             vm.dateDimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION" && item.dateFilter === "ENABLED";
+            }).map(function (item) {
+                var startDate = new Date();
+                startDate.setDate(startDate.getDate() - 1);
+                item.selection = moment(startDate).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+                item.selection2 = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+                item.metadata = {
+                    dateRangeTab: 1,
+                    customDynamicDateRange: 1
+                };
+                addDateRangeFilter(item.selection, item.name, item.type);
+                addDateRangeFilter(item.selection2, item.name, item.type);
+                return item;
             });
 
             vm.allDimensions = featureEntities.filter(function (item) {

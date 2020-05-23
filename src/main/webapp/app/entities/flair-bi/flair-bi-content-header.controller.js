@@ -172,6 +172,7 @@
             registerFilterRefresh();
             registerFilterClick();
             registerAddFilter();
+            registerFilterReady();
             setPageSizeforScreens();
             fetchDashboardsAndViews();
             if ($(window).width() < 990) {
@@ -182,8 +183,6 @@
                 applyBookmark(vm.selectedBookmark);
                 VisualDispatchService.setFeatureBookmark({});
                 recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
-            } else if (vm.view.viewFeatureCriterias) {
-                setTimeout(() => applyViewFeatureCriteria(vm.view.viewFeatureCriterias));
             }
         }
 
@@ -222,10 +221,6 @@
             });
 
             filterParametersService.save(filters);
-            $rootScope.$broadcast('flairbiApp:filter-input-refresh');
-            $rootScope.$broadcast('flairbiApp:filter');
-            $rootScope.$broadcast('flairbiApp:filter-add');
-
             vm.viewFeatureCriteriaReady = true;
         }
 
@@ -617,6 +612,19 @@
             });
             $scope.$on("$destroy", unsub1);
             $scope.$on("$destroy", unsub2);
+        }
+
+        function registerFilterReady() {
+            $scope.$on("$destroy", $rootScope.$on("flairbiApp:filters-ready", function () {
+                console.log('filters ready handler');
+                if (!VisualDispatchService.getApplyBookmark() && vm.view.viewFeatureCriterias) {
+                    console.log('filters ready handler: applying view feature criterias');
+                    // applyViewFeatureCriteria(vm.view.viewFeatureCriterias);
+                }
+                $rootScope.$broadcast('flairbiApp:filter-input-refresh');
+                $rootScope.$broadcast('flairbiApp:filter');
+                $rootScope.$broadcast('flairbiApp:filter-add');
+            }));
         }
 
         function getFilterCriterias() {

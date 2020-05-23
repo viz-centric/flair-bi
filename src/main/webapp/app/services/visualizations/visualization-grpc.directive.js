@@ -161,9 +161,9 @@
                 return vm.canBuild;
             }, function (newVal, oldVal) {
                 if (vm.canBuild) {
-                    deferred(() => {
+                    // deferred(() => {
                         build(true);
-                    });
+                    // });
                 }
             });
         }
@@ -276,13 +276,23 @@
         function registerFilterEvent() {
             var unsubscribeFilter = $scope.$on('flairbiApp:filter', function (event) {
                 if (vm.canBuild) {
-                    deferred(() => {
+                    // deferred(() => {
                         build(true);
-                    });
+                    // });
                 }
             });
 
             $scope.$on('$destroy', unsubscribeFilter);
+
+            // console.log('filters ready listener set');
+            // $scope.$on('$destroy', $scope.$on('flairbiApp:filters-ready', function (event) {
+            //     if (vm.canBuild) {
+            //         // deferred(() => {
+            //         console.log('filters ready fired');
+            //         build(true);
+            //         // });
+            //     }
+            // }));
         }
 
         function registerResizeWidgetEvent() {

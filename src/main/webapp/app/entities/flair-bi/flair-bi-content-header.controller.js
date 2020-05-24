@@ -805,6 +805,8 @@
                     metadata: item.metaData
                 }));
 
+            console.log('saveViewFeatureCriterias', features);
+
             ViewFeatureCriteria.save({
                 features,
                 viewId: vm.view.id

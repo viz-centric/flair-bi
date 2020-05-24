@@ -183,7 +183,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+            return filterParametersService.dateToString(date);
         }
 
     }

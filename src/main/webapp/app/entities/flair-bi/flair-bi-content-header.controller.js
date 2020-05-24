@@ -206,8 +206,8 @@
                 mandatoryDimensions.forEach(function (item) {
                     var startDate = new Date();
                     startDate.setDate(startDate.getDate() - 1);
-                    item.selected = moment(startDate).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
-                    item.selected2 = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+                    item.selected = filterParametersService.dateToString(startDate);
+                    item.selected2 = filterParametersService.dateToString(new Date());
                     item.metadata = {
                         dateRangeTab: 1,
                         customDynamicDateRange: 1,
@@ -217,7 +217,6 @@
                     addDateRangeFilter(filterParameters, item.selected, item);
                     addDateRangeFilter(filterParameters, item.selected2, item);
                 });
-                console.log('applyDefaultFilters', filterParameters);
                 filterParametersService.saveSelectedFilter(filterParameters);
                 filterParametersService.save(filterParametersService.getSelectedFilter());
             }
@@ -233,7 +232,6 @@
         }
 
         function addDateRangeFilter(filterParameters, date, feature) {
-            console.log('addDateRangeFilter:', arguments);
             const name = feature.name;
             const type = feature.type;
             var dateRangeName = filterParametersService.buildDateRangeFilterName(name);
@@ -287,10 +285,6 @@
                         filterParametersService.saveDynamicDateRangeMetaData(dateRangeFeatureName, data.metadata.metadata);
                         filterParametersService.saveDynamicDateRangeToolTip(data.tooltipObj);
                     }
-                    //     $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data", data.metadata);
-                    // } else {
-                    //     $rootScope.$broadcast("flairbiApp:filter-set-date-ranges", buildDateRange(feature.name, data.values));
-                    // }
                     delete filters[filterParametersService.buildDateRangeFilterName(feature.name)]
                     addDateRangeFilter(filters, data.values[0], feature);
                     addDateRangeFilter(filters, data.values[1], feature);
@@ -804,8 +798,6 @@
                     featureId: item.feature.id,
                     metadata: item.metaData
                 }));
-
-            console.log('saveViewFeatureCriterias', features);
 
             ViewFeatureCriteria.save({
                 features,

@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES','QueryValidationService', '$q'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES,QueryValidationService, $q) {
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -58,6 +58,7 @@
         vm.maxListSize = 10;
         vm.selectedUsers = [];
         vm.selectedWebhook = [];
+        vm.validate = validate;
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
@@ -263,6 +264,41 @@
         }
 
         function setHavingDTO(query) {
+            if (query.having) {
+                vm.condition.featureName = query.having[0].feature.name;
+                vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
+                    return item.opt === query.having[0].comparatorType;
+                })[0];
+
+                const operation = JSON.parse(query.having[0].operation || '{}');
+                if (operation['@type'] === 'arithmetic') {
+                    const innerQuery = operation.operations[0].value;
+                    console.log('innerQuery', innerQuery);
+                    const scalar = operation.operations[1].value;
+                    const conditionExpression = innerQuery.conditionExpressions[0].conditionExpression.firstExpression;
+                    const field = innerQuery.fields[0];
+                    vm.condition.thresholdMode = 'dynamic';
+                    vm.condition.dynamicThreshold = {
+                        field: field.name,
+                        aggregation: vm.AGGREGATION_TYPES.find(function (item) {
+                            return item.opt === field.aggregation;
+                        }),
+                        dimension: vm.timeCompatibleDimensions.find(function (item) {
+                            return item.definition === conditionExpression.featureName;
+                        }),
+                        unit: vm.TIME_UNIT.find(function (unit) {
+                            return unit.value === conditionExpression.valueType.interval.split(' ')[1];
+                        }),
+                        value: conditionExpression.valueType.interval.split(' ')[0],
+                    };
+                    vm.condition.value = 100 - Math.round(scalar * 100);
+                } else {
+                    vm.condition.value = operation.value;
+                }
+            }
+        }
+
+        function getConditionExpression(query) {
             if (query.having) {
                 vm.condition.featureName = query.having[0].feature.name;
                 vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
@@ -825,6 +861,43 @@
                 }
             );
             $scope.$on("$destroy", setCommunicationList);
+        }
+
+        function validate() {
+            vm.isValidated = false;
+            vm.query = null;
+            vm.queryValidationError = null;
+
+            var deferred = $q.defer();
+
+            Visualmetadata.validate({}, {
+                datasourceId: datasource.id,
+                queryDTO: visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                visualMetadataId: visualMetaData.id,
+                conditionExpression: vm.conditionExpression
+            }).$promise
+                .then(function (data) {
+                    vm.isValidated = data.validationResultType === 'SUCCESS';
+                    vm.query = data.rawQuery;
+                    var validationError = null;
+                    if (!vm.isValidated) {
+                        validationError = QueryValidationService.getQueryValidationError(data.error);
+                    }
+                    if (validationError) {
+                        vm.queryValidationError = $translate.instant(validationError.msgKey, validationError.params);
+                    }
+                    if (vm.isValidated) {
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                })
+                .catch(function (error) {
+                    vm.queryValidationError = $translate.instant('error.query.failed');
+                    deferred.reject(error);
+                });
+
+            return deferred.promise;
         }
 
     }

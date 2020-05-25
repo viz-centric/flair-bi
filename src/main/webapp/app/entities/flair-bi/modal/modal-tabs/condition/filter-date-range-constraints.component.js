@@ -15,9 +15,9 @@
             }
         });
 
-    FilterDateRangeConstraintsController.$inject = ['$scope','DYNAMIC_DATE_RANGE_CONFIG'];
+    FilterDateRangeConstraintsController.$inject = ['$scope','DYNAMIC_DATE_RANGE_CONFIG', 'filterParametersService'];
 
-    function FilterDateRangeConstraintsController($scope,DYNAMIC_DATE_RANGE_CONFIG) {
+    function FilterDateRangeConstraintsController($scope,DYNAMIC_DATE_RANGE_CONFIG, filterParametersService) {
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;

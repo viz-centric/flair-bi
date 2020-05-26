@@ -7,14 +7,16 @@
         <div class="col-md-7">
         </div>
         <div class="col-md-3">
-                <h4>Report Title: <span class="label label-default">{{vm.reportData.comment}}</span></h4>
-                <h4>Dashboard Name: <span class="label label-default">{{vm.reportData.dashboardName}}</span></h4>
-                <h4>View Name: <span class="label label-default">{{vm.reportData.viewName}}</span></h4>
-                <h4>Execute At: <span class="label label-default">{{vm.reportData.taskExecuted | date : vm.dateFormat}}</span></h4>
+            <h4>Report Title: <span class="label label-default">{{vm.reportData.comment}}</span></h4>
+            <h4>Dashboard Name: <span class="label label-default">{{vm.reportData.dashboardName}}</span></h4>
+            <h4>View Name: <span class="label label-default">{{vm.reportData.viewName}}</span></h4>
+            <h4>Execute At: <span
+                    class="label label-default">{{vm.reportData.taskExecuted | date : vm.dateFormat}}</span></h4>
 
         </div>
     </div>
     <div class="row">
+
         <div class="datasource-table-holder">
             <table id="table-view-{{vm.id}}" class="table table-striped table-bordered">
                 <thead>
@@ -25,5 +27,8 @@
                 </tbody>
             </table>
         </div>
+        <div id="content-{{vm.id }}" class="chart">
+
+        </div>  
     </div>
 </div>

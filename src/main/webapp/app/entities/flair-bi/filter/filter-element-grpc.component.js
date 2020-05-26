@@ -151,11 +151,11 @@
 
         function onDateChange(startDate, endDate,metadata) {
             vm.dimension.metadata = metadata;
-            if(metadata.dateRangeTab!=2){
+            if (metadata.dateRangeTab !== 2) {
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
-            }else{
-                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name),metadata);
+            } else {
+                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name), metadata);
             }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);

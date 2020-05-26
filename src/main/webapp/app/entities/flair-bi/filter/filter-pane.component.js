@@ -31,12 +31,16 @@
         ////////////////
 
         function activate() {
+            filterClearSubscription();
+            filterChangedSubscription();
+        }
+
+        function filterClearSubscription() {
             var unsub = $scope.$on('flairbiApp:clearFilters', function () {
                 clear();
             });
 
             $scope.$on('$destroy', unsub);
-            filterChangedSubscription();
         }
 
         function filterChangedSubscription() {
@@ -81,10 +85,6 @@
                     }
                 });
             }
-
-            // filterParametersService.clear(vm.dateFilter);
-            // filterParametersService.saveSelectedFilter($rootScope.updateWidget);
-            // filter();
         }
 
         function filter() {

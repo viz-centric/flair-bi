@@ -94,7 +94,7 @@
                     endDate: endDate,
                     metadata: {
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
-                        currentDynamicDateRangeConfig : null,
+                        currentDynamicDateRangeConfig : {},
                         customDynamicDateRange : 0
                     }
                 });
@@ -108,7 +108,7 @@
                     endDate: endDate,
                     metadata: {
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
-                        currentDynamicDateRangeConfig : null,
+                        currentDynamicDateRangeConfig : {},
                         customDynamicDateRange : 0
                     }
                 });
@@ -183,7 +183,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+            return filterParametersService.dateToString(date);
         }
 
     }

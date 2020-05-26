@@ -99,168 +99,225 @@ import lombok.extern.slf4j.Slf4j;
 @Profile("!test")
 public class NotificationsGrpcService implements INotificationsGrpcService {
 
-	private final ManagedChannelFactory managedChannelFactory;
-	private volatile ReportServiceGrpc.ReportServiceBlockingStub reportServiceBlockingStub;
-	private volatile ManagedChannel channel;
+    private final ManagedChannelFactory managedChannelFactory;
+    private volatile ReportServiceGrpc.ReportServiceBlockingStub reportServiceBlockingStub;
+    private volatile ManagedChannel channel;
 
-	@Autowired
-	public NotificationsGrpcService(
-			@Qualifier("notificationsChannelFactory") ManagedChannelFactory managedChannelFactory) {
-		this.managedChannelFactory = managedChannelFactory;
-	}
+    @Autowired
+    public NotificationsGrpcService(@Qualifier("notificationsChannelFactory") ManagedChannelFactory managedChannelFactory) {
+        this.managedChannelFactory = managedChannelFactory;
+    }
 
-	private ReportServiceGrpc.ReportServiceBlockingStub getReportStub() {
-		if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
-			synchronized (this) {
-				if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
-					reportServiceBlockingStub = ReportServiceGrpc.newBlockingStub(getChannel());
-				}
-			}
-		}
-		return reportServiceBlockingStub;
-	}
+    private ReportServiceGrpc.ReportServiceBlockingStub getReportStub() {
+        if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+            synchronized (this) {
+                if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
+                    reportServiceBlockingStub = ReportServiceGrpc.newBlockingStub(getChannel());
+                }
+            }
+        }
+        return reportServiceBlockingStub;
+    }
 
-	private ManagedChannel getChannel() {
-		if (channel == null || channel.isShutdown()) {
-			synchronized (this) {
-				if (channel == null || channel.isShutdown()) {
-					channel = managedChannelFactory.getInstance();
-				}
-			}
-		}
-		return channel;
-	}
+    private ManagedChannel getChannel() {
+        if (channel == null || channel.isShutdown()) {
+            synchronized (this) {
+                if (channel == null || channel.isShutdown()) {
+                    channel = managedChannelFactory.getInstance();
+                }
+            }
+        }
+        return channel;
+    }
 
-	@Override
-	public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
-		GetScheduledReportRequest request = GetScheduledReportRequest.newBuilder().setVisualizationId(visualizationId)
-				.build();
-		ScheduleReportResponse response = getReportStub().getScheduledReport(request);
-		return createSchedulerReportDto(response);
-	}
+    @Override
+    public GetSchedulerReportDTO getSchedulerReport(String visualizationId) {
+        GetScheduledReportRequest request = GetScheduledReportRequest.newBuilder()
+                .setVisualizationId(visualizationId)
+                .build();
+        ScheduleReportResponse response = getReportStub().getScheduledReport(request);
+        return createSchedulerReportDto(response);
+    }
 
-	@Override
-	public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
-		ScheduleReportResponse response = getReportStub().scheduleReport(
-				ScheduleReportRequest.newBuilder().setReport(toReportProto(schedulerNotificationDTO)).build());
-		return createSchedulerReportDto(response);
-	}
+    @Override
+    public GetSchedulerReportDTO createSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+        ScheduleReportResponse response = getReportStub().scheduleReport(ScheduleReportRequest.newBuilder()
+                .setReport(toReportProto(schedulerNotificationDTO))
+                .build());
+        return createSchedulerReportDto(response);
+    }
 
-	@Override
-	public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
-		ScheduleReportResponse response = getReportStub().updateScheduledReport(
-				ScheduleReportRequest.newBuilder().setReport(toReportProto(schedulerNotificationDTO)).build());
-		return createSchedulerReportDto(response);
-	}
+    @Override
+    public GetSchedulerReportDTO updateSchedulerReport(SchedulerNotificationDTO schedulerNotificationDTO) {
+        ScheduleReportResponse response = getReportStub().updateScheduledReport(ScheduleReportRequest.newBuilder()
+                .setReport(toReportProto(schedulerNotificationDTO))
+                .build());
+        return createSchedulerReportDto(response);
+    }
 
-	@Override
-	public SchedulerReportsDTO getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
-		RepUserResp response = getReportStub().getAllScheduledReportsByUser(
-				RepUserReq.newBuilder().setUsername(username).setPage(page).setPageSize(pageSize).build());
-		List<SchedulerNotificationDTO> dtos = response.getReportsList().stream()
-				.map(r -> createSchedulerNotificationDTO(r)).collect(toList());
+    @Override
+    public SchedulerReportsDTO getScheduledReportsByUser(String username, Integer pageSize, Integer page) {
+        RepUserResp response = getReportStub().getAllScheduledReportsByUser(RepUserReq.newBuilder()
+                .setUsername(username)
+                .setPage(page)
+                .setPageSize(pageSize)
+                .build());
+        List<SchedulerNotificationDTO> dtos = response.getReportsList()
+                .stream()
+                .map(r -> createSchedulerNotificationDTO(r))
+                .collect(toList());
 
-		return SchedulerReportsDTO.builder()
-				.message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage()).reports(dtos)
-				.build();
-	}
+        return SchedulerReportsDTO.builder()
+                .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
+                .reports(dtos)
+                .build();
+    }
 
-	@Override
-	public GetSchedulerReportDTO deleteSchedulerReport(String visualizationId) {
-		ScheduleReportResponse response = getReportStub().deleteScheduledReport(
-				DeleteScheduledReportRequest.newBuilder().setVisualizationId(visualizationId).build());
-		return createSchedulerReportDto(response);
-	}
+    @Override
+    public GetSchedulerReportDTO deleteSchedulerReport(String visualizationId) {
+        ScheduleReportResponse response = getReportStub().deleteScheduledReport(DeleteScheduledReportRequest.newBuilder()
+                .setVisualizationId(visualizationId)
+                .build());
+        return createSchedulerReportDto(response);
+    }
 
-	@Override
-	public Integer getScheduledReportsCount(String username) {
-		RepUserCountResp response = getReportStub()
-				.getAllScheduledReportsCountsByUser(RepUserCountReq.newBuilder().setUsername(username).build());
-		return response.getTotalReports();
-	}
+    @Override
+    public Integer getScheduledReportsCount(String username) {
+        RepUserCountResp response = getReportStub().getAllScheduledReportsCountsByUser(RepUserCountReq.newBuilder()
+                .setUsername(username)
+                .build());
+        return response.getTotalReports();
+    }
 
-	@Override
-	public void executeImmediateScheduledReport(String visualizationId) {
-		ExecuteReportResponse response = getReportStub()
-				.executeReport(ExecuteReportRequest.newBuilder().setVisualizationId(visualizationId).build());
-	}
+    @Override
+    public void executeImmediateScheduledReport(String visualizationId) {
+        ExecuteReportResponse response = getReportStub().executeReport(ExecuteReportRequest.newBuilder()
+                .setVisualizationId(visualizationId)
+                .build());
+    }
 
-	@Override
-	public GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page) {
-		GetScheduleReportLogsResponse result = getReportStub().getScheduleReportLogs(GetScheduleReportLogsRequest
-				.newBuilder().setVisualizationId(visualizationid).setPageSize(pageSize).setPage(page).build());
-		return GetSchedulerReportLogsDTO.builder()
-				.message(StringUtils.isEmpty(result.getMessage()) ? null : result.getMessage())
-				.schedulerLogs(toLogs(result.getSchedulerLogsList())).totalRecords(result.getTotalRecords()).build();
-	}
+    @Override
+    public GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page) {
+        GetScheduleReportLogsResponse result = getReportStub().getScheduleReportLogs(
+                GetScheduleReportLogsRequest.newBuilder()
+                        .setVisualizationId(visualizationid)
+                        .setPageSize(pageSize)
+                        .setPage(page)
+                        .build()
+        );
+        return GetSchedulerReportLogsDTO.builder()
+                .message(StringUtils.isEmpty(result.getMessage()) ? null : result.getMessage())
+                .schedulerLogs(toLogs(result.getSchedulerLogsList()))
+                .totalRecords(result.getTotalRecords())
+                .build();
+    }
 
-	@Override
-	public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate,
-			Integer pageSize, Integer page, Boolean thresholdAlert) {
-		SearchReportsResponse result = getReportStub().searchReports(SearchReportsRequest.newBuilder()
-				.setUsername(username).setReportName(reportName).setStartDate(startDate).setEndDate(endDate)
-				.setPageSize(pageSize).setPage(page).setThresholdAlert(thresholdAlert).build());
-		return GetSearchReportsDTO.builder().totalRecords(result.getTotalRecords())
-				.reports(toReportsDto(result.getRecordsList())).build();
-	}
+    @Override
+    public GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate, Integer pageSize, Integer page,Boolean thresholdAlert) {
+        SearchReportsResponse result = getReportStub().searchReports(
+                SearchReportsRequest.newBuilder()
+                        .setUsername(username)
+                        .setReportName(reportName)
+                        .setStartDate(startDate)
+                        .setEndDate(endDate)
+                        .setPageSize(pageSize)
+                        .setPage(page)
+                        .setThresholdAlert(thresholdAlert)
+                        .build()
+        );
+        return GetSearchReportsDTO.builder()
+                .totalRecords(result.getTotalRecords())
+                .reports(toReportsDto(result.getRecordsList()))
+                .build();
+    }
 
-	@Override
-	public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
-		GetScheduleReportLogResponse result = getReportStub()
-				.getScheduleReportLog(GetScheduleReportLogRequest.newBuilder().setTaskLogMetaId(taskLogMetaId).build());
-		return GetSchedulerReportLogDTO.builder().reportLog(toReportLog(result.getReportLog()))
-				.error(toApiError(result.getError())).build();
-	}
+    @Override
+    public GetSchedulerReportLogDTO getReportLogByMetaId(Long taskLogMetaId) {
+        GetScheduleReportLogResponse result = getReportStub().getScheduleReportLog(
+                GetScheduleReportLogRequest.newBuilder()
+                        .setTaskLogMetaId(taskLogMetaId)
+                        .build()
+        );
+        return GetSchedulerReportLogDTO.builder()
+                .reportLog(toReportLog(result.getReportLog()))
+                .error(toApiError(result.getError()))
+                .build();
+    }
 
-	private ApiErrorDTO toApiError(com.flair.bi.messages.report.ApiError error) {
-		if (StringUtils.isEmpty(error.getMessage())) {
-			return null;
-		}
-		return ApiErrorDTO.builder().message(error.getMessage()).build();
-	}
+    private ApiErrorDTO toApiError(com.flair.bi.messages.report.ApiError error) {
+        if (StringUtils.isEmpty(error.getMessage())) {
+            return null;
+        }
+        return ApiErrorDTO.builder()
+                .message(error.getMessage())
+                .build();
+    }
 
-	private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
-		return list.stream().map(item -> createSchedulerNotificationDTO(item)).collect(toList());
-	}
+    private List<SchedulerNotificationDTO> toReportsDto(List<ScheduleReport> list) {
+        return list.stream()
+                .map(item -> createSchedulerNotificationDTO(item))
+                .collect(toList());
+    }
 
-	private List<SchedulerLogDTO> toLogs(List<ReportLog> list) {
-		return list.stream().map(item -> toReportLog(item)).collect(toList());
-	}
+    private List<SchedulerLogDTO> toLogs(List<ReportLog> list) {
+        return list.stream()
+                .map(item -> toReportLog(item))
+                .collect(toList());
+    }
 
-	private SchedulerLogDTO toReportLog(ReportLog item) {
-		return SchedulerLogDTO.builder().taskExecuted(item.getTaskExecuted()).taskStatus(item.getTaskStatus())
-				.channel(item.getChannel()).comment(item.getComment()).dashboardName(item.getDashboardName())
-				.descripition(item.getDescripition()).notificationSent(item.getNotificationSent())
-				.thresholdMet(item.getThresholdMet()).schedulerTaskMetaId(item.getSchedulerTaskMetaId())
-				.viewData(item.getViewData()).viewName(item.getViewName())
-				.enableTicketCreation(item.getEnableTicketCreation()).isTicketCreated(item.getIsTicketCreated())
-				.viewTicket(item.getViewTicket()).query(QueryGrpcUtils.mapToQueryDTO(item.getQuery())).build();
-	}
+    private SchedulerLogDTO toReportLog(ReportLog item) {
+        return SchedulerLogDTO.builder()
+                .taskExecuted(item.getTaskExecuted())
+                .taskStatus(item.getTaskStatus())
+                .channel(item.getChannel())
+                .comment(item.getComment())
+                .dashboardName(item.getDashboardName())
+                .descripition(item.getDescripition())
+                .notificationSent(item.getNotificationSent())
+                .thresholdMet(item.getThresholdMet())
+                .schedulerTaskMetaId(item.getSchedulerTaskMetaId())
+                .viewData(item.getViewData())
+                .viewName(item.getViewName())
+                .enableTicketCreation(item.getEnableTicketCreation())
+                .isTicketCreated(item.getIsTicketCreated())
+                .viewTicket(item.getViewTicket())
+                .query(QueryGrpcUtils.mapToQueryDTO(item.getQuery()))
+				.visualizationId(item.getVisualizationId())
+                .build();
+    }
 
-	private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
-		return GetSchedulerReportDTO.builder()
-				.message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
-				.report(createSchedulerNotificationDTO(response)).build();
-	}
+    private GetSchedulerReportDTO createSchedulerReportDto(ScheduleReportResponse response) {
+        return GetSchedulerReportDTO.builder()
+                .message(StringUtils.isEmpty(response.getMessage()) ? null : response.getMessage())
+                .report(createSchedulerNotificationDTO(response))
+                .build();
+    }
 
-	private ScheduleReport toReportProto(SchedulerNotificationDTO dto) {
-		return ScheduleReport.newBuilder()
-				.setReport(Report.newBuilder().setUserid(orEmpty(dto.getReport().getUserid()))
-						.setDashboardName(orEmpty(dto.getReport().getDashboard_name()))
-						.setViewName(orEmpty(dto.getReport().getView_name()))
-						.setShareLink(orEmpty(dto.getReport().getShare_link()))
-						.setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
-						.setBuildUrl(orEmpty(dto.getReport().getBuild_url()))
-						.setMailBody(orEmpty(dto.getReport().getMail_body()))
-						.setSubject(orEmpty(dto.getReport().getSubject()))
-						.setReportName(orEmpty(dto.getReport().getReport_name()))
-						.setTitleName(orEmpty(dto.getReport().getTitle_name()))
-						.setThresholdAlert(dto.getReport().getThresholdAlert()).build())
-				.setReportLineItem(com.flair.bi.messages.report.ReportLineItem.newBuilder()
-						.setVisualizationid(orEmpty(dto.getReport_line_item().getVisualizationid()))
-						.addAllDimension(Arrays.asList(dto.getReport_line_item().getDimension()))
-						.addAllMeasure(Arrays.asList(dto.getReport_line_item().getMeasure()))
-						.setVisualization(orEmpty(dto.getReport_line_item().getVisualization())).build())
+    private ScheduleReport toReportProto(SchedulerNotificationDTO dto) {
+        return ScheduleReport.newBuilder()
+                .setReport(
+                        Report.newBuilder()
+                                .setUserid(orEmpty(dto.getReport().getUserid()))
+                                .setDashboardName(orEmpty(dto.getReport().getDashboard_name()))
+                                .setViewName(orEmpty(dto.getReport().getView_name()))
+                                .setShareLink(orEmpty(dto.getReport().getShare_link()))
+                                .setViewId(orEmpty(String.valueOf(dto.getReport().getView_id())))
+                                .setBuildUrl(orEmpty(dto.getReport().getBuild_url()))
+                                .setMailBody(orEmpty(dto.getReport().getMail_body()))
+                                .setSubject(orEmpty(dto.getReport().getSubject()))
+                                .setReportName(orEmpty(dto.getReport().getReport_name()))
+                                .setTitleName(orEmpty(dto.getReport().getTitle_name()))
+                                .setThresholdAlert(dto.getReport().getThresholdAlert())
+                                .build()
+                )
+                .setReportLineItem(
+                        com.flair.bi.messages.report.ReportLineItem.newBuilder()
+                                .setVisualizationid(orEmpty(dto.getReport_line_item().getVisualizationid()))
+                                .addAllDimension(Arrays.asList(dto.getReport_line_item().getDimension()))
+                                .addAllMeasure(Arrays.asList(dto.getReport_line_item().getMeasure()))
+                                .setVisualization(orEmpty(dto.getReport_line_item().getVisualization()))
+                                .build()
+                )
 				.setAssignReport(com.flair.bi.messages.report.AssignReport.newBuilder()
 						.addAllChannel(Arrays.asList(dto.getAssign_report().getChannel()))
 						.setSlackAPIToken(orEmpty(dto.getAssign_report().getSlack_API_Token()))

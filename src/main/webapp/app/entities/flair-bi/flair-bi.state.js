@@ -30,7 +30,7 @@
             )
             .state("table-view", {
                 parent: "entity",
-                url: "/visual-table/{id}?datasource",
+                url: "/visual-table/{id}?datasource&chartType=table",
                 data: {
                     authorities: []
                 },

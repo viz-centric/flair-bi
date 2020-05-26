@@ -230,6 +230,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
                 .isTicketCreated(item.getIsTicketCreated())
                 .viewTicket(item.getViewTicket())
                 .query(QueryGrpcUtils.mapToQueryDTO(item.getQuery()))
+				.visualizationId(item.getVisualizationId())
                 .build();
     }
 

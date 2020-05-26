@@ -14,7 +14,7 @@
                 url: '/report-management/{id}?page&sort&:thresholdAlert',
                 data: {
                     authorities: [],
-                    pageTitle: 'Reports',
+                    pageTitle: 'reportManagement.home.title',
                     displayName: "report Management"
                 },
                 params: {
@@ -52,7 +52,6 @@
                         $translatePartialLoader.addPart('report-management');
                         return $translate.refresh();
                     }]
-
 
                 }
 
@@ -147,7 +146,8 @@
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('report-management');
                         return $translate.refresh();
-                    }]
+                    }],
+                    
 
                 }
 

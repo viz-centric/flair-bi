@@ -6909,6 +6909,8 @@ disabled look for disabled choices in the results dropdown
 
 .table-view {
   min-width: 95%; }
+  .table-view .chart {
+    height: 600px; }
 
 .cron-select-wrap {
   display: inline-block; }

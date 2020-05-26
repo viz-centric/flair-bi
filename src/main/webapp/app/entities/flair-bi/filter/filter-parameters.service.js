@@ -34,7 +34,8 @@
             saveDynamicDateRangeMetaData : saveDynamicDateRangeMetaData,
             getDynamicDateRangeMetaData : getDynamicDateRangeMetaData,
             buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange,
-            isDateType : isDateType
+            isDateType : isDateType,
+            dateToString
         };
 
 
@@ -42,6 +43,10 @@
         return service;
 
         ////////////////
+
+        function dateToString(date) {
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+        }
 
         /**
          * Return whole filter object or just part of it

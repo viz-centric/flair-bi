@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES','QueryValidationService', '$q'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES', 'QueryValidationService', '$q'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES,QueryValidationService, $q) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES, QueryValidationService, $q) {
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -110,12 +110,12 @@
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
-            
-                getWebhookList();
-                isConfigExist();
-          
-                getWebhookNames();
-           
+
+            getWebhookList();
+            isConfigExist();
+
+            getWebhookNames();
+
             resetSelectedChannels();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
@@ -864,6 +864,7 @@
         }
 
         function validate() {
+            vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
             vm.isValidated = false;
             vm.query = null;
             vm.queryValidationError = null;
@@ -871,9 +872,9 @@
             var deferred = $q.defer();
 
             Visualmetadata.validate({}, {
-                datasourceId: datasource.id,
-                queryDTO: visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                visualMetadataId: visualMetaData.id,
+                datasourceId: vm.scheduleObj.datasourceid,
+                queryDTO: vm.scheduleObj.queryDTO,
+                visualMetadataId: vm.scheduleObj.report_line_item.visualizationid,
                 conditionExpression: vm.conditionExpression
             }).$promise
                 .then(function (data) {

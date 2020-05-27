@@ -22,4 +22,5 @@ public class SchedulerLogDTO {
 	private final Boolean enableTicketCreation;
 	private final String viewTicket;
 	private final QueryDTO query;
+	private final String visualizationId;
 }

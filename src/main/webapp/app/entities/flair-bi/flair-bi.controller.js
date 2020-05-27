@@ -160,9 +160,6 @@
             }
 
             $rootScope.updateWidget = {}
-            if (!VisualDispatchService.getApplyBookmark()) {
-                filterParametersService.clear();
-            }
             VisualMetadataContainer.clear();
             VisualDispatchService.clearAll();
 
@@ -174,6 +171,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerScopeDestroy();
             openSchedulerDialogForThreshold();
             openLiveModeDialog();
             updateTableChart();
@@ -256,7 +254,12 @@
                 const headers = data.headers;
                 const text = $translate.instant('flairbiApp.visualmetadata.queryValidation.' + headers.error,
                     { reason: headers.value }) || $translate.instant(error.msgKey, error.params);
-                $rootScope.showErrorSingleToast({text: text});
+                if (text.startsWith("Missing feature")) {
+                    $rootScope.showWarningToastForDateFilter({ text: text });
+                }
+                else{
+                    $rootScope.showErrorSingleToast({ text: text });
+                }
             }
         }
 
@@ -497,22 +500,6 @@
             return features.length > 0 ? false : true;
         }
 
-        function getScheduleReport(visualizationid) {
-            schedulerService
-                .getScheduleReport(addPrefix(visualizationid))
-                .then(function (success) {
-                    var report = success.data.report;
-                    if (report) {
-                    }
-                })
-                .catch(function (error) {
-                    $rootScope.showErrorSingleToast({
-                        text: error.data.message,
-                        title: "Error"
-                    });
-                });
-        }
-
         function saveFeatures(v) {
             v.isCardRevealed = true;
             vm.isSaving = true;
@@ -527,9 +514,6 @@
                         VisualMetadataContainer.update(v.id, result, 'id');
                         var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: v.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
-
-                        getScheduleReport(v.id);
-
                     },
                     onSaveFeaturesError
                 );
@@ -661,6 +645,13 @@
                 vm.view.viewDashboard.dashboardName,
                 vm.view.viewName,
                 $window.location.href);
+        }
+
+        function registerScopeDestroy() {
+            $scope.$on("$destroy", function () {
+                filterParametersService.saveSelectedFilter({});
+                filterParametersService.clear();
+            });
         }
 
         function registerButtonToggleEvent() {

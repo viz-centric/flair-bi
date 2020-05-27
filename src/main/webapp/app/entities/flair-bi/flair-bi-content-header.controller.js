@@ -428,6 +428,12 @@
             vm.viewId = 0;
         }
 
+        function changeTitle() {
+            if (vm.selectedDashboard && vm.selectedView) {
+                $window.document.title = vm.selectedDashboard.dashboardName + "/" + vm.selectedView.viewName;
+            }
+        }
+
         function clearDashboard() {
             vm.selectedDashboard = null;
         }
@@ -444,6 +450,7 @@
                 function (result) {
                     vm.views = result;
                     vm.selectedView = VisualDispatchService.getView(result, parseInt(vm.viewId));
+                    changeTitle();
                 }
             );
         }
@@ -451,11 +458,13 @@
         function changeView(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
+            changeTitle()
         }
 
         function changeViewAndUpdateDashboard(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
+            changeTitle();
             vm.build();
         }
 
@@ -628,7 +637,7 @@
         function removeFilter($event, key) {
             $event.preventDefault();
             if (isDateRange(key)) {
-                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', {dimensionName: key.split('|')[1].toLowerCase(), startDate: null, endDate: null });
+                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { dimensionName: key.split('|')[1].toLowerCase(), startDate: null, endDate: null });
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));

@@ -65,7 +65,8 @@
         'proxyGrpcService',
         'filterParametersService',
         '$log',
-        '$timeout'
+        '$timeout',
+        'Visualmetadata'
         //,'stompClientService'
     ];
     /* @ngInject */
@@ -102,7 +103,8 @@
         proxyGrpcService,
         filterParametersService,
         $log,
-        $timeout
+        $timeout,
+        Visualmetadata
     ) {
 
         var vm = this;
@@ -226,11 +228,26 @@
                 height = el.height();
             var panel = $('.grid-stack');
 
-            widgets[vm.widget].build(
-                visualMetadata,
-                el,
-                panel
-            );
+            if (!vm.isSaved) {
+                Visualmetadata.get({
+                    id: vm.data.id
+                }, function (v) {
+                    v.data = vm.data.data;
+                    widgets[vm.widget].build(
+                        v,
+                        el,
+                        panel
+                    );
+                });
+            }
+            else {
+                widgets[vm.widget].build(
+                    visualMetadata,
+                    el,
+                    panel
+                );
+            }
+
         }
 
         function onForwardCallSuccess(result) {
@@ -258,7 +275,6 @@
                 if (vm.canBuild) {
                     if (result) {
                         vm.data.fields = result;
-
                     }
                     if (vm.data.data) {
                         build(false);

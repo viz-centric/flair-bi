@@ -958,6 +958,7 @@
                     }
                 }
                 var int = $interval(function () {
+                    v.isSaved = true;
                     refreshWidget(v);
                 }, 5000);
                 intervalRegistry[v.visualBuildId] = int;

@@ -91,8 +91,7 @@
                 var contentId = "content-" + $stateParams.id;
 
                 Visualmetadata.get({
-                    //set haedcoeded for now
-                    id: 'e560be127551f671f6dba71cd2001685--a5bb8748-b06a-46ed-9827-91e6047a8569'
+                    id: vm.reportData.visualizationId
                 }, function (v) {
 
                     visualizationRenderService.setMetaData(

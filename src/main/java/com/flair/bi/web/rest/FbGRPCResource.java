@@ -7,8 +7,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.client.RestTemplate;
 
 import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
@@ -24,16 +24,6 @@ import com.google.protobuf.util.JsonFormat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.client.RestTemplate;
-
-import java.net.URISyntaxException;
 
 @RequiredArgsConstructor
 @Controller
@@ -50,32 +40,27 @@ public class FbGRPCResource {
 
 	private final GrpcQueryService grpcQueryService;
 
-	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ', 'VIEW')")
-    @MessageMapping("/fbi-engine-grpc/{datasourcesId}/query/{viewId}")
-    public void mirrorSocket(@DestinationVariable Long datasourcesId, @DestinationVariable Long viewId, @Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
-		grpcQueryService.sendGetDataStream(
-				SendGetDataDTO.builder()
-						.datasourcesId(datasourcesId)
-						.userId(headerAccessor.getUser().getName())
-						.visualMetadata(fbiEngineDTO.getVisualMetadata())
-						.queryDTO(fbiEngineDTO.getQueryDTO())
-						.visualMetadataId(fbiEngineDTO.getvId())
-						.type(fbiEngineDTO.getType())
-                        .validationType(fbiEngineDTO.getValidationType())
-						.build()
-		);
-    }
+	private final SchedulerService schedulerService;
 
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    @MessageMapping("/fbi-engine-grpc/queryAll")
-    public void handleQueryAll(@Payload QueryAllRequestDTO requestDTO, SimpMessageHeaderAccessor headerAccessor) {
-        grpcQueryService.sendQueryAll(headerAccessor.getUser().getName(), requestDTO);
-    }
+	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ', 'VIEW')")
+	@MessageMapping("/fbi-engine-grpc/{datasourcesId}/query/{viewId}")
+	public void mirrorSocket(@DestinationVariable Long datasourcesId, @DestinationVariable Long viewId,
+			@Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
+		grpcQueryService.sendGetDataStream(SendGetDataDTO.builder().datasourcesId(datasourcesId)
+				.userId(headerAccessor.getUser().getName()).visualMetadata(fbiEngineDTO.getVisualMetadata())
+				.queryDTO(fbiEngineDTO.getQueryDTO()).visualMetadataId(fbiEngineDTO.getvId())
+				.type(fbiEngineDTO.getType()).validationType(fbiEngineDTO.getValidationType()).build());
+	}
+
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	@MessageMapping("/fbi-engine-grpc/queryAll")
+	public void handleQueryAll(@Payload QueryAllRequestDTO requestDTO, SimpMessageHeaderAccessor headerAccessor) {
+		grpcQueryService.sendQueryAll(headerAccessor.getUser().getName(), requestDTO);
+	}
 
 	@MessageMapping("fbi-engine-grpc/scheduled-reports/{pageSize}/{page}")
 	public void getSchedulerReportsAndEngineData(@DestinationVariable Integer pageSize,
 			@DestinationVariable Integer page) throws URISyntaxException {
-		RestTemplate restTemplate = new RestTemplate();
 		try {
 			SchedulerReportsDTO reports = schedulerService
 					.getScheduledReportsByUser(SecurityUtils.getCurrentUserLogin(), pageSize, page);

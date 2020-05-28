@@ -15,11 +15,11 @@
         <div class="modal-body">
             <div class="form-group">
                 <label class="control-label" data-translate="flairbiApp.views.viewName" for="field_viewName">View Name</label>
-                <input class="form-control" id="field_viewName" name="viewName" ng-maxlength="20" ng-model="vm.views.viewName" required=""
+                <input class="form-control" id="field_viewName" name="viewName" ng-maxlength="30" ng-model="vm.views.viewName" required=""
                     type="text" />
                 <div ng-show="editForm.viewName.$invalid">
                     <p class="help-block" data-translate="entity.validation.required" ng-show="editForm.viewName.$error.required">This field is required.</p>
-                    <p class="help-block" data-translate="entity.validation.maxlength" ng-show="editForm.viewName.$error.maxlength" translate-value-max="20">This field cannot be longer than 20 characters.</p>
+                    <p class="help-block" data-translate="entity.validation.maxlength" ng-show="editForm.viewName.$error.maxlength" translate-value-max="30">This field cannot be longer than 30 characters.</p>
                 </div>
             </div>
             <div class="form-group">

@@ -18,6 +18,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,9 +41,9 @@ public class FbGRPCResource {
 
     private final SchedulerService schedulerService;
 
-
-    @MessageMapping("/fbi-engine-grpc/{datasourcesId}/query")
-    public void mirrorSocket(@DestinationVariable Long datasourcesId, @Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
+	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ', 'VIEW')")
+    @MessageMapping("/fbi-engine-grpc/{datasourcesId}/query/{viewId}")
+    public void mirrorSocket(@DestinationVariable Long datasourcesId, @DestinationVariable Long viewId, @Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
 		grpcQueryService.sendGetDataStream(
 				SendGetDataDTO.builder()
 						.datasourcesId(datasourcesId)
@@ -56,6 +57,7 @@ public class FbGRPCResource {
 		);
     }
 
+    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
     @MessageMapping("/fbi-engine-grpc/queryAll")
     public void handleQueryAll(@Payload QueryAllRequestDTO requestDTO, SimpMessageHeaderAccessor headerAccessor) {
         grpcQueryService.sendQueryAll(headerAccessor.getUser().getName(), requestDTO);

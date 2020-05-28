@@ -42,7 +42,7 @@
                 visualMetadata: vm.visualMetadata,
                 type:'share-link',
                 validationType: 'REQUIRED_FIELDS'
-            });
+            },$stateParams.viewId);
         }
 
         function connectWebSocket() {

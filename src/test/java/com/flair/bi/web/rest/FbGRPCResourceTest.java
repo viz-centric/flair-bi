@@ -40,14 +40,15 @@ public class FbGRPCResourceTest {
 		resource = new FbGRPCResource(grpcQueryService, schedulerService);
 	}
 
-	@Test
-	public void mirrorSocket() throws InterruptedException {
-		VisualMetadata visualMetadata = new VisualMetadata();
-		String visualId = "visual id";
-		QueryDTO queryDTO = new QueryDTO();
-		String userId = "user id";
-		long datasourcesId = 1L;
-		String type = null;
+    @Test
+    public void mirrorSocket() throws InterruptedException {
+        VisualMetadata visualMetadata = new VisualMetadata();
+        String visualId = "visual id";
+        QueryDTO queryDTO = new QueryDTO();
+        String userId = "user id";
+        long datasourcesId = 1L;
+        long viewId = 1L;
+        String type = null;
 
 		FbiEngineDTO fbiEngineDTO = new FbiEngineDTO();
 		fbiEngineDTO.setQueryDTO(queryDTO);
@@ -66,14 +67,15 @@ public class FbGRPCResourceTest {
 			QueryDTO queryDTOArg = invocationOnMock.getArgument(3, QueryDTO.class);
 			String visualIdArg = invocationOnMock.getArgument(4, String.class);
 
-			assertEquals(datasourcesId, (long) datasourceIdArg);
-			assertEquals(userId, userIdArg);
-			assertEquals(visualMetadata, visualMetadataArg);
-			assertEquals(queryDTO, queryDTOArg);
-			assertEquals(visualId, visualIdArg);
-			return null;
-		}).when(grpcQueryService).sendGetDataStream(any(SendGetDataDTO.class));
-		resource.mirrorSocket(datasourcesId, fbiEngineDTO, headerAccessor);
+            assertEquals(datasourcesId, (long)datasourceIdArg);
+            assertEquals(userId, userIdArg);
+            assertEquals(visualMetadata, visualMetadataArg);
+            assertEquals(queryDTO, queryDTOArg);
+            assertEquals(visualId, visualIdArg);
+            return null;
+        }).when(grpcQueryService)
+            .sendGetDataStream(any(SendGetDataDTO.class));
+        resource.mirrorSocket(datasourcesId, viewId, fbiEngineDTO, headerAccessor);
 
 	}
 }

@@ -10,16 +10,17 @@
     function proxyGrpcService(
         stompClientService
     ) {
-        function forwardCall(sourceId, body) {
-            sendMsg(sourceId, body);
+        function forwardCall(sourceId, body, viewId) {
+            sendMsg(sourceId, body, viewId);
         }
 
-        function sendMsg(sourceId, body) {
+        function sendMsg(sourceId, body, viewId) {
             console.log('sending message', body);
             stompClientService.send(
                 "/flair-ws/fbi-engine-grpc/" +
                 sourceId +
-                "/query",
+                "/query/" +
+                viewId,
                 {},
                 JSON.stringify(body)
             );

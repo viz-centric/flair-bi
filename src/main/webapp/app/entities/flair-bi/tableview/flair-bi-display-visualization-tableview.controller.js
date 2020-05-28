@@ -27,7 +27,7 @@
         visualizationRenderService,
         Visualmetadata) {
         var vm = this;
-        vm.id = $stateParams.id;
+        vm.id = $stateParams.schedulerId;
         vm.chartType = $stateParams.chartType;
         vm.tableData = [];
         vm.tablekey = [];
@@ -39,7 +39,7 @@
 
         function activate() {
 
-            schedulerService.getReportLogByMetaId($stateParams.id)
+            schedulerService.getReportLogByMetaId($stateParams.schedulerId)
                 .then(
                     function (response) {
                         vm.reportData = response.data.reportLog;
@@ -49,9 +49,9 @@
                         };
                         connectWebSocket();
 
-                        proxyGrpcService.forwardCall($stateParams.datasource, {
+                        proxyGrpcService.forwardCall($stateParams.datasourceId, {
                             queryDTO: response.data.reportLog.query
-                        });
+                        },$stateParams.viewId);
                     },
                     function (error) {
                         var info = {
@@ -77,6 +77,7 @@
         }
 
         function onExchangeMetadataError(data) {
+            console.log("error "+ data)
         }
 
 
@@ -88,7 +89,7 @@
 
             }
             else {
-                var contentId = "content-" + $stateParams.id;
+                var contentId = "content-" + $stateParams.schedulerId;
 
                 Visualmetadata.get({
                     id: vm.reportData.visualizationId

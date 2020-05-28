@@ -171,7 +171,7 @@
                     </div>
                     <div ng-style="{'opacity': v.bodyProperties.opacity}"
                         ng-if="$root.vizualizationServiceMode == 'grpc'" id="content-{{v.visualBuildId}}"
-                        class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()"
+                        class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()" is-saved="v.isSaved"
                         data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
                         reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
                         <div class="loader-spinner" ng-if="v.metadataVisual.functionname==='GenerateTable'">

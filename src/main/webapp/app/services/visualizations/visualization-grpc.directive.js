@@ -20,6 +20,7 @@
             restrict: 'A',
             scope: {
                 canBuild: '=',
+                isSaved: '=',
                 data: '=',
                 widget: '@',
                 id: '@',
@@ -66,8 +67,8 @@
         'filterParametersService',
         '$log',
         '$timeout',
+        '$stateParams',
         'Visualmetadata'
-        //,'stompClientService'
     ];
     /* @ngInject */
     function VisualizationRenderGrpcController(
@@ -104,6 +105,7 @@
         filterParametersService,
         $log,
         $timeout,
+        $stateParams,
         Visualmetadata
     ) {
 
@@ -149,12 +151,21 @@
             registerUpdateWidgetEvent();
             registerRefreshWidgetEvent();
             registerIdChanges();
+            registerisSavedChange();
             registerTimeout();
         }
 
         function registerTimeout() {
             $scope.$on('$destroy', () => {
                 clearDeferred();
+            });
+        }
+
+        function registerisSavedChange() {
+            $scope.$watch(function () {
+                return vm.isSaved;
+            }, function (newVal, oldVal) {
+                //console.log("isSaved newVal=="+newVal+"===isSaved oldVal=="+oldVal);
             });
         }
 
@@ -208,7 +219,7 @@
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
                     visualMetadata: vm.data,
                     validationType: 'REQUIRED_FIELDS'
-                });
+                },$stateParams.id);
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
@@ -260,11 +271,14 @@
 
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
-                if (vm.canBuild) {
-                    if (result) {
-                        vm.data.fields = result;
-                    }
+                if (result) {
+                    vm.data.fields = result;
                     build(true);
+                }
+                else {
+                    if (vm.canBuild && vm.isSaved) {
+                        build(true);
+                    }
                 }
             });
 

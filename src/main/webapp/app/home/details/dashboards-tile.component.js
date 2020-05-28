@@ -32,6 +32,8 @@
         vm.page = 1;
         vm.currentSearch = null;
 
+        vm.searchDashboards = searchDashboards;
+
 
         ////////////////
         vm.$onInit = function () {
@@ -50,6 +52,14 @@
         vm.$onChanges = function () { };
         vm.$onDestroy = function () { };
 
+        function searchDashboards() {
+            Dashboards.query({
+                page: vm.pagingParams.page - 1,
+                size: vm.itemsPerPage,
+                sort: sort(),
+                dashboardName: vm.search.dashboardName
+            }, onSuccess, onError);
+        }
         function transition() {
             $state.transitionTo($state.$current, {
                 page: vm.page,

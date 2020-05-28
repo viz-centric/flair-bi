@@ -213,7 +213,7 @@
             return viewEditedBeforeSave;
         }
         function setIsSaved(flag){
-            visual.visual.isSaved = false;
+            visual.visual.isSaved = flag;
         }
     }
 })();

@@ -30,7 +30,7 @@
             )
             .state("table-view", {
                 parent: "entity",
-                url: "/visual-table/{id}?datasource&chartType=table&viewId",
+                url: "/visual-table/?schedulerId&datasourceId&viewId&chartType=table",
                 data: {
                     authorities: []
                 },
@@ -67,7 +67,7 @@
             })
             .state("fullscreen", {
                 parent: "entity",
-                url: "/visual/{id}?datasource&viewId",
+                url: "/visual/{id}?datasourceId&viewId",
                 data: {
                     authorities: []
                 },

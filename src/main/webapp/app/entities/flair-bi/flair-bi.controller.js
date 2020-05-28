@@ -503,6 +503,7 @@
         function saveFeatures(v) {
             v.isCardRevealed = true;
             vm.isSaving = true;
+            v.isSaved = true;
             if (v.id) {
                 Visualmetadata.update(
                     {
@@ -572,11 +573,11 @@
                         .parent()
                         .parent()
                         .attr("drop-box");
-                    //var v=VisualMetadataContainer.getOneVBuildId(vId);
                     VisualDispatchService.setVisual({
                         visual: VisualMetadataContainer.getOneVBuildId(vId),
                         view: entity
                     });
+                    VisualDispatchService.setIsSaved(false);
                     if (VisualDispatchService.isFeatureExist()) {
                         if (
                             $(event.target)
@@ -1159,6 +1160,7 @@
         function createVisualMetadata(visualization) {
             var newVM = {
                 isCardRevealed: true,
+                isSaved: false,
                 viewId: vm.view.linkId,
                 titleProperties: {
                     titleText: visualization.name,

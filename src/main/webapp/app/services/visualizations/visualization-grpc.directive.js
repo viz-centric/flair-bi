@@ -20,6 +20,7 @@
             restrict: 'A',
             scope: {
                 canBuild: '=',
+                isSaved: '=',
                 data: '=',
                 widget: '@',
                 id: '@',
@@ -149,12 +150,21 @@
             registerUpdateWidgetEvent();
             registerRefreshWidgetEvent();
             registerIdChanges();
+            registerisSavedChange();
             registerTimeout();
         }
 
         function registerTimeout() {
             $scope.$on('$destroy', () => {
                 clearDeferred();
+            });
+        }
+
+        function registerisSavedChange() {
+            $scope.$watch(function () {
+                return vm.isSaved;
+            }, function (newVal, oldVal) {
+                //console.log("isSaved newVal=="+newVal+"===isSaved oldVal=="+oldVal);
             });
         }
 
@@ -260,7 +270,7 @@
 
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
-                if (vm.canBuild) {
+                if (vm.canBuild && vm.isSaved) {
                     if (result) {
                         vm.data.fields = result;
                     }

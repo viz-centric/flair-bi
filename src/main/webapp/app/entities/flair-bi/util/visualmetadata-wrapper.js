@@ -95,7 +95,7 @@
      * @return url location of this visual metadata
      */
     function getSharePath(datasource,viewId) {
-        return '/visual/' + this.id + "?datasource=" + datasource.id +"&viewId=" + viewId;
+        return '/visual/' + this.id + "?datasourceId=" + datasource.id +"&viewId=" + viewId;
     }
 
     /**

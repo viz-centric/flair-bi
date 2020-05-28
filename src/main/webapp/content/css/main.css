@@ -1725,6 +1725,26 @@ a {
   .permission-header-controls top-nav-button-component #trigger {
     display: inline-block; }
 
+#information .panel-info {
+  border-color: #1c84c6; }
+
+#information .panel-heading {
+  padding: 5px 15px;
+  background-color: #1c84c6;
+  border-color: #1c84c6;
+  color: #ffffff; }
+
+#information .panel-body {
+  padding: 5px; }
+  #information .panel-body .info {
+    padding: 5px; }
+    #information .panel-body .info ul {
+      margin-bottom: 0px; }
+      #information .panel-body .info ul li.list-group-item {
+        padding: 7px 5px; }
+      #information .panel-body .info ul .access-icon {
+        padding-right: 10px; }
+
 .permission-dashboard-item {
   height: 100%;
   display: inline-block; }
@@ -6889,6 +6909,8 @@ disabled look for disabled choices in the results dropdown
 
 .table-view {
   min-width: 95%; }
+  .table-view .chart {
+    height: 600px; }
 
 .cron-select-wrap {
   display: inline-block; }

@@ -11,7 +11,9 @@
         "stompClientService",
         "AuthServerProvider",
         "schedulerService",
-        "REPORTMANAGEMENTCONSTANTS"
+        "REPORTMANAGEMENTCONSTANTS",
+        "visualizationRenderService",
+        "Visualmetadata"
     ];
 
     function FlairBiDisplayVisualizationTableviewController($scope,
@@ -21,12 +23,16 @@
         stompClientService,
         AuthServerProvider,
         schedulerService,
-        REPORTMANAGEMENTCONSTANTS) {
+        REPORTMANAGEMENTCONSTANTS,
+        visualizationRenderService,
+        Visualmetadata) {
         var vm = this;
         vm.id = $stateParams.id;
+        vm.chartType = $stateParams.chartType;
         vm.tableData = [];
         vm.tablekey = [];
         vm.reportData;
+        //  vm.visualMetadata = new VisualWrap(visualMetadata);
         vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
         activate();
         ///////////////
@@ -76,10 +82,26 @@
 
         function onExchangeMetadata(data) {
             var metaData = JSON.parse(data.body);
-            createHeader(metaData.data[0]);
-            addDataInTable(metaData.data);
+            if (vm.chartType === "table") {
+                createHeader(metaData.data[0]);
+                addDataInTable(metaData.data);
 
+            }
+            else {
+                var contentId = "content-" + $stateParams.id;
 
+                Visualmetadata.get({
+                    id: vm.reportData.visualizationId
+                }, function (v) {
+
+                    visualizationRenderService.setMetaData(
+                        v,
+                        metaData,
+                        contentId
+                    );
+                });
+
+            }
         }
         function createHeader(cols) {
             $("#table-view-col-" + vm.id + "").empty();

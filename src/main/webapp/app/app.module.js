@@ -131,15 +131,23 @@
         /** Methods for toaster notifications */
 
         $rootScope.showSuccessToast = function (info) {
+            toastr.options.preventDuplicates = false;
             toastr.success(info.text, info.title);
         };
         $rootScope.showInfoToast = function (info) {
+            toastr.options.preventDuplicates = false;
             toastr.info(info.title);
         };
         $rootScope.showWarningToast = function (info) {
+            toastr.options.preventDuplicates = false;
+            toastr.warning(info.text, info.title);
+        };
+        $rootScope.showWarningToastForDateFilter = function (info) {
+            toastr.options.preventDuplicates = true;
             toastr.warning(info.text, info.title);
         };
         $rootScope.showErrorToast = function (info) {
+            toastr.options.preventDuplicates = false;
             var toastrBody = $rootScope.buildToastrBody(info.text);
             toastr.error(toastrBody, info.title);
         };
@@ -151,6 +159,7 @@
             return toastrBody;
         };
         $rootScope.showErrorSingleToast = function (info) {
+            toastr.options.preventDuplicates = false;
             toastr.error(info.text, info.title);
         };
 

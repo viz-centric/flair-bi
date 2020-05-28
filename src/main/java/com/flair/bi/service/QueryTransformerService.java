@@ -23,10 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.project.bi.query.SQLUtil.sanitize;
@@ -43,23 +43,28 @@ public class QueryTransformerService {
 
     public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) throws QueryTransformerException {
         log.debug("Map to query {} params {}", queryDTO.toString(), params);
-        QueryValidationResult validationResult = queryValidationService.validate(queryDTO);
+
+        Map<String, Feature> features = Optional.ofNullable(params.getDatasourceId())
+                .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
+                        .stream()
+                        .collect(Collectors.toMap(item -> item.getName(), item -> item)))
+                .orElseGet(() -> new ConcurrentHashMap<>());
+
+        QueryValidationResult validationResult = queryValidationService.validate(queryDTO,
+                QueryValidationParams.builder()
+                        .features(features)
+                        .validationType(params.getValidationType())
+                        .build());
         if (!validationResult.success()) {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
 
         return toQuery(queryDTO, params.getConnectionName(), params.getVId(),
-                params.getUserId(), params.getDatasourceId());
+                params.getUserId(), features);
     }
 
     private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId,
-                          Long datasourceId) {
-        Map<String, Feature> features = Optional.ofNullable(datasourceId)
-                .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
-                        .stream()
-                        .collect(Collectors.toMap(item -> item.getName(), item -> item)))
-                .orElseGet(() -> new HashMap<>());
-
+                          Map<String, Feature> features) {
         List<FieldDTO> fields = transformSelectFields(features, queryDTO.getFields());
         List<FieldDTO> groupBy = transformGroupByFields(features, queryDTO.getGroupBy());
 
@@ -218,10 +223,10 @@ public class QueryTransformerService {
             return Query.ConditionExpressionHolder.ExpressionType.BETWEEN_VALUE;
         } else if (conditionExpression instanceof CompareConditionExpression) {
             return Query.ConditionExpressionHolder.ExpressionType.COMPARE_VALUE;
-        } else if (conditionExpression instanceof ContainsConditionExpression) {
-            return Query.ConditionExpressionHolder.ExpressionType.CONTAINS_VALUE;
         } else if (conditionExpression instanceof NotContainsConditionExpression) {
             return Query.ConditionExpressionHolder.ExpressionType.NOTCONTAINS_VALUE;
+        } else if (conditionExpression instanceof ContainsConditionExpression) {
+            return Query.ConditionExpressionHolder.ExpressionType.CONTAINS_VALUE;
         } else if (conditionExpression instanceof LikeConditionExpression) {
             return Query.ConditionExpressionHolder.ExpressionType.LIKE_VALUE;
         }
@@ -264,14 +269,14 @@ public class QueryTransformerService {
             AndConditionExpression andConditionExpression = (AndConditionExpression) conditionExpression;
             andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression(), features));
             andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression(), features));
-        } else if (conditionExpression instanceof ContainsConditionExpression) {
-            ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
-            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, containsConditionExpression.getFeatureName()));
-            containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
         } else if (conditionExpression instanceof NotContainsConditionExpression) {
             NotContainsConditionExpression notContainsConditionExpression = (NotContainsConditionExpression) conditionExpression;
             notContainsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, notContainsConditionExpression.getFeatureName()));
             notContainsConditionExpression.setValues(sanitizeList(notContainsConditionExpression.getValues()));
+        } else if (conditionExpression instanceof ContainsConditionExpression) {
+            ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
+            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, containsConditionExpression.getFeatureName()));
+            containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
         } else if (conditionExpression instanceof LikeConditionExpression) {
             LikeConditionExpression likeConditionExpression = (LikeConditionExpression) conditionExpression;
             likeConditionExpression.setValue(sanitize(likeConditionExpression.getValue()));

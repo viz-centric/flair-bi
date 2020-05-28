@@ -49,7 +49,10 @@
             "barChartType": "Bar Chart Type",
             "showGrid": "Show Grid",
             "metadataVisual": "Metadata Visual",
-            "errorOnReceivingMataData":"Error receiving data"
+            "errorOnReceivingMataData":"Error receiving data",
+            "queryValidation": {
+                "RequiredConditionFeatureMissing": "Missing feature: {{ reason }}"
+            }
         }
     }
 }

@@ -2,6 +2,63 @@
     <div class="hidden-sm hidden-md hidden-lg hidden-xl ">
         <h3 class="center-text">Please open in table or desktop to view permission details</h3>
     </div>
+    <div class="col-md-12" id="information">
+        <div class="panel panel-info">
+            <div class="panel-heading">Permission
+                <i class="fa fa-info-circle"></i>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6 info">
+                    <ul class="list-group">
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="glyphicon glyphicon-eye-open access-icon mr-5"></i>
+                            READ : Allow read olny access on view
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="glyphicon glyphicon-pencil access-icon mr-5"></i>
+                            WRITE : Allow edit dashboard
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="glyphicon glyphicon-edit access-icon mr-5"></i> Cras
+                            UPDATE : Allow update dashboard
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i
+                                class="glyphicon glyphicon-remove-circle access-icon mr-5"></i>
+                            DELETE : Allow delete view
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="fa fa-newspaper-o access-icon ng-scope mr-5"></i>
+                            READ_PUBLISHED : 
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-md-6 info">
+                    <ul class="list-group">
+
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="fa fa-scissors access-icon mr-5"></i>
+                            DELETE_PUBLISHED : - 
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="fa fa-toggle-on access-icon mr-5"></i>
+                            TOOGGLE_PUBLISHED : - 
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="fa fa-paper-plane-o access-icon mr-5"></i>
+                            REQUEST_PUBLISHED : Allow send request for publish to view
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="md-v-line"></div><i class="fa fa-tasks access-icon ng-scope mr-5"></i>
+                            MANAGE_PUBLISHED : -
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-5 col-sm-12 hidden-xs">
         <div class="fbibox permissions-fbibox">
             <div class="fbibox-title">
@@ -12,10 +69,14 @@
                     <div class="col-md-12 col-sm-12">
                         <div class="form-inline">
                             <div class="form-group">
-                                <input type="search" name="search" id="search-input" class="form-control" value="" required="required" title="" ng-model="vm.searchInput">
+                                <input type="search" name="search" id="search-input" class="form-control" value=""
+                                    required="required" title="" ng-model="vm.searchInput">
                             </div>
-                            <div ng-class="vm.areUsersToggled ? 'btn-default' : 'btn-primary'" class="btn" ng-click="vm.toggleUsers()"> {{vm.areUsersToggled ? 'Hide' : 'Show'}} Users</div>
-                            <div ng-class="vm.areUserGroupsToggled ? 'btn-default' : 'btn-primary'" class="btn" ng-click="vm.toggleUserGroups()"> {{vm.areUserGroupsToggled ? 'Hide' : 'Show'}} User Groups </div>
+                            <div ng-class="vm.areUsersToggled ? 'btn-default' : 'btn-primary'" class="btn"
+                                ng-click="vm.toggleUsers()"> {{vm.areUsersToggled ? 'Hide' : 'Show'}} Users</div>
+                            <div ng-class="vm.areUserGroupsToggled ? 'btn-default' : 'btn-primary'" class="btn"
+                                ng-click="vm.toggleUserGroups()"> {{vm.areUserGroupsToggled ? 'Hide' : 'Show'}} User
+                                Groups </div>
                         </div>
                     </div>
                 </div>
@@ -23,7 +84,8 @@
                     <div class="tree-handle user-tree">
                         <span class="user-tree-header">User</span>
                     </div>
-                    <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === user.login}" ng-repeat="user in vm.users | filter: vm.filterUser">
+                    <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === user.login}"
+                        ng-repeat="user in vm.users | filter: vm.filterUser">
                         <span>{{user.login}}</span>
                         <button type="submit" ui-sref="datasource-constraints({login:user.login})">
                             <svg class="datasource-constraints-icon">
@@ -43,12 +105,14 @@
                     <div class="tree-handle user-tree">
                         <span class="user-tree-header">User Groups</span>
                     </div>
-                    <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === group.name}" ng-repeat="group in vm.userGroups | filter: vm.filterUserGroup">
+                    <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === group.name}"
+                        ng-repeat="group in vm.userGroups | filter: vm.filterUserGroup">
                         <span>{{group.name}}</span>
                         <button type="submit" ng-click="vm.getUserGroupPermissions(group.name)">
                             <span class="fa fa-share-square-o permission-icon fa-2x square-icon"></span>
                         </button>
-                        <button ng-hide="vm.isPredefinedGroup(group.name)" type="submit" ui-sref="permission-management.user-group-delete({name: group.name})">
+                        <button ng-hide="vm.isPredefinedGroup(group.name)" type="submit"
+                            ui-sref="permission-management.user-group-delete({name: group.name})">
                             <svg class="flaticons-close close-icon">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#permission-close"></use>
                             </svg>
@@ -71,46 +135,70 @@
                     <div class="col-md-12">
                         <div ui-tree data-nodrop-enabled data-drag-enabled="false" class="permission-tree">
                             <div class="" ui-tree-nodes ng-model="vm.pagedItems">
-                                <div class="dashboard-permission-item" ng-class="(dashboard.views && dashboard.views.length > 0)? 'collapsible': 'not-collapsible'"
+                                <div class="dashboard-permission-item"
+                                    ng-class="(dashboard.views && dashboard.views.length > 0)? 'collapsible': 'not-collapsible'"
                                     ng-repeat="dashboard in vm.pagedItems[vm.currentPage]" ui-tree-node>
 
                                     <div ui-tree-handle>
                                         <div class="content-header">
                                             <svg class="nav-dashboard permission-icon">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#nav-dashboard"></use>
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                    xlink:href="#nav-dashboard"></use>
                                             </svg>
                                             <span class="vertical-align">{{dashboard.dashboardName}}</span>
-                                            <a class="vertical-align" ng-if="dashboard.views && dashboard.views.length > 0" data-nodrag ng-click="vm.toggle(this)">
-                                            <span class="fa" ng-class="{
+                                            <a class="vertical-align"
+                                                ng-if="dashboard.views && dashboard.views.length > 0" data-nodrag
+                                                ng-click="vm.toggle(this)">
+                                                <span class="fa" ng-class="{
                                               'fa-chevron-right': collapsed,
                                               'fa-chevron-down': !collapsed
                                             }"></span>
-                                        </a>
+                                            </a>
                                         </div>
 
                                         <table class="permission-table table">
                                             <thead>
                                                 <tr class="table-head">
                                                     <th ng-repeat="dashPermission in dashboard.permissionMetadata">
-                                                        <span title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'READ'" class="glyphicon glyphicon-eye-open access-icon"></span>
-                                                        <span title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'WRITE'" class="glyphicon glyphicon-pencil access-icon"></span>
-                                                        <span title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'UPDATE'" class="glyphicon glyphicon-edit access-icon"></span>
-                                                        <span title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'DELETE'" class="glyphicon glyphicon-remove-circle access-icon"></span>
-                                                        <i title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'READ_PUBLISHED'" class="fa fa-newspaper-o access-icon"></i>
-                                                        <i title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'DELETE_PUBLISHED'"
+                                                        <span title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'READ'"
+                                                            class="glyphicon glyphicon-eye-open access-icon"></span>
+                                                        <span title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'WRITE'"
+                                                            class="glyphicon glyphicon-pencil access-icon"></span>
+                                                        <span title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'UPDATE'"
+                                                            class="glyphicon glyphicon-edit access-icon"></span>
+                                                        <span title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'DELETE'"
+                                                            class="glyphicon glyphicon-remove-circle access-icon"></span>
+                                                        <i title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'READ_PUBLISHED'"
+                                                            class="fa fa-newspaper-o access-icon"></i>
+                                                        <i title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'DELETE_PUBLISHED'"
                                                             class="fa fa-scissors access-icon"></i>
-                                                        <i title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'TOGGLE_PUBLISH'" class="fa fa-toggle-on access-icon"></i>
-                                                        <i title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'REQUEST_PUBLISH'" class="fa fa-paper-plane-o access-icon"></i>
-                                                        <i title={{dashPermission.permission.key.action}} ng-if="dashPermission.permission.key.action === 'MANAGE_PUBLISH'" class="fa fa-tasks access-icon"></i>
+                                                        <i title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'TOGGLE_PUBLISH'"
+                                                            class="fa fa-toggle-on access-icon"></i>
+                                                        <i title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'REQUEST_PUBLISH'"
+                                                            class="fa fa-paper-plane-o access-icon"></i>
+                                                        <i title={{dashPermission.permission.key.action}}
+                                                            ng-if="dashPermission.permission.key.action === 'MANAGE_PUBLISH'"
+                                                            class="fa fa-tasks access-icon"></i>
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td ng-repeat="dashPermission in dashboard.permissionMetadata" class="checkbox-padding">
+                                                    <td ng-repeat="dashPermission in dashboard.permissionMetadata"
+                                                        class="checkbox-padding">
                                                         <label class="checkbox-container" title="Click Here">
-                                                       <input class="flair-check-box" ng-change="vm.changePermission(dashPermission)" type="checkbox" ng-model="dashPermission.hasIt">
-                                                        <span class="checkmark"></span>
+                                                            <input class="flair-check-box"
+                                                                ng-change="vm.changePermission(dashPermission)"
+                                                                type="checkbox" ng-model="dashPermission.hasIt">
+                                                            <span class="checkmark"></span>
                                                         </label>
                                                     </td>
                                                 </tr>
@@ -123,7 +211,8 @@
                                             <div ui-tree-handle>
                                                 <div class="content-header">
                                                     <svg class="flaticons-view permission-icon">
-                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#view"></use>
+                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                            xlink:href="#view"></use>
                                                     </svg>
                                                     <span class="vertical-align">{{view.viewName}}</span>
                                                 </div>
@@ -132,27 +221,47 @@
                                                     <thead>
                                                         <tr class="table-head">
                                                             <th ng-repeat="permission in view.permissionMetadata">
-                                                            <span  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'READ'" class="glyphicon glyphicon-eye-open access-icon"></span>
-                                                            <span  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'WRITE'" class="glyphicon glyphicon-pencil access-icon"></span>
-                                                            <span  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'UPDATE'" class="glyphicon glyphicon-edit access-icon"></span>
-                                                            <span  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'DELETE'" class="glyphicon glyphicon-remove-circle access-icon"></span>
-                                                            <i  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'READ_PUBLISHED'" class="fa fa-newspaper-o access-icon"></i>
-                                                            <i  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'DELETE_PUBLISHED'"
-                                                                class="fa fa-scissors access-icon"></i>
-                                                            <i  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'TOGGLE_PUBLISH'" class="fa fa-toggle-on access-icon"></i>
-                                                            <i  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'REQUEST_PUBLISH'" class="fa fa-paper-plane-o access-icon"></i>
-                                                            <i  title={{permission.permission.key.action}} ng-if="permission.permission.key.action === 'MANAGE_PUBLISH'" class="fa fa-tasks access-icon"></i>
+                                                                <span title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'READ'"
+                                                                    class="glyphicon glyphicon-eye-open access-icon"></span>
+                                                                <span title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'WRITE'"
+                                                                    class="glyphicon glyphicon-pencil access-icon"></span>
+                                                                <span title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'UPDATE'"
+                                                                    class="glyphicon glyphicon-edit access-icon"></span>
+                                                                <span title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'DELETE'"
+                                                                    class="glyphicon glyphicon-remove-circle access-icon"></span>
+                                                                <i title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'READ_PUBLISHED'"
+                                                                    class="fa fa-newspaper-o access-icon"></i>
+                                                                <i title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'DELETE_PUBLISHED'"
+                                                                    class="fa fa-scissors access-icon"></i>
+                                                                <i title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'TOGGLE_PUBLISH'"
+                                                                    class="fa fa-toggle-on access-icon"></i>
+                                                                <i title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'REQUEST_PUBLISH'"
+                                                                    class="fa fa-paper-plane-o access-icon"></i>
+                                                                <i title={{permission.permission.key.action}}
+                                                                    ng-if="permission.permission.key.action === 'MANAGE_PUBLISH'"
+                                                                    class="fa fa-tasks access-icon"></i>
                                                             </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td ng-repeat="permission in view.permissionMetadata" class="checkbox-padding">
+                                                            <td ng-repeat="permission in view.permissionMetadata"
+                                                                class="checkbox-padding">
                                                                 <label class="checkbox-container" title="Click Here">
-                                                                <input class="flair-check-box" ng-disabled="vm.hasDashboardAccess(dashboard, permission)" class="flair-check-box pull-right"
-                                                                    ng-change="vm.changePermission(permission)" type="checkbox"
-                                                                    ng-model="permission.hasIt">
-                                                                <span class="checkmark"></span>
+                                                                    <input class="flair-check-box"
+                                                                        ng-disabled="vm.hasDashboardAccess(dashboard, permission)"
+                                                                        class="flair-check-box pull-right"
+                                                                        ng-change="vm.changePermission(permission)"
+                                                                        type="checkbox" ng-model="permission.hasIt">
+                                                                    <span class="checkmark"></span>
                                                                 </label>
                                                             </td>
                                                         </tr>
@@ -171,16 +280,17 @@
                 <div class="text-center" ng-show="vm.dashboardsTotalItems && vm.dashboards.length > 0">
                     <ul class="pagination">
                         <li ng-class="{disabled: vm.currentPage == 0}">
-                        <a href="javascript:;" ng-click="vm.prevPage()">« Prev</a>
+                            <a href="javascript:;" ng-click="vm.prevPage()">« Prev</a>
                         </li>
-                        <li ng-repeat="n in vm.range(vm.pagedItems.length)" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
-                        <a href="javascript:;" ng-bind="n+1">1</a>
+                        <li ng-repeat="n in vm.range(vm.pagedItems.length)" ng-class="{active: n == vm.currentPage}"
+                            ng-click="vm.setPage(n)">
+                            <a href="javascript:;" ng-bind="n+1">1</a>
                         </li>
                         <li ng-class="{disabled: vm.currentPage == vm.pagedItems.length - 1}">
-                        <a href="javascript:;" ng-click="vm.nextPage()">Next »</a>
+                            <a href="javascript:;" ng-click="vm.nextPage()">Next »</a>
                         </li>
                     </ul>
-                    </div>
+                </div>
             </div>
         </div>
 

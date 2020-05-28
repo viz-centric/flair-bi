@@ -4,6 +4,7 @@ import com.flair.bi.messages.Query;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.SendGetDataDTO;
 import com.flair.bi.service.dto.FbiEngineDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
@@ -42,14 +43,19 @@ public class FbGRPCResource {
 
     @MessageMapping("/fbi-engine-grpc/{datasourcesId}/query")
     public void mirrorSocket(@DestinationVariable Long datasourcesId, @Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
-        grpcQueryService.sendGetDataStream(datasourcesId,
-            headerAccessor.getUser().getName(),
-            fbiEngineDTO.getVisualMetadata(),
-            fbiEngineDTO.getQueryDTO(),
-            fbiEngineDTO.getvId(),
-            fbiEngineDTO.getType());
+		grpcQueryService.sendGetDataStream(
+				SendGetDataDTO.builder()
+						.datasourcesId(datasourcesId)
+						.userId(headerAccessor.getUser().getName())
+						.visualMetadata(fbiEngineDTO.getVisualMetadata())
+						.queryDTO(fbiEngineDTO.getQueryDTO())
+						.visualMetadataId(fbiEngineDTO.getvId())
+						.type(fbiEngineDTO.getType())
+                        .validationType(fbiEngineDTO.getValidationType())
+						.build()
+		);
     }
-    
+
     @MessageMapping("/fbi-engine-grpc/queryAll")
     public void handleQueryAll(@Payload QueryAllRequestDTO requestDTO, SimpMessageHeaderAccessor headerAccessor) {
         grpcQueryService.sendQueryAll(headerAccessor.getUser().getName(), requestDTO);

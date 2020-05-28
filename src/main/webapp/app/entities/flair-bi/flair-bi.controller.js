@@ -980,7 +980,7 @@
                     resolve: {
                         shareLink: function () {
                             return ShareLinkService.createLink(
-                                v.getSharePath(vm.datasource)
+                                v.getSharePath(vm.datasource,$stateParams.id)
                             );
                         }
                     }

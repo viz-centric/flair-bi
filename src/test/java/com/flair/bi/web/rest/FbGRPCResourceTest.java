@@ -46,6 +46,7 @@ public class FbGRPCResourceTest {
         QueryDTO queryDTO = new QueryDTO();
         String userId = "user id";
         long datasourcesId = 1L;
+        long viewId = 1L;
         String type = null;
 
         FbiEngineDTO fbiEngineDTO = new FbiEngineDTO();
@@ -73,7 +74,7 @@ public class FbGRPCResourceTest {
             return null;
         }).when(grpcQueryService)
             .sendGetDataStream(any(SendGetDataDTO.class));
-        resource.mirrorSocket(datasourcesId, fbiEngineDTO, headerAccessor);
+        resource.mirrorSocket(datasourcesId, viewId, fbiEngineDTO, headerAccessor);
 
     }
 }

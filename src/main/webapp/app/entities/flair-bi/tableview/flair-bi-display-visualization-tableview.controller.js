@@ -51,7 +51,7 @@
 
                         proxyGrpcService.forwardCall($stateParams.datasource, {
                             queryDTO: response.data.reportLog.query
-                        });
+                        },$stateParams.viewId);
                     },
                     function (error) {
                         var info = {

@@ -396,7 +396,7 @@
             vm.scheduleObj.report.view_name = view.viewName;
             vm.scheduleObj.report.view_id = view.id;
             vm.scheduleObj.report.build_url = builUrl(dashboard, view);
-            vm.scheduleObj.report.share_link = getShareLink(visualMetaData, datasource);
+            vm.scheduleObj.report.share_link = getShareLink(visualMetaData, datasource, view.id);
             vm.scheduleObj.datasourceid = datasource.id;
             vm.scheduleObj.report.report_name = getReportName(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid = visualMetaData.id;
@@ -406,9 +406,9 @@
 
         }
 
-        function getShareLink(visualMetaData, datasource) {
+        function getShareLink(visualMetaData, datasource, viewId) {
             return ShareLinkService.createLink(
-                visualMetaData.getSharePath(datasource)
+                visualMetaData.getSharePath(datasource, viewId)
             );
         }
 

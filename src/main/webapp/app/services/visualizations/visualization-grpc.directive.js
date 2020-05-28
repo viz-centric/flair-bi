@@ -67,8 +67,8 @@
         'filterParametersService',
         '$log',
         '$timeout',
+        '$stateParams',
         'Visualmetadata'
-        //,'stompClientService'
     ];
     /* @ngInject */
     function VisualizationRenderGrpcController(
@@ -105,6 +105,7 @@
         filterParametersService,
         $log,
         $timeout,
+        $stateParams,
         Visualmetadata
     ) {
 
@@ -218,7 +219,7 @@
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
                     visualMetadata: vm.data,
                     validationType: 'REQUIRED_FIELDS'
-                });
+                },$stateParams.id);
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {

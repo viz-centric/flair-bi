@@ -38,6 +38,11 @@ import lombok.Setter;
 @Table(name = "fields")
 public class Field extends AbstractAuditingEntity implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9072742593808431633L;
+
 	@Id
 	@GeneratedValue
 	protected long id;

@@ -271,11 +271,14 @@
 
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
-                if (vm.canBuild && vm.isSaved) {
-                    if (result) {
-                        vm.data.fields = result;
-                    }
+                if (result) {
+                    vm.data.fields = result;
                     build(true);
+                }
+                else {
+                    if (vm.canBuild && vm.isSaved) {
+                        build(true);
+                    }
                 }
             });
 

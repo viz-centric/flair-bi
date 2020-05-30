@@ -170,7 +170,6 @@
         function activate() {
             registerEditModeToggle();
             registerFilterRefresh();
-            registerFilterClick();
             registerAddFilter();
             setPageSizeforScreens();
             fetchDashboardsAndViews();
@@ -721,17 +720,6 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function registerFilterClick() {
-            const unsub1 = $rootScope.$on("flairbiApp:clearFiltersClicked", function () {
-                saveViewFeatureCriterias();
-            });
-            const unsub2 = $rootScope.$on("flairbiApp:filterClicked", function () {
-                saveViewFeatureCriterias();
-            });
-            $scope.$on("$destroy", unsub1);
-            $scope.$on("$destroy", unsub2);
-        }
-
         function getFilterCriterias() {
             var params = filterParametersService.get();
             var filterCriterias = [];
@@ -846,6 +834,7 @@
 
         function onWriteToPg() {
             $rootScope.$broadcast("FlairBi:saveAllWidgets");
+            saveViewFeatureCriterias();
         }
 
         function onGetData() { }

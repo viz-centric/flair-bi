@@ -81,7 +81,8 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public Authentication getAuthentication(String token) {
-		Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+
+		Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
 		Collection<? extends GrantedAuthority> authorities = Arrays
 				.stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(PermissionGrantedAuthority::new)
@@ -94,7 +95,7 @@ public class TokenProvider implements InitializingBean {
 
 	public boolean validateToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
 			log.info("Invalid JWT token.");

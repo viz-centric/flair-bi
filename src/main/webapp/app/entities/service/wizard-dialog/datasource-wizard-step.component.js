@@ -122,8 +122,8 @@
         }
 
         function saveConnection(cb, err) {
+            var connection = prepareConnection();
             if (!vm.selectedConnection) {
-                var connection = prepareConnection();
                 return Connections.save(
                     connection,
                     function (result) {
@@ -135,7 +135,16 @@
                     }
                 );
             } else {
-                return cb(vm.connection);
+                return Connections.update(
+                    connection,
+                    function (result) {
+                        vm.connection = result;
+                        return cb(result);
+                    },
+                    function (error) {
+                        return err(error);
+                    }
+                );
             }
         }
 

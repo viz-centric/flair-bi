@@ -86,12 +86,10 @@
         function onInputChange() {
             if (vm.dimension.metadata.dateRangeTab === TAB_DAY) {
                 var startDate = formatDate(resetTimezone(strToDate(vm.dimension.selected)));
-                var endDate = formatDate(resetTimezone(endOfDay(strToDate(vm.dimension.selected))));
                 console.log('filter-date-range-component: input change day', typeof startDate, startDate,
                     typeof endDate, endDate);
                 vm.onDateChange({
                     startDate: startDate,
-                    endDate: endDate,
                     metadata: {
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
                         currentDynamicDateRangeConfig : {},

@@ -17,7 +17,6 @@ import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -34,8 +32,6 @@ import static java.util.stream.Collectors.toSet;
 @RequiredArgsConstructor
 @Slf4j
 public class QueryValidationService {
-
-    private static final Pattern FIELD_REGEX = Pattern.compile("[0-9a-zA-Z_]+");
 
     public QueryValidationResult validate(QueryDTO queryDTO, QueryValidationParams params) {
         log.info("Validate query {}", queryDTO);
@@ -191,27 +187,6 @@ public class QueryValidationService {
     }
 
     private Optional<QueryValidationError> validateField(FieldDTO field) {
-        if (!StringUtils.isEmpty(field.getAggregation())
-                && !FIELD_REGEX.matcher(field.getAggregation()).matches()) {
-            return Optional.ofNullable(
-                    QueryValidationError.of(field.getAggregation(),
-                    "FieldAggregationInvalid")
-            );
-        }
-        if (!StringUtils.isEmpty(field.getName())
-                && !FIELD_REGEX.matcher(field.getName()).matches()) {
-            return Optional.ofNullable(
-                    QueryValidationError.of(field.getName(),
-                    "FieldNameInvalid")
-            );
-        }
-        if (!StringUtils.isEmpty(field.getAlias())
-                && !FIELD_REGEX.matcher(field.getAlias()).matches()) {
-            return Optional.ofNullable(
-                    QueryValidationError.of(field.getAlias(),
-                    "FieldAliasInvalid")
-            );
-        }
         return Optional.empty();
     }
 }

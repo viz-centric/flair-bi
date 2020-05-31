@@ -70,61 +70,6 @@ public class QueryValidationServiceTest {
     }
 
     @Test
-    public void validateInvalidFieldAggregation() {
-        QueryDTO query = new QueryDTO();
-        FieldDTO field = new FieldDTO();
-        field.setAggregation("TEST-");
-        query.setFields(asList(field));
-        QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
-        assertEquals(QueryValidationResult.Group.SELECT, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("TEST-", "FieldAggregationInvalid")), result.getErrors());
-    }
-
-    @Test
-    public void validateInvalidFieldName() {
-        QueryDTO query = new QueryDTO();
-        FieldDTO field = new FieldDTO();
-        field.setName("TEST-");
-        query.setFields(asList(field));
-        QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
-        assertEquals(QueryValidationResult.Group.SELECT, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("TEST-", "FieldNameInvalid")), result.getErrors());
-    }
-
-    @Test
-    public void validateInvalidFieldAlias() {
-        QueryDTO query = new QueryDTO();
-        FieldDTO field = new FieldDTO();
-        field.setAlias("TEST-");
-        query.setFields(asList(field));
-        QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
-        assertEquals(QueryValidationResult.Group.SELECT, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("TEST-", "FieldAliasInvalid")), result.getErrors());
-    }
-
-    @Test
-    public void validateInvalidGroupBy() {
-        QueryDTO query = new QueryDTO();
-        FieldDTO field = new FieldDTO();
-        field.setName("TEST-");
-        query.setGroupBy(asList(field));
-        QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
-        assertEquals(QueryValidationResult.Group.GROUP_BY, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("TEST-", "FieldNameInvalid")), result.getErrors());
-    }
-
-    @Test
-    public void validateInvalidHaving() {
-        QueryDTO query = new QueryDTO();
-        FieldDTO field = new FieldDTO();
-        field.setName("TEST-");
-        query.setHaving(asList(new HavingDTO(field, HavingDTO.ComparatorType.GT, new ScalarOperation("100"))));
-        QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
-        assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("TEST-", "FieldNameInvalid")), result.getErrors());
-    }
-
-    @Test
     public void validateInvalidHavingValue() {
         QueryDTO query = new QueryDTO();
         FieldDTO field = new FieldDTO();
@@ -133,17 +78,6 @@ public class QueryValidationServiceTest {
         QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
         assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
         assertEquals(asList(QueryValidationError.of("", "HavingValueInvalid")), result.getErrors());
-    }
-
-    @Test
-    public void validateInvalidOrderBy() {
-        QueryDTO query = new QueryDTO();
-        FieldDTO field = new FieldDTO();
-        field.setName("TEST-");
-        query.setOrders(asList(new SortDTO(field, SortDTO.Direction.ASC)));
-        QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
-        assertEquals(QueryValidationResult.Group.ORDER_BY, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("TEST-", "FieldNameInvalid")), result.getErrors());
     }
 
     @Test

@@ -163,7 +163,11 @@
             var valueType = meta.valueType || '';
             if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
                 console.log('create body exp ', values, name);
-                values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
+                if (values[1]) {
+                    values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
+                } else {
+                    values = [changeDateFormat(values[0])];
+                }
                 name = name.split('|')[1];
             }
             if (valueType === 'compare') {

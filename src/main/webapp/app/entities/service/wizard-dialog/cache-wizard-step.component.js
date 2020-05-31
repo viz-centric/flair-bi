@@ -8,6 +8,7 @@
         controllerAs: "vm",
         bindings: {
             connectionParameters: "=",
+            connection: "<",
         }
     });
 
@@ -17,7 +18,13 @@
         vm.nextStep=nextStep;
         vm.previousStep=previousStep;
         vm.$onInit = function() {};
-        vm.$onChanges = function(changesObj) {};
+        vm.$onChanges = function(changesObj) {
+            if (changesObj.connection) {
+                if (vm.connection) {
+                    vm.connectionParameters = vm.connection.connectionParameters;
+                }
+            }
+        };
         vm.$onDestroy = function() {};
 
         function nextStep(){

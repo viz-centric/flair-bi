@@ -865,6 +865,7 @@
 
         function validate() {
             vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
+            validateAndSetHaving();
             vm.isValidated = false;
             vm.query = null;
             vm.queryValidationError = null;

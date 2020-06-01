@@ -71,7 +71,10 @@
     <include file="config/liquibase/changelog/202005091918_added_entity_ViewFeatureCriteria.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200516100000_added_features_date_filter.xml" relativeToChangelogFile="false" />
 	<include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
-	<include file="config/liquibase/changelog/20200520230000_added_spring_session_tables.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200531100000_percent_function.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200601165500_increase_column_size_view_dashboard_name.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200520230000_added_spring_session_tables.xml" relativeToChangelogFile="false"/>
     
+
 </databaseChangeLog>
 <!--@formatter:on-->

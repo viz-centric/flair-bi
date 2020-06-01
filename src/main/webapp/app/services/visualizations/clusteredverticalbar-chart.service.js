@@ -116,12 +116,10 @@
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
                             var clusteredverticalbar = $rootScope.updateWidget[record.id];
-                            if (!record.isSaved) {
-                                clusteredverticalbar.isLiveEnabled(record.isLiveEnabled)
-                                    .config(getProperties(VisualizationUtils, record))
-                                    .data(record.data)
-                                    .update(record.data);
-                            }
+                            clusteredverticalbar.isLiveEnabled(record.isLiveEnabled)
+                                .config(getProperties(VisualizationUtils, record))
+                                .data(record.data)
+                                .update(record.data);
                         }
                     } else {
                         var clusteredverticalbar = createChart();

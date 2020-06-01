@@ -334,9 +334,15 @@
         }
 
         function getDatasourceId(share_link) {
-            var params = share_link.split('=');
-            return params[params.length - 1];
+            return getQueryString('datasourceId',share_link);
         }
+
+        function getQueryString(field, url ) {
+            var href = url ? url : window.location.href;
+            var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+            var string = reg.exec(href);
+            return string ? string[1] : null;
+        };
 
         function addEmailList(emailsR) {
             var emails = emailsR.slice(0, vm.maxListSize);
@@ -863,8 +869,16 @@
             $scope.$on("$destroy", setCommunicationList);
         }
 
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
         function validate() {
             vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
+            validateAndSetHaving();
             vm.isValidated = false;
             vm.query = null;
             vm.queryValidationError = null;

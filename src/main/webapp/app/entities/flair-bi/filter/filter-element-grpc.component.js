@@ -160,10 +160,12 @@
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
-            if (startDate && endDate) {
+            if (startDate) {
                 startDate = resetTimezone(startDate);
-                endDate = resetTimezone(endDate);
                 addDateRangeFilter(startDate);
+            }
+            if (endDate) {
+                endDate = resetTimezone(endDate);
                 addDateRangeFilter(endDate);
             }
         }

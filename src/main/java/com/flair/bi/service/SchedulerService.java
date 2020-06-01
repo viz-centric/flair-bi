@@ -193,6 +193,23 @@ public class SchedulerService {
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
 							 String visualizationId, String userId)
 			throws InvalidProtocolBufferException, QueryTransformerException {
+		preprocessQuery(queryDTO, visualMetadata, datasource, userId);
+
+		Query query = queryTransformerService.toQuery(queryDTO,
+				QueryTransformerParams.builder()
+						.datasourceId(datasource.getId())
+						.connectionName(datasource.getConnectionName())
+						.vId(visualizationId != null ? visualizationId : "")
+						.userId(userId)
+						.build()
+		);
+		String jsonQuery = JsonFormat.printer().print(query);
+		log.debug("jsonQuery==" + jsonQuery);
+		return jsonQuery;
+
+	}
+
+	public void preprocessQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource, String userId) {
 		queryDTO.setQuerySource(new QuerySourceDTO(datasource.getName(), "A"));
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
@@ -215,19 +232,6 @@ public class SchedulerService {
 					.collect(Collectors.toList());
 			processOperations(queryDTO, operationList, 0);
 		}
-
-		Query query = queryTransformerService.toQuery(queryDTO,
-				QueryTransformerParams.builder()
-						.datasourceId(datasource.getId())
-						.connectionName(datasource.getConnectionName())
-						.vId(visualizationId != null ? visualizationId : "")
-						.userId(userId)
-						.build()
-		);
-		String jsonQuery = JsonFormat.printer().print(query);
-		log.debug("jsonQuery==" + jsonQuery);
-		return jsonQuery;
-
 	}
 
 	private void processOperations(QueryDTO queryDTO, List<Operation> operationList, int nestLevel) {

@@ -71,6 +71,7 @@
     <include file="config/liquibase/changelog/202005091918_added_entity_ViewFeatureCriteria.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200516100000_added_features_date_filter.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200531100000_percent_function.xml" relativeToChangelogFile="false" />
 
 </databaseChangeLog>
 <!--@formatter:on-->

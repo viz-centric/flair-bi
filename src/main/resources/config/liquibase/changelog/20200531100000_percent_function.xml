@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sergeil" id="20200531100000">
+        <insert tableName="functions">
+            <column name="id" value="10" />
+            <column name="name" value="percent" />
+            <column name="description" value="Returns percentage" />
+            <column name="value" value="field_name1/field_name2*100" />
+            <column name="dimension_use" value="true" />
+            <column name="measure_use" value="true" />
+            <column name="validation" value="[\w]+\s*/[\w]+\s*\*\s*\d+" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

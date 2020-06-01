@@ -20,7 +20,6 @@
             restrict: 'A',
             scope: {
                 canBuild: '=',
-                isSaved: '=',
                 data: '=',
                 widget: '@',
                 id: '@',
@@ -151,21 +150,12 @@
             registerUpdateWidgetEvent();
             registerRefreshWidgetEvent();
             registerIdChanges();
-            registerisSavedChange();
             registerTimeout();
         }
 
         function registerTimeout() {
             $scope.$on('$destroy', () => {
                 clearDeferred();
-            });
-        }
-
-        function registerisSavedChange() {
-            $scope.$watch(function () {
-                return vm.isSaved;
-            }, function (newVal, oldVal) {
-                //console.log("isSaved newVal=="+newVal+"===isSaved oldVal=="+oldVal);
             });
         }
 
@@ -240,7 +230,14 @@
                 height = el.height();
             var panel = $('.grid-stack');
 
-            if (!vm.isSaved) {
+            if (vm.data.isSaved) {
+                widgets[vm.widget].build(
+                    visualMetadata,
+                    el,
+                    panel
+                );
+            }
+            else {
                 Visualmetadata.get({
                     id: vm.data.id
                 }, function (v) {
@@ -252,14 +249,6 @@
                     );
                 });
             }
-            else {
-                widgets[vm.widget].build(
-                    visualMetadata,
-                    el,
-                    panel
-                );
-            }
-
         }
 
         function onForwardCallSuccess(result) {
@@ -271,14 +260,8 @@
 
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
-                if (result) {
-                    vm.data.fields = result;
+                if (vm.canBuild && vm.data.isSaved) {
                     build(true);
-                }
-                else {
-                    if (vm.canBuild && vm.isSaved) {
-                        build(true);
-                    }
                 }
             });
 
@@ -288,9 +271,6 @@
         function registerRefreshWidgetEvent() {
             var unsubscribe = $scope.$on('refresh-widget-' + vm.id, function (event, result) {
                 if (vm.canBuild) {
-                    if (result) {
-                        vm.data.fields = result;
-                    }
                     if (vm.data.data) {
                         build(false);
                     }

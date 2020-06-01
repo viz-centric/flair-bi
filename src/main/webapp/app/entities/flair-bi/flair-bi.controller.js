@@ -133,6 +133,7 @@
         vm.openSchedulerDialog = openSchedulerDialog;
         vm.showVizLoader = showVizLoader;
         vm.hideThreshold = hideThreshold;
+        vm.applyFeatures = applyFeatures;
         vm.filtersLength = 0;
         activate();
 
@@ -532,6 +533,17 @@
                     },
                     onSaveFeaturesError
                 );
+            }
+        }
+
+        function applyFeatures(v) {
+            v.isCardRevealed = true;
+            v.isSaved = true;
+            if (v.id) {
+                VisualMetadataContainer.update(v.id, v, 'id');
+            } 
+            else{
+                saveFeatures(v);
             }
         }
 

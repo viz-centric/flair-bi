@@ -63,6 +63,7 @@
         vm.onWidgetsOpen = onWidgetsOpen;
         vm.onWidgetsClose = onWidgetsClose;
         vm.vizIdPrefix = 'threshold_alert_:';
+        vm.apply = apply;
         activate();
 
 
@@ -212,6 +213,17 @@
                     },
                     onSaveError
                 );
+            }
+        }
+
+        function apply() {
+            vm.visual.isSaved = true;
+            if (vm.visual.id) {
+                VisualMetadataContainer.update(vm.visual.id, vm.visual, 'id');
+                VisualDispatchService.setViewEditedBeforeSave(false);
+            } 
+            else{
+                save();
             }
         }
 

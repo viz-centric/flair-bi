@@ -3222,11 +3222,21 @@ input[type="search"] {
       .info-card .info-card-content .card-footer .item {
         align-self: center;
         padding: 10px; }
+      .info-card .info-card-content .card-footer .box-name {
+        max-width: 70%;
+        display: flex; }
+        .info-card .info-card-content .card-footer .box-name .text {
+          overflow: hidden !important;
+          text-overflow: ellipsis; }
+        .info-card .info-card-content .card-footer .box-name .description-icon {
+          margin-left: 4px; }
+        .info-card .info-card-content .card-footer .box-name p {
+          margin-bottom: 0px; }
       .info-card .info-card-content .card-footer .build {
         margin-left: auto; }
         .info-card .info-card-content .card-footer .build:hover {
           background: #f0f0f2;
-          margin-right: 4px; }
+          min-width: 20%; }
 
 /* This element contains logged in user details */
 .user-profile-container .user-profile {

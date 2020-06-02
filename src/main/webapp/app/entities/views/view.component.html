@@ -59,14 +59,16 @@
                     <img alt="View" ng-src="{{vm.view.imageLocation}}" />
                 </span>
             </div>
-            <div class="card-footer">
-                <h4 class="item">{{vm.getViewName()}}
-                    <span uib-tooltip={{vm.view.description}} tooltip-placement="top"><i
-                            class="fa fa-info-circle"></i></span>
-                </h4>
-                <a class="item build" ng-if="vm.canUpdate"
-                    ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
+            <div class="card-footer flair-text">
+                <div class="item box-name">
+                    <p class="text" title={{vm.getViewName()}} >{{vm.getViewName()}}</p>
+                    <span class="description-icon" uib-tooltip={{vm.view.description}} tooltip-placement="top">
+                        <i class="fa fa-info-circle"></i>
+                    </span>
+                </div>
+                <a class="item build" ng-if="vm.canUpdate" ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
                     <i class="fa fa-angle-right"></i>
+                </a>
                 </a>
             </div>
         </div>

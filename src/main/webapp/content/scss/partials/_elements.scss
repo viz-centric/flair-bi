@@ -546,11 +546,25 @@ input[type="search"] {
                 align-self: center;
                 padding: 10px;
             }
+            .box-name{
+                max-width: 70%;
+                display: flex;
+                .text{
+                    overflow: hidden !important;
+                    text-overflow: ellipsis;
+                }
+                .description-icon{
+                    margin-left: 4px;
+                }
+                p{
+                    margin-bottom: 0px;
+                }
+            }
             .build {
                 margin-left: auto;
                 &:hover {
                     background: $active-background-color;
-                    margin-right: 4px;
+                    min-width: 20%;
                 }
             }
         }

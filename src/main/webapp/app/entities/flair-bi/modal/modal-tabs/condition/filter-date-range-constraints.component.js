@@ -82,7 +82,6 @@
                     .subtract(config.period.days, 'days')
                     .subtract(config.period.months, 'months')
                     .toDate();
-                console.log('to date', toDate);
                 return toDate;
             }
             return null;
@@ -95,8 +94,13 @@
                 return null;
             }
             if (config.isCustom) {
-                date.setDate(date.getDate() - vm.customDynamicDateRange);
-                return date;
+                let result = moment(date)
+                    .subtract(vm.customDynamicDateRange, config.unit)
+                    .toDate();
+                if (config.startDay) {
+                    result = startOfDay(result);
+                }
+                return result;
             } else if (config.toDate) {
                 date = moment(date).startOf(config.toDate).toDate();
                 return date;
@@ -123,7 +127,7 @@
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
                 var startDateRange = getStartDateRange();
                 if (startDateRange) {
-                    startDate = formatDate(resetTimezone(startOfDay(strToDate(startDateRange))));
+                    startDate = formatDate(resetTimezone(strToDate(startDateRange)));
                     startDateFormatted = startDate;
                 } else {
                     var startDateRangeInterval = getStartDateRangeInterval();

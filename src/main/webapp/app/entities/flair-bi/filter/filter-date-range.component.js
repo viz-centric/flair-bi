@@ -69,8 +69,13 @@
             var date = new Date();
             var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
             if (config.isCustom) {
-                date.setDate(date.getDate() - vm.dimension.metadata.customDynamicDateRange);
-                return date;
+                let result = moment(date)
+                    .subtract(vm.dimension.metadata.customDynamicDateRange, config.unit)
+                    .toDate();
+                if (config.startDay) {
+                    result = startOfDay(result);
+                }
+                return result;
             } else if (config.toDate) {
                 date = moment(date).startOf(config.toDate).toDate();
                 return date;
@@ -114,7 +119,7 @@
                 var startDateRange = getStartDateRange();
                 var startDate;
                 if (startDateRange) {
-                    startDate = formatDate(resetTimezone(startOfDay(strToDate(startDateRange))));
+                    startDate = formatDate(resetTimezone(strToDate(startDateRange)));
                 } else {
                     var startDateRangeInterval = getStartDateRangeInterval();
                     startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";

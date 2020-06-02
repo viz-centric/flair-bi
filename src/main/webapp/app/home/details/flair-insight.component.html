@@ -28,6 +28,9 @@
                     <span data-translate="reportManagement.createdBy"></span>
                 </th>
                 <th>
+                    <span data-translate="reportManagement.createdDate"></span>
+                </th>
+                <th>
                     <span data-translate="reportManagement.action"></span>
                 </th>
             </tr>
@@ -40,6 +43,7 @@
                 <td>{{report.report.thresholdAlert?'Yes':'No'}}</td>
                 <td>{{report.schedule.cron_exp | CronParser}}</td>
                 <td>{{report.report.userid}}</td>
+                <td>{{report.report.createdDate}}</td>
                 <td>
                     <div class="btn-group flex-btn-group-container report-actions">
                         <button uib-tooltip="Run Now" ng-click="vm.executeNow(report.report_line_item.visualizationid)"

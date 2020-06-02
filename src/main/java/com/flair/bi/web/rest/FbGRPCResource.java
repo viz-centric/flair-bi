@@ -43,13 +43,35 @@ public class FbGRPCResource {
 	private final SchedulerService schedulerService;
 
 	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ', 'VIEW')")
-	@MessageMapping("/fbi-engine-grpc/{datasourcesId}/query/{viewId}")
-	public void mirrorSocket(@DestinationVariable Long datasourcesId, @DestinationVariable Long viewId,
-			@Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
-		grpcQueryService.sendGetDataStream(SendGetDataDTO.builder().datasourcesId(datasourcesId)
-				.userId(headerAccessor.getUser().getName()).visualMetadata(fbiEngineDTO.getVisualMetadata())
-				.queryDTO(fbiEngineDTO.getQueryDTO()).visualMetadataId(fbiEngineDTO.getvId())
-				.type(fbiEngineDTO.getType()).validationType(fbiEngineDTO.getValidationType()).build());
+    @MessageMapping("/fbi-engine-grpc/{datasourcesId}/query/{viewId}")
+    public void mirrorSocket(@DestinationVariable Long datasourcesId, @DestinationVariable Long viewId, @Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
+		grpcQueryService.sendGetDataStream(
+				SendGetDataDTO.builder()
+						.datasourcesId(datasourcesId)
+						.userId(headerAccessor.getUser().getName())
+						.visualMetadata(fbiEngineDTO.getVisualMetadata())
+						.queryDTO(fbiEngineDTO.getQueryDTO())
+						.visualMetadataId(fbiEngineDTO.getvId())
+						.type(fbiEngineDTO.getType())
+                        .validationType(fbiEngineDTO.getValidationType())
+						.build()
+		);
+    }
+	//this service is accessible to user having connection read access
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	@MessageMapping("/fbi-engine-grpc/{datasourcesId}/query")
+	public void mirrorSocketV2(@DestinationVariable Long datasourcesId, @Payload FbiEngineDTO fbiEngineDTO, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
+		grpcQueryService.sendGetDataStream(
+				SendGetDataDTO.builder()
+						.datasourcesId(datasourcesId)
+						.userId(headerAccessor.getUser().getName())
+						.visualMetadata(fbiEngineDTO.getVisualMetadata())
+						.queryDTO(fbiEngineDTO.getQueryDTO())
+						.visualMetadataId(fbiEngineDTO.getvId())
+						.type(fbiEngineDTO.getType())
+						.validationType(fbiEngineDTO.getValidationType())
+						.build()
+		);
 	}
 
 	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")

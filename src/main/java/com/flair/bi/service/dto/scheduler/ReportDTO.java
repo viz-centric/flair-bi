@@ -18,6 +18,7 @@ public class ReportDTO {
 	private String share_link;
 	private String build_url;
 	private boolean thresholdAlert;
+	private String createdDate;
 
 	public ReportDTO() {
 	}
@@ -102,6 +103,14 @@ public class ReportDTO {
 		this.thresholdAlert = thresholdAlert;
 	}
 
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("ReportDTO{");
@@ -116,6 +125,7 @@ public class ReportDTO {
 		sb.append(", share_link='").append(share_link).append('\'');
 		sb.append(", build_url='").append(build_url).append('\'');
 		sb.append(", thresholdAlert=").append(thresholdAlert);
+		sb.append(", createdDate=").append(createdDate);
 		sb.append('}');
 		return sb.toString();
 	}

@@ -312,6 +312,7 @@ public class NotificationsGrpcService implements INotificationsGrpcService {
         report.setView_name(scheduleReport.getReport().getViewName());
         report.setView_id(Long.valueOf(scheduleReport.getReport().getViewId()));
         report.setThresholdAlert(scheduleReport.getReport().getThresholdAlert());
+        report.setCreatedDate(scheduleReport.getReport().getCreatedDate());
         responseDTO.setReport(report);
         ReportLineItem reportLineItem = new ReportLineItem();
         reportLineItem.setDimension(scheduleReport.getReportLineItem().getDimensionList().toArray(new String[]{}));

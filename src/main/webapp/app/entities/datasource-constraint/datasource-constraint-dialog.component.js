@@ -207,10 +207,9 @@
             }
             query.distinct = true;
             query.limit = 20;
-            proxyGrpcService.forwardCall(
+            proxyGrpcService.forwardCallV2(
                 vm.datasourceConstraint.datasource.id, {
-                queryDTO: query,
-                vId: vId
+                queryDTO: query
             }
             );
         }

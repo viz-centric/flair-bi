@@ -14,6 +14,10 @@
             sendMsg(sourceId, body, viewId);
         }
 
+        function forwardCallV2(sourceId, body) {
+            sendMsgV2(sourceId, body);
+        }
+
         function sendMsg(sourceId, body, viewId) {
             console.log('sending message', body);
             stompClientService.send(
@@ -21,6 +25,17 @@
                 sourceId +
                 "/query/" +
                 viewId,
+                {},
+                JSON.stringify(body)
+            );
+        }
+
+        function sendMsgV2(sourceId, body) {
+            console.log('sending message', body);
+            stompClientService.send(
+                "/flair-ws/fbi-engine-grpc/" +
+                sourceId +
+                "/query",
                 {},
                 JSON.stringify(body)
             );
@@ -40,6 +55,7 @@
 
         return {
             forwardCall: forwardCall,
+            forwardCallV2: forwardCallV2,
             queryAll: queryAll,
             getSchedulerReportsAndEngineData: getSchedulerReportsAndEngineData
         };

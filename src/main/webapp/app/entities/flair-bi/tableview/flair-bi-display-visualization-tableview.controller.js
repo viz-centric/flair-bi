@@ -91,8 +91,9 @@
             else {
                 var contentId = "content-" + $stateParams.schedulerId;
 
+                var id= vm.reportData.visualizationId.replace("threshold_alert_:","");
                 Visualmetadata.get({
-                    id: vm.reportData.visualizationId
+                    id: id
                 }, function (v) {
 
                     visualizationRenderService.setMetaData(

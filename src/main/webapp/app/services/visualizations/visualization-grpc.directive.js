@@ -206,14 +206,14 @@
             if (forceQuery) {
                 angular.element("#loader-spinner").show();
                 proxyGrpcService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
+                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                     visualMetadata: vm.data,
                     validationType: 'REQUIRED_FIELDS'
-                },$stateParams.id);
+                }, $stateParams.id);
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                         visualmetadata: vm.data,
                         validationType: 'REQUIRED_FIELDS'
                     });
@@ -261,7 +261,13 @@
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
                 if (vm.canBuild && vm.data.isSaved) {
-                    build(true);
+                    if (result) {
+                        vm.data.fields = result;
+                        build(true);
+                    }
+                    else {
+                        build(true);
+                    }
                 }
             });
 

@@ -45,7 +45,7 @@
         ////////////////
 
         function dateToString(date) {
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.000000');
         }
 
         /**

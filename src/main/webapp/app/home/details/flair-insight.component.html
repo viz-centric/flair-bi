@@ -1,9 +1,8 @@
 <div class="table-responsive tile-area-table flairInsightsTable">
     <div class="search-box inner-addon left-addon b-b-xs">
         <i class="glyphicon glyphicon-search"></i>
-        <input type="text" ng-model="vm.reportName" name="reportName" class="form-control"
+        <input type="text" ng-model="vm.reportName"  ng-change="vm.searchReports()" name="reportName" class="form-control"
             placeholder="Enter Report..." />
-        <button type="button" ng-click="vm.searchReports()" class="btn btn-default btn-sm search-btn">Search</button>
     </div>
     <br />
     <table class="table table-striped flair-table-v1">

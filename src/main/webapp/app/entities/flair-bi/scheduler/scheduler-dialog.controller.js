@@ -228,6 +228,7 @@
             vm.scheduleObj.schedule.end_date = new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body = data.report.mail_body;
             vm.scheduleObj.report.userid = data.report.userid;
+            vm.scheduleObj.report.title_name = data.report.title_name;
 
             vm.canEdit = AccountDispatch.hasAuthority(
                 "WRITE_" + data.report.view_id + "_VIEW"
@@ -334,12 +335,12 @@
         }
 
         function getDatasourceId(share_link) {
-            return getQueryString('datasourceId',share_link);
+            return getQueryString('datasourceId', share_link);
         }
 
-        function getQueryString(field, url ) {
+        function getQueryString(field, url) {
             var href = url ? url : window.location.href;
-            var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+            var reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
             var string = reg.exec(href);
             return string ? string[1] : null;
         };
@@ -390,6 +391,7 @@
             vm.scheduleObj.report.share_link = scheduledObj.report.share_link;
             vm.scheduleObj.datasourceid = getDatasourceId(scheduledObj.report.share_link);
             vm.scheduleObj.report.report_name = getReportName(visualMetaData);
+            vm.scheduleObj.report.title_name = getReportTitle(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid = visualMetaData.id;
             vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
             assignTimeConditionsToScheduledObj();
@@ -405,6 +407,7 @@
             vm.scheduleObj.report.share_link = getShareLink(visualMetaData, datasource, view.id);
             vm.scheduleObj.datasourceid = datasource.id;
             vm.scheduleObj.report.report_name = getReportName(visualMetaData);
+            vm.scheduleObj.report.title_name = getReportTitle(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid = visualMetaData.id;
             vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
             assignTimeConditionsToScheduledObj();
@@ -425,6 +428,10 @@
         function getReportName(visualMetaData) {
             var reportName = visualMetaData.metadataVisual.name.split(' ').join('-') + '-' + visualMetaData.id;
             return reportName;
+        }
+
+        function getReportTitle(visualMetaData) {
+            return visualMetaData.titleProperties.titleText;
         }
 
         function loadUsers(q) {

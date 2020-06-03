@@ -67,7 +67,7 @@
             })
             .state("fullscreen", {
                 parent: "entity",
-                url: "/visual/{id}?datasourceId&viewId",
+                url: "/visual/?visualisationId&datasourceId&viewId",
                 data: {
                     authorities: []
                 },
@@ -90,7 +90,7 @@
                         "$state",
                         function($stateParams, Visualmetadata, $state) {
                             return Visualmetadata.get({
-                                id: $stateParams.id
+                                id: $stateParams.visualisationId
                             }).$promise;
                         }
                     ],
@@ -99,7 +99,7 @@
                       "Datasources",
                       function($stateParams, Datasources){
                         return Datasources.get({
-                          id: $stateParams.datasource
+                          id: $stateParams.datasourceId
                         }).$promise;
                       }
                     ]

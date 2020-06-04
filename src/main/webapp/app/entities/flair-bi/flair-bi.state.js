@@ -62,7 +62,17 @@
                           return $stateParams.datasource
                          
                         }
-                      ]
+                    ],
+                    hasAuthority: [
+                        "$stateParams",
+                        "Principal",
+                        "$timeout",
+                        "$q",
+                        "$state",
+                        function hasAuthority($stateParams,Principal,$q,$state) {
+                            hasViewAccess($stateParams.viewId,Principal,$q,$state);
+                        }
+                    ]
                 }
             })
             .state("fullscreen", {
@@ -102,9 +112,31 @@
                           id: $stateParams.datasourceId
                         }).$promise;
                       }
+                    ],
+                    hasAuthority: [
+                        "$stateParams",
+                        "Principal",
+                        "$timeout",
+                        "$q",
+                        "$state",
+                        function hasAuthority($stateParams,Principal,$q,$state) {
+                            hasViewAccess($stateParams.viewId,Principal,$q,$state);
+                        }
                     ]
                 }
             });
+
+        function hasViewAccess(viewId,Principal,$q,$state){
+            Principal.identity().then(function (account) {
+                var isAdmin = account.userGroups && account.userGroups.indexOf("ROLE_ADMIN")>-1 ? true : false;
+                var canAccess = account.permissions && account.permissions.indexOf("READ_" + viewId + "_VIEW") !== -1 ? true : false;
+                if(isAdmin || canAccess){
+                    return $q.when();
+                }else{
+                    $state.go('accessdenied');
+                }
+            });
+        }
 
         function viewAndDeveloperSettings(url, isRead) {
             return {
@@ -241,6 +273,16 @@
                                 )
                             };
                             return currentStateData;
+                        }
+                    ],
+                    hasAuthority: [
+                        "$stateParams",
+                        "Principal",
+                        "$timeout",
+                        "$q",
+                        "$state",
+                        function hasAuthority($stateParams,Principal,$q,$state) {
+                            hasViewAccess($stateParams.id,Principal,$q,$state);
                         }
                     ]
                 }

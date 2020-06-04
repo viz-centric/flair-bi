@@ -140,12 +140,7 @@
                 vm.selectedFeature = selectedFeature;
                 vm.selectedWebhook = selectedFeature.map(function (item) {
                     var features = {};
-                    var list = vm.features.filter(function (val) {
-                        if (val.id == item.featureID) {
-                            return val
-                        }
-                    })
-                    features['text'] = list[0].name;
+                    features['text'] = item.featureName;
                     return features;
                 });
 

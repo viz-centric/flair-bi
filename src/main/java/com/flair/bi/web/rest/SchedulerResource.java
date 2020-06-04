@@ -103,7 +103,6 @@ public class SchedulerResource {
 		schedulerDTO.getReport().setUserid(SecurityUtils.getCurrentUserLogin());
 		schedulerDTO.getReport()
 				.setSubject("Report : " + visualMetadata.getMetadataVisual().getName() + " : " + new Date());
-		schedulerDTO.getReport().setTitle_name(visualMetadata.getTitleProperties().getTitleText());
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query;
 		try {

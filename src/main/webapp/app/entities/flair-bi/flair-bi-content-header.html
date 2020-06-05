@@ -2,7 +2,7 @@
     class="flairbi-content-header ng-class:{'flairbi-content-header-fullscreen':$root.isFullScreen == true, 'get-sticky':$root.isFullScreen == false}">
 
     <div class="row" ng-if="$root.isFullScreen == false">
-        <div class="col-md-6 col-sm-6 col-xs-6 header-first">
+        <div class="col-md-7 col-sm-6 col-xs-6 header-first">
             <a class="logo" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </a>
@@ -62,7 +62,7 @@
             </form>
         </div>
 
-        <div class="configuration-options col-md-6">
+        <div class="configuration-options col-md-5">
             <div class="row">
                 <div class="col-md-11 col-sm-12 col-xs-12 5visual-arrow">
                     <div class="options-1">
@@ -109,14 +109,14 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()">
+                        <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()" hidden>
                             <span uib-tooltip="Previous" tooltip-placement="bottom">
                                 <svg class="flaticons-left-arrow">
                                     <use xlink:href="#left-arrow" />
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()">
+                        <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()" hidden>
                             <span uib-tooltip="Next" tooltip-placement="bottom">
                                 <svg class="flaticons-right-arrow">
                                     <use xlink:href="#right-arrow" />
@@ -146,7 +146,7 @@
                                 </span>
                             </top-nav-button-component>
                         </div>
-                        <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
+                        <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)" hidden>
                             <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
                                 <svg class="alarm-icon-on">
                                     <use xlink:href="#alarm" />

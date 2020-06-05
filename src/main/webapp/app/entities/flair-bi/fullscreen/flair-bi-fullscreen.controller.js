@@ -69,7 +69,7 @@
         function onExchangeMetadata(data) {
             console.log('controller on metadata', data);
             var metaData = JSON.parse(data.body);
-            var contentId = "content-" + $stateParams.id;
+            var contentId = "content-" + $stateParams.visualisationId;
             visualizationRenderService.setMetaData(
                 vm.visualMetadata,
                 metaData,

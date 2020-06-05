@@ -57,10 +57,10 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     @Column(name = "dashboard_name", length = 30, nullable = false,unique=true)
     private String dashboardName;
 
-	@NotNull
-	@Size(max = 20)
-	@Column(name = "category", length = 20, nullable = false)
-	private String category;
+    @NotNull
+    @Size(max = 30)
+    @Column(name = "category", length = 30, nullable = false)
+    private String category;
 
 	@Size(max = 100)
 	@Column(name = "description", length = 100)

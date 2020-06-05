@@ -1,0 +1,24 @@
+.error-403{
+    text-align: center;
+    margin-top: 30px;
+    .error-main{
+        .error-heading{
+            margin: 25px auto;
+            width: 340px;
+            border: 3px solid $flair-text;
+            font-size: 46px;
+            line-height: 76px;
+            border-radius: 10px;
+        }
+        .error-msg{
+            font-size: 20px;
+        }
+        .flair-icon{
+            width: 50px;
+            height: 50px;
+            margin-top: 24px;
+            margin-right: 7px;
+        }
+    }
+}
+

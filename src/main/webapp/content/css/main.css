@@ -6955,3 +6955,21 @@ disabled look for disabled choices in the results dropdown
 
 .select-options {
   display: inline-block; }
+
+.error-403 {
+  text-align: center;
+  margin-top: 30px; }
+  .error-403 .error-main .error-heading {
+    margin: 25px auto;
+    width: 340px;
+    border: 3px solid #404345;
+    font-size: 46px;
+    line-height: 76px;
+    border-radius: 10px; }
+  .error-403 .error-main .error-msg {
+    font-size: 20px; }
+  .error-403 .error-main .flair-icon {
+    width: 50px;
+    height: 50px;
+    margin-top: 24px;
+    margin-right: 7px; }

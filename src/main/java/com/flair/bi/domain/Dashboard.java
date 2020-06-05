@@ -11,14 +11,27 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonView;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -74,7 +87,7 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     @Column(name = "image_content_type")
     private String imageContentType;
 
-    @OneToMany(mappedBy = "viewDashboard")
+    @OneToMany(mappedBy = "viewDashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<View> dashboardViews = new HashSet<>();
 
@@ -82,10 +95,10 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     @NotNull
     private Datasource dashboardDatasource;
 
-    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DashboardRelease> dashboardReleases = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "current_release_id", referencedColumnName = "id")
     private DashboardRelease currentRelease;
 

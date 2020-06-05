@@ -25,6 +25,7 @@ import java.util.List;
 public class DatasourceServiceImpl implements DatasourceService {
 
     private final DatasourceRepository datasourceRepository;
+    private final DashboardService dashboardService;
 
     /**
      * Save a datasource.
@@ -85,11 +86,14 @@ public class DatasourceServiceImpl implements DatasourceService {
      * @param id the id of the entity
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         log.debug("Request to delete Datasource : {}", id);
         final Datasource datasource = datasourceRepository.findOne(id);
         datasource.setStatus(DatasourceStatus.DELETED);
         datasourceRepository.save(datasource);
+        datasource.getDashboardSet()
+                .forEach((dashboard -> dashboardService.delete(dashboard.getId())));
     }
 
     @Override

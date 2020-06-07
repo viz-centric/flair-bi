@@ -200,9 +200,14 @@
         }
 
         function removeFilter(filter) {
-            var filterParameters = filterParametersService.get();
+            var filterParameters;
+            filterParameters = filterParametersService.get();
             filterParameters[filter] = [];
             filterParametersService.save(filterParameters);
+
+            filterParameters = filterParametersService.getSelectedFilter();
+            filterParameters[filter] = [];
+            filterParametersService.saveSelectedFilter(filterParameters);
         }
 
         function processRemoveFilter(filter) {

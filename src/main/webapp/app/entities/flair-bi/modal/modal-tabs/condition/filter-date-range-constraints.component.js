@@ -60,8 +60,10 @@
             if (!config) {
                 return null;
             }
-            if (config.toDate || config.isCustom) {
+            if (config.toDate) {
                 return null;
+            } else if (config.isCustom) {
+                return vm.customDynamicDateRange + ' ' + config.unit;
             } else if (config.period.days) {
                 return config.period.days + ' days';
             } else if (config.period.months) {
@@ -93,15 +95,7 @@
             if (!config) {
                 return null;
             }
-            if (config.isCustom) {
-                let result = moment(date)
-                    .subtract(vm.customDynamicDateRange, config.unit)
-                    .toDate();
-                if (config.startDay) {
-                    result = startOfDay(result);
-                }
-                return result;
-            } else if (config.toDate) {
+            if (config.toDate) {
                 date = moment(date).startOf(config.toDate).toDate();
                 return date;
             }

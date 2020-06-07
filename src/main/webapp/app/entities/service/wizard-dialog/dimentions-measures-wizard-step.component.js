@@ -16,14 +16,16 @@
             }
         });
 
-    DatasourceWizardStepController.$inject = ["$scope", "Features", "$rootScope","$state"];
-    function DatasourceWizardStepController($scope, Features, $rootScope,$state) {
+    DatasourceWizardStepController.$inject = ["$scope", "Features", "$rootScope","$state", 'COMPARABLE_DATA_TYPES'];
+
+    function DatasourceWizardStepController($scope, Features, $rootScope, $state, COMPARABLE_DATA_TYPES) {
         var vm = this;
         vm.toggleCheckbox = toggleCheckbox;
         vm.changeFeature = changeFeature;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.finishWizard = finishWizard;
+        vm.isTemporalFeature = isTemporalFeature;
         vm.finishResult = '';
         ////////////////
 
@@ -33,6 +35,10 @@
 
         function openCalendar(date) {
             vm.datePickerOpenStatus[date] = true;
+        }
+
+        function isTemporalFeature(feature) {
+            return COMPARABLE_DATA_TYPES.indexOf(feature.type) > -1;
         }
 
         function toggleCheckbox(feature) {
@@ -67,7 +73,7 @@
                     vm.finishResult = "success";
 
                     $rootScope.showSuccessToast({
-                        text: "Dimentions and Measures are configured successfully",
+                        text: "Dimensions and Measures are configured successfully",
                         title: "Saved"
                     });
 

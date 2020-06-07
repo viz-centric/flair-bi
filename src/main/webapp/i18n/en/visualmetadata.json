@@ -7,10 +7,10 @@
                 "createOrEditLabel": "Create or edit a Visualmetadata",
                 "search": "Search for Visualmetadata"
             },
-            "created": "A new Visualmetadata is created with identifier {{ param }}",
-            "updated": "A Visualmetadata is updated with identifier {{ param }}",
-            "errorSaving": "Error saving Visualmetadata",
-            "deleted": "A Visualmetadata is deleted with identifier {{ param }}",
+            "created": "A new Visual Metadata is created with identifier {{ param }}",
+            "updated": "A Visual Metadata is updated with identifier {{ param }}",
+            "errorSaving": "Error saving Visual Metadata",
+            "deleted": "A Visual Metadata is deleted with identifier {{ param }}",
             "delete": {
                 "question": "Are you sure you want to delete Visualmetadata {{ id }}?"
             },
@@ -49,7 +49,10 @@
             "barChartType": "Bar Chart Type",
             "showGrid": "Show Grid",
             "metadataVisual": "Metadata Visual",
-            "errorOnReceivingMataData":"Error receiving data"
+            "errorOnReceivingMataData":"Error receiving data",
+            "queryValidation": {
+                "RequiredConditionFeatureMissing": "Missing feature: {{ reason }}"
+            }
         }
     }
 }

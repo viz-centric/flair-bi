@@ -16,9 +16,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES','$stateParams'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -134,9 +134,9 @@
             favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
                 .then(function (data) {
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'Added' : 'remove';
+                    var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " from favourit filter",
+                        text: "Dimensions " + opration + " Bookmark filter panelr",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);
@@ -151,27 +151,27 @@
 
         function onDateChange(startDate, endDate,metadata) {
             vm.dimension.metadata = metadata;
-            if(metadata!=2){
+            if (metadata.dateRangeTab !== 2) {
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
+            } else {
+                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name), metadata);
             }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
             removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
-            if (startDate && endDate) {
+            if (startDate) {
                 startDate = resetTimezone(startDate);
-                endDate = resetTimezone(endDate);
                 addDateRangeFilter(startDate);
+            }
+            if (endDate) {
+                endDate = resetTimezone(endDate);
                 addDateRangeFilter(endDate);
             }
         }
 
         function canDisplayDateRangeControls(dimension) {
-            var type = dimension && dimension.type;
-            if (!type) {
-                return false;
-            }
-            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+            return filterParametersService.isDateType(dimension);
         }
 
         function registerRemoveTag() {
@@ -200,9 +200,14 @@
         }
 
         function removeFilter(filter) {
-            var filterParameters = filterParametersService.get();
+            var filterParameters;
+            filterParameters = filterParametersService.get();
             filterParameters[filter] = [];
             filterParametersService.save(filterParameters);
+
+            filterParameters = filterParametersService.getSelectedFilter();
+            filterParameters[filter] = [];
+            filterParametersService.saveSelectedFilter(filterParameters);
         }
 
         function processRemoveFilter(filter) {
@@ -259,7 +264,8 @@
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,
                 vId: vId
-            }
+            },
+            $stateParams.id
             );
         }
 
@@ -303,12 +309,17 @@
                     var newItem = {};
                     newItem['text'] = item;
                     if(isFavouriteFilter())
-                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), i);
+                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
                     return newItem;
                 });
             } else {
-                vm.dimension.selected = [];
-                vm.dimension.selected2 = [];
+                if(filterParametersService.isDateType(vm.dimension)){
+                    vm.dimension.selected = null;
+                    vm.dimension.selected2 = null;
+                }else{
+                    vm.dimension.selected = [];
+                    vm.dimension.selected2 = [];
+                }
             }
         }
 

@@ -67,6 +67,12 @@
 	<include file="config/liquibase/changelog/20190906113649_added_feature_bookmark_daterange.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200316100000_added_features_favourite_filter.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200421113649_added_feature_bookmark_dynamic_tooltip.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200511113649_added_feature_criteria_dynamic_date_range_meta_data.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/202005091918_added_entity_ViewFeatureCriteria.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200516100000_added_features_date_filter.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200531100000_percent_function.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200603165500_increase_column_size_view_dashboard_name_category.xml" relativeToChangelogFile="false" />
 
 </databaseChangeLog>
 <!--@formatter:on-->

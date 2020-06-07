@@ -38,13 +38,13 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     private Long id;
 
     @NotNull
-    @Size(max = 20)
-    @Column(name = "dashboard_name", length = 20, nullable = false,unique=true)
+    @Size(max = 30)
+    @Column(name = "dashboard_name", length = 30, nullable = false,unique=true)
     private String dashboardName;
 
     @NotNull
-    @Size(max = 20)
-    @Column(name = "category", length = 20, nullable = false)
+    @Size(max = 30)
+    @Column(name = "category", length = 30, nullable = false)
     private String category;
 
     @Size(max = 100)

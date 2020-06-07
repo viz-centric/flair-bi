@@ -15,9 +15,9 @@
             }
         });
 
-    FilterDateRangeConstraintsController.$inject = ['$scope','DYNAMIC_DATE_RANGE_CONFIG'];
+    FilterDateRangeConstraintsController.$inject = ['$scope','DYNAMIC_DATE_RANGE_CONFIG', 'filterParametersService'];
 
-    function FilterDateRangeConstraintsController($scope,DYNAMIC_DATE_RANGE_CONFIG) {
+    function FilterDateRangeConstraintsController($scope,DYNAMIC_DATE_RANGE_CONFIG, filterParametersService) {
         var TAB_DAY = 0;
         var TAB_RANGE = 1;
         var TAB_DYNAMIC = 2;
@@ -60,8 +60,10 @@
             if (!config) {
                 return null;
             }
-            if (config.toDate || config.isCustom) {
+            if (config.toDate) {
                 return null;
+            } else if (config.isCustom) {
+                return vm.customDynamicDateRange + ' ' + config.unit;
             } else if (config.period.days) {
                 return config.period.days + ' days';
             } else if (config.period.months) {
@@ -82,7 +84,6 @@
                     .subtract(config.period.days, 'days')
                     .subtract(config.period.months, 'months')
                     .toDate();
-                console.log('to date', toDate);
                 return toDate;
             }
             return null;
@@ -94,10 +95,7 @@
             if (!config) {
                 return null;
             }
-            if (config.isCustom) {
-                date.setDate(date.getDate() - vm.customDynamicDateRange);
-                return date;
-            } else if (config.toDate) {
+            if (config.toDate) {
                 date = moment(date).startOf(config.toDate).toDate();
                 return date;
             }
@@ -123,7 +121,7 @@
             } else if (vm.dateRangeTab === TAB_DYNAMIC) {
                 var startDateRange = getStartDateRange();
                 if (startDateRange) {
-                    startDate = formatDate(resetTimezone(startOfDay(strToDate(startDateRange))));
+                    startDate = formatDate(resetTimezone(strToDate(startDateRange)));
                     startDateFormatted = startDate;
                 } else {
                     var startDateRangeInterval = getStartDateRangeInterval();
@@ -226,7 +224,7 @@
             if (!date) {
                 return null;
             }
-            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.SSS000');
+            return filterParametersService.dateToString(date);
         }
 
     }

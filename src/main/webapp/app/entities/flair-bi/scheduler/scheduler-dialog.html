@@ -74,7 +74,15 @@
                 <fieldset>
                     <legend>Channel Configuration</legend>
                     <div class="row container">
-
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Report Title*
+                                </label>
+                                <input class="form-control" type="text" ng-required="vm.scheduleObj.report.title_name==null"  ng-model="vm.scheduleObj.report.title_name"/>
+                                
+                            </div>
+                        </div>
                         <div class="col-xs-4" style="display: none;">
                             <div class="form-group">
                                 <label class="control-label" for="timezoneGroup">Timezone*</label>
@@ -126,7 +134,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-xs-8" ng-if="vm.channels.Teams && vm.isAdmin">
+                        <div class="col-xs-8" ng-if="vm.channels.Teams">
                             <div class="form-group scheduler-tags">
                                 <label class="control-label" for="emails">Select Webhooks*</label>
                                 <tags-input placeholder="Select a Webhook" on-tag-added="vm.addWebhook($tag)"
@@ -148,7 +156,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-xs-8" ng-if="vm.channels.Teams && !vm.isAdmin">
+                        <!-- <div class="col-xs-8" ng-if="vm.channels.Teams && !vm.isAdmin">
                             <div class="form-group scheduler-webhooks">
                                 <label class="control-label">Configured Webhooks*</label>
                                 <div class="webhooks">
@@ -157,7 +165,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="row container">
                         <div class="col-xs-8">
@@ -176,7 +184,7 @@
                 <fieldset>
                     <legend>Scheduler Configuration</legend>
                     <div class="row container threshold-alert-condition form-group"
-                         ng-if="vm.scheduleObj.report.thresholdAlert">
+                        ng-if="vm.scheduleObj.report.thresholdAlert">
                         <div class="col-xs-1">
                             <label class="control-label">
                                 Threshold Type
@@ -185,10 +193,8 @@
                         <div class="col-xs-1">
                             <div class="radio">
                                 <label>
-                                    <input type="radio"
-                                           name="thresholdTypeRadio"
-                                           ng-model="vm.condition.thresholdMode"
-                                           value="absolute">
+                                    <input type="radio" name="thresholdTypeRadio" ng-model="vm.condition.thresholdMode"
+                                        value="absolute">
                                     Absolute
                                 </label>
                             </div>
@@ -196,29 +202,25 @@
                         <div class="col-xs-1">
                             <div class="radio">
                                 <label>
-                                    <input type="radio"
-                                           name="thresholdTypeRadio"
-                                           ng-model="vm.condition.thresholdMode"
-                                           value="dynamic">
+                                    <input type="radio" name="thresholdTypeRadio" ng-model="vm.condition.thresholdMode"
+                                        value="dynamic">
                                     Dynamic
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="row container threshold-alert-condition form-group"
-                         ng-if="vm.condition.thresholdMode === 'dynamic'">
+                        ng-if="vm.condition.thresholdMode === 'dynamic'">
                         <div class="col-xs-2">
                             <label class="control-label">
                                 Threshold field*
                             </label>
-                            <ui-select class="condition-val"
-                                       required
-                                       ng-model="vm.condition.dynamicThreshold.field">
+                            <ui-select class="condition-val" required ng-model="vm.condition.dynamicThreshold.field">
                                 <ui-select-match placeholder="Search Measure">
                                     {{vm.condition.dynamicThreshold.field}}
                                 </ui-select-match>
                                 <ui-select-choices
-                                        repeat="feature in vm.features | filter: $select.search track by feature">
+                                    repeat="feature in vm.features | filter: $select.search track by feature">
                                     <div ng-bind="feature"></div>
                                 </ui-select-choices>
                             </ui-select>
@@ -227,9 +229,8 @@
                             <label class="control-label">
                                 Agg. type*
                             </label>
-                            <ui-select required
-                                       class="condition-val"
-                                       ng-model="vm.condition.dynamicThreshold.aggregation" theme="bootstrap">
+                            <ui-select required class="condition-val"
+                                ng-model="vm.condition.dynamicThreshold.aggregation" theme="bootstrap">
                                 <ui-select-match placeholder="Compare">
                                     {{vm.condition.dynamicThreshold.aggregation.value}}
                                 </ui-select-match>
@@ -242,14 +243,13 @@
                             <label class="control-label">
                                 Dimension*
                             </label>
-                            <ui-select class="condition-val"
-                                       required
-                                       ng-model="vm.condition.dynamicThreshold.dimension">
+                            <ui-select class="condition-val" required
+                                ng-model="vm.condition.dynamicThreshold.dimension">
                                 <ui-select-match placeholder="Search Dimension">
                                     {{vm.condition.dynamicThreshold.dimension.definition}}
                                 </ui-select-match>
                                 <ui-select-choices
-                                        repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature.id">
+                                    repeat="feature in vm.timeCompatibleDimensions | filter: $select.search track by feature.id">
                                     <div ng-bind="feature.definition"></div>
                                 </ui-select-choices>
                             </ui-select>
@@ -258,9 +258,8 @@
                             <label class="control-label">
                                 Unit*
                             </label>
-                            <ui-select required
-                                       class="condition-val"
-                                       ng-model="vm.condition.dynamicThreshold.unit" theme="bootstrap">
+                            <ui-select required class="condition-val" ng-model="vm.condition.dynamicThreshold.unit"
+                                theme="bootstrap">
                                 <ui-select-match placeholder="Unit">
                                     {{vm.condition.dynamicThreshold.unit.title}}
                                 </ui-select-match>
@@ -273,10 +272,8 @@
                             <label class="control-label">
                                 Value*
                             </label>
-                            <input required
-                                   type="text"
-                                   class="form-control condition-val"
-                                   ng-model="vm.condition.dynamicThreshold.value" />
+                            <input required type="text" class="form-control condition-val"
+                                ng-model="vm.condition.dynamicThreshold.value" />
                         </div>
                     </div>
                     <div class="row container threshold-alert-condition form-group"
@@ -418,11 +415,20 @@
                         </div>
                     </div>
                 </fieldset>
-
+                <div ng-if="vm.queryValidationError" class="alert alert-danger" role="alert">
+                    {{vm.queryValidationError}}
+                </div>
+                <div ng-show="vm.query" class="query">
+                    <label class="control-label">SQL : </label> <kbd>{{vm.query}}</kbd>
+                </div>
 
             </div>
         </div>
         <div class="modal-footer scheduler-footer">
+            <button style="float: left;" type="button" class="btn btn-primary" ng-click="vm.validate()">
+                <span class="glyphicon glyphicon-glass"></span>&nbsp;
+                <span>validate</span>
+            </button>
             <button class="btn btn-primary" ng-click="vm.schedule()" ng-disabled="editForm.$invalid || vm.isSaving">
                 <span class="fa fa-calendar"></span>&nbsp;
                 <span>Schedule</span>

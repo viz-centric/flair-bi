@@ -9,7 +9,7 @@
         'entity', 'Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies', '$timeout', "filterParametersService", "FilterStateManagerService",
-        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate"
+        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
@@ -21,7 +21,7 @@
         Visualmetadata,
         VisualDispatchService,
         VisualMetadataContainer,
-        $translate) {
+        $translate, schedulerService) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -62,6 +62,8 @@
         vm.getSelectedItem = getSelectedItem;
         vm.onWidgetsOpen = onWidgetsOpen;
         vm.onWidgetsClose = onWidgetsClose;
+        vm.vizIdPrefix = 'threshold_alert_:';
+        vm.apply = apply;
         activate();
 
 
@@ -88,6 +90,8 @@
             registerToggleWidgetsOff();
             registerToggleHeaderFilter();
             registerToggleAppliedFilterOn();
+            registerBookmarkUpdateDynamicDateRange();
+            setDateRangeSubscription();
             filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
         }
 
@@ -138,8 +142,43 @@
             //$uibModalInstance.dismiss("cancel");
         }
 
+        function getScheduleReport(visualizationid) {
+            schedulerService
+                .getScheduleReport(visualizationid)
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        var info = { text: 'Visualization configuration has changed, please reschedule the report.', title: "Updated" }
+                        $rootScope.showSuccessToast(info);
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+
+            schedulerService
+                .getScheduleReport(vm.vizIdPrefix + visualizationid)
+                .then(function (success) {
+                    var report = success.data.report;
+                    if (report) {
+                        var info = { text: 'Visualization configuration has changed, please reschedule the report.', title: "Updated" }
+                        $rootScope.showSuccessToast(info);
+                    }
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
+                });
+        }
+
         function save() {
             vm.isSaving = true;
+            vm.visual.isSaved = true;
             if (vm.visual.id) {
                 Visualmetadata.update(
                     {
@@ -153,6 +192,8 @@
                         vm.visual = result;
                         var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: result.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
+
+                        getScheduleReport(vm.visual.id);
                     },
                     onSaveError
                 );
@@ -172,6 +213,17 @@
                     },
                     onSaveError
                 );
+            }
+        }
+
+        function apply() {
+            vm.visual.isSaved = true;
+            if (vm.visual.id) {
+                VisualMetadataContainer.update(vm.visual.id, vm.visual, 'id');
+                VisualDispatchService.setViewEditedBeforeSave(false);
+            } 
+            else{
+                save();
             }
         }
 
@@ -198,7 +250,7 @@
         }
 
         function registerFilterRefresh() {
-            var unsubscribe = $scope.$on("flairbiApp:filter", function () {
+            var unsubscribe = $scope.$on("flairbiApp:filters", function () {
                 refresh();
             });
             $scope.$on("$destroy", unsubscribe);
@@ -214,8 +266,8 @@
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
         }
 
-        function setThinBarStyle(isFiltersApplied){
-            vm.thinbarStyle = isFiltersApplied ? {"margin-top": "40px"} : {"margin-top": "75px"} 
+        function setThinBarStyle(isFiltersApplied) {
+            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
         }
 
         function registerToggleAppliedFilterOn() {
@@ -354,15 +406,15 @@
             $('#slider').css('display', 'block');
         }
 
-        function getAppliedFiltersDimentions(){
+        function getAppliedFiltersDimentions() {
             var filters = filterParametersService.get();
             vm.appliedFiltersDimensions = vm.dimensions.filter(function (item) {
-                return filters[getDimensionName(item.name,item.type)] ? true : false ;
+                return filters[getDimensionName(item.name, item.type)] ? true : false;
             });
         }
 
-        function getDimensionName(name,type) {
-            return type==='timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
+        function getDimensionName(name, type) {
+            return type === 'timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
         }
 
         function openFilters() {
@@ -377,9 +429,55 @@
             vm.sideBarTab = "widgets";
             vm.widgetsToggled = true;
             vm.favouriteDimensions = vm.dimensions.filter(function (item) {
-                return  item.favouriteFilter===true;
+                return item.favouriteFilter === true;
             });
             $('#slider').css('display', 'block');
+        }
+
+        function registerBookmarkUpdateDynamicDateRange() {
+            var bookmarkUpdateDynamicDateRange = $scope.$on(
+                "flairbiApp:bookmark-update-dynamic-date-range-meta-data",
+                function (event, data) {
+                    var index = findDateRangeDimensionIndex(data.dimensionName);
+                    if (data.metadata && index > -1) {
+                        vm.dimensions[index]['metadata'] = data.metadata;
+                    }
+                }
+            );
+            $scope.$on("$destroy", bookmarkUpdateDynamicDateRange);
+        }
+
+        function setDateRangeSubscription() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:filter-set-date-ranges",
+                function (event, data) {
+                    var index = findDateRangeDimensionIndex(data.dimensionName);
+                    if (index > -1) {
+                        vm.dimensions[index].selected = strToDate(data.startDate);
+                        vm.dimensions[index].selected2 = strToDate(data.endDate);
+                        vm.dimensions[index].metadata = {};
+                        vm.dimensions[index].metadata.dateRangeTab = 1;
+                        vm.dimensions[index].metadata.currentDynamicDateRangeConfig = null;
+                        vm.dimensions[index].metadata.customDynamicDateRange = 0;
+                    }
+                }
+            );
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function findDateRangeDimensionIndex(dimensionName) {
+            var index = -1;
+            vm.dimensions.some(function (obj, i) {
+                return obj.name === dimensionName ? index = i : false;
+            });
+            return index;
+        }
+
+        function strToDate(date) {
+            if (!date) {
+                return null;
+            }
+            return Date.parse(date) ? new Date(date) : null;
         }
 
         function clearFilters() {
@@ -406,12 +504,15 @@
         }
 
         function loadDimensions() {
-            vm.dimensions = featureEntities.filter(function (item) {
-                return item.featureType === "DIMENSION";
+            vm.dateDimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION" && item.dateFilter === "ENABLED";
             });
-            vm.FavouriteDimensions = featureEntities.filter(function (item) {
-                return item.featureType === "DIMENSION" && item.favouriteFilter === true;
+
+            vm.allDimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION" && item.dateFilter !== "ENABLED";
             });
+
+            vm.dimensions =  vm.dateDimensions.concat( vm.allDimensions);
         }
 
         function registerToggleRightNavBarOff() {
@@ -509,7 +610,7 @@
             $rootScope.$broadcast("flairbiApp:toggleFilters-on");
         }
 
-        function onAppliedFiltersOpen(){
+        function onAppliedFiltersOpen() {
             resetWidgetEntry();
             $rootScope.$broadcast("flairbiApp:toggleAppliedFilters-on");
         }
@@ -565,10 +666,13 @@
                     $(event.target).parents('.suggestion-list').length + pLen + dcLen + dlen + cpicker + gridLen + cdatepicker;
                 if (trigger !== event.target && !trigger.has(event.target).length && len == 0) {
                     $('#slider').css('display', 'none');
+
+                    hideSidebar();
                     onVizualizationsClose();
                     onFiltersClose();
                     onPropertiesClose();
                     onDataclose();
+
                     VisualDispatchService.reloadGrids();
                     VisualDispatchService.removeOpacity();
                 }
@@ -578,8 +682,8 @@
 
         function deleteHierarchy(hierarchy) {
             swal(
-                "Are you sure?",
-                "You want to delete selected hierarchy", {
+                "Delete Hierarchy",
+                "Confirm delete Hierarchy object.", {
                 dangerMode: true,
                 buttons: true,
             })
@@ -608,8 +712,8 @@
 
         function deleteFeature(feature) {
             swal(
-                "Are you sure?",
-                "Do you want to delete selected feature?", {
+                "Delete Custom field",
+                "Confirm delete dashboard data field.", {
                 dangerMode: true,
                 buttons: true,
             })

@@ -26,6 +26,12 @@ public class FeatureCriteria implements Serializable {
     @Column(name = "jhi_value", nullable = false)
     private String value;
 
+    @Column(name = "meta_data")
+    private String metaData;
+
+    @Column(name = "date_range")
+    private boolean dateRange;
+
     @ManyToOne(optional = false)
     @NotNull
     private Feature feature;
@@ -57,6 +63,22 @@ public class FeatureCriteria implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(String metaData) {
+        this.metaData = metaData;
+    }
+
+    public boolean getDateRange() {
+        return dateRange;
+    }
+
+    public void setDateRange(boolean dateRange) {
+        this.dateRange = dateRange;
     }
 
     public FeatureCriteria value(String value) {

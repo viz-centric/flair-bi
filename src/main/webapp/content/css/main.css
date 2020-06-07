@@ -41,6 +41,7 @@
 /* IBox */
 /* User management*/
 /* Viz Settings */
+/* build page */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 100; }
 
@@ -1290,7 +1291,7 @@ nav.navbar-static-top {
   z-index: 10;
   height: calc(100% - 95px);
   overflow-y: hidden;
-  margin-right: 46px;
+  margin-right: 40px;
   margin-top: 58px; }
   #slider .row {
     margin: 0; }
@@ -1723,6 +1724,26 @@ a {
   justify-content: space-around; }
   .permission-header-controls top-nav-button-component #trigger {
     display: inline-block; }
+
+#information .panel-info {
+  border-color: #1c84c6; }
+
+#information .panel-heading {
+  padding: 5px 15px;
+  background-color: #1c84c6;
+  border-color: #1c84c6;
+  color: #ffffff; }
+
+#information .panel-body {
+  padding: 5px; }
+  #information .panel-body .info {
+    padding: 5px; }
+    #information .panel-body .info ul {
+      margin-bottom: 0px; }
+      #information .panel-body .info ul li.list-group-item {
+        padding: 7px 5px; }
+      #information .panel-body .info ul .access-icon {
+        padding-right: 10px; }
 
 .permission-dashboard-item {
   height: 100%;
@@ -2882,7 +2903,7 @@ input[type="search"] {
     border-radius: 0;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    top: 58px; }
+    top: 40px; }
   .dropdown-options-v2 svg {
     width: 25px;
     height: 25px;
@@ -3016,6 +3037,7 @@ input[type="search"] {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     top: 46px;
     max-height: 300px;
+    max-width: fit-content;
     overflow-y: auto; }
   .dropdown-options-v5 .dropdown-menu {
     padding: 0px; }
@@ -3200,11 +3222,21 @@ input[type="search"] {
       .info-card .info-card-content .card-footer .item {
         align-self: center;
         padding: 10px; }
+      .info-card .info-card-content .card-footer .box-name {
+        max-width: 70%;
+        display: flex; }
+        .info-card .info-card-content .card-footer .box-name .text {
+          overflow: hidden !important;
+          text-overflow: ellipsis; }
+        .info-card .info-card-content .card-footer .box-name .description-icon {
+          margin-left: 4px; }
+        .info-card .info-card-content .card-footer .box-name p {
+          margin-bottom: 0px; }
       .info-card .info-card-content .card-footer .build {
         margin-left: auto; }
         .info-card .info-card-content .card-footer .build:hover {
           background: #f0f0f2;
-          margin-right: 4px; }
+          min-width: 20%; }
 
 /* This element contains logged in user details */
 .user-profile-container .user-profile {
@@ -6888,6 +6920,8 @@ disabled look for disabled choices in the results dropdown
 
 .table-view {
   min-width: 95%; }
+  .table-view .chart {
+    height: 600px; }
 
 .cron-select-wrap {
   display: inline-block; }
@@ -6921,3 +6955,21 @@ disabled look for disabled choices in the results dropdown
 
 .select-options {
   display: inline-block; }
+
+.error-403 {
+  text-align: center;
+  margin-top: 30px; }
+  .error-403 .error-main .error-heading {
+    margin: 25px auto;
+    width: 340px;
+    border: 3px solid #404345;
+    font-size: 46px;
+    line-height: 76px;
+    border-radius: 10px; }
+  .error-403 .error-main .error-msg {
+    font-size: 20px; }
+  .error-403 .error-main .flair-icon {
+    width: 50px;
+    height: 50px;
+    margin-top: 24px;
+    margin-right: 7px; }

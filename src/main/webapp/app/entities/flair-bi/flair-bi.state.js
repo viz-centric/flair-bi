@@ -30,7 +30,7 @@
             )
             .state("table-view", {
                 parent: "entity",
-                url: "/visual-table/{id}?datasource",
+                url: "/visual-table/?schedulerId&datasourceId&viewId&chartType=table",
                 data: {
                     authorities: []
                 },
@@ -62,12 +62,22 @@
                           return $stateParams.datasource
                          
                         }
-                      ]
+                    ],
+                    hasAuthority: [
+                        "$stateParams",
+                        "Principal",
+                        "$timeout",
+                        "$q",
+                        "$state",
+                        function hasAuthority($stateParams,Principal,$q,$state) {
+                            hasViewAccess($stateParams.viewId,Principal,$q,$state);
+                        }
+                    ]
                 }
             })
             .state("fullscreen", {
                 parent: "entity",
-                url: "/visual/{id}?datasource",
+                url: "/visual/?visualisationId&datasourceId&viewId",
                 data: {
                     authorities: []
                 },
@@ -90,7 +100,7 @@
                         "$state",
                         function($stateParams, Visualmetadata, $state) {
                             return Visualmetadata.get({
-                                id: $stateParams.id
+                                id: $stateParams.visualisationId
                             }).$promise;
                         }
                     ],
@@ -99,12 +109,34 @@
                       "Datasources",
                       function($stateParams, Datasources){
                         return Datasources.get({
-                          id: $stateParams.datasource
+                          id: $stateParams.datasourceId
                         }).$promise;
                       }
+                    ],
+                    hasAuthority: [
+                        "$stateParams",
+                        "Principal",
+                        "$timeout",
+                        "$q",
+                        "$state",
+                        function hasAuthority($stateParams,Principal,$q,$state) {
+                            hasViewAccess($stateParams.viewId,Principal,$q,$state);
+                        }
                     ]
                 }
             });
+
+        function hasViewAccess(viewId,Principal,$q,$state){
+            Principal.identity().then(function (account) {
+                var isAdmin = account.userGroups && account.userGroups.indexOf("ROLE_ADMIN")>-1 ? true : false;
+                var canAccess = account.permissions && account.permissions.indexOf("READ_" + viewId + "_VIEW") !== -1 ? true : false;
+                if(isAdmin || canAccess){
+                    return $q.when();
+                }else{
+                    $state.go('accessdenied');
+                }
+            });
+        }
 
         function viewAndDeveloperSettings(url, isRead) {
             return {
@@ -241,6 +273,16 @@
                                 )
                             };
                             return currentStateData;
+                        }
+                    ],
+                    hasAuthority: [
+                        "$stateParams",
+                        "Principal",
+                        "$timeout",
+                        "$q",
+                        "$state",
+                        function hasAuthority($stateParams,Principal,$q,$state) {
+                            hasViewAccess($stateParams.id,Principal,$q,$state);
                         }
                     ]
                 }

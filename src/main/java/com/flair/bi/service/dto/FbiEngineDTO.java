@@ -21,6 +21,8 @@ public class FbiEngineDTO {
     
     private String type;
 
+    private QueryValidationType validationType;
+
 	public String getvId() {
 		return vId;
 	}

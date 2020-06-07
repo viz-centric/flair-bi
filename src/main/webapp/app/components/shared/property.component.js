@@ -69,6 +69,12 @@
             if (vm.propstype === 'data') {
                 VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-data-properties-update", { value: value, fieldName: vm.display, property: vm.property });
+
+                if (vm.property.propertyType.name === "Aggregation type" && value.value === "NONE") {
+                    var info = { text: 'Please change the Aggregation type NONE to all other measures.', title: "Warning" }
+                    $rootScope.showWarningToast(info);
+                }
+
             } else if (vm.propstype === 'chart') {
                 VisualDispatchService.setSavePromptMessage("visualization chart property has been changed and it has not been saved.Do you want to save?");
                 $rootScope.$broadcast("flairbiApp:on-chart-properties-update", { value: value, property: vm.property });
@@ -77,7 +83,7 @@
 
         function setCheckboxProperty(value) {
             value = !value;
-            vm.property.value=value;
+            vm.property.value = value;
             VisualDispatchService.setViewEditedBeforeSave(true);
             if (vm.propstype === 'data') {
                 VisualDispatchService.setSavePromptMessage("visualization data property has been changed and it has not been saved.Do you want to save?");
@@ -129,17 +135,12 @@
             vm.property.value = JSON.stringify(vm.selectedFeature);
         }
         function setFectures() {
-            if (vm.property.value){
+            if (vm.property.value) {
                 var selectedFeature = JSON.parse(vm.property.value);
                 vm.selectedFeature = selectedFeature;
                 vm.selectedWebhook = selectedFeature.map(function (item) {
                     var features = {};
-                    var list = vm.features.filter(function (val) {
-                        if (val.id == item.featureID) {
-                            return val
-                        }
-                    })
-                    features['text'] = list[0].name;
+                    features['text'] = item.featureName;
                     return features;
                 });
 

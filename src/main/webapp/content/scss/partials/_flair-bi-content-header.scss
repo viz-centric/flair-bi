@@ -20,7 +20,7 @@
         padding-top: 0px;
         .input-box {
             display: flex;
-            border: 1px solid rgb(228, 228, 228);
+            border: 1px solid $dropdown-border-color;
             border-radius: 8px;
             margin-top: 5px;
             
@@ -117,26 +117,7 @@
             padding: 0px;
             //border-right: 1px lighten($icons-color, 40%) solid;
         }
-        // .options-1::after{
-        //       content: "";
-        //       height: 35px;
-        //       display: block;
-        //       border-left: 1px lighten($icons-color, 40%) solid;
-        //       position: absolute;
-        //       right: 4%;
-        //       top: 50%;
-        //       transform: translateY(-50%);
-        // }
-        .options-1::before{
-            //   content: "";
-            //   height: 35px;
-            //   display: block;
-            //   border-left: 1px lighten($icons-color, 40%) solid;
-            //   position: absolute;
-            //   left: 5%;
-            //   top: 50%;
-            //   transform: translateY(-50%);
-        }
+      
         .options-2 {
             display: flex;
             justify-content: space-around;
@@ -404,7 +385,6 @@
 
 .flairbi-content-header-fullscreen {
     padding: 0;
-   // padding-top: 6px;
     position: fixed;
     top: 0px;
     z-index: 30;

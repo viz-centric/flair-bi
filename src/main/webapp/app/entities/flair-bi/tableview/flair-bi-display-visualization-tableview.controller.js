@@ -11,7 +11,9 @@
         "stompClientService",
         "AuthServerProvider",
         "schedulerService",
-        "REPORTMANAGEMENTCONSTANTS"
+        "REPORTMANAGEMENTCONSTANTS",
+        "visualizationRenderService",
+        "Visualmetadata"
     ];
 
     function FlairBiDisplayVisualizationTableviewController($scope,
@@ -21,35 +23,39 @@
         stompClientService,
         AuthServerProvider,
         schedulerService,
-        REPORTMANAGEMENTCONSTANTS) {
+        REPORTMANAGEMENTCONSTANTS,
+        visualizationRenderService,
+        Visualmetadata) {
         var vm = this;
-        vm.id = $stateParams.id;
+        vm.id = $stateParams.schedulerId;
+        vm.chartType = $stateParams.chartType;
         vm.tableData = [];
         vm.tablekey = [];
         vm.reportData;
+        //  vm.visualMetadata = new VisualWrap(visualMetadata);
         vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
         activate();
         ///////////////
 
         function activate() {
 
-            schedulerService.getReportLogByMetaId($stateParams.id)
+            schedulerService.getReportLogByMetaId($stateParams.schedulerId)
                 .then(
                     function (response) {
                         vm.reportData = response.data.reportLog;
                         var info = {
-                            text: 'Report will be execute now',
+                            text: 'Report executed',
                             title: 'Success'
                         };
                         connectWebSocket();
 
-                        proxyGrpcService.forwardCall($stateParams.datasource, {
+                        proxyGrpcService.forwardCall($stateParams.datasourceId, {
                             queryDTO: response.data.reportLog.query
-                        });
+                        },$stateParams.viewId);
                     },
                     function (error) {
                         var info = {
-                            text: 'error occured while cancelling scheduled report',
+                            text: 'A Webhook with this name already exists',
                             title: "Error"
                         };
                         $rootScope.showErrorSingleToast(info);
@@ -71,15 +77,33 @@
         }
 
         function onExchangeMetadataError(data) {
+            console.log("error "+ data)
         }
 
 
         function onExchangeMetadata(data) {
             var metaData = JSON.parse(data.body);
-            createHeader(metaData.data[0]);
-            addDataInTable(metaData.data);
+            if (vm.chartType === "table") {
+                createHeader(metaData.data[0]);
+                addDataInTable(metaData.data);
 
+            }
+            else {
+                var contentId = "content-" + $stateParams.schedulerId;
 
+                var id= vm.reportData.visualizationId.replace("threshold_alert_:","");
+                Visualmetadata.get({
+                    id: id
+                }, function (v) {
+
+                    visualizationRenderService.setMetaData(
+                        v,
+                        metaData,
+                        contentId
+                    );
+                });
+
+            }
         }
         function createHeader(cols) {
             $("#table-view-col-" + vm.id + "").empty();

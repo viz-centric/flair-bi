@@ -2,7 +2,7 @@
     class="flairbi-content-header ng-class:{'flairbi-content-header-fullscreen':$root.isFullScreen == true, 'get-sticky':$root.isFullScreen == false}">
 
     <div class="row" ng-if="$root.isFullScreen == false">
-        <div class="col-md-6 col-sm-6 col-xs-6 header-first">
+        <div class="col-md-7 col-sm-6 col-xs-6 header-first">
             <a class="logo" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </a>
@@ -43,12 +43,11 @@
                             <svg class="field-icon-left">
                                 <use xlink:href="#eye" />
                             </svg>
-                            <span ng-if="vm.selectedView.viewName!==''"> {{vm.selectedView.viewName}}</span>
+                            <span ng-if="vm.selectedView.viewName"> {{vm.selectedView.viewName}}</span>
                             <span ng-if="!vm.selectedView"> Select View</span>
                         </button>
                         <ul class="dropdown-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
-                                <!-- <i class="glyphicon glyphicon-search"></i> -->
                                 <input type="text" ng-model="searchView" class="form-control"
                                     placeholder="Search View..." />
                             </div>
@@ -63,11 +62,11 @@
             </form>
         </div>
 
-        <div class="configuration-options col-md-6">
+        <div class="configuration-options col-md-5">
             <div class="row">
                 <div class="col-md-11 col-sm-12 col-xs-12 5visual-arrow">
                     <div class="options-1">
-                        <div class="col-md-5">
+                        <div>
                             <div class="apply-bookmarks">
                                 <div class="dropdown-options-v5">
                                     <a class="dropdown-toggle" type="button" id="dropdownBookMark"
@@ -78,7 +77,7 @@
                                             </svg>
                                             <input type="text" ng-model="vm.selectedBookmark.name" class="form-control"
                                                 placeholder="Apply bookmark" />
-                                            <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                            <svg ng-click="vm.clearFiltersClick()" class="field-icon-right">
                                                 <use xlink:href="#cancle" />
                                             </svg>
                                         </div>
@@ -110,28 +109,28 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()">
+                        <top-nav-button-component is-disabled="vm.previousDisabled" click="vm.previous()" hidden>
                             <span uib-tooltip="Previous" tooltip-placement="bottom">
                                 <svg class="flaticons-left-arrow">
                                     <use xlink:href="#left-arrow" />
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()">
+                        <top-nav-button-component is-disabled="vm.nextDisabled" click="vm.next()" hidden>
                             <span uib-tooltip="Next" tooltip-placement="bottom">
                                 <svg class="flaticons-right-arrow">
                                     <use xlink:href="#right-arrow" />
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component if="vm.ngIfClearFilters()" click="vm.clearFilters()">
+                        <top-nav-button-component if="vm.ngIfClearFilters()" click="vm.clearFiltersClick()">
                             <span uib-tooltip="Reset" tooltip-placement="bottom">
                                 <svg class="flaticons-close">
                                     <use xlink:href="#close" />
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <div ng-if="!vm.configuration.readOnly">
+                        <div ng-if="vm.canEdit">
                             <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="vm.editOn">
                                 <span uib-tooltip="Edit" tooltip-placement="bottom">
                                     <svg class="viz-dashboard-edit-on">
@@ -141,13 +140,13 @@
                             </top-nav-button-component>
                             <top-nav-button-component click="vm.editState(vm.editOn)" ng-show="!vm.editOn">
                                 <span uib-tooltip="Edit" tooltip-placement="bottom">
-                                    <svg class="viz-dashboard-edit-on" >
+                                    <svg class="viz-dashboard-edit-on">
                                         <use xlink:href="#viz-dashboard-edit-off" />
                                     </svg>
                                 </span>
                             </top-nav-button-component>
                         </div>
-                        <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)">
+                        <top-nav-button-component click="vm.thresholdAlert(vm.isThresholdAlert)" hidden>
                             <span uib-tooltip="Threshold Alert" tooltip-placement="bottom" ng-if="vm.isThresholdAlert">
                                 <svg class="alarm-icon-on">
                                     <use xlink:href="#alarm" />
@@ -180,6 +179,8 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
+
+
                     </div>
                 </div>
 
@@ -282,7 +283,7 @@
                                 </svg>
                                 <input type="text" ng-model="vm.selectedBookmark.name" class="form-control"
                                     placeholder="Apply bookmark" />
-                                <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                <svg ng-click="vm.clearFiltersClick()" class="field-icon-right">
                                     <use xlink:href="#cancle" />
                             </div>
                         </a>
@@ -311,7 +312,7 @@
             </div>
 
             <div uib-tooltip="Reset" tooltip-placement="bottom" class="fs-btn  item hidden-xs hidden-sm"
-                if="vm.ngIfClearFilters()" ng-click="vm.clearFilters()">
+                if="vm.ngIfClearFilters()" ng-click="vm.clearFiltersClick()">
                 <span uib-tooltip="Reset" tooltip-placement="bottom">
                     <svg class="flaticons-close">
                         <use xlink:href="#close" />
@@ -404,7 +405,7 @@
                                         </svg>
                                         <input type="text" ng-model="vm.selectedBookmark.name" class="form-control"
                                             placeholder="Apply bookmark" />
-                                        <svg ng-click="vm.clearFilters()" class="field-icon-right">
+                                        <svg ng-click="vm.clearFiltersClick()" class="field-icon-right">
                                             <use xlink:href="#cancle" />
                                     </div>
                                 </a>
@@ -523,7 +524,7 @@
                 class="fa fa-angle-double-left"></i></a>
         <div title="Clear All Filters" class="clear-all ng-class:{'item':$root.isFullScreen == true}"
             ng-if="vm.filtersLength > 1">
-            <i ng-click="vm.clearFilters()" class="clear-all-icon  glyphicon glyphicon-remove-sign"></i>
+            <i ng-click="vm.clearFiltersClick()" class="clear-all-icon  glyphicon glyphicon-remove-sign"></i>
         </div>
         <ul class="list-inline filter-list ng-class:{'item':$root.isFullScreen == true}">
             <li ng-if="value.length > 0" ng-show="vm.currentPage==vm.getFloor($index)" style="outline:none;"

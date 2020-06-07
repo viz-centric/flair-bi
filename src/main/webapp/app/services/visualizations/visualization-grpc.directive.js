@@ -65,8 +65,9 @@
         'proxyGrpcService',
         'filterParametersService',
         '$log',
-        '$timeout'
-        //,'stompClientService'
+        '$timeout',
+        '$stateParams',
+        'Visualmetadata'
     ];
     /* @ngInject */
     function VisualizationRenderGrpcController(
@@ -102,11 +103,14 @@
         proxyGrpcService,
         filterParametersService,
         $log,
-        $timeout
+        $timeout,
+        $stateParams,
+        Visualmetadata
     ) {
 
         var vm = this;
         var widgets = [];
+        var timeout = null;
         activate();
 
         function activate() {
@@ -144,8 +148,15 @@
             registerFilterEvent();
             registerResizeWidgetEvent();
             registerUpdateWidgetEvent();
+            registerRefreshWidgetEvent();
             registerIdChanges();
+            registerTimeout();
+        }
 
+        function registerTimeout() {
+            $scope.$on('$destroy', () => {
+                clearDeferred();
+            });
         }
 
         function registerCanBuildChange() {
@@ -153,7 +164,9 @@
                 return vm.canBuild;
             }, function (newVal, oldVal) {
                 if (vm.canBuild) {
-                    build(true);
+                    deferred(() => {
+                        build(true);
+                    });
                 }
             });
         }
@@ -167,10 +180,22 @@
                     vm.id = newVal;
                     registerResizeWidgetEvent();
                     registerUpdateWidgetEvent();
+                    registerRefreshWidgetEvent();
                 }
             });
         }
 
+        function clearDeferred() {
+            if (timeout) {
+                $timeout.cancel(timeout);
+            }
+        }
+
+        function deferred(func, delay) {
+            delay = delay || 500
+            clearDeferred();
+            timeout = $timeout(func, delay);
+        }
 
         /**
          * Build current visualization with data and filters
@@ -181,14 +206,16 @@
             if (forceQuery) {
                 angular.element("#loader-spinner").show();
                 proxyGrpcService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
-                    visualMetadata: vm.data
-                });
+                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                    visualMetadata: vm.data,
+                    validationType: 'REQUIRED_FIELDS'
+                }, $stateParams.id);
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(),$rootScope.activePage.activePageNo),
-                        visualmetadata: vm.data
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                        visualmetadata: vm.data,
+                        validationType: 'REQUIRED_FIELDS'
                     });
                 } else {
                     createWidget(vm.data);
@@ -203,11 +230,25 @@
                 height = el.height();
             var panel = $('.grid-stack');
 
-            widgets[vm.widget].build(
-                visualMetadata,
-                el,
-                panel
-            );
+            if (vm.data.isSaved) {
+                widgets[vm.widget].build(
+                    visualMetadata,
+                    el,
+                    panel
+                );
+            }
+            else {
+                Visualmetadata.get({
+                    id: vm.data.id
+                }, function (v) {
+                    v.data = vm.data.data;
+                    widgets[vm.widget].build(
+                        v,
+                        el,
+                        panel
+                    );
+                });
+            }
         }
 
         function onForwardCallSuccess(result) {
@@ -219,12 +260,29 @@
 
         function registerUpdateWidgetEvent() {
             var unsubscribe = $scope.$on('update-widget-' + vm.id, function (event, result) {
-                if (vm.canBuild) {
-                    if(result){
-                        vm.data.fields=result;
-
+                if (vm.canBuild && vm.data.isSaved) {
+                    if (result) {
+                        vm.data.fields = result;
+                        build(true);
                     }
-                    build(true);
+                    else {
+                        build(true);
+                    }
+                }
+            });
+
+            $scope.$on('$destroy', unsubscribe);
+        }
+
+        function registerRefreshWidgetEvent() {
+            var unsubscribe = $scope.$on('refresh-widget-' + vm.id, function (event, result) {
+                if (vm.canBuild) {
+                    if (vm.data.data) {
+                        build(false);
+                    }
+                    else {
+                        build(true);
+                    }
                 }
             });
 
@@ -234,7 +292,9 @@
         function registerFilterEvent() {
             var unsubscribeFilter = $scope.$on('flairbiApp:filter', function (event) {
                 if (vm.canBuild) {
-                    build(true);
+                    deferred(() => {
+                        build(true);
+                    });
                 }
             });
 

@@ -38,7 +38,9 @@
         "VisualizationUtils",
         "D3Utils",
         '$transitions',
-        "favouriteFilterService"
+        "favouriteFilterService",
+        "schedulerService",
+        "AccountDispatch"
     ];
 
     function FlairBiController(
@@ -74,7 +76,9 @@
         VisualizationUtils,
         D3Utils,
         $transitions,
-        favouriteFilterService
+        favouriteFilterService,
+        schedulerService,
+        AccountDispatch
     ) {
         var vm = this;
         var editMode = false;
@@ -128,16 +132,35 @@
         vm.recreateVisual = recreateVisual;
         vm.openSchedulerDialog = openSchedulerDialog;
         vm.showVizLoader = showVizLoader;
+        vm.hideThreshold = hideThreshold;
+        vm.applyFeatures = applyFeatures;
         vm.filtersLength = 0;
         activate();
 
         ////////////////
 
         function activate() {
-            $rootScope.updateWidget = {}
-            if (!VisualDispatchService.getApplyBookmark()) {
-                filterParametersService.clear();
+
+            vm.canEdit = AccountDispatch.hasAuthority(
+                "WRITE_" + vm.view.id + "_VIEW"
+            );
+
+            vm.canDelete = AccountDispatch.hasAuthority(
+                "DELETE_" + vm.view.id + "_VIEW"
+            );
+
+            vm.canUpdate = AccountDispatch.hasAuthority(
+                "UPDATE_" + vm.view.id + "_VIEW"
+            );
+            vm.canRead = AccountDispatch.hasAuthority(
+                "READ_" + vm.view.id + "_VIEW"
+            );
+
+            if (vm.canEdit) {
+                vm.canCreateReport = true;
             }
+
+            $rootScope.updateWidget = {}
             VisualMetadataContainer.clear();
             VisualDispatchService.clearAll();
 
@@ -149,6 +172,7 @@
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
             registerButtonToggleEvent();
+            registerScopeDestroy();
             openSchedulerDialogForThreshold();
             openLiveModeDialog();
             updateTableChart();
@@ -227,10 +251,16 @@
                     text: msg
                 });
             } else {
-                var error = QueryValidationService.getQueryValidationError(body.description);
-                $rootScope.showErrorSingleToast({
-                    text: $translate.instant(error.msgKey, error.params)
-                });
+                const error = QueryValidationService.getQueryValidationError(body.description);
+                const headers = data.headers;
+                const text = $translate.instant('flairbiApp.visualmetadata.queryValidation.' + headers.error,
+                    { reason: headers.value }) || $translate.instant(error.msgKey, error.params);
+                if (text.startsWith("Missing feature")) {
+                    $rootScope.showWarningToastForDateFilter({ text: text });
+                }
+                else{
+                    $rootScope.showErrorSingleToast({ text: text });
+                }
             }
         }
 
@@ -474,6 +504,7 @@
         function saveFeatures(v) {
             v.isCardRevealed = true;
             vm.isSaving = true;
+            v.isSaved = true;
             if (v.id) {
                 Visualmetadata.update(
                     {
@@ -502,6 +533,17 @@
                     },
                     onSaveFeaturesError
                 );
+            }
+        }
+
+        function applyFeatures(v) {
+            v.isCardRevealed = true;
+            v.isSaved = true;
+            if (v.id) {
+                VisualMetadataContainer.update(v.id, v, 'id');
+            } 
+            else{
+                saveFeatures(v);
             }
         }
 
@@ -543,11 +585,11 @@
                         .parent()
                         .parent()
                         .attr("drop-box");
-                    //var v=VisualMetadataContainer.getOneVBuildId(vId);
                     VisualDispatchService.setVisual({
                         visual: VisualMetadataContainer.getOneVBuildId(vId),
                         view: entity
                     });
+                    VisualDispatchService.setIsSaved(false);
                     if (VisualDispatchService.isFeatureExist()) {
                         if (
                             $(event.target)
@@ -616,6 +658,13 @@
                 vm.view.viewDashboard.dashboardName,
                 vm.view.viewName,
                 $window.location.href);
+        }
+
+        function registerScopeDestroy() {
+            $scope.$on("$destroy", function () {
+                filterParametersService.saveSelectedFilter({});
+                filterParametersService.clear();
+            });
         }
 
         function registerButtonToggleEvent() {
@@ -730,7 +779,7 @@
                     function (error) { }
                 );
                 VisualDispatchService.setViewEditedBeforeSave(true);
-                VisualDispatchService.setSavePromptMessage("new visualization has been created and it has not been saved.Do you want to save?");
+                VisualDispatchService.setSavePromptMessage("You have unsaved changes made to the dashboard. Are you sure you wish to discard these changes?");
             });
             $scope.$on("$destroy", unsub);
         }
@@ -780,7 +829,7 @@
         function registerToggleHeaderFilter() {
             var toggleHeaderFiltersUnsubscribeOff = $scope.$on(
                 "flairbiApp:toggle-headers-filters",
-                function (event,result) {
+                function (event, result) {
                     onFiltersCountChange();
                     vm.showFSFilter = !result;
                 }
@@ -788,14 +837,14 @@
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
         }
 
-        function onFiltersCountChange(){
+        function onFiltersCountChange() {
             vm.filtersLength = filterParametersService.getFiltersCount();
         }
 
         function registerToggleFullScreenFilter() {
             var toggleFullScreenFiltersUnsubscribeOff = $scope.$on(
                 "flairbiApp:toggle-fullscreen-header-filters",
-                function (event,result) {
+                function (event, result) {
                     vm.showFSFilter = result;
                 }
             );
@@ -913,6 +962,7 @@
                     }
                 }
                 var int = $interval(function () {
+                    v.isSaved = true;
                     refreshWidget(v);
                 }, 5000);
                 intervalRegistry[v.visualBuildId] = int;
@@ -942,7 +992,7 @@
                     resolve: {
                         shareLink: function () {
                             return ShareLinkService.createLink(
-                                v.getSharePath(vm.datasource)
+                                v.getSharePath(vm.datasource,$stateParams.id)
                             );
                         }
                     }
@@ -1122,6 +1172,7 @@
         function createVisualMetadata(visualization) {
             var newVM = {
                 isCardRevealed: true,
+                isSaved: false,
                 viewId: vm.view.linkId,
                 titleProperties: {
                     titleText: visualization.name,
@@ -1222,7 +1273,7 @@
 
         function onResizeStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to the dashboard. Are you sure you wish to discard these changes?");
             delete $rootScope.updateWidget[ui.element.attr("id")];
             $rootScope.$broadcast(
                 "resize-widget-content-" + ui.element.attr("id")
@@ -1235,7 +1286,7 @@
 
         function onDragStop(event, ui) {
             VisualDispatchService.setViewEditedBeforeSave(true);
-            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to dashboard. Are you sure you wish to discard these changes?");
+            VisualDispatchService.setSavePromptMessage("You have unsaved changes made to the dashboard. Are you sure you wish to discard these changes?");
         }
 
         function onItemAdded(item) { }
@@ -1284,8 +1335,18 @@
             return editMode;
         }
 
+        function hideThreshold(v) {
+            if (v.metadataVisual.name === "KPI") {
+                return false
+            }
+            return true;
+        }
+
         function ngIfDelete() {
-            return editMode;
+            if (editMode && vm.canEdit && vm.canUpdate && vm.canRead) {
+                return true;
+            }
+            return false;
         }
 
         function enableEditForNewWidget(mode) {

@@ -32,7 +32,10 @@
         "$stateParams",
         "$window",
         "recentBookmarkService",
-        "Auth"
+        "Auth",
+        'ViewFeatureCriteria',
+        "DYNAMIC_DATE_RANGE_CONFIG",
+        "AccountDispatch"
     ];
 
     function FlairBiContentHeaderController(
@@ -59,17 +62,21 @@
         $stateParams,
         $window,
         recentBookmarkService,
-        Auth
+        Auth,
+        ViewFeatureCriteria,
+        DYNAMIC_DATE_RANGE_CONFIG,
+        AccountDispatch
     ) {
         var vm = this;
 
         var editMode = false;
         var showOpt = true;
-        var dynamicDateRangeFun='FLAIR';
-        vm.toolTipTexts={};
+        var dynamicDateRangeFun = 'FLAIR';
+        vm.toolTipTexts = {};
         vm.configuration = configuration;
         vm.states = states;
         vm.clearFilters = clearFilters;
+        vm.clearFiltersClick = clearFiltersClick;
         vm.onWriteToPg = onWriteToPg;
         vm.onGetData = onGetData;
         vm.exploration = $rootScope.exploration;
@@ -137,7 +144,7 @@
         vm.getKeyName = getKeyName;
         vm.isDateRange = isDateRange;
         vm.getFiltersToolTipName = getFiltersToolTipName;
-
+        vm.viewFeatureCriteriaReady = false;
         vm.canEdit = false;
         vm.editOn = false;
 
@@ -156,6 +163,8 @@
 
         activate();
 
+
+
         ////////////////
 
         function activate() {
@@ -169,41 +178,184 @@
             }
             if (VisualDispatchService.getApplyBookmark()) {
                 vm.selectedBookmark = VisualDispatchService.getFeatureBookmark();
-                if (vm.selectedBookmark.dateRange) {
-                    addFilterFromBookmark(vm.selectedBookmark);
-                }
-                $rootScope.$broadcast(
-                    "flairbiApp:filter-input-refresh"
-                );
-                $rootScope.$broadcast("flairbiApp:filter");
-                $rootScope.$broadcast('flairbiApp:filter-add');
+                applyBookmark(vm.selectedBookmark);
                 VisualDispatchService.setFeatureBookmark({});
                 recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
+            } else {
+                applyFilters();
             }
+        }
+
+        function applyDefaultFilters(excluded) {
+            const filterParameters = filterParametersService.get();
+            const mandatoryDimensions = featureEntities
+                .filter(function (item) {
+                    return !excluded.includes(item);
+                })
+                .filter(function (item) {
+                    return item.featureType === "DIMENSION" && item.dateFilter === "ENABLED";
+                })
+                .filter(function (item) {
+                    const dateRangeName = filterParametersService.buildDateRangeFilterName(item.name);
+                    return !filterParameters[dateRangeName];
+                });
+
+            if (mandatoryDimensions.length > 0) {
+                const filterParameters = filterParametersService.getSelectedFilter();
+                mandatoryDimensions.forEach(function (item) {
+                    var startDate = new Date();
+                    startDate.setDate(startDate.getDate() - 1);
+                    item.selected = filterParametersService.dateToString(startDate);
+                    item.selected2 = filterParametersService.dateToString(new Date());
+                    item.metadata = {
+                        dateRangeTab: 1,
+                        customDynamicDateRange: 1,
+                        currentDynamicDateRangeConfig: {}
+                    };
+                    delete filterParameters[filterParametersService.buildDateRangeFilterName(item.name)]
+                    addDateRangeFilter(filterParameters, item.selected, item);
+                    addDateRangeFilter(filterParameters, item.selected2, item);
+                });
+                filterParametersService.saveSelectedFilter(filterParameters);
+                filterParametersService.save(filterParametersService.getSelectedFilter());
+            }
+        }
+
+        function applyFilters() {
+            const applied = applyViewFeatureCriteria();
+            applyDefaultFilters(applied);
+
+            $rootScope.$broadcast('flairbiApp:filter-input-refresh');
+            $rootScope.$broadcast('flairbiApp:filter');
+            $rootScope.$broadcast('flairbiApp:filter-add');
+        }
+
+        function addDateRangeFilter(filterParameters, date, feature) {
+            const name = feature.name;
+            const type = feature.type;
+            var dateRangeName = filterParametersService.buildDateRangeFilterName(name);
+            if (!filterParameters[dateRangeName]) {
+                filterParameters[dateRangeName] = [];
+            }
+            filterParameters[dateRangeName].push(date);
+            filterParameters[dateRangeName]._meta = {
+                dataType: type,
+                valueType: 'dateRangeValueType'
+            };
+        }
+
+        function applyFeatureCriteria(isTemporal, metadata, feature, value, filterName) {
+            if (isTemporal) {
+                if (metadata) {
+                    const dynamics = metadata.split("||");
+                    const tooltipText = dynamics[0] === "true" ? 'Last ' + dynamics[1] : dynamics[2];
+                    const dynamicDateRangeToolTip = { name: filterName, text: tooltipText };
+                    const dynamicDateRangeObject = buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]);
+                    filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(filterName), dynamicDateRangeObject.metadata);
+                    filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
+                    $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data", dynamicDateRangeObject);
+                } else {
+                    const daterange = value.split("||");
+                    $rootScope.$broadcast("flairbiApp:filter-set-date-ranges", buildDateRange(feature.name, daterange));
+                }
+            }
+            const valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
+            const filter = value.split('||');
+            filter._meta = {
+                dataType: feature.type,
+                valueType: valueType
+            };
+            return filter;
+        }
+
+        function applyViewFeatureCriteria() {
+            const viewFeatureCriterias = vm.view.viewFeatureCriterias;
+            if (viewFeatureCriterias.length > 0) {
+                const filters = filterParametersService.getSelectedFilter();
+                viewFeatureCriterias.forEach(criteria => {
+                    const feature = featureEntities.filter((item) => item.name === criteria.feature.name)[0];
+                    const dateRangeFeatureName = filterParametersService.buildDateRangeFilterName(feature.name);
+                    const data = parseViewFeatureMetadata(criteria.metadata, feature, criteria.value, dateRangeFeatureName);
+                    console.log('applyViewFeatureCriteria: feature', feature, 'data', data);
+                    feature.selected = data.selected[0];
+                    feature.selected2 = data.selected[1];
+                    feature.metadata = data.metadata.metadata;
+                    if (data.dateRangeTab === 2) {
+                        filterParametersService.saveDynamicDateRangeMetaData(dateRangeFeatureName, data.metadata.metadata);
+                        filterParametersService.saveDynamicDateRangeToolTip(data.tooltipObj);
+                    }
+                    delete filters[filterParametersService.buildDateRangeFilterName(feature.name)]
+                    addDateRangeFilter(filters, data.values[0], feature);
+                    addDateRangeFilter(filters, data.values[1], feature);
+                });
+                filterParametersService.saveSelectedFilter(filters);
+                filterParametersService.save(filterParametersService.getSelectedFilter());
+            }
+            vm.viewFeatureCriteriaReady = true;
+
+            return viewFeatureCriterias.map((criteria) => criteria.feature.name);
+        }
+
+        function parseViewFeatureMetadata(metadata, feature, value, filterName) {
+            console.log('parseViewFeatureMetadata', arguments);
+            var dynamics;
+            var tooltipText;
+            var dynamicDateRangeToolTip;
+            var dynamicDateRangeObject;
+            var daterange = value.split("||");
+            var selected;
+            if (metadata) {
+                dynamics = metadata.split("||");
+                tooltipText = dynamics[0] === "true" ? 'Last ' + dynamics[1] : dynamics[2];
+                dynamicDateRangeToolTip = { name: filterName, text: tooltipText };
+                dynamicDateRangeObject = buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]);
+                selected = {};
+            } else {
+                dynamicDateRangeObject = {
+                    dimensionName: feature.name,
+                    metadata: {
+                        dateRangeTab: daterange.length === 1 ? 0 : 1,
+                        customDynamicDateRange: 1,
+                        currentDynamicDateRangeConfig: {}
+                    }
+                };
+                selected = daterange;
+            }
+
+            return {
+                values: daterange,
+                metadataValues: dynamics,
+                tooltip: tooltipText,
+                tooltipObj: dynamicDateRangeToolTip,
+                metadata: dynamicDateRangeObject,
+                selected: selected
+            };
         }
 
         function addFilterFromBookmark(selectedBookmark) {
             var filter = {};
-            var dynamicDateRangeToolTip = {name:'',text:''};
             var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function (criteria) {
-                var isTemporal = selectedBookmark.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
+                var isTemporal = criteria.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
                 var featureName = isTemporal
                     ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
                     : criteria.feature.name;
-                var valueType = isTemporal ? 'dateRangeValueType' : 'valueType';
-                if(isTemporal && selectedBookmark.dynamicTooltip){
-                    dynamicDateRangeToolTip.name = featureName;
-                    dynamicDateRangeToolTip.text = selectedBookmark.dynamicTooltip;
-                    filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
-                }
-                filter[featureName] = criteria.value.split("||");
-                filter[featureName]._meta = {
-                    dataType: criteria.feature.type,
-                    valueType: valueType
-                };
+                filter[featureName] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, featureName);
             });
             filterParametersService.save(filter);
+        }
+
+        function buildDynamicDateRangeObject(dimensionName, title, customDynamicDateRange) {
+            var metaData = { dimensionName: dimensionName, metadata: { currentDynamicDateRangeConfig: {}, customDynamicDateRange: customDynamicDateRange, dateRangeTab: 2 } };
+            vm.configs = DYNAMIC_DATE_RANGE_CONFIG.filter(function (item) {
+                return item.title === title;
+            });
+            metaData.metadata.currentDynamicDateRangeConfig = vm.configs[0];
+            return metaData;
+        }
+
+        function buildDateRange(dimensionName, daterange) {
+            return { dimensionName: dimensionName, daterange: { selected: daterange[0], selected2: daterange[1] } };
         }
 
         function openSettings() {
@@ -224,7 +376,7 @@
 
         function toggleFSFilter() {
             vm.showFSFilter = filterParametersService.getFiltersCount() == 0 ? false : !vm.showFSFilter;
-            $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters",vm.showFSFilter);
+            $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters", vm.showFSFilter);
         }
 
         function ifFSFilterToggled() {
@@ -249,10 +401,10 @@
         function hideFiltersHeaderAndSideBar() {
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters",true);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
             } else {
                 vm.showFSFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters",false);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
             }
         }
 
@@ -275,6 +427,12 @@
             vm.viewId = 0;
         }
 
+        function changeTitle() {
+            if (vm.selectedDashboard && vm.selectedView) {
+                $window.document.title = vm.selectedDashboard.dashboardName + "/" + vm.selectedView.viewName;
+            }
+        }
+
         function clearDashboard() {
             vm.selectedDashboard = null;
         }
@@ -291,6 +449,7 @@
                 function (result) {
                     vm.views = result;
                     vm.selectedView = VisualDispatchService.getView(result, parseInt(vm.viewId));
+                    changeTitle();
                 }
             );
         }
@@ -298,11 +457,13 @@
         function changeView(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
+            changeTitle()
         }
 
-        function changeViewAndUpdateDashboard(item){
+        function changeViewAndUpdateDashboard(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
+            changeTitle();
             vm.build();
         }
 
@@ -419,9 +580,9 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function setToolTipTexts(filters){
+        function setToolTipTexts(filters) {
             angular.forEach(filters, function (value, key) {
-                vm.toolTipTexts[key]=getFiltersToolTipName(key);
+                vm.toolTipTexts[key] = getFiltersToolTipName(key);
             });
         }
 
@@ -431,13 +592,17 @@
 
         function getFiltersToolTipName(name) {
             if (isDateRange(name)) {
-                var dateRangeToolTipText="Date Range : ";
+                var dateRangeToolTipText = "Date Range : ";
                 var filters = filterParametersService.get();
-                if((filters[name][0].indexOf(dynamicDateRangeFun) !== -1) || (filters[name][1].indexOf(dynamicDateRangeFun) !== -1)){
+                if ((filters[name][0].indexOf(dynamicDateRangeFun) !== -1) || (filters[name][1] && filters[name][1].indexOf(dynamicDateRangeFun) !== -1)) {
                     dateRangeToolTipText = dateRangeToolTipText + filterParametersService.getDynamicDateRangeToolTip(name);
                     return dateRangeToolTipText;
-                }else{
-                    dateRangeToolTipText = dateRangeToolTipText + filterParametersService.changeDateFormat(filters[name][0]) + " AND " + filterParametersService.changeDateFormat(filters[name][1]);
+                } else {
+                    if (filters[name][1]) {
+                        dateRangeToolTipText = dateRangeToolTipText + filterParametersService.changeDateFormat(filters[name][0]) + " AND " + filterParametersService.changeDateFormat(filters[name][1]);
+                    } else {
+                        dateRangeToolTipText = dateRangeToolTipText + filterParametersService.changeDateFormat(filters[name][0]) + " and newer";
+                    }
                     return dateRangeToolTipText;
                 }
             } else {
@@ -446,7 +611,7 @@
         }
 
         function isDateRange(name) {
-            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0 ? true : false;
+            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0;
         }
 
         function setNoOfPages() {
@@ -473,10 +638,9 @@
         }
 
         function removeFilter($event, key) {
-
             $event.preventDefault();
             if (isDateRange(key)) {
-                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { startDate: '', endDate: '' });
+                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { dimensionName: key.split('|')[1].toLowerCase(), startDate: null, endDate: null });
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));
@@ -560,26 +724,28 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function bookmark() {
+        function getFilterCriterias() {
             var params = filterParametersService.get();
             var filterCriterias = [];
-            var dateRange = false;
-            var dateRangeFeatureName = "";
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
-                    var param = params[key];
-                    if (isDateRange(key)) {
-                        params[key][0] = filterParametersService.changeDateFormat(params[key][0]);
-                        params[key][1] = filterParametersService.changeDateFormat(params[key][1]);
+                    const param = params[key];
+                    const isItemDateRange = isDateRange(key);
+                    if (isItemDateRange) {
+                        param[0] = filterParametersService.changeDateFormat(param[0]);
+                        if (param[1]) {
+                            param[1] = filterParametersService.changeDateFormat(param[1]);
+                        }
                     }
                     filterCriterias.push({
                         value: params[key].join('||'),
+                        metaData: isItemDateRange ? filterParametersService.buildFilterCriteriasForDynamicDateRange(key) : null,
+                        dateRange: isItemDateRange,
+                        key,
                         feature: vm.features.filter(function (item) {
                             var featureName = "";
-                            if (isDateRange(key)) {
-                                dateRange = true;
+                            if (isItemDateRange) {
                                 featureName = key.split('|')[1].toLowerCase();
-                                dateRangeFeatureName = key; 
                             } else {
                                 featureName = key.toLowerCase();
                             }
@@ -588,6 +754,11 @@
                     });
                 }
             }
+            return filterCriterias;
+        }
+
+        function bookmark() {
+            const filterCriterias = getFilterCriterias();
 
             $uibModal
                 .open({
@@ -603,9 +774,7 @@
                                 id: null,
                                 name: null,
                                 featureCriteria: filterCriterias,
-                                datasource: vm.view.viewDashboard.dashboardDatasource,
-                                dateRange: dateRange,
-                                dynamicTooltip : filterParametersService.getDynamicDateRangeToolTip(dateRangeFeatureName)
+                                datasource: vm.view.viewDashboard.dashboardDatasource
                             };
                         }
                     }
@@ -619,6 +788,24 @@
                     },
                     function () { }
                 );
+        }
+
+        function saveViewFeatureCriterias() {
+            if (!vm.viewFeatureCriteriaReady) {
+                return;
+            }
+            const features = getFilterCriterias()
+                .filter((item) => item.dateRange)
+                .map((item) => ({
+                    value: item.value,
+                    featureId: item.feature.id,
+                    metadata: item.metaData
+                }));
+
+            ViewFeatureCriteria.save({
+                features,
+                viewId: vm.view.id
+            });
         }
 
         function refresh() {
@@ -646,8 +833,14 @@
             $rootScope.$broadcast("flairbiApp:clearFilters");
         }
 
+        function clearFiltersClick() {
+            clearFilters();
+            $rootScope.$broadcast("flairbiApp:clearFiltersClicked");
+        }
+
         function onWriteToPg() {
             $rootScope.$broadcast("FlairBi:saveAllWidgets");
+            saveViewFeatureCriterias();
         }
 
         function onGetData() { }

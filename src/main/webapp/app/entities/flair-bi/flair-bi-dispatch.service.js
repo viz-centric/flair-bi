@@ -54,7 +54,8 @@
             setSavePromptMessage:setSavePromptMessage,
             getSavePromptMessage:getSavePromptMessage,
             setViewEditedBeforeSave:setViewEditedBeforeSave,
-            getViewEditedBeforeSave:getViewEditedBeforeSave
+            getViewEditedBeforeSave:getViewEditedBeforeSave,
+            setIsSaved:setIsSaved
         };
 
         function setVisual(v) {
@@ -150,10 +151,12 @@
         }
         function reloadGrids(){
             var elements=$('div[visual-build-id-resize]');
-                for(var i in elements){
+       
+            for (let index = 0; index < elements.length; index++) {
                 $rootScope.$broadcast(
-                "update-widget-content-" + elements[i].id || elements[i].id
-                );
+                    "refresh-widget-content-" + elements[index].id || elements[index].id
+                    );
+                
             }
         }
 
@@ -208,6 +211,9 @@
         }
         function getViewEditedBeforeSave(){
             return viewEditedBeforeSave;
+        }
+        function setIsSaved(flag){
+            visual.visual.isSaved = flag;
         }
     }
 })();

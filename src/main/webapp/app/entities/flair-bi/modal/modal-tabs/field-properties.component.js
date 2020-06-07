@@ -28,6 +28,7 @@
         vm.addFieldDimension = addFieldDimension;
         vm.addFieldMeasure = addFieldMeasure;
         vm.removeField = removeField;
+        vm.featureChange = featureChange;
 
         ////////////////
 
@@ -105,5 +106,12 @@
                 return el.feature.name === vm.selectedField.feature.name;
             }).length > 0;
         }
+
+        function featureChange(feature){
+            if(feature){
+                VisualDispatchService.setIsSaved(false);
+            }
+        }
+
     }
 })();

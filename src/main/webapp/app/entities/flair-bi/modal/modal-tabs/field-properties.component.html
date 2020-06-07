@@ -64,7 +64,7 @@
                 <label class="control-label"
                     ng-if="vm.selectedField.fieldType.featureType ==='DIMENSION'">Dimension</label>
                 <label class="control-label" ng-if="vm.selectedField.fieldType.featureType ==='MEASURE'">Measure</label>
-                <ui-select ng-model="vm.selectedField.feature" theme="bootstrap">
+                <ui-select ng-model="vm.selectedField.feature" theme="bootstrap" on-select="vm.featureChange($item)">
                     <ui-select-match placeholder="Select {{vm.selectedField.fieldType.featureType}}" allow-clear="true">
                         {{vm.selectedField.feature.name}}
                     </ui-select-match>

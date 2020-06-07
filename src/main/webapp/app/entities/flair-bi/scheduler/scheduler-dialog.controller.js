@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES', 'QueryValidationService', '$q'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES, QueryValidationService, $q) {
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -58,9 +58,11 @@
         vm.maxListSize = 10;
         vm.selectedUsers = [];
         vm.selectedWebhook = [];
+        vm.validate = validate;
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
+                "userid": "",
                 "connection_name": "",
                 "report_name": "",
                 "source_id": "",
@@ -102,16 +104,18 @@
 
         function activate() {
             vm.isAdmin = AccountDispatch.isAdmin();
+            vm.account = AccountDispatch.getAccount();
+
             registerSetCommunicationList();
             vm.datePickerOpenStatus.startDate = false;
             vm.datePickerOpenStatus.endDate = false;
             vm.scheduleObj.schedule.end_date.setDate(vm.scheduleObj.schedule.start_date.getDate() + 1);
-            if (vm.isAdmin) {
-                getWebhookList();
-                isConfigExist();
-            } else {
-                getWebhookNames();
-            }
+
+            getWebhookList();
+            isConfigExist();
+
+            getWebhookNames();
+
             resetSelectedChannels();
             if (visualMetaData) {
                 vm.visualMetaData = visualMetaData;
@@ -223,7 +227,28 @@
             vm.scheduleObj.schedule.start_date = new Date(data.schedule.start_date);
             vm.scheduleObj.schedule.end_date = new Date(data.schedule.end_date);
             vm.scheduleObj.report.mail_body = data.report.mail_body;
-            vm.scheduleObj.putcall = true;
+            vm.scheduleObj.report.userid = data.report.userid;
+            vm.scheduleObj.report.title_name = data.report.title_name;
+
+            vm.canEdit = AccountDispatch.hasAuthority(
+                "WRITE_" + data.report.view_id + "_VIEW"
+            );
+
+            vm.canDelete = AccountDispatch.hasAuthority(
+                "DELETE_" + data.report.view_id + "_VIEW"
+            );
+
+            vm.canUpdate = AccountDispatch.hasAuthority(
+                "UPDATE_" + data.report.view_id + "_VIEW"
+            );
+            vm.canRead = AccountDispatch.hasAuthority(
+                "READ_" + data.report.view_id + "_VIEW"
+            );
+
+            if (vm.canEdit && vm.canUpdate && vm.canRead) {
+                vm.scheduleObj.putcall = true;
+            }
+
             vm.scheduleObj.report.thresholdAlert = data.report.thresholdAlert;
             vm.scheduleObj.constraints = data.constraints;
             vm.scheduleObj.assign_report.communication_list.teams = data.assign_report.communication_list.teams;
@@ -274,10 +299,51 @@
             }
         }
 
-        function getDatasourceId(share_link) {
-            var params = share_link.split('=');
-            return params[params.length - 1];
+        function getConditionExpression(query) {
+            if (query.having) {
+                vm.condition.featureName = query.having[0].feature.name;
+                vm.condition.compare = vm.COMPARISIONS.filter(function (item) {
+                    return item.opt === query.having[0].comparatorType;
+                })[0];
+
+                const operation = JSON.parse(query.having[0].operation || '{}');
+                if (operation['@type'] === 'arithmetic') {
+                    const innerQuery = operation.operations[0].value;
+                    console.log('innerQuery', innerQuery);
+                    const scalar = operation.operations[1].value;
+                    const conditionExpression = innerQuery.conditionExpressions[0].conditionExpression.firstExpression;
+                    const field = innerQuery.fields[0];
+                    vm.condition.thresholdMode = 'dynamic';
+                    vm.condition.dynamicThreshold = {
+                        field: field.name,
+                        aggregation: vm.AGGREGATION_TYPES.find(function (item) {
+                            return item.opt === field.aggregation;
+                        }),
+                        dimension: vm.timeCompatibleDimensions.find(function (item) {
+                            return item.definition === conditionExpression.featureName;
+                        }),
+                        unit: vm.TIME_UNIT.find(function (unit) {
+                            return unit.value === conditionExpression.valueType.interval.split(' ')[1];
+                        }),
+                        value: conditionExpression.valueType.interval.split(' ')[0],
+                    };
+                    vm.condition.value = 100 - Math.round(scalar * 100);
+                } else {
+                    vm.condition.value = operation.value;
+                }
+            }
         }
+
+        function getDatasourceId(share_link) {
+            return getQueryString('datasourceId', share_link);
+        }
+
+        function getQueryString(field, url) {
+            var href = url ? url : window.location.href;
+            var reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
+            var string = reg.exec(href);
+            return string ? string[1] : null;
+        };
 
         function addEmailList(emailsR) {
             var emails = emailsR.slice(0, vm.maxListSize);
@@ -325,6 +391,7 @@
             vm.scheduleObj.report.share_link = scheduledObj.report.share_link;
             vm.scheduleObj.datasourceid = getDatasourceId(scheduledObj.report.share_link);
             vm.scheduleObj.report.report_name = getReportName(visualMetaData);
+            vm.scheduleObj.report.title_name = getReportTitle(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid = visualMetaData.id;
             vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
             assignTimeConditionsToScheduledObj();
@@ -337,9 +404,10 @@
             vm.scheduleObj.report.view_name = view.viewName;
             vm.scheduleObj.report.view_id = view.id;
             vm.scheduleObj.report.build_url = builUrl(dashboard, view);
-            vm.scheduleObj.report.share_link = getShareLink(visualMetaData, datasource);
+            vm.scheduleObj.report.share_link = getShareLink(visualMetaData, datasource, view.id);
             vm.scheduleObj.datasourceid = datasource.id;
             vm.scheduleObj.report.report_name = getReportName(visualMetaData);
+            vm.scheduleObj.report.title_name = getReportTitle(visualMetaData);
             vm.scheduleObj.report_line_item.visualizationid = visualMetaData.id;
             vm.scheduleObj.queryDTO = buildQueryDTO(visualMetaData);
             assignTimeConditionsToScheduledObj();
@@ -347,9 +415,9 @@
 
         }
 
-        function getShareLink(visualMetaData, datasource) {
+        function getShareLink(visualMetaData, datasource, viewId) {
             return ShareLinkService.createLink(
-                visualMetaData.getSharePath(datasource)
+                visualMetaData.getSharePath(datasource, viewId)
             );
         }
 
@@ -360,6 +428,10 @@
         function getReportName(visualMetaData) {
             var reportName = visualMetaData.metadataVisual.name.split(' ').join('-') + '-' + visualMetaData.id;
             return reportName;
+        }
+
+        function getReportTitle(visualMetaData) {
+            return visualMetaData.titleProperties.titleText;
         }
 
         function loadUsers(q) {
@@ -417,7 +489,7 @@
             };
 
             const featureData2 = {};
-            const dimension = visualMetaData.getFieldDimensions()[0];
+            const dimension = vm.visualMetaData.getFieldDimensions()[0];
             const featureDef = dimension.feature.definition;
             featureData2[featureDefinition] = ['A.' + featureDef, 'B.' + featureDef];
             featureData2[featureDefinition]._meta = {
@@ -455,7 +527,7 @@
                     if (success.status == 200 && (success.data.message == "report is updated" || success.data.message == "Report is scheduled successfully")) {
                         $uibModalInstance.close(vm.scheduleObj);
                         $rootScope.showSuccessToast({
-                            text: success.data.message,
+                            text: "Report updated",
                             title: "Success"
                         });
                     } else {
@@ -473,7 +545,7 @@
                 });
             } else {
                 var info = {
-                    text: "Please select aggregate function from settings",
+                    text: "Scheduling threshold alerting on Visualisation with NONE aggregate type is prohibited",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
@@ -545,20 +617,36 @@
         }
 
         function deleteReport(id) {
-            schedulerService.cancelScheduleReport(addPrefix(id)).then(function (success) {
-                var info = {
-                    text: success.data.message,
-                    title: "Cancelled"
+            var canDelete = true;
+            if (!vm.isAdmin) {
+                if (vm.scheduleObj.report.userid !== vm.account.login) {
+                    canDelete = false;
                 }
-                $rootScope.showSuccessToast(info);
-                vm.clear();
-            }).catch(function (error) {
+            }
+            if (canDelete) {
+                schedulerService.cancelScheduleReport(addPrefix(id)).then(function (success) {
+                    var info = {
+                        text: success.data.message,
+                        title: "Cancelled"
+                    }
+                    $rootScope.showSuccessToast(info);
+                    vm.clear();
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+            }
+            else {
                 var info = {
-                    text: error.data.message,
+                    text: "You don't have access to cancel this job",
                     title: "Error"
                 }
                 $rootScope.showErrorSingleToast(info);
-            });
+            }
+
         }
 
         function loadDashboards() {
@@ -620,7 +708,7 @@
             if (vm.condition.thresholdMode === 'dynamic') {
                 const dynamicAlertConditionalExpressions = getDynamicAlertConditionalExpressions();
                 const conditionExpressionForParams = filterParametersService.getConditionExpressionForParams(dynamicAlertConditionalExpressions);
-                const query = visualMetaData.getQueryParametersWithFields(
+                const query = vm.visualMetaData.getQueryParametersWithFields(
                     [{
                         name: vm.condition.dynamicThreshold.field,
                         aggregation: vm.condition.dynamicThreshold.aggregation.opt,
@@ -786,6 +874,52 @@
                 }
             );
             $scope.$on("$destroy", setCommunicationList);
+        }
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        function validate() {
+            vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
+            validateAndSetHaving();
+            vm.isValidated = false;
+            vm.query = null;
+            vm.queryValidationError = null;
+
+            var deferred = $q.defer();
+
+            Visualmetadata.validate({}, {
+                datasourceId: vm.scheduleObj.datasourceid,
+                queryDTO: vm.scheduleObj.queryDTO,
+                visualMetadataId: vm.scheduleObj.report_line_item.visualizationid,
+                conditionExpression: vm.conditionExpression
+            }).$promise
+                .then(function (data) {
+                    vm.isValidated = data.validationResultType === 'SUCCESS';
+                    vm.query = data.rawQuery;
+                    var validationError = null;
+                    if (!vm.isValidated) {
+                        validationError = QueryValidationService.getQueryValidationError(data.error);
+                    }
+                    if (validationError) {
+                        vm.queryValidationError = $translate.instant(validationError.msgKey, validationError.params);
+                    }
+                    if (vm.isValidated) {
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                })
+                .catch(function (error) {
+                    vm.queryValidationError = $translate.instant('error.query.failed');
+                    deferred.reject(error);
+                });
+
+            return deferred.promise;
         }
 
     }

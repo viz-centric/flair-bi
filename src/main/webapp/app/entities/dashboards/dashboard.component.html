@@ -44,10 +44,13 @@
                 <img ng-src="{{vm.dashboard.imageLocation}}" alt="Dashboard" />
             </span>
         </div>
-        <div class="card-footer">
-            <h4 class="item">{{vm.dashboard.dashboardName}}
-                <span uib-tooltip={{vm.dashboard.description}} tooltip-placement="top"><i class="fa fa-info-circle"></i></span>
-            </h4>
+        <div class="card-footer flair-text">
+            <div class="item box-name">
+            <p class="text" title={{vm.dashboard.dashboardName}} >{{vm.dashboard.dashboardName}}</p>
+                <span class="description-icon" uib-tooltip={{vm.dashboard.description}} tooltip-placement="top">
+                    <i class="fa fa-info-circle"></i>
+                </span>
+            </div>
             <a class="item build" ui-sref="dashboards-overview({id:vm.dashboard.id})">views
                 <i class="fa fa-angle-right"></i>
             </a>

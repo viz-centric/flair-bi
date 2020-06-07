@@ -6,13 +6,13 @@
                 "createLabel": "Create a new Feature Bookmark",
                 "createOrEditLabel": "Create or edit a Feature Bookmark"
             },
-            "created": "A new Feature Bookmark is created with identifier {{ param }}",
-            "updated": "A Feature Bookmark is updated with identifier {{ param }}",
+            "created": "Bookmark is created with identifier {{ param }}",
+            "updated": "Bookmark is updated with identifier {{ param }}",
             "deleted": "A Feature Bookmark is deleted with identifier {{ param }}",
-            "errorSaving":"Error saving Feature Bookmark",
-            "errorDeleting":"Error deleting Feature Bookmark",
+            "errorSaving":"Error saving Bookmark",
+            "errorDeleting":"Error deleting Bookmark",
             "delete": {
-                "question": "Are you sure you want to delete Feature Bookmark {{ id }}?"
+                "question": "Confirm delete Feature Bookmark {{ id }}"
             },
             "detail": {
                 "title": "Feature Bookmark"

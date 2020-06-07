@@ -32,9 +32,7 @@
 
         function activate() {
             vm.features.$promise.then(function(result){
-                vm.dimensions = result.filter(function (item) {
-                    return item.featureType === 'DIMENSION';
-                });
+                vm.dimensions = result;
             })
             registerComposition();
             registerDecomposition();

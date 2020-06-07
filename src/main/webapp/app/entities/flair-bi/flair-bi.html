@@ -78,6 +78,15 @@
                                                         </svg>
                                                     </span></a>
                                             </div>
+                                            <div class="item" role="menuitem" ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()">
+                                                <a href ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
+                                                    <span uib-tooltip="Save" tooltip-placement="top">
+                                                        <svg class="flaticons-save-button">
+                                                            <use xlink:href="#save-button" />
+                                                        </svg>
+                                                    </span>
+                                                </a>
+                                            </div>
                                             <div class="item" role="menuitem" ng-show="vm.ngIfSettings()">
                                                 <a href ng-click="vm.openDataContraints(v)">
                                                     <span uib-tooltip="Data&nbsp;Constraints" tooltip-placement="top">
@@ -132,7 +141,7 @@
                                                     </span>
                                                 </a>
                                             </div>
-                                            <div class="item" role="menuitem">
+                                            <div class="item" role="menuitem"  ng-if="vm.canCreateReport">
                                                 <a href ng-click="vm.openSchedulerDialog(v,false)">
                                                     <span uib-tooltip="Schedule&nbsp;Report" tooltip-placement="top">
                                                         <svg class="calendar">
@@ -141,7 +150,7 @@
                                                     </span>
                                                 </a>
                                             </div>
-                                            <div class="item" role="menuitem">
+                                            <div  ng-if="vm.hideThreshold(v)" class="item" role="menuitem" ng-show="vm.canCreateReport">
                                                 <a href ng-click="vm.openSchedulerDialog(v,true)">
                                                     <span uib-tooltip="Schedule&nbsp;Threshold&nbsp;Alert&nbsp;Report"
                                                         tooltip-placement="top">
@@ -171,8 +180,7 @@
                     </div>
                     <div ng-style="{'opacity': v.bodyProperties.opacity}"
                         ng-if="$root.vizualizationServiceMode == 'grpc'" id="content-{{v.visualBuildId}}"
-                        class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()"
-                        data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
+                        class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()" data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
                         reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
                         <div class="loader-spinner" ng-if="v.metadataVisual.functionname==='GenerateTable'">
                             <img class="vizualization" src="../../../content/svgs/loader.svg" style="height: 100px;width: 100px;">
@@ -207,10 +215,17 @@
                                             </span>
                                         </a>
                                         <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href=""
-                                            class="viz-header-button" ng-click="vm.saveFeatures(v)"
-                                            ng-disabled="vm.isSaving">
-                                            <span uib-tooltip="Build" tooltip-placement="bottom">
+                                            class="viz-header-button" ng-click="vm.applyFeatures(v)">
+                                            <span uib-tooltip="Apply" tooltip-placement="bottom">
                                                 <i class="viz-header-icon fa fa-gavel"></i>
+                                            </span>
+                                        </a>
+                                        <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href=""
+                                            class="viz-header-button" ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
+                                            <span uib-tooltip="Save" tooltip-placement="bottom">
+                                                <svg class="viz-header-icon flaticons-save-button">
+                                                    <use xlink:href="#save-button" />
+                                                </svg>
                                             </span>
                                         </a>
                                         <a href="" class="viz-header-button" ng-click="vm.flipCard(v)">

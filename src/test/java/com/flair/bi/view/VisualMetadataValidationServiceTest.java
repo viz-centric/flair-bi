@@ -1,6 +1,8 @@
 package com.flair.bi.view;
 
+import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.SchedulerService;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
@@ -21,11 +23,20 @@ public class VisualMetadataValidationServiceTest {
     @Mock
     private GrpcQueryService grpcQueryService;
 
+    @Mock
+    private DatasourceService datasourceService;
+
+    @Mock
+    private SchedulerService schedulerService;
+
+    @Mock
+    private VisualMetadataService visualMetadataService;
+
     private VisualMetadataValidationService service;
 
     @Before
     public void setUp() {
-        service = new VisualMetadataValidationService(grpcQueryService);
+        service = new VisualMetadataValidationService(grpcQueryService, datasourceService, schedulerService, visualMetadataService);
     }
 
     @Test

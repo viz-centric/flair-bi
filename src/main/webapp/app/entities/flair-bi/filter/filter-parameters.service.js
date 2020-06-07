@@ -13,6 +13,7 @@
         var dateRangePrefix='date-range';
         var selectedFilters={};
         var dynamicDateRangeToolTip={};
+        var dynamicDateRangeMetaData={};
 
         var service = {
             get: get,
@@ -29,7 +30,12 @@
             getComparableDataTypes:getComparableDataTypes,
             saveDynamicDateRangeToolTip:saveDynamicDateRangeToolTip,
             getDynamicDateRangeToolTip:getDynamicDateRangeToolTip,
-            resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip
+            resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip,
+            saveDynamicDateRangeMetaData : saveDynamicDateRangeMetaData,
+            getDynamicDateRangeMetaData : getDynamicDateRangeMetaData,
+            buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange,
+            isDateType : isDateType,
+            dateToString
         };
 
 
@@ -37,6 +43,10 @@
         return service;
 
         ////////////////
+
+        function dateToString(date) {
+            return moment(date).utc().format('YYYY-MM-DD HH:mm:ss.000000');
+        }
 
         /**
          * Return whole filter object or just part of it
@@ -153,9 +163,12 @@
             var valueType = meta.valueType || '';
             if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
                 console.log('create body exp ', values, name);
-                values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
+                if (values[1]) {
+                    values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
+                } else {
+                    values = [changeDateFormat(values[0])];
+                }
                 name = name.split('|')[1];
-                setDatesInRightSideFilters(values[0], values[1]);
             }
             if (valueType === 'compare') {
                 console.log('filter-parameters: compare value type values', values);
@@ -245,10 +258,6 @@
             return dateRangePrefix;
         }
 
-        function setDatesInRightSideFilters(startDate,endDate){
-            $rootScope.$broadcast('flairbiApp:filter-set-date-ranges',{startDate:startDate,endDate:endDate});
-        }
-
         function buildDateRangeFilterName(name){
             return dateRangePrefix+"|"+name;
         }
@@ -279,6 +288,36 @@
         }
         function resetDynamicDateRangeToolTip(){
             dynamicDateRangeToolTip={};
+        }
+
+        function saveDynamicDateRangeMetaData(dimensionName,metaData){
+            dynamicDateRangeMetaData[dimensionName] = metaData;
+        }
+
+        function getDynamicDateRangeMetaData(dimensionName){
+            if(dynamicDateRangeMetaData[dimensionName]){
+                return dynamicDateRangeMetaData[dimensionName];
+            }else{
+                return '';
+            }
+        }
+
+        function buildFilterCriteriasForDynamicDateRange(dimensionName){
+            if(dynamicDateRangeMetaData[dimensionName]){
+                var metaData = dynamicDateRangeMetaData[dimensionName];
+                var isCustom = metaData.currentDynamicDateRangeConfig.isCustom ? "true" : "false";
+                return isCustom +"||"+ metaData.customDynamicDateRange +"||"+ metaData.currentDynamicDateRangeConfig.title;
+            }else{
+                return null;
+            }
+        }
+
+        function isDateType(dimension) {
+            var type = dimension && dimension.type;
+            if (!type) {
+                return false;
+            }
+            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
     }
 })();

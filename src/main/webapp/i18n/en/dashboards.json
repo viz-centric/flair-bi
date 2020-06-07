@@ -12,7 +12,7 @@
             "errorSaving": "Error saving dashboard",
             "deleted": "A Dashboard is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Dashboard {{ id }}?"
+                "question": "Confirm delete dashboard {{id}}"
             },
             "errorDeleting": "Error deleting dashboard",
             "detail": {
@@ -28,10 +28,10 @@
             "dashboardDatasources": "Dashboard Data Sources",
             "searchTitle": "Search result for dashboards",
             "error": {
-                "searched": "Error loading searched dashboards"
+                "searched": "Dashboard search error"
             },
             "selectDatasource": "Search Available Data Sources",
-            "uniqueError" : "Dashboard already exists with this name"
+            "uniqueError" : "A dashboard with this name already exists"
         }
     }
 }

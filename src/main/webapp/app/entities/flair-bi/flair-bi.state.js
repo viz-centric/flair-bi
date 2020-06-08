@@ -66,7 +66,6 @@
                     hasAuthority: [
                         "$stateParams",
                         "Principal",
-                        "$timeout",
                         "$q",
                         "$state",
                         function hasAuthority($stateParams,Principal,$q,$state) {
@@ -116,7 +115,6 @@
                     hasAuthority: [
                         "$stateParams",
                         "Principal",
-                        "$timeout",
                         "$q",
                         "$state",
                         function hasAuthority($stateParams,Principal,$q,$state) {
@@ -278,7 +276,6 @@
                     hasAuthority: [
                         "$stateParams",
                         "Principal",
-                        "$timeout",
                         "$q",
                         "$state",
                         function hasAuthority($stateParams,Principal,$q,$state) {

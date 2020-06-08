@@ -55,8 +55,10 @@
 
         function getStartDateRangeInterval() {
             var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
-            if (config.toDate || config.isCustom) {
+            if (config.toDate) {
                 return null;
+            } else if (config.isCustom) {
+                return vm.dimension.metadata.customDynamicDateRange + ' ' + config.unit;
             } else if (config.period.days) {
                 return config.period.days + ' days';
             } else if (config.period.months) {
@@ -68,15 +70,7 @@
         function getStartDateRange() {
             var date = new Date();
             var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
-            if (config.isCustom) {
-                let result = moment(date)
-                    .subtract(vm.dimension.metadata.customDynamicDateRange, config.unit)
-                    .toDate();
-                if (config.startDay) {
-                    result = startOfDay(result);
-                }
-                return result;
-            } else if (config.toDate) {
+            if (config.toDate) {
                 date = moment(date).startOf(config.toDate).toDate();
                 return date;
             }

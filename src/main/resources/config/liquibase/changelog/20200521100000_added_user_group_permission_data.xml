@@ -29,6 +29,62 @@
             <column name="permission_action" value="DELETE" />
             <column name="permission_scope" value="APPLICATION" />
         </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_DEVELOPMENT" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="READ" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_DEVELOPMENT" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="WRITE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_DEVELOPMENT" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="UPDATE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_DEVELOPMENT" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="DELETE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_USER" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="READ" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_USER" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="WRITE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_USER" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="UPDATE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_USER" />
+            <column name="permission_resource" value="VISUALIZATION_COLORS" />
+            <column name="permission_action" value="DELETE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

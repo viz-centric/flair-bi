@@ -65,25 +65,21 @@
             $rootScope.updateWidget = {};
             if (vm.dimensions) {
                 vm.dimensions.forEach(function (item) {
-                    if (item.dateFilter !== "ENABLED") {
-                        if (filterParametersService.isDateType(item)) {
-                            item.selected = null;
-                            item.selected2 = null;
-                            item.metadata = {};
-                            item.metadata.dateRangeTab = 0;
-                            item.metadata.currentDynamicDateRangeConfig = null;
-                            item.metadata.customDynamicDateRange = 0;
-                        } else {
-                            item.selected = null;
-                            item.selected2 = null;
-                        }
-
-                        $rootScope.$broadcast("FlairBi:remove-filter", item.name);
-                    }
-                    else {
-                        vm.dateFilter.push("date-range|" + item.name);
+                    if (filterParametersService.isDateType(item)) {
+                        item.selected = null;
+                        item.selected2 = null;
+                        item.metadata = {};
+                        item.metadata.dateRangeTab = 0;
+                        item.metadata.currentDynamicDateRangeConfig = null;
+                        item.metadata.customDynamicDateRange = 0;
+                    } else {
+                        item.selected = null;
+                        item.selected2 = null;
                     }
                 });
+                filterParametersService.clear();
+                filterParametersService.saveSelectedFilter($rootScope.updateWidget);
+                filter();
             }
         }
 

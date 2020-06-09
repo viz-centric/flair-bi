@@ -5751,6 +5751,9 @@ ui bootstrap tweaks
 .filter-area .filter-element tags-input.filter-input {
   margin: 0.5vw; }
 
+.filter-area .filter-element i.active {
+  color: #1c84c6; }
+
 .filter-area .dimensions-container {
   padding: 10px 5px;
   height: 100%;

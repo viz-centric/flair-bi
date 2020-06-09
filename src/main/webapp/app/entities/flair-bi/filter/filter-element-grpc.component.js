@@ -16,7 +16,7 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES','$stateParams'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams'];
 
     function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams) {
         var vm = this;
@@ -31,8 +31,10 @@
         vm.addToFavourite = addToFavourite;
         vm.checkFavouriteFilter = checkFavouriteFilter;
         vm.addFilter = addFilter;
+        vm.displayTextboxForValues = displayTextboxForValues;
+        vm.addToFilter = addToFilter;
         vm.isActive = isActive;
-
+        vm.activeForText = "disable"
 
         ////////////////
 
@@ -48,7 +50,7 @@
             $scope.$on('$destroy', unsub);
             registerRemoveTag();
             receivedMetaData();
-            if(isFavouriteFilter())
+            if (isFavouriteFilter())
                 vm.load("", vm.dimension);
         }
 
@@ -95,15 +97,15 @@
 
             if (filterParameters[vm.dimension.name].indexOf(filter) !== -1) {
                 filterParameters[vm.dimension.name].splice(filterParameters[vm.dimension.name].indexOf(filter.name), 1);
-                removeTagFromSelectedList({text:filter});
+                removeTagFromSelectedList({ text: filter });
             }
             else {
                 filterParameters[vm.dimension.name].push(filter);
-                if(!vm.dimension.selected){
+                if (!vm.dimension.selected) {
                     vm.dimension.selected = [];
-                    vm.dimension.selected.push({text:filter});
-                }else{
-                    vm.dimension.selected.push({text:filter});
+                    vm.dimension.selected.push({ text: filter });
+                } else {
+                    vm.dimension.selected.push({ text: filter });
                 }
             }
 
@@ -113,7 +115,7 @@
             };
             filterParametersService.saveSelectedFilter(filterParameters);
             vm.isActive(filter);
-            if(isFavouriteFilter())
+            if (isFavouriteFilter())
                 displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
 
 
@@ -149,7 +151,7 @@
                 });
         }
 
-        function onDateChange(startDate, endDate,metadata) {
+        function onDateChange(startDate, endDate, metadata) {
             vm.dimension.metadata = metadata;
             if (metadata.dateRangeTab !== 2) {
                 vm.dimension.selected = startDate;
@@ -265,12 +267,12 @@
                 queryDTO: query,
                 vId: vId
             },
-            $stateParams.id
+                $stateParams.id
             );
         }
 
-        function isFavouriteFilter(){
-            return vm.tab==='widgets'? true : false
+        function isFavouriteFilter() {
+            return vm.tab === 'widgets' ? true : false
         }
 
         function removed(tag) {
@@ -308,15 +310,15 @@
                 vm.dimension.selected = myFilters.map(function (item) {
                     var newItem = {};
                     newItem['text'] = item;
-                    if(isFavouriteFilter())
+                    if (isFavouriteFilter())
                         displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
                     return newItem;
                 });
             } else {
-                if(filterParametersService.isDateType(vm.dimension)){
+                if (filterParametersService.isDateType(vm.dimension)) {
                     vm.dimension.selected = null;
                     vm.dimension.selected2 = null;
-                }else{
+                } else {
                     vm.dimension.selected = [];
                     vm.dimension.selected2 = [];
                 }
@@ -334,7 +336,7 @@
                 valueType: 'valueType'
             };
             filterParametersService.saveSelectedFilter(filterParameters);
-            if(isFavouriteFilter())
+            if (isFavouriteFilter())
                 displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(tag['text']), filterParameters[vm.dimension.name].length - 1);
         }
 
@@ -362,6 +364,29 @@
             }
             arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
             return arr;
+        }
+
+        function displayTextboxForValues(dimension) {
+            vm.filterDimension = dimension;
+            vm.isBulkValue = true;
+        }
+
+        function addToFilter(dimension) {
+            if (vm.commaValue.length > 0) {
+                vm.isBulkValue = false;
+                vm.activeForText = "active";
+                vm.dimension.selected = [];
+                var filterParameters = filterParametersService.getSelectedFilter();
+                filterParameters[vm.dimension.name] = [];
+                var getList = vm.commaValue.split(',');
+                getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
+                getList.forEach(element => {
+                    added({ text: element });
+                    vm.dimension.selected.push({ text: element });
+                });
+                vm.commaValue = '';
+            }
+
         }
 
     }

@@ -27,5 +27,6 @@ public class DatasourceDTO {
     private Set<Hierarchy> hierarchies;
     private Set<DatasourceConstraint> datasourceConstraints;
     private DatasourceStatus status;
+    private String sql;
 
 }

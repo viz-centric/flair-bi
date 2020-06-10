@@ -21,6 +21,9 @@
         var vm = this;
         var delayedSearch;
 
+        vm.onSubmitDisabled = onSubmitDisabled;
+        vm.tabIndex = 0;
+        vm.sql = '';
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.setDataSource = setDataSource;
@@ -32,6 +35,7 @@
         vm.features = [];
         vm.resetTest = resetTest;
         vm.showData = showData;
+        vm.onTabClick = onTabClick;
         vm.data = [];
 
 
@@ -50,9 +54,21 @@
             })
         }
 
+        function onTabClick(tabIndex) {
+            vm.tabIndex = tabIndex;
+        }
+
+        function onSubmitDisabled() {
+            if (vm.tabIndex === 0) {
+                return !vm.datasources.name;
+            }
+            return !vm.sql;
+        }
+
         function openCalendar(date) {
             vm.datePickerOpenStatus[date] = true;
         }
+
         function setDataSource(name) {
             vm.datasources.name = name;
         }
@@ -123,27 +139,24 @@
 
         function saveConnection(cb, err) {
             var connection = prepareConnection();
+            const success = function (result) {
+                vm.connection = result;
+                return cb(result);
+            };
+            const failure = function (error) {
+                return err(error);
+            };
             if (!vm.selectedConnection) {
                 return Connections.save(
                     connection,
-                    function (result) {
-                        vm.connection = result;
-                        return cb(result);
-                    },
-                    function (error) {
-                        return err(error);
-                    }
+                    success,
+                    failure
                 );
             } else {
                 return Connections.update(
                     connection,
-                    function (result) {
-                        vm.connection = result;
-                        return cb(result);
-                    },
-                    function (error) {
-                        return err(error);
-                    }
+                    success,
+                    failure
                 );
             }
         }
@@ -174,6 +187,12 @@
         }
 
         function saveDatasource(connectionLinkId, customAction) {
+            if (vm.tabIndex === 0) {
+                vm.datasources.sql = null;
+            } else {
+                vm.datasources.sql = '__FLAIR_RAW([[' + vm.sql + ']])';
+                vm.datasources.name = 'sql';
+            }
             vm.datasources.connectionName = connectionLinkId;
             sendSaveDatasource(customAction);
         }

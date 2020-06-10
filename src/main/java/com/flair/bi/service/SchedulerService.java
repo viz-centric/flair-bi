@@ -238,9 +238,10 @@ public class SchedulerService {
 		operationList
 				.forEach((op -> {
 					if (op instanceof QueryOperation) {
+						QuerySourceDTO querySource = (QuerySourceDTO) queryDTO.getQuerySource();
 						QueryOperation queryOperation = (QueryOperation) op;
 						queryOperation.getValue().setQuerySource(
-								new QuerySourceDTO(queryDTO.getQuerySource().getSource(),
+								new QuerySourceDTO(querySource.getSource(),
 										String.valueOf((char) (65 + nestLevel))
 								));
 					} else if (op instanceof CompositeOperation) {

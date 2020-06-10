@@ -85,6 +85,9 @@ public class Datasource implements Serializable {
     @Enumerated(EnumType.STRING)
     private DatasourceStatus status;
 
+    @Column(name = "sql")
+    private String sql;
+
     @PreRemove
     public void preRemove() {
 

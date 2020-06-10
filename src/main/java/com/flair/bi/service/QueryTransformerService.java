@@ -7,7 +7,7 @@ import com.flair.bi.messages.Query;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.dto.QuerySource;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -124,10 +124,9 @@ public class QueryTransformerService {
         return builder.build();
     }
 
-    private Query.QuerySource toQuerySource(QuerySourceDTO querySource) {
+    private Query.QuerySource toQuerySource(QuerySource querySource) {
         return Query.QuerySource.newBuilder()
-                .setSource(querySource.getSource())
-                .setAlias(querySource.getAlias())
+                .setSource(JacksonUtil.toString(querySource))
                 .build();
     }
 

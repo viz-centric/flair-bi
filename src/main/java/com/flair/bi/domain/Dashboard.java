@@ -2,10 +2,7 @@ package com.flair.bi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.authorization.GranteePermissionReport;
-import com.flair.bi.authorization.PermissionGrantee;
-import com.flair.bi.authorization.PermissionReport;
-import com.flair.bi.authorization.SecuredEntity;
+import com.flair.bi.authorization.*;
 import com.flair.bi.domain.enumeration.Action;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -209,6 +206,23 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
         granteePermissionReport.getInfo().put("dashboardName", this.dashboardName);
         granteePermissionReport.getInfo().put("permissionMetadata", reports);
 
+        return granteePermissionReport;
+    }
+
+    @Override
+    public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee,List<GranteePermissionReport<T>> viewPermissions) {
+        DashboardGranteePermissionReport<T> granteePermissionReport = new DashboardGranteePermissionReport<>();
+
+        Set<PermissionReport> reports = this.getPermissions()
+                .stream()
+                .map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        granteePermissionReport.setGrantee(grantee);
+        granteePermissionReport.setViews(viewPermissions);
+        granteePermissionReport.getInfo().put("id", this.id);
+        granteePermissionReport.getInfo().put("dashboardName", this.dashboardName);
+        granteePermissionReport.getInfo().put("permissionMetadata", reports);
         return granteePermissionReport;
     }
 

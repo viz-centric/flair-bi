@@ -356,6 +356,11 @@ public class AccessControlManagerImplTest {
             }
 
             @Override
+            public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee, List<GranteePermissionReport<T>> viewPermissions) {
+                return null;
+            }
+
+            @Override
             public List<String> getResources() {
                 return Collections.singletonList("test");
             }
@@ -391,6 +396,11 @@ public class AccessControlManagerImplTest {
             }
 
             @Override
+            public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee, List<GranteePermissionReport<T>> viewPermissions) {
+                return null;
+            }
+
+            @Override
             public List<String> getResources() {
                 return Collections.singletonList("a");
             }
@@ -419,6 +429,11 @@ public class AccessControlManagerImplTest {
         SecuredEntity a = new SecuredEntity() {
             @Override
             public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
+                return null;
+            }
+
+            @Override
+            public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee, List<GranteePermissionReport<T>> viewPermissions) {
                 return null;
             }
 
@@ -467,6 +482,11 @@ public class AccessControlManagerImplTest {
         SecuredEntity a = new SecuredEntity() {
             @Override
             public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
+                return null;
+            }
+
+            @Override
+            public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee, List<GranteePermissionReport<T>> viewPermissions) {
                 return null;
             }
 

@@ -2,8 +2,12 @@ package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
+import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.DashboardService;
@@ -13,10 +17,12 @@ import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
+import com.querydsl.core.types.Predicate;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +39,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -227,6 +234,48 @@ public class UserGroupResource {
 
     }
 
+
+    @GetMapping("/userGroups/{name}/dashboardPermissions/search")
+    @Timed
+    public ResponseEntity<List<DashboardGranteePermissionReport<UserGroup>>> searchDashboardPermissionMetadataUser(@QuerydslPredicate(root = Dashboard.class) Predicate predicate, @PathVariable String name, @ApiParam Pageable pageable) throws URISyntaxException {
+        Page<Dashboard> dashboardPage = dashboardService.findAllByPrincipalPermissions(pageable, predicate);
+        UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
+                .orElseThrow(() ->
+                        new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
+        List<GranteePermissionReport<UserGroup>> body = dashboardPage
+                .getContent()
+                .stream()
+                .map(x -> x.getGranteePermissionReport(userGroup))
+                .collect(Collectors.toList());
+        List<DashboardGranteePermissionReport<UserGroup>> dashboardPermissions = new ArrayList<DashboardGranteePermissionReport<UserGroup>>();
+        for(Dashboard dashboard : dashboardPage.getContent()){
+            List<GranteePermissionReport<UserGroup>> viewPermissions = viewService
+                    .findByDashboardId(dashboard.getId())
+                    .stream()
+                    .map(x -> x.getGranteePermissionReport(userGroup))
+                    .collect(Collectors.toList());
+            dashboardPermissions.add(dashboard.getDashboardGranteePermissionReport(userGroup,viewPermissions));
+        }
+        return ResponseEntity.ok(dashboardPermissions);
+    }
+
+
+    @GetMapping("/userGroups/{name}/viewPermissions/search")
+    @Timed
+    public ResponseEntity<List<DashboardGranteePermissionReport<UserGroup>>> searchViewPermissionMetadataUser(@QuerydslPredicate(root = View.class) Predicate predicate, @PathVariable String name) throws URISyntaxException {
+        List<View> views = viewService.findAllByPrincipalPermissions(predicate);
+        UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
+                .orElseThrow(() ->
+                        new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
+        List<DashboardGranteePermissionReport<UserGroup>> dashboardPermissions = new ArrayList<DashboardGranteePermissionReport<UserGroup>>();
+        for (View view : views) {
+            List<GranteePermissionReport<UserGroup>> viewPermissions = new ArrayList<GranteePermissionReport<UserGroup>>();
+            Dashboard dashboard = view.getViewDashboard();
+            viewPermissions.add(view.getGranteePermissionReport(userGroup));
+            dashboardPermissions.add(dashboard.getDashboardGranteePermissionReport(userGroup,viewPermissions));
+        }
+        return ResponseEntity.ok(dashboardPermissions);
+    }
 
     @PutMapping("/userGroups/{name}/changePermissions")
     @Timed

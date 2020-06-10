@@ -372,7 +372,7 @@
         }
 
         function addToFilter(dimension) {
-            if (vm.commaValue.length > 0) {
+            if (vm.commaValue && vm.commaValue.length > 0) {
                 vm.isBulkValue = false;
                 vm.activeForText = "active";
                 vm.dimension.selected = [];

@@ -2,10 +2,12 @@ package com.flair.bi.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.service.DashboardService;
@@ -38,8 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -225,6 +226,45 @@ public class UserResource {
         return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions/search")
+    @Timed
+    public ResponseEntity<List<DashboardGranteePermissionReport<User>>> searchDashboardPermissionMetadataUser(@QuerydslPredicate(root = Dashboard.class) Predicate predicate,@PathVariable String login, @ApiParam Pageable pageable) throws URISyntaxException {
+        Page<Dashboard> dashboardPage = dashboardService.findAllByPrincipalPermissions(pageable, predicate);
+        final User user = userService.getUserWithAuthoritiesByLogin(login)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
+        List<GranteePermissionReport<User>> body = dashboardPage
+                .getContent()
+                .stream()
+                .map(x -> x.getGranteePermissionReport(user))
+                .collect(Collectors.toList());
+        List<DashboardGranteePermissionReport<User>> dashboardPermissions = new ArrayList<DashboardGranteePermissionReport<User>>();
+        for(Dashboard dashboard : dashboardPage.getContent()){
+            List<GranteePermissionReport<User>> viewPermissions = viewService
+                    .findByDashboardId(dashboard.getId())
+                    .stream()
+                    .map(x -> x.getGranteePermissionReport(user))
+                    .collect(Collectors.toList());
+            dashboardPermissions.add(dashboard.getDashboardGranteePermissionReport(user,viewPermissions));
+        }
+        return ResponseEntity.ok(dashboardPermissions);
+    }
+
+
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/viewPermissions/search")
+    @Timed
+    public ResponseEntity<List<DashboardGranteePermissionReport<User>>> searchViewPermissionMetadataUser(@QuerydslPredicate(root = View.class) Predicate predicate, @PathVariable String login) throws URISyntaxException {
+        List<View> views = viewService.findAllByPrincipalPermissions(predicate);
+        final User user = userService.getUserWithAuthoritiesByLogin(login)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
+        List<DashboardGranteePermissionReport<User>> dashboardPermissions = new ArrayList<DashboardGranteePermissionReport<User>>();
+        for (View view : views) {
+            List<GranteePermissionReport<User>> viewPermissions = new ArrayList<GranteePermissionReport<User>>();
+            Dashboard dashboard = view.getViewDashboard();
+            viewPermissions.add(view.getGranteePermissionReport(user));
+            dashboardPermissions.add(dashboard.getDashboardGranteePermissionReport(user,viewPermissions));
+        }
+        return ResponseEntity.ok(dashboardPermissions);
+    }
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions/{id}/viewPermissions")
     @Timed

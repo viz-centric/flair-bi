@@ -44,7 +44,6 @@ public class VisualizationColorsResource {
      */
     @PostMapping("/visualization-colors")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('VISUALIZATION_COLORS', 'WRITE','APPLICATION')")
     public ResponseEntity<VisualizationColorsDTO> createVisualizationColors(@Valid @RequestBody VisualizationColorsDTO visualizationColorsDTO) throws URISyntaxException {
         log.debug("REST request to save VisualizationColors : {}", visualizationColorsDTO);
         if (visualizationColorsDTO.getId() != null) {
@@ -67,7 +66,6 @@ public class VisualizationColorsResource {
      */
     @PutMapping("/visualization-colors")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('VISUALIZATION_COLORS', 'UPDATE','APPLICATION')")
     public ResponseEntity<VisualizationColorsDTO> updateVisualizationColors(@Valid @RequestBody VisualizationColorsDTO visualizationColorsDTO) throws URISyntaxException {
         log.debug("REST request to update VisualizationColors : {}", visualizationColorsDTO);
         if (visualizationColorsDTO.getId() == null) {
@@ -100,7 +98,6 @@ public class VisualizationColorsResource {
      */
     @GetMapping("/visualization-colors/{id}")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('VISUALIZATION_COLORS', 'READ','APPLICATION')")
     public ResponseEntity<VisualizationColorsDTO> getVisualizationColors(@PathVariable Long id) {
         log.debug("REST request to get VisualizationColors : {}", id);
         VisualizationColorsDTO visualizationColorsDTO = visualizationColorsService.findOne(id);
@@ -119,7 +116,6 @@ public class VisualizationColorsResource {
      */
     @DeleteMapping("/visualization-colors/{id}")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('VISUALIZATION_COLORS', 'DELETE','APPLICATION')")
     public ResponseEntity<Void> deleteVisualizationColors(@PathVariable Long id) {
         log.debug("REST request to delete VisualizationColors : {}", id);
         visualizationColorsService.delete(id);

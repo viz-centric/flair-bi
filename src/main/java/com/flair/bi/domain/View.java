@@ -3,10 +3,7 @@ package com.flair.bi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.authorization.GranteePermissionReport;
-import com.flair.bi.authorization.PermissionGrantee;
-import com.flair.bi.authorization.PermissionReport;
-import com.flair.bi.authorization.SecuredEntity;
+import com.flair.bi.authorization.*;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.viewwatch.ViewWatch;
 import lombok.EqualsAndHashCode;
@@ -210,5 +207,10 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
         return granteePermissionReport;
+    }
+
+    @Override
+    public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee, List<GranteePermissionReport<T>> viewPermissions) {
+        return null;
     }
 }

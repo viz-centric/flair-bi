@@ -76,7 +76,7 @@
             })
             .state("fullscreen", {
                 parent: "entity",
-                url: "/visual/?visualisationId&datasourceId&viewId",
+                url: "/visual/?visualisationId&datasourceId&viewId&filters",
                 data: {
                     authorities: []
                 },

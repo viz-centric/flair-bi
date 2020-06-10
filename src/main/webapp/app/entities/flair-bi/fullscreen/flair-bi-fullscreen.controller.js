@@ -36,20 +36,38 @@
         ////////////////
 
         function activate() {
+            if ($stateParams.filters) {
+                var filters = JSON.parse($stateParams.filters);
+                var filterKey = Object.keys(filters);
+                var filterParameters = filterParametersService.getSelectedFilter();
+
+                filterKey.forEach(element => {
+                    if (element.endsWith(":date-range")) {
+                        var dimension = element.replace(":date-range", "");
+                        filterParameters["date-range|" + dimension] = filters[element];
+                        filterParametersService.save(filterParameters);
+                    }
+                    else {
+                        filterParameters[element] = filters[element];
+                        filterParametersService.save(filterParameters);
+                    }
+
+                });
+            }
             connectWebSocket();
             proxyGrpcService.forwardCall(vm.datasource.id, {
                 queryDTO: vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
                 visualMetadata: vm.visualMetadata,
-                type:'share-link',
+                type: 'share-link',
                 validationType: 'REQUIRED_FIELDS'
-            },$stateParams.viewId);
+            }, $stateParams.viewId);
         }
 
         function connectWebSocket() {
             console.log('flair-bi fullscreen controller connect web socket');
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
-                function(frame) {
+                function (frame) {
                     console.log('flair-bi fullscreen controller connected web socket');
                     stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);

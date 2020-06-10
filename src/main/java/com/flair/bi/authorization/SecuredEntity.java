@@ -1,6 +1,8 @@
 package com.flair.bi.authorization;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 
@@ -51,5 +53,8 @@ public interface SecuredEntity {
 
     @JsonIgnore
     <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee);
+
+    @JsonIgnore
+    <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee,List<GranteePermissionReport<T>> viewPermissions);
 
 }

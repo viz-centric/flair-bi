@@ -63,7 +63,7 @@
         vm.filterUser = filterUser;
         vm.filterUserGroup = filterUserGroup;
         vm.isPredefinedGroup = isPredefinedGroup;
-
+        vm.search = search;
         vm.toggle = toggle;
 
         var actionOrder = {
@@ -353,6 +353,42 @@
             $state.reload();
         }
 
+        function search(){
+            if(vm.selected === 'user'){
+                User.searchDashboardPermissions({
+                    login: vm.selectedEntity,
+                    dashboardName : vm.searchCriteria,
+                    page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
+                    size: vm.dashboardsItemsPerPage
+                }, searchPermissionsSuccess, onError);
+                User.searchViewPermissions({
+                    login: vm.selectedEntity,
+                    viewName : vm.searchCriteria
+                }, searchPermissionsSuccess, onError);
+            }else{
+                UserGroup.searchDashboardPermissions({
+                    name: vm.selectedEntity,
+                    dashboardName : vm.searchCriteria,
+                    page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
+                    size: vm.dashboardsItemsPerPage
+                }, searchPermissionsSuccess, onError);
+                UserGroup.searchViewPermissions({
+                    name: vm.selectedEntity,
+                    viewName : vm.searchCriteria
+                }, searchPermissionsSuccess, onError);
+            }
+        }
+
+        function searchPermissionsSuccess(data){
+            vm.dashboards = data.map(function (item) {
+                var dashboard = item.info;
+                dashboard.views = item.views.map(function (viewItem) {
+                    return viewItem.info;
+                });
+                return dashboard;
+            });
+            vm.groupToPages();
+        }
 
         function getUserGroupPermissions(name) {
             vm.selectedEntity = name;

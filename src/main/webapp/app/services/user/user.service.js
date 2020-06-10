@@ -34,6 +34,16 @@
                 url: 'api/users/:login/dashboardPermissions',
                 isArray: true
             },
+            'searchDashboardPermissions': {
+                method: 'GET',
+                url: 'api/users/:login/dashboardPermissions/search',
+                isArray: true
+            },
+            'searchViewPermissions': {
+                method: 'GET',
+                url: 'api/users/:login/viewPermissions/search',
+                isArray: true
+            },
             'getViewPermisions': {
                 method: 'GET',
                 url: 'api/users/:login/dashboardPermissions/:id/viewPermissions',

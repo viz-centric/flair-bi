@@ -39,6 +39,16 @@
                 url: 'api/userGroups/:name/dashboardPermissions/:id/viewPermissions',
                 isArray: true
             },
+            'searchDashboardPermissions': {
+                method: 'GET',
+                url: 'api/userGroups/:name/dashboardPermissions/search',
+                isArray: true
+            },
+            'searchViewPermissions': {
+                method: 'GET',
+                url: 'api/userGroups/:name/viewPermissions/search',
+                isArray: true
+            },
             'changePermissions': {
                 method: 'PUT',
                 url: 'api/userGroups/:name/changePermissions'

@@ -1,7 +1,12 @@
 <div class="filter-element form-group" ng-show="vm.tab != 'widgets'">
     <label class="control-label">{{vm.dimension.name}} </label>
-    <label class="pull-right"> <i ng-click="vm.addToFavourite(vm.dimension.id)" ng-class="vm.checkFavouriteFilter()" aria-hidden="true"
-            class="favouritefilter"></i></label>
+    <label class="pull-right"> <i ng-click="vm.addToFavourite(vm.dimension.id)" ng-class="vm.checkFavouriteFilter()"
+            aria-hidden="true" class="favouritefilter"></i></label>
+
+    <label ng-if="!vm.canDisplayDateRangeControls(vm.dimension)" class="pull-right"> <i
+            ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width"
+            ng-class="{'active' : vm.isBulkValue}"></i></label>
+
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension" reload="vm.dateRangeReload"
             on-date-change="vm.onDateChange(startDate, endDate, metadata)">
@@ -9,7 +14,7 @@
     </div>
     <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">
         <div>
-            <div >
+            <div ng-if="!vm.isBulkValue">
                 <tags-input-grpc placeholder="Search for {{vm.dimension.name}}" on-tag-added="vm.added($tag)"
                     on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
                     min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
@@ -17,6 +22,10 @@
                         min-length="0
             " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
                 </tags-input-grpc>
+            </div>
+            <div ng-if="vm.isBulkValue">
+                <input type="text" placeholder="Enter values for {{vm.dimension.name}}" ng-model="vm.commaValue"
+                    class="form-control" ng-blur="vm.addToFilter(vm.dimension)" />
             </div>
         </div>
     </div>
@@ -34,11 +43,12 @@
             <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">
                 <div>
                     <div>
-                    <input auto-focus type="text" class="form-control" name={{vm.dimension.name}}
-                           placeholder="Search for {{vm.dimension.name}}"
-                           ng-model="vm.searchText" ng-keyup="vm.load(vm.searchText,vm.dimension)" ng-change="vm.load(vm.searchText,vm.dimension)"/>
+                        <input auto-focus type="text" class="form-control" name={{vm.dimension.name}}
+                            placeholder="Search for {{vm.dimension.name}}" ng-model="vm.searchText"
+                            ng-keyup="vm.load(vm.searchText,vm.dimension)"
+                            ng-change="vm.load(vm.searchText,vm.dimension)" />
                     </div>
-                    <br/>
+                    <br />
                     <md-list ng-cloak>
                         <md-list-item ng-class="{'active':vm.isActive(data) === true}"
                             ng-repeat="data in vm.list[vm.dimension.name]" ng-click="vm.addFilter(data)">

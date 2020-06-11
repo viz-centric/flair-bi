@@ -131,6 +131,20 @@
                 <p class="text-center" ng-show="vm.dashboards.length ===  0 && vm.selectedEntity">
                     No dashboards in system. Click <a ui-sref="dashboards">here</a> to create
                 </p>
+                <div class="row" ng-if="vm.selected">
+                    <div class="col-md-6 col-sm-16">
+                        <div class="form-group">
+                            <input type="search" name="search" id="search-dashboard-view" class="form-control" placeholder="Search Dashboards and Views" ng-model="vm.searchCriteria">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <button class="btn btn-primary" type="submit" ng-click="vm.search()">
+                            <span class="glyphicon glyphicon-search"></span>
+                            Search
+                        </button>
+                    </div>
+                </div>
+                <br/>
                 <div class="row">
                     <div class="col-md-12">
                         <div ui-tree data-nodrop-enabled data-drag-enabled="false" class="permission-tree">

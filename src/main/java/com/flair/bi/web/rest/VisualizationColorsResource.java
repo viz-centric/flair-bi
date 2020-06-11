@@ -86,7 +86,6 @@ public class VisualizationColorsResource {
      */
     @GetMapping("/visualization-colors")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('VISUALIZATION_COLORS', 'READ','APPLICATION')")
     public List<VisualizationColorsDTO> getAllVisualizationColors() {
         log.debug("REST request to get all VisualizationColors");
         return visualizationColorsService.findAll();
@@ -100,7 +99,6 @@ public class VisualizationColorsResource {
      */
     @GetMapping("/visualization-colors/{id}")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('VISUALIZATION_COLORS', 'READ','APPLICATION')")
     public ResponseEntity<VisualizationColorsDTO> getVisualizationColors(@PathVariable Long id) {
         log.debug("REST request to get VisualizationColors : {}", id);
         VisualizationColorsDTO visualizationColorsDTO = visualizationColorsService.findOne(id);

@@ -76,7 +76,7 @@
             })
             .state("fullscreen", {
                 parent: "entity",
-                url: "/visual/?visualisationId&datasourceId&viewId",
+                url: "/visual/?visualisationId&datasourceId&viewId&filters",
                 data: {
                     authorities: []
                 },
@@ -101,6 +101,22 @@
                             return Visualmetadata.get({
                                 id: $stateParams.visualisationId
                             }).$promise;
+                        }
+                    ],
+                    featureEntities: [
+                        "Features",
+                        "$stateParams",
+                        "$q",
+                        function(Features, $stateParams, $q) {
+                            if (!isNaN($stateParams.viewId)) {
+                                return Features.query({
+                                    view: $stateParams.viewId
+                                }).$promise;
+                            } else {
+                                var deferred = $q.defer();
+                                deferred.reject("Not valid id");
+                                return deferred.promise;
+                            }
                         }
                     ],
                     datasource: [

@@ -15,7 +15,8 @@
         "proxyGrpcService",
         "filterParametersService",
         "stompClientService",
-        "AuthServerProvider"
+        "AuthServerProvider",
+        "DYNAMIC_DATE_RANGE_CONFIG"
     ];
 
     function FlairBiFullscreenController($scope,
@@ -28,7 +29,8 @@
         proxyGrpcService,
         filterParametersService,
         stompClientService,
-        AuthServerProvider) {
+        AuthServerProvider,
+        DYNAMIC_DATE_RANGE_CONFIG) {
         var vm = this;
 
         vm.visualMetadata = new VisualWrap(visualMetadata);
@@ -38,6 +40,7 @@
         });
         vm.datasource = datasource;
         vm.addFilterInQueryDTO = addFilterInQueryDTO;
+        vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
         activate();
 
         ////////////////
@@ -91,6 +94,75 @@
                 return item.name === dimension;
             })
         }
+        function getStartDateRange() {
+            var date = new Date();
+            var config = vm.currentDynamicDateRangeConfig;
+            if (config.toDate) {
+                date = moment(date).startOf(config.toDate).toDate();
+                return date;
+            }
+            return null;
+        }
+        function getStartDateRangeInterval(filterTime) {
+
+            var activeFilter = vm.dynamicDateRangeConfig.filter(function (item) {
+                return item.title === vm.currentDynamicDateRangeConfig;
+            });
+
+            var config = vm.currentDynamicDateRangeConfig;
+            if (config.toDate) {
+                return null;
+            } else if (activeFilter[0].isCustom) {
+                return filterTime + ' ' + activeFilter[0].unit;
+            } else if (activeFilter[0].period.days) {
+                return activeFilter[0].period.days + ' days';
+            } else if (activeFilter[0].period.months) {
+                return activeFilter[0].period.months + ' months';
+            }
+            return null;
+        }
+        function formatDate(date) {
+            if (!date) {
+                return null;
+            }
+            return filterParametersService.dateToString(date);
+        }
+
+        function resetTimezone(date) {
+            if (!date) {
+                return null;
+            }
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            return date;
+        }
+
+        function strToDate(date) {
+            if (!date) {
+                return null;
+            }
+            return Date.parse(date) ? new Date(date) : null;
+        }
+
+        function addDateRangeFilter(date, dimension) {
+            var filterParameters = filterParametersService.getSelectedFilter();
+            var dateRangeName = filterParametersService.buildDateRangeFilterName(dimension.name);
+            delete filterParameters[dimension.name];
+            if (!filterParameters[dateRangeName]) {
+                filterParameters[dateRangeName] = [];
+            }
+            filterParameters[dateRangeName].push(date);
+            filterParameters[dateRangeName]._meta = {
+                dataType: dimension.type,
+                valueType: 'dateRangeValueType'
+            };
+            filterParametersService.save(filterParameters);
+        }
+
+        function resetTimezoneDate(startDate) {
+            return startDate;
+        }
+
+
         function addFilterInQueryDTO() {
             var filters = JSON.parse($stateParams.filters);
             var filterKey = Object.keys(filters);
@@ -98,6 +170,7 @@
 
             filterKey.forEach(element => {
                 var dimension = element.replace(":date-range", "");
+                dimension = dimension.replace(":custom-date", "");
                 var validDimension = findDimension(dimension);
                 if (validDimension && validDimension.length > 0) {
                     if (element.endsWith(":date-range")) {
@@ -109,6 +182,28 @@
                             valueType: 'dateRangeValueType'
                         };
                         filterParametersService.save(filterParameters);
+                    }
+                    else if (element.endsWith(":custom-date")) {
+
+                        vm.currentDynamicDateRangeConfig = filters[element][0];
+                        var startDateRange = getStartDateRange();
+                        var startDate;
+                        if (startDateRange) {
+                            startDate = formatDate(resetTimezone(strToDate(startDateRange)));
+                        } else {
+                            var startDateRangeInterval = getStartDateRangeInterval(filters[element][1]);
+                            startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                        }
+                        var endDate = '__FLAIR_NOW()';
+                        if (startDate) {
+                            startDate = resetTimezoneDate(startDate);
+                            addDateRangeFilter(startDate, validDimension[0]);
+                        }
+                        if (endDate) {
+                            endDate = resetTimezoneDate(endDate);
+                            addDateRangeFilter(endDate, validDimension[0]);
+                        }
+
                     }
                     else {
                         filterParameters[element] = filters[element];

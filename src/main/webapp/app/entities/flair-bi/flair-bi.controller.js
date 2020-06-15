@@ -429,7 +429,8 @@
                 var field = {
                     fieldType: fieldType,
                     feature: null,
-                    constraint: fieldType.constraint
+                    constraint: fieldType.constraint,
+                    order : getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -463,7 +464,8 @@
                 var field = {
                     fieldType: fieldType,
                     feature: null,
-                    constraint: fieldType.constraint
+                    constraint: fieldType.constraint,
+                    order : getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -575,6 +577,11 @@
                 $timeout(function () { });
             });
             $scope.$on("$destroy", unsubscribe);
+        }
+
+        function getFieldMaxOrder(fields){
+            var maxOrder = Math.max.apply(Math, fields.map(function(item) { return item.order; }));
+            return maxOrder + 1;
         }
 
         function registerOnDropEnd() {
@@ -1211,6 +1218,7 @@
         }
 
         function createFields(newVM) {
+            var order = 0;
             newVM.fields = newVM.metadataVisual.fieldTypes
                 .filter(function (item) {
                     return item.constraint === "REQUIRED";
@@ -1230,6 +1238,7 @@
                     },
                     function (result) {
                         field.fieldType = result;
+                        field.order = order + 1;
                         field.properties = field.fieldType.propertyTypes.map(
                             function (item) {
                                 return {

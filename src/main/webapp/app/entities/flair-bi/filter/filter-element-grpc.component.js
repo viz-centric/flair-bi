@@ -307,13 +307,15 @@
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
             if (myFilters && myFilters.length > 0) {
-                vm.dimension.selected = myFilters.map(function (item) {
-                    var newItem = {};
-                    newItem['text'] = item;
-                    if (isFavouriteFilter())
-                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
-                    return newItem;
-                });
+                if(!filterParametersService.isDateType(vm.dimension)){
+                    vm.dimension.selected = myFilters.map(function (item) {
+                        var newItem = {};
+                        newItem['text'] = item;
+                        if (isFavouriteFilter())
+                            displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
+                        return newItem;
+                    });
+                }
             } else {
                 if (filterParametersService.isDateType(vm.dimension)) {
                     vm.dimension.selected = null;

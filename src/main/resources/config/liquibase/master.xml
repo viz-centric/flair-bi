@@ -73,6 +73,6 @@
     <include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200531100000_percent_function.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200603165500_increase_column_size_view_dashboard_name_category.xml" relativeToChangelogFile="false" />
-    <include file="config/liquibase/changelog/20200612110000_added_order_column_field.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200616183700_added_order_column_field.xml" relativeToChangelogFile="false" />
 </databaseChangeLog>
 <!--@formatter:on-->

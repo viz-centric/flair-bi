@@ -157,11 +157,11 @@
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
             } else {
-                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name), metadata);
+                filterParametersService.saveDynamicDateRangeMetaData(vm.dimension.name, metadata);
             }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
+            removeFilter(vm.dimension.name);
             if (startDate) {
                 startDate = resetTimezone(startDate);
                 addDateRangeFilter(startDate);
@@ -342,13 +342,12 @@
 
         function addDateRangeFilter(date) {
             var filterParameters = filterParametersService.getSelectedFilter();
-            var dateRangeName = filterParametersService.buildDateRangeFilterName(vm.dimension.name);
             delete filterParameters[vm.dimension.name];
-            if (!filterParameters[dateRangeName]) {
-                filterParameters[dateRangeName] = [];
+            if (!filterParameters[vm.dimension.name]) {
+                filterParameters[vm.dimension.name] = [];
             }
-            filterParameters[dateRangeName].push(date);
-            filterParameters[dateRangeName]._meta = {
+            filterParameters[vm.dimension.name].push(date);
+            filterParameters[vm.dimension.name]._meta = {
                 dataType: vm.dimension.type,
                 valueType: 'dateRangeValueType'
             };

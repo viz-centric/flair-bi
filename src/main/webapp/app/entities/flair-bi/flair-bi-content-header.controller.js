@@ -196,8 +196,7 @@
                     return item.featureType === "DIMENSION" && item.dateFilter === "ENABLED";
                 })
                 .filter(function (item) {
-                    const dateRangeName = filterParametersService.buildDateRangeFilterName(item.name);
-                    return !filterParameters[dateRangeName];
+                    return !filterParameters[item.name];
                 });
 
             if (mandatoryDimensions.length > 0) {
@@ -212,7 +211,7 @@
                         customDynamicDateRange: 1,
                         currentDynamicDateRangeConfig: {}
                     };
-                    delete filterParameters[filterParametersService.buildDateRangeFilterName(item.name)]
+                    delete filterParameters[item.name]
                     addDateRangeFilter(filterParameters, item.selected, item);
                     addDateRangeFilter(filterParameters, item.selected2, item);
                 });
@@ -233,12 +232,11 @@
         function addDateRangeFilter(filterParameters, date, feature) {
             const name = feature.name;
             const type = feature.type;
-            var dateRangeName = filterParametersService.buildDateRangeFilterName(name);
-            if (!filterParameters[dateRangeName]) {
-                filterParameters[dateRangeName] = [];
+            if (!filterParameters[name]) {
+                filterParameters[name] = [];
             }
-            filterParameters[dateRangeName].push(date);
-            filterParameters[dateRangeName]._meta = {
+            filterParameters[name].push(date);
+            filterParameters[name]._meta = {
                 dataType: type,
                 valueType: 'dateRangeValueType'
             };
@@ -251,7 +249,7 @@
                     const tooltipText = dynamics[0] === "true" ? 'Last ' + dynamics[1] : dynamics[2];
                     const dynamicDateRangeToolTip = { name: filterName, text: tooltipText };
                     const dynamicDateRangeObject = buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]);
-                    filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(filterName), dynamicDateRangeObject.metadata);
+                    filterParametersService.saveDynamicDateRangeMetaData(filterName, dynamicDateRangeObject.metadata);
                     filterParametersService.saveDynamicDateRangeToolTip(dynamicDateRangeToolTip);
                     $rootScope.$broadcast("flairbiApp:bookmark-update-dynamic-date-range-meta-data", dynamicDateRangeObject);
                 } else {
@@ -274,17 +272,16 @@
                 const filters = filterParametersService.getSelectedFilter();
                 viewFeatureCriterias.forEach(criteria => {
                     const feature = featureEntities.filter((item) => item.name === criteria.feature.name)[0];
-                    const dateRangeFeatureName = filterParametersService.buildDateRangeFilterName(feature.name);
-                    const data = parseViewFeatureMetadata(criteria.metadata, feature, criteria.value, dateRangeFeatureName);
+                    const data = parseViewFeatureMetadata(criteria.metadata, feature, criteria.value, feature.name);
                     console.log('applyViewFeatureCriteria: feature', feature, 'data', data);
                     feature.selected = data.selected[0];
                     feature.selected2 = data.selected[1];
                     feature.metadata = data.metadata.metadata;
                     if (data.dateRangeTab === 2) {
-                        filterParametersService.saveDynamicDateRangeMetaData(dateRangeFeatureName, data.metadata.metadata);
+                        filterParametersService.saveDynamicDateRangeMetaData(feature.name, data.metadata.metadata);
                         filterParametersService.saveDynamicDateRangeToolTip(data.tooltipObj);
                     }
-                    delete filters[filterParametersService.buildDateRangeFilterName(feature.name)]
+                    delete filters[feature.name]
                     addDateRangeFilter(filters, data.values[0], feature);
                     addDateRangeFilter(filters, data.values[1], feature);
                 });
@@ -337,11 +334,7 @@
             var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function (criteria) {
                 var isTemporal = criteria.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
-                var featureName = isTemporal
-                    ? filterParametersService.buildDateRangeFilterName(criteria.feature.name)
-                    : criteria.feature.name;
-                filter[featureName] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, featureName);
-            });
+                filter[criteria.feature.name] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, criteria.feature.name);           });
             filterParametersService.save(filter);
         }
 
@@ -582,16 +575,16 @@
 
         function setToolTipTexts(filters) {
             angular.forEach(filters, function (value, key) {
-                vm.toolTipTexts[key] = getFiltersToolTipName(key);
+                vm.toolTipTexts[key] = getFiltersToolTipName(key,value._meta.dataType);
             });
         }
 
         function getKeyName(name) {
-            return isDateRange(name) ? name.split('|')[1] : name;
+            return isDateRange(name) ? name : name;
         }
 
-        function getFiltersToolTipName(name) {
-            if (isDateRange(name)) {
+        function getFiltersToolTipName(name,type) {
+            if (filterParametersService.isDateFilterType(type)) {
                 var dateRangeToolTipText = "Date Range : ";
                 var filters = filterParametersService.get();
                 if ((filters[name][0].indexOf(dynamicDateRangeFun) !== -1) || (filters[name][1] && filters[name][1].indexOf(dynamicDateRangeFun) !== -1)) {
@@ -611,7 +604,11 @@
         }
 
         function isDateRange(name) {
-            return name.lastIndexOf(filterParametersService.getDateRangePrefix(), 0) === 0;
+            if(vm.filters[name]._meta.dataType){
+                return filterParametersService.isDateFilterType(vm.filters[name]._meta.dataType);
+            }else{
+                return false;
+            }
         }
 
         function setNoOfPages() {
@@ -640,7 +637,7 @@
         function removeFilter($event, key) {
             $event.preventDefault();
             if (isDateRange(key)) {
-                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { dimensionName: key.split('|')[1].toLowerCase(), startDate: null, endDate: null });
+                $rootScope.$broadcast('flairbiApp:filter-set-date-ranges', { dimensionName: key, startDate: null, endDate: null });
                 var filterParameters = filterParametersService.get();
                 delete filterParameters[key];
                 FilterStateManagerService.add(angular.copy(filterParametersService.get()));
@@ -743,13 +740,7 @@
                         dateRange: isItemDateRange,
                         key,
                         feature: vm.features.filter(function (item) {
-                            var featureName = "";
-                            if (isItemDateRange) {
-                                featureName = key.split('|')[1].toLowerCase();
-                            } else {
-                                featureName = key.toLowerCase();
-                            }
-                            return item.name.toLowerCase() === featureName;
+                            return item.name.toLowerCase() === key;
                         })[0]
                     });
                 }

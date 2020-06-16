@@ -409,12 +409,8 @@
         function getAppliedFiltersDimentions() {
             var filters = filterParametersService.get();
             vm.appliedFiltersDimensions = vm.dimensions.filter(function (item) {
-                return filters[getDimensionName(item.name, item.type)] ? true : false;
+                return filters[item.name] ? true : false;
             });
-        }
-
-        function getDimensionName(name, type) {
-            return type === 'timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
         }
 
         function openFilters() {

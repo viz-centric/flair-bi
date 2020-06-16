@@ -35,6 +35,7 @@
             getDynamicDateRangeMetaData : getDynamicDateRangeMetaData,
             buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange,
             isDateType : isDateType,
+            isDateFilterType : isDateFilterType,
             dateToString
         };
 
@@ -314,6 +315,13 @@
 
         function isDateType(dimension) {
             var type = dimension && dimension.type;
+            if (!type) {
+                return false;
+            }
+            return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+        }
+
+        function isDateFilterType(type){
             if (!type) {
                 return false;
             }

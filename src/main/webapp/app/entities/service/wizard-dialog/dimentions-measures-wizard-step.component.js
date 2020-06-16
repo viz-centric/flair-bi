@@ -38,7 +38,7 @@
         }
 
         function isTemporalFeature(feature) {
-            return COMPARABLE_DATA_TYPES.indexOf(feature.type) > -1;
+            return COMPARABLE_DATA_TYPES.indexOf(feature.type.toLowerCase()) > -1;
         }
 
         function toggleCheckbox(feature) {

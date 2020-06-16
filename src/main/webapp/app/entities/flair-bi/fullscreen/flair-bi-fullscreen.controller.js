@@ -16,7 +16,8 @@
         "filterParametersService",
         "stompClientService",
         "AuthServerProvider",
-        "DYNAMIC_DATE_RANGE_CONFIG"
+        "DYNAMIC_DATE_RANGE_CONFIG",
+        "DateUtils"
     ];
 
     function FlairBiFullscreenController($scope,
@@ -30,7 +31,8 @@
         filterParametersService,
         stompClientService,
         AuthServerProvider,
-        DYNAMIC_DATE_RANGE_CONFIG) {
+        DYNAMIC_DATE_RANGE_CONFIG,
+        DateUtils) {
         var vm = this;
 
         vm.visualMetadata = new VisualWrap(visualMetadata);
@@ -121,27 +123,7 @@
             }
             return null;
         }
-        function formatDate(date) {
-            if (!date) {
-                return null;
-            }
-            return filterParametersService.dateToString(date);
-        }
 
-        function resetTimezone(date) {
-            if (!date) {
-                return null;
-            }
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            return date;
-        }
-
-        function strToDate(date) {
-            if (!date) {
-                return null;
-            }
-            return Date.parse(date) ? new Date(date) : null;
-        }
 
         function addDateRangeFilter(date, dimension) {
             var filterParameters = filterParametersService.getSelectedFilter();
@@ -156,11 +138,6 @@
             };
             filterParametersService.save(filterParameters);
         }
-
-        function resetTimezoneDate(startDate) {
-            return startDate;
-        }
-
 
         function addFilterInQueryDTO() {
             var filters = JSON.parse($stateParams.filters);
@@ -194,18 +171,18 @@
                             var startDateRange = getStartDateRange();
                             var startDate;
                             if (startDateRange) {
-                                startDate = formatDate(resetTimezone(strToDate(startDateRange)));
+                                startDate = DateUtils.formatDate(DateUtils.resetTimezone(DateUtils.strToDate(startDateRange)));
                             } else {
                                 var startDateRangeInterval = getStartDateRangeInterval(filters[element].value[1]);
                                 startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
                             }
                             var endDate = '__FLAIR_NOW()';
                             if (startDate) {
-                                startDate = resetTimezoneDate(startDate);
+                                startDate = DateUtils.resetTimezoneDate(startDate);
                                 addDateRangeFilter(startDate, validDimension[0]);
                             }
                             if (endDate) {
-                                endDate = resetTimezoneDate(endDate);
+                                endDate = DateUtils.resetTimezoneDate(endDate);
                                 addDateRangeFilter(endDate, validDimension[0]);
                             }
                         }

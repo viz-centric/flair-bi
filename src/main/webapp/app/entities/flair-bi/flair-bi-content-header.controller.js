@@ -333,7 +333,8 @@
             var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function (criteria) {
                 var isTemporal = criteria.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
-                filter[criteria.feature.name] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, criteria.feature.name);           });
+                filter[criteria.feature.name] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, criteria.feature.name);  
+            });
             filterParametersService.save(filter);
         }
 

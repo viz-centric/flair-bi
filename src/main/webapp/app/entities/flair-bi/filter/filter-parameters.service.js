@@ -10,7 +10,6 @@
     function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES) {
 
         var paramObject = {};
-        var dateRangePrefix='date-range';
         var selectedFilters={};
         var dynamicDateRangeToolTip={};
         var dynamicDateRangeMetaData={};
@@ -22,9 +21,7 @@
             getConditionExpression: getConditionExpression,
             getConditionExpressionForParams: getConditionExpressionForParams,
             getFiltersCount:getFiltersCount,
-            getDateRangePrefix:getDateRangePrefix,
             changeDateFormat:changeDateFormat,
-            buildDateRangeFilterName:buildDateRangeFilterName,
             getSelectedFilter:getSelectedFilter,
             saveSelectedFilter:saveSelectedFilter,
             getComparableDataTypes:getComparableDataTypes,
@@ -162,14 +159,14 @@
         function createBodyExpr(values, name) {
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
-            if (name.lastIndexOf(dateRangePrefix, 0) === 0) {
+            var type = meta ? meta.dataType : '';
+            if (isDateFilterType(type)) {
                 console.log('create body exp ', values, name);
                 if (values[1]) {
                     values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
                 } else {
                     values = [changeDateFormat(values[0])];
                 }
-                name = name.split('|')[1];
             }
             if (valueType === 'compare') {
                 console.log('filter-parameters: compare value type values', values);
@@ -253,14 +250,6 @@
                         date.getMinutes(),
                         date.getSeconds()].join(':');
             }
-        }
-
-        function getDateRangePrefix(){
-            return dateRangePrefix;
-        }
-
-        function buildDateRangeFilterName(name){
-            return dateRangePrefix+"|"+name;
         }
 
         function getSelectedFilter(){

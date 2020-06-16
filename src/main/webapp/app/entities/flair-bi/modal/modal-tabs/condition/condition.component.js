@@ -72,7 +72,7 @@
                 return [];
             }
             const dataType = dimension.type;
-            const isDateType = COMPARABLE_DATA_TYPES.indexOf(dataType) > -1;
+            const isDateType = COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1;
 
             if (isDateType) {
                 return vm.dateRangeSupportedTypes;

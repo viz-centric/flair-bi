@@ -19,6 +19,8 @@ import com.flair.bi.web.websocket.FbEngineWebSocketService;
 import com.google.common.collect.ImmutableMap;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.dto.RawQuerySourceDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -138,17 +140,23 @@ public class GrpcQueryService {
         DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(sendGetDataDTO.getUserId(),
                 datasource.getId());
 
+        QueryDTO queryDTO = sendGetDataDTO.getQueryDTO();
+
         Optional.ofNullable(sendGetDataDTO.getVisualMetadata()).map(VisualMetadata::getConditionExpression).map(x -> {
             ConditionExpressionDTO dto = new ConditionExpressionDTO();
             dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
             dto.setConditionExpression(x);
             return dto;
-        }).ifPresent(sendGetDataDTO.getQueryDTO().getConditionExpressions()::add);
+        }).ifPresent(queryDTO.getConditionExpressions()::add);
 
         Optional.ofNullable(constraint).map(DatasourceConstraint::build)
-                .ifPresent(sendGetDataDTO.getQueryDTO().getConditionExpressions()::add);
+                .ifPresent(queryDTO.getConditionExpressions()::add);
 
-        sendGetDataDTO.getQueryDTO().setSource(datasource.getName());
+        if (datasource.getSql() == null) {
+            queryDTO.setQuerySource(new QuerySourceDTO(datasource.getName()));
+        } else {
+            queryDTO.setQuerySource(new RawQuerySourceDTO(datasource.getSql()));
+        }
 
         if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType() == null) {
             callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), "vizualization", sendGetDataDTO);

@@ -20,6 +20,7 @@
         visual.doesPropertyExists = doesPropertyExists;
         visual.fieldPropertyExists = fieldPropertyExists;
         visual.getFieldPropertyValue = getFieldPropertyValue;
+        visual.addDatasource = addDatasource;
         visual.getQueryParameters = getQueryParameters;
         visual.getQueryParametersWithFields = getQueryParametersWithFields;
         visual.hasDimension = hasDimension;
@@ -269,6 +270,18 @@
         return null;
     }
 
+    function addDatasource(query, datasource) {
+        return query;
+        // if (query.source || query.querySource) {
+        //     return;
+        // }
+        //
+        // query.querySource = {
+        //     '@type': 'table',
+        //     source: datasource.name
+        // }
+        // return query;
+    }
 
     function getQueryParameters(filters, conditionExpression, offset) {
 

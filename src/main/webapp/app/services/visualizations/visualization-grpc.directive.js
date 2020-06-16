@@ -206,14 +206,20 @@
             if (forceQuery) {
                 angular.element("#loader-spinner").show();
                 proxyGrpcService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                    queryDTO: vm.data.addDatasource(
+                        vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                        vm.datasource
+                    ),
                     visualMetadata: vm.data,
                     validationType: 'REQUIRED_FIELDS'
                 }, $stateParams.id);
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                        queryDTO: vm.data.addDatasource(
+                            vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                            vm.data.views.viewDashboard.dashboardDatasources
+                        ),
                         visualmetadata: vm.data,
                         validationType: 'REQUIRED_FIELDS'
                     });

@@ -169,43 +169,10 @@
             var filterParameters = filterParametersService.getSelectedFilter();
 
             filterKey.forEach(element => {
-                var dimension = element.replace(":date-range", "");
-                dimension = dimension.replace(":custom-date", "");
-                var validDimension = findDimension(dimension);
+                var validDimension = findDimension(element);
                 if (validDimension && validDimension.length > 0) {
-                    if (element.endsWith(":date-range")) {
 
-                        filterParameters["date-range|" + dimension] = filters[element];
-
-                        filterParameters["date-range|" + dimension]._meta = {
-                            dataType: validDimension[0].type,
-                            valueType: 'dateRangeValueType'
-                        };
-                        filterParametersService.save(filterParameters);
-                    }
-                    else if (element.endsWith(":custom-date")) {
-
-                        vm.currentDynamicDateRangeConfig = filters[element][0];
-                        var startDateRange = getStartDateRange();
-                        var startDate;
-                        if (startDateRange) {
-                            startDate = formatDate(resetTimezone(strToDate(startDateRange)));
-                        } else {
-                            var startDateRangeInterval = getStartDateRangeInterval(filters[element][1]);
-                            startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
-                        }
-                        var endDate = '__FLAIR_NOW()';
-                        if (startDate) {
-                            startDate = resetTimezoneDate(startDate);
-                            addDateRangeFilter(startDate, validDimension[0]);
-                        }
-                        if (endDate) {
-                            endDate = resetTimezoneDate(endDate);
-                            addDateRangeFilter(endDate, validDimension[0]);
-                        }
-
-                    }
-                    else {
+                    if (Array.isArray(filters[element])) {
                         filterParameters[element] = filters[element];
                         filterParameters[element]._meta = {
                             dataType: validDimension[0].type,
@@ -213,9 +180,40 @@
                         };
                         filterParametersService.save(filterParameters);
                     }
+                    else {
+                        if (filters[element].type == "date-range") {
+                            filterParameters[element] = filters[element].value;
+
+                            filterParameters[element]._meta = {
+                                dataType: validDimension[0].type,
+                                valueType: 'dateRangeValueType'
+                            };
+                            filterParametersService.save(filterParameters);
+                        }
+                        else if (filters[element].type == "custom-date") {
+                            vm.currentDynamicDateRangeConfig = filters[element].value[0];
+                            var startDateRange = getStartDateRange();
+                            var startDate;
+                            if (startDateRange) {
+                                startDate = formatDate(resetTimezone(strToDate(startDateRange)));
+                            } else {
+                                var startDateRangeInterval = getStartDateRangeInterval(filters[element].value[1]);
+                                startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                            }
+                            var endDate = '__FLAIR_NOW()';
+                            if (startDate) {
+                                startDate = resetTimezoneDate(startDate);
+                                addDateRangeFilter(startDate, validDimension[0]);
+                            }
+                            if (endDate) {
+                                endDate = resetTimezoneDate(endDate);
+                                addDateRangeFilter(endDate, validDimension[0]);
+                            }
+                        }
+                    }
+
                 }
             });
         }
-
     }
 })();

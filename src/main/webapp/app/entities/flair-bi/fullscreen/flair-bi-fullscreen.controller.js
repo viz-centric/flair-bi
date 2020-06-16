@@ -145,13 +145,12 @@
 
         function addDateRangeFilter(date, dimension) {
             var filterParameters = filterParametersService.getSelectedFilter();
-            var dateRangeName = filterParametersService.buildDateRangeFilterName(dimension.name);
             delete filterParameters[dimension.name];
-            if (!filterParameters[dateRangeName]) {
-                filterParameters[dateRangeName] = [];
+            if (!filterParameters[dimension.name]) {
+                filterParameters[dimension.name] = [];
             }
-            filterParameters[dateRangeName].push(date);
-            filterParameters[dateRangeName]._meta = {
+            filterParameters[dimension.name].push(date);
+            filterParameters[dimension.name]._meta = {
                 dataType: dimension.type,
                 valueType: 'dateRangeValueType'
             };

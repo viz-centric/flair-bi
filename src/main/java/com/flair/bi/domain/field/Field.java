@@ -25,6 +25,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,5 +63,8 @@ public class Field extends AbstractAuditingEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "const", updatable = false, nullable = false)
     private Constraint constraint;
+
+    @Column(name = "order")
+    private Integer order = 0;
 
 }

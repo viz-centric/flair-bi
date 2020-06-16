@@ -141,7 +141,6 @@
         vm.filtersLength = 0;
         vm.changeHeaderColor = changeHeaderColor;
         vm.changeContainerColor = changeContainerColor;
-        vm.getKeyName = getKeyName;
         vm.isDateRange = isDateRange;
         vm.getFiltersToolTipName = getFiltersToolTipName;
         vm.viewFeatureCriteriaReady = false;
@@ -348,7 +347,7 @@
         }
 
         function buildDateRange(dimensionName, daterange) {
-            return { dimensionName: dimensionName, daterange: { selected: daterange[0], selected2: daterange[1] } };
+            return { dimensionName: dimensionName, startDate: daterange[0], endDate: daterange[1] };
         }
 
         function openSettings() {
@@ -577,10 +576,6 @@
             angular.forEach(filters, function (value, key) {
                 vm.toolTipTexts[key] = getFiltersToolTipName(key,value._meta.dataType);
             });
-        }
-
-        function getKeyName(name) {
-            return isDateRange(name) ? name : name;
         }
 
         function getFiltersToolTipName(name,type) {

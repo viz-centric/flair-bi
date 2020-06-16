@@ -531,7 +531,7 @@
                 ng-click="vm.toggleFilters($event)" class="list-inline-item"
                 ng-repeat="(key, value) in vm.filters track by $index">
                 <a class="btn btn-info btn-sm filter" title="{{vm.toolTipTexts[key]}}">
-                    <span class="filter-name">{{vm.getKeyName(key)}}</span><span ng-click="vm.removeFilter($event,key)"
+                    <span class="filter-name">{{key}}</span><span ng-click="vm.removeFilter($event,key)"
                         class="remove glyphicon glyphicon-remove-sign glyphicon-white"></span>
                 </a>
                 <ul class="list-group filter-drop-downs" ng-if="!vm.isDateRange(key)">

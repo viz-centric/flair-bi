@@ -54,7 +54,8 @@
             var field = {
                 fieldType: fieldType,
                 feature: null,
-                constraint: fieldType.constraint
+                constraint: fieldType.constraint,
+                order : VisualDispatchService.getFieldMaxOrder(vm.visual.fields)
             };
             Visualizations.getFieldType({
                 id: vm.visual.metadataVisual.id,
@@ -78,7 +79,8 @@
             var field = {
                 fieldType: fieldType,
                 feature: null,
-                constraint: fieldType.constraint
+                constraint: fieldType.constraint,
+                order : VisualDispatchService.getFieldMaxOrder(vm.visual.fields)
             };
             Visualizations.getFieldType({
                 id: vm.visual.metadataVisual.id,

@@ -430,7 +430,7 @@
                     fieldType: fieldType,
                     feature: null,
                     constraint: fieldType.constraint,
-                    order : getFieldMaxOrder(v.fields)
+                    order : VisualDispatchService.getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -465,7 +465,7 @@
                     fieldType: fieldType,
                     feature: null,
                     constraint: fieldType.constraint,
-                    order : getFieldMaxOrder(v.fields)
+                    order : VisualDispatchService.getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -577,11 +577,6 @@
                 $timeout(function () { });
             });
             $scope.$on("$destroy", unsubscribe);
-        }
-
-        function getFieldMaxOrder(fields){
-            var maxOrder = Math.max.apply(Math, fields.map(function(item) { return item.order; }));
-            return maxOrder + 1;
         }
 
         function registerOnDropEnd() {

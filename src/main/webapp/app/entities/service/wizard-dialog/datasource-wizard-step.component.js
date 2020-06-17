@@ -26,12 +26,13 @@
         vm.sql = '';
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
-        vm.setDataSource = setDataSource;
         vm.onSearchKeyUp = onSearchKeyUp;
         vm.search = search;
         vm.tables = [];
         vm.datasources.name = null;
         vm.createDataSource = createDataSource;
+        vm.isShowDataEnabled = isShowDataEnabled;
+        vm.getDatasourceNames = getDatasourceNames;
         vm.features = [];
         vm.resetTest = resetTest;
         vm.showData = showData;
@@ -54,23 +55,28 @@
             })
         }
 
+        function isShowDataEnabled() {
+            if (vm.tabIndex === 0 && vm.datasources.name) {
+                return true;
+            }
+            return vm.tabIndex === 1 && vm.sql && vm.datasources.name;
+        }
+
         function onTabClick(tabIndex) {
             vm.tabIndex = tabIndex;
+            vm.datasources.name = null;
+            vm.tables = [];
         }
 
         function onSubmitDisabled() {
             if (vm.tabIndex === 0) {
                 return !vm.datasources.name;
             }
-            return !vm.sql;
+            return !vm.sql || !vm.datasources.name;
         }
 
         function openCalendar(date) {
             vm.datePickerOpenStatus[date] = true;
-        }
-
-        function setDataSource(name) {
-            vm.datasources.name = name;
         }
 
         function clearDelayedSearch() {
@@ -86,10 +92,19 @@
             }, 1000);
         }
 
+        function getDatasourceNames(search) {
+            const clonedList = vm.tables.slice();
+            if (search && clonedList.indexOf(search) === -1) {
+                clonedList.unshift(search);
+            }
+            return clonedList;
+        }
+
         function search(searchedText) {
             if (searchedText) {
                 var body = {
-                    searchTerm: searchedText
+                    searchTerm: searchedText,
+                    filter: vm.tabIndex === 0 ? 'TABLE' : 'SQL'
                 };
                 if (vm.selectedConnection) {
                     body.connectionLinkId = vm.connection.linkId;
@@ -101,9 +116,6 @@
                     body,
                     function (data) {
                         vm.tables = data.tableNames;
-                        if (data.tableNames.length === 0) {
-                            setInputText(searchedText);
-                        }
                     },
                     function () {
                         Toastr.error({
@@ -121,11 +133,6 @@
             conn.details["@type"] =
                 vm.connectionType.connectionPropertiesSchema.connectionDetailsType;
             return conn;
-        }
-
-        function setInputText(searchedText) {
-            vm.datasources.name = searchedText;
-            vm.datasource = vm.datasources.name;
         }
 
         function createDataSource() {
@@ -190,8 +197,7 @@
             if (vm.tabIndex === 0) {
                 vm.datasources.sql = null;
             } else {
-                vm.datasources.sql = '__FLAIR_RAW([[' + vm.sql + ']])';
-                vm.datasources.name = 'sql';
+                vm.datasources.sql = vm.sql;
             }
             vm.datasources.connectionName = connectionLinkId;
             sendSaveDatasource(customAction);
@@ -292,6 +298,7 @@
                     limit: 10,
                     source: vm.datasources.name,
                 },
+                sql: vm.tabIndex === 1 ? vm.sql : null,
                 sourceId: vm.datasources.id
             };
             if (vm.selectedConnection) {

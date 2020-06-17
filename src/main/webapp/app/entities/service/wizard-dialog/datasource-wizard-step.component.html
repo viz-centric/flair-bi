@@ -15,10 +15,14 @@
     </div>
     <div class="form-group" ng-show="vm.tabIndex == 0">
         <label class="control-label" data-translate="flairbiApp.datasources.name" for="field_name">Table Name</label>
-        <ui-select ng-keyup="vm.onSearchKeyUp($select.search)" id="field_name" name="name" ng-model="vm.datasource"
-            required ng-change="vm.setDataSource($select.selected)">
+        <ui-select ng-keyup="vm.onSearchKeyUp($select.search)"
+                   id="field_name"
+                   name="name"
+                   ng-model="vm.datasources.name"
+                   required>
             <ui-select-match placeholder="{{ 'flairbiApp.datasources.selectDatasource' | translate }}">
-                {{$select.selected}}</ui-select-match>
+                {{$select.selected}}
+            </ui-select-match>
             <ui-select-choices repeat="table in vm.tables">
                 <div ng-bind="table"></div>
             </ui-select-choices>
@@ -35,14 +39,32 @@
         </div>
     </div>
 
-    <div class="form-group" ng-show="vm.tabIndex == 1">
-        <label class="control-label" data-translate="flairbiApp.datasources.sqlmode.enterquery"
-               for="tarea">_</label>
-        <textarea class="form-control" id="tarea" name="tarea"
-            ng-model="vm.sql"></textarea>
+    <div ng-show="vm.tabIndex == 1">
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.datasources.sqlmode.enterdatasource"
+                   for="dsname">_</label>
+            <ui-select ng-keyup="vm.onSearchKeyUp($select.search)"
+                       id="dsname"
+                       name="dsname"
+                       ng-model="vm.datasources.name"
+                       required>
+                <ui-select-match placeholder="{{ 'flairbiApp.datasources.selectDatasource' | translate }}">
+                    {{$select.selected}}
+                </ui-select-match>
+                <ui-select-choices repeat="table in vm.getDatasourceNames($select.search)">
+                    <div ng-bind="table"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="flairbiApp.datasources.sqlmode.enterquery"
+                   for="tarea">_</label>
+            <textarea class="form-control" id="tarea" name="tarea"
+                      ng-model="vm.sql"></textarea>
+        </div>
     </div>
 
-    <div class="row m-t-md" ng-if="vm.datasources.name">
+    <div class="row m-t-md" ng-if="vm.isShowDataEnabled()">
         <div class="col-md-12">
             <button ng-disabled="vm.loading" ng-click="vm.showData()" class="btn btn-primary">Show Data
             </button>

@@ -53,10 +53,7 @@
             }
             connectWebSocket();
             proxyGrpcService.forwardCall(vm.datasource.id, {
-                queryDTO: vm.visualMetadata.addDatasource(
-                    vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                    vm.datasource
-                ),
+                queryDTO: vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
                 visualMetadata: vm.visualMetadata,
                 type: 'share-link',
                 validationType: 'REQUIRED_FIELDS'

@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.QDatasource;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcConnectionService;
@@ -47,6 +48,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -269,13 +271,22 @@ public class DatasourcesResource {
 
     @PostMapping("/datasources/listTables")
     @Timed
-    public ResponseEntity<?> listTables(@RequestBody final ListTablesRequest listTablesRequest) {
+    public ListTablesResponseDTO listTables(@RequestBody final ListTablesRequest listTablesRequest) {
         log.debug("REST request to get list tables {}", listTablesRequest);
 
-        final ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
+        if (listTablesRequest.getFilter() == ListTablesRequest.FilterType.SQL) {
+            Set<String> sqlDatasourceNames = datasourceService.findAll(QDatasource.datasource.sql.isNotNull())
+                    .stream()
+                    .map(ds -> ds.getName())
+                    .collect(Collectors.toSet());
+            return new ListTablesResponseDTO()
+                    .setTableNames(new ArrayList<>(sqlDatasourceNames));
+        }
+
+        ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
                 listTablesRequest.getSearchTerm(), listTablesRequest.getConnection(), 50);
 
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @GetMapping("/datasources/search")
@@ -294,7 +305,12 @@ public class DatasourcesResource {
         @NotNull
         @NotEmpty
         String searchTerm;
+        FilterType filter;
         ConnectionDTO connection;
+
+        private enum FilterType {
+            SQL, TABLE
+        }
     }
 
     @Builder

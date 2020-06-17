@@ -344,7 +344,6 @@
 
         function addDateRangeFilter(date) {
             var filterParameters = filterParametersService.getSelectedFilter();
-            delete filterParameters[vm.dimension.name];
             if (!filterParameters[vm.dimension.name]) {
                 filterParameters[vm.dimension.name] = [];
             }

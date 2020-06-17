@@ -55,7 +55,8 @@
             getSavePromptMessage:getSavePromptMessage,
             setViewEditedBeforeSave:setViewEditedBeforeSave,
             getViewEditedBeforeSave:getViewEditedBeforeSave,
-            setIsSaved:setIsSaved
+            setIsSaved:setIsSaved,
+            getFieldMaxOrder:getFieldMaxOrder
         };
 
         function setVisual(v) {
@@ -214,6 +215,10 @@
         }
         function setIsSaved(flag){
             visual.visual.isSaved = flag;
+        }
+        function getFieldMaxOrder(fields){
+            var maxOrder = Math.max.apply(Math, fields.map(function(item) { return item.order; }));
+            return maxOrder + 1;
         }
     }
 })();

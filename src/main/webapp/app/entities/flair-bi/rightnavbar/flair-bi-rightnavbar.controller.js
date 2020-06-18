@@ -126,6 +126,9 @@
 
         function setProperties(visual, view) {
             vm.visual = visual;
+            vm.visual.fields = vm.visual.fields.sort(function (a, b) {
+                return a.order - b.order;
+            });
             vm.visual.titleProperties.titleText =
                 vm.visual.titleProperties.titleText.trim() == ""
                     ? vm.visual.metadataVisual.name
@@ -221,8 +224,8 @@
             if (vm.visual.id) {
                 VisualMetadataContainer.update(vm.visual.id, vm.visual, 'id');
                 VisualDispatchService.setViewEditedBeforeSave(false);
-            } 
-            else{
+            }
+            else {
                 save();
             }
         }
@@ -508,7 +511,7 @@
                 return item.featureType === "DIMENSION" && item.dateFilter !== "ENABLED";
             });
 
-            vm.dimensions =  vm.dateDimensions.concat( vm.allDimensions);
+            vm.dimensions = vm.dateDimensions.concat(vm.allDimensions);
         }
 
         function registerToggleRightNavBarOff() {

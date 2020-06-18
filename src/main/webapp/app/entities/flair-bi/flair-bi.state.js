@@ -119,6 +119,22 @@
                             }
                         }
                     ],
+                    entity: [
+                        "$stateParams",
+                        "Views",
+                        "$q",
+                        function($stateParams, Views, $q) {
+                            if (!isNaN($stateParams.viewId)) {
+                                return Views.get({
+                                    id: $stateParams.viewId
+                                }).$promise;
+                            } else {
+                                var deferred = $q.defer();
+                                deferred.reject("Not valid id");
+                                return deferred.promise;
+                            }
+                        }
+                    ],
                     datasource: [
                       "$stateParams",
                       "Datasources",

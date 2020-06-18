@@ -17,7 +17,7 @@
                             </span>
                             {{vm.selectedDashboard.dashboardName}}
                             <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu flair-content-header-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
                                 <!-- <i class="glyphicon glyphicon-search"></i> -->
                                 <input type="text" ng-model="searchDashboard" class="form-control"
@@ -44,7 +44,7 @@
                             <span ng-if="vm.selectedView.viewName"> {{vm.selectedView.viewName}}</span>
                             <span ng-if="!vm.selectedView"> Select View</span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu flair-content-header-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
                                 <input type="text" ng-model="searchView" class="form-control"
                                     placeholder="Search View..." />

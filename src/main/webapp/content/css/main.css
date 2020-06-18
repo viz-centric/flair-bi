@@ -4400,6 +4400,9 @@ jhi-alert .alerts .alert-danger {
   margin-right: 5px;
   margin-top: 20px; }
 
+.flair-content-header-menu {
+  padding: 0px; }
+
 @media screen and (max-width: 990px) {
   .dashboard-filter-header-fullscreen {
     margin-left: 0px;

@@ -4827,6 +4827,12 @@ jhi-alert .alerts .alert-danger {
     display: flex; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field {
       align-self: center; }
+      .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field .comma-separated-off {
+        color: #404345;
+        outline: none; }
+      .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field .comma-separated-on {
+        color: #439dd3;
+        outline: none; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .between-label {
       width: 7%;
       margin: auto; }

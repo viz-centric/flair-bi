@@ -54,7 +54,7 @@
         </div>
         <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'"
             class="col-md-5 field">
-            <tags-input-grpc placeholder="Add Values" use-strings="true" min-length="1"
+            <tags-input-grpc ng-if="!vm.isCommaSeparatedInput" placeholder="Add Values" use-strings="true" min-length="1"
                              ng-model="vm.condition.values"
                              on-tag-added="vm.onContainsAdded($tag)"
                              on-tag-removed="vm.onContainsRemoved($tag)"
@@ -63,6 +63,15 @@
                     source="vm.load($query, vm.condition.featureName)" min-length="0
                 " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
             </tags-input-grpc>
+            <input ng-if="vm.isCommaSeparatedInput" type="text" placeholder="Add comma separated values" ng-model="vm.commaSeparatedValues"
+                    class="form-control" ng-blur="vm.addToFilter()" />
+        </div>
+        <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'"
+            class="field">
+            <label class="pull-right">
+                 <i ng-click="vm.displayTextboxForValues()" class="fa fa-text-width" ng-class="{'comma-separated-on' : vm.isCommaSeparatedInput,'comma-separated-off' : !vm.isCommaSeparatedInput}">
+                 </i>
+            </label>
         </div>
         <div class="col-md-2 field">
             <div ng-show="vm.showAdd" class="data-constraint-operation-button add-button icon"
@@ -94,7 +103,7 @@
 <div class="condition-component-wrapper" ng-if="vm.condition['@type'] === 'Or' || vm.condition['@type'] === 'And'">
     <condition-component show-add="true" show-delete="true" features="vm.features"
         condition="vm.condition.firstExpression" datasource-id="vm.datasourceId"></condition-component>
-    <div class="row" style="margin-left: 0;margin-bottom: 14px;">
+    <div class="row" style="margin-left: 0;margin-bottom: 14px;margin-top: 14px;">
         <div class="col-md-2">
             <ui-select ng-model="vm.condition['@type']">
                 <ui-select-match>{{$select.selected.displayName}}</ui-select-match>

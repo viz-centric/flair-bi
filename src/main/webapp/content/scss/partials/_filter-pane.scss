@@ -7,8 +7,11 @@
     tags-input.filter-input {
       margin: 0.5vw;
     }
+    i{
+      outline: none;
+    }
     i.active{
-      color:$blue;
+      color:$primary-color;
     }
   }
   .dimensions-container {

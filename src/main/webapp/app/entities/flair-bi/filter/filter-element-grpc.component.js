@@ -368,23 +368,27 @@
 
         function displayTextboxForValues(dimension) {
             vm.filterDimension = dimension;
-            vm.isBulkValue = true;
+            vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
+            if(vm.dimension.selected && vm.dimension.selected.length>0){
+                vm.dimension.commaSeparatedValues = vm.dimension.selected.map(function(elem){
+                    return elem.text;
+                }).join(",");
+            }
         }
 
         function addToFilter(dimension) {
-            if (vm.commaValue && vm.commaValue.length > 0) {
-                vm.isBulkValue = false;
+            if (vm.dimension.commaSeparatedValues && vm.dimension.commaSeparatedValues.length > 0) {
+                vm.isCommaSeparatedInput = false;
                 vm.activeForText = "active";
                 vm.dimension.selected = [];
                 var filterParameters = filterParametersService.getSelectedFilter();
                 filterParameters[vm.dimension.name] = [];
-                var getList = vm.commaValue.split(',');
+                var getList = vm.dimension.commaSeparatedValues.split(',');
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element });
                     vm.dimension.selected.push({ text: element });
                 });
-                vm.commaValue = '';
             }
 
         }

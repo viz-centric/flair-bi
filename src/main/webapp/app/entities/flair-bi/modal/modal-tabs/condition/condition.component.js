@@ -213,7 +213,6 @@
                     onContainsAdded({ text: element });
                     vm.condition.values.push(element);
                 });
-                vm.commaSeparatedValues = '';
             }
 
         }

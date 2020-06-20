@@ -3,13 +3,13 @@
 
     <div class="row" ng-if="$root.isFullScreen == false">
         <div class="col-md-7 col-sm-6 col-xs-6 header-first">
-            <a class="logo" ui-sref="home">
+            <a ng-disabled="vm.isIframe" class="logo" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </a>
             <form class="form-inline">
                 <div class="form-group">
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button ng-disabled="vm.isIframe" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                             <span>
                                 <svg class="field-icon-left">
                                     <use xlink:href="#dashboard-header" />
@@ -37,7 +37,7 @@
                 </div> -->
                 <div class="form-group">
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button  ng-disabled="vm.isIframe" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                             <svg class="field-icon-left">
                                 <use xlink:href="#eye" />
                             </svg>
@@ -170,10 +170,10 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()">
-                            <span uib-tooltip="Full Screen" tooltip-placement="bottom">
-                                <svg class="full-screen">
-                                    <use xlink:href="#full-screen" />
+                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.share()">
+                            <span uib-tooltip="Share" tooltip-placement="bottom">
+                                <svg class="flaticons-share">
+                                    <use xlink:href="#share" />
                                 </svg>
                             </span>
                         </top-nav-button-component>
@@ -183,8 +183,8 @@
                 </div>
 
                 <div>
-                    <div class="options-4">
-                        <menu-component></menu-component>
+                    <div class="options-4" ng-disabled="vm.isIframe">
+                        <menu-component disabled="vm.isIframe"></menu-component>
                     </div>
                 </div>
             </div>

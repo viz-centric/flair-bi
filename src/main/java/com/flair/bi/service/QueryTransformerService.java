@@ -302,6 +302,6 @@ public class QueryTransformerService {
         if (params.getSql() == null) {
             return new QuerySourceDTO(params.getSourceName(), alias);
         }
-        return new RawQuerySourceDTO(params.getSql(), alias);
+        return new RawQuerySourceDTO(params.getSql().replaceAll("[\\n\\r]+", " "), alias);
     }
 }

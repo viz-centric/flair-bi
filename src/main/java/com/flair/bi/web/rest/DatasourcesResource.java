@@ -48,7 +48,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -275,18 +274,18 @@ public class DatasourcesResource {
         log.debug("REST request to get list tables {}", listTablesRequest);
 
         if (listTablesRequest.getFilter() == ListTablesRequest.FilterType.SQL) {
-            Set<String> sqlDatasourceNames = datasourceService.findAll(QDatasource.datasource.sql.isNotNull())
+            List<ListTablesResponseDTO.Table> sqlDatasourceNames = datasourceService.findAll(
+                    QDatasource.datasource.sql.isNotNull()
+                            .and(QDatasource.datasource.name.likeIgnoreCase("%" + listTablesRequest.getSearchTerm() + "%")))
                     .stream()
-                    .map(ds -> ds.getName())
-                    .collect(Collectors.toSet());
+                    .map(ds -> new ListTablesResponseDTO.Table(ds.getName(), ds.getSql()))
+                    .collect(Collectors.toList());
             return new ListTablesResponseDTO()
-                    .setTableNames(new ArrayList<>(sqlDatasourceNames));
+                    .setTables(sqlDatasourceNames);
         }
 
-        ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
+        return grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
                 listTablesRequest.getSearchTerm(), listTablesRequest.getConnection(), 50);
-
-        return response;
     }
 
     @GetMapping("/datasources/search")

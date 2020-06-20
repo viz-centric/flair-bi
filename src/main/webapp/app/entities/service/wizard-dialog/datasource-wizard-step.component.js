@@ -23,13 +23,14 @@
 
         vm.onSubmitDisabled = onSubmitDisabled;
         vm.tabIndex = 0;
-        vm.sql = '';
+        vm.sql = null;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.onSearchKeyUp = onSearchKeyUp;
+        vm.onSelectedTableChanged = onSelectedTableChanged;
         vm.search = search;
         vm.tables = [];
-        vm.datasources.name = null;
+        vm.displayTables = [];
         vm.createDataSource = createDataSource;
         vm.isShowDataEnabled = isShowDataEnabled;
         vm.getDatasourceNames = getDatasourceNames;
@@ -56,23 +57,32 @@
         }
 
         function isShowDataEnabled() {
-            if (vm.tabIndex === 0 && vm.datasources.name) {
+            if (vm.loading) {
                 return true;
             }
-            return vm.tabIndex === 1 && vm.sql && vm.datasources.name;
+            if (vm.tabIndex === 0) {
+                return !vm.selectedTable;
+            } else if (vm.tabIndex === 1) {
+                return !vm.sql || !vm.selectedTable;
+            }
+            return false;
         }
 
         function onTabClick(tabIndex) {
             vm.tabIndex = tabIndex;
-            vm.datasources.name = null;
+            vm.selectedTable = null;
+            vm.sql = null;
             vm.tables = [];
+            vm.displayTables = [];
+        }
+
+        function onSelectedTableChanged(table) {
+            vm.selectedTable = table;
+            vm.sql = table.sql || vm.sql;
         }
 
         function onSubmitDisabled() {
-            if (vm.tabIndex === 0) {
-                return !vm.datasources.name;
-            }
-            return !vm.sql || !vm.datasources.name;
+            return isShowDataEnabled();
         }
 
         function openCalendar(date) {
@@ -93,11 +103,16 @@
         }
 
         function getDatasourceNames(search) {
-            const clonedList = vm.tables.slice();
-            if (search && clonedList.indexOf(search) === -1) {
-                clonedList.unshift(search);
+            if (search) {
+                const existingList = vm.displayTables
+                    .filter(item => !vm.tables.includes(item));
+                existingList
+                    .forEach(item => item.name = search);
+                if (existingList.length === 0) {
+                    vm.displayTables.unshift({name: search, sql: null, temp: true});
+                }
             }
-            return clonedList;
+            return vm.displayTables;
         }
 
         function search(searchedText) {
@@ -115,7 +130,8 @@
                 Datasources.listTables(
                     body,
                     function (data) {
-                        vm.tables = data.tableNames;
+                        vm.tables = data.tables;
+                        vm.displayTables = vm.tables.concat();
                     },
                     function () {
                         Toastr.error({
@@ -194,11 +210,8 @@
         }
 
         function saveDatasource(connectionLinkId, customAction) {
-            if (vm.tabIndex === 0) {
-                vm.datasources.sql = null;
-            } else {
-                vm.datasources.sql = vm.sql;
-            }
+            vm.datasources.sql = vm.sql;
+            vm.datasources.name = vm.selectedTable.name;
             vm.datasources.connectionName = connectionLinkId;
             sendSaveDatasource(customAction);
         }
@@ -296,9 +309,9 @@
                     fields: [],
                     distinct: true,
                     limit: 10,
-                    source: vm.datasources.name,
+                    source: vm.selectedTable.name,
                 },
-                sql: vm.tabIndex === 1 ? vm.sql : null,
+                sql: vm.sql,
                 sourceId: vm.datasources.id
             };
             if (vm.selectedConnection) {

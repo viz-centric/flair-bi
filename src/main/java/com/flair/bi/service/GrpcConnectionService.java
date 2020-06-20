@@ -67,8 +67,11 @@ public class GrpcConnectionService {
             int maxEntries) {
         ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries,
                 QueryGrpcUtils.toProtoConnection(connection));
-        return new ListTablesResponseDTO().setTableNames(
-                result.getTablesList().stream().map(table -> table.getTableName()).collect(Collectors.toList()));
+        return new ListTablesResponseDTO().setTables(
+                result.getTablesList()
+                        .stream()
+                        .map(table -> new ListTablesResponseDTO.Table(table.getTableName(), null))
+                        .collect(Collectors.toList()));
     }
 
     public ConnectionDTO saveConnection(ConnectionDTO connection) {

@@ -27,10 +27,13 @@ public class ViewFeatureCriteriaService {
 	public Set<ViewFeatureCriteria> create(CreateViewFeatureCriteriaRequest request) {
 		View view = viewRepository.getOne(request.getViewId());
 
-		Set<ViewFeatureCriteria> viewFeatureCriterias = request.getFeatures().stream()
+    final Set<ViewFeatureCriteria> viewFeatureCriterias = request.getFeatures().stream()
 				.map(f -> composeViewFeatureCriteria(view, f)).collect(Collectors.toSet());
+    // remove existing one
+    view.getViewFeatureCriterias().forEach(view::remove);
 
-		view.setViewFeatureCriterias(viewFeatureCriterias);
+    //add new one
+    viewFeatureCriterias.forEach(view::add);
 
 		viewRepository.save(view);
 

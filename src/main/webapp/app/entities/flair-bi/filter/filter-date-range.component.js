@@ -136,7 +136,7 @@
 
         function getDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
             var dynamicDateRangeToolTip = {name:'',text:''};
-                dynamicDateRangeToolTip.name = filterParametersService.buildDateRangeFilterName(dimensionName);
+                dynamicDateRangeToolTip.name = dimensionName;
             if(currentDynamicDateRangeConfig.isCustom){
                 dynamicDateRangeToolTip.text = 'Last '+customDynamicDateRange; 
             }else{

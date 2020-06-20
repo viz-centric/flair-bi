@@ -126,6 +126,9 @@
 
         function setProperties(visual, view) {
             vm.visual = visual;
+            vm.visual.fields = vm.visual.fields.sort(function (a, b) {
+                return a.order - b.order;
+            });
             vm.visual.titleProperties.titleText =
                 vm.visual.titleProperties.titleText.trim() == ""
                     ? vm.visual.metadataVisual.name
@@ -221,8 +224,8 @@
             if (vm.visual.id) {
                 VisualMetadataContainer.update(vm.visual.id, vm.visual, 'id');
                 VisualDispatchService.setViewEditedBeforeSave(false);
-            } 
-            else{
+            }
+            else {
                 save();
             }
         }
@@ -409,12 +412,8 @@
         function getAppliedFiltersDimentions() {
             var filters = filterParametersService.get();
             vm.appliedFiltersDimensions = vm.dimensions.filter(function (item) {
-                return filters[getDimensionName(item.name, item.type)] ? true : false;
+                return filters[item.name] ? true : false;
             });
-        }
-
-        function getDimensionName(name, type) {
-            return type === 'timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
         }
 
         function openFilters() {
@@ -512,7 +511,7 @@
                 return item.featureType === "DIMENSION" && item.dateFilter !== "ENABLED";
             });
 
-            vm.dimensions =  vm.dateDimensions.concat( vm.allDimensions);
+            vm.dimensions = vm.dateDimensions.concat(vm.allDimensions);
         }
 
         function registerToggleRightNavBarOff() {

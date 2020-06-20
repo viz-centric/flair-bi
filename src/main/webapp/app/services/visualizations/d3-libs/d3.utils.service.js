@@ -112,6 +112,10 @@
             },
 
             getNames: function (arr) {
+                arr=arr.sort(function(a,b){
+                    return a.order - b.order;
+                    }
+                );
                 return arr.map(function (item) {
                     if (item.feature.name)
                         return item.feature.name

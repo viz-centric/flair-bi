@@ -3,15 +3,13 @@
 
     <div class="row" ng-if="$root.isFullScreen == false">
         <div class="col-md-7 col-sm-6 col-xs-6 header-first">
-            <a class="logo" ui-sref="home">
+            <a ng-disabled="vm.isIframe" class="logo" ui-sref="home">
                 <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
             </a>
-            <div class="line" style="margin-left: -1px;"></div>
-
             <form class="form-inline">
                 <div class="form-group">
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button ng-disabled="vm.isIframe" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                             <span>
                                 <svg class="field-icon-left">
                                     <use xlink:href="#dashboard-header" />
@@ -19,7 +17,7 @@
                             </span>
                             {{vm.selectedDashboard.dashboardName}}
                             <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu flair-content-header-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
                                 <!-- <i class="glyphicon glyphicon-search"></i> -->
                                 <input type="text" ng-model="searchDashboard" class="form-control"
@@ -39,14 +37,14 @@
                 </div> -->
                 <div class="form-group">
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button  ng-disabled="vm.isIframe" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                             <svg class="field-icon-left">
                                 <use xlink:href="#eye" />
                             </svg>
                             <span ng-if="vm.selectedView.viewName"> {{vm.selectedView.viewName}}</span>
                             <span ng-if="!vm.selectedView"> Select View</span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu flair-content-header-menu">
                             <div class="search-box-list inner-addon left-addon b-b-xs">
                                 <input type="text" ng-model="searchView" class="form-control"
                                     placeholder="Search View..." />
@@ -172,10 +170,10 @@
                                 </svg>
                             </span>
                         </top-nav-button-component>
-                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.setFullScreen()">
-                            <span uib-tooltip="Full Screen" tooltip-placement="bottom">
-                                <svg class="full-screen">
-                                    <use xlink:href="#full-screen" />
+                        <top-nav-button-component class="options-3-item viz-full-screen-btn" click="vm.share()">
+                            <span uib-tooltip="Share" tooltip-placement="bottom">
+                                <svg class="flaticons-share">
+                                    <use xlink:href="#share" />
                                 </svg>
                             </span>
                         </top-nav-button-component>
@@ -185,8 +183,8 @@
                 </div>
 
                 <div>
-                    <div class="options-4">
-                        <menu-component></menu-component>
+                    <div class="options-4" ng-disabled="vm.isIframe">
+                        <menu-component disabled="vm.isIframe"></menu-component>
                     </div>
                 </div>
             </div>
@@ -531,7 +529,7 @@
                 ng-click="vm.toggleFilters($event)" class="list-inline-item"
                 ng-repeat="(key, value) in vm.filters track by $index">
                 <a class="btn btn-info btn-sm filter" title="{{vm.toolTipTexts[key]}}">
-                    <span class="filter-name">{{vm.getKeyName(key)}}</span><span ng-click="vm.removeFilter($event,key)"
+                    <span class="filter-name">{{key}}</span><span ng-click="vm.removeFilter($event,key)"
                         class="remove glyphicon glyphicon-remove-sign glyphicon-white"></span>
                 </a>
                 <ul class="list-group filter-drop-downs" ng-if="!vm.isDateRange(key)">

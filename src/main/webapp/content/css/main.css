@@ -1185,17 +1185,19 @@ nav.navbar-static-top {
       vertical-align: bottom;
       width: 25px;
       height: 20px;
-      fill: #404345; }
+      fill: #404345;
+      margin-right: -9px; }
     nav.navbar-static-top .navbar-header .logo {
       position: absolute;
       top: 0px;
       left: 0px;
       border-right: 1px #ced0d1 solid;
-      height: 30px; }
+      height: 41px;
+      width: 37px; }
       nav.navbar-static-top .navbar-header .logo img {
         width: 25px;
-        height: 36px;
-        margin-right: 5px; }
+        height: 40px;
+        margin-left: 6px; }
     nav.navbar-static-top .navbar-header .home-row {
       display: flex;
       align-items: center; }
@@ -1204,7 +1206,8 @@ nav.navbar-static-top {
       position: absolute;
       outline: none;
       -webkit-transition: all 1s ease;
-      transition: all 1s ease; }
+      transition: all 1s ease;
+      margin-right: -18px; }
     nav.navbar-static-top .navbar-header .search-right-icon-active {
       left: 62px; }
   nav.navbar-static-top user-profile-component .dropdown-menu {
@@ -2617,6 +2620,20 @@ tags-input-grpc .autocomplete {
 
 .filter-area .filter-element tags-input-grpc.filter-input {
   margin: .5vw; }
+
+.comma-separated-box {
+  height: 26px;
+  width: auto !important;
+  margin-top: 0.5vw;
+  margin-right: 0.5vw;
+  margin-bottom: 0.5vw;
+  margin-left: 0.5vw;
+  padding: 0px 0px 33px 0px;
+  line-height: normal;
+  font: 13px "open sans"; }
+  .comma-separated-box .comma-separated-input {
+    font: 13px "open sans";
+    height: 38px; }
 
 @media screen {
   #printSection {
@@ -4089,21 +4106,12 @@ jhi-alert .alerts .alert-danger {
     .flairbi-content-header .header-first .view-name {
       margin-left: 11px; }
     .flairbi-content-header .header-first .logo {
-      width: 30px;
-      margin-left: 5px;
-      margin-left: 5px;
-      display: flex;
-      align-items: center;
-      height: 40px; }
+      width: 31px;
+      height: 40px;
+      border-right: 1px #ced0d1 solid; }
       .flairbi-content-header .header-first .logo img {
         width: 25px;
         height: 40px; }
-    .flairbi-content-header .header-first .line {
-      width: 1px;
-      height: 35px;
-      background: #e4e4e4;
-      float: left;
-      margin: 4px 5px 0 5px; }
   .flairbi-content-header h2 {
     margin: 0px;
     line-height: 40px;
@@ -4215,22 +4223,18 @@ jhi-alert .alerts .alert-danger {
       display: flex;
       align-items: flex-start;
       justify-content: flex-start; }
-      .flairbi-content-header .full-screen-topbar .full-screen-options .line {
-        width: 1px;
-        height: 39px;
-        background: #e4e4e4;
-        float: left;
-        margin: 4px 5px 0 5px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .logo {
-        width: 30px;
+        width: 45px;
         margin-left: 5px;
         margin-left: 5px;
         display: flex;
         align-items: center;
-        height: 40px; }
+        height: 40px;
+        border-right: 1px #ced0d1 solid; }
         .flairbi-content-header .full-screen-topbar .full-screen-options .logo img {
           width: 25px;
-          height: 40px; }
+          height: 40px;
+          margin-left: 7px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .dropdown-options-v5 {
         margin-left: 0px;
         padding-top: 0px; }
@@ -4262,7 +4266,7 @@ jhi-alert .alerts .alert-danger {
       .flairbi-content-header .full-screen-topbar .full-screen-options .add-bookmark {
         margin-right: 9px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options menu-component .menu-container .menu {
-        margin-right: 12px; }
+        margin-right: 15px; }
       .flairbi-content-header .full-screen-topbar .full-screen-options .fs-btn svg {
         width: 38px;
         height: 35px;
@@ -4409,6 +4413,9 @@ jhi-alert .alerts .alert-danger {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 20px; }
+
+.flair-content-header-menu {
+  padding: 0px; }
 
 @media screen and (max-width: 990px) {
   .dashboard-filter-header-fullscreen {
@@ -4834,6 +4841,12 @@ jhi-alert .alerts .alert-danger {
     display: flex; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field {
       align-self: center; }
+      .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field .comma-separated-off {
+        color: #404345;
+        outline: none; }
+      .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field .comma-separated-on {
+        color: #439dd3;
+        outline: none; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .between-label {
       width: 7%;
       margin: auto; }
@@ -5751,8 +5764,11 @@ ui bootstrap tweaks
 .filter-area .filter-element tags-input.filter-input {
   margin: 0.5vw; }
 
+.filter-area .filter-element i {
+  outline: none; }
+
 .filter-area .filter-element i.active {
-  color: #1c84c6; }
+  color: #439dd3; }
 
 .filter-area .dimensions-container {
   padding: 10px 5px;

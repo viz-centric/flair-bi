@@ -256,7 +256,7 @@
                                                 <use xlink:href="#entity-dimension" />
                                             </svg>
                                         </li>
-                                        <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'DIMENSION'}}:true | orderBy:'fieldType.id'"
+                                        <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'DIMENSION'}}:true | orderBy:'order'"
                                             class="list-group-item dimension-item">
                                             <input index={{v.fields.indexOf(field)}} type="text" class="form-control"
                                                 ng-model="field.feature.definition" placeholder="Drop Here" readonly>
@@ -284,7 +284,7 @@
                                                 <use xlink:href="#entity-measure" />
                                             </svg>
                                         </li>
-                                        <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'MEASURE'}}:true | orderBy:'fieldType.id'"
+                                        <li ng-repeat="field in v.fields | filter:{fieldType:{featureType:'MEASURE'}}:true | orderBy:'order'"
                                             class="list-group-item measure-item">
                                             <input index={{v.fields.indexOf(field)}} type="text" class="form-control"
                                                 ng-model="field.feature.definition" placeholder="Drop Here" readonly>

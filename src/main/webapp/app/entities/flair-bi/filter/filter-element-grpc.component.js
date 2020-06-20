@@ -157,11 +157,11 @@
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
             } else {
-                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name), metadata);
+                filterParametersService.saveDynamicDateRangeMetaData(vm.dimension.name, metadata);
             }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
+            removeFilter(vm.dimension.name);
             if (startDate) {
                 startDate = resetTimezone(startDate);
                 addDateRangeFilter(startDate);
@@ -307,13 +307,15 @@
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
             if (myFilters && myFilters.length > 0) {
-                vm.dimension.selected = myFilters.map(function (item) {
-                    var newItem = {};
-                    newItem['text'] = item;
-                    if (isFavouriteFilter())
-                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
-                    return newItem;
-                });
+                if(!filterParametersService.isDateType(vm.dimension)){
+                    vm.dimension.selected = myFilters.map(function (item) {
+                        var newItem = {};
+                        newItem['text'] = item;
+                        if (isFavouriteFilter())
+                            displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
+                        return newItem;
+                    });
+                }
             } else {
                 if (filterParametersService.isDateType(vm.dimension)) {
                     vm.dimension.selected = null;
@@ -342,13 +344,11 @@
 
         function addDateRangeFilter(date) {
             var filterParameters = filterParametersService.getSelectedFilter();
-            var dateRangeName = filterParametersService.buildDateRangeFilterName(vm.dimension.name);
-            delete filterParameters[vm.dimension.name];
-            if (!filterParameters[dateRangeName]) {
-                filterParameters[dateRangeName] = [];
+            if (!filterParameters[vm.dimension.name]) {
+                filterParameters[vm.dimension.name] = [];
             }
-            filterParameters[dateRangeName].push(date);
-            filterParameters[dateRangeName]._meta = {
+            filterParameters[vm.dimension.name].push(date);
+            filterParameters[vm.dimension.name]._meta = {
                 dataType: vm.dimension.type,
                 valueType: 'dateRangeValueType'
             };
@@ -368,23 +368,27 @@
 
         function displayTextboxForValues(dimension) {
             vm.filterDimension = dimension;
-            vm.isBulkValue = true;
+            vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
+            if(vm.dimension.selected && vm.dimension.selected.length>0){
+                vm.dimension.commaSeparatedValues = vm.dimension.selected.map(function(elem){
+                    return elem.text;
+                }).join(",");
+            }
         }
 
         function addToFilter(dimension) {
-            if (vm.commaValue && vm.commaValue.length > 0) {
-                vm.isBulkValue = false;
+            if (vm.dimension.commaSeparatedValues && vm.dimension.commaSeparatedValues.length > 0) {
+                vm.isCommaSeparatedInput = false;
                 vm.activeForText = "active";
                 vm.dimension.selected = [];
                 var filterParameters = filterParametersService.getSelectedFilter();
                 filterParameters[vm.dimension.name] = [];
-                var getList = vm.commaValue.split(',');
+                var getList = vm.dimension.commaSeparatedValues.split(',');
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element });
                     vm.dimension.selected.push({ text: element });
                 });
-                vm.commaValue = '';
             }
 
         }

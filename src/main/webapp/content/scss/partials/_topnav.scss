@@ -63,17 +63,19 @@ nav.navbar-static-top {
             width: 25px;
             height: 20px;
             fill: $anchor-color;
+            margin-right: -9px;
         }
         .logo {
             position: absolute;
             top: 0px;
             left: 0px;
             border-right: 1px #ced0d1 solid;
-            height:30px;
+            height:41px;
+            width: 37px;
             img {
                 width: 25px;
-                height: 36px;
-                margin-right: 5px;
+                height: 40px;
+                margin-left: 6px;
             }
         }
         .home-row {
@@ -86,6 +88,7 @@ nav.navbar-static-top {
             outline: none;
             -webkit-transition: all 1s ease;
             transition: all 1s ease;
+            margin-right: -18px;
         }
         .search-right-icon-active {
             left: 62px;

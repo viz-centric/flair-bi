@@ -429,7 +429,8 @@
                 var field = {
                     fieldType: fieldType,
                     feature: null,
-                    constraint: fieldType.constraint
+                    constraint: fieldType.constraint,
+                    order : VisualDispatchService.getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -463,7 +464,8 @@
                 var field = {
                     fieldType: fieldType,
                     feature: null,
-                    constraint: fieldType.constraint
+                    constraint: fieldType.constraint,
+                    order : VisualDispatchService.getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -1211,6 +1213,7 @@
         }
 
         function createFields(newVM) {
+            var order = 0;
             newVM.fields = newVM.metadataVisual.fieldTypes
                 .filter(function (item) {
                     return item.constraint === "REQUIRED";
@@ -1230,6 +1233,7 @@
                     },
                     function (result) {
                         field.fieldType = result;
+                        field.order = order + 1;
                         field.properties = field.fieldType.propertyTypes.map(
                             function (item) {
                                 return {

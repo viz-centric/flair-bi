@@ -10,7 +10,7 @@
             .state(
                 "flair-bi-build",
                 viewAndDeveloperSettings(
-                    "/dashboards/{dashboardId}/views/{id}/build",
+                    "/dashboards/{dashboardId}/views/{id}/build/?isIframe=false",
                     false
                 )
             )
@@ -111,6 +111,22 @@
                             if (!isNaN($stateParams.viewId)) {
                                 return Features.query({
                                     view: $stateParams.viewId
+                                }).$promise;
+                            } else {
+                                var deferred = $q.defer();
+                                deferred.reject("Not valid id");
+                                return deferred.promise;
+                            }
+                        }
+                    ],
+                    entity: [
+                        "$stateParams",
+                        "Views",
+                        "$q",
+                        function($stateParams, Views, $q) {
+                            if (!isNaN($stateParams.viewId)) {
+                                return Views.get({
+                                    id: $stateParams.viewId
                                 }).$promise;
                             } else {
                                 var deferred = $q.defer();

@@ -35,7 +35,8 @@
         "Auth",
         'ViewFeatureCriteria',
         "DYNAMIC_DATE_RANGE_CONFIG",
-        "AccountDispatch"
+        "AccountDispatch",
+        "ShareLinkService"
     ];
 
     function FlairBiContentHeaderController(
@@ -65,7 +66,8 @@
         Auth,
         ViewFeatureCriteria,
         DYNAMIC_DATE_RANGE_CONFIG,
-        AccountDispatch
+        AccountDispatch,
+        ShareLinkService
     ) {
         var vm = this;
 
@@ -125,6 +127,7 @@
         vm.changeViewAndUpdateDashboard = changeViewAndUpdateDashboard;
         vm.dashboardId = $stateParams.dashboardId;
         vm.viewId = $stateParams.id;
+        vm.isIframe = $stateParams.isIframe==="true"?true:false;
         vm.isShowDisabled = isShowDisabled;
         vm.disableShow = false;
         vm.build = build;
@@ -146,6 +149,7 @@
         vm.viewFeatureCriteriaReady = false;
         vm.canEdit = false;
         vm.editOn = false;
+        vm.share = share;
 
         Principal.identity().then(function (account) {
             vm.account = account;
@@ -333,7 +337,7 @@
             var temporalDataTypes = filterParametersService.getComparableDataTypes();
             selectedBookmark.featureCriteria.forEach(function (criteria) {
                 var isTemporal = criteria.dateRange && temporalDataTypes.indexOf(criteria.feature.type.toLowerCase()) > -1;
-                filter[criteria.feature.name] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, criteria.feature.name);  
+                filter[criteria.feature.name] = applyFeatureCriteria(isTemporal, criteria.metaData, criteria.feature, criteria.value, criteria.feature.name);
             });
             filterParametersService.save(filter);
         }
@@ -575,11 +579,11 @@
 
         function setToolTipTexts(filters) {
             angular.forEach(filters, function (value, key) {
-                vm.toolTipTexts[key] = getFiltersToolTipName(key,value._meta.dataType);
+                vm.toolTipTexts[key] = getFiltersToolTipName(key, value._meta.dataType);
             });
         }
 
-        function getFiltersToolTipName(name,type) {
+        function getFiltersToolTipName(name, type) {
             if (filterParametersService.isDateFilterType(type)) {
                 var dateRangeToolTipText = "Date Range : ";
                 var filters = filterParametersService.get();
@@ -600,9 +604,9 @@
         }
 
         function isDateRange(name) {
-            if(vm.filters[name]._meta.dataType){
+            if (vm.filters[name]._meta.dataType) {
                 return filterParametersService.isDateFilterType(vm.filters[name]._meta.dataType);
-            }else{
+            } else {
                 return false;
             }
         }
@@ -882,6 +886,29 @@
         function changeContainerColor(containerColor) {
             if (containerColor)
                 $('.page-wrapper-full-screen').css('background-color', containerColor)
+        }
+
+        function share() {
+            $uibModal
+                .open({
+                    animation: true,
+                    templateUrl:
+                        "app/entities/flair-bi/share-dialog/share-dialog.html",
+                    size: "md",
+                    controller: "ShareDialogController",
+                    controllerAs: "vm",
+                    resolve: {
+                        shareLink: function () {
+                            return ShareLinkService.createLink("/dashboards/" + vm.dashboardId + "/views/" + vm.viewId + "/build/?isIframe=true");
+                        }
+                    }
+                })
+                .result.then(
+                    function () {
+                        cb();
+                    },
+                    function () { }
+                );
         }
     }
 })();

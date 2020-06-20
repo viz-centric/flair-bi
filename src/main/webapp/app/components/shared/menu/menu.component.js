@@ -7,6 +7,9 @@
             templateUrl: 'app/components/shared/menu/menu.component.html',
             controller: menuController,
             controllerAs: 'vm',
+            bindings:{
+                disabled : '='
+            }
         });
 
     menuController.$inject = ['$state', 'Auth', 'AccountDispatch'];

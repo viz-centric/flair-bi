@@ -10,7 +10,7 @@
             .state(
                 "flair-bi-build",
                 viewAndDeveloperSettings(
-                    "/dashboards/{dashboardId}/views/{id}/build",
+                    "/dashboards/{dashboardId}/views/{id}/build/?isIframe=false",
                     false
                 )
             )

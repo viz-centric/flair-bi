@@ -10,7 +10,7 @@ import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.dto.QuerySource;
 import com.project.bi.query.dto.SortDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -75,11 +75,11 @@ public final class QueryGrpcUtils {
         return queryDTO;
     }
 
-    private static QuerySourceDTO getQuerySourceDTO(Query.QuerySource querySource) {
-        if (querySource == null) {
-            return null;
+    private static QuerySource getQuerySourceDTO(Query.QuerySource querySource) {
+        if (!StringUtils.isEmpty(querySource.getSource())) {
+            return JacksonUtil.fromString(querySource.getSource(), QuerySource.class);
         }
-        return new QuerySourceDTO(querySource.getSource(), querySource.getAlias());
+        return null;
     }
 
     private static List<FieldDTO> toFieldDTOs(List<Query.Field> fieldsList) {

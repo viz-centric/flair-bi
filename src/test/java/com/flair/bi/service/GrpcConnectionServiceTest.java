@@ -256,8 +256,8 @@ public class GrpcConnectionServiceTest {
                         .addTables(ListTablesResponse.Table.newBuilder().setTableName("table name2").build()).build());
         ListTablesResponseDTO response = service.listTables("linkid", "table", null, 10);
 
-        assertEquals("table name", response.getTableNames().get(0));
-        assertEquals("table name2", response.getTableNames().get(1));
+        assertEquals("table name", response.getTables().get(0));
+        assertEquals("table name2", response.getTables().get(1));
 
     }
 }

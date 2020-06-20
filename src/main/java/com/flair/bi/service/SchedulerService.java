@@ -23,7 +23,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.dto.QuerySource;
 import com.project.bi.query.expression.operations.CompositeOperation;
 import com.project.bi.query.expression.operations.Operation;
 import com.project.bi.query.expression.operations.QueryOperation;
@@ -197,7 +197,9 @@ public class SchedulerService {
 
 		Query query = queryTransformerService.toQuery(queryDTO,
 				QueryTransformerParams.builder()
+						.sql(datasource.getSql())
 						.datasourceId(datasource.getId())
+						.sourceName(queryDTO.getSource())
 						.connectionName(datasource.getConnectionName())
 						.vId(visualizationId != null ? visualizationId : "")
 						.userId(userId)
@@ -210,7 +212,12 @@ public class SchedulerService {
 	}
 
 	public void preprocessQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource, String userId) {
-		queryDTO.setQuerySource(new QuerySourceDTO(datasource.getName(), "A"));
+		QuerySource querySource = queryTransformerService.composeQuerySource(QueryTransformerParams.builder()
+				.sourceName(datasource.getName())
+				.sql(datasource.getSql())
+				.sourceAlias("A")
+				.build());
+		queryDTO.setQuerySource(querySource);
 
 		DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(userId,
 				datasource.getId());
@@ -230,22 +237,24 @@ public class SchedulerService {
 					.filter(h -> h.getOperation() != null)
 					.map(h -> h.getOperation())
 					.collect(Collectors.toList());
-			processOperations(queryDTO, operationList, 0);
+			processOperations(operationList, datasource, 0);
 		}
 	}
 
-	private void processOperations(QueryDTO queryDTO, List<Operation> operationList, int nestLevel) {
+	private void processOperations(List<Operation> operationList, Datasource datasource, int nestLevel) {
 		operationList
 				.forEach((op -> {
 					if (op instanceof QueryOperation) {
 						QueryOperation queryOperation = (QueryOperation) op;
-						queryOperation.getValue().setQuerySource(
-								new QuerySourceDTO(queryDTO.getQuerySource().getSource(),
-										String.valueOf((char) (65 + nestLevel))
-								));
+						QuerySource newQuerySource = queryTransformerService.composeQuerySource(QueryTransformerParams.builder()
+								.sourceName(datasource.getName())
+								.sql(datasource.getSql())
+								.sourceAlias(String.valueOf((char) (65 + nestLevel)))
+								.build());
+						queryOperation.getValue().setQuerySource(newQuerySource);
 					} else if (op instanceof CompositeOperation) {
 						CompositeOperation compositeOperation = (CompositeOperation) op;
-						processOperations(queryDTO, compositeOperation.getOperations(), nestLevel + 1);
+						processOperations(compositeOperation.getOperations(), datasource, nestLevel + 1);
 					}
 				}));
 	}

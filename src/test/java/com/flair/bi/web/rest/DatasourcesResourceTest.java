@@ -245,7 +245,8 @@ public class DatasourcesResourceTest extends AbstractIntegrationTest {
 		request.setConnection(new ConnectionDTO());
 
 		ListTablesResponseDTO dto = new ListTablesResponseDTO();
-		dto.setTableNames(Arrays.asList("one", "two"));
+		dto.setTables(Arrays.asList(new ListTablesResponseDTO.Table("one", null),
+				new ListTablesResponseDTO.Table("two", null)));
 		when(grpcConnectionService.listTables(eq("linkid"), eq("term"), any(ConnectionDTO.class), eq(10)))
 				.thenReturn(dto);
 
@@ -255,8 +256,8 @@ public class DatasourcesResourceTest extends AbstractIntegrationTest {
 
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("one", response.getBody().getTableNames().get(0));
-		assertEquals("two", response.getBody().getTableNames().get(1));
+		assertEquals("one", response.getBody().getTables().get(0));
+		assertEquals("two", response.getBody().getTables().get(1));
 	}
 
 	@Test

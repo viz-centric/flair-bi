@@ -47,15 +47,17 @@ public class GrpcQueryService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
-        queryDTO.setSource(datasource.getName());
-
-        log.debug("Sending run query request for datasource {} id {}", queryDTO.getSource(),
+        log.debug("Sending run query request for datasource {} id {}", datasource.getName(),
                 datasource.getConnectionName());
 
         Query query;
         try {
             query = queryTransformerService.toQuery(queryDTO, QueryTransformerParams.builder()
-                    .connectionName(datasource.getConnectionName()).datasourceId(datasource.getId()).build());
+                    .connectionName(datasource.getConnectionName())
+                    .sql(datasource.getSql())
+                    .sourceName(datasource.getName())
+                    .datasourceId(datasource.getId())
+                    .build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + queryDTO, e);
             throw new RuntimeException(e);
@@ -102,8 +104,6 @@ public class GrpcQueryService {
         Optional.ofNullable(constraint).map(DatasourceConstraint::build)
                 .ifPresent(queryDTO.getConditionExpressions()::add);
 
-        queryDTO.setSource(datasource.getName());
-
         Query query;
         try {
             query = queryTransformerService.toQuery(queryDTO,
@@ -111,6 +111,8 @@ public class GrpcQueryService {
                             .connectionName(datasource.getConnectionName())
                             .vId(visualMetadataId != null ? visualMetadataId : "")
                             .userId(userId)
+                            .sql(datasource.getSql())
+                            .sourceName(datasource.getName())
                             .datasourceId(datasource.getId())
                             .build());
         } catch (QueryTransformerException e) {
@@ -138,17 +140,17 @@ public class GrpcQueryService {
         DatasourceConstraint constraint = datasourceConstraintService.findByUserAndDatasource(sendGetDataDTO.getUserId(),
                 datasource.getId());
 
+        QueryDTO queryDTO = sendGetDataDTO.getQueryDTO();
+
         Optional.ofNullable(sendGetDataDTO.getVisualMetadata()).map(VisualMetadata::getConditionExpression).map(x -> {
             ConditionExpressionDTO dto = new ConditionExpressionDTO();
             dto.setSourceType(ConditionExpressionDTO.SourceType.BASE);
             dto.setConditionExpression(x);
             return dto;
-        }).ifPresent(sendGetDataDTO.getQueryDTO().getConditionExpressions()::add);
+        }).ifPresent(queryDTO.getConditionExpressions()::add);
 
         Optional.ofNullable(constraint).map(DatasourceConstraint::build)
-                .ifPresent(sendGetDataDTO.getQueryDTO().getConditionExpressions()::add);
-
-        sendGetDataDTO.getQueryDTO().setSource(datasource.getName());
+                .ifPresent(queryDTO.getConditionExpressions()::add);
 
         if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType() == null) {
             callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), "vizualization", sendGetDataDTO);
@@ -167,7 +169,12 @@ public class GrpcQueryService {
         Query query;
         try {
             query = queryTransformerService.toQuery(requestDTO.getQuery(),
-                    QueryTransformerParams.builder().userId(userId).datasourceId(requestDTO.getSourceId()).build());
+                    QueryTransformerParams.builder()
+                            .userId(userId)
+                            .sql(requestDTO.getSql())
+                            .sourceName(requestDTO.getQuery().getSource())
+                            .datasourceId(requestDTO.getSourceId())
+                            .build());
         } catch (QueryTransformerException e) {
             log.error("Error validating a query " + requestDTO.getQuery(), e);
             throw new RuntimeException(e);
@@ -191,6 +198,8 @@ public class GrpcQueryService {
             query = queryTransformerService.toQuery(queryDTO,
                     QueryTransformerParams.builder()
                             .datasourceId(datasource.getId())
+                            .sourceName(datasource.getName())
+                            .sql(datasource.getSql())
                             .connectionName(datasource.getConnectionName())
                             .validationType(sendGetDataDTO.getValidationType())
                             .vId(vId)

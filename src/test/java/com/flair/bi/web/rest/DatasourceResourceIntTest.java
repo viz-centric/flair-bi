@@ -41,8 +41,13 @@ import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for the DatasourcesResource REST controller.
@@ -342,7 +347,10 @@ public class DatasourceResourceIntTest extends AbstractIntegrationTest {
         listTablesRequest.setConnectionLinkId("connection link");
 
         when(grpcConnectionService.listTables(eq("connection link"), eq("some table"), isNull(ConnectionDTO.class),
-                eq(10))).thenReturn(new ListTablesResponseDTO().setTableNames(Arrays.asList("table1", "table2")));
+                eq(10))).thenReturn(new ListTablesResponseDTO().setTables(
+                        Arrays.asList(new ListTablesResponseDTO.Table("table1", null),
+                                new ListTablesResponseDTO.Table("table2", null))
+        ));
 
         restDatasourcesMockMvc
                 .perform(post("/api/datasources/listTables").contentType(TestUtil.APPLICATION_JSON_UTF8)

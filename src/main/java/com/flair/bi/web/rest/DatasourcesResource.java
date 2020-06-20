@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.QDatasource;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcConnectionService;
@@ -269,13 +270,22 @@ public class DatasourcesResource {
 
     @PostMapping("/datasources/listTables")
     @Timed
-    public ResponseEntity<?> listTables(@RequestBody final ListTablesRequest listTablesRequest) {
+    public ListTablesResponseDTO listTables(@RequestBody final ListTablesRequest listTablesRequest) {
         log.debug("REST request to get list tables {}", listTablesRequest);
 
-        final ListTablesResponseDTO response = grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
-                listTablesRequest.getSearchTerm(), listTablesRequest.getConnection(), 50);
+        if (listTablesRequest.getFilter() == ListTablesRequest.FilterType.SQL) {
+            List<ListTablesResponseDTO.Table> sqlDatasourceNames = datasourceService.findAll(
+                    QDatasource.datasource.sql.isNotNull()
+                            .and(QDatasource.datasource.name.likeIgnoreCase("%" + listTablesRequest.getSearchTerm() + "%")))
+                    .stream()
+                    .map(ds -> new ListTablesResponseDTO.Table(ds.getName(), ds.getSql()))
+                    .collect(Collectors.toList());
+            return new ListTablesResponseDTO()
+                    .setTables(sqlDatasourceNames);
+        }
 
-        return ResponseEntity.ok(response);
+        return grpcConnectionService.listTables(listTablesRequest.getConnectionLinkId(),
+                listTablesRequest.getSearchTerm(), listTablesRequest.getConnection(), 50);
     }
 
     @GetMapping("/datasources/search")
@@ -294,7 +304,12 @@ public class DatasourcesResource {
         @NotNull
         @NotEmpty
         String searchTerm;
+        FilterType filter;
         ConnectionDTO connection;
+
+        private enum FilterType {
+            SQL, TABLE
+        }
     }
 
     @Builder

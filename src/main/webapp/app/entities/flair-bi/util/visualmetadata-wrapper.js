@@ -269,7 +269,6 @@
         return null;
     }
 
-
     function getQueryParameters(filters, conditionExpression, offset) {
 
         var dimensions = this.fields

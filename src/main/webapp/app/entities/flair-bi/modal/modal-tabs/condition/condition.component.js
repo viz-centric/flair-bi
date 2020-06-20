@@ -42,6 +42,8 @@
         vm.onContainsRemoved = onContainsRemoved;
         vm.onFeatureSelect = onFeatureSelect;
         vm.getMetadataTooltip = getMetadataTooltip;
+        vm.displayTextboxForValues = displayTextboxForValues;
+        vm.addToFilter = addToFilter;
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
@@ -193,6 +195,26 @@
             },
             $stateParams.id
             );
+        }
+
+        function displayTextboxForValues() {
+            vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
+            vm.commaSeparatedValues = vm.condition.values.join(",");
+        }
+
+        function addToFilter() {
+            if (vm.commaSeparatedValues && vm.commaSeparatedValues.length > 0) {
+                vm.isCommaSeparatedInput = false;
+                vm.condition.values = [];
+                vm.condition.valueTypes = [];
+                var getList = vm.commaSeparatedValues.split(',');
+                getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
+                getList.forEach(element => {
+                    onContainsAdded({ text: element });
+                    vm.condition.values.push(element);
+                });
+            }
+
         }
     }
 })();

@@ -1,6 +1,35 @@
 package com.flair.bi.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.security.PermissionService;
+import com.flair.bi.service.security.UserGroupService;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.vm.ChangePermissionVM;
+import com.flair.bi.web.rest.vm.ChangePermissionVM.Action;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,43 +38,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
-import com.flair.bi.AbstractIntegrationTest;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.flair.bi.FlairbiApp;
-import com.flair.bi.authorization.AccessControlManager;
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.View;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.security.PermissionService;
-import com.flair.bi.service.security.UserGroupService;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.vm.ChangePermissionVM;
-import com.flair.bi.web.rest.vm.ChangePermissionVM.Action;
 
 @Ignore
 public class UserGroupResourceIntTest extends AbstractIntegrationTest {
@@ -59,6 +51,9 @@ public class UserGroupResourceIntTest extends AbstractIntegrationTest {
     
     @Inject
     private DashboardService dashboardService;
+
+    @Inject
+    private DatasourceService datasourceService;
 
     @Inject
     private ViewService viewService;
@@ -92,7 +87,7 @@ public class UserGroupResourceIntTest extends AbstractIntegrationTest {
     
     @Before
     public void setup() {
-	    UserGroupResource userGroupResource = new UserGroupResource(userGroupService, dashboardService, viewService, accessControlManager);
+	    UserGroupResource userGroupResource = new UserGroupResource(userGroupService, dashboardService, datasourceService, viewService, accessControlManager);
         ReflectionTestUtils.setField(userGroupResource, "userGroupService", userGroupService);     
         this.restUserGroupMockMvc = MockMvcBuilders.standaloneSetup(userGroupResource)
                 .setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)

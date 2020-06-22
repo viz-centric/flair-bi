@@ -29,6 +29,11 @@
             'delete': {
                 method: 'DELETE'
             },
+            'getDatasourcePermissions': {
+                method: 'GET',
+                url: 'api/users/:login/datasourcePermissions',
+                isArray: true
+            },
             'getDashboardPermissions': {
                 method: 'GET',
                 url: 'api/users/:login/dashboardPermissions',

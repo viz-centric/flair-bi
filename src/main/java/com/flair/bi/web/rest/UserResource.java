@@ -6,11 +6,13 @@ import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.view.ViewService;
@@ -40,7 +42,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -80,6 +84,8 @@ public class UserResource {
     private final UserService userService;
 
     private final DashboardService dashboardService;
+
+    private final DatasourceService datasourceService;
 
     private final ViewService viewService;
 
@@ -223,6 +229,24 @@ public class UserResource {
 
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(dashboardPage, "/api/dashboards/permissions");
+        return new ResponseEntity<>(body, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/datasourcePermissions")
+    @Timed
+    public ResponseEntity<List<GranteePermissionReport<User>>> getDatasourcePermissions(@PathVariable String login,
+                                                                                        @ApiParam Pageable pageable) throws URISyntaxException {
+        final Page<Datasource> page = datasourceService.findAll(pageable);
+        final User user = userService.getUserWithAuthoritiesByLogin(login)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
+
+        List<GranteePermissionReport<User>> body = page
+                .getContent()
+                .stream()
+                .map(x -> x.getGranteePermissionReport(user))
+                .collect(Collectors.toList());
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users/{login}/datasourcePermissions");
         return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
 

@@ -6,6 +6,7 @@ import com.flair.bi.domain.QDatasource;
 import com.flair.bi.repository.DatasourceRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,14 @@ public class DatasourceServiceImpl implements DatasourceService {
         BooleanBuilder b = new BooleanBuilder(predicate);
         b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
         return (List<Datasource>) datasourceRepository.findAll(b);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Datasource> findAll(Pageable pageable) {
+        log.debug("Request to get all Datasource");
+        BooleanExpression predicate = QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull());
+        return datasourceRepository.findAll(predicate, pageable);
     }
 
     @Override

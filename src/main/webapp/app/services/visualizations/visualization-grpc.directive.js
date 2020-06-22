@@ -209,7 +209,9 @@
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                     visualMetadata: vm.data,
                     validationType: 'REQUIRED_FIELDS'
-                }, $stateParams.id);
+                }, $stateParams.id === undefined ? $stateParams.viewId : $stateParams.id );
+                angular.element("#loader-spinner").hide();
+
             } else {
                 if (!vm.data.data) {
                     proxyGrpcService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {

@@ -40,7 +40,7 @@ public class FbEngineWebSocketService {
     }
 
     /**
-     * Send meta to users subscribed on channel "/user/exchange/metaData".
+     * Send meta to users subscribed on channel "/user/exchange/metaData/@visualisationId".
      * <p>
      * The message will be sent only to the user with the given username.
      *

@@ -71,7 +71,7 @@
                 { token: AuthServerProvider.getToken() },
                 function (frame) {
                     console.log('flair-bi fullscreen controller connected web socket');
-                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
+                    stompClientService.subscribe("/user/exchange/metaData/"+$stateParams.visualisationId, onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );

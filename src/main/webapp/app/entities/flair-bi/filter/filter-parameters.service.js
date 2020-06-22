@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('filterParametersService', filterParametersService);
 
-    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES'];
+    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES','DYNAMIC_DATE_RANGE_CONFIG'];
 
-    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES) {
+    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES,DYNAMIC_DATE_RANGE_CONFIG) {
 
         var paramObject = {};
         var selectedFilters={};
@@ -33,7 +33,9 @@
             buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange,
             isDateType : isDateType,
             isDateFilterType : isDateFilterType,
-            dateToString
+            dateToString,
+            applyDefaultFilters : applyDefaultFilters,
+            applyViewFeatureCriteria : applyViewFeatureCriteria
         };
 
 
@@ -315,6 +317,123 @@
                 return false;
             }
             return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
+        }
+
+        function applyDefaultFilters(excluded, featureEntities) {
+            const filterParameters = get();
+            const mandatoryDimensions = featureEntities
+                .filter(function (item) {
+                    return !excluded.includes(item);
+                })
+                .filter(function (item) {
+                    return item.featureType === "DIMENSION" && item.dateFilter === "ENABLED";
+                })
+                .filter(function (item) {
+                    return !filterParameters[item.name];
+                });
+
+            if (mandatoryDimensions.length > 0) {
+                const filterParameters = getSelectedFilter();
+                mandatoryDimensions.forEach(function (item) {
+                    var startDate = new Date();
+                    startDate.setDate(startDate.getDate() - 1);
+                    item.selected = dateToString(startDate);
+                    item.selected2 = dateToString(new Date());
+                    item.metadata = {
+                        dateRangeTab: 1,
+                        customDynamicDateRange: 1,
+                        currentDynamicDateRangeConfig: {}
+                    };
+                    delete filterParameters[item.name]
+                    addDefaultDateRangeFilter(filterParameters, item.selected, item);
+                    addDefaultDateRangeFilter(filterParameters, item.selected2, item);
+                });
+                saveSelectedFilter(filterParameters);
+                save(getSelectedFilter());
+            }
+        }
+
+        function applyViewFeatureCriteria(featureCriterias,featureEntities) {
+            const viewFeatureCriterias = featureCriterias;
+            if (viewFeatureCriterias.length > 0) {
+                const filters = getSelectedFilter();
+                viewFeatureCriterias.forEach(criteria => {
+                    const feature = featureEntities.filter((item) => item.name === criteria.feature.name)[0];
+                    const data = parseViewFeatureMetadata(criteria.metadata, feature, criteria.value, feature.name);
+                    console.log('applyViewFeatureCriteria: feature', feature, 'data', data);
+                    feature.selected = data.selected[0];
+                    feature.selected2 = data.selected[1];
+                    feature.metadata = data.metadata.metadata;
+                    if (data.dateRangeTab === 2) {
+                        saveDynamicDateRangeMetaData(feature.name, data.metadata.metadata);
+                        saveDynamicDateRangeToolTip(data.tooltipObj);
+                    }
+                    delete filters[feature.name]
+                    addDefaultDateRangeFilter(filters, data.values[0], feature);
+                    addDefaultDateRangeFilter(filters, data.values[1], feature);
+                });
+                saveSelectedFilter(filters);
+                save(getSelectedFilter());
+            }
+            return viewFeatureCriterias.map((criteria) => criteria.feature.name);
+        }
+
+        function parseViewFeatureMetadata(metadata, feature, value, filterName) {
+            console.log('parseViewFeatureMetadata', arguments);
+            var dynamics;
+            var tooltipText;
+            var dynamicDateRangeToolTip;
+            var dynamicDateRangeObject;
+            var daterange = value.split("||");
+            var selected;
+            if (metadata) {
+                dynamics = metadata.split("||");
+                tooltipText = dynamics[0] === "true" ? 'Last ' + dynamics[1] : dynamics[2];
+                dynamicDateRangeToolTip = { name: filterName, text: tooltipText };
+                dynamicDateRangeObject = buildDynamicDateRangeObject(feature.name, dynamics[2], dynamics[1]);
+                selected = {};
+            } else {
+                dynamicDateRangeObject = {
+                    dimensionName: feature.name,
+                    metadata: {
+                        dateRangeTab: daterange.length === 1 ? 0 : 1,
+                        customDynamicDateRange: 1,
+                        currentDynamicDateRangeConfig: {}
+                    }
+                };
+                selected = daterange;
+            }
+
+            return {
+                values: daterange,
+                metadataValues: dynamics,
+                tooltip: tooltipText,
+                tooltipObj: dynamicDateRangeToolTip,
+                metadata: dynamicDateRangeObject,
+                selected: selected
+            };
+        }
+
+        function buildDynamicDateRangeObject(dimensionName, title, customDynamicDateRange) {
+            var metaData = { dimensionName: dimensionName, metadata: { currentDynamicDateRangeConfig: {}, customDynamicDateRange: customDynamicDateRange, dateRangeTab: 2 } };
+            var configs = DYNAMIC_DATE_RANGE_CONFIG.filter(function (item) {
+                return item.title === title;
+            });
+            metaData.metadata.currentDynamicDateRangeConfig = configs[0];
+            return metaData;
+        }
+
+        function addDefaultDateRangeFilter(filterParameters, date, feature) {
+            const name = feature.name;
+            const type = feature.type;
+            if (!filterParameters[name]) {
+                filterParameters[name] = [];
+            }
+            filterParameters[name].push(date);
+            filterParameters[name]._meta = {
+                dataType: type,
+                valueType: 'dateRangeValueType'
+            };
         }
     }
 })();

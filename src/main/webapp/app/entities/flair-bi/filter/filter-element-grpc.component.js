@@ -267,7 +267,7 @@
                 queryDTO: query,
                 vId: vId
             },
-                $stateParams.id
+                vm.view.id
             );
         }
 

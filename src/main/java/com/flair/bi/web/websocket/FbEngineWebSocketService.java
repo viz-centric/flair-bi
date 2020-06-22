@@ -39,6 +39,25 @@ public class FbEngineWebSocketService {
         messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
     }
 
+    /**
+     * Send meta to users subscribed on channel "/user/exchange/metaData".
+     * <p>
+     * The message will be sent only to the user with the given username.
+     *
+     * @param queryResponse query response
+     * @param request request
+     */
+    public void pushGRPCMetaDataSharedLink(QueryResponse queryResponse, String request) {
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("queryId", queryResponse.getQueryId());
+        header.put("userId", queryResponse.getUserId());
+        header.put("request", request);
+        if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
+            header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
+        }
+        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData/"+queryResponse.getQueryId(), queryResponse.getData(), header);
+    }
+
     public void pushGRPCMetaDataError(String userId, Status status, Map<String, Object> error) {
         HashMap<String, Object> header = new HashMap<>();
         header.put("userId", userId);

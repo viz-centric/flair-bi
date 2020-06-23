@@ -40,7 +40,7 @@
         favouriteFilterService,
         $rootScope) {
         var vm = this;
-
+        vm.isShareFilter = true;
         vm.visualMetadata = new VisualWrap(visualMetadata);
         vm.features = featureEntities;
         vm.dimensions = featureEntities.filter(function (item) {
@@ -96,7 +96,7 @@
         function onExchangeMetadata(data) {
             console.log('controller on metadata', data);
             var metaData = data.body === "" ? { data: [] } : JSON.parse(data.body);
-            if (data.headers.request === "filters") {
+            if (data.headers.request === "share-link-filter") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
                     metaData.data,

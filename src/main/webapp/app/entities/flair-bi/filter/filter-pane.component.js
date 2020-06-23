@@ -11,7 +11,9 @@
                 dimensions: '=',
                 view: '=',
                 type: '@',
-                tab: '='
+                tab: '=',
+                sharefilter: '=',
+                visualmetadata: '='
             }
         });
 

@@ -10,12 +10,12 @@
             data="vm.visualMetadata"
             visualization-render-grpc can-build="vm.visualMetadata.canBuild()"
             id="content-{{vm.visualMetadata.id || vm.visualMetadata.visualBuildId}}"
-            widget="{{vm.visualMetadata.metadataVisual.functionname}}" reload="vm.change" datasource="vm.datasource">
+            widget="{{vm.visualMetadata.metadataVisual.functionname}}" sharefilter="vm.isShareFilter" reload="vm.change" datasource="vm.datasource">
         </div>
 
         <div class="col-md-2">
             <div id="slider" class="flair-scroll-gray" ng-style="vm.thinbarStyle">
-                <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters" tab="vm.sideBarTab">
+                <filter-pane-component sharefilter="vm.isShareFilter" visualmetadata="vm.visualMetadata"  view="vm.view" dimensions="vm.dimensions" type="Filters" tab="vm.sideBarTab">
                 </filter-pane-component>
             </div>
         </div>

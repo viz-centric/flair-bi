@@ -24,7 +24,8 @@
                 widget: '@',
                 id: '@',
                 drilldowns: '=',
-                datasource: '='
+                datasource: '=',
+                sharefilter: '='
             }
         };
         return directive;
@@ -205,11 +206,22 @@
         function build(forceQuery) {
             if (forceQuery) {
                 angular.element("#loader-spinner").show();
-                proxyGrpcService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
-                    visualMetadata: vm.data,
-                    validationType: 'REQUIRED_FIELDS'
-                }, $stateParams.id === undefined ? $stateParams.viewId : $stateParams.id );
+
+                if (vm.sharefilter) {
+                    proxyGrpcService.forwardCall(vm.datasource.id, {
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                        visualMetadata: vm.data,
+                        validationType: 'REQUIRED_FIELDS',
+                        type: 'share-link',
+                    }, $stateParams.viewId);
+                } else {
+                    proxyGrpcService.forwardCall(vm.datasource.id, {
+                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
+                        visualMetadata: vm.data,
+                        validationType: 'REQUIRED_FIELDS',
+                    }, $stateParams.id);
+                }
+
                 angular.element("#loader-spinner").hide();
 
             } else {

@@ -12,7 +12,9 @@
                 view: '=',
                 dimensions: '=',
                 tab: '=',
-                list: '='
+                list: '=',
+                sharefilter: '=',
+                visualmetadata: '='
             }
         });
 
@@ -264,13 +266,26 @@
             query.distinct = true;
             query.limit = 100;
             favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
-            proxyGrpcService.forwardCall(
-                vm.view.viewDashboard.dashboardDatasource.id, {
-                queryDTO: query,
-                vId: vId
-            },
-                $stateParams.id
-            );
+            if(vm.sharefilter){
+                proxyGrpcService.forwardCall(
+                    vm.view.viewDashboard.dashboardDatasource.id, {
+                    queryDTO: query,
+                    visualMetadata: vm.visualmetadata,
+                    type: 'share-link-filter',
+                    vId: vId
+                },
+                    $stateParams.viewId
+                );
+            }
+            else{
+                proxyGrpcService.forwardCall(
+                    vm.view.viewDashboard.dashboardDatasource.id, {
+                    queryDTO: query,
+                    vId: vId
+                },
+                    $stateParams.id
+                );
+            }
         }
 
         function isFavouriteFilter() {

@@ -295,10 +295,6 @@
             }
         }
 
-        function onPermissionChangeSuccess() {
-            reloadPage();
-        }
-
         function changeUserGroupPermission() {
             var changes = findChanges();
 
@@ -332,16 +328,19 @@
 
                 });
 
-                dashboard.views.forEach(function (view) {
-                    view.permissionMetadata.forEach(function (permissionV) {
-                        if (angular.isDefined(permissionV.value) && permissionV.hasIt !== permissionV.value) {
-                            changes.push({
-                                id: permissionV.permission.stringValue,
-                                action: permissionV.hasIt ? 'ADD' : 'REMOVE'
-                            });
-                        }
+                // for datasources there are no "views"
+                if (dashboard.views) {
+                    dashboard.views.forEach(function (view) {
+                        view.permissionMetadata.forEach(function (permissionV) {
+                            if (angular.isDefined(permissionV.value) && permissionV.hasIt !== permissionV.value) {
+                                changes.push({
+                                    id: permissionV.permission.stringValue,
+                                    action: permissionV.hasIt ? 'ADD' : 'REMOVE'
+                                });
+                            }
+                        });
                     });
-                });
+                }
 
             });
             return changes;

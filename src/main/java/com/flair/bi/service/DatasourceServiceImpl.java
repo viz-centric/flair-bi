@@ -1,9 +1,13 @@
 package com.flair.bi.service;
 
+import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceStatus;
 import com.flair.bi.domain.QDatasource;
+import com.flair.bi.domain.security.Permission;
 import com.flair.bi.repository.DatasourceRepository;
+import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.SecurityUtils;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -14,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service Implementation for managing Datasource.
@@ -26,6 +32,7 @@ import java.util.List;
 public class DatasourceServiceImpl implements DatasourceService {
 
     private final DatasourceRepository datasourceRepository;
+    private final AccessControlManager accessControlManager;
 
     /**
      * Save a datasource.
@@ -34,9 +41,19 @@ public class DatasourceServiceImpl implements DatasourceService {
      * @return the persisted entity
      */
     @Override
+    @Transactional
     public Datasource save(Datasource datasource) {
         log.debug("Request to save Datasource : {}", datasource);
-        return datasourceRepository.save(datasource);
+
+        boolean create = null == datasource.getId();
+        Datasource ds = datasourceRepository.save(datasource);
+
+        if (create) {
+            Set<Permission> permissions = new HashSet<>(accessControlManager.addPermissions(ds.getPermissions()));
+            accessControlManager.grantAccess(SecurityUtils.getCurrentUserLogin(), permissions);
+            accessControlManager.assignPermissions(AuthoritiesConstants.ADMIN, permissions);
+        }
+        return ds;
     }
 
     /**

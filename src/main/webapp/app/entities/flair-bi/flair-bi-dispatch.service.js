@@ -10,8 +10,8 @@
         .module("flairbiApp")
         .factory("VisualDispatchService", VisualDispatchService);
 
-    VisualDispatchService.$inject = ['$rootScope','FeatureCriteria','filterParametersService','$window'];
-    function VisualDispatchService($rootScope,FeatureCriteria,filterParametersService,$window) {
+    VisualDispatchService.$inject = ['$rootScope','FeatureCriteria','filterParametersService','$window','$translate'];
+    function VisualDispatchService($rootScope,FeatureCriteria,filterParametersService,$window,$translate) {
         var visual = {};
         var filters={};
         var feature={};
@@ -56,7 +56,8 @@
             setViewEditedBeforeSave:setViewEditedBeforeSave,
             getViewEditedBeforeSave:getViewEditedBeforeSave,
             setIsSaved:setIsSaved,
-            getFieldMaxOrder:getFieldMaxOrder
+            getFieldMaxOrder:getFieldMaxOrder,
+            setcommaSeparatedToolTip:setcommaSeparatedToolTip
         };
 
         function setVisual(v) {
@@ -219,6 +220,9 @@
         function getFieldMaxOrder(fields){
             var maxOrder = Math.max.apply(Math, fields.map(function(item) { return item.order; }));
             return maxOrder + 1;
+        }
+        function setcommaSeparatedToolTip(isCommaSeparatedInput){
+            return isCommaSeparatedInput ? $translate.instant('comma_separated.off') : $translate.instant('comma_separated.on');
         }
     }
 })();

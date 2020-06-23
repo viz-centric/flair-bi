@@ -16,9 +16,9 @@
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService','$stateParams'];
+    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService','$stateParams','VisualDispatchService'];
 
-    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService,$stateParams) {
+    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService,$stateParams,VisualDispatchService) {
         var vm = this;
         vm.load = load;
         vm.showInfo = false;
@@ -50,6 +50,8 @@
         const SIMPLE_DATE_TYPES_FOR_DATES = ['Between', 'Compare'];
         const SIMPLE_DATE_TYPES_OTHER = ['Compare', 'Contains', 'NotContains', 'Like'];
         vm.dimension = vm.features[0];
+        vm.isCommaSeparatedInput = false;
+        vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         ////////////////
 
         function activate() {
@@ -200,6 +202,7 @@
         function displayTextboxForValues() {
             vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
             vm.commaSeparatedValues = vm.condition.values.join(",");
+            vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         }
 
         function addToFilter() {
@@ -213,8 +216,8 @@
                     onContainsAdded({ text: element });
                     vm.condition.values.push(element);
                 });
+                vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
-
         }
     }
 })();

@@ -127,7 +127,7 @@
         vm.changeViewAndUpdateDashboard = changeViewAndUpdateDashboard;
         vm.dashboardId = $stateParams.dashboardId;
         vm.viewId = $stateParams.id;
-        vm.isIframe = $stateParams.isIframe==="true"?true:false;
+        vm.isIframe = $stateParams.isIframe === true ? true : false;
         vm.isShowDisabled = isShowDisabled;
         vm.disableShow = false;
         vm.build = build;
@@ -476,7 +476,7 @@
         function build() {
             if (vm.viewId != $stateParams.id) {
                 vm.disableShow = true;
-                $window.location.href = buildUrl();
+                $window.open(buildUrl(), '_blank');
                 vm.mobileNavidationSlide = false;
             }
         }

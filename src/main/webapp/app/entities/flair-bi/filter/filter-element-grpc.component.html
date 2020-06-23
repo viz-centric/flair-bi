@@ -4,7 +4,7 @@
             aria-hidden="true" class="favouritefilter"></i></label>
 
     <label ng-if="!vm.canDisplayDateRangeControls(vm.dimension)" class="pull-right">
-         <i ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width" ng-class="{'active' : vm.isCommaSeparatedInput}">
+         <i ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width" ng-class="{'active' : vm.isCommaSeparatedInput}" uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom" >
         </i>
     </label>
 

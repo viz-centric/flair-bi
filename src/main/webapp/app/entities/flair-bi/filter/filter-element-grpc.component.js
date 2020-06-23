@@ -34,7 +34,9 @@
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
         vm.isActive = isActive;
-        vm.activeForText = "disable"
+        vm.activeForText = "disable";
+        vm.isCommaSeparatedInput = false;
+        vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
 
         ////////////////
 
@@ -267,7 +269,7 @@
                 queryDTO: query,
                 vId: vId
             },
-                vm.view.id
+                $stateParams.id
             );
         }
 
@@ -374,8 +376,8 @@
                     return elem.text;
                 }).join(",");
             }
+            vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         }
-
         function addToFilter(dimension) {
             if (vm.dimension.commaSeparatedValues && vm.dimension.commaSeparatedValues.length > 0) {
                 vm.isCommaSeparatedInput = false;
@@ -389,9 +391,8 @@
                     added({ text: element });
                     vm.dimension.selected.push({ text: element });
                 });
+                vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
-
         }
-
     }
 })();

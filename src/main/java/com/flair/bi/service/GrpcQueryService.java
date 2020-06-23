@@ -46,7 +46,6 @@ public class GrpcQueryService {
     private final IEngineGrpcService grpcService;
     private final QueryTransformerService queryTransformerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    public static final String SHARED_LINK = "share-link";
 
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
         log.debug("Sending run query request for datasource {} id {}", datasource.getName(),

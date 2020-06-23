@@ -127,7 +127,7 @@
         vm.changeViewAndUpdateDashboard = changeViewAndUpdateDashboard;
         vm.dashboardId = $stateParams.dashboardId;
         vm.viewId = $stateParams.id;
-        vm.isIframe = $stateParams.isIframe === true ? true : false;
+        vm.isIframe = $stateParams.isIframe === "true" ? true : false;
         vm.isShowDisabled = isShowDisabled;
         vm.disableShow = false;
         vm.build = build;
@@ -899,7 +899,7 @@
                     controllerAs: "vm",
                     resolve: {
                         shareLink: function () {
-                            return ShareLinkService.createLink("/dashboards/" + vm.dashboardId + "/views/" + vm.viewId + "/build/?isIframe=true");
+                            return ShareLinkService.createLink("/dashboards/" + vm.dashboardId + "/views/" + vm.viewId + "/build?isIframe=true");
                         }
                     }
                 })

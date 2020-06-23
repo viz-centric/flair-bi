@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
@@ -45,7 +46,6 @@ public class GrpcQueryService {
     private final IEngineGrpcService grpcService;
     private final QueryTransformerService queryTransformerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    public static final String SHARED_LINK = "share-link";
 
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
         log.debug("Sending run query request for datasource {} id {}", datasource.getName(),
@@ -155,8 +155,10 @@ public class GrpcQueryService {
 
         if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType() == null) {
             callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), "vizualization", sendGetDataDTO);
-        } else if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType().equals(SHARED_LINK)) {
-            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), SHARED_LINK, sendGetDataDTO);
+        } else if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType().equals(Constants.SHARED_LINK)) {
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), Constants.SHARED_LINK, sendGetDataDTO);
+        } else if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType().equals(Constants.SHARED_LINK_FILTER)) {
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), Constants.SHARED_LINK_FILTER, sendGetDataDTO);
         } else {
             callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadataId(), "filters", sendGetDataDTO);
         }
@@ -220,11 +222,6 @@ public class GrpcQueryService {
             public void onNext(QueryResponse queryResponse) {
                 log.debug("Finished trip with===" + queryResponse.toString());
                 fbEngineWebSocketService.pushGRPCMetaDeta(queryResponse, request);
-                if(request.equals(SHARED_LINK)){
-                    fbEngineWebSocketService.pushGRPCMetaDataSharedLink(queryResponse, request);
-                }else{
-                    fbEngineWebSocketService.pushGRPCMetaDeta(queryResponse, request);
-                }
             }
 
             @Override

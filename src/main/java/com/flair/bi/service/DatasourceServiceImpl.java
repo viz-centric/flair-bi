@@ -136,9 +136,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Transactional(readOnly = true)
     public Long getCount(Predicate predicate) {
         log.debug("Request to get Datasource count with predicate {}", predicate);
-        BooleanBuilder b = new BooleanBuilder(predicate);
-        b.and(QDatasource.datasource.status.ne(DatasourceStatus.DELETED).or(QDatasource.datasource.status.isNull()));
-        return datasourceRepository.count(b);
+        return (long) findAll(predicate).size();
     }
 
     /**

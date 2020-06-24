@@ -75,6 +75,7 @@
     <include file="config/liquibase/changelog/20200603165500_increase_column_size_view_dashboard_name_category.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200616183700_added_order_column_field.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200610165500_sql_datasources.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200624183700_assign_datasource_permissions.xml" relativeToChangelogFile="false" />
 
 </databaseChangeLog>
 <!--@formatter:on-->

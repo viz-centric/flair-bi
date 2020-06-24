@@ -37,7 +37,7 @@ public class FbEngineWebSocketService {
         if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
             header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
         }
-        if(request.equals(Constants.SHARED_LINK) || request.equals(Constants.SHARED_LINK_FILTER)){
+        if(request.startsWith(Constants.SHARED_LINK)){
             messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData/"+queryResponse.getQueryId(), queryResponse.getData(), header);
         }else{
             messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);

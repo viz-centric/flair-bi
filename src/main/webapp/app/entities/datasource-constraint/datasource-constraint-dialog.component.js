@@ -213,7 +213,8 @@
             query.limit = 20;
             proxyGrpcService.forwardCallV2(
                 vm.datasourceConstraint.datasource.id, {
-                queryDTO: query
+                queryDTO: query,
+                type: 'filters'
             }
             );
         }

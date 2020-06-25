@@ -193,7 +193,8 @@
             proxyGrpcService.forwardCall(
                 vm.datasourceId, {
                 queryDTO: query,
-                vId: dimensions[0].id
+                vId: dimensions[0].id,
+                type: 'filters'
             },
             $stateParams.id
             );

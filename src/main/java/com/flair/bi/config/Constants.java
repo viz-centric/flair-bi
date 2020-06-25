@@ -34,6 +34,8 @@ public final class Constants {
 
     public static final String SHARED_LINK = "share-link";
 
+    public static final String SHARED_LINK_FILTER = "share-link-filter";
+
     private Constants() {
     }
 

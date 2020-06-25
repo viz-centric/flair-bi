@@ -3,12 +3,13 @@ package com.flair.bi.web.websocket;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flair.bi.config.Constants;
+import com.flair.bi.messages.QueryResponse;
+import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import com.flair.bi.messages.QueryResponse;
-import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 
 import io.grpc.Status;
 import lombok.Builder;
@@ -22,25 +23,28 @@ public class FbEngineWebSocketService {
 
 	private final SimpMessagingTemplate messagingTemplate;
 
-	/**
-	 * Send meta to users subscribed on channel "/user/exchange/metaData".
-	 * <p>
-	 * The message will be sent only to the user with the given username.
-	 *
-	 * @param queryResponse query response
-	 * @param request       request
-	 */
-	public void pushGRPCMetaDeta(QueryResponse queryResponse, String request) {
-		HashMap<String, Object> header = new HashMap<>();
-		header.put("queryId", queryResponse.getQueryId());
-		header.put("userId", queryResponse.getUserId());
-		header.put("request", request);
-		if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
-			header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
-		}
-		messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(),
-				header);
-	}
+    /**
+     * Send meta to users subscribed on channel "/user/exchange/metaData".
+     * <p>
+     * The message will be sent only to the user with the given username.
+     *
+     * @param queryResponse query response
+     * @param request request
+     */
+    public void pushGRPCMetaDeta(QueryResponse queryResponse, String request) {
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("queryId", queryResponse.getQueryId());
+        header.put("userId", queryResponse.getUserId());
+        header.put("request", request);
+        if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
+            header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
+        }
+        if(request.startsWith(Constants.SHARED_LINK)){
+            messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData/"+queryResponse.getQueryId(), queryResponse.getData(), header);
+        }else{
+            messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
+        }
+    }
 
 	public void pushGRPCMetaDataError(String userId, Status status, Map<String, Object> error) {
 		HashMap<String, Object> header = new HashMap<>();
@@ -63,7 +67,7 @@ public class FbEngineWebSocketService {
 	 * @param queryResponse query response
 	 */
 	public void pushGRPCMetaDeta(QueryResponse queryResponse) {
-		HashMap<String, Object> header = new HashMap<>();
+		Map<String, Object> header = new HashMap<>();
 		header.put("queryId", queryResponse.getQueryId());
 		header.put("userId", queryResponse.getUserId());
 		messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(),
@@ -81,7 +85,7 @@ public class FbEngineWebSocketService {
 	 */
 	public void pushGRPCMetaDeta(SchedulerNotificationDTO schedulerNotificationResponseDTO, QueryResponse queryResponse,
 			String request) {
-		HashMap<String, Object> header = new HashMap<>();
+		Map<String, Object> header = new HashMap<>();
 		header.put("queryId", queryResponse.getQueryId());
 		header.put("userId", queryResponse.getUserId());
 		header.put("request", request);

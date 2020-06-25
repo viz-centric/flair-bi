@@ -40,225 +40,225 @@ import com.google.common.collect.ImmutableMap;
 @RunWith(MockitoJUnitRunner.class)
 public class GrpcConnectionServiceTest {
 
-	@Mock
-	IEngineGrpcService grpcService;
+    @Mock
+    IEngineGrpcService grpcService;
 
-	private GrpcConnectionService service;
+    private GrpcConnectionService service;
 
-	@Before
-	public void setUp() throws Exception {
-		service = new GrpcConnectionService(grpcService);
-	}
+    @Before
+    public void setUp() throws Exception {
+        service = new GrpcConnectionService(grpcService);
+    }
 
-	@Test
-	public void getConnectionTypes() {
-		when(grpcService.getAllConnectionTypes()).thenReturn(ConnectionTypesResponses.newBuilder()
-				.addConnectionTypes(ConnectionType.newBuilder().setName("nm").setId(1L).setBundleClass("class")
-						.setConnectionPropertiesSchema(ConnectionType.ConnectionPropertiesSchema.newBuilder()
-								.setImagePath("img").setConnectionDetailsType("type")
-								.setConnectionDetailsClass("class1")
-								.addAllConnectionProperties(Arrays.asList(
-										ConnectionType.ConnectionPropertiesSchema.ConnectionProperty.newBuilder()
-												.setRequired(true).setDefaultValue("default").setFieldType("type")
-												.setOrder(10).setFieldName("name").setDisplayName("display").build()))
-								.build())
-						.build())
-				.build());
-		List<ConnectionTypeDTO> connectionTypes = service.getAllConnectionTypes();
+    @Test
+    public void getConnectionTypes() {
+        when(grpcService.getAllConnectionTypes()).thenReturn(ConnectionTypesResponses.newBuilder()
+                .addConnectionTypes(ConnectionType.newBuilder().setName("nm").setId(1L).setBundleClass("class")
+                        .setConnectionPropertiesSchema(ConnectionType.ConnectionPropertiesSchema.newBuilder()
+                                .setImagePath("img").setConnectionDetailsType("type")
+                                .setConnectionDetailsClass("class1")
+                                .addAllConnectionProperties(Arrays.asList(
+                                        ConnectionType.ConnectionPropertiesSchema.ConnectionProperty.newBuilder()
+                                                .setRequired(true).setDefaultValue("default").setFieldType("type")
+                                                .setOrder(10).setFieldName("name").setDisplayName("display").build()))
+                                .build())
+                        .build())
+                .build());
+        List<ConnectionTypeDTO> connectionTypes = service.getAllConnectionTypes();
 
-		assertEquals(1, connectionTypes.size());
-		assertEquals(1L, (long) connectionTypes.get(0).getId());
-		assertEquals("nm", connectionTypes.get(0).getName());
-		assertEquals("class", connectionTypes.get(0).getBundleClass());
-		assertEquals("class1", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionDetailsClass());
-		assertEquals("type", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionDetailsType());
-		assertEquals("img", connectionTypes.get(0).getConnectionPropertiesSchema().getImagePath());
-		assertEquals(1, connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().size());
-		assertTrue(
-				connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0).isRequired());
-		assertEquals("default", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0)
-				.getDefaultValue());
-		assertEquals("type",
-				connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0).getFieldType());
-		assertEquals("name",
-				connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0).getFieldName());
-		assertEquals("display", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0)
-				.getDisplayName());
-	}
+        assertEquals(1, connectionTypes.size());
+        assertEquals(1L, (long) connectionTypes.get(0).getId());
+        assertEquals("nm", connectionTypes.get(0).getName());
+        assertEquals("class", connectionTypes.get(0).getBundleClass());
+        assertEquals("class1", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionDetailsClass());
+        assertEquals("type", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionDetailsType());
+        assertEquals("img", connectionTypes.get(0).getConnectionPropertiesSchema().getImagePath());
+        assertEquals(1, connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().size());
+        assertTrue(
+                connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0).isRequired());
+        assertEquals("default", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0)
+                .getDefaultValue());
+        assertEquals("type",
+                connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0).getFieldType());
+        assertEquals("name",
+                connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0).getFieldName());
+        assertEquals("display", connectionTypes.get(0).getConnectionPropertiesSchema().getConnectionProperties().get(0)
+                .getDisplayName());
+    }
 
-	@Test
-	public void getAllConnections() {
-		ConnectionResponses connectionResponses = ConnectionResponses.newBuilder()
-				.addConnection(Connection.newBuilder().setConnectionPassword("pass").setConnectionType(1L)
-						.setConnectionUsername("user").putAllDetails(ImmutableMap.of("one", "two", "three", "four"))
-						.setId(7L).setLinkId("linkid").setName("nm").build())
-				.build();
-		when(grpcService.getAllConnections()).thenReturn(connectionResponses);
-		List<ConnectionDTO> connections = service.getAllConnections(new ConnectionFilterParamsDTO());
+    @Test
+    public void getAllConnections() {
+        ConnectionResponses connectionResponses = ConnectionResponses.newBuilder()
+                .addConnection(Connection.newBuilder().setConnectionPassword("pass").setConnectionType(1L)
+                        .setConnectionUsername("user").putAllDetails(ImmutableMap.of("one", "two", "three", "four"))
+                        .setId(7L).setLinkId("linkid").setName("nm").build())
+                .build();
+        when(grpcService.getAllConnections()).thenReturn(connectionResponses);
+        List<ConnectionDTO> connections = service.getAllConnections(new ConnectionFilterParamsDTO());
 
-		assertEquals(1, connections.size());
-		assertEquals(1L, (long) connections.get(0).getConnectionTypeId());
-		assertEquals(7L, (long) connections.get(0).getId());
-		assertEquals(ImmutableMap.of("one", "two", "three", "four"), connections.get(0).getDetails());
-		assertEquals("linkid", connections.get(0).getLinkId());
-		assertEquals("nm", connections.get(0).getName());
-		assertEquals("pass", connections.get(0).getConnectionPassword());
-		assertEquals("user", connections.get(0).getConnectionUsername());
-	}
+        assertEquals(1, connections.size());
+        assertEquals(1L, (long) connections.get(0).getConnectionTypeId());
+        assertEquals(7L, (long) connections.get(0).getId());
+        assertEquals(ImmutableMap.of("one", "two", "three", "four"), connections.get(0).getDetails());
+        assertEquals("linkid", connections.get(0).getLinkId());
+        assertEquals("nm", connections.get(0).getName());
+        assertEquals("pass", connections.get(0).getConnectionPassword());
+        assertEquals("user", connections.get(0).getConnectionUsername());
+    }
 
-	@Test
-	public void getAllConnectionsWithParameters() {
-		ConnectionResponses connectionResponses = ConnectionResponses.newBuilder()
-				.addConnection(Connection.newBuilder().setConnectionPassword("pass").setConnectionType(1L)
-						.setConnectionUsername("user").putAllDetails(ImmutableMap.of("one", "two", "three", "four"))
-						.setId(7L).setLinkId("linkid").setName("nm").build())
-				.addConnection(Connection.newBuilder().setConnectionPassword("pass2").setConnectionType(2L)
-						.setConnectionUsername("user2").putAllDetails(ImmutableMap.of("one", "two2", "three", "four2"))
-						.setId(8L).setLinkId("linkid2").setName("nm2").build())
-				.build();
-		when(grpcService.getAllConnections()).thenReturn(connectionResponses);
-		List<ConnectionDTO> connections = service
-				.getAllConnections(new ConnectionFilterParamsDTO().setLinkId("linkid2").setConnectionType(2L));
+    @Test
+    public void getAllConnectionsWithParameters() {
+        ConnectionResponses connectionResponses = ConnectionResponses.newBuilder()
+                .addConnection(Connection.newBuilder().setConnectionPassword("pass").setConnectionType(1L)
+                        .setConnectionUsername("user").putAllDetails(ImmutableMap.of("one", "two", "three", "four"))
+                        .setId(7L).setLinkId("linkid").setName("nm").build())
+                .addConnection(Connection.newBuilder().setConnectionPassword("pass2").setConnectionType(2L)
+                        .setConnectionUsername("user2").putAllDetails(ImmutableMap.of("one", "two2", "three", "four2"))
+                        .setId(8L).setLinkId("linkid2").setName("nm2").build())
+                .build();
+        when(grpcService.getAllConnections()).thenReturn(connectionResponses);
+        List<ConnectionDTO> connections = service
+                .getAllConnections(new ConnectionFilterParamsDTO().setLinkId("linkid2").setConnectionType(2L));
 
-		assertEquals(1, connections.size());
-		assertEquals(2L, (long) connections.get(0).getConnectionTypeId());
-		assertEquals(8L, (long) connections.get(0).getId());
-		assertEquals(ImmutableMap.of("one", "two2", "three", "four2"), connections.get(0).getDetails());
-		assertEquals("linkid2", connections.get(0).getLinkId());
-		assertEquals("nm2", connections.get(0).getName());
-		assertEquals("pass2", connections.get(0).getConnectionPassword());
-		assertEquals("user2", connections.get(0).getConnectionUsername());
-	}
+        assertEquals(1, connections.size());
+        assertEquals(2L, (long) connections.get(0).getConnectionTypeId());
+        assertEquals(8L, (long) connections.get(0).getId());
+        assertEquals(ImmutableMap.of("one", "two2", "three", "four2"), connections.get(0).getDetails());
+        assertEquals("linkid2", connections.get(0).getLinkId());
+        assertEquals("nm2", connections.get(0).getName());
+        assertEquals("pass2", connections.get(0).getConnectionPassword());
+        assertEquals("user2", connections.get(0).getConnectionUsername());
+    }
 
-	@Test
-	public void testConnectionWorksByConnection() throws IOException {
-		doAnswer(invocationOnMock -> {
-			Connection c = invocationOnMock.getArgument(2, Connection.class);
-			assertEquals("connection name", c.getName());
-			assertEquals(1L, c.getId());
-			assertEquals("linkid", c.getLinkId());
-			assertEquals("pwd", c.getConnectionPassword());
-			assertEquals("usr", c.getConnectionUsername());
-			assertEquals(10L, c.getConnectionType());
-			assertEquals("1234", c.getDetailsMap().get("serverIp"));
-			return TestConnectionResponse.newBuilder().setResult("[]").build();
-		}).when(grpcService).testConnection(any(Connection.class));
+    @Test
+    public void testConnectionWorksByConnection() throws IOException {
+        doAnswer(invocationOnMock -> {
+            Connection c = invocationOnMock.getArgument(2, Connection.class);
+            assertEquals("connection name", c.getName());
+            assertEquals(1L, c.getId());
+            assertEquals("linkid", c.getLinkId());
+            assertEquals("pwd", c.getConnectionPassword());
+            assertEquals("usr", c.getConnectionUsername());
+            assertEquals(10L, c.getConnectionType());
+            assertEquals("1234", c.getDetailsMap().get("serverIp"));
+            return TestConnectionResponse.newBuilder().setResult("[]").build();
+        }).when(grpcService).testConnection(any(Connection.class));
 
-		ConnectionDTO connectionDTO = new ConnectionDTO();
-		connectionDTO.setName("connection name");
-		connectionDTO.setId(1L);
-		connectionDTO.setLinkId("linkid");
-		connectionDTO.setConnectionPassword("pwd");
-		connectionDTO.setConnectionUsername("usr");
-		connectionDTO.setConnectionTypeId(10L);
-		connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
+        ConnectionDTO connectionDTO = new ConnectionDTO();
+        connectionDTO.setName("connection name");
+        connectionDTO.setId(1L);
+        connectionDTO.setLinkId("linkid");
+        connectionDTO.setConnectionPassword("pwd");
+        connectionDTO.setConnectionUsername("usr");
+        connectionDTO.setConnectionTypeId(10L);
+        connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
 
-		TestConnectionResultDTO result = service.testConnection(connectionDTO);
+        TestConnectionResultDTO result = service.testConnection(connectionDTO);
 
-		assertTrue(result.isSuccess());
-	}
+        assertTrue(result.isSuccess());
+    }
 
-	@Test
-	public void testConnectionFailsByConnection() throws IOException {
-		when(grpcService.testConnection(any(Connection.class)))
-				.thenReturn(TestConnectionResponse.newBuilder().setResult("").build());
+    @Test
+    public void testConnectionFailsByConnection() throws IOException {
+        when(grpcService.testConnection(any(Connection.class)))
+                .thenReturn(TestConnectionResponse.newBuilder().setResult("").build());
 
-		ConnectionDTO connectionDTO = new ConnectionDTO();
-		connectionDTO.setName("connection name");
-		connectionDTO.setId(1L);
-		connectionDTO.setLinkId("linkid");
-		connectionDTO.setConnectionPassword("pwd");
-		connectionDTO.setConnectionUsername("usr");
-		connectionDTO.setConnectionTypeId(10L);
-		connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
+        ConnectionDTO connectionDTO = new ConnectionDTO();
+        connectionDTO.setName("connection name");
+        connectionDTO.setId(1L);
+        connectionDTO.setLinkId("linkid");
+        connectionDTO.setConnectionPassword("pwd");
+        connectionDTO.setConnectionUsername("usr");
+        connectionDTO.setConnectionTypeId(10L);
+        connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
 
-		TestConnectionResultDTO result = service.testConnection(connectionDTO);
+        TestConnectionResultDTO result = service.testConnection(connectionDTO);
 
-		assertFalse(result.isSuccess());
-	}
+        assertFalse(result.isSuccess());
+    }
 
-	@Test
-	public void testSaveConnection() {
-		when(grpcService.saveConnection(any(Connection.class))).thenReturn(SaveConnectionResponse.newBuilder()
-				.setConnection(Connection.newBuilder().setId(10).setConnectionType(11).setLinkId("lnk").setName("nm")
-						.setConnectionUsername("usr").setConnectionPassword("pwd")
-						.putAllDetails(ImmutableMap.of("serverIp", "1234")).build())
-				.build());
+    @Test
+    public void testSaveConnection() {
+        when(grpcService.saveConnection(any(Connection.class))).thenReturn(SaveConnectionResponse.newBuilder()
+                .setConnection(Connection.newBuilder().setId(10).setConnectionType(11).setLinkId("lnk").setName("nm")
+                        .setConnectionUsername("usr").setConnectionPassword("pwd")
+                        .putAllDetails(ImmutableMap.of("serverIp", "1234")).build())
+                .build());
 
-		ConnectionDTO connectionDTO = new ConnectionDTO();
-		connectionDTO.setName("connection name");
-		connectionDTO.setLinkId("linkid");
-		connectionDTO.setConnectionPassword("pwd");
-		connectionDTO.setConnectionUsername("usr");
-		connectionDTO.setConnectionTypeId(10L);
-		connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
-		ConnectionDTO savedConnectionDto = service.saveConnection(connectionDTO);
+        ConnectionDTO connectionDTO = new ConnectionDTO();
+        connectionDTO.setName("connection name");
+        connectionDTO.setLinkId("linkid");
+        connectionDTO.setConnectionPassword("pwd");
+        connectionDTO.setConnectionUsername("usr");
+        connectionDTO.setConnectionTypeId(10L);
+        connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
+        ConnectionDTO savedConnectionDto = service.saveConnection(connectionDTO);
 
-		assertEquals(11, (long) savedConnectionDto.getConnectionTypeId());
-		assertEquals(10, (long) savedConnectionDto.getId());
-		assertEquals(ImmutableMap.of("serverIp", "1234"), savedConnectionDto.getDetails());
-		assertEquals("lnk", savedConnectionDto.getLinkId());
-		assertEquals("nm", savedConnectionDto.getName());
-		assertEquals("pwd", savedConnectionDto.getConnectionPassword());
-		assertEquals("usr", savedConnectionDto.getConnectionUsername());
-	}
+        assertEquals(11, (long) savedConnectionDto.getConnectionTypeId());
+        assertEquals(10, (long) savedConnectionDto.getId());
+        assertEquals(ImmutableMap.of("serverIp", "1234"), savedConnectionDto.getDetails());
+        assertEquals("lnk", savedConnectionDto.getLinkId());
+        assertEquals("nm", savedConnectionDto.getName());
+        assertEquals("pwd", savedConnectionDto.getConnectionPassword());
+        assertEquals("usr", savedConnectionDto.getConnectionUsername());
+    }
 
-	@Test
-	public void testUpdateConnection() {
-		when(grpcService.updateConnection(any(Connection.class))).thenReturn(UpdateConnectionResponse.newBuilder()
-				.setConnection(Connection.newBuilder().setId(10).setConnectionType(11).setLinkId("lnk").setName("nm")
-						.setConnectionUsername("usr").setConnectionPassword("pwd")
-						.putAllDetails(ImmutableMap.of("serverIp", "1234")).build())
-				.build());
+    @Test
+    public void testUpdateConnection() {
+        when(grpcService.updateConnection(any(Connection.class))).thenReturn(UpdateConnectionResponse.newBuilder()
+                .setConnection(Connection.newBuilder().setId(10).setConnectionType(11).setLinkId("lnk").setName("nm")
+                        .setConnectionUsername("usr").setConnectionPassword("pwd")
+                        .putAllDetails(ImmutableMap.of("serverIp", "1234")).build())
+                .build());
 
-		ConnectionDTO connectionDTO = new ConnectionDTO();
-		connectionDTO.setName("connection name");
-		connectionDTO.setId(1L);
-		connectionDTO.setLinkId("linkid");
-		connectionDTO.setConnectionPassword("pwd");
-		connectionDTO.setConnectionUsername("usr");
-		connectionDTO.setConnectionTypeId(10L);
-		connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
-		ConnectionDTO savedConnectionDto = service.updateConnection(connectionDTO);
+        ConnectionDTO connectionDTO = new ConnectionDTO();
+        connectionDTO.setName("connection name");
+        connectionDTO.setId(1L);
+        connectionDTO.setLinkId("linkid");
+        connectionDTO.setConnectionPassword("pwd");
+        connectionDTO.setConnectionUsername("usr");
+        connectionDTO.setConnectionTypeId(10L);
+        connectionDTO.setDetails(ImmutableMap.of("serverIp", "1234"));
+        ConnectionDTO savedConnectionDto = service.updateConnection(connectionDTO);
 
-		assertEquals(11, (long) savedConnectionDto.getConnectionTypeId());
-		assertEquals(10, (long) savedConnectionDto.getId());
-		assertEquals(ImmutableMap.of("serverIp", "1234"), savedConnectionDto.getDetails());
-		assertEquals("lnk", savedConnectionDto.getLinkId());
-		assertEquals("nm", savedConnectionDto.getName());
-		assertEquals("pwd", savedConnectionDto.getConnectionPassword());
-		assertEquals("usr", savedConnectionDto.getConnectionUsername());
-	}
+        assertEquals(11, (long) savedConnectionDto.getConnectionTypeId());
+        assertEquals(10, (long) savedConnectionDto.getId());
+        assertEquals(ImmutableMap.of("serverIp", "1234"), savedConnectionDto.getDetails());
+        assertEquals("lnk", savedConnectionDto.getLinkId());
+        assertEquals("nm", savedConnectionDto.getName());
+        assertEquals("pwd", savedConnectionDto.getConnectionPassword());
+        assertEquals("usr", savedConnectionDto.getConnectionUsername());
+    }
 
-	@Test
-	public void testGetConnection() {
-		when(grpcService.getConnection(1L)).thenReturn(
-				GetConnectionResponse.newBuilder().setConnection(Connection.newBuilder().setId(1L).build()).build());
-		ConnectionDTO connectionDto = service.getConnection(1L);
+    @Test
+    public void testGetConnection() {
+        when(grpcService.getConnection(1L)).thenReturn(
+                GetConnectionResponse.newBuilder().setConnection(Connection.newBuilder().setId(1L).build()).build());
+        ConnectionDTO connectionDto = service.getConnection(1L);
 
-		assertEquals(1L, (long) connectionDto.getId());
-	}
+        assertEquals(1L, (long) connectionDto.getId());
+    }
 
-	@Test
-	public void deleteConnection() {
-		when(grpcService.deleteConnection(1L))
-				.thenReturn(DeleteConnectionResponse.newBuilder().setSuccess(true).setConnectionId(1L).build());
+    @Test
+    public void deleteConnection() {
+        when(grpcService.deleteConnection(1L))
+                .thenReturn(DeleteConnectionResponse.newBuilder().setSuccess(true).setConnectionId(1L).build());
 
-		boolean success = service.deleteConnection(1L);
+        boolean success = service.deleteConnection(1L);
 
-		assertTrue(success);
-	}
+        assertTrue(success);
+    }
 
-	@Test
-	public void listTables() {
-		when(grpcService.listTables(eq("linkid"), eq("table"), eq(10), any(Connection.class)))
-				.thenReturn(ListTablesResponse.newBuilder()
-						.addTables(ListTablesResponse.Table.newBuilder().setTableName("table name").build())
-						.addTables(ListTablesResponse.Table.newBuilder().setTableName("table name2").build()).build());
-		ListTablesResponseDTO response = service.listTables("linkid", "table", null, 10);
+    @Test
+    public void listTables() {
+        when(grpcService.listTables(eq("linkid"), eq("table"), eq(10), any(Connection.class)))
+                .thenReturn(ListTablesResponse.newBuilder()
+                        .addTables(ListTablesResponse.Table.newBuilder().setTableName("table name").build())
+                        .addTables(ListTablesResponse.Table.newBuilder().setTableName("table name2").build()).build());
+        ListTablesResponseDTO response = service.listTables("linkid", "table", null, 10);
 
-		assertEquals("table name", response.getTableNames().get(0));
-		assertEquals("table name2", response.getTableNames().get(1));
+        assertEquals("table name", response.getTables().get(0));
+        assertEquals("table name2", response.getTables().get(1));
 
-	}
+    }
 }

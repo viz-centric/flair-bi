@@ -6,8 +6,9 @@ import lombok.Data;
 
 @Data
 public class QueryAllRequestDTO {
-	private QueryDTO query;
-	private String connectionLinkId;
-	private Long sourceId;
-	private ConnectionDTO connection;
+    private QueryDTO query;
+    private String connectionLinkId;
+    private String sql;
+    private Long sourceId;
+    private ConnectionDTO connection;
 }

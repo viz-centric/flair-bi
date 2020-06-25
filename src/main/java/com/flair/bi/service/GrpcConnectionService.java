@@ -33,89 +33,92 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GrpcConnectionService {
 
-	private final IEngineGrpcService grpcService;
+    private final IEngineGrpcService grpcService;
 
-	public List<ConnectionTypeDTO> getAllConnectionTypes() {
-		ConnectionTypesResponses connectionTypes = grpcService.getAllConnectionTypes();
-		return connectionTypes.getConnectionTypesList().stream().map(conn -> toDto(conn)).collect(Collectors.toList());
-	}
+    public List<ConnectionTypeDTO> getAllConnectionTypes() {
+        ConnectionTypesResponses connectionTypes = grpcService.getAllConnectionTypes();
+        return connectionTypes.getConnectionTypesList().stream().map(conn -> toDto(conn)).collect(Collectors.toList());
+    }
 
-	private ConnectionTypeDTO toDto(ConnectionType conn) {
-		return new ConnectionTypeDTO().setId(conn.getId()).setName(conn.getName()).setBundleClass(conn.getBundleClass())
-				.setConnectionPropertiesSchema(new ConnectionPropertiesSchemaDTO()
-						.setConnectionDetailsClass(conn.getConnectionPropertiesSchema().getConnectionDetailsClass())
-						.setConnectionDetailsType(conn.getConnectionPropertiesSchema().getConnectionDetailsType())
-						.setImagePath(conn.getConnectionPropertiesSchema().getImagePath()).setConnectionProperties(
-								conn.getConnectionPropertiesSchema().getConnectionPropertiesList().stream()
-										.map(t -> new ConnectionPropertyDTO().setDefaultValue(t.getDefaultValue())
-												.setDisplayName(t.getDisplayName()).setFieldName(t.getFieldName())
-												.setFieldType(t.getFieldType()).setOrder(t.getOrder())
-												.setRequired(t.getRequired()))
-										.collect(Collectors.toList())));
-	}
+    private ConnectionTypeDTO toDto(ConnectionType conn) {
+        return new ConnectionTypeDTO().setId(conn.getId()).setName(conn.getName()).setBundleClass(conn.getBundleClass())
+                .setConnectionPropertiesSchema(new ConnectionPropertiesSchemaDTO()
+                        .setConnectionDetailsClass(conn.getConnectionPropertiesSchema().getConnectionDetailsClass())
+                        .setConnectionDetailsType(conn.getConnectionPropertiesSchema().getConnectionDetailsType())
+                        .setImagePath(conn.getConnectionPropertiesSchema().getImagePath()).setConnectionProperties(
+                                conn.getConnectionPropertiesSchema().getConnectionPropertiesList().stream()
+                                        .map(t -> new ConnectionPropertyDTO().setDefaultValue(t.getDefaultValue())
+                                                .setDisplayName(t.getDisplayName()).setFieldName(t.getFieldName())
+                                                .setFieldType(t.getFieldType()).setOrder(t.getOrder())
+                                                .setRequired(t.getRequired()))
+                                        .collect(Collectors.toList())));
+    }
 
-	public List<ConnectionDTO> getAllConnections(ConnectionFilterParamsDTO filterParams) {
-		ConnectionResponses connections = grpcService.getAllConnections();
-		return connections.getConnectionList().stream().filter(filterConnectionByParams(filterParams))
-				.map(conn -> toDto(conn)).collect(Collectors.toList());
-	}
+    public List<ConnectionDTO> getAllConnections(ConnectionFilterParamsDTO filterParams) {
+        ConnectionResponses connections = grpcService.getAllConnections();
+        return connections.getConnectionList().stream().filter(filterConnectionByParams(filterParams))
+                .map(conn -> toDto(conn)).collect(Collectors.toList());
+    }
 
-	public TestConnectionResultDTO testConnection(ConnectionDTO connection) {
-		TestConnectionResponse result = grpcService.testConnection(QueryGrpcUtils.toProtoConnection(connection));
-		return new TestConnectionResultDTO().setSuccess(!StringUtils.isEmpty(result.getResult()));
-	}
+    public TestConnectionResultDTO testConnection(ConnectionDTO connection) {
+        TestConnectionResponse result = grpcService.testConnection(QueryGrpcUtils.toProtoConnection(connection));
+        return new TestConnectionResultDTO().setSuccess(!StringUtils.isEmpty(result.getResult()));
+    }
 
-	public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection,
-			int maxEntries) {
-		ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries,
-				QueryGrpcUtils.toProtoConnection(connection));
-		return new ListTablesResponseDTO().setTableNames(
-				result.getTablesList().stream().map(table -> table.getTableName()).collect(Collectors.toList()));
-	}
+    public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection,
+            int maxEntries) {
+        ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries,
+                QueryGrpcUtils.toProtoConnection(connection));
+        return new ListTablesResponseDTO().setTables(
+                result.getTablesList()
+                        .stream()
+                        .map(table -> new ListTablesResponseDTO.Table(table.getTableName(), null))
+                        .collect(Collectors.toList()));
+    }
 
-	public ConnectionDTO saveConnection(ConnectionDTO connection) {
-		SaveConnectionResponse response = grpcService.saveConnection(QueryGrpcUtils.toProtoConnection(connection));
-		return toDto(response.getConnection());
-	}
+    public ConnectionDTO saveConnection(ConnectionDTO connection) {
+        SaveConnectionResponse response = grpcService.saveConnection(QueryGrpcUtils.toProtoConnection(connection));
+        return toDto(response.getConnection());
+    }
 
-	public ConnectionDTO getConnection(Long connectionId) {
-		GetConnectionResponse response = grpcService.getConnection(connectionId);
-		return toDto(response.getConnection());
-	}
+    public ConnectionDTO getConnection(Long connectionId) {
+        GetConnectionResponse response = grpcService.getConnection(connectionId);
+        return toDto(response.getConnection());
+    }
 
-	public boolean deleteConnection(Long connectionId) {
-		DeleteConnectionResponse response = grpcService.deleteConnection(connectionId);
-		return response.getSuccess();
-	}
+    public boolean deleteConnection(Long connectionId) {
+        DeleteConnectionResponse response = grpcService.deleteConnection(connectionId);
+        return response.getSuccess();
+    }
 
-	public ConnectionDTO updateConnection(ConnectionDTO connection) {
-		UpdateConnectionResponse response = grpcService.updateConnection(QueryGrpcUtils.toProtoConnection(connection));
-		return toDto(response.getConnection());
-	}
+    public ConnectionDTO updateConnection(ConnectionDTO connection) {
+        UpdateConnectionResponse response = grpcService.updateConnection(QueryGrpcUtils.toProtoConnection(connection));
+        return toDto(response.getConnection());
+    }
 
-	private ConnectionDTO toDto(Connection conn) {
-		ConnectionDTO dto = new ConnectionDTO();
-		dto.setId(conn.getId());
-		dto.setName(conn.getName());
-		dto.setConnectionUsername(conn.getConnectionUsername());
-		dto.setConnectionPassword(conn.getConnectionPassword());
-		dto.setConnectionTypeId(conn.getConnectionType());
-		dto.setLinkId(conn.getLinkId());
-		dto.setDetails(conn.getDetailsMap());
-		dto.setConnectionParameters(conn.getConnectionParametersMap());
-		return dto;
-	}
+    private ConnectionDTO toDto(Connection conn) {
+        ConnectionDTO dto = new ConnectionDTO();
+        dto.setId(conn.getId());
+        dto.setName(conn.getName());
+        dto.setConnectionUsername(conn.getConnectionUsername());
+        dto.setConnectionPassword(conn.getConnectionPassword());
+        dto.setConnectionTypeId(conn.getConnectionType());
+        dto.setLinkId(conn.getLinkId());
+        dto.setDetails(conn.getDetailsMap());
+        dto.setConnectionParameters(conn.getConnectionParametersMap());
+        return dto;
+    }
 
-	private Predicate<Connection> filterConnectionByParams(ConnectionFilterParamsDTO filterParams) {
-		return conn -> {
-			if (filterParams.getConnectionType() != null) {
-				return Objects.equals(conn.getConnectionType(), filterParams.getConnectionType());
-			}
-			if (filterParams.getLinkId() != null) {
-				return Objects.equals(conn.getLinkId(), filterParams.getLinkId());
-			}
-			return true;
-		};
-	}
+    private Predicate<Connection> filterConnectionByParams(ConnectionFilterParamsDTO filterParams) {
+        return conn -> {
+            if (filterParams.getConnectionType() != null) {
+                return Objects.equals(conn.getConnectionType(), filterParams.getConnectionType());
+            }
+            if (filterParams.getLinkId() != null) {
+                return Objects.equals(conn.getLinkId(), filterParams.getLinkId());
+            }
+            return true;
+        };
+    }
 
 }

@@ -165,5 +165,9 @@
         "user": "User",
         "selectUser": "Select User"
     },
+    "comma_separated":{
+        "on": "Click here, to add comma separated values",
+        "off": "Click here, to go back to search box"
+    },
     "footer": "This is your footer"
 }

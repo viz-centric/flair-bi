@@ -23,6 +23,10 @@
             "lastUpdated": "Last Updated",
             "connectionName": "Connection Name",
             "queryPath": "Query Path",
+            "regular.name": "Datasource",
+            "sqlmode.name": "SQL query",
+            "sqlmode.enterquery": "Enter query",
+            "sqlmode.enterdatasource": "Enter datasource name",
             "service": "Service",
             "selectDatasource": "Search Available Data Sources",
             "error": {

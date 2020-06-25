@@ -31,6 +31,7 @@
         vm.chartType = $stateParams.chartType;
         vm.tableData = [];
         vm.tablekey = [];
+        vm.visualizationId;
         vm.reportData;
         //  vm.visualMetadata = new VisualWrap(visualMetadata);
         vm.dateFormat = REPORTMANAGEMENTCONSTANTS.dateTime;
@@ -39,34 +40,46 @@
 
         function activate() {
 
-            schedulerService.getReportLogByMetaId($stateParams.schedulerId)
-                .then(
-                    function (response) {
-                        vm.reportData = response.data.reportLog;
-                        var info = {
-                            text: 'Report executed',
-                            title: 'Success'
-                        };
-                        connectWebSocket();
+            Visualmetadata.get({
+                id: $stateParams.visualisationId
+            }, function (v) {
+                vm.visualMetadata = v;
 
-                        proxyGrpcService.forwardCall($stateParams.datasourceId, {
-                            queryDTO: response.data.reportLog.query
-                        },$stateParams.viewId);
-                    },
-                    function (error) {
-                        var info = {
-                            text: 'A Webhook with this name already exists',
-                            title: "Error"
-                        };
-                        $rootScope.showErrorSingleToast(info);
-                    });
+                schedulerService.getReportLogByMetaId($stateParams.schedulerId)
+                    .then(
+                        function (response) {
+                            vm.reportData = response.data.reportLog;
+                            var info = {
+                                text: 'Report executed',
+                                title: 'Success'
+                            };
+                            vm.visualizationId = vm.reportData.visualizationId.replace("threshold_alert_:", "");
+                            connectWebSocket();
+
+                            proxyGrpcService.forwardCall($stateParams.datasourceId, {
+                                visualMetadata: v,
+                                queryDTO: response.data.reportLog.query,
+                                type: 'share-link',
+                                validationType: 'REQUIRED_FIELDS'
+                            }, $stateParams.viewId);
+                        },
+                        function (error) {
+                            var info = {
+                                text: 'A Webhook with this name already exists',
+                                title: "Error"
+                            };
+                            $rootScope.showErrorSingleToast(info);
+                        });
+            });
+
+
         }
 
         function connectWebSocket() {
             stompClientService.connect(
                 { token: AuthServerProvider.getToken() },
                 function (frame) {
-                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
+                    stompClientService.subscribe("/user/exchange/metaData/" + $stateParams.visualisationId, onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
                 }
             );
@@ -77,7 +90,7 @@
         }
 
         function onExchangeMetadataError(data) {
-            console.log("error "+ data)
+            console.log("error " + data)
         }
 
 
@@ -90,19 +103,11 @@
             }
             else {
                 var contentId = "content-" + $stateParams.schedulerId;
-
-                var id= vm.reportData.visualizationId.replace("threshold_alert_:","");
-                Visualmetadata.get({
-                    id: id
-                }, function (v) {
-
-                    visualizationRenderService.setMetaData(
-                        v,
-                        metaData,
-                        contentId
-                    );
-                });
-
+                visualizationRenderService.setMetaData(
+                    vm.visualMetadata,
+                    metaData,
+                    contentId
+                );
             }
         }
         function createHeader(cols) {

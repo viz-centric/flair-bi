@@ -3,11 +3,11 @@ spring:
         name: flairbi
     cloud:
         config:
-            uri: ${CONFIG_URI:http://localhost:8761/config}
+            uri: ${CONFIG_URI:http://localhost:8761/}
             username: ${CONFIG_USER:admin}
             password: ${CONFIG_PASS:admin}
             name: flairbi
-            label: ${CONFIG_LABEL:master}
+            label: ${CONFIG_LABEL:okta-login-fix}
     profiles:
         active: dev
 

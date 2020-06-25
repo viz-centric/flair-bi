@@ -1,14 +1,7 @@
 package com.flair.bi.domain.field;
 
-import com.flair.bi.domain.AbstractAuditingEntity;
-import com.flair.bi.domain.Feature;
-import com.flair.bi.domain.enumeration.Constraint;
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.domain.hierarchy.Hierarchy;
-import com.flair.bi.domain.listeners.FieldListener;
-import com.flair.bi.domain.property.Property;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,17 +18,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.persistence.Transient;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+
+import com.flair.bi.domain.AbstractAuditingEntity;
+import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.enumeration.Constraint;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.domain.hierarchy.Hierarchy;
+import com.flair.bi.domain.listeners.FieldListener;
+import com.flair.bi.domain.property.Property;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @EntityListeners(value = {FieldListener.class})
 @Table(name = "fields")
-public class Field extends AbstractAuditingEntity implements Serializable {
+public class Field extends AbstractAuditingEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue

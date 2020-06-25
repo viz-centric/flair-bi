@@ -11,9 +11,12 @@ import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.BookMarkWatchService;
 import com.flair.bi.service.ViewWatchService;
+import com.flair.bi.view.export.ViewExportDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+
+import groovy.time.BaseDuration.From;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ektorp.DocumentNotFoundException;
@@ -44,420 +47,429 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class ViewServiceImpl implements ViewService {
 
-    private final ViewRepository viewRepository;
+	private final ViewRepository viewRepository;
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    private final ViewStateCouchDbRepository viewStateCouchDbRepository;
+	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
-    private final AccessControlManager accessControlManager;
+	private final AccessControlManager accessControlManager;
 
-    private final ViewWatchService viewWatchService;
+	private final ViewWatchService viewWatchService;
 
-    private final JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 
-    private final BookMarkWatchService bookMarkWatchService;
+	private final BookMarkWatchService bookMarkWatchService;
 
-    /**
-     * Save a views.
-     *
-     * @param views the entity to save
-     * @return the persisted entity
-     */
-    @Override
-    public View save(View views) {
-        log.debug("Request to save View : {}", views);
-        boolean create = null == views.getId();
-        View view = views;
+	/**
+	 * Save a views.
+	 *
+	 * @param views the entity to save
+	 * @return the persisted entity
+	 */
+	@Override
+	public View save(View views) {
+		log.debug("Request to save View : {}", views);
+		boolean create = null == views.getId();
+		View view = views;
 
-        if (!create) {
-            view = viewRepository.getOne(views.getId());
-            view.setDescription(views.getDescription());
-            // view.setImage(views.getImage());
-            view.setImageContentType(views.getImageContentType());
-            view.setImageLocation(views.getImageLocation());
+		if (!create) {
+			view = viewRepository.getOne(views.getId());
+			view.setDescription(views.getDescription());
+			// view.setImage(views.getImage());
+			view.setImageContentType(views.getImageContentType());
+			view.setImageLocation(views.getImageLocation());
 
-            // changes of view being published or not can be only applied by user who has
-            // permission to do that
-            if (accessControlManager.hasAccess(view.getId().toString(), Action.TOGGLE_PUBLISH, "VIEW")) {
-                if (views.isPublished() && view.getCurrentRelease() != null) {
-                    view.setPublished(views.isPublished());
-                } else if (!views.isPublished()) {
-                    view.setPublished(views.isPublished());
-                }
-            }
+			// changes of view being published or not can be only applied by user who has
+			// permission to do that
+			if (accessControlManager.hasAccess(view.getId().toString(), Action.TOGGLE_PUBLISH, "VIEW")) {
+				if (views.isPublished() && view.getCurrentRelease() != null) {
+					view.setPublished(views.isPublished());
+				} else if (!views.isPublished()) {
+					view.setPublished(views.isPublished());
+				}
+			}
 
-            view.setViewName(views.getViewName());
-            view.setViewDashboard(views.getViewDashboard());
-        } else {
-            // we temporary set the invalid id, because first we want to make sure that
-            // saving into couchdb was successfull
-            // and then fully commit on postgres.
-            // Because if error on couchdb occurs it will trigger postgres rollbacking.
-            ViewState vs = new ViewState();
-            vs.setId("temp");
-            view.setCurrentEditingState(vs);
-        }
+			view.setViewName(views.getViewName());
+			view.setViewDashboard(views.getViewDashboard());
+		} else {
+			// we temporary set the invalid id, because first we want to make sure that
+			// saving into couchdb was successfull
+			// and then fully commit on postgres.
+			// Because if error on couchdb occurs it will trigger postgres rollbacking.
+			ViewState vs = new ViewState();
+			vs.setId("temp");
+			view.setCurrentEditingState(vs);
+		}
 
-        View v = viewRepository.save(view);
+		View v = viewRepository.save(view);
 
-        if (create) {
-            Set<Permission> permissions = view.getPermissions();
-            permissions = new HashSet<>(accessControlManager.addPermissions(permissions));
-            final View vw = v;
-            permissions.forEach(x -> accessControlManager.connectPermissions(x,
-                    new Permission(vw.getViewDashboard().getId().toString(), x.getAction(),
-                            vw.getViewDashboard().getScope()),
-                    x.getAction().equals(Action.READ) || x.getAction().equals(Action.REQUEST_PUBLISH)
-                            || x.getAction().equals(Action.MANAGE_PUBLISH)
-                            || x.getAction().equals(Action.READ_PUBLISHED),
-                    true));
+		if (create) {
+			Set<Permission> permissions = view.getPermissions();
+			permissions = new HashSet<>(accessControlManager.addPermissions(permissions));
+			final View vw = v;
+			permissions.forEach(x -> accessControlManager.connectPermissions(x,
+					new Permission(vw.getViewDashboard().getId().toString(), x.getAction(),
+							vw.getViewDashboard().getScope()),
+					x.getAction().equals(Action.READ) || x.getAction().equals(Action.REQUEST_PUBLISH)
+							|| x.getAction().equals(Action.MANAGE_PUBLISH)
+							|| x.getAction().equals(Action.READ_PUBLISHED),
+					true));
 
-            ViewState viewState = new ViewState();
-            viewStateCouchDbRepository.add(viewState);
+			ViewState viewState = new ViewState();
+			viewStateCouchDbRepository.add(viewState);
 
-            v.setCurrentEditingState(viewState);
-            v = viewRepository.save(v);
-        }
+			v.setCurrentEditingState(viewState);
+			v = viewRepository.save(v);
+		}
 
-        return v;
-    }
+		return v;
+	}
 
-    /**
-     * Change the release version of the view
-     *
-     * @param view          view
-     * @param versionNumber version number to be release
-     */
-    private void changeReleaseVersion(View view, Long versionNumber) {
-        if (null == view) {
-            throw new EntityNotFoundException();
-        }
+	/**
+	 * Change the release version of the view
+	 *
+	 * @param view          view
+	 * @param versionNumber version number to be release
+	 */
+	private void changeReleaseVersion(View view, Long versionNumber) {
+		if (null == view) {
+			throw new EntityNotFoundException();
+		}
 
-        if (view.getCurrentRelease() != null && !view.getCurrentRelease().getVersionNumber().equals(versionNumber)) {
-            view.getReleases().stream().filter(x -> x.getVersionNumber().equals(versionNumber)).findFirst()
-                    .ifPresent(view::setCurrentRelease);
-        }
+		if (view.getCurrentRelease() != null && !view.getCurrentRelease().getVersionNumber().equals(versionNumber)) {
+			view.getReleases().stream().filter(x -> x.getVersionNumber().equals(versionNumber)).findFirst()
+					.ifPresent(view::setCurrentRelease);
+		}
 
-    }
+	}
 
-    /**
-     * Get all the views.
-     *
-     * @return the list of entities
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<View> findAll() {
-        log.debug("Request to get all View");
-        return viewRepository.findAll();
-    }
+	/**
+	 * Get all the views.
+	 *
+	 * @return the list of entities
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<View> findAll() {
+		log.debug("Request to get all View");
+		return viewRepository.findAll();
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<View> findAllByPrincipalPermissions(Predicate predicate) {
-        log.debug("Request to get all View");
-        return (List<View>) viewRepository.findAll(userHasPermission().and(predicate));
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<View> findAllByPrincipalPermissions(Predicate predicate) {
+		log.debug("Request to get all View");
+		return (List<View>) viewRepository.findAll(userHasPermission().and(predicate));
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<View> findAllByPrincipalPermissions(Predicate predicate, Pageable pageable) {
-        log.debug("Request to get paginated View");
-        return viewRepository.findAll(userHasPermission().and(predicate), pageable);
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public Page<View> findAllByPrincipalPermissions(Predicate predicate, Pageable pageable) {
+		log.debug("Request to get paginated View");
+		return viewRepository.findAll(userHasPermission().and(predicate), pageable);
+	}
 
-    private BooleanExpression userHasPermission() {
-        final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
-        // retrieve all view permissions that we have 'READ' permission or
-        // 'READ_PUBLISHED'
-        final Set<Permission> permissions = user
-                .getPermissionsByActionAndPermissionType(Arrays.asList(Action.READ, Action.READ_PUBLISHED), "VIEW");
-        return QView.view.id
-                .in(permissions.stream().map(x -> Long.parseLong(x.getResource())).collect(Collectors.toSet()));
-    }
+	private BooleanExpression userHasPermission() {
+		final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+		final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
+		// retrieve all view permissions that we have 'READ' permission or
+		// 'READ_PUBLISHED'
+		final Set<Permission> permissions = user
+				.getPermissionsByActionAndPermissionType(Arrays.asList(Action.READ, Action.READ_PUBLISHED), "VIEW");
+		return QView.view.id
+				.in(permissions.stream().map(x -> Long.parseLong(x.getResource())).collect(Collectors.toSet()));
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public Long countByPrincipalPermissions() {
-        return viewRepository.count(userHasPermission());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public Long countByPrincipalPermissions() {
+		return viewRepository.count(userHasPermission());
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<View> recentlyCreated() {
-        final BooleanExpression createdBy = QView.view.createdBy.eq(SecurityUtils.getCurrentUserLogin());
-        final Sort sort = new Sort(Sort.Direction.DESC, "createdDate");
-        final PageRequest pageRequest = new PageRequest(0, 5, sort);
+	@Override
+	@Transactional(readOnly = true)
+	public List<View> recentlyCreated() {
+		final BooleanExpression createdBy = QView.view.createdBy.eq(SecurityUtils.getCurrentUserLogin());
+		final Sort sort = new Sort(Sort.Direction.DESC, "createdDate");
+		final PageRequest pageRequest = new PageRequest(0, 5, sort);
 
-        return viewRepository.findAll(createdBy.and(userHasPermission()), pageRequest).getContent();
-    }
+		return viewRepository.findAll(createdBy.and(userHasPermission()), pageRequest).getContent();
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<View> mostPopular() {
-        final Sort sort = new Sort(Sort.Direction.DESC, "watchCount");
-        final PageRequest pageRequest = new PageRequest(0, 5, sort);
-        return viewRepository.findAll(userHasPermission(), pageRequest).getContent();
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<View> mostPopular() {
+		final Sort sort = new Sort(Sort.Direction.DESC, "watchCount");
+		final PageRequest pageRequest = new PageRequest(0, 5, sort);
+		return viewRepository.findAll(userHasPermission(), pageRequest).getContent();
+	}
 
-    /**
-     * Get one views by id.
-     *
-     * @param id the id of the entity
-     * @return the entity
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public View findOne(Long id) {
-        log.debug("Request to get View : {}", id);
-        View view = viewRepository.findOne(id);
-        viewWatchService.saveViewWatch(SecurityUtils.getCurrentUserLogin(), view);
-        return view;
-    }
+	/**
+	 * Get one views by id.
+	 *
+	 * @param id the id of the entity
+	 * @return the entity
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public View findOne(Long id) {
+		log.debug("Request to get View : {}", id);
+		View view = viewRepository.findOne(id);
+		viewWatchService.saveViewWatch(SecurityUtils.getCurrentUserLogin(), view);
+		return view;
+	}
 
-    /**
-     * Delete the views by id.
-     *
-     * @param id the id of the entity
-     */
-    @Override
-    public void delete(Long id) {
-        log.debug("Request to delete View : {}", id);
-        try {
-            final View view = viewRepository.findOne(id);
-            if (view.isPublished() && !accessControlManager.hasAccess(id.toString(), Action.DELETE_PUBLISHED, "VIEW")) {
-                throw new AccessDeniedException("User does not have a priviledge");
-            }
-            // delete view permissions and connections
-            Set<Permission> permissions = view.getPermissions();
-            permissions.forEach(x -> accessControlManager.disconnectPermissions(x, new Permission(
-                    view.getViewDashboard().getId().toString(), x.getAction(), view.getViewDashboard().getScope())));
-            // remove permissions
-            accessControlManager.removePermissions(permissions);
-            // remove bookmark watches
-            bookMarkWatchService.deleteBookmarkWatchesByViewId(id);
-            viewRepository.delete(view);
-            // if the document is already deleted we ignore the error
-            // remove view
-            viewStateCouchDbRepository.remove(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
-            view.getReleases().stream().map(ViewRelease::getViewState).map(ViewState::getId)
-                    .map(viewStateCouchDbRepository::get).forEach(viewStateCouchDbRepository::remove);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+	/**
+	 * Delete the views by id.
+	 *
+	 * @param id the id of the entity
+	 */
+	@Override
+	public void delete(Long id) {
+		log.debug("Request to delete View : {}", id);
+		try {
+			final View view = viewRepository.findOne(id);
+			if (view.isPublished() && !accessControlManager.hasAccess(id.toString(), Action.DELETE_PUBLISHED, "VIEW")) {
+				throw new AccessDeniedException("User does not have a priviledge");
+			}
+			// delete view permissions and connections
+			Set<Permission> permissions = view.getPermissions();
+			permissions.forEach(x -> accessControlManager.disconnectPermissions(x, new Permission(
+					view.getViewDashboard().getId().toString(), x.getAction(), view.getViewDashboard().getScope())));
+			// remove permissions
+			accessControlManager.removePermissions(permissions);
+			// remove bookmark watches
+			bookMarkWatchService.deleteBookmarkWatchesByViewId(id);
+			viewRepository.delete(view);
+			// if the document is already deleted we ignore the error
+			// remove view
+			viewStateCouchDbRepository.remove(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
+			view.getReleases().stream().map(ViewRelease::getViewState).map(ViewState::getId)
+					.map(viewStateCouchDbRepository::get).forEach(viewStateCouchDbRepository::remove);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 
-    }
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<View> findByDashboardId(Long dashboardId) {
-        return viewRepository.findByDashboardId(dashboardId).collect(Collectors.toList());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<View> findByDashboardId(Long dashboardId) {
+		return viewRepository.findByDashboardId(dashboardId).collect(Collectors.toList());
+	}
 
-    /**
-     * Retrieve current editing state of {@link View}
-     *
-     * @param viewId id of a view
-     * @return view state, never null
-     */
-    @Override
-    public ViewState getCurrentEditingViewState(Long viewId) {
-        View view = viewRepository.findOne(viewId);
+	/**
+	 * Retrieve current editing state of {@link View}
+	 *
+	 * @param viewId id of a view
+	 * @return view state, never null
+	 */
+	@Override
+	public ViewState getCurrentEditingViewState(Long viewId) {
+		View view = viewRepository.findOne(viewId);
 
-        if (null == view) {
-            throw new EntityNotFoundException("no view");
-        }
+		if (null == view) {
+			throw new EntityNotFoundException("no view");
+		}
 
-        return viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
-    }
+		return viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
+	}
 
-    /**
-     * Save an editing view state
-     *
-     * @param viewId    id of the view
-     * @param viewState view state
-     * @return saved view state
-     */
-    @Override
-    public ViewState saveViewState(Long viewId, ViewState viewState) {
-        View view = viewRepository.findOne(viewId);
+	/**
+	 * Save an editing view state
+	 *
+	 * @param viewId    id of the view
+	 * @param viewState view state
+	 * @return saved view state
+	 */
+	@Override
+	public ViewState saveViewState(Long viewId, ViewState viewState) {
+		View view = viewRepository.findOne(viewId);
 
-        if (null == view) {
-            throw new EntityNotFoundException("View not found");
-        }
+		if (null == view) {
+			throw new EntityNotFoundException("View not found");
+		}
 
-        ViewState vs = viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
-        if (null == viewState || vs.isReadOnly()) {
-            throw new EntityNotFoundException("View state not found");
-        }
+		ViewState vs = viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
+		if (null == viewState || vs.isReadOnly()) {
+			throw new EntityNotFoundException("View state not found");
+		}
 
-        view.setCurrentEditingState(vs);
+		view.setCurrentEditingState(vs);
 
-        viewState.getVisualMetadataSet().stream().filter(x -> x.getId() == null).forEach(x -> x.setId(
-                VisualMetadata.constructId(UUID.randomUUID().toString(), view.getCurrentEditingState().getId())));
+		viewState.getVisualMetadataSet().stream().filter(x -> x.getId() == null).forEach(x -> x.setId(
+				VisualMetadata.constructId(UUID.randomUUID().toString(), view.getCurrentEditingState().getId())));
 
-        vs.setVisualMetadataSet(viewState.getVisualMetadataSet());
+		vs.setVisualMetadataSet(viewState.getVisualMetadataSet());
 
-        viewStateCouchDbRepository.update(vs);
+		viewStateCouchDbRepository.update(vs);
 
-        return vs;
-    }
+		return vs;
+	}
 
-    /**
-     * Retrieve latest release
-     *
-     * @param viewId id of a view
-     * @return latest view state, can be null
-     */
-    @Override
-    public ViewRelease getCurrentViewStateRelease(Long viewId) {
-        View view = viewRepository.findOne(viewId);
+	/**
+	 * Retrieve latest release
+	 *
+	 * @param viewId id of a view
+	 * @return latest view state, can be null
+	 */
+	@Override
+	public ViewRelease getCurrentViewStateRelease(Long viewId) {
+		View view = viewRepository.findOne(viewId);
 
-        if (view.getCurrentRelease() == null) {
-            return null;
-        } else {
-            ViewRelease viewRelease = view.getCurrentRelease();
-            viewRelease.setViewState(viewStateCouchDbRepository.get(view.getCurrentRelease().getViewState().getId()));
-            return viewRelease;
-        }
-    }
+		if (view.getCurrentRelease() == null) {
+			return null;
+		} else {
+			ViewRelease viewRelease = view.getCurrentRelease();
+			viewRelease.setViewState(viewStateCouchDbRepository.get(view.getCurrentRelease().getViewState().getId()));
+			return viewRelease;
+		}
+	}
 
-    /**
-     * Retrieve release state by version
-     *
-     * @param viewId  id of a view
-     * @param version version of view state
-     * @return view state, or null if not exists
-     */
-    @Override
-    public ViewRelease getReleaseViewStateByVersion(Long viewId, Long version) {
-        View view = viewRepository.findOne(viewId);
-        if (null == view) {
-            throw new EntityNotFoundException("No view");
-        }
+	/**
+	 * Retrieve release state by version
+	 *
+	 * @param viewId  id of a view
+	 * @param version version of view state
+	 * @return view state, or null if not exists
+	 */
+	@Override
+	public ViewRelease getReleaseViewStateByVersion(Long viewId, Long version) {
+		View view = viewRepository.findOne(viewId);
+		if (null == view) {
+			throw new EntityNotFoundException("No view");
+		}
 
-        if (view.getCurrentRelease() != null && view.getCurrentRelease().getVersionNumber().equals(version)) {
-            ViewState state = viewStateCouchDbRepository.get(view.getCurrentRelease().getViewState().getId());
-            view.getCurrentRelease().setViewState(state);
-            return view.getCurrentRelease();
-        } else {
-            return view.getReleases().stream().filter(x -> x.getVersionNumber().equals(version)).findFirst().map(x -> {
-                x.setViewState(viewStateCouchDbRepository.get(x.getViewState().getId()));
-                return x;
-            }).orElse(null);
-        }
+		if (view.getCurrentRelease() != null && view.getCurrentRelease().getVersionNumber().equals(version)) {
+			ViewState state = viewStateCouchDbRepository.get(view.getCurrentRelease().getViewState().getId());
+			view.getCurrentRelease().setViewState(state);
+			return view.getCurrentRelease();
+		} else {
+			return view.getReleases().stream().filter(x -> x.getVersionNumber().equals(version)).findFirst().map(x -> {
+				x.setViewState(viewStateCouchDbRepository.get(x.getViewState().getId()));
+				return x;
+			}).orElse(null);
+		}
 
-    }
+	}
 
-    /**
-     * Get all releases that view has
-     *
-     * @param viewId id of a view
-     * @return collection of view releases
-     */
-    @Override
-    public List<ViewRelease> getViewReleases(Long viewId) {
-        return Optional.ofNullable(viewId).map(viewRepository::findOne).map(View::getReleases).map(ArrayList::new)
-                .orElse(new ArrayList<>());
-    }
+	/**
+	 * Get all releases that view has
+	 *
+	 * @param viewId id of a view
+	 * @return collection of view releases
+	 */
+	@Override
+	public List<ViewRelease> getViewReleases(Long viewId) {
+		return Optional.ofNullable(viewId).map(viewRepository::findOne).map(View::getReleases).map(ArrayList::new)
+				.orElse(new ArrayList<>());
+	}
 
-    /**
-     * Publish a new release for view
-     * <p>
-     * Release has to be approved else it will be rejected
-     *
-     * @param id      id of a view
-     * @param release release to be published
-     * @return updated view
-     */
-    @Override
-    public View publishRelease(Long id, ViewRelease release) {
-        if (!release.getReleaseStatus().equals(Release.Status.APPROVED)) {
-            throw new IllegalArgumentException("Must be approved");
-        }
+	/**
+	 * Publish a new release for view
+	 * <p>
+	 * Release has to be approved else it will be rejected
+	 *
+	 * @param id      id of a view
+	 * @param release release to be published
+	 * @return updated view
+	 */
+	@Override
+	public View publishRelease(Long id, ViewRelease release) {
+		if (!release.getReleaseStatus().equals(Release.Status.APPROVED)) {
+			throw new IllegalArgumentException("Must be approved");
+		}
 
-        View view = viewRepository.findOne(id);
-        view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
+		View view = viewRepository.findOne(id);
+		view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
 
-        // load view state
-        release.setViewState(viewStateCouchDbRepository.get(release.getViewState().getId()));
+		// load view state
+		release.setViewState(viewStateCouchDbRepository.get(release.getViewState().getId()));
 
-        if (release.getVersionNumber().equals(-1L)) {
-            Long version = view.getReleases().stream().max((o1, o2) -> Release.maxVersion().compare(o1, o2))
-                    .map(Release::getVersionNumber).filter(x -> !x.equals(-1L)).map(x -> x + 1).orElse(1L);
+		if (release.getVersionNumber().equals(-1L)) {
+			Long version = view.getReleases().stream().max((o1, o2) -> Release.maxVersion().compare(o1, o2))
+					.map(Release::getVersionNumber).filter(x -> !x.equals(-1L)).map(x -> x + 1).orElse(1L);
 
-            release.setVersionNumber(version);
-        }
+			release.setVersionNumber(version);
+		}
 
-        // if current editing is same as release state we need to create a new view
-        // state
-        if (view.getCurrentEditingState().getId().equalsIgnoreCase(release.getViewState().getId())) {
-            ViewState viewState = new ViewState();
+		// if current editing is same as release state we need to create a new view
+		// state
+		if (view.getCurrentEditingState().getId().equalsIgnoreCase(release.getViewState().getId())) {
+			ViewState viewState = new ViewState();
 
-            // copy new metadata
-            release.getViewState().getVisualMetadataSet().forEach(viewState::addVisualMetadata);
+			// copy new metadata
+			release.getViewState().getVisualMetadataSet().forEach(viewState::addVisualMetadata);
 
-            viewStateCouchDbRepository.add(viewState);
-            view.setCurrentEditingState(viewState);
+			viewStateCouchDbRepository.add(viewState);
+			view.setCurrentEditingState(viewState);
 
-        }
+		}
 
-        view.setPublished(true);
-        view.setCurrentRelease(release);
+		view.setPublished(true);
+		view.setCurrentRelease(release);
 
-        return viewRepository.save(view);
-    }
+		return viewRepository.save(view);
+	}
 
-    /**
-     * Change the current release of the view
-     *
-     * @param id      id of a view
-     * @param version version of the release
-     * @return view that is changed, no changes occur if the version does not exist
-     */
-    @Override
-    public View changeCurrentRelease(Long id, Long version) {
-        return Optional.ofNullable(id).map(viewRepository::findOne).map(x -> {
-            ViewRelease viewRelease = x.getReleases().stream()
-                    .filter(y -> y.getReleaseStatus().equals(Release.Status.APPROVED))
-                    .filter(y -> y.getVersionNumber().equals(version)).findFirst().orElse(null);
+	/**
+	 * Change the current release of the view
+	 *
+	 * @param id      id of a view
+	 * @param version version of the release
+	 * @return view that is changed, no changes occur if the version does not exist
+	 */
+	@Override
+	public View changeCurrentRelease(Long id, Long version) {
+		return Optional.ofNullable(id).map(viewRepository::findOne).map(x -> {
+			ViewRelease viewRelease = x.getReleases().stream()
+					.filter(y -> y.getReleaseStatus().equals(Release.Status.APPROVED))
+					.filter(y -> y.getVersionNumber().equals(version)).findFirst().orElse(null);
 
-            x.setCurrentRelease(viewRelease);
-            x.setPublished(viewRelease != null);
-            return x;
-        }).map(viewRepository::save).orElse(null);
-    }
+			x.setCurrentRelease(viewRelease);
+			x.setPublished(viewRelease != null);
+			return x;
+		}).map(viewRepository::save).orElse(null);
+	}
 
-    public void updateImageLocation(String imageLocation, Long id) {
-        try {
-            jdbcTemplate.update("UPDATE views SET image_location=? WHERE id=?", imageLocation, id);
-        } catch (Exception e) {
-            log.error("error occured while updating image location" + e.getMessage());
-        }
-    }
+	public void updateImageLocation(String imageLocation, Long id) {
+		try {
+			jdbcTemplate.update("UPDATE views SET image_location=? WHERE id=?", imageLocation, id);
+		} catch (Exception e) {
+			log.error("error occured while updating image location" + e.getMessage());
+		}
+	}
 
-    @Override
-    public String getImageLocation(Long id) {
-        String imageLocation = null;
-        try {
-            List<String> loc = jdbcTemplate.query("select image_location from views where id=?", new Object[] { id },
-                    new RowMapper<String>() {
-                        public String mapRow(ResultSet srs, int rowNum) throws SQLException {
-                            return srs.getString("image_location");
-                        }
-                    });
-            imageLocation = loc.get(0);
-        } catch (Exception e) {
-            log.error("error occured while getting image location" + e.getMessage());
-        }
-        return imageLocation;
-    }
+	@Override
+	public String getImageLocation(Long id) {
+		String imageLocation = null;
+		try {
+			List<String> loc = jdbcTemplate.query("select image_location from views where id=?", new Object[] { id },
+					new RowMapper<String>() {
+						public String mapRow(ResultSet srs, int rowNum) throws SQLException {
+							return srs.getString("image_location");
+						}
+					});
+			imageLocation = loc.get(0);
+		} catch (Exception e) {
+			log.error("error occured while getting image location" + e.getMessage());
+		}
+		return imageLocation;
+	}
 
-    @Override
-    public View findByDashboardIdAndViewName(Long id, String viewName) {
-        return viewRepository.findByDashboardIdAndViewName(id, viewName);
-    }
+	@Override
+	public View findByDashboardIdAndViewName(Long id, String viewName) {
+		return viewRepository.findByDashboardIdAndViewName(id, viewName);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ViewExportDTO exportView(Long id) {
+		return Optional.ofNullable(viewRepository.findOne(id)).map(view -> {
+			view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
+			return ViewExportDTO.from(view);
+		}).orElse(null);
+	}
 
 }

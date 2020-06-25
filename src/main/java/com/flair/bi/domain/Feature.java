@@ -1,12 +1,7 @@
 package com.flair.bi.domain;
 
-import com.flair.bi.domain.enumeration.FeatureType;
-import com.flair.bi.domain.field.Field;
-import com.flair.bi.domain.listeners.FeatureListener;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,9 +20,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+
+import com.flair.bi.domain.enumeration.FeatureType;
+import com.flair.bi.domain.field.Field;
+import com.flair.bi.domain.listeners.FeatureListener;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Represents type of data being retrieved from {@link Datasource}
@@ -39,7 +40,12 @@ import java.util.Set;
 @EntityListeners(value = {FeatureListener.class})
 @Table(name = "features")
 @ToString
-public class Feature extends AbstractAuditingEntity implements Serializable {
+public class Feature extends AbstractAuditingEntity {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

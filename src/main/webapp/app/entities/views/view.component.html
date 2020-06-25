@@ -18,7 +18,7 @@
                                 </svg>
                             </a>
                         </div>
-                        <div  uib-tooltip="Setting" tooltip-placement="bottom" class="item" role="menuitem">
+                        <div uib-tooltip="Setting" tooltip-placement="bottom" class="item" role="menuitem">
                             <a
                                 ui-sref="dashboards-overview.view-detail({id: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="edit">
@@ -26,11 +26,18 @@
                                 </svg>
                             </a>
                         </div>
-                        <div  uib-tooltip="Release" tooltip-placement="bottom" class="item" role="menuitem">
+                        <div uib-tooltip="Release" tooltip-placement="bottom" class="item" role="menuitem">
                             <a ng-if="vm.requestPublish"
                                 ui-sref="request-view-publish({did: vm.view.viewDashboard.id,viewId: vm.view.id})">
                                 <svg class="#release-icon">
                                     <use xlink:href="#release-icon" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="item" role="menuitem">
+                            <a uib-tooltip="Export" class="pull-right" href="api/views/{{ vm.view.id }}/export" download="{{vm.view.viewName}}-{{vm.view.id}}.json">
+                                <svg class="flaticons-export">
+                                    <use xlink:href="#export" />
                                 </svg>
                             </a>
                         </div>
@@ -61,12 +68,13 @@
             </div>
             <div class="card-footer flair-text">
                 <div class="item box-name">
-                    <p class="text" title={{vm.getViewName()}} >{{vm.getViewName()}}</p>
+                    <p class="text" title={{vm.getViewName()}}>{{vm.getViewName()}}</p>
                     <span class="description-icon" uib-tooltip={{vm.view.description}} tooltip-placement="top">
                         <i class="fa fa-info-circle"></i>
                     </span>
                 </div>
-                <a class="item build" ng-if="vm.canRead" ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
+                <a class="item build" ng-if="vm.canRead"
+                    ng-click="vm.build(vm.view.id,vm.view.viewDashboard.id,vm.bookmark)">Build
                     <i class="fa fa-angle-right"></i>
                 </a>
                 </a>

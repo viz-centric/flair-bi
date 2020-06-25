@@ -16,7 +16,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -24,7 +23,7 @@ import java.util.Set;
 /**
  * A VisualMetadata.
  */
-public class VisualMetadata extends AbstractAuditingEntity implements Serializable {
+public class VisualMetadata extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 

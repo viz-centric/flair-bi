@@ -3,6 +3,7 @@ package com.flair.bi.view;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
+import com.flair.bi.view.export.ViewExportDTO;
 import com.querydsl.core.types.Predicate;
 
 import org.springframework.data.domain.Page;
@@ -151,11 +152,18 @@ public interface ViewService {
      * @return view that is changed, no changes occur if the version does not exist
      */
     View changeCurrentRelease(Long id, Long version);
-
+    
     void updateImageLocation(String imageLocation, Long id);
 
     String getImageLocation(Long id);
 
     View findByDashboardIdAndViewName(Long id, String viewName);
+    
+    /**
+     * Prepare given view for export.
+     * @param id
+     * @return view to be exported
+     */
+    ViewExportDTO exportView(Long id);
 
 }

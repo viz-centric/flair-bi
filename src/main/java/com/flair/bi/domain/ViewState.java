@@ -3,7 +3,6 @@ package com.flair.bi.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;

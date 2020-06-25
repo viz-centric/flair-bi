@@ -247,7 +247,7 @@
         }
 
         function load(q, dimension) {
-            var vId = dimension.id;
+            var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
             if (q) {
@@ -267,9 +267,10 @@
             proxyGrpcService.forwardCall(
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,
-                vId: vId
+                vId: vId,
+                type : $stateParams.id ? 'filters' : 'share-link-filter'
             },
-                $stateParams.id
+                $stateParams.id ? $stateParams.id : $stateParams.viewId
             );
         }
 

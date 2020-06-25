@@ -156,9 +156,9 @@ public class GrpcQueryService {
         if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType() == null) {
             callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), "vizualization", sendGetDataDTO);
         } else if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType().equals(Constants.SHARED_LINK)) {
-            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), Constants.SHARED_LINK, sendGetDataDTO);
-        } else if (sendGetDataDTO.getVisualMetadata() != null && sendGetDataDTO.getType().equals(Constants.SHARED_LINK_FILTER)) {
-            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), Constants.SHARED_LINK_FILTER, sendGetDataDTO);
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadata().getId(), sendGetDataDTO.getType(), sendGetDataDTO);
+        } else if (sendGetDataDTO.getVisualMetadata() == null && sendGetDataDTO.getType().equals(Constants.SHARED_LINK_FILTER)) {
+            callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadataId(), sendGetDataDTO.getType(), sendGetDataDTO);
         } else {
             callGrpcBiDirectionalAndPushInSocket(datasource, sendGetDataDTO.getVisualMetadataId(), "filters", sendGetDataDTO);
         }

@@ -1385,6 +1385,7 @@ nav.navbar-static-top {
     margin: 0 10px; }
   #slider .properties {
     max-height: calc(100vh - 200px);
+    min-height: calc(100vh - 200px);
     overflow-y: auto; }
 
 .right-nav-option-tabs .first-tab .tooltip {
@@ -4755,8 +4756,7 @@ jhi-alert .alerts .alert-danger {
 #shareLink #slider {
   margin-right: 0px !important;
   margin-top: 25px !important;
-  min-width: 250px !important; 
-  top: 25px;}
+  min-width: 250px !important; }
 
 .field-properties .property-header {
   border-bottom: 1px solid #e5e6e7;
@@ -5763,6 +5763,12 @@ ui bootstrap tweaks
     .constraint-field .user-data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
+  .constraint-field .comma-separated .comma-separated-on {
+    color: #439dd3;
+    outline: none; }
+  .constraint-field .comma-separated .comma-separated-off {
+    color: #404345;
+    outline: none; }
 
 .user-management-table .datasource-constraints-icon {
   width: 16px;

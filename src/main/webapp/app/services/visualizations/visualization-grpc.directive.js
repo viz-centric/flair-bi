@@ -208,8 +208,9 @@
                 proxyGrpcService.forwardCall(vm.datasource.id, {
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                     visualMetadata: vm.data,
-                    validationType: 'REQUIRED_FIELDS'
-                }, $stateParams.id === undefined ? $stateParams.viewId : $stateParams.id );
+                    validationType: 'REQUIRED_FIELDS',
+                    type : $stateParams.id ? null : 'share-link'
+                }, $stateParams.id ? $stateParams.id : $stateParams.viewId);
                 angular.element("#loader-spinner").hide();
 
             } else {

@@ -34,7 +34,9 @@
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
         vm.isActive = isActive;
-        vm.activeForText = "disable"
+        vm.activeForText = "disable";
+        vm.isCommaSeparatedInput = false;
+        vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
 
         ////////////////
 
@@ -245,7 +247,7 @@
         }
 
         function load(q, dimension) {
-            var vId = dimension.id;
+            var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
             if (q) {
@@ -265,9 +267,10 @@
             proxyGrpcService.forwardCall(
                 vm.view.viewDashboard.dashboardDatasource.id, {
                 queryDTO: query,
-                vId: vId
+                vId: vId,
+                type : $stateParams.id ? 'filters' : 'share-link-filter'
             },
-                vm.view.id
+                $stateParams.id ? $stateParams.id : $stateParams.viewId
             );
         }
 
@@ -374,8 +377,8 @@
                     return elem.text;
                 }).join(",");
             }
+            vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         }
-
         function addToFilter(dimension) {
             if (vm.dimension.commaSeparatedValues && vm.dimension.commaSeparatedValues.length > 0) {
                 vm.isCommaSeparatedInput = false;
@@ -389,9 +392,8 @@
                     added({ text: element });
                     vm.dimension.selected.push({ text: element });
                 });
+                vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
-
         }
-
     }
 })();

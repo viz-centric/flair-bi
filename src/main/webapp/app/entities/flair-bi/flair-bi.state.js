@@ -10,7 +10,7 @@
             .state(
                 "flair-bi-build",
                 viewAndDeveloperSettings(
-                    "/dashboards/{dashboardId}/views/{id}/build/?isIframe=false",
+                    "/dashboards/{dashboardId}/views/{id}/build?isIframe",
                     false
                 )
             )
@@ -30,7 +30,7 @@
             )
             .state("table-view", {
                 parent: "entity",
-                url: "/visual-table/?schedulerId&datasourceId&viewId&chartType=table",
+                url: "/visual-table/?visualisationId&schedulerId&datasourceId&viewId&chartType=table",
                 data: {
                     authorities: []
                 },
@@ -314,6 +314,12 @@
                             hasViewAccess($stateParams.id,Principal,$q,$state);
                         }
                     ]
+                },
+                params: {
+                    isIframe: {
+                        value: 'false',
+                        squash: true
+                    }
                 }
             };
         }

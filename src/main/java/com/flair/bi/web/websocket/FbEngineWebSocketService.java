@@ -1,5 +1,6 @@
 package com.flair.bi.web.websocket;
 
+import com.flair.bi.config.Constants;
 import com.flair.bi.messages.QueryResponse;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import io.grpc.Status;
@@ -36,26 +37,11 @@ public class FbEngineWebSocketService {
         if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
             header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
         }
-        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
-    }
-
-    /**
-     * Send meta to users subscribed on channel "/user/exchange/metaData/@visualisationId".
-     * <p>
-     * The message will be sent only to the user with the given username.
-     *
-     * @param queryResponse query response
-     * @param request request
-     */
-    public void pushGRPCMetaDataSharedLink(QueryResponse queryResponse, String request) {
-        HashMap<String, Object> header = new HashMap<>();
-        header.put("queryId", queryResponse.getQueryId());
-        header.put("userId", queryResponse.getUserId());
-        header.put("request", request);
-        if (queryResponse.getCacheMetadata().getDateCreated() != 0) {
-            header.put("cacheDate", queryResponse.getCacheMetadata().getDateCreated());
+        if(request.startsWith(Constants.SHARED_LINK)){
+            messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData/"+queryResponse.getQueryId(), queryResponse.getData(), header);
+        }else{
+            messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData", queryResponse.getData(), header);
         }
-        messagingTemplate.convertAndSendToUser(queryResponse.getUserId(), "/exchange/metaData/"+queryResponse.getQueryId(), queryResponse.getData(), header);
     }
 
     public void pushGRPCMetaDataError(String userId, Status status, Map<String, Object> error) {

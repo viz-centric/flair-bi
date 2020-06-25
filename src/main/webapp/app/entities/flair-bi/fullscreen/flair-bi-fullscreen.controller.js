@@ -77,10 +77,8 @@
                 { token: AuthServerProvider.getToken() },
                 function (frame) {
                     console.log('flair-bi fullscreen controller connected web socket');
-                    stompClientService.subscribe("/user/exchange/metaData/" + $stateParams.visualisationId, onExchangeMetadataViz);
+                    stompClientService.subscribe("/user/exchange/metaData/" + $stateParams.visualisationId, onExchangeMetadata);
                     stompClientService.subscribe("/user/exchange/metaDataError", onExchangeMetadataError);
-                    stompClientService.subscribe("/user/exchange/metaData", onExchangeMetadata);
-
                 }
             );
 
@@ -95,26 +93,10 @@
             console.log('controller on metadata error', data);
         }
 
-        function onExchangeMetadataViz(data) {
-            console.log('controller on metadata', data);
-            var metaData = data.body === "" ? { data: [] } : JSON.parse(data.body);
-            if (data.headers.request === "filters") {
-                $rootScope.$broadcast(
-                    "flairbiApp:filters-meta-Data",
-                    metaData.data,
-                    favouriteFilterService.getFavouriteFilter()
-                );
-            } else {
-                vm.visualMetadata.data = metaData.data;
-                createVisualisation();
-                angular.element("#loader-spinner").hide();
-            }
-        }
-
         function onExchangeMetadata(data) {
             console.log('controller on metadata', data);
             var metaData = data.body === "" ? { data: [] } : JSON.parse(data.body);
-            if (data.headers.request === "filters") {
+            if (data.headers.request === "share-link-filter") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
                     metaData.data,
@@ -238,7 +220,7 @@
                 createVisualisation();
             }
             else {
-                $('.widget-container').css('width', '100%').css('width', '-=16px');
+                $('.widget-container-share-link').css('width', '100%').css('width', '-=16px');
                 $('#slider').css('display', 'none');
                 createVisualisation()
             }
@@ -246,11 +228,12 @@
 
         function showSideBar() {
 
-            var wg = $(".widget-container").width();
+            var wg = $(".widget-container-share-link").width();
             var sb = $("#slider").width();
-            $(".widget-container").width(wg - sb - 1);
+            $(".widget-container-share-link").width(wg - sb - 1);
             createVisualisation();
         }
+
         function createVisualisation() {
             var contentId = "content-" + $stateParams.visualisationId;
             var metaData = {};

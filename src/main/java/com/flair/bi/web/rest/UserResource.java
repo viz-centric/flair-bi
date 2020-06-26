@@ -273,6 +273,21 @@ public class UserResource {
         return ResponseEntity.ok(dashboardPermissions);
     }
 
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/datasourcePermissions/search")
+    @Timed
+    public ResponseEntity<List<GranteePermissionReport<User>>> searchDatasourcePermission(@QuerydslPredicate(root = Datasource.class) Predicate predicate, @PathVariable String login) {
+        List<Datasource> datasources = datasourceService.findAll(predicate);
+        final User user = userService.getUserWithAuthoritiesByLogin(login)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
+
+        List<GranteePermissionReport<User>> body = datasources
+                .stream()
+                .map(x -> x.getGranteePermissionReport(user))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(body);
+    }
+
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/viewPermissions/search")
     @Timed

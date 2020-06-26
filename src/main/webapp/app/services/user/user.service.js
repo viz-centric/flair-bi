@@ -49,6 +49,11 @@
                 url: 'api/users/:login/viewPermissions/search',
                 isArray: true
             },
+            'searchDatasourcePermissions': {
+                method: 'GET',
+                url: 'api/users/:login/datasourcePermissions/search',
+                isArray: true
+            },
             'getViewPermisions': {
                 method: 'GET',
                 url: 'api/users/:login/dashboardPermissions/:id/viewPermissions',

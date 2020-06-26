@@ -49,6 +49,11 @@
                 url: 'api/userGroups/:name/dashboardPermissions/search',
                 isArray: true
             },
+            'searchDatasourcePermissions': {
+                method: 'GET',
+                url: 'api/userGroups/:groupName/datasourcePermissions/search',
+                isArray: true
+            },
             'searchViewPermissions': {
                 method: 'GET',
                 url: 'api/userGroups/:name/viewPermissions/search',

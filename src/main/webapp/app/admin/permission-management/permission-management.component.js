@@ -65,7 +65,7 @@
         vm.filterUser = filterUser;
         vm.filterUserGroup = filterUserGroup;
         vm.isPredefinedGroup = isPredefinedGroup;
-        vm.search = search;
+        vm.onSearchClick = onSearchClick;
         vm.toggle = toggle;
 
         var actionOrder = {
@@ -361,23 +361,43 @@
             });
         }
 
-
-
-
-
-
-        function reloadPage() {
-            $state.reload();
+        function onSearchClick() {
+            if (vm.tabIndex === 0) {
+                searchDashboards();
+            } else if (vm.tabIndex === 1) {
+                searchDatasources();
+            }
         }
 
-        function search(){
+        function searchDatasources() {
+            if (vm.selected === 'user') {
+                User.searchDatasourcePermissions({
+                    login: vm.selectedEntity,
+                    name : vm.searchCriteria
+                }, onDatasourcesSearchSuccess, onError);
+            } else if (vm.selected === 'userGroup') {
+                UserGroup.searchDatasourcePermissions({
+                    groupName: vm.selectedEntity,
+                    name : vm.searchCriteria
+                }, onDatasourcesSearchSuccess, onError);
+            }
+        }
+
+        function onDatasourcesSearchSuccess(data){
+            vm.dashboards = data.map(function (item) {
+                return item.info;
+            });
+            groupToPages();
+        }
+
+        function searchDashboards(){
             User.searchViewPermissions({
                 login: vm.selectedEntity,
                 viewName : vm.searchCriteria
-            }, searchPermissionsSuccess, onError);
+            }, onDashboardsSearchSuccess, onError);
         }
 
-        function searchPermissionsSuccess(data){
+        function onDashboardsSearchSuccess(data){
             vm.dashboards = data.map(function (item) {
                 var dashboard = item.info;
                 dashboard.views = item.views.map(function (viewItem) {

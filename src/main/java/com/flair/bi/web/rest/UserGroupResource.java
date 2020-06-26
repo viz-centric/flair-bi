@@ -279,6 +279,23 @@ public class UserGroupResource {
         return ResponseEntity.ok(dashboardPermissions);
     }
 
+    @GetMapping("/userGroups/{groupName}/datasourcePermissions/search")
+    @Timed
+    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> searchDatasourcePermissions(@QuerydslPredicate(root = Datasource.class) Predicate predicate,
+                                                                                                @PathVariable String groupName,
+                                                                                                @ApiParam Pageable pageable) {
+        Page<Datasource> page = datasourceService.findAll(predicate, pageable);
+        UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(groupName))
+                .orElseThrow(() ->
+                        new EntityNotFoundException(String.format("User group with name: %s was not found", groupName)));
+        List<GranteePermissionReport<UserGroup>> body = page
+                .getContent()
+                .stream()
+                .map(x -> x.getGranteePermissionReport(userGroup))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(body);
+    }
+
 
     @GetMapping("/userGroups/{name}/viewPermissions/search")
     @Timed

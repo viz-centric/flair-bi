@@ -15,8 +15,8 @@
         "entity",
         "Dashboards",
         "Views",
-        "Principal",
-        "AccountDispatch"
+        "AccountDispatch",
+        "paginationConstants",
     ];
 
     function DashboardOverviewController(
@@ -29,8 +29,8 @@
         entity,
         Dashboards,
         Views,
-        Principal,
-        AccountDispatch
+        AccountDispatch,
+        paginationConstants
     ) {
         var vm = this;
 
@@ -41,6 +41,11 @@
         vm.openFile = DataUtils.openFile;
         vm.views = [];
         vm.showWaterMark = true;
+        vm.loadPage = loadPage;
+        vm.page = 1;
+        vm.itemsPerPage = 10;
+
+
 
         activate();
 
@@ -79,13 +84,22 @@
         function loadAll() {
             Views.query(
                 {
-                    viewDashboard: $stateParams.id
+                    viewDashboard: $stateParams.id,
+                    page: vm.page - 1,
+                    size: vm.itemsPerPage,
+                    paginate: true
                 },
-                function(result) {
+                function(result,headers) {
                     vm.views = result;
                     vm.showWaterMark = vm.views.length > 0;
+                    vm.totalItems = headers('X-Total-Count');
                 }
             );
+        }
+
+        function loadPage(page) {
+            vm.page = page;
+            loadAll();
         }
     }
 })();

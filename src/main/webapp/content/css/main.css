@@ -3192,7 +3192,7 @@ input[type="search"] {
   width: -webkit-calc(100% - 16px); }
 
 .container-margin-top {
-  margin-top: 48px; }
+  margin-top: 40px; }
 
 /* This element is used for dashboards and views components*/
 .info-card {
@@ -5731,7 +5731,7 @@ ui bootstrap tweaks
 /* jhipster-needle-css-add-main JHipster will add new css style */
 .content-header-container {
   background-color: #fafafa;
-  margin: 50px -15px;
+  margin: 41px -15px;
   padding: 10px;
   margin-bottom: 0px; }
   .content-header-container .header-text h2 {

@@ -138,10 +138,14 @@
             <div class="fbibox-title">
                 <h2> Permissions For {{vm.selectedEntity}} </h2>
             </div>
-            <div class="fbibox-content"
-                 ng-show="vm.tabIndex === 1">
+            <div class="fbibox-content">
                 <p class="text-center" ng-show="vm.dashboards.length === 0 && vm.selectedEntity">
-                    No datasources in system. Click <a ui-sref="connection.new">here</a> to create
+                    <span ng-if="vm.tabIndex === 0">
+                        {{'userGroups.no.dashboards.error' | translate}} Click <a ui-sref="dashboards">here</a> to create
+                    </span>
+                    <span ng-if="vm.tabIndex === 1">
+                        {{'userGroups.no.datasources.error' | translate}} Click <a ui-sref="connection.new">here</a> to create
+                    </span>
                 </p>
                 <div class="row" ng-if="vm.selected">
                     <div class="col-md-6 col-sm-16">
@@ -162,7 +166,8 @@
                     </div>
                 </div>
                 <br/>
-                <div class="row">
+                <div class="row"
+                     ng-show="vm.tabIndex === 1">
                     <div class="col-md-12">
                         <div ui-tree data-nodrop-enabled data-drag-enabled="false" class="permission-tree">
                             <div class="" ng-model="vm.pagedItems">
@@ -217,47 +222,8 @@
                     </div>
                 </div>
 
-
-                <div class="text-center" ng-show="vm.dashboardsTotalItems && vm.dashboards.length > 0">
-                    <ul class="pagination">
-                        <li ng-class="{disabled: vm.currentPage == 0}">
-                            <a href="javascript:;" ng-click="vm.prevPage()">« Prev</a>
-                        </li>
-                        <li ng-repeat="n in vm.range(vm.pagedItems.length)" ng-class="{active: n == vm.currentPage}"
-                            ng-click="vm.setPage(n)">
-                            <a href="javascript:;" ng-bind="n+1">1</a>
-                        </li>
-                        <li ng-class="{disabled: vm.currentPage == vm.pagedItems.length - 1}">
-                            <a href="javascript:;" ng-click="vm.nextPage()">Next »</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="fbibox-content"
-                 ng-show="vm.tabIndex === 0">
-                <p class="text-center" ng-show="vm.dashboards.length ===  0 && vm.selectedEntity">
-                    No dashboards in system. Click <a ui-sref="dashboards">here</a> to create
-                </p>
-                <div class="row" ng-if="vm.selected">
-                    <div class="col-md-6 col-sm-16">
-                        <div class="form-group">
-                            <input type="search"
-                                   name="search"
-                                   id="search-dashboard-view"
-                                   class="form-control"
-                                   placeholder="Search Dashboards and Views"
-                                   ng-model="vm.searchCriteria">
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4">
-                        <button class="btn btn-primary" type="submit" ng-click="vm.onSearchClick()">
-                            <span class="glyphicon glyphicon-search"></span>
-                            Search
-                        </button>
-                    </div>
-                </div>
-                <br/>
-                <div class="row">
+                <div class="row"
+                     ng-show="vm.tabIndex === 0">
                     <div class="col-md-12">
                         <div ui-tree data-nodrop-enabled data-drag-enabled="false" class="permission-tree">
                             <div class="" ui-tree-nodes ng-model="vm.pagedItems">

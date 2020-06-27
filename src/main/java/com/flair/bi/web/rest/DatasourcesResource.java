@@ -13,21 +13,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.QDatasource;
@@ -44,6 +29,22 @@ import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.querydsl.core.types.Predicate;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
@@ -78,6 +79,7 @@ public class DatasourcesResource {
      */
     @PostMapping("/datasources")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('DATASOURCES', 'WRITE', 'APPLICATION')")
     public ResponseEntity<?> createDatasources(@Valid @RequestBody final CreateDatasourceRequest request)
             throws URISyntaxException {
         log.debug("REST request to save datasource request {}", request);
@@ -120,6 +122,7 @@ public class DatasourcesResource {
      */
     @PutMapping("/datasources")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess(#request.datasource.id, 'UPDATE', 'DATASOURCE')")
     public ResponseEntity<?> updateDatasources(@Valid @RequestBody final CreateDatasourceRequest request) {
         log.debug("REST request to update Datasource : {}", request);
         final Datasource datasource = request.getDatasource();
@@ -174,6 +177,7 @@ public class DatasourcesResource {
      */
     @GetMapping("/datasources")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('DATASOURCES', 'READ', 'APPLICATION')")
     public ResponseEntity<List<DatasourceDTO>> getAllDatasources(
             @QuerydslPredicate(root = Datasource.class) final Predicate predicate, @ApiParam final Pageable pageable,
             @RequestParam(name = "paginate", defaultValue = "false", required = false) final boolean shouldPaginate)
@@ -217,6 +221,7 @@ public class DatasourcesResource {
      */
     @GetMapping("/datasources/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess(#id, 'READ', 'DATASOURCE')")
     public ResponseEntity<Datasource> getDatasources(@PathVariable final Long id) {
         log.debug("REST request to get Datasource : {}", id);
         final Datasource datasource = datasourceService.findOne(id);
@@ -231,6 +236,7 @@ public class DatasourcesResource {
      */
     @DeleteMapping("/datasources/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess(#id, 'DELETE', 'DATASOURCE')")
     public ResponseEntity<Void> deleteDatasources(@PathVariable final Long id) {
         log.debug("REST request to delete Datasource : {}", id);
         datasourceService.delete(id);
@@ -252,6 +258,7 @@ public class DatasourcesResource {
      */
     @DeleteMapping("/datasources")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('DATASOURCES', 'DELETE', 'APPLICATION')")
     public ResponseEntity<Void> deleteDatasources(
             @QuerydslPredicate(root = Datasource.class) final Predicate predicate) {
         log.debug("REST request to get all Datasource");
@@ -260,6 +267,7 @@ public class DatasourcesResource {
     }
 
     @GetMapping("/datasources/{id}/deleteInfo")
+    @PreAuthorize("@accessControlManager.hasAccess(#id, 'READ', 'DATASOURCE')")
     public ResponseEntity<List<DeleteInfo>> getDatasourceDeleteInfo(@PathVariable final Long id) {
 
         final List<Dashboard> dashboards = dashboardService.findAllByDatasourceIds(Collections.singletonList(id));
@@ -273,6 +281,7 @@ public class DatasourcesResource {
 
     @PostMapping("/datasources/listTables")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('DATASOURCES', 'READ', 'APPLICATION')")
     public ListTablesResponseDTO listTables(@RequestBody final ListTablesRequest listTablesRequest) {
         log.debug("REST request to get list tables {}", listTablesRequest);
 
@@ -293,6 +302,7 @@ public class DatasourcesResource {
 
     @GetMapping("/datasources/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('DATASOURCES', 'READ', 'APPLICATION')")
     public ResponseEntity<List<Datasource>> getSearchedDatasources(@ApiParam final Pageable pageable,
             @QuerydslPredicate(root = Datasource.class) final Predicate predicate) throws URISyntaxException {
         log.debug("REST request to get Searched Datasources");

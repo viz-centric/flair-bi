@@ -1,12 +1,19 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.authorization.DashboardGranteePermissionReport;
+import com.flair.bi.authorization.GranteePermissionReport;
+import com.flair.bi.authorization.PermissionGrantee;
+import com.flair.bi.authorization.PermissionReport;
+import com.flair.bi.authorization.SecuredEntity;
+import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.hierarchy.Drilldown;
+import com.flair.bi.domain.hierarchy.Hierarchy;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,15 +29,16 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.domain.hierarchy.Drilldown;
-import com.flair.bi.domain.hierarchy.Hierarchy;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A Datasource.
@@ -41,7 +49,7 @@ import lombok.ToString;
 @Entity
 @ToString(exclude = { "dashboardSet", "features", "hierarchies", "datasourceConstraints" })
 @Table(name = "datasources")
-public class Datasource implements Serializable {
+public class Datasource implements Serializable, SecuredEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -138,6 +146,61 @@ public class Datasource implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    /**
+     * Get the entity identifiers
+     *
+     * @return collection of entity resources
+     */
+    @Override
+    @JsonIgnore
+    public List<String> getResources() {
+        return Collections.singletonList(this.id.toString());
+    }
+
+    /**
+     * List of available actions that can be performed against secured entity
+     *
+     * @return collection of {@link Action}
+     */
+    @Override
+    @JsonIgnore
+    public List<Action> getActions() {
+        return Arrays.asList(Action.READ,
+                Action.WRITE,
+                Action.UPDATE,
+                Action.DELETE);
+    }
+
+    /**
+     * Under which scope is this entity being protected
+     *
+     * @return scope or realm
+     */
+    @Override
+    @JsonIgnore
+    public String getScope() {
+        return "DATASOURCE";
+    }
+
+    @Override
+    public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
+        GranteePermissionReport<T> granteePermissionReport = new GranteePermissionReport<>();
+        granteePermissionReport.setGrantee(grantee);
+        granteePermissionReport.getInfo().put("resourceName", this.name);
+        granteePermissionReport.getInfo().put("id", this.id);
+        granteePermissionReport.getInfo().put("permissionMetadata", this.getPermissions()
+                .stream()
+                .map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
+
+        return granteePermissionReport;
+    }
+
+    @Override
+    public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee, List<GranteePermissionReport<T>> viewPermissions) {
+        return null;
     }
 
 }

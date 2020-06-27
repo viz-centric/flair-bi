@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20200624183700" author="sergeil">
+        <sql stripComments="true">
+            INSERT INTO permission (resource, action, scope)
+                (select id, 'READ', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+            INSERT INTO permission (resource, action, scope)
+                (select id, 'WRITE', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+            INSERT INTO permission (resource, action, scope)
+                (select id, 'UPDATE', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+            INSERT INTO permission (resource, action, scope)
+                (select id, 'DELETE', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+
+
+
+
+            INSERT INTO user_group_permission (user_grp_name, permission_resource, permission_action, permission_scope)
+                (select 'ROLE_ADMIN', id, 'READ', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+            INSERT INTO user_group_permission (user_grp_name, permission_resource, permission_action, permission_scope)
+                (select 'ROLE_ADMIN', id, 'WRITE', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+            INSERT INTO user_group_permission (user_grp_name, permission_resource, permission_action, permission_scope)
+                (select 'ROLE_ADMIN', id, 'UPDATE', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+            INSERT INTO user_group_permission (user_grp_name, permission_resource, permission_action, permission_scope)
+                (select 'ROLE_ADMIN', id, 'DELETE', 'DATASOURCE' FROM datasources)
+                ON CONFLICT DO NOTHING;
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

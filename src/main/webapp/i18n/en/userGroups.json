@@ -4,6 +4,10 @@
 		"updated": "An user group is updated with identifier {{ param }}",
 		"deleted": "An user group is deleted with identifier {{ param }}",
 		"errorSaving":"Error saving user group",
-		"errorDeleting":"Error deleting user group"
+		"errorDeleting":"Error deleting user group",
+		"tabs.0": "Dashboard",
+		"tabs.1": "Datasource",
+		"no.dashboards.error": "No dashboards in the system.",
+		"no.datasources.error": "No datasources in the system."
 	}
 }

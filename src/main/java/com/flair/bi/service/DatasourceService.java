@@ -24,6 +24,8 @@ public interface DatasourceService {
      */
     List<Datasource> findAll(Predicate predicate);
 
+    Page<Datasource> findAll(Pageable pageable);
+
     /**
      * Get all the datasources paginated.
      * 

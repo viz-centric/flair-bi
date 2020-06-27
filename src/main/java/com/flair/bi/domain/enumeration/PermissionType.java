@@ -22,7 +22,10 @@ public enum PermissionType {
     /**
      * Permission type related to {@link VisualMetadata} and it is dynamically created
      */
-    VISUAL_METADATA("VISUAL_METADATA");
+    VISUAL_METADATA("VISUAL_METADATA"),
+
+
+    DATASOURCE("DATASOURCE");
 
 
     private final String type;

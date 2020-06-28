@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
 
-	<changeSet id="20200520230000" author="vizcentric">
+	<changeSet id="20200625230000" author="vizcentric">
 
 		<createTable tableName="SPRING_SESSION">
 			<column name="PRIMARY_ID" type="CHAR(36)">

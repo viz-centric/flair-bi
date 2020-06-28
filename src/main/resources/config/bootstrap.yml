@@ -7,9 +7,9 @@ spring:
             username: ${CONFIG_USER:admin}
             password: ${CONFIG_PASS:admin}
             name: flairbi
-            label: ${CONFIG_LABEL:okta-login-fix}
-    profiles:
-        active: dev
+            label: ${CONFIG_LABEL:master}
+   # profiles:
+   #     active: dev
 
 eureka:
     client:

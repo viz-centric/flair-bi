@@ -73,7 +73,7 @@
 		<postgres.test.port>9999</postgres.test.port>
 		<postgres.test.pw>admin</postgres.test.pw>
 		<postgres.test.user>postgres</postgres.test.user>
-		<postgresql.version>9.4.1212</postgresql.version>
+		<postgresql.version>42.2.14</postgresql.version>
 		<!-- These remain empty unless the corresponding profile is active -->
 		<profile.no-liquibase />
 		<profile.swagger />

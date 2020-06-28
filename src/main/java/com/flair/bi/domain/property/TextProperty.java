@@ -8,18 +8,18 @@ import javax.persistence.Entity;
 @DiscriminatorValue(value = "text")
 public class TextProperty extends Property {
 
-    @Column(name = "text_value")
-    private String value;
+	@Column(name = "text_value")
+	private String value;
 
-    public TextProperty() {
-        this.setType("TEXT");
-    }
+	public TextProperty() {
+		this.setType("TEXT");
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

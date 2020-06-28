@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@ToString(exclude = {"dashboardSet", "features", "hierarchies", "datasourceConstraints"})
+@ToString(exclude = { "dashboardSet", "features", "hierarchies", "datasourceConstraints" })
 @Table(name = "datasources")
 public class Datasource implements Serializable, SecuredEntity {
 

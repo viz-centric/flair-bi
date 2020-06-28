@@ -13,6 +13,6 @@ import lombok.ToString;
 @ToString
 public class TeamConfigParametersDTO {
 	private Integer id;
-    private String webhookName;
-    private String webhookURL;
+	private String webhookName;
+	private String webhookURL;
 }

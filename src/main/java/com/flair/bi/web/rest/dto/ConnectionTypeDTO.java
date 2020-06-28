@@ -7,12 +7,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ConnectionTypeDTO {
 
-    private Long id;
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String bundleClass;
+	private String bundleClass;
 
-    private ConnectionPropertiesSchemaDTO connectionPropertiesSchema;
+	private ConnectionPropertiesSchemaDTO connectionPropertiesSchema;
 
 }

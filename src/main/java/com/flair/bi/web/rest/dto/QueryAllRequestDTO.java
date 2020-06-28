@@ -1,6 +1,7 @@
 package com.flair.bi.web.rest.dto;
 
 import com.project.bi.query.dto.QueryDTO;
+
 import lombok.Data;
 
 @Data

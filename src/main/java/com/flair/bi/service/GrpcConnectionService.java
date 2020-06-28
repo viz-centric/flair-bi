@@ -1,5 +1,13 @@
 package com.flair.bi.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionType;
@@ -18,14 +26,8 @@ import com.flair.bi.web.rest.dto.ConnectionPropertiesSchemaDTO;
 import com.flair.bi.web.rest.dto.ConnectionPropertyDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

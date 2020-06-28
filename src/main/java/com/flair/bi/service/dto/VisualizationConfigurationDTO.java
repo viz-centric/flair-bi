@@ -5,11 +5,12 @@ import java.util.List;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 
 public class VisualizationConfigurationDTO {
-	
+
 	private VisualMetadata visualMetadata;
 	private List<VisualizationColorsDTO> VisualizationColors;
-	
-	public VisualizationConfigurationDTO() {}
+
+	public VisualizationConfigurationDTO() {
+	}
 
 	public VisualizationConfigurationDTO(VisualMetadata visualMetadata,
 			List<VisualizationColorsDTO> visualizationColors) {

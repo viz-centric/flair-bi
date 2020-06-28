@@ -12,9 +12,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class ConnectionPropertiesDTO {
-    private String displayName ;
-    private String fieldName ;
-    private Integer order ;
-    private String fieldType ;
-    private Boolean required ;
+	private String displayName;
+	private String fieldName;
+	private Integer order;
+	private String fieldType;
+	private Boolean required;
 }

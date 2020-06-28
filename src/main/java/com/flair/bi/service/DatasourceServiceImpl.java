@@ -109,7 +109,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Datasource findOne(Long id) {
         log.debug("Request to get Datasource : {}", id);
         return datasourceRepository.findOne(
-                hasUserPermissions().and(QDatasource.datasource.id.eq(id)));
+                hasUserPermissions().and(QDatasource.datasource.id.eq(id))).orElse(null);
     }
 
     /**
@@ -120,10 +120,14 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Datasource : {}", id);
-        final Datasource datasource = datasourceRepository.findOne(
+        final Optional<Datasource> datasource = datasourceRepository.findOne(
                 hasUserPermissions().and(QDatasource.datasource.id.eq(id)));
-        datasource.setStatus(DatasourceStatus.DELETED);
-        datasourceRepository.save(datasource);
+        
+        datasource.ifPresent(x-> {
+        	 x.setStatus(DatasourceStatus.DELETED);
+             datasourceRepository.save(x);
+        });
+       
     }
 
     @Override
@@ -146,7 +150,7 @@ public class DatasourceServiceImpl implements DatasourceService {
         for (Datasource datasource : datasources) {
             datasource.setStatus(DatasourceStatus.DELETED);
         }
-        datasourceRepository.save(datasources);
+        datasourceRepository.saveAll(datasources);
     }
 
     @Override

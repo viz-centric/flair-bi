@@ -5,6 +5,6 @@ import com.flair.bi.domain.ReleaseRequest;
 
 public interface ReleaseRequestProcessor<T extends Release> {
 
-    ReleaseRequest requestRelease(T entity);
+	ReleaseRequest requestRelease(T entity);
 
 }

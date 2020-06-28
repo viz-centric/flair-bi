@@ -1,5 +1,11 @@
 package com.flair.bi.release;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
 import com.flair.bi.domain.ReleaseRequest;
@@ -10,64 +16,51 @@ import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Component(value = "dashboardReleaseProcessor")
 @Transactional
 @RequiredArgsConstructor
 class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<DashboardRelease> {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    private final DashboardService dashboardService;
+	private final DashboardService dashboardService;
 
-    private final ReleaseRequestRepository requestRepository;
+	private final ReleaseRequestRepository requestRepository;
 
-    @Override
-    public ReleaseRequest requestRelease(DashboardRelease entity) {
+	@Override
+	public ReleaseRequest requestRelease(DashboardRelease entity) {
 
-        User user = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElseThrow(RuntimeException::new);
-        ReleaseRequest request = new ReleaseRequest();
-        request.setRequestedBy(user);
-        request.setComment(entity.getComment());
+		User user = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin())
+				.orElseThrow(RuntimeException::new);
+		ReleaseRequest request = new ReleaseRequest();
+		request.setRequestedBy(user);
+		request.setComment(entity.getComment());
 
-        Dashboard dashboard = dashboardService.findOne(entity.getDashboard().getId());
+		Dashboard dashboard = dashboardService.findOne(entity.getDashboard().getId());
 
+		// since they are fresh releases they do not have assigned version number until,
+		// first approved
+		entity.setVersionNumber(-1L);
+		entity.setRequestedBy(request.getRequestedBy());
 
-        // since they are fresh releases they do not have assigned version number until, first approved
-        entity.setVersionNumber(-1L);
-        entity.setRequestedBy(request.getRequestedBy());
+		entity.getViewReleases().stream().peek(x -> x.setRequestedBy(user)).filter(x -> x.getVersionNumber() == null)
+				.forEach(x -> x.setVersionNumber(-1L));
 
-        entity.getViewReleases()
-            .stream()
-            .peek(x -> x.setRequestedBy(user))
-            .filter(x -> x.getVersionNumber() == null)
-            .forEach(x -> x.setVersionNumber(-1L));
+		List<Long> ids = entity.getViewReleases().stream().map(ViewRelease::getView).map(View::getId)
+				.collect(Collectors.toList());
 
-        List<Long> ids = entity.getViewReleases()
-            .stream()
-            .map(ViewRelease::getView)
-            .map(View::getId)
-            .collect(Collectors.toList());
+		// add latest releases of other views
+		dashboard.getDashboardViews().stream().filter(x -> !ids.contains(x.getId()))
+				.filter(x -> x.getCurrentRelease() != null).map(View::getCurrentRelease).forEach(entity::add);
 
-        // add latest releases of other views
-        dashboard.getDashboardViews()
-            .stream()
-            .filter(x -> !ids.contains(x.getId()))
-            .filter(x -> x.getCurrentRelease() != null)
-            .map(View::getCurrentRelease)
-            .forEach(entity::add);
+		request.setRelease(entity);
+		ReleaseRequest r = requestRepository.save(request);
+		dashboardService.save(dashboard);
+		return r;
 
-        request.setRelease(entity);
-        ReleaseRequest r = requestRepository.save(request);
-        dashboardService.save(dashboard);
-        return r;
-
-    }
+	}
 
 }

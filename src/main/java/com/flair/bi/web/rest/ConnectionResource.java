@@ -1,19 +1,11 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.QDatasource;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.GrpcConnectionService;
-import com.flair.bi.service.GrpcQueryService;
-import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
-import com.flair.bi.service.dto.DeleteInfo;
-import com.flair.bi.service.dto.RunQueryResponseDTO;
-import com.flair.bi.web.rest.dto.ConnectionDTO;
-import com.project.bi.query.dto.QueryDTO;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,10 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.QDatasource;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
+import com.flair.bi.service.dto.DeleteInfo;
+import com.flair.bi.service.dto.RunQueryResponseDTO;
+import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.project.bi.query.dto.QueryDTO;
+
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,139 +41,131 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/connection")
 public class ConnectionResource {
 
-    private final DatasourceService datasourceService;
-    private final DashboardService dashboardService;
-    private final GrpcConnectionService grpcConnectionService;
-    private final GrpcQueryService grpcQueryService;
+	private final DatasourceService datasourceService;
+	private final DashboardService dashboardService;
+	private final GrpcConnectionService grpcConnectionService;
+	private final GrpcQueryService grpcQueryService;
 
-    @GetMapping("/{connectionLinkId}/deleteInfo")
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<DeleteInfo>> getConnectionDeleteInfo(@PathVariable String connectionLinkId) {
-        final List<Datasource> datasource =
-            datasourceService.findAll(QDatasource.datasource.connectionName.eq(connectionLinkId));
+	@GetMapping("/{connectionLinkId}/deleteInfo")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<List<DeleteInfo>> getConnectionDeleteInfo(@PathVariable String connectionLinkId) {
+		final List<Datasource> datasource = datasourceService
+				.findAll(QDatasource.datasource.connectionName.eq(connectionLinkId));
 
-        final List<DeleteInfo> deleteInfos = new ArrayList<>();
+		final List<DeleteInfo> deleteInfos = new ArrayList<>();
 
-        datasource.forEach(x ->
-            deleteInfos.add(new DeleteInfo("Datasource", x.getName())));
+		datasource.forEach(x -> deleteInfos.add(new DeleteInfo("Datasource", x.getName())));
 
+		dashboardService.findAllByDatasourceIds(datasource.stream().map(Datasource::getId).collect(Collectors.toList()))
+				.forEach(y -> deleteInfos.add(new DeleteInfo("Dashboard", y.getDashboardName())));
 
-        dashboardService
-            .findAllByDatasourceIds(datasource.stream()
-                .map(Datasource::getId)
-                .collect(Collectors.toList()))
-            .forEach(y -> deleteInfos.add(new DeleteInfo("Dashboard", y.getDashboardName())));
+		return ResponseEntity.ok(deleteInfos);
+	}
 
+	@GetMapping
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<List<ConnectionDTO>> getConnections(@RequestParam(required = false) String linkId,
+			@RequestParam(required = false) Long connectionType) {
+		log.debug("Get connections by link {} and connection type {}", linkId, connectionType);
 
-        return ResponseEntity.ok(deleteInfos);
-    }
+		List<ConnectionDTO> connections = grpcConnectionService
+				.getAllConnections(new ConnectionFilterParamsDTO().setConnectionType(connectionType).setLinkId(linkId));
 
-    @GetMapping
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<ConnectionDTO>> getConnections(@RequestParam(required = false) String linkId,
-                                                              @RequestParam(required = false) Long connectionType) {
-        log.debug("Get connections by link {} and connection type {}", linkId, connectionType);
+		log.debug("Get connections returned {}", connections);
 
-        List<ConnectionDTO> connections = grpcConnectionService.getAllConnections(
-            new ConnectionFilterParamsDTO()
-                .setConnectionType(connectionType)
-                .setLinkId(linkId));
+		return ResponseEntity.ok(connections);
+	}
 
-        log.debug("Get connections returned {}", connections);
+	@PostMapping
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'WRITE', 'APPLICATION')")
+	public ResponseEntity<ConnectionDTO> saveConnection(@Valid @RequestBody ConnectionDTO connection) {
+		log.debug("Save connection {}", connection);
 
-        return ResponseEntity.ok(connections);
-    }
+		ConnectionDTO connectionDTO = grpcConnectionService.saveConnection(connection);
 
-    @PostMapping
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'WRITE', 'APPLICATION')")
-    public ResponseEntity<ConnectionDTO> saveConnection(@Valid @RequestBody ConnectionDTO connection) {
-        log.debug("Save connection {}", connection);
+		log.debug("Saved connection {}", connectionDTO);
 
-        ConnectionDTO connectionDTO = grpcConnectionService.saveConnection(connection);
+		return ResponseEntity.ok(connectionDTO);
+	}
 
-        log.debug("Saved connection {}", connectionDTO);
+	@PutMapping
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'WRITE', 'APPLICATION')")
+	public ResponseEntity<ConnectionDTO> updateConnection(@Valid @RequestBody ConnectionDTO connection) {
+		log.debug("Update connection {}", connection);
 
-        return ResponseEntity.ok(connectionDTO);
-    }
+		ConnectionDTO connectionDTO = grpcConnectionService.updateConnection(connection);
 
-    @PutMapping
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'WRITE', 'APPLICATION')")
-    public ResponseEntity<ConnectionDTO> updateConnection(@Valid @RequestBody ConnectionDTO connection) {
-        log.debug("Update connection {}", connection);
+		log.debug("Updated connection {}", connectionDTO);
 
-        ConnectionDTO connectionDTO = grpcConnectionService.updateConnection(connection);
+		return ResponseEntity.ok(connectionDTO);
+	}
 
-        log.debug("Updated connection {}", connectionDTO);
+	@DeleteMapping("/{connectionId}")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'DELETE', 'APPLICATION')")
+	public ResponseEntity<ConnectionDTO> deleteConnection(@PathVariable Long connectionId) {
+		log.info("Delete connection {}", connectionId);
 
-        return ResponseEntity.ok(connectionDTO);
-    }
+		ConnectionDTO connection = grpcConnectionService.getConnection(connectionId);
+		if (connection == null) {
+			log.info("Cannot delete a connection that does not exist {}", connectionId);
+			return ResponseEntity.unprocessableEntity().build();
+		}
 
-    @DeleteMapping("/{connectionId}")
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'DELETE', 'APPLICATION')")
-    public ResponseEntity<ConnectionDTO> deleteConnection(@PathVariable Long connectionId) {
-        log.info("Delete connection {}", connectionId);
+		boolean success = grpcConnectionService.deleteConnection(connectionId);
 
-        ConnectionDTO connection = grpcConnectionService.getConnection(connectionId);
-        if (connection == null) {
-            log.info("Cannot delete a connection that does not exist {}", connectionId);
-            return ResponseEntity.unprocessableEntity().build();
-        }
+		log.debug("Deleted connection {} success {}", connectionId, success);
 
-        boolean success = grpcConnectionService.deleteConnection(connectionId);
+		if (!success) {
+			return ResponseEntity.unprocessableEntity().build();
+		}
 
-        log.debug("Deleted connection {} success {}", connectionId, success);
+		datasourceService.delete(QDatasource.datasource.connectionName.eq(connection.getLinkId()));
 
-        if (!success) {
-            return ResponseEntity.unprocessableEntity().build();
-        }
+		log.debug("Deleted datasources for connection {}", connection.getLinkId());
 
-        datasourceService.delete(QDatasource.datasource.connectionName.eq(connection.getLinkId()));
+		return ResponseEntity.ok().build();
+	}
 
-        log.debug("Deleted datasources for connection {}", connection.getLinkId());
+	@GetMapping("/{connectionId}")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<ConnectionDTO> getConnection(@PathVariable Long connectionId) {
+		log.info("Get connection {}", connectionId);
 
-        return ResponseEntity.ok().build();
-    }
+		ConnectionDTO connection = grpcConnectionService.getConnection(connectionId);
 
-    @GetMapping("/{connectionId}")
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<ConnectionDTO> getConnection(@PathVariable Long connectionId) {
-        log.info("Get connection {}", connectionId);
+		log.debug("Got connection {}", connectionId);
 
-        ConnectionDTO connection = grpcConnectionService.getConnection(connectionId);
+		return ResponseEntity.ok(connection);
+	}
 
-        log.debug("Got connection {}", connectionId);
+	@PostMapping("/features/{datasourceId}")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
+	public ResponseEntity<?> fetchFeatures(@PathVariable("datasourceId") Long datasourceId,
+			@RequestBody QueryDTO query) {
 
-        return ResponseEntity.ok(connection);
-    }
+		log.info("Fetching features for datasource {} and query {}", datasourceId, query);
 
-    @PostMapping("/features/{datasourceId}")
-    @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('CONNECTIONS', 'READ', 'APPLICATION')")
-    public ResponseEntity<?> fetchFeatures(@PathVariable("datasourceId") Long datasourceId,
-                                           @RequestBody QueryDTO query) {
+		Datasource datasource = datasourceService.findOne(datasourceId);
+		if (datasource == null) {
+			log.warn("No datasource found for {} for query {}", datasourceId, query);
+			return ResponseEntity.badRequest().build();
+		}
 
-        log.info("Fetching features for datasource {} and query {}", datasourceId, query);
+		RunQueryResponseDTO result = grpcQueryService.sendRunQuery(query, datasource);
 
-        Datasource datasource = datasourceService.findOne(datasourceId);
-        if (datasource == null) {
-            log.warn("No datasource found for {} for query {}", datasourceId, query);
-            return ResponseEntity.badRequest().build();
-        }
+		log.debug("Fetch features result {}", result);
 
-        RunQueryResponseDTO result = grpcQueryService.sendRunQuery(query, datasource);
+		if (result.getResult() == null) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 
-        log.debug("Fetch features result {}", result);
-
-        if (result.getResult() == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-        return ResponseEntity.ok(result.getResult());
-    }
+		return ResponseEntity.ok(result.getResult());
+	}
 }

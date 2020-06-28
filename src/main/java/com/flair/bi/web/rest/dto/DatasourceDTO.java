@@ -1,15 +1,16 @@
 package com.flair.bi.web.rest.dto;
 
+import java.time.ZonedDateTime;
+import java.util.Set;
+
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.DatasourceStatus;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.hierarchy.Hierarchy;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Getter
 @Builder

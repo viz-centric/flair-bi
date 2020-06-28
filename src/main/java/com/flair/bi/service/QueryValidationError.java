@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value(staticConstructor = "of")
 public class QueryValidationError {
-    String value;
-    String error;
+	String value;
+	String error;
 }

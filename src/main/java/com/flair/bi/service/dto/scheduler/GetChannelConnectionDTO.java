@@ -1,4 +1,5 @@
 package com.flair.bi.service.dto.scheduler;
+
 import java.util.List;
 
 import lombok.Builder;
@@ -9,5 +10,5 @@ import lombok.ToString;
 @Builder
 @ToString
 public class GetChannelConnectionDTO {
-	private  List<ChannelParametersDTO> channelParameters;
+	private List<ChannelParametersDTO> channelParameters;
 }

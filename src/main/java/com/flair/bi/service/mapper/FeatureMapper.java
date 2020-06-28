@@ -1,19 +1,20 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.Feature;
-import com.flair.bi.service.dto.FeatureDTO;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
-import java.util.List;
+import com.flair.bi.domain.Feature;
+import com.flair.bi.service.dto.FeatureDTO;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface FeatureMapper {
 
-    FeatureDTO featureToFeatureDTO(Feature feature);
+	FeatureDTO featureToFeatureDTO(Feature feature);
 
-    Feature featureDTOtoFeature(FeatureDTO featureDTO);
+	Feature featureDTOtoFeature(FeatureDTO featureDTO);
 
-    List<Feature> featureDTOsToFeatures(List<FeatureDTO> featureDTOS);
+	List<Feature> featureDTOsToFeatures(List<FeatureDTO> featureDTOS);
 
-    List<FeatureDTO> featuresToFeatureDTOs(List<Feature> fieldTypes);
+	List<FeatureDTO> featuresToFeatureDTOs(List<Feature> fieldTypes);
 }

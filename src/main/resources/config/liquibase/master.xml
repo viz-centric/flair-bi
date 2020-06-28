@@ -27,9 +27,9 @@
     <include file="config/liquibase/changelog/20170907192607_added_entity_FeatureBookmark.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170908202540_added_entity_DatasourceConstraint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180323112600_added_dashboard_view_release_entities.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20180626113637_added_entity_Functions.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20180730112627_added_entity_VisualizationColors.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20181217113649_added_entity_FileUploaderStatus.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180626113637_added_entity_Functions.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180730112627_added_entity_VisualizationColors.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181217113649_added_entity_FileUploaderStatus.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 
     <include file="config/liquibase/changelog/20170123190046_added_entity_constraints_Views.xml" relativeToChangelogFile="false"/>
@@ -64,18 +64,20 @@
     <include file="config/liquibase/changelog/20170817215500_added_entity_Hierarchy_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170817225500_added_entity_Drilldown_seed.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170908231600_added_DatasourceConstraint_seed.xml" relativeToChangelogFile="false"/>
-	<include file="config/liquibase/changelog/20190906113649_added_feature_bookmark_daterange.xml" relativeToChangelogFile="false"/>
+  	<include file="config/liquibase/changelog/20190906113649_added_feature_bookmark_daterange.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200316100000_added_features_favourite_filter.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200421113649_added_feature_bookmark_dynamic_tooltip.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200511113649_added_feature_criteria_dynamic_date_range_meta_data.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/202005091918_added_entity_ViewFeatureCriteria.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200516100000_added_features_date_filter.xml" relativeToChangelogFile="false" />
-    <include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
+  	<include file="config/liquibase/changelog/20200521100000_added_user_group_permission_data.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200531100000_percent_function.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200603165500_increase_column_size_view_dashboard_name_category.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200616183700_added_order_column_field.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200610165500_sql_datasources.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200624183700_assign_datasource_permissions.xml" relativeToChangelogFile="false" />
-
+    <include file="config/liquibase/changelog/20200625230000_added_spring_session_tables.xml" relativeToChangelogFile="false"/>
+    
+    
 </databaseChangeLog>
 <!--@formatter:on-->

@@ -25,7 +25,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,38 +32,39 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@EntityListeners(value = {FieldListener.class})
+@EntityListeners(value = { FieldListener.class })
 @Table(name = "fields")
 public class Field extends AbstractAuditingEntity implements Serializable {
 
-    @Id
-    @GeneratedValue
-    protected long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    @OneToMany(mappedBy = "field", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Property> properties = new HashSet<>();
+	@Id
+	@GeneratedValue
+	protected long id;
 
-    @ManyToOne
-    @JoinColumn(name = "field_type_id",
-        foreignKey = @ForeignKey(name = "fk_field_type_id"),
-        referencedColumnName = "id")
-    private FieldType fieldType;
+	@OneToMany(mappedBy = "field", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Property> properties = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "feature_id",
-        foreignKey = @ForeignKey(name = "fk_feature_id"),
-        referencedColumnName = "id")
-    private Feature feature;
+	@ManyToOne
+	@JoinColumn(name = "field_type_id", foreignKey = @ForeignKey(name = "fk_field_type_id"), referencedColumnName = "id")
+	private FieldType fieldType;
 
-    @ManyToOne
-    private Hierarchy hierarchy;
+	@ManyToOne
+	@JoinColumn(name = "feature_id", foreignKey = @ForeignKey(name = "fk_feature_id"), referencedColumnName = "id")
+	private Feature feature;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "const", updatable = false, nullable = false)
-    private Constraint constraint;
+	@ManyToOne
+	private Hierarchy hierarchy;
 
-    @Column(name = "order")
-    private Integer order = 0;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "const", updatable = false, nullable = false)
+	private Constraint constraint;
+
+	@Column(name = "order")
+	private Integer order = 0;
 
 }

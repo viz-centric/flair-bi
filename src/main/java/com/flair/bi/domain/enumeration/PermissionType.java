@@ -1,9 +1,10 @@
 package com.flair.bi.domain.enumeration;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public enum PermissionType {
 

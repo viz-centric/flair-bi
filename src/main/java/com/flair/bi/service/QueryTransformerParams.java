@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.service.dto.QueryValidationType;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,24 +1,22 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.DashboardRelease;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.Release;
-import com.flair.bi.domain.ReleaseRequest;
-import com.flair.bi.domain.View;
-import com.flair.bi.domain.ViewState;
-import com.flair.bi.release.ReleaseRequestService;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.dto.CountDTO;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
-import com.querydsl.core.types.Predicate;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,18 +27,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.DashboardRelease;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.ReleaseRequest;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewState;
+import com.flair.bi.release.ReleaseRequestService;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
+import com.querydsl.core.types.Predicate;
 
 @Ignore
 public class DashboardsResourceTest extends AbstractIntegrationTest {
@@ -151,7 +150,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 		List<Dashboard> dashboards = Arrays.asList(d1, d2);
 
 		when(dashboardService.findAllByPrincipalPermissions(any(Pageable.class), any(Predicate.class)))
-				.thenReturn(new PageImpl<>(dashboards, new PageRequest(1, 2), 2));
+				.thenReturn(new PageImpl<>(dashboards, PageRequest.of(1, 2), 2));
 
 		ResponseEntity<Dashboard[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
 				getUrl() + "/api/dashboards", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
@@ -250,7 +249,7 @@ public class DashboardsResourceTest extends AbstractIntegrationTest {
 		when(viewService.findOne(eq(7L))).thenReturn(view2);
 
 		doAnswer(invocationOnMock -> {
-			DashboardRelease dashboardRelease = invocationOnMock.getArgumentAt(0, DashboardRelease.class);
+			DashboardRelease dashboardRelease = invocationOnMock.getArgument(0, DashboardRelease.class);
 			ReleaseRequest releaseRequest = new ReleaseRequest();
 			releaseRequest.setComment(dashboardRelease.getComment());
 			releaseRequest.setRelease(dashboardRelease);

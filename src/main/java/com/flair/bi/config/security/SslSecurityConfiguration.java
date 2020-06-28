@@ -7,13 +7,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @Profile("tls")
-public class SslSecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class SslSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.requiresChannel()
-        .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-        .requiresSecure();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.requiresChannel().requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null).requiresSecure();
+	}
 
 }

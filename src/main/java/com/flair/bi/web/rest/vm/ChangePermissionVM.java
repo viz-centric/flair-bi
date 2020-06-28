@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class ChangePermissionVM {
 
-    private String id;
+	private String id;
 
-    private Action action;
+	private Action action;
 
-    public enum Action {
-        ADD, REMOVE
-    }
+	public enum Action {
+		ADD, REMOVE
+	}
 }

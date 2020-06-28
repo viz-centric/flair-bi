@@ -17,14 +17,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Ignore
 public class TestWebMvcConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("flairuser").password("flairpass").authorities("USER");
-    }
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("flairuser").password("flairpass").authorities("USER");
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().authorizeRequests().anyRequest().authenticated().and().csrf().disable();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.httpBasic().and().authorizeRequests().anyRequest().authenticated().and().csrf().disable();
+	}
 
 }

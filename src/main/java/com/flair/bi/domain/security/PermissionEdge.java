@@ -1,49 +1,56 @@
 package com.flair.bi.domain.security;
 
-import lombok.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "permission_edge")
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"key"})
+@EqualsAndHashCode(of = { "key" })
 @AllArgsConstructor
 @NoArgsConstructor
 public class PermissionEdge {
 
-    @EmbeddedId
-    private PermissionEdgeKey key = new PermissionEdgeKey();
+	@EmbeddedId
+	private PermissionEdgeKey key = new PermissionEdgeKey();
 
-    @MapsId("fromKey")
-    @JoinColumns(value = {
-        @JoinColumn(name = "from_resource", referencedColumnName = "resource"),
-        @JoinColumn(name = "from_action", referencedColumnName = "action"),
-        @JoinColumn(name = "from_scope", referencedColumnName = "scope")
-    })
-    @ManyToOne
-    private Permission from;
+	@MapsId("fromKey")
+	@JoinColumns(value = { @JoinColumn(name = "from_resource", referencedColumnName = "resource"),
+			@JoinColumn(name = "from_action", referencedColumnName = "action"),
+			@JoinColumn(name = "from_scope", referencedColumnName = "scope") })
+	@ManyToOne
+	private Permission from;
 
-    @MapsId("toKey")
-    @ManyToOne
-    @JoinColumns(value = {
-        @JoinColumn(name = "to_resource", referencedColumnName = "resource"),
-        @JoinColumn(name = "to_action", referencedColumnName = "action"),
-        @JoinColumn(name = "to_scope", referencedColumnName = "scope")
-    })
-    private Permission to;
+	@MapsId("toKey")
+	@ManyToOne
+	@JoinColumns(value = { @JoinColumn(name = "to_resource", referencedColumnName = "resource"),
+			@JoinColumn(name = "to_action", referencedColumnName = "action"),
+			@JoinColumn(name = "to_scope", referencedColumnName = "scope") })
+	private Permission to;
 
-    @Column(name = "bidirectional", updatable = false)
-    private boolean biDirectional;
+	@Column(name = "bidirectional", updatable = false)
+	private boolean biDirectional;
 
-    @Column(name = "transitive", updatable = false)
-    private boolean transitive;
+	@Column(name = "transitive", updatable = false)
+	private boolean transitive;
 
-    public PermissionEdge(Permission from, Permission to, boolean biDirectional, boolean transitive) {
-        this.from = from;
-        this.to = to;
-        this.biDirectional = biDirectional;
-        this.transitive = transitive;
-    }
+	public PermissionEdge(Permission from, Permission to, boolean biDirectional, boolean transitive) {
+		this.from = from;
+		this.to = to;
+		this.biDirectional = biDirectional;
+		this.transitive = transitive;
+	}
 }

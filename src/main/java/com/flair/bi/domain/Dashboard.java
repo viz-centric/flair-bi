@@ -12,8 +12,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonView;
-
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;

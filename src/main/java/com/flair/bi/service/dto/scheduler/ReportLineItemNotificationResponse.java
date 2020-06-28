@@ -5,8 +5,9 @@ import com.flair.bi.messages.Query;
 public class ReportLineItemNotificationResponse extends ReportLineItem {
 	private Query query;
 
-	public ReportLineItemNotificationResponse(){}
-		
+	public ReportLineItemNotificationResponse() {
+	}
+
 	public Query getQuery() {
 		return query;
 	}
@@ -19,5 +20,5 @@ public class ReportLineItemNotificationResponse extends ReportLineItem {
 		super();
 		this.query = query;
 	}
-	
+
 }

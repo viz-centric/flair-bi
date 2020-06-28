@@ -1,7 +1,8 @@
 package com.flair.bi.service.dto;
 
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+
+import javax.validation.constraints.NotNull;
 
 public class FileUploaderDTO {
 	@NotNull
@@ -11,7 +12,7 @@ public class FileUploaderDTO {
 	@NotNull
 	private String fileName;
 	private String contentType;
-	
+
 	public byte[] getFile() {
 		return file;
 	}
@@ -49,5 +50,5 @@ public class FileUploaderDTO {
 		return "FileUploaderDTO [file=" + Arrays.toString(file) + ", fileSystem=" + fileSystem + ", fileName="
 				+ fileName + ", contentType=" + contentType + "]";
 	}
-	
+
 }

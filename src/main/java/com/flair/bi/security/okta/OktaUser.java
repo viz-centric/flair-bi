@@ -9,14 +9,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OktaUser {
 
-    private final String username;
-    private final String firstName;
-    private final String lastName;
-    private final String email;
+	private final String username;
+	private final String firstName;
+	private final String lastName;
+	private final String email;
 
-    public static OktaUser from(Map<?, ?> map) {
-        return new OktaUser(((String) map.get("preferred_username")).toLowerCase(), (String) map.get("given_name"),
-                (String) map.get("family_name"), (String) map.get("email"));
-    }
+	public static OktaUser from(Map<?, ?> map) {
+		return new OktaUser(((String) map.get("preferred_username")).toLowerCase(), (String) map.get("given_name"),
+				(String) map.get("family_name"), (String) map.get("email"));
+	}
 
 }

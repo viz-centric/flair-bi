@@ -8,9 +8,11 @@ import com.flair.bi.service.SchedulerService;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
+
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

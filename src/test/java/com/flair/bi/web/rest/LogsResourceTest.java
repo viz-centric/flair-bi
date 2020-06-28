@@ -1,7 +1,9 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.web.rest.vm.LoggerVM;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
@@ -10,28 +12,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.web.rest.vm.LoggerVM;
 
 @Ignore
 public class LogsResourceTest extends AbstractIntegrationTest {
 
 	@Test
 	public void getList() {
-		ResponseEntity<LoggerVM[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/management/logs",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						LoggerVM[].class);
+		ResponseEntity<LoggerVM[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/management/logs", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				LoggerVM[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("WARN", Arrays.stream(response.getBody())
-				.filter(i -> i.getName().equalsIgnoreCase("ROOT"))
-				.findFirst()
-				.get()
-				.getLevel());
+		assertEquals("WARN", Arrays.stream(response.getBody()).filter(i -> i.getName().equalsIgnoreCase("ROOT"))
+				.findFirst().get().getLevel());
 	}
 
 	@Test

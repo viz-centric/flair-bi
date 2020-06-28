@@ -1,6 +1,5 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
@@ -21,6 +20,8 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.querydsl.core.types.Predicate;
+
+import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

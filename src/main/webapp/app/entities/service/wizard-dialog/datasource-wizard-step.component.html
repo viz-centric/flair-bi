@@ -61,17 +61,26 @@
         <div class="form-group">
             <label class="control-label" data-translate="flairbiApp.datasources.sqlmode.enterquery"
                    for="tarea">_</label>
-            <textarea class="form-control" id="tarea" name="tarea" rows="10"
-                      ng-model="vm.sql"></textarea>
+            <div class="sql-query-container">
+                <div class="line-nums" ><div ng-repeat="(key,value) in vm.lines track by $index">{{key+1}}</div></div>
+                <textarea class="form-control sql-query-area" id="tarea" name="tarea" rows={{vm.sqlQuerylength}}
+                          ng-model="vm.sql" ng-paste="vm.formatSql(vm.sql)">    
+                </textarea>
+            </div>
         </div>
     </div>
 
-    <div class="row m-t-md">
-        <div class="col-md-12">
+    <div class="row m-t-md sql-actions">
+        <div class="sql-action">
             <button ng-disabled="vm.isShowDataEnabled()" ng-click="vm.showData()" class="btn btn-primary">
                 Show Data
             </button>
             <loading-component show-loading="vm.loading"></loading-component>
+        </div>
+        <div class="sql-action">
+            <button ng-disabled="vm.isShowDataEnabled()" ng-click="vm.formatSql(vm.sql)" class="btn btn-primary">
+                Formate Query
+            </button>
         </div>
     </div>
     <br />

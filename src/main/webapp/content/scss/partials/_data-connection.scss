@@ -40,6 +40,13 @@
 			    max-height: 250px;
 			    width: 100%;
 		    }
+		    .sql-actions{
+		    	display: flex;
+		    	.sql-action{
+					margin-right: 5px;
+				    margin-left: 15px;
+		    	}
+		    }
 		}
 	}
 }
@@ -71,4 +78,38 @@
 	    	height: 45px;
 		}
 	} 
+}
+
+.sql-query-container{
+	position:relative;
+	margin-left: 29px;
+	.sql-query-area{
+		overflow:hidden;
+		line-height: 13px;
+		font-size: 13px;
+		border:1px solid #ededed;
+		padding:10px;
+		font-family: monospace;
+		margin:0;
+		display:block;
+		outline:none;
+	}
+	.sql-query-area:focus{
+	  border-color:$primary-color;
+	}
+	.line-nums{
+		font-size:13px;
+		line-height:13px;
+		padding:10px 4px;
+		font-family: monospace;
+	  	background: #f6f8f8;
+		position: absolute;
+	    width: 30px;
+	    left: -28px;
+		bottom: 0;
+		top: 0;
+		text-align:right;
+		border:1px solid #ededed;
+		overflow: hidden;
+	}
 }

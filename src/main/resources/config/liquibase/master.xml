@@ -77,7 +77,9 @@
     <include file="config/liquibase/changelog/20200610165500_sql_datasources.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200624183700_assign_datasource_permissions.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200625230000_added_spring_session_tables.xml" relativeToChangelogFile="false"/>
-    
+    <include file="config/liquibase/changelog/20200601100000_add_iframe_settings.xml" relativeToChangelogFile="false"/>
+
+
     
 </databaseChangeLog>
 <!--@formatter:on-->

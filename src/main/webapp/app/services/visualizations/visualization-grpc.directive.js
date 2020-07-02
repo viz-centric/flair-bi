@@ -62,6 +62,7 @@
         'GenerateDateRange',
         'GeneratePieGridChart',
         'GenerateNumberGridChart',
+        'GenerateIframe',
         'proxyGrpcService',
         'filterParametersService',
         '$log',
@@ -100,6 +101,7 @@
         GenerateDateRange,
         GeneratePieGridChart,
         GenerateNumberGridChart,
+        GenerateIframe,
         proxyGrpcService,
         filterParametersService,
         $log,
@@ -144,6 +146,7 @@
             widgets.GenerateDateRange = GenerateDateRange;
             widgets.GeneratePieGridChart = GeneratePieGridChart;
             widgets.GenerateNumberGridChart = GenerateNumberGridChart;
+            widgets.GenerateIframe = GenerateIframe;
             registerCanBuildChange();
             registerFilterEvent();
             registerResizeWidgetEvent();

@@ -35,7 +35,10 @@
             isDateFilterType : isDateFilterType,
             dateToString,
             applyDefaultFilters : applyDefaultFilters,
-            applyViewFeatureCriteria : applyViewFeatureCriteria
+            applyViewFeatureCriteria : applyViewFeatureCriteria,
+            removeFilterInIframeURL : removeFilterInIframeURL,
+            setFilterInIframeURL : setFilterInIframeURL
+
         };
 
 
@@ -434,6 +437,86 @@
                 dataType: type,
                 valueType: 'dateRangeValueType'
             };
+        }
+
+        function setFilterInIframeURL(filters,iframes,dashboardDatasource,dimensions) {
+
+            var filtersList = Object.keys(filters);
+            if (filtersList.length > 0) {
+                var datasourceId = dashboardDatasource;
+                iframes.forEach(element => {
+                    var id = getParameterByName('datasourceId', element.properties[0].value)
+                    element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
+                    var filterUrl = {};
+                    if (datasourceId === id) {
+
+                        filtersList.forEach(item => {
+
+                            var validadimension = getDimensionMetaData(dimensions, item);
+                            if (validadimension.length > 0) {
+                                if (filters[item]._meta.valueType === "dateRangeValueType") {
+                                    filterUrl[item] = {
+                                        value: [validadimension[0].metadata.currentDynamicDateRangeConfig.title],
+                                        type: "date-range"
+                                    }
+                                }
+                                else {
+                                    filterUrl[item] = Array(filters[item]);
+                                }
+                            }
+                        });
+
+                        filterUrl = element.properties[0].value + "&filters=" + JSON.stringify(filterUrl);
+                        filtersList.forEach(item => {
+                            filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
+                        });
+                        element.properties[0].value = filterUrl;
+                    }
+                });
+            }
+        }
+
+        function getDimensionMetaData(dimensions,dimension) {
+            return dimensions.filter(function (item) {
+                return item.name === dimension
+            })
+
+        }
+
+        function removeFilterInIframeURL(iframes) {
+            iframes.forEach(element => {
+                element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
+            });
+        }
+
+        function removeURLParameter(url, parameter) {
+            var urlparts = url.split('?');
+            if (urlparts.length >= 2) {
+
+                var prefix = encodeURIComponent(parameter) + '=';
+                var pars = urlparts[1].split(/[&;]/g);
+
+                for (var i = pars.length; i-- > 0;) {
+                    if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+                        pars.splice(i, 1);
+                    }
+                }
+
+                url = urlparts[0] + '?' + pars.join('&');
+                return url;
+            } else {
+                return url;
+            }
+        }
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
     }
 })();

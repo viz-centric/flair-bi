@@ -11,7 +11,8 @@
                 dimensions: '=',
                 view: '=',
                 type: '@',
-                tab: '='
+                tab: '=',
+                iframes: '='
             }
         });
 
@@ -46,6 +47,7 @@
         function filterChangedSubscription() {
             var unsubscribe = $scope.$on('filterParametersService:filter-changed', function (event, newFilter) {
                 vm.selectedFilters = newFilter;
+                //setFilterInIframeURL(vm.selectedFilters);
             });
 
             $scope.$on('$destroy', unsubscribe);
@@ -81,6 +83,7 @@
                 filterParametersService.clear();
                 filterParametersService.saveSelectedFilter($rootScope.updateWidget);
                 filter();
+                filterParametersService.removeFilterInIframeURL(vm.iframes);
             }
         }
 
@@ -89,6 +92,12 @@
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
+            addFilterInIframeURL();
+        }
+
+        function addFilterInIframeURL() {
+            var filters = filterParametersService.getSelectedFilter();
+            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.view.viewDashboard.dashboardDatasource.id.toString(),vm.dimensions);
         }
     }
 })();

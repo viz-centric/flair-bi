@@ -38,7 +38,6 @@
         vm.activeForText = "disable";
         vm.isCommaSeparatedInput = false;
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
-
         ////////////////
 
         function activate() {
@@ -376,7 +375,7 @@
             if(vm.dimension.selected && vm.dimension.selected.length>0){
                 vm.dimension.commaSeparatedValues = vm.dimension.selected.map(function(elem){
                     return elem.text;
-                }).join(",");
+                }).join(getSeparator());
             }
             vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         }
@@ -387,8 +386,7 @@
                 vm.dimension.selected = [];
                 var filterParameters = filterParametersService.getSelectedFilter();
                 filterParameters[vm.dimension.name] = [];
-                var separatorVal = vm.separator ? vm.separator.value : ",";
-                var getList = vm.dimension.commaSeparatedValues.split(separatorVal);
+                var getList = vm.dimension.commaSeparatedValues.split(getSeparator());
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element });
@@ -396,6 +394,10 @@
                 });
                 vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
+        }
+
+        function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
         }
     }
 })();

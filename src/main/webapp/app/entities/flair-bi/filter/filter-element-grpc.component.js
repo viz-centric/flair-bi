@@ -12,7 +12,8 @@
                 view: '=',
                 dimensions: '=',
                 tab: '=',
-                list: '='
+                list: '=',
+                separator: '='
             }
         });
 
@@ -386,7 +387,8 @@
                 vm.dimension.selected = [];
                 var filterParameters = filterParametersService.getSelectedFilter();
                 filterParameters[vm.dimension.name] = [];
-                var getList = vm.dimension.commaSeparatedValues.split(',');
+                var separatorVal = vm.separator ? vm.separator.value : ",";
+                var getList = vm.dimension.commaSeparatedValues.split(separatorVal);
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element });

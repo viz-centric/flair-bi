@@ -15,9 +15,9 @@
             }
         });
 
-    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService'];
+    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService','SEPARATORS'];
 
-    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService) {
+    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService,SEPARATORS) {
         var vm = this;
 
         vm.filter = filter;
@@ -26,6 +26,9 @@
         vm.selectedFilters = {};
         vm.list = {};
         vm.dateFilter = [];
+        vm.separators = SEPARATORS;
+        vm.separator =  vm.separators[0];
+
         activate();
 
         ////////////////

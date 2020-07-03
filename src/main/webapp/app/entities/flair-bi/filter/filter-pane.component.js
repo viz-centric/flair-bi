@@ -96,7 +96,7 @@
 
         function addFilterInIframeURL() {
             var filters = filterParametersService.getSelectedFilter();
-            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.view.viewDashboard.dashboardDatasource.id.toString(),vm.dimensions);
+            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimensions);
         }
     }
 })();

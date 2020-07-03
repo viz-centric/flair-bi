@@ -5,14 +5,14 @@
         .module('flairbiApp')
         .factory('filterParametersService', filterParametersService);
 
-    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES','DYNAMIC_DATE_RANGE_CONFIG'];
+    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES', 'DYNAMIC_DATE_RANGE_CONFIG', 'Features'];
 
-    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES,DYNAMIC_DATE_RANGE_CONFIG) {
+    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES, DYNAMIC_DATE_RANGE_CONFIG, Features) {
 
         var paramObject = {};
-        var selectedFilters={};
-        var dynamicDateRangeToolTip={};
-        var dynamicDateRangeMetaData={};
+        var selectedFilters = {};
+        var dynamicDateRangeToolTip = {};
+        var dynamicDateRangeMetaData = {};
 
         var service = {
             get: get,
@@ -20,24 +20,24 @@
             clear: clear,
             getConditionExpression: getConditionExpression,
             getConditionExpressionForParams: getConditionExpressionForParams,
-            getFiltersCount:getFiltersCount,
-            changeDateFormat:changeDateFormat,
-            getSelectedFilter:getSelectedFilter,
-            saveSelectedFilter:saveSelectedFilter,
-            getComparableDataTypes:getComparableDataTypes,
-            saveDynamicDateRangeToolTip:saveDynamicDateRangeToolTip,
-            getDynamicDateRangeToolTip:getDynamicDateRangeToolTip,
-            resetDynamicDateRangeToolTip:resetDynamicDateRangeToolTip,
-            saveDynamicDateRangeMetaData : saveDynamicDateRangeMetaData,
-            getDynamicDateRangeMetaData : getDynamicDateRangeMetaData,
-            buildFilterCriteriasForDynamicDateRange : buildFilterCriteriasForDynamicDateRange,
-            isDateType : isDateType,
-            isDateFilterType : isDateFilterType,
+            getFiltersCount: getFiltersCount,
+            changeDateFormat: changeDateFormat,
+            getSelectedFilter: getSelectedFilter,
+            saveSelectedFilter: saveSelectedFilter,
+            getComparableDataTypes: getComparableDataTypes,
+            saveDynamicDateRangeToolTip: saveDynamicDateRangeToolTip,
+            getDynamicDateRangeToolTip: getDynamicDateRangeToolTip,
+            resetDynamicDateRangeToolTip: resetDynamicDateRangeToolTip,
+            saveDynamicDateRangeMetaData: saveDynamicDateRangeMetaData,
+            getDynamicDateRangeMetaData: getDynamicDateRangeMetaData,
+            buildFilterCriteriasForDynamicDateRange: buildFilterCriteriasForDynamicDateRange,
+            isDateType: isDateType,
+            isDateFilterType: isDateFilterType,
             dateToString,
-            applyDefaultFilters : applyDefaultFilters,
-            applyViewFeatureCriteria : applyViewFeatureCriteria,
-            removeFilterInIframeURL : removeFilterInIframeURL,
-            setFilterInIframeURL : setFilterInIframeURL
+            applyDefaultFilters: applyDefaultFilters,
+            applyViewFeatureCriteria: applyViewFeatureCriteria,
+            removeFilterInIframeURL: removeFilterInIframeURL,
+            setFilterInIframeURL: setFilterInIframeURL
 
         };
 
@@ -77,19 +77,19 @@
             resetDynamicDateRangeToolTip();
         }
 
-        function createBetweenExpressionBody(value, secondValue, featureName, dataType,activeTab) {
-          var result = {
-            '@type': 'Between',
-            value: value,
-            secondValue: secondValue,
-            activeTab : activeTab,
-            featureName: featureName
-          };
-          if (dataType) {
-              result.valueType = {value: value, type: dataType, '@type': 'valueType'};
-              result.secondValueType = {value: secondValue, type: dataType, '@type': 'valueType'};
-          }
-          return result;
+        function createBetweenExpressionBody(value, secondValue, featureName, dataType, activeTab) {
+            var result = {
+                '@type': 'Between',
+                value: value,
+                secondValue: secondValue,
+                activeTab: activeTab,
+                featureName: featureName
+            };
+            if (dataType) {
+                result.valueType = { value: value, type: dataType, '@type': 'valueType' };
+                result.secondValueType = { value: secondValue, type: dataType, '@type': 'valueType' };
+            }
+            return result;
         }
 
         function createContainsExpressionBody(values, featureName, dataType) {
@@ -157,7 +157,7 @@
                     value: value
                 },
                 secondValue: value,
-                activeTab : value
+                activeTab: value
             };
         }
 
@@ -180,7 +180,7 @@
                 var dataType = meta.dataType || '';
                 console.log('filter-parameters: date range value type values', values);
                 if (values.length === 2) {
-                    return createBetweenExpressionBody(values[0], values[1], name, dataType,values[2]);
+                    return createBetweenExpressionBody(values[0], values[1], name, dataType, values[2]);
                 } else {
                     return createCompareExpressionBody(values[0], name, dataType);
                 }
@@ -235,7 +235,7 @@
             };
         }
 
-        function getFiltersCount(){
+        function getFiltersCount() {
             var size = 0, key;
             for (key in paramObject) {
                 if (paramObject.hasOwnProperty(key)) size++;
@@ -243,66 +243,66 @@
             return size;
         }
 
-        function changeDateFormat(date){
-        if((typeof date)=='string'){
-            return date;
-        }else{
-            return [ (date.getFullYear()),
-                        date.getMonth()+1,
-                        date.getDate()].join('-')+
-                        ' ' +
-                      [ date.getHours(),
-                        date.getMinutes(),
-                        date.getSeconds()].join(':');
+        function changeDateFormat(date) {
+            if ((typeof date) == 'string') {
+                return date;
+            } else {
+                return [(date.getFullYear()),
+                date.getMonth() + 1,
+                date.getDate()].join('-') +
+                    ' ' +
+                    [date.getHours(),
+                    date.getMinutes(),
+                    date.getSeconds()].join(':');
             }
         }
 
-        function getSelectedFilter(){
+        function getSelectedFilter() {
             return selectedFilters;
         }
 
-        function saveSelectedFilter(selectedF){
-            selectedFilters=selectedF;
+        function saveSelectedFilter(selectedF) {
+            selectedFilters = selectedF;
         }
 
-        function getComparableDataTypes(){
+        function getComparableDataTypes() {
             return COMPARABLE_DATA_TYPES;
         }
 
-        function saveDynamicDateRangeToolTip(dynamicDateRangeToolTipTemp){
+        function saveDynamicDateRangeToolTip(dynamicDateRangeToolTipTemp) {
             dynamicDateRangeToolTip[dynamicDateRangeToolTipTemp.name] = dynamicDateRangeToolTipTemp.text;
         }
 
-        function getDynamicDateRangeToolTip(dimensionName){
-            if(dynamicDateRangeToolTip[dimensionName]){
+        function getDynamicDateRangeToolTip(dimensionName) {
+            if (dynamicDateRangeToolTip[dimensionName]) {
                 return dynamicDateRangeToolTip[dimensionName];
-            }else{
+            } else {
                 return '';
             }
 
         }
-        function resetDynamicDateRangeToolTip(){
-            dynamicDateRangeToolTip={};
+        function resetDynamicDateRangeToolTip() {
+            dynamicDateRangeToolTip = {};
         }
 
-        function saveDynamicDateRangeMetaData(dimensionName,metaData){
+        function saveDynamicDateRangeMetaData(dimensionName, metaData) {
             dynamicDateRangeMetaData[dimensionName] = metaData;
         }
 
-        function getDynamicDateRangeMetaData(dimensionName){
-            if(dynamicDateRangeMetaData[dimensionName]){
+        function getDynamicDateRangeMetaData(dimensionName) {
+            if (dynamicDateRangeMetaData[dimensionName]) {
                 return dynamicDateRangeMetaData[dimensionName];
-            }else{
+            } else {
                 return '';
             }
         }
 
-        function buildFilterCriteriasForDynamicDateRange(dimensionName){
-            if(dynamicDateRangeMetaData[dimensionName]){
+        function buildFilterCriteriasForDynamicDateRange(dimensionName) {
+            if (dynamicDateRangeMetaData[dimensionName]) {
                 var metaData = dynamicDateRangeMetaData[dimensionName];
                 var isCustom = metaData.currentDynamicDateRangeConfig.isCustom ? "true" : "false";
-                return isCustom +"||"+ metaData.customDynamicDateRange +"||"+ metaData.currentDynamicDateRangeConfig.title;
-            }else{
+                return isCustom + "||" + metaData.customDynamicDateRange + "||" + metaData.currentDynamicDateRangeConfig.title;
+            } else {
                 return null;
             }
         }
@@ -315,7 +315,7 @@
             return COMPARABLE_DATA_TYPES.indexOf(type.toLowerCase()) > -1;
         }
 
-        function isDateFilterType(type){
+        function isDateFilterType(type) {
             if (!type) {
                 return false;
             }
@@ -356,7 +356,7 @@
             }
         }
 
-        function applyViewFeatureCriteria(featureCriterias,featureEntities) {
+        function applyViewFeatureCriteria(featureCriterias, featureEntities) {
             const viewFeatureCriterias = featureCriterias;
             if (viewFeatureCriterias.length > 0) {
                 const filters = getSelectedFilter();
@@ -439,44 +439,75 @@
             };
         }
 
-        function setFilterInIframeURL(filters,iframes,dashboardDatasource,dimensions) {
-
+        function setFilterInIframeURL(filters, iframes, filterDimensions) {
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
-                var datasourceId = dashboardDatasource;
+                removeFilterInIframeURL(iframes);
                 iframes.forEach(element => {
                     var id = getParameterByName('datasourceId', element.properties[0].value)
-                    element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
-                    var filterUrl = {};
-                    if (datasourceId === id) {
+                    validateFilter(id, filtersList, filterDimensions, filters, element);
+                });
+            }
+        }
 
+        function getDateFilterValue(filterDimensions, dimension) {
+            return filterDimensions.filter(function (item) {
+                return item.name === dimension;
+            })
+
+        }
+        function validateFilter(id, filtersList, filterDimensions, filters, element) {
+            if (id) {
+                Features.query(
+                    {
+                        datasource: id,
+                        featureType: "DIMENSION"
+                    },
+                    function (dimensions) {
+                        var filterUrl = {};
                         filtersList.forEach(item => {
-
                             var validadimension = getDimensionMetaData(dimensions, item);
                             if (validadimension.length > 0) {
                                 if (filters[item]._meta.valueType === "dateRangeValueType") {
-                                    filterUrl[item] = {
-                                        value: [validadimension[0].metadata.currentDynamicDateRangeConfig.title],
-                                        type: "date-range"
-                                    }
+                                    filterUrl[item] = setDateFilterValue(filterDimensions, item, filters);
                                 }
                                 else {
                                     filterUrl[item] = Array(filters[item]);
                                 }
                             }
                         });
-
                         filterUrl = element.properties[0].value + "&filters=" + JSON.stringify(filterUrl);
                         filtersList.forEach(item => {
                             filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
                         });
                         element.properties[0].value = filterUrl;
-                    }
-                });
+                    },
+                    function (_) { }
+                );
             }
         }
 
-        function getDimensionMetaData(dimensions,dimension) {
+        function setDateFilterValue(filterDimensions, item, filters) {
+            var isfilterDimensions = getDateFilterValue(filterDimensions, item);
+            var type = "date-range";
+            var value;
+            if (isfilterDimensions[0].metadata.dateRangeTab === 2) {
+                type = "custom-date";
+                value = [isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title];
+                if (isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title === "Custom X days" || isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title === "Custom X hours") {
+                    value = [isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title, isfilterDimensions[0].metadata.customDynamicDateRange]
+                }
+            }
+            else {
+                value = [filters[item][0], filters[item][1]]
+            }
+
+            return {
+                value: value,
+                type: type
+            }
+        }
+        function getDimensionMetaData(dimensions, dimension) {
             return dimensions.filter(function (item) {
                 return item.name === dimension
             })
@@ -517,6 +548,21 @@
             if (!results) return null;
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        function getDimensionsByID(id) {
+            if (id) {
+                Features.query(
+                    {
+                        datasource: id,
+                        featureType: "DIMENSION"
+                    },
+                    function (result) {
+                        return result;
+                    },
+                    function (_) { }
+                );
+            }
         }
     }
 })();

@@ -36,7 +36,8 @@
         'ViewFeatureCriteria',
         "DYNAMIC_DATE_RANGE_CONFIG",
         "AccountDispatch",
-        "ShareLinkService"
+        "ShareLinkService",
+        "IFRAME"
     ];
 
     function FlairBiContentHeaderController(
@@ -67,7 +68,8 @@
         ViewFeatureCriteria,
         DYNAMIC_DATE_RANGE_CONFIG,
         AccountDispatch,
-        ShareLinkService
+        ShareLinkService,
+        IFRAME
     ) {
         var vm = this;
 
@@ -186,7 +188,7 @@
                 var vms = states.visualMetadataSet || [];
             }
             vm.iFrames = vms.filter(function(item){
-                return item.metadataVisual.name === "Iframe";
+                return item.metadataVisual.name === IFRAME.iframe;
             })
 
             if ($(window).width() < 990) {

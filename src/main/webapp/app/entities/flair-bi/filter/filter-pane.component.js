@@ -47,7 +47,6 @@
         function filterChangedSubscription() {
             var unsubscribe = $scope.$on('filterParametersService:filter-changed', function (event, newFilter) {
                 vm.selectedFilters = newFilter;
-                //setFilterInIframeURL(vm.selectedFilters);
             });
 
             $scope.$on('$destroy', unsubscribe);

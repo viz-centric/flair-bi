@@ -10,7 +10,7 @@
     function GenerateIframe(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
             build: function (record, element, panel, isNotification) {
-                var iframeLink = VisualizationUtils.getPropertyValue(record.properties, 'I frame link');
+                var iframeLink = VisualizationUtils.getPropertyValue(record.properties, 'iFrame link');
                 d3.select(element[0]).html('')
                 var div = d3.select(element[0]).append('iframe')
                     .attr('id', 'iframe-' + element[0].id)

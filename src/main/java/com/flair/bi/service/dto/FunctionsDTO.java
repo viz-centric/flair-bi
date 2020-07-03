@@ -1,9 +1,10 @@
 package com.flair.bi.service.dto;
 
+import com.flair.bi.web.rest.dto.RealmDTO;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Objects;
-
-import lombok.Data;
 
 @Data
 public class FunctionsDTO implements Serializable {
@@ -22,14 +23,16 @@ public class FunctionsDTO implements Serializable {
 
 	private String validation;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
+    private RealmDTO real;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
 		FunctionsDTO functionsDTO = (FunctionsDTO) o;
 

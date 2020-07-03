@@ -1,9 +1,10 @@
 package com.flair.bi.service.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
+import com.flair.bi.web.rest.dto.RealmDTO;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A DTO for the VisualizationColors entity.
@@ -15,9 +16,11 @@ public class VisualizationColorsDTO implements Serializable {
 	@NotNull
 	private String code;
 
-	public Long getId() {
-		return id;
-	}
+    private RealmDTO real;
+
+    public Long getId() {
+        return id;
+    }
 
 	public void setId(Long id) {
 		this.id = id;
@@ -53,8 +56,19 @@ public class VisualizationColorsDTO implements Serializable {
 		return Objects.hashCode(id);
 	}
 
-	@Override
-	public String toString() {
-		return "VisualizationColorsDTO{" + "id=" + id + ", code='" + code + "'" + '}';
-	}
+    @Override
+    public String toString() {
+        return "VisualizationColorsDTO{" +
+            "id=" + id +
+            ", code='" + code + "'" +
+            '}';
+    }
+
+    public RealmDTO getReal() {
+        return real;
+    }
+
+    public void setReal(RealmDTO real) {
+        this.real = real;
+    }
 }

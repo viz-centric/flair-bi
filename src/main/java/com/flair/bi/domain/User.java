@@ -1,12 +1,16 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.authorization.PermissionGrantee;
+import com.flair.bi.config.Constants;
+import com.flair.bi.domain.bookmarkwatch.BookmarkWatch;
+import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.security.Permission;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.domain.viewwatch.ViewWatch;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.PreDestroy;
 import javax.persistence.CascadeType;
@@ -19,25 +23,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.authorization.PermissionGrantee;
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.bookmarkwatch.BookmarkWatch;
-import com.flair.bi.domain.enumeration.Action;
-import com.flair.bi.domain.security.Permission;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.domain.viewwatch.ViewWatch;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A user.
@@ -135,6 +134,9 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<DatasourceConstraint> datasourceConstraints = new HashSet<>();
+
+	@ManyToOne
+	private Realm realm;
 
 	@PreDestroy
 	public void preDestroy() {

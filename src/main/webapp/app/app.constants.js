@@ -123,24 +123,6 @@
 		"value": "LTE"
 	}
 ])
-        .constant('SEPARATORS', [
-	{
-		"displayName": "Data Separator Comma[,]",
-		"value": ","
-	},
-	{
-		"displayName": "Data Separator Space[]",
-		"value": " "
-	},
-	{
-		"displayName": "Data Separator Pipe[|]",
-		"value": "|"
-	},
-	{
-		"displayName": "Data Separator Colon[:]",
-		"value": ":"
-	}
-])
         .constant('FILTER_TYPES', {
 	"BASE": "BASE",
 	"FILTER": "FILTER",

@@ -2637,6 +2637,12 @@ tags-input-grpc .autocomplete {
     font: 13px "open sans";
     height: 38px; }
 
+.filter-separator-container {
+  margin-right: 0.5vw;
+  margin-left: 0.5vw; }
+  .filter-separator-container .separator-select {
+    font: 13px "open sans"; }
+
 @media screen {
   #printSection {
     display: none; } }

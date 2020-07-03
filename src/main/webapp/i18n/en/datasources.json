@@ -25,6 +25,7 @@
             "queryPath": "Query Path",
             "regular.name": "Datasource",
             "sqlmode.name": "SQL query",
+            "format.query": "Format Query",
             "sqlmode.enterquery": "Enter query",
             "sqlmode.enterdatasource": "Enter datasource name",
             "service": "Service",

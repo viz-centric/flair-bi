@@ -176,6 +176,19 @@
             registerAddFilter();
             setPageSizeforScreens();
             fetchDashboardsAndViews();
+            vm.dimensions = featureEntities.filter(function (item) {
+                return item.featureType === "DIMENSION";
+            });
+
+            if (configuration.readOnly) {
+                var vms = states.viewState.visualMetadataSet || [];
+            } else {
+                var vms = states.visualMetadataSet || [];
+            }
+            vm.iFrames = vms.filter(function(item){
+                return item.metadataVisual.name === "Iframe";
+            })
+
             if ($(window).width() < 990) {
                 $rootScope.isFullScreen = true;
             }
@@ -698,6 +711,8 @@
                         );
                         $rootScope.$broadcast("flairbiApp:filter");
                         $rootScope.$broadcast('flairbiApp:filter-add');
+                        var filters = filterParametersService.get();
+                        filterParametersService.setFilterInIframeURL(filters,vm.iFrames,vm.view.viewDashboard.dashboardDatasource.id.toString(),vm.dimensions);
                         recentBookmarkService.saveRecentBookmark(item.id, $stateParams.id);
                     }
                 );

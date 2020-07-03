@@ -80,7 +80,10 @@
 
         function onSelectedTableChanged(table) {
             vm.selectedTable = table;
-            formatSql(table.sql || vm.sql);
+            vm.sql = table.sql || vm.sql;
+            if(vm.tabIndex==1){
+                formatSql(vm.sql);
+            }
         }
 
         function onSubmitDisabled() {

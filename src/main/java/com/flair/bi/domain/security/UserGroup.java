@@ -1,9 +1,15 @@
 package com.flair.bi.domain.security;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.authorization.PermissionGrantee;
+import com.flair.bi.domain.Realm;
+import com.flair.bi.domain.User;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,21 +19,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.authorization.PermissionGrantee;
-import com.flair.bi.domain.User;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_group")
@@ -57,9 +57,12 @@ public class UserGroup implements Serializable, PermissionGrantee {
 	@ManyToMany(mappedBy = "userGroups")
 	private Set<User> users = new HashSet<>();
 
-	public UserGroup(String name) {
-		this.name = name;
-	}
+    @ManyToOne
+    private Realm realm;
+
+    public UserGroup(String name) {
+        this.name = name;
+    }
 
 	@PreRemove
 	public void preRemove() {

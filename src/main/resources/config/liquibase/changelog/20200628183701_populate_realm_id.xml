@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20200624183700" author="sergeil">
+        <sql stripComments="true">
+            INSERT INTO realm (name) VALUES('vizcentric');
+
+            UPDATE jhi_user SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE user_group_permission SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE user_group SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE dashboards SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE datasources SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE functions SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE views SET realm_id =
+                (select id from realm order by id desc limit 1);
+            UPDATE visualization_colors SET realm_id =
+                (select id from realm order by id desc limit 1);
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

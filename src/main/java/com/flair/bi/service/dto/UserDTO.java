@@ -1,17 +1,16 @@
 package com.flair.bi.service.dto;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Email;
-
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.web.rest.dto.RealmDTO;
+import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -43,8 +42,10 @@ public class UserDTO {
 
 	private String userType;
 
-	public UserDTO() {
-	}
+    private RealmDTO realm;
+
+    public UserDTO() {
+    }
 
 	public UserDTO(User user) {
 		this(user.getLogin(), user.getFirstName(), user.getLastName(), user.getEmail(), user.isActivated(),
@@ -104,4 +105,12 @@ public class UserDTO {
 		return permissions;
 	}
 
+
+    public RealmDTO getRealm() {
+        return realm;
+    }
+
+    public void setRealm(RealmDTO realm) {
+        this.realm = realm;
+    }
 }

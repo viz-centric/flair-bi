@@ -2,18 +2,37 @@ package com.flair.bi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.authorization.*;
+import com.flair.bi.authorization.DashboardGranteePermissionReport;
+import com.flair.bi.authorization.GranteePermissionReport;
+import com.flair.bi.authorization.PermissionGrantee;
+import com.flair.bi.authorization.PermissionReport;
+import com.flair.bi.authorization.SecuredEntity;
 import com.flair.bi.domain.enumeration.Action;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -83,6 +102,9 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "current_release_id", referencedColumnName = "id")
     private DashboardRelease currentRelease;
+
+    @ManyToOne
+    private Realm realm;
 
     public Dashboard add(DashboardRelease dashboardRelease) {
         dashboardRelease.setDashboard(this);

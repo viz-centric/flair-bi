@@ -78,8 +78,8 @@
             <loading-component show-loading="vm.loading"></loading-component>
         </div>
         <div class="sql-action">
-            <button ng-disabled="vm.isShowDataEnabled()" ng-click="vm.formatSql(vm.sql)" class="btn btn-primary">
-                Formate Query
+            <button ng-disabled="vm.isShowDataEnabled()" ng-if="vm.tabIndex==1" ng-click="vm.formatSql(vm.sql)" class="btn btn-primary" data-translate="flairbiApp.datasources.format.query">
+                Format Query
             </button>
         </div>
     </div>

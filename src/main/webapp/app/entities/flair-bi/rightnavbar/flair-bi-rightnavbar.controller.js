@@ -6,14 +6,14 @@
         .controller('FlairBiRightNavBarController', FlairBiRightNavBarController);
 
     FlairBiRightNavBarController.$inject = ['Visualizations', '$rootScope',
-        'entity', 'Features', '$uibModal',
+        'entity', 'states','Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies', '$timeout', "filterParametersService", "FilterStateManagerService",
-        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService"
+        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService", "configuration"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
-        entity, Features, $uibModal,
+        entity,states, Features, $uibModal,
         $state, $scope, featureEntities,
         Hierarchies, $timeout,
         filterParametersService,
@@ -21,7 +21,7 @@
         Visualmetadata,
         VisualDispatchService,
         VisualMetadataContainer,
-        $translate, schedulerService) {
+        $translate, schedulerService, configuration) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -93,6 +93,15 @@
             registerBookmarkUpdateDynamicDateRange();
             setDateRangeSubscription();
             filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
+
+            if (configuration.readOnly) {
+                var vms = states.viewState.visualMetadataSet || [];
+            } else {
+                var vms = states.visualMetadataSet || [];
+            }
+            vm.iFrames = vms.filter(function(item){
+                return item.metadataVisual.name === "Iframe";
+            })
         }
 
         ////////////////

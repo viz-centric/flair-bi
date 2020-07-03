@@ -29,7 +29,7 @@
 		</repository>
 	</distributionManagement>
 	<properties>
-    
+
 		<flair-messages.version>0.3.20</flair-messages.version>
 		<project-bi-common.version>1.4.16</project-bi-common.version>
 
@@ -760,6 +760,8 @@
 							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
 			</plugin>
 			<plugin>

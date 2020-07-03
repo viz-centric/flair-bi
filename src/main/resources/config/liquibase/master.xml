@@ -87,5 +87,8 @@
     <include file="config/liquibase/changelog/20200701600000_add_sorting_in_pivot_table.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200702200000_update_pivot_table_sorting_option.xml" relativeToChangelogFile="false"/>
     
+    <include file="config/liquibase/changelog/20200628183700_realm_table.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200628183701_populate_realm_id.xml" relativeToChangelogFile="false" />
+
 </databaseChangeLog>
 <!--@formatter:on-->

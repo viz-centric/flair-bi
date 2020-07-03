@@ -50,7 +50,6 @@
         function filterChangedSubscription() {
             var unsubscribe = $scope.$on('filterParametersService:filter-changed', function (event, newFilter) {
                 vm.selectedFilters = newFilter;
-                //setFilterInIframeURL(vm.selectedFilters);
             });
 
             $scope.$on('$destroy', unsubscribe);
@@ -100,7 +99,7 @@
 
         function addFilterInIframeURL() {
             var filters = filterParametersService.getSelectedFilter();
-            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.view.viewDashboard.dashboardDatasource.id.toString(),vm.dimensions);
+            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimensions);
         }
     }
 })();

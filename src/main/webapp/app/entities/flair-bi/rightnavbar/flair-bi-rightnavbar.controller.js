@@ -9,7 +9,7 @@
         'entity', 'states','Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies', '$timeout', "filterParametersService", "FilterStateManagerService",
-        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService", "configuration"
+        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService", "configuration","IFRAME"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
@@ -21,7 +21,7 @@
         Visualmetadata,
         VisualDispatchService,
         VisualMetadataContainer,
-        $translate, schedulerService, configuration) {
+        $translate, schedulerService, configuration,IFRAME) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -100,7 +100,7 @@
                 var vms = states.visualMetadataSet || [];
             }
             vm.iFrames = vms.filter(function(item){
-                return item.metadataVisual.name === "Iframe";
+                return item.metadataVisual.name === IFRAME.iframe;
             })
         }
 

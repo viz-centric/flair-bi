@@ -36,8 +36,8 @@
             dateToString,
             applyDefaultFilters : applyDefaultFilters,
             applyViewFeatureCriteria : applyViewFeatureCriteria,
-            removeFilterInIframeURL : removeFilterInIframeURL,
-            setFilterInIframeURL : setFilterInIframeURL
+            removeFilterInIframeURL: removeFilterInIframeURL,
+            setFilterInIframeURL: setFilterInIframeURL
 
         };
 
@@ -439,44 +439,75 @@
             };
         }
 
-        function setFilterInIframeURL(filters,iframes,dashboardDatasource,dimensions) {
-
+        function setFilterInIframeURL(filters, iframes, filterDimensions) {
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
-                var datasourceId = dashboardDatasource;
+                removeFilterInIframeURL(iframes);
                 iframes.forEach(element => {
                     var id = getParameterByName('datasourceId', element.properties[0].value)
-                    element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
-                    var filterUrl = {};
-                    if (datasourceId === id) {
+                    validateFilter(id, filtersList, filterDimensions, filters, element);
+                });
+            }
+        }
 
+        function getDateFilterValue(filterDimensions, dimension) {
+            return filterDimensions.filter(function (item) {
+                return item.name === dimension;
+            })
+
+        }
+        function validateFilter(id, filtersList, filterDimensions, filters, element) {
+            if (id) {
+                Features.query(
+                    {
+                        datasource: id,
+                        featureType: "DIMENSION"
+                    },
+                    function (dimensions) {
+                        var filterUrl = {};
                         filtersList.forEach(item => {
-
                             var validadimension = getDimensionMetaData(dimensions, item);
                             if (validadimension.length > 0) {
                                 if (filters[item]._meta.valueType === "dateRangeValueType") {
-                                    filterUrl[item] = {
-                                        value: [validadimension[0].metadata.currentDynamicDateRangeConfig.title],
-                                        type: "date-range"
-                                    }
+                                    filterUrl[item] = setDateFilterValue(filterDimensions, item, filters);
                                 }
                                 else {
                                     filterUrl[item] = Array(filters[item]);
                                 }
                             }
                         });
-
                         filterUrl = element.properties[0].value + "&filters=" + JSON.stringify(filterUrl);
                         filtersList.forEach(item => {
                             filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
                         });
                         element.properties[0].value = filterUrl;
-                    }
-                });
+                    },
+                    function (_) { }
+                );
             }
         }
 
-        function getDimensionMetaData(dimensions,dimension) {
+        function setDateFilterValue(filterDimensions, item, filters) {
+            var isfilterDimensions = getDateFilterValue(filterDimensions, item);
+            var type = "date-range";
+            var value;
+            if (isfilterDimensions[0].metadata.dateRangeTab === 2) {
+                type = "custom-date";
+                value = [isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title];
+                if (isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title === "Custom X days" || isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title === "Custom X hours") {
+                    value = [isfilterDimensions[0].metadata.currentDynamicDateRangeConfig.title, isfilterDimensions[0].metadata.customDynamicDateRange]
+                }
+            }
+            else {
+                value = [filters[item][0], filters[item][1]]
+            }
+
+            return {
+                value: value,
+                type: type
+            }
+        }
+        function getDimensionMetaData(dimensions, dimension) {
             return dimensions.filter(function (item) {
                 return item.name === dimension
             })
@@ -518,5 +549,7 @@
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
+
     }
 })();
+    

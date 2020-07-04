@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .factory('filterParametersService', filterParametersService);
 
-    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES','DYNAMIC_DATE_RANGE_CONFIG'];
+    filterParametersService.$inject = ['$rootScope', 'CryptoService', 'ConditionExpression', 'FILTER_TYPES', 'COMPARABLE_DATA_TYPES','DYNAMIC_DATE_RANGE_CONFIG','Features'];
 
-    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES,DYNAMIC_DATE_RANGE_CONFIG) {
+    function filterParametersService($rootScope, CryptoService, ConditionExpression, FILTER_TYPES, COMPARABLE_DATA_TYPES,DYNAMIC_DATE_RANGE_CONFIG,Features) {
 
         var paramObject = {};
         var selectedFilters={};

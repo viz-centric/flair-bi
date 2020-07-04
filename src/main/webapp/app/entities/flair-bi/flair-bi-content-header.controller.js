@@ -714,7 +714,7 @@
                         $rootScope.$broadcast("flairbiApp:filter");
                         $rootScope.$broadcast('flairbiApp:filter-add');
                         var filters = filterParametersService.get();
-                        filterParametersService.setFilterInIframeURL(filters,vm.iFrames,vm.view.viewDashboard.dashboardDatasource.id.toString(),vm.dimensions);
+                        filterParametersService.setFilterInIframeURL(filters,vm.iFrames,vm.dimensions);
                         recentBookmarkService.saveRecentBookmark(item.id, $stateParams.id);
                     }
                 );

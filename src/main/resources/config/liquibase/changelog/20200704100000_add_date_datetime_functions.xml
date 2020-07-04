@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="ir73" id="20200704100000">
+        <sql stripComments="true">
+            insert into functions (id,
+                name,
+                description,
+                value,
+                dimension_use,
+                measure_use,
+                validation)
+            (select MAX(id) + 1,
+                'date_time',
+                'Returns date and time string. For example 02-Jul-2020 23:29.',
+                'date_time(field_name)',
+                true,
+                false,
+                'date_time\(\w+\)'
+                FROM functions)
+            ON CONFLICT DO NOTHING;
+
+            insert into functions (id,
+                name,
+                description,
+                value,
+                dimension_use,
+                measure_use,
+                validation)
+            (select MAX(id) + 1,
+                'time',
+                'Returns time string. For example 23:29.',
+                'time(field_name)',
+                true,
+                false,
+                'time\(\w+\)'
+                FROM functions)
+            ON CONFLICT DO NOTHING;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

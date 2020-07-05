@@ -248,9 +248,9 @@
      */
     function constructMeasureField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
-        if (agg !== null && agg !== 'NONE') {
+        if (agg !== null) {
             return {
-                aggregation: agg,
+                aggregation: (agg !== 'NONE') ? agg : null,
                 name: fieldMeasure.feature.definition,
                 alias: fieldMeasure.feature.name,
             };
@@ -295,8 +295,7 @@
                 return result;
             });
 
-        var measureFields = this.fields
-            .filter(isMeasure)
+        var measureFields = measures
             .map(function (item) {
                 return constructMeasureField(item);
             });

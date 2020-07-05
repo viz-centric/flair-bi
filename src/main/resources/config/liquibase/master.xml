@@ -80,6 +80,7 @@
     <include file="config/liquibase/changelog/20200601100000_add_iframe_settings.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/2020070200000_update_column_propertytyprname_propertytype_iframe_setting.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200704100000_add_date_datetime_functions.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200705100000_aggregate_percent_function.xml" relativeToChangelogFile="false"/>
 
 
     

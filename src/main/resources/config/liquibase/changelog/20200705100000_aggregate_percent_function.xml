@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="ir73" id="20200705100000">
+        <sql stripComments="true">
+            update functions
+            set value = 'SUM(field_name1)/SUM(field_name2)*100',
+                dimension_use = false,
+                validation = '\w+\([\w]+\)\s*\/\w+\([\w]+\)\s*\*\s*\d+'
+            where name = 'percent';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

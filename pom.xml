@@ -760,9 +760,7 @@
 							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

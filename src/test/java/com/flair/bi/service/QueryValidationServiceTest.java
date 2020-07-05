@@ -1,5 +1,13 @@
 package com.flair.bi.service;
 
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+
 import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.service.dto.QueryValidationType;
@@ -10,13 +18,6 @@ import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.dto.SortDTO;
 import com.project.bi.query.expression.condition.impl.BetweenConditionExpression;
 import com.project.bi.query.expression.operations.ScalarOperation;
-import org.junit.Before;
-import org.junit.Test;
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class QueryValidationServiceTest {
 

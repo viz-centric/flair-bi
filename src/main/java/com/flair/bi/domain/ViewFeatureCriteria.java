@@ -1,9 +1,6 @@
 package com.flair.bi.domain;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.ToString;
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,39 +11,43 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
-@ToString(exclude = {"feature", "view"})
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+import lombok.ToString;
+
+@ToString(exclude = { "feature", "view" })
 @Data
 @Entity
 @Table(name = "view_feature_criteria")
 public class ViewFeatureCriteria implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @NotNull
-    @Column(nullable = false)
-    private String value;
+	@NotNull
+	@Column(nullable = false)
+	private String value;
 
-    @Column
-    private String metadata;
+	@Column
+	private String metadata;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    private Feature feature;
+	@ManyToOne(optional = false)
+	@NotNull
+	private Feature feature;
 
-    @ManyToOne
-    @NotNull
-    @JsonIgnore
-    private View view;
+	@ManyToOne
+	@NotNull
+	@JsonIgnore
+	private View view;
 
-    @PreRemove
-    public void preRemove() {
-        this.feature = null;
-    }
+	@PreRemove
+	public void preRemove() {
+		this.feature = null;
+	}
 
 }

@@ -1,5 +1,25 @@
 package com.flair.bi.web.rest;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Optional;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.ReleaseRequest;
@@ -17,27 +37,6 @@ import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.CreateViewReleaseRequestDTO;
 import com.querydsl.core.types.Predicate;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @Ignore
 public class ViewsResourceTest extends AbstractIntegrationTest {
@@ -67,12 +66,8 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 		viewDashboard.setId(19L);
 		request.setViewDashboard(viewDashboard);
 
-		ResponseEntity<View> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views",
-						HttpMethod.POST,
-						new HttpEntity<>(request),
-						View.class);
+		ResponseEntity<View> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/views", HttpMethod.POST, new HttpEntity<>(request), View.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
@@ -94,16 +89,12 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.save(any(View.class))).thenReturn(request2);
 
-		ResponseEntity<View> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views",
-						HttpMethod.POST,
-						new HttpEntity<>(request),
-						View.class);
+		ResponseEntity<View> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/views", HttpMethod.POST, new HttpEntity<>(request), View.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertEquals("view name", response.getBody().getViewName());
-		assertEquals(18L, (long)response.getBody().getId());
+		assertEquals(18L, (long) response.getBody().getId());
 	}
 
 	@Test
@@ -124,16 +115,12 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.save(any(View.class))).thenReturn(request2);
 
-		ResponseEntity<View> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views",
-						HttpMethod.PUT,
-						new HttpEntity<>(request),
-						View.class);
+		ResponseEntity<View> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/views", HttpMethod.PUT, new HttpEntity<>(request), View.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("view name", response.getBody().getViewName());
-		assertEquals(18L, (long)response.getBody().getId());
+		assertEquals(18L, (long) response.getBody().getId());
 	}
 
 	@Test
@@ -148,31 +135,24 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.findAllByPrincipalPermissions(any(Predicate.class))).thenReturn(Arrays.asList(request));
 
-		ResponseEntity<View[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						View[].class);
+		ResponseEntity<View[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()), View[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("view name", response.getBody()[0].getViewName());
-		assertEquals(18L, (long)response.getBody()[0].getId());
+		assertEquals(18L, (long) response.getBody()[0].getId());
 	}
 
 	@Test
 	public void getViewsCount() {
 		when(viewService.countByPrincipalPermissions()).thenReturn(7L);
 
-		ResponseEntity<CountDTO> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/count",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						CountDTO.class);
+		ResponseEntity<CountDTO> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/count", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				CountDTO.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(7L, (long)response.getBody().getCount());
+		assertEquals(7L, (long) response.getBody().getCount());
 	}
 
 	@Test
@@ -187,16 +167,13 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.recentlyCreated()).thenReturn(Arrays.asList(request));
 
-		ResponseEntity<View[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/recentlyCreated",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						View[].class);
+		ResponseEntity<View[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/recentlyCreated", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				View[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("view name", response.getBody()[0].getViewName());
-		assertEquals(18L, (long)response.getBody()[0].getId());
+		assertEquals(18L, (long) response.getBody()[0].getId());
 	}
 
 	@Test
@@ -211,16 +188,13 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.mostPopular()).thenReturn(Arrays.asList(request));
 
-		ResponseEntity<View[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/mostPopular",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						View[].class);
+		ResponseEntity<View[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/mostPopular", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				View[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("view name", response.getBody()[0].getViewName());
-		assertEquals(18L, (long)response.getBody()[0].getId());
+		assertEquals(18L, (long) response.getBody()[0].getId());
 	}
 
 	@Test
@@ -235,28 +209,21 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.findOne(eq(5L))).thenReturn(request);
 		when(userRepository.findOneByLogin(anyString())).thenReturn(Optional.of(new User()));
-		when(viewWatchRepository.findOne(any(ViewWatchId.class))).thenReturn(new ViewWatch());
+		when(viewWatchRepository.getOne(any(ViewWatchId.class))).thenReturn(new ViewWatch());
 
-		ResponseEntity<View> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						View.class);
+		ResponseEntity<View> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()), View.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("view name", response.getBody().getViewName());
-		assertEquals(18L, (long)response.getBody().getId());
+		assertEquals(18L, (long) response.getBody().getId());
 	}
 
 	@Test
 	public void deleteViews() {
-		ResponseEntity<View> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						View.class);
+		ResponseEntity<View> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				View.class);
 
 		verify(viewService, times(1)).delete(eq(5L));
 
@@ -270,12 +237,9 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.getCurrentEditingViewState(eq(5L))).thenReturn(t);
 
-		ResponseEntity<ViewState> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5/viewState",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						ViewState.class);
+		ResponseEntity<ViewState> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5/viewState", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				ViewState.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("16", response.getBody().getId());
@@ -290,12 +254,8 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 		viewState.setId("16");
 		when(viewService.saveViewState(eq(5L), any(ViewState.class))).thenReturn(viewState);
 
-		ResponseEntity<ViewState> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5/viewState",
-						HttpMethod.PUT,
-						new HttpEntity<>(dto),
-						ViewState.class);
+		ResponseEntity<ViewState> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/views/5/viewState", HttpMethod.PUT, new HttpEntity<>(dto), ViewState.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("16", response.getBody().getId());
@@ -312,12 +272,8 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 		View view = new View();
 		when(viewService.findOne(eq(5L))).thenReturn(view);
 
-		ResponseEntity<ReleaseRequest> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5/requestRelease",
-						HttpMethod.PUT,
-						new HttpEntity<>(dto),
-						ReleaseRequest.class);
+		ResponseEntity<ReleaseRequest> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5/requestRelease", HttpMethod.PUT, new HttpEntity<>(dto), ReleaseRequest.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("my comment", response.getBody().getComment());
@@ -330,12 +286,9 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.getViewReleases(eq(5L))).thenReturn(Arrays.asList(viewRelease));
 
-		ResponseEntity<ViewRelease[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5/releases",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						ViewRelease[].class);
+		ResponseEntity<ViewRelease[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5/releases", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				ViewRelease[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("my comment", response.getBody()[0].getComment());
@@ -348,12 +301,9 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.getCurrentViewStateRelease(eq(5L))).thenReturn(viewRelease);
 
-		ResponseEntity<ViewRelease> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5/releases/latest",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						ViewRelease.class);
+		ResponseEntity<ViewRelease> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5/releases/latest", HttpMethod.GET,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), ViewRelease.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("my comment", response.getBody().getComment());
@@ -366,12 +316,9 @@ public class ViewsResourceTest extends AbstractIntegrationTest {
 
 		when(viewService.getReleaseViewStateByVersion(eq(5L), eq(17L))).thenReturn(viewRelease);
 
-		ResponseEntity<ViewRelease> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/views/5/releases/17",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						ViewRelease.class);
+		ResponseEntity<ViewRelease> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/views/5/releases/17", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				ViewRelease.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("my comment", response.getBody().getComment());

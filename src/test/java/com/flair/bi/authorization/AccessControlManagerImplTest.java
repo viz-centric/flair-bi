@@ -25,7 +25,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -382,8 +381,8 @@ public class AccessControlManagerImplTest {
         Assert.assertTrue(perm.contains(new Permission("test", Action.READ, "test")));
         Assert.assertTrue(perm.contains(new Permission("test", Action.WRITE, "test")));
 
-        Assert.assertTrue(permissionRepository.findOne(new PermissionKey("test", Action.READ, "test")) != null);
-        Assert.assertTrue(permissionRepository.findOne(new PermissionKey("test", Action.WRITE, "test")) != null);
+        Assert.assertTrue(permissionRepository.getOne(new PermissionKey("test", Action.READ, "test")) != null);
+        Assert.assertTrue(permissionRepository.getOne(new PermissionKey("test", Action.WRITE, "test")) != null);
     }
 
     @Test
@@ -419,8 +418,8 @@ public class AccessControlManagerImplTest {
         accessControlManager.addPermissions(a);
         accessControlManager.removePermissions(a);
         // the entity does not exist in persistence storage
-        Assert.assertTrue(permissionRepository.findOne(new PermissionKey("a", Action.READ, "a")) == null);
-        Assert.assertTrue(permissionRepository.findOne(new PermissionKey("a", Action.WRITE, "a")) == null);
+        Assert.assertTrue(permissionRepository.getOne(new PermissionKey("a", Action.READ, "a")) == null);
+        Assert.assertTrue(permissionRepository.getOne(new PermissionKey("a", Action.WRITE, "a")) == null);
     }
 
     @Test
@@ -514,13 +513,13 @@ public class AccessControlManagerImplTest {
         accessControlManager.assignPermission("test", new Permission("test", Action.READ, "b"));
 
         // assert that user group has permissions
-        Assert.assertTrue(userGroupRepository.findOne("test").getPermissions()
+        Assert.assertTrue(userGroupRepository.getOne("test").getPermissions()
                 .contains(new Permission("test", Action.READ, "b")));
 
         accessControlManager.dissociatePermission("test", new Permission("test", Action.READ, "b"));
 
         // assert that user group does not have a permission
-        Assert.assertFalse(userGroupRepository.findOne("test").getPermissions()
+        Assert.assertFalse(userGroupRepository.getOne("test").getPermissions()
                 .contains(new Permission("test", Action.READ, "b")));
     }
 

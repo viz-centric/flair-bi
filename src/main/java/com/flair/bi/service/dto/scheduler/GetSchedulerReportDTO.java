@@ -8,6 +8,6 @@ import lombok.ToString;
 @Builder
 @ToString
 public class GetSchedulerReportDTO {
-    private final String message;
-    private final SchedulerNotificationDTO report;
+	private final String message;
+	private final SchedulerNotificationDTO report;
 }

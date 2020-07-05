@@ -1,8 +1,8 @@
 package com.flair.bi.repository;
 
-import com.flair.bi.domain.Release;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.NoRepositoryBean;
+
+import com.flair.bi.domain.Release;
 
 public interface ReleaseRepository extends JpaRepository<Release, Long> {
 }

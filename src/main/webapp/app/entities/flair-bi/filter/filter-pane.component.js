@@ -11,7 +11,8 @@
                 dimensions: '=',
                 view: '=',
                 type: '@',
-                tab: '='
+                tab: '=',
+                iframes: '='
             }
         });
 
@@ -81,6 +82,7 @@
                 filterParametersService.clear();
                 filterParametersService.saveSelectedFilter($rootScope.updateWidget);
                 filter();
+                filterParametersService.removeFilterInIframeURL(vm.iframes);
             }
         }
 
@@ -89,6 +91,12 @@
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
+            addFilterInIframeURL();
+        }
+
+        function addFilterInIframeURL() {
+            var filters = filterParametersService.getSelectedFilter();
+            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimensions);
         }
     }
 })();

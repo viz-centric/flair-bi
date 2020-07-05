@@ -8,18 +8,18 @@ import javax.persistence.Entity;
 @DiscriminatorValue(value = "color_picker")
 public class ColorPickerProperty extends Property {
 
-    @Column(name = "color_picker_value")
-    private String value;
+	@Column(name = "color_picker_value")
+	private String value;
 
-    public ColorPickerProperty() {
-        this.setType("COLOR_PICKER");
-    }
+	public ColorPickerProperty() {
+		this.setType("COLOR_PICKER");
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

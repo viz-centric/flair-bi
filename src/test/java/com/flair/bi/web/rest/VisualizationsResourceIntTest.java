@@ -1,28 +1,31 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.Visualization;
-import com.flair.bi.domain.enumeration.Constraint;
-import com.flair.bi.domain.enumeration.FeatureType;
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.domain.viewwatch.ViewWatch;
-import com.flair.bi.service.VisualizationService;
-import com.flair.bi.service.dto.IdentifierDTO;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.util.Arrays;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.Visualization;
+import com.flair.bi.domain.enumeration.Constraint;
+import com.flair.bi.domain.enumeration.FeatureType;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.service.VisualizationService;
+import com.flair.bi.service.dto.IdentifierDTO;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 @Ignore
 public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
@@ -40,18 +43,14 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
 
-		when(visualizationService.save(any(Visualization.class)))
-				.thenReturn(visualization1);
+		when(visualizationService.save(any(Visualization.class))).thenReturn(visualization1);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations",
-						HttpMethod.POST,
-						new HttpEntity<>(visualization),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations", HttpMethod.POST, new HttpEntity<>(visualization),
+				Visualization.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(7L, (long)response.getBody().getId());
+		assertEquals(7L, (long) response.getBody().getId());
 		assertEquals("func name", response.getBody().getFunctionname());
 		assertEquals("vis name", response.getBody().getName());
 	}
@@ -63,12 +62,9 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setName("vis name");
 		visualization.setId(7L);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations",
-						HttpMethod.POST,
-						new HttpEntity<>(visualization),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations", HttpMethod.POST, new HttpEntity<>(visualization),
+				Visualization.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
@@ -84,18 +80,13 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
 
-		when(visualizationService.save(any(Visualization.class)))
-				.thenReturn(visualization1);
+		when(visualizationService.save(any(Visualization.class))).thenReturn(visualization1);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations",
-						HttpMethod.PUT,
-						new HttpEntity<>(visualization),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations", HttpMethod.PUT, new HttpEntity<>(visualization), Visualization.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(7L, (long)response.getBody().getId());
+		assertEquals(7L, (long) response.getBody().getId());
 		assertEquals("func name", response.getBody().getFunctionname());
 		assertEquals("vis name", response.getBody().getName());
 	}
@@ -112,18 +103,13 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
 
-		when(visualizationService.save(any(Visualization.class)))
-				.thenReturn(visualization1);
+		when(visualizationService.save(any(Visualization.class))).thenReturn(visualization1);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations",
-						HttpMethod.PUT,
-						new HttpEntity<>(visualization),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations", HttpMethod.PUT, new HttpEntity<>(visualization), Visualization.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(7L, (long)response.getBody().getId());
+		assertEquals(7L, (long) response.getBody().getId());
 		assertEquals("func name", response.getBody().getFunctionname());
 		assertEquals("vis name", response.getBody().getName());
 	}
@@ -135,18 +121,14 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setName("vis name");
 		visualization.setFunctionname("func name");
 
-		when(visualizationService.findAll())
-				.thenReturn(Arrays.asList(visualization));
+		when(visualizationService.findAll()).thenReturn(Arrays.asList(visualization));
 
-		ResponseEntity<Visualization[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						Visualization[].class);
+		ResponseEntity<Visualization[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				Visualization[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(10L, (long)response.getBody()[0].getId());
+		assertEquals(10L, (long) response.getBody()[0].getId());
 		assertEquals("vis name", response.getBody()[0].getName());
 		assertEquals("func name", response.getBody()[0].getFunctionname());
 	}
@@ -161,28 +143,22 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 		when(visualizationService.findOne(eq(10L))).thenReturn(visualization);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				Visualization.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(10L, (long)response.getBody().getId());
+		assertEquals(10L, (long) response.getBody().getId());
 		assertEquals("func name", response.getBody().getFunctionname());
 		assertEquals("vis name", response.getBody().getName());
-		assertEquals(5L, (long)response.getBody().getCustomId());
+		assertEquals(5L, (long) response.getBody().getCustomId());
 	}
 
 	@Test
 	public void deleteVisualizations() {
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				Visualization.class);
 
 		verify(visualizationService, times(1)).delete(eq(10L));
 
@@ -197,18 +173,14 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		fieldType.setOrder(2);
 		fieldType.setFeatureType(FeatureType.DIMENSION);
 
-		when(visualizationService.getFieldType(eq(10L), eq(11L)))
-				.thenReturn(fieldType);
+		when(visualizationService.getFieldType(eq(10L), eq(11L))).thenReturn(fieldType);
 
-		ResponseEntity<FieldType> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10/fieldTypes/11",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						FieldType.class);
+		ResponseEntity<FieldType> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10/fieldTypes/11", HttpMethod.GET,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), FieldType.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(5L, (long)response.getBody().getId());
+		assertEquals(5L, (long) response.getBody().getId());
 		assertEquals(Constraint.REQUIRED, response.getBody().getConstraint());
 		assertEquals(2, response.getBody().getOrder());
 		assertEquals(FeatureType.DIMENSION, response.getBody().getFeatureType());
@@ -221,8 +193,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		fieldType.setOrder(2);
 		fieldType.setFeatureType(FeatureType.DIMENSION);
 
-		when(visualizationService.getFieldType(eq(10L), eq(11L)))
-				.thenReturn(fieldType);
+		when(visualizationService.getFieldType(eq(10L), eq(11L))).thenReturn(fieldType);
 
 		Visualization visualization = new Visualization();
 		visualization.setId(10L);
@@ -230,31 +201,24 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setName("vis name");
 		visualization.setFunctionname("func name");
 
-		when(visualizationService.saveFieldType(eq(10L), any(FieldType.class)))
-				.thenReturn(visualization);
+		when(visualizationService.saveFieldType(eq(10L), any(FieldType.class))).thenReturn(visualization);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10/fieldTypes",
-						HttpMethod.POST,
-						new HttpEntity<>(fieldType),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10/fieldTypes", HttpMethod.POST, new HttpEntity<>(fieldType),
+				Visualization.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(10L, (long)response.getBody().getId());
-		assertEquals(9, (int)response.getBody().getCustomId());
+		assertEquals(10L, (long) response.getBody().getId());
+		assertEquals(9, (int) response.getBody().getCustomId());
 		assertEquals("vis name", response.getBody().getName());
 		assertEquals("func name", response.getBody().getFunctionname());
 	}
 
 	@Test
 	public void deleteFieldType() {
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10/fieldTypes/11",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10/fieldTypes/11", HttpMethod.DELETE,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), Visualization.class);
 
 		verify(visualizationService, times(1)).deleteFieldType(eq(10L), eq(11L));
 
@@ -270,15 +234,12 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		t.setId(18L);
 		when(visualizationService.assignPropertyType(eq(10L), eq(27L))).thenReturn(t);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10/propertyTypes",
-						HttpMethod.POST,
-						new HttpEntity<>(dto),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10/propertyTypes", HttpMethod.POST, new HttpEntity<>(dto),
+				Visualization.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(18L, (long)response.getBody().getId());
+		assertEquals(18L, (long) response.getBody().getId());
 	}
 
 	@Test
@@ -287,14 +248,11 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		t.setId(18L);
 		when(visualizationService.removePropertyType(eq(10L), eq(18L))).thenReturn(t);
 
-		ResponseEntity<Visualization> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/visualizations/10/propertyTypes/18",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						Visualization.class);
+		ResponseEntity<Visualization> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/visualizations/10/propertyTypes/18", HttpMethod.DELETE,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), Visualization.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(18L, (long)response.getBody().getId());
+		assertEquals(18L, (long) response.getBody().getId());
 	}
 }

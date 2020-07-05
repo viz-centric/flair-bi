@@ -1345,7 +1345,8 @@ nav.navbar-static-top {
           -moz-flex-flow: row wrap;
           -ms-flex-flow: row wrap;
           flex-flow: row wrap;
-          justify-content: space-around; }
+          justify-content: space-around;
+          min-height: auto; }
           #slider .resource-nav .panel .panel-body .list-group .visualContainer .visual-items {
             margin-top: 10px;
             padding: 10px 15px; }
@@ -3192,7 +3193,7 @@ input[type="search"] {
   width: -webkit-calc(100% - 16px); }
 
 .container-margin-top {
-  margin-top: 48px; }
+  margin-top: 40px; }
 
 /* This element is used for dashboards and views components*/
 .info-card {
@@ -5731,7 +5732,7 @@ ui bootstrap tweaks
 /* jhipster-needle-css-add-main JHipster will add new css style */
 .content-header-container {
   background-color: #fafafa;
-  margin: 50px -15px;
+  margin: 41px -15px;
   padding: 10px;
   margin-bottom: 0px; }
   .content-header-container .header-text h2 {
@@ -6691,6 +6692,11 @@ disabled look for disabled choices in the results dropdown
         overflow: scroll;
         max-height: 250px;
         width: 100%; }
+      #dataSource-holder .window-holder .window-body .sql-actions {
+        display: flex; }
+        #dataSource-holder .window-holder .window-body .sql-actions .sql-action {
+          margin-right: 5px;
+          margin-left: 15px; }
 
 .dataSource-sidebar {
   width: 190px;
@@ -6713,6 +6719,36 @@ disabled look for disabled choices in the results dropdown
     .dataSource-sidebar .step-line svg {
       width: 2px;
       height: 45px; }
+
+.sql-query-container {
+  position: relative;
+  margin-left: 29px; }
+  .sql-query-container .sql-query-area {
+    overflow: hidden;
+    line-height: 13px;
+    font-size: 13px;
+    border: 1px solid #ededed;
+    padding: 10px;
+    font-family: monospace;
+    margin: 0;
+    display: block;
+    outline: none; }
+  .sql-query-container .sql-query-area:focus {
+    border-color: #439dd3; }
+  .sql-query-container .line-nums {
+    font-size: 13px;
+    line-height: 13px;
+    padding: 10px 4px;
+    font-family: monospace;
+    background: #f6f8f8;
+    position: absolute;
+    width: 30px;
+    left: -28px;
+    bottom: 0;
+    top: 0;
+    text-align: right;
+    border: 1px solid #ededed;
+    overflow: hidden; }
 
 .common-create-popup .modal-header {
   background-color: #f6f8f8; }

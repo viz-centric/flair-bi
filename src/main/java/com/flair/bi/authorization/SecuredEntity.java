@@ -1,8 +1,6 @@
 package com.flair.bi.authorization;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.View;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 

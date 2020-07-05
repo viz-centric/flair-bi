@@ -16,8 +16,8 @@
         }
     });
 
-    DatasourceWizardStepController.$inject = ["$scope", "$timeout", "Datasources", "$rootScope", "$translate", "Query", "Connections", "WizardHandler", "$q", "AlertService", "QueryValidationService", "$uibModal", 'Toastr'];
-    function DatasourceWizardStepController($scope, $timeout, Datasources, $rootScope, $translate, Query, Connections, WizardHandler, $q, AlertService, QueryValidationService, $uibModal, Toastr) {
+    DatasourceWizardStepController.$inject = ["$scope", "$timeout", "Datasources", "$rootScope", "$translate", "Query", "Connections", "WizardHandler", "$q", "AlertService", "QueryValidationService", "$uibModal", 'Toastr','SqlFormatter'];
+    function DatasourceWizardStepController($scope, $timeout, Datasources, $rootScope, $translate, Query, Connections, WizardHandler, $q, AlertService, QueryValidationService, $uibModal, Toastr,SqlFormatter) {
         var vm = this;
         var delayedSearch;
 
@@ -39,6 +39,8 @@
         vm.showData = showData;
         vm.onTabClick = onTabClick;
         vm.data = [];
+        vm.formatSql = formatSql;
+        vm.sqlQuerylength = 10;
 
 
 
@@ -79,6 +81,9 @@
         function onSelectedTableChanged(table) {
             vm.selectedTable = table;
             vm.sql = table.sql || vm.sql;
+            if(vm.tabIndex==1){
+                formatSql(vm.sql);
+            }
         }
 
         function onSubmitDisabled() {
@@ -334,5 +339,14 @@
                 vm.loading = false;
             });
         }
+
+        function formatSql(sqlQuery){
+            vm.lines = [];
+            var result = SqlFormatter.formatSql(sqlQuery);
+            vm.lines = result.split('\n');
+            vm.sqlQuerylength = vm.lines.length+1;
+            vm.sql = result;
+        }
+
     }
 })();

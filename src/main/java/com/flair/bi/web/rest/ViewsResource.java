@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
@@ -43,6 +42,7 @@ import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.querydsl.core.types.Predicate;
 
+import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -143,7 +143,7 @@ public class ViewsResource {
 	 * @param pageable       pageable if paginated wanted
 	 * @param shouldPaginate if query is paginated
 	 * @return the ResponseEntity with status 200 (OK) and the list of views in body
-	 * @throws URISyntaxException
+	 * @throws URISyntaxException when URI cannot be constructed
 	 */
 	@GetMapping("/views")
 	@Timed

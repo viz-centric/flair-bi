@@ -1,4 +1,4 @@
-FROM postgres:9.4-alpine
+FROM postgres:11.8-alpine
 
 
 ## COpy all SSL materials and change owner to postgres:postgres and chmod to 0600

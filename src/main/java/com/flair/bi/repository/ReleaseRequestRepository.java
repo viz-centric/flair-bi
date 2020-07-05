@@ -1,11 +1,12 @@
 package com.flair.bi.repository;
 
-import com.flair.bi.domain.ReleaseRequest;
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
+import com.flair.bi.domain.ReleaseRequest;
 
 public interface ReleaseRequestRepository extends JpaRepository<ReleaseRequest, Long> {
 
-    Collection<ReleaseRequest> findByReleaseId(Long releaseId);
+	Collection<ReleaseRequest> findByReleaseId(Long releaseId);
 }

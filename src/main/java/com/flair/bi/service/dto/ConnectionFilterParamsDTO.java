@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ConnectionFilterParamsDTO {
 
-    private String linkId;
-    private Long connectionType;
+	private String linkId;
+	private Long connectionType;
 
 }

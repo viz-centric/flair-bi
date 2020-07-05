@@ -1,28 +1,16 @@
 package com.flair.bi.view;
 
-import com.flair.bi.authorization.AccessControlManager;
-import com.flair.bi.domain.*;
-import com.flair.bi.domain.enumeration.Action;
-import com.flair.bi.domain.security.Permission;
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.repository.ViewReleaseRepository;
-import com.flair.bi.repository.ViewRepository;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.BookMarkWatchService;
-import com.flair.bi.service.ViewWatchService;
-import com.flair.bi.view.export.ViewExportDTO;
-import com.flair.bi.web.rest.errors.EntityNotFoundException;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-import groovy.time.BaseDuration.From;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.ektorp.DocumentNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,10 +21,28 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.domain.QView;
+import com.flair.bi.domain.Release;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.domain.ViewState;
+import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.security.Permission;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.repository.UserRepository;
+import com.flair.bi.repository.ViewRepository;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.BookMarkWatchService;
+import com.flair.bi.service.ViewWatchService;
+import com.flair.bi.view.export.ViewExportDTO;
+import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for managing View.
@@ -191,8 +197,8 @@ class ViewServiceImpl implements ViewService {
 	@Transactional(readOnly = true)
 	public List<View> recentlyCreated() {
 		final BooleanExpression createdBy = QView.view.createdBy.eq(SecurityUtils.getCurrentUserLogin());
-		final Sort sort = new Sort(Sort.Direction.DESC, "createdDate");
-		final PageRequest pageRequest = new PageRequest(0, 5, sort);
+		final Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+		final PageRequest pageRequest = PageRequest.of(0, 5, sort);
 
 		return viewRepository.findAll(createdBy.and(userHasPermission()), pageRequest).getContent();
 	}
@@ -200,8 +206,8 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<View> mostPopular() {
-		final Sort sort = new Sort(Sort.Direction.DESC, "watchCount");
-		final PageRequest pageRequest = new PageRequest(0, 5, sort);
+		final Sort sort = Sort.by(Sort.Direction.DESC, "watchCount");
+		final PageRequest pageRequest = PageRequest.of(0, 5, sort);
 		return viewRepository.findAll(userHasPermission(), pageRequest).getContent();
 	}
 
@@ -215,7 +221,7 @@ class ViewServiceImpl implements ViewService {
 	@Transactional(readOnly = true)
 	public View findOne(Long id) {
 		log.debug("Request to get View : {}", id);
-		View view = viewRepository.findOne(id);
+		View view = viewRepository.getOne(id);
 		viewWatchService.saveViewWatch(SecurityUtils.getCurrentUserLogin(), view);
 		return view;
 	}
@@ -229,7 +235,7 @@ class ViewServiceImpl implements ViewService {
 	public void delete(Long id) {
 		log.debug("Request to delete View : {}", id);
 		try {
-			final View view = viewRepository.findOne(id);
+			final View view = viewRepository.getOne(id);
 			if (view.isPublished() && !accessControlManager.hasAccess(id.toString(), Action.DELETE_PUBLISHED, "VIEW")) {
 				throw new AccessDeniedException("User does not have a priviledge");
 			}
@@ -267,11 +273,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewState getCurrentEditingViewState(Long viewId) {
-		View view = viewRepository.findOne(viewId);
-
-		if (null == view) {
-			throw new EntityNotFoundException("no view");
-		}
+		final View view = viewRepository.getOne(viewId);
 
 		return viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
 	}
@@ -285,13 +287,9 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewState saveViewState(Long viewId, ViewState viewState) {
-		View view = viewRepository.findOne(viewId);
+		final View view = viewRepository.getOne(viewId);
 
-		if (null == view) {
-			throw new EntityNotFoundException("View not found");
-		}
-
-		ViewState vs = viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
+		final ViewState vs = viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
 		if (null == viewState || vs.isReadOnly()) {
 			throw new EntityNotFoundException("View state not found");
 		}
@@ -316,7 +314,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewRelease getCurrentViewStateRelease(Long viewId) {
-		View view = viewRepository.findOne(viewId);
+		View view = viewRepository.getOne(viewId);
 
 		if (view.getCurrentRelease() == null) {
 			return null;
@@ -336,10 +334,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewRelease getReleaseViewStateByVersion(Long viewId, Long version) {
-		View view = viewRepository.findOne(viewId);
-		if (null == view) {
-			throw new EntityNotFoundException("No view");
-		}
+		View view = viewRepository.getOne(viewId);
 
 		if (view.getCurrentRelease() != null && view.getCurrentRelease().getVersionNumber().equals(version)) {
 			ViewState state = viewStateCouchDbRepository.get(view.getCurrentRelease().getViewState().getId());
@@ -362,8 +357,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public List<ViewRelease> getViewReleases(Long viewId) {
-		return Optional.ofNullable(viewId).map(viewRepository::findOne).map(View::getReleases).map(ArrayList::new)
-				.orElse(new ArrayList<>());
+		return viewRepository.findById(viewId).map(View::getReleases).map(ArrayList::new).orElse(new ArrayList<>());
 	}
 
 	/**
@@ -381,7 +375,7 @@ class ViewServiceImpl implements ViewService {
 			throw new IllegalArgumentException("Must be approved");
 		}
 
-		View view = viewRepository.findOne(id);
+		View view = viewRepository.getOne(id);
 		view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
 
 		// load view state
@@ -422,7 +416,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public View changeCurrentRelease(Long id, Long version) {
-		return Optional.ofNullable(id).map(viewRepository::findOne).map(x -> {
+		return viewRepository.findById(id).map(x -> {
 			ViewRelease viewRelease = x.getReleases().stream()
 					.filter(y -> y.getReleaseStatus().equals(Release.Status.APPROVED))
 					.filter(y -> y.getVersionNumber().equals(version)).findFirst().orElse(null);
@@ -466,7 +460,7 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	@Transactional(readOnly = true)
 	public ViewExportDTO exportView(Long id) {
-		return Optional.ofNullable(viewRepository.findOne(id)).map(view -> {
+		return viewRepository.findById(id).map(view -> {
 			view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
 			return ViewExportDTO.from(view);
 		}).orElse(null);

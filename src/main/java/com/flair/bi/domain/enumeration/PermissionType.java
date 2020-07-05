@@ -1,9 +1,10 @@
 package com.flair.bi.domain.enumeration;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public enum PermissionType {
 
@@ -22,7 +23,10 @@ public enum PermissionType {
     /**
      * Permission type related to {@link VisualMetadata} and it is dynamically created
      */
-    VISUAL_METADATA("VISUAL_METADATA");
+    VISUAL_METADATA("VISUAL_METADATA"),
+
+
+    DATASOURCE("DATASOURCE");
 
 
     private final String type;

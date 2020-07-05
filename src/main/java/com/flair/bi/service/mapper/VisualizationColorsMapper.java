@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.*;
-import com.flair.bi.service.dto.VisualizationColorsDTO;
-
-import org.mapstruct.*;
 import java.util.List;
+
+import org.mapstruct.Mapper;
+
+import com.flair.bi.domain.VisualizationColors;
+import com.flair.bi.service.dto.VisualizationColorsDTO;
 
 /**
  * Mapper for the entity VisualizationColors and its DTO VisualizationColorsDTO.
@@ -12,11 +13,13 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {})
 public interface VisualizationColorsMapper {
 
-    VisualizationColorsDTO visualizationColorsToVisualizationColorsDTO(VisualizationColors visualizationColors);
+	VisualizationColorsDTO visualizationColorsToVisualizationColorsDTO(VisualizationColors visualizationColors);
 
-    List<VisualizationColorsDTO> visualizationColorsToVisualizationColorsDTOs(List<VisualizationColors> visualizationColors);
+	List<VisualizationColorsDTO> visualizationColorsToVisualizationColorsDTOs(
+			List<VisualizationColors> visualizationColors);
 
-    VisualizationColors visualizationColorsDTOToVisualizationColors(VisualizationColorsDTO visualizationColorsDTO);
+	VisualizationColors visualizationColorsDTOToVisualizationColors(VisualizationColorsDTO visualizationColorsDTO);
 
-    List<VisualizationColors> visualizationColorsDTOsToVisualizationColors(List<VisualizationColorsDTO> visualizationColorsDTOs);
+	List<VisualizationColors> visualizationColorsDTOsToVisualizationColors(
+			List<VisualizationColorsDTO> visualizationColorsDTOs);
 }

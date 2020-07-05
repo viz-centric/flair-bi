@@ -8,6 +8,6 @@ import lombok.ToString;
 @Builder
 @ToString
 public class GetSchedulerReportLogDTO {
-    private final SchedulerLogDTO reportLog;
-    private final ApiErrorDTO error;
+	private final SchedulerLogDTO reportLog;
+	private final ApiErrorDTO error;
 }

@@ -1,10 +1,11 @@
 package com.flair.bi.service.mapper;
 
-import com.flair.bi.domain.*;
-import com.flair.bi.service.dto.FunctionsDTO;
-
-import org.mapstruct.*;
 import java.util.List;
+
+import org.mapstruct.Mapper;
+
+import com.flair.bi.domain.Functions;
+import com.flair.bi.service.dto.FunctionsDTO;
 
 /**
  * Mapper for the entity Functions and its DTO FunctionsDTO.
@@ -12,11 +13,11 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {})
 public interface FunctionsMapper {
 
-    FunctionsDTO functionsToFunctionsDTO(Functions functions);
+	FunctionsDTO functionsToFunctionsDTO(Functions functions);
 
-    List<FunctionsDTO> functionsToFunctionsDTOs(List<Functions> functions);
+	List<FunctionsDTO> functionsToFunctionsDTOs(List<Functions> functions);
 
-    Functions functionsDTOToFunctions(FunctionsDTO functionsDTO);
+	Functions functionsDTOToFunctions(FunctionsDTO functionsDTO);
 
-    List<Functions> functionsDTOsToFunctions(List<FunctionsDTO> functionsDTOs);
+	List<Functions> functionsDTOsToFunctions(List<FunctionsDTO> functionsDTOs);
 }

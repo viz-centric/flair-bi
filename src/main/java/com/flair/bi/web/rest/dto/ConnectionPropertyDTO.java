@@ -7,16 +7,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ConnectionPropertyDTO {
 
-    private String displayName;
+	private String displayName;
 
-    private String fieldName;
+	private String fieldName;
 
-    private Integer order;
+	private Integer order;
 
-    private String fieldType;
+	private String fieldType;
 
-    private String defaultValue;
+	private String defaultValue;
 
-    private boolean required;
+	private boolean required;
 
 }

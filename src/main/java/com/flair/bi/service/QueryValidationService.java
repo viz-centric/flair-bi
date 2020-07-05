@@ -1,5 +1,14 @@
 package com.flair.bi.service;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.service.dto.QueryValidationType;
@@ -15,18 +24,11 @@ import com.project.bi.query.expression.condition.impl.CompareConditionExpression
 import com.project.bi.query.expression.condition.impl.ContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

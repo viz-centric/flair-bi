@@ -39,12 +39,12 @@
         vm.userGroups = [];
 
         vm.dashboards = [];
-        vm.getUserPermissions = getUserPermissions;
+        vm.onUserClick = onUserClick;
         vm.dashboardToggles = {};
         vm.orderByPermissionsByAction = orderByPermissionsByAction;
         vm.loadUserGroups = loadUserGroups;
         vm.loadUsers = loadUsers;
-        vm.getUserGroupPermissions = getUserGroupPermissions;
+        vm.onUserGroupClick = onUserGroupClick;
         vm.dashboardsItemsPerPage = paginationConstants.itemsPerPage;
         vm.userGroupsItemsPerPage = paginationConstants.itemsPerPage;
         vm.usersItemsPerPage = paginationConstants.itemsPerPage;
@@ -58,12 +58,14 @@
         vm.selectedEntity;
         vm.selected;
 
+        vm.tabIndex = 0;
+        vm.onTabClick = onTabClick;
         vm.changePermission = changePermission;
         vm.searchInput = null;
         vm.filterUser = filterUser;
         vm.filterUserGroup = filterUserGroup;
         vm.isPredefinedGroup = isPredefinedGroup;
-        vm.search = search;
+        vm.onSearchClick = onSearchClick;
         vm.toggle = toggle;
 
         var actionOrder = {
@@ -116,6 +118,22 @@
             }
         };
 
+        function onUserClick(username) {
+            vm.selectedEntity = username;
+            vm.selected = 'user';
+            onLoadItems();
+        }
+
+        function onUserGroupClick(groupName) {
+            vm.selectedEntity = groupName;
+            vm.selected = 'userGroup';
+            onLoadItems();
+        }
+
+        function onTabClick(index) {
+            vm.tabIndex = index;
+            loadAll();
+        }
 
         function range(start, end) {
             var ret = [];
@@ -277,10 +295,6 @@
             }
         }
 
-        function onPermissionChangeSuccess() {
-            reloadPage();
-        }
-
         function changeUserGroupPermission() {
             var changes = findChanges();
 
@@ -314,16 +328,19 @@
 
                 });
 
-                dashboard.views.forEach(function (view) {
-                    view.permissionMetadata.forEach(function (permissionV) {
-                        if (angular.isDefined(permissionV.value) && permissionV.hasIt !== permissionV.value) {
-                            changes.push({
-                                id: permissionV.permission.stringValue,
-                                action: permissionV.hasIt ? 'ADD' : 'REMOVE'
-                            });
-                        }
+                // for datasources there are no "views"
+                if (dashboard.views) {
+                    dashboard.views.forEach(function (view) {
+                        view.permissionMetadata.forEach(function (permissionV) {
+                            if (angular.isDefined(permissionV.value) && permissionV.hasIt !== permissionV.value) {
+                                changes.push({
+                                    id: permissionV.permission.stringValue,
+                                    action: permissionV.hasIt ? 'ADD' : 'REMOVE'
+                                });
+                            }
+                        });
                     });
-                });
+                }
 
             });
             return changes;
@@ -344,42 +361,43 @@
             });
         }
 
-
-
-
-
-
-        function reloadPage() {
-            $state.reload();
-        }
-
-        function search(){
-            if(vm.selected === 'user'){
-                User.searchDashboardPermissions({
-                    login: vm.selectedEntity,
-                    dashboardName : vm.searchCriteria,
-                    page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
-                    size: vm.dashboardsItemsPerPage
-                }, searchPermissionsSuccess, onError);
-                User.searchViewPermissions({
-                    login: vm.selectedEntity,
-                    viewName : vm.searchCriteria
-                }, searchPermissionsSuccess, onError);
-            }else{
-                UserGroup.searchDashboardPermissions({
-                    name: vm.selectedEntity,
-                    dashboardName : vm.searchCriteria,
-                    page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
-                    size: vm.dashboardsItemsPerPage
-                }, searchPermissionsSuccess, onError);
-                UserGroup.searchViewPermissions({
-                    name: vm.selectedEntity,
-                    viewName : vm.searchCriteria
-                }, searchPermissionsSuccess, onError);
+        function onSearchClick() {
+            if (vm.tabIndex === 0) {
+                searchDashboards();
+            } else if (vm.tabIndex === 1) {
+                searchDatasources();
             }
         }
 
-        function searchPermissionsSuccess(data){
+        function searchDatasources() {
+            if (vm.selected === 'user') {
+                User.searchDatasourcePermissions({
+                    login: vm.selectedEntity,
+                    name : vm.searchCriteria
+                }, onDatasourcesSearchSuccess, onError);
+            } else if (vm.selected === 'userGroup') {
+                UserGroup.searchDatasourcePermissions({
+                    groupName: vm.selectedEntity,
+                    name : vm.searchCriteria
+                }, onDatasourcesSearchSuccess, onError);
+            }
+        }
+
+        function onDatasourcesSearchSuccess(data){
+            vm.dashboards = data.map(function (item) {
+                return item.info;
+            });
+            groupToPages();
+        }
+
+        function searchDashboards(){
+            User.searchViewPermissions({
+                login: vm.selectedEntity,
+                viewName : vm.searchCriteria
+            }, onDashboardsSearchSuccess, onError);
+        }
+
+        function onDashboardsSearchSuccess(data){
             vm.dashboards = data.map(function (item) {
                 var dashboard = item.info;
                 dashboard.views = item.views.map(function (viewItem) {
@@ -390,26 +408,40 @@
             vm.groupToPages();
         }
 
-        function getUserGroupPermissions(name) {
-            vm.selectedEntity = name;
+        function getUserGroupDatasourcePermissions() {
+            vm.dashboards = [];
+            UserGroup.getDatasourcePermissions({
+                name: vm.selectedEntity,
+                page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
+                size: vm.dashboardsItemsPerPage
+            }, onDatasourcePermissionsSuccess, onError)
+        }
+
+        function getUserDatasourcePermissions() {
+            vm.dashboards = [];
+            User.getDatasourcePermissions({
+                login: vm.selectedEntity,
+                page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
+                size: vm.dashboardsItemsPerPage
+            }, onDatasourcePermissionsSuccess, onError)
+        }
+
+        function getUserGroupPermissions() {
             $localStorage.selectedEntity = vm.selectedEntity;
-            vm.selected = 'userGroup';
             $localStorage.selected = vm.selected;
             UserGroup.getDashboardPermissions({
-                name: name,
+                name: vm.selectedEntity,
                 page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
                 size: vm.dashboardsItemsPerPage
             }, dashboardPermissionsSuccess, onError)
         }
 
 
-        function getUserPermissions(id) {
-            vm.selectedEntity = id;
+        function getUserPermissions() {
             $localStorage.selectedEntity = vm.selectedEntity;
-            vm.selected = 'user';
             $localStorage.selected = vm.selected;
             User.getDashboardPermissions({
-                login: id,
+                login: vm.selectedEntity,
                 page: vm.pagingParams.dashboardsPage === 0 ? 0 : vm.pagingParams.dashboardsPage - 1,
                 size: vm.dashboardsItemsPerPage
             }, dashboardPermissionsSuccess, onError);
@@ -422,7 +454,7 @@
             User.query({
                 page: vm.pagingParams.usersPage === 0 ? 0 : vm.pagingParams.usersPage - 1,
                 size: vm.usersItemsPerPage
-            }, onSuccess, onError);
+            }, onLoadUsersSuccess, onError);
         }
 
         function loadUserGroups() {
@@ -432,18 +464,16 @@
             UserGroup.query({
                 page: vm.pagingParams.userGroupsPage === 0 ? 0 : vm.pagingParams.userGroupsPage - 1,
                 size: vm.userGroupsItemsPerPage
-            }, onUserGroupsSuccess, onError);
+            }, onLoadUserGroupsSuccess, onError);
         }
 
-        function onUserGroupsSuccess(data, headers) {
+        function onLoadUserGroupsSuccess(data, headers) {
             vm.userGroupLinks = ParseLinks.parse(headers('link'));
             vm.userGroupsTotalItems = headers('X-Total-Count');
             vm.userGroupsQueryCount = vm.userGroupsTotalItems;
             vm.userGroupsPage = vm.pagingParams.userGroupsPage;
             vm.userGroups = data;
-            if (vm.selected === 'userGroup') {
-                getUserGroupPermissions(vm.selectedEntity);
-            }
+            onLoadItems();
         }
 
         function orderByPermissionsByAction(permission) {
@@ -478,6 +508,17 @@
 
         }
 
+        function onDatasourcePermissionsSuccess(data, headers) {
+            vm.dashboardsLinks = ParseLinks.parse(headers('link'));
+            vm.dashboardsTotalItems = headers('X-Total-Count');
+            vm.dashboardsQueryCount = vm.dashboardsTotalItems;
+            vm.dashboardsPage = vm.pagingParams.dashboardsPage;
+            vm.dashboards = data.map(function (item) {
+                return item.info;
+            });
+            groupToPages();
+        }
+
 
         function getViewPermissionPromises(dashboardId, onRes, onError) {
             if (vm.selected === 'user') {
@@ -494,7 +535,7 @@
             }
         }
 
-        function onSuccess(data, headers) {
+        function onLoadUsersSuccess(data, headers) {
             //hide anonymous user from permision management: it's a required user for Spring Security
             var hiddenUsersSize = 0;
             for (var i in data) {
@@ -509,13 +550,27 @@
             vm.usersQueryCount = vm.usersTotalItems;
             vm.usersPage = vm.pagingParams.usersPage;
             vm.users = data;
-            if (vm.selected === 'user') {
-                getUserPermissions(vm.selectedEntity);
-            }
+            onLoadItems();
         }
 
         function onError(error) {
             AlertService.error(error.data.message);
+        }
+
+        function onLoadItems() {
+            if (vm.selected === 'user') {
+                if (vm.tabIndex === 0) {
+                    getUserPermissions();
+                } else {
+                    getUserDatasourcePermissions();
+                }
+            } else if (vm.selected === 'userGroup') {
+                if (vm.tabIndex === 0) {
+                    getUserGroupPermissions();
+                } else {
+                    getUserGroupDatasourcePermissions();
+                }
+            }
         }
 
     }

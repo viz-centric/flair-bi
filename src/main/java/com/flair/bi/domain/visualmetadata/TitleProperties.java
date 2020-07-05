@@ -8,40 +8,40 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TitleProperties {
 
-    private String titleText;
-    private String backgroundColor;
-    private String borderBottom;
-    private String color;
+	private String titleText;
+	private String backgroundColor;
+	private String borderBottom;
+	private String color;
 
-    public String getTitleText() {
-        return titleText;
-    }
+	public String getTitleText() {
+		return titleText;
+	}
 
-    public void setTitleText(String titleText) {
-        this.titleText = titleText;
-    }
+	public void setTitleText(String titleText) {
+		this.titleText = titleText;
+	}
 
-    public String getBackgroundColor() {
-        return backgroundColor;
-    }
+	public String getBackgroundColor() {
+		return backgroundColor;
+	}
 
-    public void setBackgroundColor(String backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
+	public void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
 
-    public String getBorderBottom() {
-        return borderBottom;
-    }
+	public String getBorderBottom() {
+		return borderBottom;
+	}
 
-    public void setBorderBottom(String borderBottom) {
-        this.borderBottom = borderBottom;
-    }
+	public void setBorderBottom(String borderBottom) {
+		this.borderBottom = borderBottom;
+	}
 
-    public String getColor() {
-        return color;
-    }
+	public String getColor() {
+		return color;
+	}
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+	public void setColor(String color) {
+		this.color = color;
+	}
 }

@@ -1,16 +1,15 @@
 package com.flair.bi.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
-import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.User;
+import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.util.HeaderUtil;
@@ -18,6 +17,8 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.querydsl.core.types.Predicate;
+
+import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -55,6 +56,7 @@ public class UserGroupResource {
     private static final String ENTITY_NAME = "userGroup";
     private final UserGroupService userGroupService;
     private final DashboardService dashboardService;
+    private final DatasourceService datasourceService;
     private final ViewService viewService;
     private final AccessControlManager accessControlManager;
 
@@ -217,6 +219,25 @@ public class UserGroupResource {
 
     }
 
+    @GetMapping("/userGroups/{name}/datasourcePermissions")
+    @Timed
+    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getDatasourcePermissionMetadataUserGroup(@PathVariable String name, @ApiParam Pageable pageable) throws URISyntaxException {
+        Page<Datasource> page = datasourceService.findAll(pageable);
+        UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
+
+        List<GranteePermissionReport<UserGroup>> body = page
+                .getContent()
+                .stream()
+                .map(x -> x.getGranteePermissionReport(userGroup))
+                .collect(Collectors.toList());
+
+        HttpHeaders headers = PaginationUtil.
+                generatePaginationHttpHeaders(page, "/api/userGroups/{name}/datasourcePermissions");
+        return new ResponseEntity<>(body, headers, HttpStatus.OK);
+
+    }
+
     @GetMapping("/userGroups/{name}/dashboardPermissions/{id}/viewPermissions")
     @Timed
     public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getViewPermissionMetadataUserGroup(@PathVariable String name, @PathVariable Long id) {
@@ -257,6 +278,23 @@ public class UserGroupResource {
             dashboardPermissions.add(dashboard.getDashboardGranteePermissionReport(userGroup,viewPermissions));
         }
         return ResponseEntity.ok(dashboardPermissions);
+    }
+
+    @GetMapping("/userGroups/{groupName}/datasourcePermissions/search")
+    @Timed
+    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> searchDatasourcePermissions(@QuerydslPredicate(root = Datasource.class) Predicate predicate,
+                                                                                                @PathVariable String groupName,
+                                                                                                @ApiParam Pageable pageable) {
+        Page<Datasource> page = datasourceService.findAll(predicate, pageable);
+        UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(groupName))
+                .orElseThrow(() ->
+                        new EntityNotFoundException(String.format("User group with name: %s was not found", groupName)));
+        List<GranteePermissionReport<UserGroup>> body = page
+                .getContent()
+                .stream()
+                .map(x -> x.getGranteePermissionReport(userGroup))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(body);
     }
 
 

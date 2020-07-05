@@ -1,5 +1,15 @@
 package com.flair.bi.service;
 
+import static com.flair.bi.web.rest.util.QueryGrpcUtils.toProtoConnection;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Datasource;
@@ -21,22 +31,16 @@ import com.google.common.collect.ImmutableMap;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
+
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
-
-import static com.flair.bi.web.rest.util.QueryGrpcUtils.toProtoConnection;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class GrpcQueryService {
 

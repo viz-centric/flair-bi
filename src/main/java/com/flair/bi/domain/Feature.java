@@ -1,5 +1,6 @@
 package com.flair.bi.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Entity
-@EntityListeners(value = {FeatureListener.class})
+@EntityListeners(value = { FeatureListener.class })
 @Table(name = "features")
 @ToString
 public class Feature extends AbstractAuditingEntity {
@@ -47,52 +48,50 @@ public class Feature extends AbstractAuditingEntity {
      */
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @NotNull
-    @Size(max = 40)
-    @Pattern(regexp = "[a-zA-Z_0-9]+")
-    @Column(name = "name", length = 40, nullable = false)
-    private String name;
+	@NotNull
+	@Size(max = 40)
+	@Pattern(regexp = "[a-zA-Z_0-9]+")
+	@Column(name = "name", length = 40, nullable = false)
+	private String name;
 
-    @NotNull
-    @Size(max = 40)
-    @Column(name = "type", length = 40, nullable = false)
-    private String type;
+	@NotNull
+	@Size(max = 40)
+	@Column(name = "type", length = 40, nullable = false)
+	private String type;
 
-    private Long functionId;
+	private Long functionId;
 
-    @NotNull
-    @Column(name = "feature_definition", nullable = false)
-    private String definition;
+	@NotNull
+	@Column(name = "feature_definition", nullable = false)
+	private String definition;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
-    @JoinColumn(name = "datasource_id",
-        foreignKey = @ForeignKey(name = "fk_datasource_id"),
-        referencedColumnName = "id")
-    private Datasource datasource;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@NotNull
+	@JoinColumn(name = "datasource_id", foreignKey = @ForeignKey(name = "fk_datasource_id"), referencedColumnName = "id")
+	private Datasource datasource;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "feature_type")
-    @NotNull
-    private FeatureType featureType;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "feature_type")
+	@NotNull
+	private FeatureType featureType;
 
-    @OneToMany(mappedBy = "feature")
-    private Set<Field> fields = new HashSet<>();
+	@OneToMany(mappedBy = "feature")
+	private Set<Field> fields = new HashSet<>();
 
-    @Column(name = "favourite_filter")
-    private Boolean favouriteFilter;
+	@Column(name = "favourite_filter")
+	private Boolean favouriteFilter;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "date_filter")
-    private DateFilterType dateFilter;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "date_filter")
+	private DateFilterType dateFilter;
 
-    public void clearFields() {
-        getFields().forEach(x -> x.setFeature(null));
-        getFields().clear();
-    }
+	public void clearFields() {
+		getFields().forEach(x -> x.setFeature(null));
+		getFields().clear();
+	}
 
 }

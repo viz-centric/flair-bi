@@ -4,22 +4,20 @@ package com.flair.bi.config.audit;
  * Enum for the different audit actions
  */
 public enum EntityAuditAction {
-    CREATE("CREATE"),
-    UPDATE("UPDATE"),
-    DELETE("DELETE");
+	CREATE("CREATE"), UPDATE("UPDATE"), DELETE("DELETE");
 
-    private String value;
+	private String value;
 
-    EntityAuditAction(final String value) {
-        this.value = value;
-    }
+	EntityAuditAction(final String value) {
+		this.value = value;
+	}
 
-    public String value() {
-        return value;
-    }
+	public String value() {
+		return value;
+	}
 
-    @Override
-    public String toString() {
-        return this.value();
-    }
+	@Override
+	public String toString() {
+		return this.value();
+	}
 }

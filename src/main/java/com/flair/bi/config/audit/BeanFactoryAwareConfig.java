@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BeanFactoryAwareConfig implements BeanFactoryAware {
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        EntityAuditEventListener.setBeanFactory(beanFactory);
-    }
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) {
+		EntityAuditEventListener.setBeanFactory(beanFactory);
+	}
 }

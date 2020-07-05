@@ -124,6 +124,18 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
         return this;
     }
 
+    public View add(ViewFeatureCriteria criteria){
+        criteria.setView(this);
+        viewFeatureCriterias.add(criteria);
+        return this;
+    }
+
+    public View remove(ViewFeatureCriteria criteria){
+        criteria.setView(null);
+        viewFeatureCriterias.remove(criteria);
+        return this;
+    }
+
     public View viewName(String viewName) {
         this.viewName = viewName;
         return this;

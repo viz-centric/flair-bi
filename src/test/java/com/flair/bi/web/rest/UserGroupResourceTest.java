@@ -1,15 +1,17 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.authorization.AccessControlManager;
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.View;
-import com.flair.bi.domain.security.Permission;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.security.UserGroupService;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.vm.ChangePermissionVM;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,16 +23,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.authorization.AccessControlManager;
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.security.Permission;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.security.UserGroupService;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.vm.ChangePermissionVM;
 
 @Ignore
 public class UserGroupResourceTest extends AbstractIntegrationTest {
@@ -48,15 +50,10 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 	public void createUserGroup() {
 		UserGroup userGroup1 = new UserGroup("userGroup1");
 
-		when(userGroupService.save(userGroup1))
-				.thenReturn(userGroup1);
+		when(userGroupService.save(userGroup1)).thenReturn(userGroup1);
 
-		ResponseEntity<UserGroup> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups",
-						HttpMethod.POST,
-						new HttpEntity<>(userGroup1),
-						UserGroup.class);
+		ResponseEntity<UserGroup> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/userGroups", HttpMethod.POST, new HttpEntity<>(userGroup1), UserGroup.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertEquals("userGroup1", response.getBody().getName());
@@ -65,18 +62,12 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 	@Test
 	public void createUserGroupFails() {
 		UserGroup userGroup1 = new UserGroup("userGroup1");
-		when(userGroupService.findOne("userGroup1"))
-				.thenReturn(userGroup1);
+		when(userGroupService.findOne("userGroup1")).thenReturn(userGroup1);
 
-		when(userGroupService.save(userGroup1))
-				.thenReturn(userGroup1);
+		when(userGroupService.save(userGroup1)).thenReturn(userGroup1);
 
-		ResponseEntity<UserGroup> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups",
-						HttpMethod.POST,
-						new HttpEntity<>(userGroup1),
-						UserGroup.class);
+		ResponseEntity<UserGroup> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/userGroups", HttpMethod.POST, new HttpEntity<>(userGroup1), UserGroup.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 		assertNull(response.getBody());
@@ -85,15 +76,10 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 	@Test
 	public void updateUserGroup() {
 		UserGroup userGroup1 = new UserGroup("userGroup1");
-		when(userGroupService.save(userGroup1))
-				.thenReturn(userGroup1);
+		when(userGroupService.save(userGroup1)).thenReturn(userGroup1);
 
-		ResponseEntity<UserGroup> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups",
-						HttpMethod.PUT,
-						new HttpEntity<>(userGroup1),
-						UserGroup.class);
+		ResponseEntity<UserGroup> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/userGroups", HttpMethod.PUT, new HttpEntity<>(userGroup1), UserGroup.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("userGroup1", response.getBody().getName());
@@ -104,15 +90,11 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setName("userGroup1");
 
-		when(userGroupService.findAll())
-				.thenReturn(Arrays.asList(userGroup));
+		when(userGroupService.findAll()).thenReturn(Arrays.asList(userGroup));
 
-		ResponseEntity<String[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/all",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						String[].class);
+		ResponseEntity<String[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/all", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				String[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("userGroup1", response.getBody()[0]);
@@ -123,15 +105,11 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setName("userGroup1");
 
-		when(userGroupService.findAll(any(Pageable.class)))
-				.thenReturn(new PageImpl(Arrays.asList(userGroup)));
+		when(userGroupService.findAll(any(Pageable.class))).thenReturn(new PageImpl(Arrays.asList(userGroup)));
 
-		ResponseEntity<UserGroup[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						UserGroup[].class);
+		ResponseEntity<UserGroup[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				UserGroup[].class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("userGroup1", response.getBody()[0].getName());
@@ -142,15 +120,11 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setName("userGroup1");
 
-		when(userGroupService.findOne(eq("superman")))
-				.thenReturn(userGroup);
+		when(userGroupService.findOne(eq("superman"))).thenReturn(userGroup);
 
-		ResponseEntity<UserGroup> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						UserGroup.class);
+		ResponseEntity<UserGroup> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				UserGroup.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("userGroup1", response.getBody().getName());
@@ -161,17 +135,13 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		UserGroup userGroup = new UserGroup();
 		userGroup.setName("userGroup1");
 
-		when(userGroupService.findOne(eq("superman")))
-				.thenReturn(userGroup);
+		when(userGroupService.findOne(eq("superman"))).thenReturn(userGroup);
 
 		when(userGroupService.isNotPredefinedGroup(eq("superman"))).thenReturn(true);
 
-		ResponseEntity<UserGroup> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						UserGroup.class);
+		ResponseEntity<UserGroup> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				UserGroup.class);
 
 		verify(userGroupService, times(1)).delete(eq("superman"));
 
@@ -185,12 +155,9 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 
 		when(userGroupService.isNotPredefinedGroup(eq("superman"))).thenReturn(false);
 
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				String.class);
 
 		verify(userGroupService, times(0)).delete(eq("superman"));
 
@@ -199,12 +166,9 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 
 	@Test
 	public void addPermission() {
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman/permissions/cool_permis_sion",
-						HttpMethod.POST,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman/permissions/cool_permis_sion", HttpMethod.POST,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), String.class);
 
 		verify(accessControlManager, times(1)).assignPermission(eq("superman"), any(Permission.class));
 
@@ -213,12 +177,9 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 
 	@Test
 	public void removePermission() {
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman/permissions/cool_permis_sion",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman/permissions/cool_permis_sion", HttpMethod.DELETE,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), String.class);
 
 		verify(accessControlManager, times(1)).dissociatePermission(eq("superman"), any(Permission.class));
 
@@ -236,12 +197,9 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		group.setName("superman");
 		when(userGroupService.findOne(eq("superman"))).thenReturn(group);
 
-		ResponseEntity<List> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman/dashboardPermissions",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						List.class);
+		ResponseEntity<List> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman/dashboardPermissions", HttpMethod.GET,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), List.class);
 
 		List body = response.getBody();
 		Map item = (Map) body.get(0);
@@ -263,12 +221,9 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		group.setName("superman");
 		when(userGroupService.findOne(eq("superman"))).thenReturn(group);
 
-		ResponseEntity<List> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman/dashboardPermissions/7/viewPermissions",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						List.class);
+		ResponseEntity<List> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman/dashboardPermissions/7/viewPermissions", HttpMethod.GET,
+				new HttpEntity<>(new LinkedMultiValueMap<>()), List.class);
 
 		List body = response.getBody();
 		Map item = (Map) body.get(0);
@@ -277,7 +232,7 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("superman", grantee.get("name"));
-		assertEquals(19, (int)info.get("id"));
+		assertEquals(19, (int) info.get("id"));
 	}
 
 	@Test
@@ -290,13 +245,9 @@ public class UserGroupResourceTest extends AbstractIntegrationTest {
 		vm2.setAction(ChangePermissionVM.Action.REMOVE);
 		vm2.setId("three_four_five");
 
-
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/userGroups/superman/changePermissions",
-						HttpMethod.PUT,
-						new HttpEntity<>(Arrays.asList(vm, vm2)),
-						String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/userGroups/superman/changePermissions", HttpMethod.PUT,
+				new HttpEntity<>(Arrays.asList(vm, vm2)), String.class);
 
 		verify(accessControlManager, times(1)).assignPermission(eq("superman"), any(Permission.class));
 		verify(accessControlManager, times(1)).dissociatePermission(eq("superman"), any(Permission.class));

@@ -1,7 +1,22 @@
 package com.flair.bi.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
 import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.FlairbiApp;
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Dashboard;
@@ -9,6 +24,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.view.ViewService;
@@ -19,33 +35,16 @@ import com.flair.bi.web.rest.vm.ManagedUserVM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * Test class for the UserResource REST controller.
@@ -66,6 +65,9 @@ public class UserResourceIntTest extends AbstractIntegrationTest{
 
     @Inject
     private DashboardService dashboardService;
+
+    @Inject
+    private DatasourceService datasourceService;
 
     @Inject
     private ViewService viewService;
@@ -148,7 +150,7 @@ public class UserResourceIntTest extends AbstractIntegrationTest{
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        UserResource userResource = new UserResource(userRepository, mailService, userService, dashboardService, viewService, accessControlManager);
+        UserResource userResource = new UserResource(userRepository, mailService, userService, dashboardService, datasourceService, viewService, accessControlManager);
         ReflectionTestUtils.setField(userResource, "userRepository", userRepository);
         ReflectionTestUtils.setField(userResource, "userService", userService);        
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)

@@ -101,6 +101,7 @@
 
     <include file="config/liquibase/changelog/20200628183700_realm_table.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200628183701_populate_realm_id.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200705183701_remove_default_realm_id.xml" relativeToChangelogFile="false" />
 
 </databaseChangeLog>
 <!--@formatter:on-->

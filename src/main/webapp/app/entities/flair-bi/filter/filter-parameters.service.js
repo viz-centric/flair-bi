@@ -37,7 +37,9 @@
             applyDefaultFilters : applyDefaultFilters,
             applyViewFeatureCriteria : applyViewFeatureCriteria,
             removeFilterInIframeURL: removeFilterInIframeURL,
-            setFilterInIframeURL: setFilterInIframeURL
+            setFilterInIframeURL: setFilterInIframeURL,
+            removeURLParameter : removeURLParameter,
+            getParameterByName : getParameterByName
 
         };
 
@@ -443,10 +445,12 @@
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
                 removeFilterInIframeURL(iframes);
-                iframes.forEach(element => {
-                    var id = getParameterByName('datasourceId', element.properties[0].value)
-                    validateFilter(id, filtersList, filterDimensions, filters, element);
-                });
+                if(iframes){
+                    iframes.forEach(element => {
+                        var id = getParameterByName('datasourceId', element.properties[0].value)
+                        validateFilter(id, filtersList, filterDimensions, filters, element);
+                    });
+                }
             }
         }
 
@@ -515,9 +519,11 @@
         }
 
         function removeFilterInIframeURL(iframes) {
-            iframes.forEach(element => {
-                element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
-            });
+            if(iframes){
+                iframes.forEach(element => {
+                    element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
+                });
+            }
         }
 
         function removeURLParameter(url, parameter) {

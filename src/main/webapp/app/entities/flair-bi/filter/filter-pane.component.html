@@ -4,7 +4,7 @@
             <div class="panel-title">{{vm.type}}</div>
         </div>
         <div class="dimensions-container flair-scroll-gray properties">
-            <div class="filter-item filter-separator-container">
+            <div class="filter-item filter-separator-container" ng-if="vm.tab!='widgets'">
                 <ui-select ng-model="vm.separator" class="separator-select">
                     <ui-select-match placeholder="Select Separator...">{{$select.selected.displayName}}
                     </ui-select-match>
@@ -14,7 +14,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-            <br/>
+            <br/ ng-if="vm.tab!='widgets'">
             <div ng-repeat="dimension in vm.dimensions" class="filter-item">
                 <filter-element-grpc-component ng-if="$root.vizualizationServiceMode == 'grpc'"
                     dimensions="vm.dimensions" dimension="dimension" view="vm.view" tab="vm.tab" list="{}" separator="vm.separator"></filter-element-grpc-component>

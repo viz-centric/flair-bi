@@ -32,7 +32,7 @@
 	</distributionManagement>
 	<properties>
 		<flair-messages.version>0.3.17</flair-messages.version>
-		<project-bi-common.version>1.4.11</project-bi-common.version>
+		<project-bi-common.version>1.4.12</project-bi-common.version>
 
 
 		<!-- GRPC::begin -->

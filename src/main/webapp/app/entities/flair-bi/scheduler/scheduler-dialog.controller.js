@@ -62,6 +62,8 @@
         vm.validate = validate;
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
+        vm.isCommaSeparatedInput = false;
+        vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {

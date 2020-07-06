@@ -3,10 +3,22 @@
         <div class="panel-heading">
             <div class="panel-title">{{vm.type}}</div>
         </div>
+        <!-- added condition for time being ng-if="vm.tab!='widgets'" -->
         <div class="dimensions-container flair-scroll-gray properties">
+            <div class="filter-item filter-separator-container" ng-if="vm.tab!='widgets'">
+                <ui-select ng-model="vm.separator" class="separator-select">
+                    <ui-select-match placeholder="Select Separator...">{{$select.selected.displayName}}
+                    </ui-select-match>
+                    <ui-select-choices
+                        repeat="separator in vm.separators | filter: $select.search track by separator.displayName">
+                        <div ng-bind="separator.displayName"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <br/ ng-if="vm.tab!='widgets'">
             <div ng-repeat="dimension in vm.dimensions" class="filter-item">
                 <filter-element-grpc-component ng-if="$root.vizualizationServiceMode == 'grpc'"
-                    dimensions="vm.dimensions" dimension="dimension" view="vm.view" tab="vm.tab" list="{}"></filter-element-grpc-component>
+                    dimensions="vm.dimensions" dimension="dimension" view="vm.view" tab="vm.tab" list="{}"  separator="vm.separator"></filter-element-grpc-component>
                 <filter-element-component ng-if="$root.vizualizationServiceMode == 'http'" dimensions="vm.dimensions"
                     dimension="dimension" view="vm.view"></filter-element-component>
             </div>

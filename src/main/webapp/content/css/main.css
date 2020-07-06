@@ -5773,12 +5773,6 @@ ui bootstrap tweaks
     .constraint-field .user-data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
-  .constraint-field .comma-separated .comma-separated-on {
-    color: #439dd3;
-    outline: none; }
-  .constraint-field .comma-separated .comma-separated-off {
-    color: #404345;
-    outline: none; }
 
 .user-management-table .datasource-constraints-icon {
   width: 16px;

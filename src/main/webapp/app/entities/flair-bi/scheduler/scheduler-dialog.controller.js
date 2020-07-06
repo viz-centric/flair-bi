@@ -937,7 +937,8 @@
         function addToFilter() {
             if (vm.commaSeparatedValues && vm.commaSeparatedValues.length > 0) {
                 vm.isCommaSeparatedInput = false;
-                vm.selectedUsers =[];
+                vm.selectedUsers = [];
+                vm.scheduleObj.assign_report.communication_list.email = [];
                 var getList = vm.commaSeparatedValues.split(',');
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {

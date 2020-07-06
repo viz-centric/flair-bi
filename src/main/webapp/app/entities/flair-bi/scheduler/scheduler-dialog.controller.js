@@ -5,9 +5,10 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES', 'QueryValidationService', '$q', '$translate'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES', 'QueryValidationService', '$q', '$translate','VisualDispatchService'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES, QueryValidationService, $q, $translate) {
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES, QueryValidationService, $q, $translate,VisualDispatchService){
+
         var vm = this;
         var TIME_UNIT = [{ value: 'hours', title: 'Hours' }, { value: 'days', title: 'Days' }];
         vm.cronExpression = '10 4 11 * *';
@@ -59,6 +60,8 @@
         vm.selectedUsers = [];
         vm.selectedWebhook = [];
         vm.validate = validate;
+        vm.displayTextboxForValues = displayTextboxForValues;
+        vm.addToFilter = addToFilter;
         vm.scheduleObj = {
             "datasourceid": 0,
             "report": {
@@ -921,6 +924,28 @@
 
             return deferred.promise;
         }
+        function displayTextboxForValues() {
+            vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
+            if(vm.selectedUsers && vm.selectedUsers.length>0){
+                vm.commaSeparatedValues = vm.selectedUsers.map(function(elem){
+                    return elem.text;
+                }).join(",");
+            }
+            vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+        }
 
+        function addToFilter() {
+            if (vm.commaSeparatedValues && vm.commaSeparatedValues.length > 0) {
+                vm.isCommaSeparatedInput = false;
+                vm.selectedUsers =[];
+                var getList = vm.commaSeparatedValues.split(',');
+                getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
+                getList.forEach(element => {
+                    added({ text: element });
+                    vm.selectedUsers.push({ text: element });
+                });
+                vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedUserInput);
+            }
+        }
     }
 })();

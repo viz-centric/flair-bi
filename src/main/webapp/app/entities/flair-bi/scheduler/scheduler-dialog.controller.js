@@ -930,7 +930,7 @@
             vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
             if(vm.selectedUsers && vm.selectedUsers.length>0){
                 vm.commaSeparatedValues = vm.selectedUsers.map(function(elem){
-                    return elem.text;
+                    return elem.text.split(" ")[1];
                 }).join(",");
             }
             vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
@@ -944,8 +944,10 @@
                 var getList = vm.commaSeparatedValues.split(',');
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
-                    added({ text: element });
-                    vm.selectedUsers.push({ text: element });
+                    schedulerService.getUserNameByEmail(element).then(function(emailObj){
+                        added({ text: emailObj });
+                        vm.selectedUsers.push({ text: emailObj });
+                    });
                 });
                 vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedUserInput);
             }

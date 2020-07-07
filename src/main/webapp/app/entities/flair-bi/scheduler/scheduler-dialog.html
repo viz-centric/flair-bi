@@ -124,8 +124,8 @@
                                         max-results-to-show={{vm.maxListSize}}>
                                     </auto-complete>
                                 </tags-input>
-                                <textarea rows="4" cols="10" ng-if="vm.isCommaSeparatedInput" type="text" placeholder="Add comma separated values" ng-model="vm.commaSeparatedValues"
-                                class="form-control" ng-blur="vm.addToFilter()" />
+                                <textarea rows="4" cols="10" ng-if="vm.isCommaSeparatedInput" type="text" placeholder="Add comma separated email IDs only" ng-model="vm.commaSeparatedValues"
+                                class="form-control" ng-blur="vm.addToFilter()"></textarea>
                                 <label class="pull-right">
                                     <i ng-click="vm.displayTextboxForValues()" class="fa fa-text-width comma-separated-icon ng-class: {'comma-separated-on' : vm.isCommaSeparatedInput,'comma-separated-off' : !vm.isCommaSeparatedInput}"
                                     uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">

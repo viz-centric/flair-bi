@@ -19,8 +19,7 @@
             filterScheduledReports: filterScheduledReports,
             getReportLogByMetaId: getReportLogByMetaId,
             disableTicketCreation: disableTicketCreation,
-            searchUsers:searchUsers,
-            getUserNameByEmail:getUserNameByEmail
+            searchUsers:searchUsers
         };
 
         return service;
@@ -106,21 +105,6 @@
                     }
                 },function(){
                     reject(emptyList);
-                });
-            });
-        }
-
-        function getUserNameByEmail(email){
-            return $q(function(resolve, reject) {
-                var promise=User.getUserNameByEmail({email: email}).$promise;
-                promise.then(function (data) {
-                    if (data.email) {
-                        resolve(data.firstName + " " + data.email);
-                    } else {
-                        reject("");
-                    }
-                },function(){
-                    reject("");
                 });
             });
         }

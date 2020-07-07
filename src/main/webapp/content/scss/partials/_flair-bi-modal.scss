@@ -137,14 +137,6 @@
                 display: flex;
                 .field{
                     align-self: center;
-                    .comma-separated-off{
-                        color: $flair-text;
-                        outline:none;
-                    }
-                    .comma-separated-on{
-                        color: $primary-color;
-                        outline:none;
-                    }
                 }
                 .between-label{
                     width: 7%;

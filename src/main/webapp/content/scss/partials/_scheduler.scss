@@ -14,13 +14,18 @@
 	.scheduler-tags{
 	    .tooltip-position{
 			position: absolute;
-		    top: 23px;
-		    right: -20px;
+		    top: 27px;
+		    right: -41px;
 		    .more-icon{
 			    width: 24px;
 			    height: 24px;
 			    fill: $primary-color;
 		    }
+	    }
+	    .comma-separated-icon{
+			position: absolute;
+			top: 33px;
+			right: -9px;
 	    }
 	}
 
@@ -79,6 +84,10 @@
 	}
 	label.disabled i {
 		opacity: 0.5;
+	}
+
+	.scheduler-label-comments{
+		margin-top: 10px;
 	}
 
 }

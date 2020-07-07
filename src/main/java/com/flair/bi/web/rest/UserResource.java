@@ -14,6 +14,7 @@ import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
 import com.flair.bi.service.UserService;
+import com.flair.bi.service.dto.UserBasicDTO;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
@@ -353,5 +354,11 @@ public class UserResource {
             .collect(Collectors.toList());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(managedUserVMs, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/name/{email}")
+    public ResponseEntity<UserBasicDTO> getUserNameByEmail(@PathVariable String email) {
+        log.debug("REST request to get  user name by email" + email);
+        return ResponseEntity.ok().body(userService.getUserNameByEmail(email));
     }
 }

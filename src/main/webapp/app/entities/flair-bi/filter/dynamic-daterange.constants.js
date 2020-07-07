@@ -53,7 +53,8 @@
                     title: 'Custom X days',
                     isCustom: true,
                     unit: 'days',
-                    startDay: true
+                    startDay: true,
+                    startDayUnit: 'day'
                 },
                 {
                     title: 'Custom X hours',

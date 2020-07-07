@@ -69,7 +69,7 @@
         <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'"
             class="field">
             <label class="pull-right">
-                 <i ng-click="vm.displayTextboxForValues(vm.dimension)" class="fa fa-text-width ng-class: {'comma-separated-on' : vm.isCommaSeparatedInput,'comma-separated-off' : !vm.isCommaSeparatedInput}"
+                 <i ng-click="vm.displayTextboxForValues(vm.dimension)" class="fa fa-text-width" ng-class="{'active' : vm.isCommaSeparatedInput}" 
                   uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">
                  </i>
             </label>

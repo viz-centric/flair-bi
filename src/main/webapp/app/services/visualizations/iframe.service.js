@@ -11,6 +11,7 @@
         return {
             build: function (record, element, panel, isNotification) {
                 var iframeLink = VisualizationUtils.getPropertyValue(record.properties, 'iFrame link');
+                iframeLink = iframeLink + "&ifIframe=true";
                 d3.select(element[0]).html('')
                 var div = d3.select(element[0]).append('iframe')
                     .attr('id', 'iframe-' + element[0].id)

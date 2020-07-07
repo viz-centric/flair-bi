@@ -1,5 +1,7 @@
 package com.flair.bi.service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -7,9 +9,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.flair.bi.service.dto.UserBasicDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,6 +53,8 @@ public class UserService {
 	private final PersistentTokenRepository persistentTokenRepository;
 
 	private final UserGroupRepository userGroupRepository;
+
+	private final JdbcTemplate jdbcTemplate;
 
 	public Optional<User> activateRegistration(String key) {
 		log.debug("Activating user for activation key {}", key);
@@ -239,6 +246,29 @@ public class UserService {
 		Page<User> users = userRepository.findAll(booleanBuilder, pageable);
 		users.getContent().forEach(x -> x.retrieveAllUserPermissions().size());
 		return users;
+	}
+
+	public UserBasicDTO getUserNameByEmail(String email) {
+		List<UserBasicDTO> userBasicDTOList = null;
+		UserBasicDTO userBasicDTO = null;
+		try {
+			userBasicDTOList = jdbcTemplate.query(
+					"select first_name,email from jhi_user where email = ?",
+					new Object[] {email}, new RowMapper<UserBasicDTO>() {
+						public UserBasicDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
+							UserBasicDTO userBasicDTO = new UserBasicDTO();
+							String firstName = srs.getString("first_name") !=null ? srs.getString("first_name") : "User";
+							userBasicDTO.setFirstName(firstName);
+							userBasicDTO.setEmail(srs.getString("email"));
+							return userBasicDTO;
+						}
+					});
+			if (!userBasicDTOList.isEmpty() && userBasicDTOList != null)
+				userBasicDTO = userBasicDTOList.get(0);
+		} catch (Exception e) {
+			log.error("error occured while getting user name" + e.getMessage());
+		}
+		return userBasicDTO;
 	}
 
 	/**

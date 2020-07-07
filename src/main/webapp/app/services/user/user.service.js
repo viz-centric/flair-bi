@@ -68,6 +68,11 @@
                 isArray: true,
                 url: 'api/users/search/:query'
             },
+            'getUserNameByEmail': {
+                method: 'GET',
+                isArray: false,
+                url: 'api/users/name/:email'
+            },
         });
 
         return service;

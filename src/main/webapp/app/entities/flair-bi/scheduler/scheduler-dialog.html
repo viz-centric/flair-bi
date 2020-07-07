@@ -113,7 +113,7 @@
                         <div class="col-xs-8" ng-if="vm.isAdmin">
                             <div class="form-group scheduler-tags">
                                 <label class="control-label" for="emails">Share Report with Users*</label>
-                                <tags-input placeholder="Select a User" on-tag-added="vm.added($tag)"
+                                <tags-input ng-if="!vm.isCommaSeparatedInput"  placeholder="Select a User" on-tag-added="vm.added($tag)"
                                     on-tag-removed="vm.removed($tag)" class="filter-input"
                                     add-from-autocomplete-only="true" minTags="5" min-length="1"
                                     ng-model="vm.selectedUsers"
@@ -124,6 +124,13 @@
                                         max-results-to-show={{vm.maxListSize}}>
                                     </auto-complete>
                                 </tags-input>
+                                <textarea rows="4" cols="10" ng-if="vm.isCommaSeparatedInput" type="text" placeholder="Add comma separated email IDs only" ng-model="vm.commaSeparatedValues"
+                                class="form-control" ng-blur="vm.addToFilter()"></textarea>
+                                <label class="pull-right">
+                                    <i ng-click="vm.displayTextboxForValues()" class="fa fa-text-width comma-separated-icon ng-class: {'comma-separated-on' : vm.isCommaSeparatedInput,'comma-separated-off' : !vm.isCommaSeparatedInput}"
+                                    uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">
+                                    </i>
+                                </label>
                                 <span class="tooltip-position" uib-tooltip="More..."
                                     ng-click="vm.openCommunicationListModal()"
                                     ng-if="vm.selectedUsers.length>vm.maxListSize-1">
@@ -132,6 +139,7 @@
                                         </use>
                                     </svg>
                                 </span>
+                        </div>
                             </div>
                         </div>
                         <div class="col-xs-8" ng-if="vm.channels.Teams">
@@ -170,7 +178,7 @@
                     <div class="row container">
                         <div class="col-xs-8">
                             <div class="form-group">
-                                <label class="control-label">
+                                <label class="control-label scheduler-label-comments">
                                     Comments*
                                 </label>
                                 <textarea ng-required="vm.scheduleObj.report.mail_body==null" class="form-control"

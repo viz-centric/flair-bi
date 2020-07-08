@@ -15,7 +15,7 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-            <br/ ng-if="vm.tab!='widgets'">
+            <br ng-if="vm.tab!='widgets'"/>
             <div ng-repeat="dimension in vm.dimensions" class="filter-item">
                 <filter-element-grpc-component ng-if="$root.vizualizationServiceMode == 'grpc'"
                     dimensions="vm.dimensions" dimension="dimension" view="vm.view" tab="vm.tab" list="{}"  separator="vm.separator"></filter-element-grpc-component>

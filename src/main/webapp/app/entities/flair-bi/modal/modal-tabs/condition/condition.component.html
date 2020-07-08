@@ -69,9 +69,8 @@
         <div ng-if="vm.condition['@type'] === 'Contains' || vm.condition['@type'] === 'NotContains'"
             class="field">
             <label class="pull-right">
-                 <i ng-click="vm.displayTextboxForValues(vm.dimension)" class="fa fa-text-width ng-class: {'comma-separated-on' : vm.isCommaSeparatedInput,'comma-separated-off' : !vm.isCommaSeparatedInput}"
-                  uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">
-                 </i>
+                <i ng-click="vm.displayTextboxForValues(vm.dimension)" class="fa fa-text-width ng-class: {'comma-separated-on' : vm.isCommaSeparatedInput,'comma-separated-off' : !vm.isCommaSeparatedInput}" uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">
+                </i>
             </label>
         </div>
         <div class="col-md-2 field">
@@ -103,7 +102,7 @@
 
 <div class="condition-component-wrapper" ng-if="vm.condition['@type'] === 'Or' || vm.condition['@type'] === 'And'">
     <condition-component show-add="true" show-delete="true" features="vm.features"
-        condition="vm.condition.firstExpression" datasource-id="vm.datasourceId"></condition-component>
+        condition="vm.condition.firstExpression" datasource-id="vm.datasourceId"  separator="vm.separator"></condition-component>
     <div class="row" style="margin-left: 0;margin-bottom: 14px;margin-top: 14px;">
         <div class="col-md-2">
             <ui-select ng-model="vm.condition['@type']">
@@ -115,7 +114,7 @@
         </div>
     </div>
     <condition-component show-add="true" show-delete="true" features="vm.features"
-        condition="vm.condition.secondExpression" datasource-id="vm.datasourceId"></condition-component>
+        condition="vm.condition.secondExpression" datasource-id="vm.datasourceId"  separator="vm.separator"></condition-component>
 </div>
     </fieldset>
 </form>

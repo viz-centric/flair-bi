@@ -109,6 +109,16 @@
                     <span class="glyphicon glyphicon-glass"></span>&nbsp;
                     <span>validate</span>
                 </button>
+                <div class="filter-separator-container" style="float: left;">
+                    <ui-select ng-model="vm.separator" class="separator-select separator-list-constaraint">
+                        <ui-select-match placeholder="Select Separator...">{{$select.selected.displayName}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            repeat="separator in vm.separators | filter: $select.search track by separator.displayName">
+                            <div ng-bind="separator.displayName"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
                 <button style="float: right;" type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
                     <span class="glyphicon glyphicon-save"></span>&nbsp;<span
                         data-translate="entity.action.save">Save</span>

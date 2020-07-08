@@ -8,12 +8,12 @@
     conditionTabController.$inject = ['$scope', '$translate', 'CryptoService', '$log',
         'conditionExpression', 'features', '$uibModalInstance',
         'VisualDispatchService', '$rootScope', 'visualMetaData', 'datasource',
-        'filterParametersService', 'Visualmetadata', 'QueryValidationService', '$q'];
+        'filterParametersService', 'Visualmetadata', 'QueryValidationService', '$q', 'SEPARATORS'];
 
     function conditionTabController($scope, $translate, CryptoService, $log,
                                     conditionExpression, features, $uibModalInstance,
                                     VisualDispatchService, $rootScope, visualMetaData, datasource,
-                                    filterParametersService, Visualmetadata, QueryValidationService, $q) {
+                                    filterParametersService, Visualmetadata, QueryValidationService, $q, SEPARATORS) {
         var vm = this;
         vm.addStartingCondition = addStartingCondition;
         vm.conditionExpression=conditionExpression;
@@ -25,6 +25,8 @@
         vm.isSaving=false;
         vm.query='';
         vm.datasource=datasource;
+        vm.separators = SEPARATORS;
+        vm.separator =  vm.separators[0];
 
         activate();
 

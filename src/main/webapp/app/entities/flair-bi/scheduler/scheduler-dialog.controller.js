@@ -471,10 +471,12 @@
                 featureData[featureDefinition] = [
                     vm.timeConditions.value + ' ' + vm.timeConditions.unit.value
                 ];
-                const days = vm.timeConditions.unit.value === 'days' ? "'day'" : '';
+                const initialValue = vm.timeConditions.unit.value === 'days' ?
+                    "__FLAIR_NOW('day', __FLAIR_NOW())" :
+                    '__FLAIR_NOW()';
                 featureData[featureDefinition]._meta = {
                     operator: '-',
-                    initialValue: "__FLAIR_NOW(" + days + ")",
+                    initialValue: initialValue,
                     valueType: 'intervalValueType'
                 };
                 additionalFeatures.push(featureData);
@@ -488,10 +490,12 @@
             featureData[featureDefinition] = [
                 vm.condition.dynamicThreshold.value + ' ' + vm.condition.dynamicThreshold.unit.value
             ];
-            const days = vm.condition.dynamicThreshold.unit.value === 'days' ? "'day'" : '';
+            const initialValue = vm.condition.dynamicThreshold.unit.value === 'days' ?
+                "__FLAIR_NOW('day', __FLAIR_NOW())" :
+                '__FLAIR_NOW()';
             featureData[featureDefinition]._meta = {
                 operator: '-',
-                initialValue: "__FLAIR_NOW(" + days + ")",
+                initialValue: initialValue,
                 valueType: 'intervalValueType'
             };
 

@@ -71,6 +71,9 @@
         function searchReports() {
             var user = ComponentDataService.getUser() ? ComponentDataService.getUser().login : "";
             user = vm.isAdmin ? "" : user;
+            if (vm.user) {
+                user = vm.user.login;
+            }
             vm.reportName = vm.reportName ? vm.reportName : "";
             vm.fromDate = vm.fromDate ? vm.fromDate : "";
             vm.toDate = vm.toDate ? vm.toDate : "";

@@ -1582,6 +1582,12 @@ span.rz-pointer {
     .login-page-container .login-form .okta-login .okta-icon img {
       width: 70px;
       margin-bottom: 2px; }
+    .login-page-container .login-form .okta-login .SS0 {
+      color: #19427D;
+      font-size: 18px;
+      font-weight: bolder;
+      vertical-align: middle;
+      margin: 15px; }
     .login-page-container .login-form .hr-text {
       margin-bottom: 10px;
       line-height: 1em;

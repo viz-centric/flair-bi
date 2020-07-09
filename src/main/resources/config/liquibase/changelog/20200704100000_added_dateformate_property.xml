@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="khushbu" id="20200704100000">
+
+        <!-- add date format property -->
+        <insert tableName="property_types">
+            <column name="id" value="695" />
+            <column name="property_type_name" value="Datetime format" />
+            <column name="property_type_description" value="Datetime format for xaxis" />
+            <column name="d_type" value="SELECT" />
+            <column name="checkbox_default_value" value="null" />
+            <column name="text_default_value" value="null" />
+            <column name="color_picker_default_value" value="null" />
+            <column name="number_default_value" value="null" />
+            <column name="created_by" value="flairadmin" />
+            <column name="select_data_type" value="STRING" />
+        </insert>
+
+        <!-- add options for date format -->
+        <insert tableName="values">
+            <column name="id" value="229" />
+            <column name="string_value" value="None" />
+            <column name="integer_value" value="null" />
+            <column name="decimal_value" value="null" />
+            <column name="d_type" value="STRING" />
+            <column name="property_type_id" value="695" />
+            <column name="default_select_property_type_id" value="695" />
+        </insert>
+        <insert tableName="values">
+            <column name="id" value="230" />
+            <column name="string_value" value="DD:MON" />
+            <column name="integer_value" value="null" />
+            <column name="decimal_value" value="null" />
+            <column name="d_type" value="STRING" />
+            <column name="property_type_id" value="695" />
+            <column name="default_select_property_type_id" value="null" />
+        </insert>
+        <insert tableName="values">
+            <column name="id" value="231" />
+            <column name="string_value" value="HH24:MI" />
+            <column name="integer_value" value="null" />
+            <column name="decimal_value" value="null" />
+            <column name="d_type" value="STRING" />
+            <column name="property_type_id" value="695" />
+            <column name="default_select_property_type_id" value="null" />
+        </insert>
+        <insert tableName="values">
+            <column name="id" value="232" />
+            <column name="string_value" value="HH24:MI.SSSS" />
+            <column name="integer_value" value="null" />
+            <column name="decimal_value" value="null" />
+            <column name="d_type" value="STRING" />
+            <column name="property_type_id" value="695" />
+            <column name="default_select_property_type_id" value="null" />
+        </insert>
+        <insert tableName="values">
+            <column name="id" value="233" />
+            <column name="string_value" value="DD-MON HH24:MI" />
+            <column name="integer_value" value="null" />
+            <column name="decimal_value" value="null" />
+            <column name="d_type" value="STRING" />
+            <column name="property_type_id" value="695" />
+            <column name="default_select_property_type_id" value="null" />
+        </insert>
+
+        <!-- add dateformat in bar chart -->
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="531" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="532" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="510" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="530" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="14" />
+        </insert>
+
+        <!-- add dateformat in line and combo chart -->
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="511" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="15" />
+        </insert>
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="513" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="14" />
+        </insert>
+
+        <!-- add dateformat in heatmap chart -->
+        <insert tableName="visualizations_property_types">
+            <column name="visualization_id" value="521" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="4" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

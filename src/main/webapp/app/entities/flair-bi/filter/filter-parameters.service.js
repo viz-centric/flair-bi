@@ -144,7 +144,7 @@
             };
         }
 
-        function createCompareExpressionBodyForInterval(value, featureName, interval, operator) {
+        function createCompareExpressionBodyForInterval(initialValue, endValue, featureName, interval, operator) {
             return {
                 '@type': 'Between',
                 featureName: featureName,
@@ -152,14 +152,14 @@
                     '@type': 'intervalValueType',
                     operator: operator,
                     interval: interval,
-                    value: value
+                    value: initialValue
                 },
                 secondValueType: {
                     '@type': 'valueType',
-                    value: value
+                    value: endValue
                 },
-                secondValue: value,
-                activeTab : value
+                secondValue: initialValue,
+                activeTab : initialValue
             };
         }
 
@@ -193,9 +193,10 @@
             } else if (valueType === 'intervalValueType') {
                 var operator = meta.operator;
                 var initialValue = meta.initialValue;
+                var endValue = meta.endValue;
                 var value = values[0];
-                console.log('interval value type value', value, 'operator', operator, 'initialValue', initialValue);
-                return createCompareExpressionBodyForInterval(initialValue, name, value, operator);
+                console.log('interval value type value', value, 'operator', operator, 'initialValue', initialValue, 'endValue', endValue);
+                return createCompareExpressionBodyForInterval(initialValue, endValue, name, value, operator);
             }
             return createContainsExpressionBody(values, name);
         }

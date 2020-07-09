@@ -477,6 +477,7 @@
                 featureData[featureDefinition]._meta = {
                     operator: '-',
                     initialValue: initialValue,
+                    endValue: '__FLAIR_NOW()',
                     valueType: 'intervalValueType'
                 };
                 additionalFeatures.push(featureData);
@@ -496,6 +497,7 @@
             featureData[featureDefinition]._meta = {
                 operator: '-',
                 initialValue: initialValue,
+                endValue: '__FLAIR_NOW()',
                 valueType: 'intervalValueType'
             };
 

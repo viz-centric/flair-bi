@@ -48,6 +48,7 @@
 
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
+                    result['dateFormate'] = VisualizationUtils.getPropertyValue(record.properties, 'Datetime format');
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
                     result['isFilterGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Filter Grid');
                     result['showSorting'] = VisualizationUtils.getPropertyValue(record.properties, 'Allow Sorting');

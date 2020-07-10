@@ -28,13 +28,8 @@
         var vm = this;
 
         vm.reports = [];
-
         vm.page = 1;
         vm.totalItems = 0;
-
-        vm.fromDate = null;
-        vm.toDate = null;
-
         vm.links = null;
         vm.loadPage = loadPage;
         vm.itemsPerPage = 20;
@@ -44,16 +39,10 @@
         vm.deleteReport = deleteReport;
         vm.updateReport = updateReport;
         vm.searchReports = searchReports;
-
-        vm.openCalendar = openCalendar;
-        vm.datePickerOpenStatus = {};
-        vm.datePickerOpenStatus.fromDate = false;
-        vm.datePickerOpenStatus.toDate = false;
-        vm.setThresholdAlert = setThresholdAlert;
+        vm.onFilterApplied = onFilterApplied;
+        vm.toggleFilters = toggleFilters;
         vm.thresholdAlert = $stateParams.thresholdAlert ? $stateParams.thresholdAlert : false;
-        vm.searchReports = searchReports;
-        vm.dateFormat = 'yyyy-MM-dd';
-        vm.user = null;
+        vm.isOpen = false;
 
         vm.$onInit = activate;
         ///////////////////////////////////////
@@ -80,13 +69,6 @@
             getScheduledReports(user, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert);
         }
 
-        function openCalendar(date) {
-            vm.datePickerOpenStatus[date] = true;
-        }
-
-        function setThresholdAlert(thresholdAlert) {
-            vm.thresholdAlert = !thresholdAlert;
-        }
         function getScheduledReports(userName, reportName, startDate, endDate, thresholdAlert) {
             schedulerService.filterScheduledReports(userName, reportName, startDate, endDate, vm.itemsPerPage, vm.page - 1, thresholdAlert).then(
                 function (response) {
@@ -136,6 +118,14 @@
         function updateReport(visualizationid) {
             ReportManagementUtilsService.updateReport(visualizationid);
             getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
+        }
+
+        function onFilterApplied(filters){
+            getScheduledReports(filters.userId, filters.reportName, filters.fromDate, filters.toDate, filters.thresholdAlert);
+        }
+
+        function toggleFilters(){
+            vm.isOpen = !vm.isOpen;
         }
 
     }

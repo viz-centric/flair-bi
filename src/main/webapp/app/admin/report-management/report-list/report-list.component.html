@@ -1,6 +1,6 @@
 <div class="fbibox report-management">
         <div class="fbibox-content">
-            <div class="row filters">
+<!--             <div class="row filters">
                 <div class="col-xs-3">
                     <div class="input-group">
                         <h4 class="control-label" data-translate="reportManagement.filters.fromDate"
@@ -63,8 +63,14 @@
                         <use xlink:href="#search" />
                     </svg>
                 </div>
+            </div> -->
+            <div class="filters-row row">
+                <div uib-tooltip="Filters" tooltip-placement="bottom" class="filters-box" ng-click="vm.toggleFilters()">
+                    <svg class="flaticons-filter">
+                        <use xlink:href="#filter" />
+                    </svg>
+                </div>
             </div>
-            <br />
             <div class="table-responsive" ng-if="vm.reports.length>0">
                 <table class="table table-striped flair-table-v1">
                     <thead>
@@ -158,3 +164,4 @@
 <div ng-show="vm.totalItems==0">
     <no-data-found-component message="No reports available"></no-data-found-component>
 </div>
+<report-filters-component is-open="vm.isOpen" on-filter-applied="vm.onFilterApplied(filters)"></report-filters-component>

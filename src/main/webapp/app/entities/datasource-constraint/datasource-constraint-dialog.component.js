@@ -29,7 +29,8 @@
         "QueryValidationService",
         "$stateParams",
         "$state",
-        "VisualDispatchService"
+        "VisualDispatchService",
+        'SEPARATORS'
     ];
 
     function DatasourceConstraintDialogController(
@@ -47,7 +48,8 @@
         QueryValidationService,
         $stateParams,
         $state,
-        VisualDispatchService
+        VisualDispatchService,
+        SEPARATORS
     ) {
         var vm = this;
 
@@ -67,6 +69,8 @@
         vm.validate = validate;
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
+        vm.separators = SEPARATORS;
+        vm.separator =  vm.separators[0];
         vm.$onInit = function () {
             activate();
             $timeout(function () {
@@ -329,7 +333,7 @@
             if(constraint.selected && constraint.selected.length>0){
                 vm.commaSeparatedValues = constraint.selected.map(function(elem){
                     return elem.text;
-                }).join(",");
+                }).join(getSeparator());
             }
             vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(constraint.isCommaSeparatedInput);
         }
@@ -339,7 +343,7 @@
                 constraint.isCommaSeparatedInput = false;
                 constraint.selected =[];
                 constraint.values = [];
-                var getList = vm.commaSeparatedValues.split(',');
+                var getList = vm.commaSeparatedValues.split(getSeparator());
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element },constraint);
@@ -347,6 +351,9 @@
                 });
                 vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(constraint.isCommaSeparatedInput);
             }
+        }
+            function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
         }
     }
 })();

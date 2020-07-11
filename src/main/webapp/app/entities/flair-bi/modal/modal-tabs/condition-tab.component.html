@@ -23,7 +23,7 @@
             </div>
             <div class="data-constaraint-conditions-container">
                 <form>
-                    <condition-component ng-show="vm.conditionExpression" show-add="true" show-delete="true" features="vm.dimensions" condition="vm.conditionExpression" datasource-id="vm.datasource.id"></condition-component>
+                    <condition-component ng-show="vm.conditionExpression" show-add="true" show-delete="true" features="vm.dimensions" condition="vm.conditionExpression" datasource-id="vm.datasource.id" separator="vm.separator"></condition-component>
                 </form>
                 <br/>
                 <div ng-if="vm.queryValidationError" class="alert alert-danger" role="alert">
@@ -40,6 +40,16 @@
             <span class="glyphicon glyphicon-glass"></span>&nbsp;
             <span>validate</span>
         </button>
+        <div class="filter-separator-container" style="float: left;">
+            <ui-select ng-model="vm.separator" class="separator-select separator-list-constaraint">
+                <ui-select-match placeholder="Select Separator...">{{$select.selected.displayName}}
+                </ui-select-match>
+                <ui-select-choices
+                    repeat="separator in vm.separators | filter: $select.search track by separator.displayName">
+                    <div ng-bind="separator.displayName"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;
             <span data-translate="entity.action.cancel">Cancel</span>

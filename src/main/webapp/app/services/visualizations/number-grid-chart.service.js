@@ -40,7 +40,7 @@
                     result['showLabel'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Show Labels');
                     result['showValue'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Value on Points');
                     result['fontColor'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Colour of labels');
-                    result['fontSizeforDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size for diplay name');
+                    result['fontSizeforDisplayName'] = VisualizationUtils.getFieldPropertyValue(measure[0], 'Font size for display name');
                     if (isNotification) {
                         result['showValue'] = false;
                         result['showLabel'] = false;

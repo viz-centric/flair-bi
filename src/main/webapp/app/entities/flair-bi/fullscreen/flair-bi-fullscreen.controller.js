@@ -20,7 +20,8 @@
         "DYNAMIC_DATE_RANGE_CONFIG",
         "DateUtils",
         "favouriteFilterService",
-        "$rootScope"
+        "$rootScope",
+        "$window"
     ];
 
     function FlairBiFullscreenController($scope,
@@ -38,7 +39,8 @@
         DYNAMIC_DATE_RANGE_CONFIG,
         DateUtils,
         favouriteFilterService,
-        $rootScope) {
+        $rootScope,
+        $window) {
         var vm = this;
 
         vm.visualMetadata = new VisualWrap(visualMetadata);
@@ -213,15 +215,23 @@
             $rootScope.updateWidget = {};
             vm.isOpen = !vm.isOpen;
             $rootScope.$broadcast("flairbiApp:toggleFilters-on");
-            if (vm.isOpen) {
-                showSideBar();
-                $('#slider').css('display', 'block');
-                createVisualisation();
+
+            var isIframe = filterParametersService.getParameterByName("ifIframe", $window.location.href);
+            if (isIframe) {
+                var url = filterParametersService.removeURLParameter( $window.location.href,"ifIframe");
+                $window.open(url, '_blank');
             }
             else {
-                $('.widget-container-share-link').css('width', '100%').css('width', '-=16px');
-                $('#slider').css('display', 'none');
-                createVisualisation()
+                if (vm.isOpen) {
+                    showSideBar();
+                    $('#slider').css('display', 'block');
+                    createVisualisation();
+                }
+                else {
+                    $('.widget-container-share-link').css('width', '100%').css('width', '-=16px');
+                    $('#slider').css('display', 'none');
+                    createVisualisation()
+                }
             }
         }
 

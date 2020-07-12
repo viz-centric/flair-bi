@@ -69,7 +69,7 @@
                         {{vm.selectedField.feature.name}}
                     </ui-select-match>
                     <ui-select-choices
-                        repeat="feature as feature in vm.features | filter: {featureType: vm.selectedField.fieldType.featureType}">
+                        repeat="feature as feature in vm.features | filter: {featureType: vm.selectedField.fieldType.featureType} | filter: $select.search track by feature.id">
                         {{feature.name}}
                     </ui-select-choices>
                 </ui-select>

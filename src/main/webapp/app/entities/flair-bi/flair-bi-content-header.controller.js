@@ -620,6 +620,9 @@
 
         function isDateRange(name) {
             if (vm.filters[name]._meta.dataType) {
+                if(vm.filters[name]._meta.valueType === "castValueType" || vm.filters[name]._meta.valueType === "valueType"){
+                    return false;
+                }
                 return filterParametersService.isDateFilterType(vm.filters[name]._meta.dataType);
             } else {
                 return false;
@@ -745,7 +748,7 @@
                 if (params.hasOwnProperty(key)) {
                     const param = params[key];
                     const isItemDateRange = isDateRange(key);
-                    if (isItemDateRange) {
+                    if (isItemDateRange && param._meta.valueType !== "castValueType") {
                         param[0] = filterParametersService.changeDateFormat(param[0]);
                         if (param[1]) {
                             param[1] = filterParametersService.changeDateFormat(param[1]);
@@ -754,7 +757,7 @@
                     filterCriterias.push({
                         value: params[key].join('||'),
                         metaData: isItemDateRange ? filterParametersService.buildFilterCriteriasForDynamicDateRange(key) : null,
-                        dateRange: isItemDateRange,
+                        dateRange: param._meta.valueType !== "castValueType" ? true : false,
                         key,
                         feature: vm.features.filter(function (item) {
                             return item.name.toLowerCase() === key;

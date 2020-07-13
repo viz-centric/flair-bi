@@ -82,7 +82,10 @@
             vm.toDate = null;
             vm.dashboard = null;
             vm.view = null;
-            vm.user = null;
+            if(vm.isAdmin){
+                ComponentDataService.setUser(null);
+                vm.user = null;
+            }
             vm.thresholdAlert = false;
             setFilters();
         }

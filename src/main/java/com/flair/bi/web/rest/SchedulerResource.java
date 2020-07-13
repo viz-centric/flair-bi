@@ -198,14 +198,14 @@ public class SchedulerResource {
 	public GetSearchReportsDTO searchReports(@RequestParam(value = "userName") String userName,
 			@RequestParam(value = "reportName") String reportName, @RequestParam(value = "startDate") String startDate,
 			@RequestParam(value = "endDate") String endDate,
-			@RequestParam(value = "thresholdAlert") Boolean thresholdAlert, @ApiParam Pageable pageable) {
+			@RequestParam(value = "thresholdAlert") Boolean thresholdAlert, @RequestParam(value = "dashboardName") String dashboardName,@RequestParam(value = "viewName") String viewName, @ApiParam Pageable pageable) {
 		log.info("Search reports username {} report {} start date {} end date {} page size {} page {}", userName,
 				reportName, startDate, endDate, pageable.getPageSize(), pageable.getPageNumber());
 		if (!SecurityUtils.iAdmin()) {
 			userName = SecurityUtils.getCurrentUserLogin();
 		}
 		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate,
-				pageable.getPageSize(), pageable.getPageNumber(), thresholdAlert);
+				pageable.getPageSize(), pageable.getPageNumber(), thresholdAlert,dashboardName,viewName);
 		log.info("Search reports result {}", result);
 		return result;
 	}

@@ -31,9 +31,9 @@
 		</repository>
 	</distributionManagement>
 	<properties>
+    
 		<flair-messages.version>0.3.18</flair-messages.version>
-		<project-bi-common.version>1.4.12</project-bi-common.version>
-
+		<project-bi-common.version>1.4.13</project-bi-common.version>
 
 		<!-- GRPC::begin -->
 		<all-grpc.version>1.28.0</all-grpc.version>
@@ -762,7 +762,7 @@
 							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
-				</configuration>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

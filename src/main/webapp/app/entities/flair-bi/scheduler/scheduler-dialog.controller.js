@@ -471,9 +471,13 @@
                 featureData[featureDefinition] = [
                     vm.timeConditions.value + ' ' + vm.timeConditions.unit.value
                 ];
+                const initialValue = vm.timeConditions.unit.value === 'days' ?
+                    "__FLAIR_NOW('day', __FLAIR_NOW())" :
+                    '__FLAIR_NOW()';
                 featureData[featureDefinition]._meta = {
                     operator: '-',
-                    initialValue: '__FLAIR_NOW()',
+                    initialValue: initialValue,
+                    endValue: '__FLAIR_NOW()',
                     valueType: 'intervalValueType'
                 };
                 additionalFeatures.push(featureData);
@@ -487,15 +491,19 @@
             featureData[featureDefinition] = [
                 vm.condition.dynamicThreshold.value + ' ' + vm.condition.dynamicThreshold.unit.value
             ];
+            const initialValue = vm.condition.dynamicThreshold.unit.value === 'days' ?
+                "__FLAIR_NOW('day', __FLAIR_NOW())" :
+                '__FLAIR_NOW()';
             featureData[featureDefinition]._meta = {
                 operator: '-',
-                initialValue: '__FLAIR_NOW()',
+                initialValue: initialValue,
+                endValue: '__FLAIR_NOW()',
                 valueType: 'intervalValueType'
             };
 
             const featureData2 = {};
             const dimension = vm.visualMetaData.getFieldDimensions()[0];
-            const featureDef = dimension.feature.definition;
+            const featureDef = dimension.feature.name;
             featureData2[featureDefinition] = ['A.' + featureDef, 'B.' + featureDef];
             featureData2[featureDefinition]._meta = {
                 valueType: 'compare'

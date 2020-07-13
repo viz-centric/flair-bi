@@ -144,6 +144,21 @@
             return null;
         }
 
+        function getStartDateRangeTimeUnit(filterTime) {
+
+            var activeFilter = vm.dynamicDateRangeConfig.filter(function (item) {
+                return item.title === vm.currentDynamicDateRangeConfig;
+            });
+
+            var config = vm.currentDynamicDateRangeConfig;
+            if (config.toDate) {
+                return null;
+            } else if (activeFilter[0].isCustom && activeFilter[0].startDay) {
+                return "'" + activeFilter[0].startDayUnit + "'";
+            }
+            return null;
+        }
+
 
         function addDateRangeFilter(date, dimension) {
             var filterParameters = filterParametersService.getSelectedFilter();
@@ -193,7 +208,8 @@
                                 startDate = DateUtils.formatDate(DateUtils.resetTimezone(DateUtils.strToDate(startDateRange)));
                             } else {
                                 var startDateRangeInterval = getStartDateRangeInterval(filters[element].value[1]);
-                                startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                                const timeUnit = getStartDateRangeTimeUnit() || '';
+                                startDate = "__FLAIR_INTERVAL_OPERATION(NOW(" + timeUnit + "), '-', '" + startDateRangeInterval + "')";
                             }
                             var endDate = '__FLAIR_NOW()';
                             if (startDate) {

@@ -1,5 +1,5 @@
 <div>
-    <h4  class="control-label" data-translate="component.user" >User</h4>
+    <h4  class="control-label user-name" data-translate="component.selectUser" >Select User</h4>
     <ui-select ng-change="vm.onChangeUser()" ng-keyup="vm.searchUser($event,$select.search)" id="field_user" name="user" ng-model="vm.user">
         <ui-select-match allow-clear="true" placeholder="{{ 'component.selectUser' | translate }}">{{$select.selected.login}}</ui-select-match>
         <ui-select-choices repeat="user in vm.users">

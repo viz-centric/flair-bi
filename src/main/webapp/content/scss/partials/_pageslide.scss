@@ -32,3 +32,13 @@ body.ng-pageslide-body-closed::before {
     opacity: 0;
     pointer-events: none;
 }
+
+.reports-filters-slider{
+    .user-name{
+        margin-left: 0.5vw;
+        margin-bottom: 5px;
+    }
+    .report-name{
+        height: 34px;
+    }
+}

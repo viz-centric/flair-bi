@@ -7110,3 +7110,10 @@ body.ng-pageslide-body-closed::before {
   z-index: 1;
   opacity: 0;
   pointer-events: none; }
+
+.reports-filters-slider .user-name {
+  margin-left: 0.5vw;
+  margin-bottom: 5px; }
+
+.reports-filters-slider .report-name {
+  height: 34px; }

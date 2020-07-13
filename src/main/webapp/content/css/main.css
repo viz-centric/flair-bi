@@ -6872,6 +6872,15 @@ disabled look for disabled choices in the results dropdown
     fill: #439dd3; }
   .report-management .filters .flair-checkbox .checkbox-icon {
     vertical-align: 6px; }
+  .report-management .filters-row {
+    display: flex;
+    margin-left: 0px;
+    margin-bottom: 5px; }
+    .report-management .filters-row .filters-box {
+      outline: none; }
+      .report-management .filters-row .filters-box .flaticons-filter {
+        width: 22px;
+        height: 22px; }
 
 .report-actions svg {
   width: 19px;
@@ -7069,3 +7078,42 @@ disabled look for disabled choices in the results dropdown
     height: 50px;
     margin-top: 24px;
     margin-right: 7px; }
+
+.ng-pageslide {
+  background: #eee; }
+
+body.ng-pageslide-body-open::before {
+  content: '.';
+  display: block;
+  position: absolute;
+  top: 0;
+  background-color: black;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0.5;
+  transition: opacity 1s;
+  opacity: 0.5;
+  pointer-events: all; }
+
+body.ng-pageslide-body-closed::before {
+  transition: opacity 1s;
+  content: '.';
+  display: block;
+  position: absolute;
+  top: 0;
+  background-color: black;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none; }
+
+.reports-filters-slider .user-name {
+  margin-left: 0.5vw;
+  margin-bottom: 5px; }
+
+.reports-filters-slider .report-name {
+  height: 34px; }

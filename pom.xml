@@ -31,9 +31,9 @@
 		</repository>
 	</distributionManagement>
 	<properties>
-		<flair-messages.version>0.3.17</flair-messages.version>
+    
+		<flair-messages.version>0.3.18</flair-messages.version>
 		<project-bi-common.version>1.4.13</project-bi-common.version>
-
 
 		<!-- GRPC::begin -->
 		<all-grpc.version>1.28.0</all-grpc.version>

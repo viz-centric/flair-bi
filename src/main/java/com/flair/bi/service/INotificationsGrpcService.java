@@ -35,7 +35,7 @@ public interface INotificationsGrpcService {
 	GetSchedulerReportLogsDTO getScheduleReportLogs(String visualizationid, Integer pageSize, Integer page);
 
 	GetSearchReportsDTO searchReports(String username, String reportName, String startDate, String endDate,
-			Integer pageSize, Integer page, Boolean thresholdAlert);
+			Integer pageSize, Integer page, Boolean thresholdAlert,String dashboardName,String viewName);
 
 	GetChannelConnectionDTO getChannelParameters(String channel);
 

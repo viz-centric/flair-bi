@@ -38,6 +38,7 @@
         vm.activeForText = "disable";
         vm.isCommaSeparatedInput = false;
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+        vm.lastQuery = {};
         ////////////////
 
         function activate() {
@@ -250,28 +251,34 @@
             var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
-            if (q) {
-                query.conditionExpressions = [{
-                    sourceType: 'FILTER',
-                    conditionExpression: {
-                        '@type': 'Like',
-                        featureType: { featureName: dimension.name, type: dimension.type },
-                        caseInsensitive: true,
-                        value: q
-                    }
-                }];
+            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q)) {
+                if (q) {
+                    query.conditionExpressions = [{
+                        sourceType: 'FILTER',
+                        conditionExpression: {
+                            '@type': 'Like',
+                            featureType: { featureName: dimension.name, type: dimension.type },
+                            caseInsensitive: true,
+                            value: q
+                        }
+                    }];
+                }
+                query.distinct = true;
+                query.limit = 100;
+                favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
+                proxyGrpcService.forwardCall(
+                    vm.view.viewDashboard.dashboardDatasource.id, {
+                    queryDTO: query,
+                    vId: vId,
+                    type: $stateParams.id ? 'filters' : 'share-link-filter'
+                },
+                    $stateParams.id ? $stateParams.id : $stateParams.viewId
+                );
+
+                vm.lastQuery.filterKey=q;
+                vm.lastQuery.filterDimension=dimension.id;
             }
-            query.distinct = true;
-            query.limit = 100;
-            favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
-            proxyGrpcService.forwardCall(
-                vm.view.viewDashboard.dashboardDatasource.id, {
-                queryDTO: query,
-                vId: vId,
-                type : $stateParams.id ? 'filters' : 'share-link-filter'
-            },
-                $stateParams.id ? $stateParams.id : $stateParams.viewId
-            );
+
         }
 
         function isFavouriteFilter() {

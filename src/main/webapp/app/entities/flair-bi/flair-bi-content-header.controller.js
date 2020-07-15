@@ -37,7 +37,8 @@
         "DYNAMIC_DATE_RANGE_CONFIG",
         "AccountDispatch",
         "ShareLinkService",
-        "IFRAME"
+        "IFRAME",
+        "ClientLogo"
     ];
 
     function FlairBiContentHeaderController(
@@ -69,10 +70,11 @@
         DYNAMIC_DATE_RANGE_CONFIG,
         AccountDispatch,
         ShareLinkService,
-        IFRAME
+        IFRAME,
+        ClientLogo
     ) {
         var vm = this;
-
+        vm.clientLogo = null;
         var editMode = false;
         var showOpt = true;
         var dynamicDateRangeFun = 'FLAIR';
@@ -178,6 +180,7 @@
             registerAddFilter();
             setPageSizeforScreens();
             fetchDashboardsAndViews();
+            getClientLogo();
             vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
             });
@@ -202,6 +205,14 @@
             } else {
                 applyFilters();
             }
+        }
+
+        function getClientLogo() {
+            ClientLogo.query(function(result) {
+                if(result && result.length > 0){
+                    vm.clientLogo = result[0];
+                }
+            });
         }
 
         function applyDefaultFilters(excluded) {

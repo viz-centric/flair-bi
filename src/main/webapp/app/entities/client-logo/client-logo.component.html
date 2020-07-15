@@ -1,0 +1,65 @@
+<div class="fbibox">
+    <div class="fbibox-content" style="padding-bottom: 50px;">
+        <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+            <div>
+                <div class="form-group">
+                    <label class="control-label" data-translate="flairbiApp.clientLogo.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                            ng-model="vm.clientLogo.name"
+                            required/>
+                    <div ng-show="editForm.name.$invalid">
+                        <p class="help-block"
+                            ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group" ngf-change="vm.setImage($file, vm.clientLogo)" ngf-drop="" ngf-pattern="'image/*'">
+                    <label class="control-label img-label" data-translate="flairbiApp.clientLogo.image"
+                        for="field_image">Logo </label>
+                    <div class="row" ng-if="vm.clientLogo.image || vm.clientLogo.url">
+<!--                         <img alt="client Logo"
+                            data-ng-src="{{'data:' + vm.clientLogo.imageContentType + ';base64,' + vm.clientLogo.image}}"
+                            ng-if="vm.clientLogo.image" style="max-height: 100px;" /> -->
+
+                        <img alt="client Logo" ng-src="{{vm.clientLogo.url}}"
+                            ng-if="vm.clientLogo.url" style="max-height: 100px;" />
+
+                        <div class="help-block clearfix col-md-7 col-sm-7 uploaded-image" ng-if="vm.clientLogo.image">
+                            <span class=" image-disc pull-left">{{vm.clientLogo.imageContentType}},
+                                {{vm.byteSize(vm.clientLogo.image)}}</span>
+                            <button class="btn btn-danger btn-xs pull-right"
+                                ng-click="vm.clientLogo.image=null;vm.clientLogo.imageContentType=null;" type="button">
+                                <span class="glyphicon glyphicon-remove"></span> Remove Logo
+                            </button>
+                        </div>
+                        <div ng-show="vm.isInValidImage">
+                            <p class="help-block">you can upload the image upto {{vm.maxImageSize}} MB </p>
+                        </div>
+                    </div>
+                    <div class="image-upload-holder">
+                        <div class="image-upload-inner">
+                            <div class="button" ngf-select name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                                data-translate="entity.action.addimage" ngf-min-height="100"
+                                ngf-change="vm.setImage($file, vm.clientLogo)">
+                                <p>Add Logo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" id="field_image" name="image" ng-model="vm.clientLogo.image"
+                        type="hidden" />
+                    <input class="form-control" id="field_imageContentType" name="imageContentType"
+                        ng-model="vm.clientLogo.imageContentType" type="hidden" />
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.deleteClientLogo(vm.clientLogo.id)">
+                    <span class="glyphicon glyphicon-remove"></span>&nbsp;<span data-translate="entity.action.delete">Delete</span>
+                </button>
+                <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1190,10 +1190,11 @@ nav.navbar-static-top {
       height: 20px;
       fill: #404345;
       margin-right: -9px; }
-    nav.navbar-static-top .navbar-header .logo {
+    nav.navbar-static-top .navbar-header .common {
       position: absolute;
       top: 0px;
-      left: 0px;
+      left: 0px; }
+    nav.navbar-static-top .navbar-header .logo {
       border-right: 1px #ced0d1 solid;
       height: 41px;
       width: 37px; }
@@ -1201,6 +1202,18 @@ nav.navbar-static-top {
         width: 25px;
         height: 40px;
         margin-left: 6px; }
+    nav.navbar-static-top .navbar-header .client-logo {
+      border-right: 1px #ced0d1 solid;
+      height: 41px;
+      width: 45px; }
+      nav.navbar-static-top .navbar-header .client-logo img {
+        width: 50px;
+        height: 40px;
+        margin-left: -3px; }
+    nav.navbar-static-top .navbar-header .flair-logo img {
+      width: 25px;
+      height: 40px;
+      margin-left: 50px; }
     nav.navbar-static-top .navbar-header .home-row {
       display: flex;
       align-items: center; }
@@ -1213,6 +1226,12 @@ nav.navbar-static-top {
       margin-right: -18px; }
     nav.navbar-static-top .navbar-header .search-right-icon-active {
       left: 62px; }
+    nav.navbar-static-top .navbar-header .home-header-search-box {
+      display: none;
+      left: 100px; }
+    nav.navbar-static-top .navbar-header .home-header-search-box1 {
+      display: none;
+      left: 44px; }
   nav.navbar-static-top user-profile-component .dropdown-menu {
     font-size: 12px; }
     nav.navbar-static-top user-profile-component .dropdown-menu a {
@@ -4137,6 +4156,19 @@ jhi-alert .alerts .alert-danger {
       .flairbi-content-header .header-first .logo img {
         width: 25px;
         height: 40px; }
+    .flairbi-content-header .header-first .client-logo-viz {
+      border-right: 1px #ced0d1 solid;
+      height: 41px;
+      width: 42px; }
+      .flairbi-content-header .header-first .client-logo-viz img {
+        width: 50px;
+        height: 40px;
+        margin-left: -7px; }
+    .flairbi-content-header .header-first .flair-logo-viz img {
+      width: 25px;
+      height: 40px;
+      margin-left: 6px;
+      margin-right: 35px; }
   .flairbi-content-header h2 {
     margin: 0px;
     line-height: 40px;

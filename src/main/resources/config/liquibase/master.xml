@@ -82,6 +82,8 @@
     <include file="config/liquibase/changelog/20200704100000_add_date_datetime_functions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200705100000_aggregate_percent_function.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200707100000_update_column_propertytype_iframe_setting.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200701600000_add_sorting_in_pivot_table.xml" relativeToChangelogFile="false"/>
+
 
 
     

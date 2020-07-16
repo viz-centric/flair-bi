@@ -3,7 +3,7 @@
 
     <div class="row" ng-if="$root.isFullScreen == false">
         <div class="col-md-7 col-sm-6 col-xs-6 header-first">
-            <a ng-disabled="vm.isIframe" ng-if="vm.clientLogo" class="client-logo-viz"  ui-sref="home">
+            <a ng-disabled="vm.isIframe" uib-tooltip={{vm.clientLogo.name}} tooltip-placement="bottom" ng-if="vm.clientLogo" class="client-logo-viz"  ui-sref="home">
                 <img ng-src={{vm.clientLogo.url}} alt={{vm.clientLogo.name}}>
             </a>
             <a ng-disabled="vm.isIframe" class=" ng-class:{'flair-logo-viz':vm.clientLogo,'logo':!vm.clientLogo}" ui-sref="home">

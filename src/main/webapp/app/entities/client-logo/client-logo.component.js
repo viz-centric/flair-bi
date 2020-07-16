@@ -24,7 +24,6 @@
         vm.isInValidImage = false;
         vm.selectedFile = "";
         var imageContentType = 'svg';
-        var entity = { name: null,url: null,id: null,imageContentType:imageContentType };
         active();
 
         $timeout(function (){
@@ -40,7 +39,7 @@
                 if(result && result.length > 0){
                     vm.clientLogo = result[0];
                 }else{
-                    vm.clientLogo = entity;
+                    vm.clientLogo = { name: null,url: null,id: null,imageContentType:imageContentType };
                 }
             });
         }
@@ -110,7 +109,7 @@
             ClientLogo.delete({ id: id }, function() {
                 var info = {text:$translate.instant('flairbiApp.clientLogo.deleted',{param:id}),title: "Deleted"};
                 $rootScope.showSuccessToast(info);
-                vm.clientLogo = entity;
+                vm.clientLogo = { name: null,url: null,id: null,imageContentType:imageContentType };
                 ClientLogoDataService.setClientLogo(null);
                 $rootScope.$broadcast("flairbiApp:set-client-logo");
                 vm.selectedFile = "";

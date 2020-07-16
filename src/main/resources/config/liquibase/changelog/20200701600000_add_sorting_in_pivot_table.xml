@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="khushbu" id="200701600000">
+
+        <update tableName="property_types">
+            <column name="color_picker_default_value" value='787878' />
+            <where>id = 677</where>
+        </update>
+
+
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="94" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="8" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="95" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="8" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="96" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="8" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="97" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="8" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="98" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="8" />
+        </insert>
+
+
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="99" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="100" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="101" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="102" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="103" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="104" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="105" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="106" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="107" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="108" />
+            <column name="property_type_id" value="686" />
+            <column name="sequence_number" value="14" />
+        </insert>
+    </changeSet> 
+</databaseChangeLog>

@@ -22,6 +22,7 @@
         vm.byteSize = DataUtils.byteSize;
         vm.openFile = DataUtils.openFile;
         vm.isInValidImage = false;
+        vm.selectedFile = "";
         var imageContentType = 'svg';
         var entity = { name: null,url: null,id: null,imageContentType:imageContentType };
         active();
@@ -80,6 +81,7 @@
                     $scope.$apply(function () {
                         clientLogo.image = base64Data;
                         clientLogo.url = null;
+                        vm.selectedFile = $file.name + " " + vm.byteSize(vm.clientLogo.image);
                         clientLogo.imageContentType = imageContentType;
                         checkValidImage(base64Data);
                     });
@@ -111,6 +113,7 @@
                 vm.clientLogo = entity;
                 ClientLogoDataService.setClientLogo(null);
                 $rootScope.$broadcast("flairbiApp:set-client-logo");
+                vm.selectedFile = "";
             },function(){
                 $rootScope.showErrorSingleToast({
                     text: $translate.instant('flairbiApp.clientLogo.errorDeleting')

@@ -1,0 +1,23 @@
+{
+    "flairbiApp": {
+        "clientLogo" : {
+            "home": {
+                "title": "ClientLogos",
+                "createLabel": "Créer un nouveau Client Logo",
+                "createOrEditLabel": "Créer ou éditer un Client Logo"
+            },
+            "created": "Un nouveau Client Logo a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Client Logo avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Client Logo avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Client Logo {{ id }} ?"
+            },
+            "detail": {
+                "title": "Client Logo"
+            },
+            "name": "Name",
+            "url": "Url",
+            "imageContentType": "Image Content Type"
+        }
+    }
+}

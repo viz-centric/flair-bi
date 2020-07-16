@@ -25,6 +25,7 @@
                 "functions": "Functions",
                 "visualizationColors": "Visualization Colors",
                 "fileUploaderStatus": "File Uploader Status",
+                "clientLogo": "Client Logo",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -101,6 +102,7 @@
         "action": {
             "addblob": "Add blob",
             "addimage": "Add image",
+            "selectLogo": "Select SVG Logo",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",

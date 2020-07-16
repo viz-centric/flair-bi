@@ -102,7 +102,7 @@
         "action": {
             "addblob": "Add blob",
             "addimage": "Add image",
-            "selectLogo": "Select Logo",
+            "selectLogo": "Select SVG Logo",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",

@@ -61,6 +61,7 @@
             }else{
                 var info = {text:$translate.instant('flairbiApp.clientLogo.created'),title: "Saved"};
             }
+            vm.clientLogo = result;
             $rootScope.showSuccessToast(info);
             ClientLogoDataService.setClientLogo(vm.clientLogo);
             $rootScope.$broadcast("flairbiApp:set-client-logo");

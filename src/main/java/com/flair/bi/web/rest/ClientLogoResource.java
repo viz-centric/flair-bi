@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,6 +46,7 @@ public class ClientLogoResource {
      */
     @PostMapping("/client-logos")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('CLIENT_LOGO', 'WRITE','APPLICATION')")
     public ResponseEntity<ClientLogo> createClientLogo(@Valid @RequestBody ClientLogo clientLogo) throws URISyntaxException {
         log.debug("REST request to save ClientLogo : {}", clientLogo);
         if (clientLogo.getId() != null) {
@@ -79,6 +81,7 @@ public class ClientLogoResource {
      */
     @PutMapping("/client-logos")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('CLIENT_LOGO', 'UPDATE','APPLICATION')")
     public ResponseEntity<ClientLogo> updateClientLogo(@Valid @RequestBody ClientLogo clientLogo) throws URISyntaxException {
         log.debug("REST request to update ClientLogo : {}", clientLogo);
         if (clientLogo.getId() == null) {
@@ -139,6 +142,7 @@ public class ClientLogoResource {
      */
     @DeleteMapping("/client-logos/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('CLIENT_LOGO', 'DELETE','APPLICATION')")
     public ResponseEntity<Void> deleteClientLogo(@PathVariable Long id) {
         log.debug("REST request to delete ClientLogo : {}", id);
         ClientLogo clientLogo = clientLogoService.findOne(id);

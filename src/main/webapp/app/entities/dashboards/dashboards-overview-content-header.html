@@ -14,6 +14,16 @@
                 </div>
             </div>
             <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs">
+                <button class="btn btn-default"
+                        type="file"
+                        ngf-select="vm.importView($file, $invalidFiles)"
+                        accept="application/json"
+                        ngf-max-size="10MB"
+                        ng-if="vm.canWriteViews">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span>Import View</span>
+                    <div ng-if="vm.importedViewFile">{{vm.importedViewFile.name}} - {{vm.importedViewFileStatus}}</div>
+                </button>
                 <button class="btn btn-primary" ng-if="vm.canWriteViews" ui-sref="dashboards-overview.view-new({dashboard: vm.selectedDashboard})">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>Create View</span>

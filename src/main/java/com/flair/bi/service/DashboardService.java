@@ -1,14 +1,15 @@
 package com.flair.bi.service;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.DashboardRelease;
+import com.flair.bi.view.export.ViewExportDTO;
+import com.flair.bi.view.export.ViewImportResult;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.DashboardRelease;
-import com.querydsl.core.types.Predicate;
+import java.util.Collection;
+import java.util.List;
 
 public interface DashboardService {
 
@@ -131,4 +132,5 @@ public interface DashboardService {
 
 	String getImageLocation(Long id);
 
+    ViewImportResult importView(ViewExportDTO viewExport);
 }

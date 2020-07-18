@@ -22,7 +22,6 @@
                         ng-if="vm.canWriteViews">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>Import View</span>
-                    <div ng-if="vm.importedViewFile">{{vm.importedViewFile.name}} - {{vm.importedViewFileStatus}}</div>
                 </button>
                 <button class="btn btn-primary" ng-if="vm.canWriteViews" ui-sref="dashboards-overview.view-new({dashboard: vm.selectedDashboard})">
                     <span class="glyphicon glyphicon-plus"></span>

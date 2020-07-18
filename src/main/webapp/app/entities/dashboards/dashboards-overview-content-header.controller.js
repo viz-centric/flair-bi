@@ -9,14 +9,22 @@
         "$scope",
         "entity",
         "AccountDispatch",
-        "Upload"
+        "Upload",
+        "$state",
+        "$rootScope",
+        "$translate",
+        "$window"
     ];
 
     function DashboardOverviewContentHeaderController(
         $scope,
         entity,
         AccountDispatch,
-        Upload
+        Upload,
+        $state,
+        $rootScope,
+        $translate,
+        $window
     ) {
         var vm = this;
 
@@ -37,7 +45,6 @@
 
         function importView(file, errFiles) {
             vm.importedViewFile = file;
-            vm.importedViewFileStatus = null;
             if (file) {
                 file.upload = Upload.upload({
                     url: 'api/dashboards/' + vm.selectedDashboard.id + '/importView',
@@ -46,11 +53,18 @@
                 });
 
                 file.upload.then(function (response) {
-                    vm.importedViewFileStatus = 'DONE';
+                    $rootScope.showSuccessToast({
+                        text: $translate.instant('flairbiApp.dashboards.upload.success',
+                            {file: vm.importedViewFile.name}),
+                        title: "Uploaded"
+                    });
+                    $window.location.reload();
+                    // $state.reload();
                 }, function (response) {
-                    if (response.status > 0) {
-                        vm.importedViewFileStatus = response.status + ': ' + response.data;
-                    }
+                    $rootScope.showErrorSingleToast({
+                        text: $translate.instant('flairbiApp.dashboards.upload.failure',
+                            {file: vm.importedViewFile.name})
+                    });
                 }, function (evt) {
 
                 });

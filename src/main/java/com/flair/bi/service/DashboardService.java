@@ -132,5 +132,5 @@ public interface DashboardService {
 
 	String getImageLocation(Long id);
 
-    ViewImportResult importView(ViewExportDTO viewExport);
+    ViewImportResult importView(Long dashboardId, ViewExportDTO viewExport);
 }

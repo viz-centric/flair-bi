@@ -31,7 +31,9 @@
                 "searched": "Dashboard search error"
             },
             "selectDatasource": "Search Available Data Sources",
-            "uniqueError" : "A dashboard with this name already exists"
+            "uniqueError" : "A dashboard with this name already exists",
+            "upload.success": "File {{file}} uploaded successfully.",
+            "upload.failure": "File {{file}} failed to upload."
         }
     }
 }

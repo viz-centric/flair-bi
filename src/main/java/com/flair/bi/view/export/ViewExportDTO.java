@@ -1,18 +1,17 @@
 package com.flair.bi.view.export;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.util.Base64Utils;
-
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewState;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Base64Utils;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +28,18 @@ public class ViewExportDTO {
 		return new ViewExportDTO(view.getViewName(), view.getDescription(),
 				Optional.ofNullable(view.getImage()).map(Base64Utils::encodeToString).orElse(null),
 				view.getCurrentEditingState(), view.getViewFeatureCriterias().stream()
-						.map(ViewFeatureCriteriaExportDTO::from).collect(Collectors.toSet()));
+						.map(ViewFeatureCriteriaExportDTO::from).collect(toSet()));
+	}
+
+	public static View to(ViewExportDTO viewExportDTO) {
+		View view = new View();
+		view.setViewName(viewExportDTO.getName() + Math.round(Math.random() * 1000));
+		view.setDescription(viewExportDTO.getDescription() + Math.round(Math.random() * 1000));
+		view.setImage(Optional.ofNullable(viewExportDTO.getImage()).map(Base64Utils::decodeFromString).orElse(null));
+		view.setCurrentEditingState(viewExportDTO.getEditState());
+		view.setViewFeatureCriterias(Optional.ofNullable(viewExportDTO.getCriterias())
+				.map(criterias -> criterias.stream().map(ViewFeatureCriteriaExportDTO::to).collect(toSet()))
+				.orElse(null));
+		return view;
 	}
 }

@@ -279,7 +279,7 @@ public class DashboardsResource {
 													   @RequestParam("file") MultipartFile file) throws IOException {
 		byte[] bytes = file.getBytes();
 		ViewExportDTO viewExportDTO = objectMapper.readValue(bytes, ViewExportDTO.class);
-		return ResponseEntity.ok(dashboardService.importView(viewExportDTO));
+		return ResponseEntity.ok(dashboardService.importView(id, viewExportDTO));
 	}
 
 }

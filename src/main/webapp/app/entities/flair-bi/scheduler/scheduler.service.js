@@ -74,9 +74,11 @@
                 method: 'GET'
             });
         }
-        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert) {
+        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert,dashboardName,viewName) {
             return $http({
-                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName + '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' + page+'&thresholdAlert='+thresholdAlert,
+                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName +
+                 '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' +
+                  page+'&thresholdAlert='+thresholdAlert+"&dashboardName="+dashboardName+"&viewName="+viewName,
                 method: 'GET'
             });
         }

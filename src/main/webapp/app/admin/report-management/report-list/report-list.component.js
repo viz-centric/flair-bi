@@ -28,13 +28,8 @@
         var vm = this;
 
         vm.reports = [];
-
         vm.page = 1;
         vm.totalItems = 0;
-
-        vm.fromDate = null;
-        vm.toDate = null;
-
         vm.links = null;
         vm.loadPage = loadPage;
         vm.itemsPerPage = 20;
@@ -43,52 +38,27 @@
         vm.goToBuildPage = goToBuildPage;
         vm.deleteReport = deleteReport;
         vm.updateReport = updateReport;
-        vm.searchReports = searchReports;
-
-        vm.openCalendar = openCalendar;
-        vm.datePickerOpenStatus = {};
-        vm.datePickerOpenStatus.fromDate = false;
-        vm.datePickerOpenStatus.toDate = false;
-        vm.setThresholdAlert = setThresholdAlert;
+        vm.onFilterApplied = onFilterApplied;
+        vm.toggleFilters = toggleFilters;
         vm.thresholdAlert = $stateParams.thresholdAlert ? $stateParams.thresholdAlert : false;
-        vm.searchReports = searchReports;
-        vm.dateFormat = 'yyyy-MM-dd';
-        vm.user = null;
+        vm.isOpen = false;
 
         vm.$onInit = activate;
         ///////////////////////////////////////
 
         function activate() {
             getAccount();
-            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.userId, "", "", "", vm.thresholdAlert,"","");
         }
 
         function getAccount() {
             vm.account = AccountDispatch.getAccount();
             vm.isAdmin = AccountDispatch.isAdmin();
+            vm.userId = vm.isAdmin ? "" : vm.account.login;
         }
 
-        function searchReports() {
-            var user = ComponentDataService.getUser() ? ComponentDataService.getUser().login : "";
-            user = vm.isAdmin ? "" : user;
-            if (vm.user) {
-                user = vm.user.login;
-            }
-            vm.reportName = vm.reportName ? vm.reportName : "";
-            vm.fromDate = vm.fromDate ? vm.fromDate : "";
-            vm.toDate = vm.toDate ? vm.toDate : "";
-            getScheduledReports(user, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert);
-        }
-
-        function openCalendar(date) {
-            vm.datePickerOpenStatus[date] = true;
-        }
-
-        function setThresholdAlert(thresholdAlert) {
-            vm.thresholdAlert = !thresholdAlert;
-        }
-        function getScheduledReports(userName, reportName, startDate, endDate, thresholdAlert) {
-            schedulerService.filterScheduledReports(userName, reportName, startDate, endDate, vm.itemsPerPage, vm.page - 1, thresholdAlert).then(
+        function getScheduledReports(userId, reportName, startDate, endDate, thresholdAlert,dashboardName,viewName) {
+            schedulerService.filterScheduledReports(userId, reportName, startDate, endDate, vm.itemsPerPage, vm.page - 1, thresholdAlert,dashboardName,viewName).then(
                 function (response) {
                     vm.reports = response.data.reports;
                     vm.totalItems = response.data.totalRecords;
@@ -104,7 +74,7 @@
         }
         function loadPage(page) {
             vm.page = page;
-            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
         }
         function parseCron(cronExp) {
             return cronstrue.toString(cronExp);
@@ -124,7 +94,7 @@
                     title: "Cancelled"
                 }
                 $rootScope.showSuccessToast(info);
-                getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
+                getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
             }).catch(function (error) {
                 var info = {
                     text: error.data.message,
@@ -135,7 +105,22 @@
         }
         function updateReport(visualizationid) {
             ReportManagementUtilsService.updateReport(visualizationid);
-            getScheduledReports(vm.isAdmin ? "" : vm.account.login, "", "", "", vm.thresholdAlert);
+            getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
+        }
+
+        function onFilterApplied(filters){
+            vm.dashboardName = filters.dashboardName;
+            vm.viewName = filters.viewName;
+            vm.userId = filters.userId;
+            vm.reportName =  filters.reportName;
+            vm.fromDate = filters.fromDate;
+            vm.toDate = filters.toDate;
+            vm.thresholdAlert = filters.thresholdAlert;
+            getScheduledReports(filters.userId, filters.reportName, filters.fromDate, filters.toDate, filters.thresholdAlert,filters.dashboardName,filters.viewName);
+        }
+
+        function toggleFilters(){
+            vm.isOpen = !vm.isOpen;
         }
 
     }

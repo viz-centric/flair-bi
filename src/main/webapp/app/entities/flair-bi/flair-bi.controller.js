@@ -300,7 +300,9 @@
                     id: v.metadataVisual.id
                 },
                 function (success) {
-                    saveClonedVisual(setVisualProps(v, createVisualMetadata(success)));
+                    var config = createVisualMetadata(success)
+                    config.isSaved = true;
+                    saveClonedVisual(setVisualProps(v, config));
                 },
                 function (error) { }
             );
@@ -750,6 +752,7 @@
                 Visualmetadata.get({
                     id: $rootScope.activePage.visualizationID
                 }, function (v) {
+                    v.isSaved = true;
                     refreshWidget(v);
                 });
             });

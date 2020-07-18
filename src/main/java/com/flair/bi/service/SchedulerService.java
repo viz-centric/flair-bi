@@ -93,9 +93,9 @@ public class SchedulerService {
 	}
 
 	public GetSearchReportsDTO searchScheduledReport(String userName, String reportName, String startDate,
-			String endDate, Integer pageSize, Integer page, Boolean thresholdAlert) {
+			String endDate, Integer pageSize, Integer page, Boolean thresholdAlert,String dashboardName,String viewName) {
 		return notificationsGrpcService.searchReports(userName, reportName, startDate, endDate, pageSize, page,
-				thresholdAlert);
+				thresholdAlert,dashboardName,viewName);
 	}
 
 	public String buildUrl(String host, String port, String apiUrl) {

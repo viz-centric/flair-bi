@@ -1,0 +1,54 @@
+<div class="fbibox">
+    <div class="fbibox-content" style="padding-bottom: 50px;">
+        <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+            <div class="client-logo-body">
+                <div class="form-group">
+                    <label class="control-label" data-translate="flairbiApp.clientLogo.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                            ng-model="vm.clientLogo.name"
+                            required/>
+                    <div ng-show="editForm.name.$invalid">
+                        <p class="help-block"
+                            ng-show="editForm.name.$error.required" data-translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group" ngf-change="vm.setImage($file, vm.clientLogo)" ngf-drop="" ngf-pattern="'image/*'">
+                    <div class="row client-image" ng-if="vm.clientLogo.image || vm.clientLogo.url">
+                        <img class="logo-display-container" alt="client Logo" ng-src="{{vm.clientLogo.url}}"
+                            ng-if="vm.clientLogo.url" />
+                    </div>
+                    <div class="logo-upload-holder">
+                        <div class="logo-upload-inner">
+                            <div class="button" ngf-select name="file" ngf-pattern="'image/svg+xml,image/svg'" ngf-accept="'image/svg+xml,image/svg'" ngf-min-height="100"
+                                ngf-change="vm.setImage($file, vm.clientLogo)">
+                                <p class="logo-row">
+                                    <span  data-translate="entity.action.selectLogo" ng-if="!vm.clientLogo.image">Select Logo
+                                    </span>
+                                    <span ng-if="vm.clientLogo.image" >
+                                        {{vm.selectedFile}}
+                                    </span>
+                                    &nbsp;
+                                    <span ng-if="vm.clientLogo.image" class="glyphicon glyphicon-remove remove-logo" ></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" id="field_image" name="image" ng-model="vm.clientLogo.image"
+                        type="hidden" required/>
+                    <input class="form-control" id="field_imageContentType" name="imageContentType"
+                        ng-model="vm.clientLogo.imageContentType" type="hidden" />
+                </div>
+            </div>
+            <div>
+                <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.deleteClientLogo(vm.clientLogo.id)">
+                    <span class="glyphicon glyphicon-trash"></span>&nbsp;<span data-translate="entity.action.delete">Delete</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

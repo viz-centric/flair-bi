@@ -1,0 +1,90 @@
+<pageslide ps-open="vm.isOpen" ps-key-listener="true" ps-body-class="true" class="reports-filters-slider">
+    <div class="flair-scroll side-widgets overflow resource-nav">
+        <div class="panel panel-default filter-area">
+            <div class="panel-heading">
+                <div class="panel-title">Report Filters</div>
+            </div>
+            <div class="dimensions-container flair-scroll-gray properties">
+
+                <div class="filter-element form-group input-group">
+                    <label data-translate="reportManagement.filters.fromDate" for="fromDate">From Date</label>
+                    <input type="text" class="form-control" name="fromDate" enable-time="false"
+                        uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.fromDate"
+                        is-open="vm.datePickerOpenStatus.fromDate" />
+                    <span class="input-group-btn flair-date-icon">
+                        <button type="button" class="btn btn-default"
+                            ng-click="vm.openCalendar('fromDate')">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+
+                <div class="filter-element form-group input-group">
+                    <label data-translate="reportManagement.filters.toDate" for="toDate">To Date</label>
+                    <input type="text" class="form-control" name="toDate" enable-time="false"
+                        uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.toDate"
+                        is-open="vm.datePickerOpenStatus.toDate" />
+                    <span class="input-group-btn flair-date-icon">
+                        <button type="button" class="btn btn-default"
+                            ng-click="vm.openCalendar('toDate')">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+
+                <div class="filter-element form-group">
+                    <label class="control-label">Select Dashboard</label>
+                    <ui-select ng-model="vm.dashboard" ng-keypress="vm.searchDashboards($select.search)">
+                        <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
+                            <div ng-bind="dashboard.dashboardName"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="filter-element form-group">
+                    <label class="control-label" for="emails">Select View</label>
+                    <ui-select ng-model="vm.view" ng-keypress="vm.searchViews($select.search)">
+                        <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="view in vm.views | filter: $select.search track by view.id">
+                            <div ng-bind="view.viewName"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="filter-element form-group">
+                    <label class="control-label" for="reportName">Report Name</label>
+                    <input type="text" class="report-name input-sm form-control" name="reportName"
+                        ng-model="vm.reportName" />
+                </div>
+
+                <div ng-if="vm.isAdmin" class="filter-element form-group">
+                    <user-search-component user="vm.user" />
+                </div>
+
+                <div class="filter-element form-group">
+                    <label class="control-label" for="emails">Threshold Alert</label>
+                    <label uib-tooltip="Threshold Alerts" class="flair-checkbox"
+                        ng-click="vm.setThresholdAlert(vm.thresholdAlert)">
+                        <i
+                            class="checkbox-icon fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.thresholdAlert,'fa-square-o-unchecked':!vm.thresholdAlert} "></i>
+                        <i
+                            class="checkbox-icon fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.thresholdAlert,'fa-check-square-o-unchecked':!vm.thresholdAlert}"></i>
+                    </label>
+                </div>
+
+            </div>
+            <div class="filter-button">
+                <div class="btn btn-primary" ng-click="vm.onFilterClick()">
+                    <i class="fa fa-search" aria-hidden="true"></i> Filter
+                </div>
+                <div class="btn btn-default" ng-click="vm.onClearClick()">
+                    Clear Filters
+                </div>
+            </div>
+        </div>
+    </div>
+</pageslide>

@@ -10,6 +10,8 @@ import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.release.ReleaseRequestService;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.FileUploadService;
+import com.flair.bi.service.ViewExportImportException;
+import com.flair.bi.service.ViewExportImportService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.view.export.ViewExportDTO;
@@ -68,6 +70,8 @@ public class DashboardsResource {
 	private final ViewsResource viewsResource;
 
 	private final ObjectMapper objectMapper;
+
+	private final ViewExportImportService viewExportImportService;
 
 	/**
 	 * POST /dashboard : Create a new dashboard.
@@ -276,10 +280,10 @@ public class DashboardsResource {
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess(#id, 'WRITE', 'DASHBOARD')")
 	public ResponseEntity<ViewImportResult> importView(@PathVariable Long id,
-													   @RequestParam("file") MultipartFile file) throws IOException {
+													   @RequestParam("file") MultipartFile file) throws IOException, ViewExportImportException {
 		byte[] bytes = file.getBytes();
 		ViewExportDTO viewExportDTO = objectMapper.readValue(bytes, ViewExportDTO.class);
-		return ResponseEntity.ok(dashboardService.importView(id, viewExportDTO));
+		return ResponseEntity.ok(viewExportImportService.importView(id, viewExportDTO));
 	}
 
 }

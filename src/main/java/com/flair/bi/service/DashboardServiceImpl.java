@@ -17,9 +17,6 @@ import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.view.ViewService;
-import com.flair.bi.view.VisualMetadataService;
-import com.flair.bi.view.export.ViewExportDTO;
-import com.flair.bi.view.export.ViewImportResult;
 import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -39,7 +36,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,8 +59,6 @@ public class DashboardServiceImpl implements DashboardService {
 	private final ViewService viewService;
 
 	private final DashboardReleaseRepository dashboardReleaseRepository;
-
-	private final VisualMetadataService visualMetadataService;
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -395,31 +389,6 @@ public class DashboardServiceImpl implements DashboardService {
 		}
 		return imageLocation;
 	}
-
-    @Override
-    public ViewImportResult importView(Long dashboardId, ViewExportDTO viewExportDTO) {
-		log.debug("Importing dashboard {} view {}", dashboardId, viewExportDTO);
-		final Dashboard dashboard = dashboardRepository.findById(dashboardId).orElseThrow(EntityNotFoundException::new);
-
-		viewExportDTO.getEditState().setId(null);
-		viewExportDTO.getEditState().setRevision(null);
-
-		View view = ViewExportDTO.to(viewExportDTO);
-		view.setViewDashboard(dashboard);
-		View savedView = viewService.save(view);
-
-		Optional.ofNullable(viewExportDTO.getEditState())
-				.map(editState -> editState.getVisualMetadataSet())
-				.orElseGet(() -> new HashSet<>())
-				.forEach(vm -> {
-					vm.setId(null);
-					visualMetadataService.save(savedView.getId(), vm);
-				});
-
-		ViewImportResult result = new ViewImportResult();
-		result.setId(savedView.getId());
-		return result;
-    }
 
     @Override
 	public List<DashboardRelease> getDashboardReleasesList(Long dashboardId) {

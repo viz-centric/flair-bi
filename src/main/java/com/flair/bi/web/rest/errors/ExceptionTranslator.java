@@ -1,7 +1,7 @@
 package com.flair.bi.web.rest.errors;
 
-import java.util.List;
-
+import com.flair.bi.exception.UniqueConstraintsException;
+import com.flair.bi.service.ViewExportImportException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.flair.bi.exception.UniqueConstraintsException;
+import java.util.List;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly
@@ -30,6 +30,14 @@ import com.flair.bi.exception.UniqueConstraintsException;
 public class ExceptionTranslator {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
+
+	@ExceptionHandler(ViewExportImportException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ErrorVM processViewExportImportException(ViewExportImportException ex) {
+		return new ErrorVM(ErrorConstants.ERR_VIEW_IMPORT_EXPORT_ERROR, ex.getMessage(),
+				List.of(new FieldErrorVM("", ex.getField(), "", ex.getKind().name().toLowerCase() + "." + ex.getType().name().toLowerCase())));
+	}
 
 	@ExceptionHandler(ConcurrencyFailureException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)

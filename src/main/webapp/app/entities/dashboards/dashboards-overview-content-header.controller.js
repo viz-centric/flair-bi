@@ -61,10 +61,20 @@
                     $window.location.reload();
                     // $state.reload();
                 }, function (response) {
-                    $rootScope.showErrorSingleToast({
-                        text: $translate.instant('flairbiApp.dashboards.upload.failure',
-                            {file: vm.importedViewFile.name})
-                    });
+                    const errorData = response.data;
+                    if (errorData.message === 'error.viewImportExportError') {
+                        const fieldError = errorData.fieldErrors[0];
+                        $rootScope.showErrorSingleToast({
+                            text: $translate.instant('flairbiApp.dashboards.upload.failure.error.viewImportExportError.' + fieldError.key, {
+                                file: vm.importedViewFile.name,
+                                field: fieldError.field
+                            })
+                        });
+                    } else {
+                        $rootScope.showErrorSingleToast({
+                            text: $translate.instant('flairbiApp.dashboards.upload.failure', {file: vm.importedViewFile.name})
+                        });
+                    }
                 }, function (evt) {
 
                 });

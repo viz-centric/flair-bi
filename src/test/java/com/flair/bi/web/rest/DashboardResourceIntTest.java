@@ -15,6 +15,7 @@ import com.flair.bi.repository.DashboardRepository;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.FileUploadService;
 import com.flair.bi.service.UserService;
+import com.flair.bi.service.ViewExportImportService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
@@ -121,12 +122,14 @@ public class DashboardResourceIntTest extends AbstractIntegrationTest {
 	private FileUploadService imageUploadService;
 	@Inject
 	private ViewsResource viewsResource;
+	@Inject
+	private ViewExportImportService viewExportImportService;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		DashboardsResource dashboardsResource = new DashboardsResource(dashboardService, releaseRequestService,
-				viewService, imageUploadService, viewsResource, new ObjectMapper());
+				viewService, imageUploadService, viewsResource, new ObjectMapper(), viewExportImportService);
 		ReflectionTestUtils.setField(dashboardsResource, "dashboardService", dashboardService);
 		this.restDashboardsMockMvc = MockMvcBuilders.standaloneSetup(dashboardsResource)
 				.setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)

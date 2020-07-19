@@ -2,8 +2,6 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
-import com.flair.bi.view.export.ViewExportDTO;
-import com.flair.bi.view.export.ViewImportResult;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -131,6 +129,4 @@ public interface DashboardService {
 	void updateImageLocation(String imageLocation, Long id);
 
 	String getImageLocation(Long id);
-
-    ViewImportResult importView(Long dashboardId, ViewExportDTO viewExport);
 }

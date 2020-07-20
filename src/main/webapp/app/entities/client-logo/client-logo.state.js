@@ -5,15 +5,15 @@
         .module('flairbiApp')
         .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+    stateConfig.$inject = ['$stateProvider','PERMISSIONS'];
 
-    function stateConfig($stateProvider) {
+    function stateConfig($stateProvider,PERMISSIONS) {
         $stateProvider
         .state('client-logo', {
             parent: 'admin',
             url: '/client-logo',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: [PERMISSIONS.WRITE_CLIENT_LOGO],
                 pageTitle: 'flairbiApp.clientLogo.home.title'
             },
             views: {

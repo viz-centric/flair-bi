@@ -19,6 +19,7 @@
                     .style('width', element[0].clientWidth + 'px')
                     .style('height', element[0].clientHeight + 'px')
                     .style('overflow', 'hidden')
+                    .style('border', 0)
                     .style('text-align', 'center')
                     .style('position', 'relative');
 

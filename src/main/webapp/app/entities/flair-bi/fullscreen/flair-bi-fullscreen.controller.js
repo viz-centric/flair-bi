@@ -59,6 +59,7 @@
         ////////////////
 
         function activate() {
+            $('body').css('overflow-y', "hidden");
             if ($stateParams.filters) {
                 addFilterInQueryDTO();
             }

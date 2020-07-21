@@ -33,8 +33,8 @@ public class ViewExportDTO {
 
 	public static View to(ViewExportDTO viewExportDTO) {
 		View view = new View();
-		view.setViewName(viewExportDTO.getName() + Math.round(Math.random() * 1000));
-		view.setDescription(viewExportDTO.getDescription() + Math.round(Math.random() * 1000));
+		view.setViewName(viewExportDTO.getName());
+		view.setDescription(viewExportDTO.getDescription());
 		view.setImage(Optional.ofNullable(viewExportDTO.getImage()).map(Base64Utils::decodeFromString).orElse(null));
 		view.setCurrentEditingState(viewExportDTO.getEditState());
 		view.setViewFeatureCriterias(Optional.ofNullable(viewExportDTO.getCriterias())

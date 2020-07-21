@@ -3180,8 +3180,9 @@ input[type="search"] {
   box-shadow: none; }
 
 .dropdown-options-v4 div.dropdown-menu {
-  top: 56%;
+  top: -97px;
   left: 56%;
+  min-width: 46px;
   border-radius: 0;
   border: 0;
   padding: 10px;

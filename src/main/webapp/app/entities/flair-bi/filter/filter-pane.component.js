@@ -68,17 +68,14 @@
             $rootScope.updateWidget = {};
             if (vm.dimensions) {
                 vm.dimensions.forEach(function (item) {
-                    if (!filterParametersService.isDateType(item)) {
-                        item.selected = null;
-                        item.selected2 = null;
+                    item.selected = null;
+                    item.selected2 = null;
+                    item.commaSeparatedValues = '';
+                    if(filterParametersService.isDateType(item)) {
                         item.metadata = {};
                         item.metadata.dateRangeTab = 0;
                         item.metadata.currentDynamicDateRangeConfig = null;
                         item.metadata.customDynamicDateRange = 0;
-                        item.commaSeparatedValues = '';
-                    } else {
-                        item.selected = null;
-                        item.selected2 = null;
                     }
                 });
                 filterParametersService.clear();

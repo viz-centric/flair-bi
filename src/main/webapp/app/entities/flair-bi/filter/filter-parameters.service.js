@@ -481,7 +481,8 @@
                                 }
                             }
                         });
-                        filterUrl = element.properties[0].value + "&filters=" + JSON.stringify(filterUrl);
+                        var url = removeURLParameter(element.properties[0].value, "filters");
+                        filterUrl = url + "&filters=" + JSON.stringify(filterUrl);
                         filtersList.forEach(item => {
                             filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
                         });

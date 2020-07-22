@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   
+    <changeSet author="khushbu" id="20200702200000">
+
+        <sql stripComments="true">
+            update field_types_property_types
+            set property_type_id = 693
+            where field_type_id in (94,95,96,97,98,99,100,101,102,103,104,105,106,107,108) and property_type_id = 686;
+
+            update field_types_property_types
+            set property_type_id = 650
+            where field_type_id = 99 and property_type_id = 693;
+        </sql>
+    </changeSet> 
+</databaseChangeLog>

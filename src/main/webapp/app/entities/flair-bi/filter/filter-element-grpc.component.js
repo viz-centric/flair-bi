@@ -13,7 +13,8 @@
                 dimensions: '=',
                 tab: '=',
                 list: '=',
-                separator: '='
+                separator: '=',
+                iframes: '='
             }
         });
 
@@ -335,6 +336,12 @@
                     vm.dimension.selected2 = [];
                 }
             }
+            addFilterInIframeURL();
+        }
+
+        function addFilterInIframeURL() {
+            var filters = filterParametersService.get();
+            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimension);
         }
 
         function added(tag) {

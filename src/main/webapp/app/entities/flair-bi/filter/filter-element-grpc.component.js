@@ -399,7 +399,7 @@
                         return filterParameters.indexOf(item) === -1
                     })
                     vm.list[vm.dimension.name] = selectedFilter.concat(unSelectedFilter);
-                }
+                } 
             }
         }
 

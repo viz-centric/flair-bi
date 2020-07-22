@@ -17,4 +17,8 @@ OAUTH_ACCESS_TOKEN_URI: ""
 OAUTH_USER_AUTHORIZATION_URI: ""
 OAUTH_USER_INFO_URI: ""
 
-spring.cloud.loadbalancer.ribbon.enabled: false
+spring:
+    cloud.loadbalancer.ribbon.enabled: false
+    servlet:
+        multipart:
+            max-file-size: 10MB

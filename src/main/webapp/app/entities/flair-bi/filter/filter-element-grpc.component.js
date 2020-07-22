@@ -13,7 +13,8 @@
                 dimensions: '=',
                 tab: '=',
                 list: '=',
-                separator: '='
+                separator: '=',
+                iframes: '='
             }
         });
 
@@ -251,7 +252,7 @@
             var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
-            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q)) {
+            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q) || q === "") {
                 if (q) {
                     query.conditionExpressions = [{
                         sourceType: 'FILTER',
@@ -335,6 +336,12 @@
                     vm.dimension.selected2 = [];
                 }
             }
+            addFilterInIframeURL();
+        }
+
+        function addFilterInIframeURL() {
+            var filters = filterParametersService.get();
+            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimension);
         }
 
         function added(tag) {

@@ -1,13 +1,25 @@
 package com.flair.bi.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import com.flair.bi.domain.ReleaseRequest;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.domain.ViewState;
+import com.flair.bi.exception.UniqueConstraintsException;
+import com.flair.bi.release.ReleaseRequestService;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.FileUploadService;
+import com.flair.bi.service.ViewWatchService;
+import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.view.export.ViewExportDTO;
+import com.flair.bi.web.rest.dto.CreateViewReleaseRequestDTO;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.util.PaginationUtil;
+import com.querydsl.core.types.Predicate;
+import io.micrometer.core.annotation.Timed;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -25,26 +37,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flair.bi.domain.ReleaseRequest;
-import com.flair.bi.domain.View;
-import com.flair.bi.domain.ViewRelease;
-import com.flair.bi.domain.ViewState;
-import com.flair.bi.exception.UniqueConstraintsException;
-import com.flair.bi.release.ReleaseRequestService;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.FileUploadService;
-import com.flair.bi.service.ViewWatchService;
-import com.flair.bi.service.dto.CountDTO;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.dto.CreateViewReleaseRequestDTO;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.util.PaginationUtil;
-import com.querydsl.core.types.Predicate;
-
-import io.micrometer.core.annotation.Timed;
-import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing View.
@@ -268,5 +266,12 @@ public class ViewsResource {
 	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ_PUBLISHED', 'VIEW')")
 	public ResponseEntity<ViewRelease> getRelease(@PathVariable Long viewId, @PathVariable Long version) {
 		return ResponseEntity.ok(viewService.getReleaseViewStateByVersion(viewId, version));
+	}
+
+	@GetMapping("/views/{viewId}/export")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ', 'VIEW')")
+	public ResponseEntity<ViewExportDTO> getExport(@PathVariable Long viewId) {
+		return ResponseEntity.ok(viewService.exportView(viewId));
 	}
 }

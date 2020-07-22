@@ -1,13 +1,29 @@
 package com.flair.bi.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.DashboardRelease;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.ReleaseRequest;
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewRelease;
+import com.flair.bi.release.ReleaseRequestService;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.FileUploadService;
+import com.flair.bi.service.ViewExportImportException;
+import com.flair.bi.service.ViewExportImportService;
+import com.flair.bi.service.dto.CountDTO;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.view.export.ViewExportDTO;
+import com.flair.bi.view.export.ViewImportResult;
+import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.util.PaginationUtil;
+import com.querydsl.core.types.Predicate;
+import io.micrometer.core.annotation.Timed;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -22,28 +38,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.DashboardRelease;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.ReleaseRequest;
-import com.flair.bi.domain.View;
-import com.flair.bi.domain.ViewRelease;
-import com.flair.bi.release.ReleaseRequestService;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.FileUploadService;
-import com.flair.bi.service.dto.CountDTO;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.dto.CreateDashboardReleaseDTO;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.util.PaginationUtil;
-import com.querydsl.core.types.Predicate;
-
-import io.micrometer.core.annotation.Timed;
-import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing Dashboard.
@@ -63,6 +68,10 @@ public class DashboardsResource {
 	private final FileUploadService imageUploadService;
 
 	private final ViewsResource viewsResource;
+
+	private final ObjectMapper objectMapper;
+
+	private final ViewExportImportService viewExportImportService;
 
 	/**
 	 * POST /dashboard : Create a new dashboard.
@@ -265,6 +274,16 @@ public class DashboardsResource {
 	@PreAuthorize("@accessControlManager.hasAccess(#id, 'READ_PUBLISHED', 'DASHBOARD')")
 	public DashboardRelease getRelease(@PathVariable Long id, @PathVariable Long version) {
 		return dashboardService.getReleaseByVersion(id, version);
+	}
+
+	@PostMapping("/dashboards/{id}/importView")
+	@Timed
+	@PreAuthorize("@accessControlManager.hasAccess(#id, 'WRITE', 'DASHBOARD')")
+	public ResponseEntity<ViewImportResult> importView(@PathVariable Long id,
+													   @RequestParam("file") MultipartFile file) throws IOException, ViewExportImportException {
+		byte[] bytes = file.getBytes();
+		ViewExportDTO viewExportDTO = objectMapper.readValue(bytes, ViewExportDTO.class);
+		return ResponseEntity.ok(viewExportImportService.importView(id, viewExportDTO));
 	}
 
 }

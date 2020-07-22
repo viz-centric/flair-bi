@@ -34,7 +34,7 @@
 
                 <div class="filter-element form-group">
                     <label class="control-label">Select Dashboard</label>
-                    <ui-select ng-model="vm.dashboard" ng-keypress="vm.searchDashboards($select.search)">
+                    <ui-select ng-model="vm.dashboard" ng-keypress="vm.searchDashboards($select.search)" theme="bootstrap" on-select="vm.onDashboardSelect($item)">
                         <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}
                         </ui-select-match>
                         <ui-select-choices

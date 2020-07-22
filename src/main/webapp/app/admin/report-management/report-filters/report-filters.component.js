@@ -28,6 +28,7 @@
         vm.setThresholdAlert = setThresholdAlert;
         vm.onFilterClick = onFilterClick;
         vm.onClearClick = onClearClick;
+        vm.onDashboardSelect = onDashboardSelect;
         vm.thresholdAlert = $stateParams.thresholdAlert ? $stateParams.thresholdAlert : false;
         vm.dateFormat = 'yyyy-MM-dd';
         vm.user = null;
@@ -66,6 +67,21 @@
                     text: $translate.instant('flairbiApp.views.error.searched')
                 });
             });
+        }
+
+        function onDashboardSelect(){
+            loadViews();
+        }
+
+        function loadViews() {
+            Views.query(
+                {
+                    viewDashboard: vm.dashboard.id
+                },
+                function (result) {
+                    vm.views = result;
+                }
+            );
         }
 
         function setThresholdAlert(thresholdAlert) {

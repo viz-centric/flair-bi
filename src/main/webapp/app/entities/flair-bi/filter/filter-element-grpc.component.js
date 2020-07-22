@@ -252,7 +252,7 @@
             var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
-            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q)) {
+            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q) || q === "") {
                 if (q) {
                     query.conditionExpressions = [{
                         sourceType: 'FILTER',

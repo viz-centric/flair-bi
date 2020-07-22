@@ -56,10 +56,9 @@
         }
 
         function getScheduledReports(userName, reportName) {
-            schedulerService.filterScheduledReports(userName, reportName, "", "", vm.itemsPerPage, vm.page - 1, vm.thresholdAlert)
+            schedulerService.filterScheduledReports(userName, reportName, "", "", vm.itemsPerPage, vm.page - 1, vm.thresholdAlert,"","")
                 .then(
                     function (response) {
-                        console.log(response.data);
                         vm.reports = response.data.reports;
                         vm.totalItems = response.data.totalRecords;
                         vm.queryCount = vm.totalItems;

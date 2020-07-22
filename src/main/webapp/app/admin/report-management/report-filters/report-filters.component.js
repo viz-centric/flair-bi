@@ -38,11 +38,18 @@
 
         function activate() {
             getAccount();
+            loadDashboards();
         }
 
         function getAccount() {
             vm.user = AccountDispatch.getAccount();
             vm.isAdmin = AccountDispatch.isAdmin();
+        }
+
+        function loadDashboards() {
+            Dashboards.query(function (result) {
+                vm.dashboards = result;
+            });
         }
 
         function searchDashboards(searchCriteria) {

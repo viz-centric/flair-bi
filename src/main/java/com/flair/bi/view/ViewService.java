@@ -1,14 +1,14 @@
 package com.flair.bi.view;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
 import com.flair.bi.domain.ViewState;
+import com.flair.bi.view.export.ViewExportDTO;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * Service for managing {@link View}
@@ -157,5 +157,12 @@ public interface ViewService {
 	String getImageLocation(Long id);
 
 	View findByDashboardIdAndViewName(Long id, String viewName);
+
+    /**
+     * Prepare given view for export.
+     * @param id
+     * @return view to be exported
+     */
+    ViewExportDTO exportView(Long id);
 
 }

@@ -1,15 +1,14 @@
 package com.flair.bi.service;
 
-import java.util.List;
-
+import com.flair.bi.domain.hierarchy.Hierarchy;
+import com.flair.bi.repository.HierarchyRepository;
+import com.google.common.collect.ImmutableList;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.domain.hierarchy.Hierarchy;
-import com.flair.bi.repository.HierarchyRepository;
-import com.querydsl.core.types.Predicate;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @Transactional
@@ -20,7 +19,7 @@ public class HierarchyService {
 
 	@Transactional(readOnly = true)
 	public List<Hierarchy> findAll(Predicate predicate) {
-		return (List<Hierarchy>) hierarchyRepository.findAll(predicate);
+		return ImmutableList.copyOf(hierarchyRepository.findAll(predicate));
 	}
 
 	@Transactional(readOnly = true)

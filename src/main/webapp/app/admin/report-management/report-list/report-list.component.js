@@ -105,7 +105,7 @@
         }
         function updateReport(visualizationid) {
             ReportManagementUtilsService.updateReport(visualizationid);
-            getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
+            // getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
         }
 
         function onFilterApplied(filters){

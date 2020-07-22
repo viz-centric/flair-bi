@@ -74,6 +74,7 @@
                             return item[dimensionName];
                         });
                         vm.list[dimensionName] = retVal;
+                        setSelectedFilter(vm.list[dimensionName]);
                     }
                 }
             );
@@ -119,8 +120,12 @@
             };
             filterParametersService.saveSelectedFilter(filterParameters);
             vm.isActive(filter);
+            vm.searchText = "";
+            vm.load(vm.searchText, vm.dimension)
+
             if (isFavouriteFilter())
-                displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+                vm.list[vm.dimension.name] = displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+
 
 
         }/////
@@ -381,6 +386,21 @@
             }
             arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
             return arr;
+        }
+
+        function setSelectedFilter() {
+            var filterParameters = filterParametersService.getSelectedFilter()[vm.dimension.name]
+            if (filterParameters) {
+                if (vm.list[vm.dimension.name] && vm.list[vm.dimension.name]) {
+                    var selectedFilter = vm.list[vm.dimension.name].filter(function (item) {
+                        return filterParameters.indexOf(item) !== -1
+                    })
+                    var unSelectedFilter = vm.list[vm.dimension.name].filter(function (item) {
+                        return filterParameters.indexOf(item) === -1
+                    })
+                    vm.list[vm.dimension.name] = selectedFilter.concat(unSelectedFilter);
+                }
+            }
         }
 
         function displayTextboxForValues(dimension) {

@@ -712,7 +712,6 @@
         }
 
         function applyBookmark(item) {
-            debugger
             if (!item) {
                 clearFilters();
             } else {

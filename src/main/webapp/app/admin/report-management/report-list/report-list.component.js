@@ -41,6 +41,11 @@
         vm.onFilterApplied = onFilterApplied;
         vm.toggleFilters = toggleFilters;
         vm.thresholdAlert = $stateParams.thresholdAlert ? $stateParams.thresholdAlert : false;
+        vm.reportName = "";
+        vm.fromDate = "";
+        vm.toDate = "";
+        vm.dashboardName = "";
+        vm.viewName = "";
         vm.isOpen = false;
 
         vm.$onInit = activate;
@@ -48,7 +53,7 @@
 
         function activate() {
             getAccount();
-            getScheduledReports(vm.userId, "", "", "", vm.thresholdAlert,"","");
+            getScheduledReports(vm.userId, "", "", "", vm.thresholdAlert, "", "");
         }
 
         function getAccount() {
@@ -57,8 +62,8 @@
             vm.userId = vm.isAdmin ? "" : vm.account.login;
         }
 
-        function getScheduledReports(userId, reportName, startDate, endDate, thresholdAlert,dashboardName,viewName) {
-            schedulerService.filterScheduledReports(userId, reportName, startDate, endDate, vm.itemsPerPage, vm.page - 1, thresholdAlert,dashboardName,viewName).then(
+        function getScheduledReports(userId, reportName, startDate, endDate, thresholdAlert, dashboardName, viewName) {
+            schedulerService.filterScheduledReports(userId, reportName, startDate, endDate, vm.itemsPerPage, vm.page - 1, thresholdAlert, dashboardName, viewName).then(
                 function (response) {
                     vm.reports = response.data.reports;
                     vm.totalItems = response.data.totalRecords;
@@ -74,7 +79,7 @@
         }
         function loadPage(page) {
             vm.page = page;
-            getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
+            getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert, vm.dashboardName, vm.viewName);
         }
         function parseCron(cronExp) {
             return cronstrue.toString(cronExp);
@@ -94,7 +99,7 @@
                     title: "Cancelled"
                 }
                 $rootScope.showSuccessToast(info);
-                getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert,vm.dashboardName,vm.viewName);
+                getScheduledReports(vm.userId, vm.reportName, vm.fromDate, vm.toDate, vm.thresholdAlert, vm.dashboardName, vm.viewName);
             }).catch(function (error) {
                 var info = {
                     text: error.data.message,
@@ -107,18 +112,18 @@
             ReportManagementUtilsService.updateReport(visualizationid);
         }
 
-        function onFilterApplied(filters){
+        function onFilterApplied(filters) {
             vm.dashboardName = filters.dashboardName;
             vm.viewName = filters.viewName;
             vm.userId = filters.userId;
-            vm.reportName =  filters.reportName;
+            vm.reportName = filters.reportName;
             vm.fromDate = filters.fromDate;
             vm.toDate = filters.toDate;
             vm.thresholdAlert = filters.thresholdAlert;
-            getScheduledReports(filters.userId, filters.reportName, filters.fromDate, filters.toDate, filters.thresholdAlert,filters.dashboardName,filters.viewName);
+            getScheduledReports(filters.userId, filters.reportName, filters.fromDate, filters.toDate, filters.thresholdAlert, filters.dashboardName, filters.viewName);
         }
 
-        function toggleFilters(){
+        function toggleFilters() {
             vm.isOpen = !vm.isOpen;
         }
 

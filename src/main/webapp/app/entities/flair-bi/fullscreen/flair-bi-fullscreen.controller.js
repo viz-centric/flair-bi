@@ -131,6 +131,7 @@
             var activeFilter = vm.dynamicDateRangeConfig.filter(function (item) {
                 return item.title === vm.currentDynamicDateRangeConfig;
             });
+            vm.activeFilter = activeFilter;
 
             var config = vm.currentDynamicDateRangeConfig;
             if (config.toDate) {
@@ -180,6 +181,11 @@
             var filterParameters = filterParametersService.getSelectedFilter();
 
             filterKey.forEach(element => {
+                vm.dimensions.map(function (item, index) {
+                    if (item.name === element) {
+                        vm.dimensionPosition = index;
+                    };
+                })
                 var validDimension = findDimension(element);
                 if (validDimension && validDimension.length > 0) {
 
@@ -190,6 +196,15 @@
                             valueType: 'castValueType'
                         };
                         filterParametersService.save(filterParameters);
+
+                        var myFilters = filterParametersService.get()[element] || filterParametersService.get()[element.toLowerCase()];
+                        if (myFilters && myFilters.length > 0) {
+                            vm.dimensions[vm.dimensionPosition].selected = myFilters.map(function (item) {
+                                var newItem = {};
+                                newItem['text'] = item;
+                                return newItem;
+                            });
+                        }
                     }
                     else {
                         if (filters[element].type == "date-range") {
@@ -200,6 +215,12 @@
                                 valueType: 'dateRangeValueType'
                             };
                             filterParametersService.save(filterParameters);
+                            vm.dimensions[vm.dimensionPosition].metadata = {}
+                            vm.dimensions[vm.dimensionPosition].selected = filters[element].value[0]
+                            vm.dimensions[vm.dimensionPosition].selected2 = filters[element].value[1]
+                            vm.dimensions[vm.dimensionPosition].metadata.currentDynamicDateRangeConfig = null;
+                            vm.dimensions[vm.dimensionPosition].metadata.dateRangeTab = 1;
+                            vm.dimensions[vm.dimensionPosition].metadata.customDynamicDateRange = 0;
                         }
                         else if (filters[element].type == "custom-date") {
                             vm.currentDynamicDateRangeConfig = filters[element].value[0];
@@ -221,8 +242,14 @@
                                 endDate = DateUtils.resetTimezoneDate(endDate);
                                 addDateRangeFilter(endDate, validDimension[0]);
                             }
+                            vm.dimensions[vm.dimensionPosition].metadata = {}
+                            vm.dimensions[vm.dimensionPosition].metadata.currentDynamicDateRangeConfig = vm.activeFilter[0];
+                            vm.dimensions[vm.dimensionPosition].metadata.dateRangeTab = 2;
+                            vm.dimensions[vm.dimensionPosition].metadata.customDynamicDateRange = 0;
+
                         }
                     }
+
 
                 }
             });
@@ -235,7 +262,7 @@
 
             var isIframe = filterParametersService.getParameterByName("ifIframe", $window.location.href);
             if (isIframe) {
-                var url = filterParametersService.removeURLParameter( $window.location.href,"ifIframe");
+                var url = filterParametersService.removeURLParameter($window.location.href, "ifIframe");
                 $window.open(url, '_blank');
             }
             else {

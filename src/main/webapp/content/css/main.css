@@ -2311,6 +2311,12 @@ a {
             font-weight: bold; }
   .home-container .tooltip {
     display: none; }
+  .home-container .flair-insights-filters {
+    display: flex; }
+    .home-container .flair-insights-filters .filter {
+      align-self: center; }
+      .home-container .flair-insights-filters .filter .report-name {
+        height: 34px; }
 
 @media screen and (max-width: 990px) {
   .home-container {

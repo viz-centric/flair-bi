@@ -1,8 +1,65 @@
-<div class="table-responsive tile-area-table flairInsightsTable">
-    <div class="search-box inner-addon left-addon b-b-xs">
-        <i class="glyphicon glyphicon-search"></i>
-        <input type="text" ng-model="vm.reportName"  ng-change="vm.searchReports()" name="reportName" class="form-control"
-            placeholder="Enter Report..." />
+<div class="table-responsive tile-area-table flair-insights-table">
+    <div class="row flair-insights-filters text-center">
+
+        <div class="col-md-3 col-sm-3 filter">
+            <div class="form-group">
+                <label class="control-label">Select Dashboard</label>
+                <ui-select ng-model="vm.dashboard" ng-keypress="vm.searchDashboards($select.search)" theme="bootstrap" on-select="vm.onDashboardSelect($item)">
+                    <ui-select-match placeholder="Search Dashboard...">{{$select.selected.dashboardName}}
+                    </ui-select-match>
+                    <ui-select-choices
+                        repeat="dashboard in vm.dashboards | filter: $select.search track by dashboard.id">
+                        <div ng-bind="dashboard.dashboardName"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-3 filter">
+            <div class="form-group">
+                <label class="control-label" for="emails">Select View</label>
+                <ui-select ng-model="vm.view" ng-keypress="vm.searchViews($select.search)">
+                    <ui-select-match placeholder="Search View...">{{$select.selected.viewName}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="view in vm.views | filter: $select.search track by view.id">
+                        <div ng-bind="view.viewName"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-3 filter">
+            <div class="form-group">
+                <label class="control-label" for="reportName">Report Name</label>
+                <input type="text" class="report-name input-sm form-control" name="reportName"ng-model="vm.reportName" />
+            </div>
+        </div>
+
+        <div class="col-md-2 col-sm-2 filter">
+            <div class="input-group">
+                <label class="control-label" for="emails">Threshold Alert</label>
+                &nbsp;
+                <label uib-tooltip="Threshold Alerts" class="flair-checkbox"
+                    ng-click="vm.setThresholdAlert(vm.thresholdAlert)">
+                    <i
+                        class="checkbox-icon fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.thresholdAlert,'fa-square-o-unchecked':!vm.thresholdAlert} "></i>
+                    <i
+                        class="checkbox-icon fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.thresholdAlert,'fa-check-square-o-unchecked':!vm.thresholdAlert}"></i>
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-3 filter">
+            <div class="form-group">
+                <button  class="btn btn-primary" type="submit" ng-click="vm.searchReports()">
+                    <span class="glyphicon glyphicon-search"></span>
+                    Filter
+                </button>
+                <div class="btn btn-default" ng-click="vm.onClearClick()">
+                    Clear
+                </div>
+            </div>
+        </div>
     </div>
     <br />
     <table class="table table-striped flair-table-v1">

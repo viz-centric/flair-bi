@@ -573,7 +573,19 @@
   .tooltip {
     display: none;
   }
+
+.flair-insights-filters{
+  display: flex;
+  .filter{
+    align-self: center;
+    .report-name{
+      height: 34px;
+    }
+  }
 }
+
+}
+
 
 @media screen and (max-width: $break-medium) {
   .home-container {

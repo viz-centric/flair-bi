@@ -439,6 +439,7 @@
             vm.favouriteDimensions = vm.dimensions.filter(function (item) {
                 return item.favouriteFilter === true;
             });
+            debugger
             $('#slider').css('display', 'block');
         }
 

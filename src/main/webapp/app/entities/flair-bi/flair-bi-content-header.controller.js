@@ -486,7 +486,6 @@
         function changeViewAndUpdateDashboard(item) {
             vm.selectedView = item;
             vm.viewId = item.id;
-            changeTitle();
             vm.build();
         }
 
@@ -661,6 +660,8 @@
             vm.filters[key] = list;
             removeTagInBI({ 'text': val });
             setNoOfPages();
+            var filters = filterParametersService.get();
+            filterParametersService.setFilterInIframeURL(filters,vm.iFrames,vm.dimensions);
         }
 
         function removeFilter($event, key) {
@@ -711,6 +712,7 @@
         }
 
         function applyBookmark(item) {
+            debugger
             if (!item) {
                 clearFilters();
             } else {

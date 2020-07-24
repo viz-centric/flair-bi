@@ -81,20 +81,18 @@ nav.navbar-static-top {
             }
         }
         .client-logo {
-            border-right: 1px #ced0d1 solid;
-            height:41px;
-            width: 45px;
             img {
                 width: 50px;
                 height: 40px;
-                margin-left: -3px;
+                border-right: 1px #ced0d1 solid;
+                padding: 2px;
             }
         }
         .flair-logo {
             img {
                 width: 25px;
                 height: 40px;
-                margin-left: 50px;
+                margin-left: 57px;
             }
         }
         .home-row {
@@ -114,7 +112,7 @@ nav.navbar-static-top {
         }
          .home-header-search-box{
             display: none;
-            left: 100px;
+            left: 103px;
          }
          .home-header-search-box1{
             display: none;

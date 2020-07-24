@@ -1202,18 +1202,15 @@ nav.navbar-static-top {
         width: 25px;
         height: 40px;
         margin-left: 6px; }
-    nav.navbar-static-top .navbar-header .client-logo {
+    nav.navbar-static-top .navbar-header .client-logo img {
+      width: 50px;
+      height: 40px;
       border-right: 1px #ced0d1 solid;
-      height: 41px;
-      width: 45px; }
-      nav.navbar-static-top .navbar-header .client-logo img {
-        width: 50px;
-        height: 40px;
-        margin-left: -3px; }
+      padding: 2px; }
     nav.navbar-static-top .navbar-header .flair-logo img {
       width: 25px;
       height: 40px;
-      margin-left: 50px; }
+      margin-left: 57px; }
     nav.navbar-static-top .navbar-header .home-row {
       display: flex;
       align-items: center; }
@@ -1228,7 +1225,7 @@ nav.navbar-static-top {
       left: 62px; }
     nav.navbar-static-top .navbar-header .home-header-search-box {
       display: none;
-      left: 100px; }
+      left: 103px; }
     nav.navbar-static-top .navbar-header .home-header-search-box1 {
       display: none;
       left: 44px; }
@@ -4164,18 +4161,18 @@ jhi-alert .alerts .alert-danger {
         width: 25px;
         height: 40px; }
     .flairbi-content-header .header-first .client-logo-viz {
-      border-right: 1px #ced0d1 solid;
-      height: 41px;
-      width: 42px; }
+      position: absolute;
+      left: 10px; }
       .flairbi-content-header .header-first .client-logo-viz img {
         width: 50px;
         height: 40px;
-        margin-left: -7px; }
+        padding: 2px;
+        border-right: 1px #ced0d1 solid; }
     .flairbi-content-header .header-first .flair-logo-viz img {
       width: 25px;
       height: 40px;
-      margin-left: 6px;
-      margin-right: 35px; }
+      margin-left: 50px;
+      margin-right: 15px; }
   .flairbi-content-header h2 {
     margin: 0px;
     line-height: 40px;
@@ -7176,4 +7173,4 @@ body.ng-pageslide-body-closed::before {
 .client-logo-body .logo-display-container {
   max-height: 100px;
   width: 100%;
-  margin-top: -15px; }
+  margin-bottom: 32px; }

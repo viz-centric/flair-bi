@@ -63,21 +63,21 @@
             }
         }
         .client-logo-viz {
-            border-right: 1px #ced0d1 solid;
-            height:41px;
-            width: 42px;
+            position: absolute;
+            left: 10px;
             img {
                 width: 50px;
                 height: 40px;
-                margin-left: -7px;
+                padding: 2px;
+                border-right: 1px #ced0d1 solid;
             }
         }
         .flair-logo-viz {
             img {
                 width: 25px;
                 height: 40px;
-                margin-left: 6px;
-                margin-right: 35px;
+                margin-left: 50px;
+                margin-right: 15px;
             }
         }
     }

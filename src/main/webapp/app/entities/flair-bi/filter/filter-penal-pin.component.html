@@ -1,0 +1,10 @@
+<form class="form-inline filter" >
+    <div class="form-group" ng-repeat="dimension in vm.dimensions">
+        <div>
+            <label>{{dimension.name}}:</label>
+            <div class="dimensionFilter" ng-dropdown-multiselect="" options="vm.list[dimension.name]" selected-model="vm.example14model[dimension.name]"
+                checkboxes="true" selectedToTop="true" extra-settings="vm.setting1"></div>
+        </div>
+
+    </div>
+</form>

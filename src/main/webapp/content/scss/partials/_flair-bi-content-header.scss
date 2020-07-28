@@ -375,6 +375,33 @@
         padding: 0 8px;
         margin-top: 0px;
     }
+    .headerMenu{
+        height: 35px;
+        display: flex;
+        border-bottom: 1px #e1e3e3 solid;
+        border-top: 1px #e1e3e3 solid;
+        margin-left: -10px;
+        margin-top: 0px;
+    }
+    .dropdown-menu {
+        .divider {
+            padding: 0px;
+            margin: 0px;
+            height: 0px;
+        }
+    } 
+    .dimensionFilter{
+        float: right;
+        margin: 2px 10px;
+        button{
+            padding : 0px;
+        }
+    }
+    .filter{
+        label {
+            margin-top: 3px;
+        }
+    }
 }
 .alarm-icon-off{
     fill:#676a6c !important; 

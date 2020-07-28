@@ -36,8 +36,10 @@
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
         vm.isActive = isActive;
+        vm.toggleHeaderFilter = toggleHeaderFilter;
         vm.activeForText = "disable";
         vm.isCommaSeparatedInput = false;
+        vm.pinFilter = [];
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         vm.lastQuery = {};
         ////////////////
@@ -432,6 +434,12 @@
 
         function getSeparator(){
             return vm.separator ? vm.separator.value : ",";
+        }
+        function toggleHeaderFilter(dimension) {
+            if (vm.pinFilter.length < 5) {
+                vm.pinFilter.push(dimension);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-pin-filters");
+            }
         }
     }
 })();

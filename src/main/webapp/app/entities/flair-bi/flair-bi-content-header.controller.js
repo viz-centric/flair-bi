@@ -154,6 +154,7 @@
         vm.canEdit = false;
         vm.editOn = false;
         vm.share = share;
+       
 
         Principal.identity().then(function (account) {
             vm.account = account;
@@ -175,6 +176,7 @@
         ////////////////
 
         function activate() {
+           
             registerEditModeToggle();
             registerFilterRefresh();
             registerAddFilter();

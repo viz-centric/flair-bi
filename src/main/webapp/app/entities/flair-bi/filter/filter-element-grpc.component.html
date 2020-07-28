@@ -7,6 +7,10 @@
          <i ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width" ng-class="{'active' : vm.isCommaSeparatedInput}" uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom" >
         </i>
     </label>
+    <label class="pull-right">
+        <i ng-click="vm.toggleHeaderFilter(vm.dimension)" aria-hidden="true" class="fa fa-thumb-tack" ng-class="{'active' : vm.isCommaSeparatedInput}">
+       </i>
+   </label>
 
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension" reload="vm.dateRangeReload"

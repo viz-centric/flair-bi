@@ -279,7 +279,7 @@
         }
 
         function setThinBarStyle(isFiltersApplied) {
-            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
+            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "70px" } : { "margin-top": "75px" }
         }
 
         function registerToggleAppliedFilterOn() {

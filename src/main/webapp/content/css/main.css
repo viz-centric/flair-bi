@@ -1450,7 +1450,7 @@ nav.navbar-static-top {
   border-left: 1px solid #e1e3e3;
   z-index: 10;
   height: 100%;
-  margin-top: 40px; }
+  margin-top: 70px; }
   .resource-tabs button {
     background: none;
     border: 0;
@@ -4367,6 +4367,24 @@ jhi-alert .alerts .alert-danger {
     height: 40px;
     padding: 0 8px;
     margin-top: 0px; }
+  .flairbi-content-header .headerMenu {
+    height: 35px;
+    display: flex;
+    border-bottom: 1px #e1e3e3 solid;
+    border-top: 1px #e1e3e3 solid;
+    margin-left: -10px;
+    margin-top: 0px; }
+  .flairbi-content-header .dropdown-menu .divider {
+    padding: 0px;
+    margin: 0px;
+    height: 0px; }
+  .flairbi-content-header .dimensionFilter {
+    float: right;
+    margin: 2px 10px; }
+    .flairbi-content-header .dimensionFilter button {
+      padding: 0px; }
+  .flairbi-content-header .filter label {
+    margin-top: 3px; }
 
 .alarm-icon-off {
   fill: #676a6c !important;
@@ -4700,7 +4718,7 @@ jhi-alert .alerts .alert-danger {
   #grid-container.filters-applied {
     margin-top: 65px; }
   #grid-container.filters-not-applied {
-    margin-top: 30px; }
+    margin-top: 60px; }
   #grid-container.filters-applied-fullscreen, #grid-container.fullscreen-show-filter {
     margin-top: 87px; }
   #grid-container.filters-not-applied-fullscreen, #grid-container.fullscreen-hide-filter {

@@ -18,9 +18,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -345,8 +345,17 @@
         }
 
         function addFilterInIframeURL() {
-            var filters = filterParametersService.get();
-            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimension);
+            Views.getCurrentEditState({
+                id: $stateParams.id
+            },
+                function (result, headers) {
+                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                        return item.metadataVisual.name === IFRAME.iframe;
+                    })
+                    var filters = filterParametersService.get();
+                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                }
+            );
         }
 
         function added(tag) {

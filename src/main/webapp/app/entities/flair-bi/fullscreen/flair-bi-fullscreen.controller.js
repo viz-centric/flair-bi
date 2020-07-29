@@ -66,12 +66,6 @@
             const applied = filterParametersService.applyViewFeatureCriteria(vm.view.viewFeatureCriterias, featureEntities);
             filterParametersService.applyDefaultFilters(applied, featureEntities);
             connectWebSocket();
-            proxyGrpcService.forwardCall(vm.datasource.id, {
-                queryDTO: vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                visualMetadata: vm.visualMetadata,
-                type: 'share-link',
-                validationType: 'REQUIRED_FIELDS'
-            }, $stateParams.viewId);
         }
 
         function connectWebSocket() {
@@ -198,6 +192,8 @@
                         filterParametersService.save(filterParameters);
 
                         var myFilters = filterParametersService.get()[element] || filterParametersService.get()[element.toLowerCase()];
+
+                        vm.dimensions[vm.dimensionPosition].selected = []
                         if (myFilters && myFilters.length > 0) {
                             vm.dimensions[vm.dimensionPosition].selected = myFilters.map(function (item) {
                                 var newItem = {};

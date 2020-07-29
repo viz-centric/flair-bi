@@ -1185,6 +1185,11 @@
                     borderBottom: "none",
                     color: "#676a6c"
                 },
+                dashboardroperties: {
+                    dashboardName :  vm.view.viewDashboard.dashboardName,
+                    viewName: vm.view.viewName,
+                    buildUrl: $window.location.href
+                },
                 bodyProperties: {
                     opacity: 1,
                     backgroundColor: "#ffffff",

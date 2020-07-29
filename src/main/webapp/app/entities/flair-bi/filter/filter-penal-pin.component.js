@@ -19,8 +19,9 @@
         var vm = this;
 
         vm.load = load;
+        vm.applyFilter = applyFilter;
         vm.list = {};
-        vm.example14model = {};
+        vm.selectedFilter = {};
         activate();
 
         ////////////////
@@ -91,12 +92,18 @@
                             id: item[dimensionName]
                         }
                     });
-                    vm.example14model[dimensionName] = [];
+                    vm.selectedFilter[dimensionName] = [];
                     vm.list[dimensionName] = retVal;
                 }
             );
             $scope.$on("$destroy", unsubscribe);
         };
+
+        function findDimension(dimension) {
+            return vm.dimensions.filter(function (item) {
+                return item.name === dimension;
+            })
+        }
 
         function load(q, dimension) {
             var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
@@ -124,6 +131,45 @@
             },
                 $stateParams.id ? $stateParams.id : $stateParams.viewId
             );
+        }
+
+        function applyFilter() {
+            var filter = Object.keys(vm.selectedFilter);
+            var filterParameters = filterParametersService.getSelectedFilter();
+
+            filter.forEach(element => {
+                if (vm.selectedFilter[element].length > 0) {
+                    var dimension = findDimension(element)[0];
+                    if (!filterParameters[dimension.name]) {
+                        filterParameters[dimension.name] = [];
+                    }
+                    filterParameters[dimension.name] = vm.selectedFilter[element].map(function (item) {
+                        return item.id;
+                    });
+                    filterParameters[dimension.name]._meta = {
+                        dataType: dimension.type,
+                        valueType: 'valueType'
+                    };
+                    filterParametersService.saveSelectedFilter(filterParameters);
+
+                }
+            });
+            FilterStateManagerService.add(angular.copy(filterParametersService.get()));
+            dd();
+        }
+
+        function dd() {
+            filterParametersService.save(filterParametersService.getSelectedFilter());
+            $rootScope.updateWidget = {};
+            $rootScope.$broadcast('flairbiApp:filter');
+            $rootScope.$broadcast('flairbiApp:filter-add');
+            addFilterInIframeURL();
+            $rootScope.$broadcast("flairbiApp:filterClicked");
+        }
+
+        function addFilterInIframeURL() {
+            var filters = filterParametersService.getSelectedFilter();
+            filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimensions);
         }
 
 

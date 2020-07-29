@@ -200,6 +200,8 @@
             registerToggleHeaderPinFilter();
             registerToggleFullScreenFilter();
             vm.filtersLength = filterParametersService.getFiltersCount();
+            showPinFilter();
+
         }
 
         function registerFilterCountChanged() {
@@ -211,7 +213,19 @@
             );
             $scope.$on("$destroy", unsubscribe);
         }
-        
+
+        function showPinFilter() {
+            vm.pinDimensions = vm.dimensions;
+            if (vm.pinDimensions.length > 0) {
+                vm.showPinFilter = true;
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
+            }
+            else{
+                vm.showPinFilter = false;
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
+            }
+        }
+
 
         function showVizLoader(isCardRevealed, loading, dataReceived) {
             return isCardRevealed && loading && !dataReceived;
@@ -850,6 +864,7 @@
                 function (event, result) {
                     //alert('demo')
                     console.log('demo')
+                    vm.showPinFilter = result;
                 }
             );
             $scope.$on("$destroy", registerToggleHeaderPinFilter);

@@ -389,17 +389,39 @@
             margin: 0px;
             height: 0px;
         }
+        li{
+            padding-bottom: 1px;
+            a{
+                padding: 0px 20px;
+            }
+            .dropdown-header{
+                padding: 0px 5px;
+                input{
+                    height: 20px;
+                }
+            }
+        }
     } 
     .dimensionFilter{
         float: right;
-        margin: 2px 10px;
+        margin: 2px 5px;
         button{
-            padding : 0px;
+            padding: 0px 5px;
+            font-size: 12px;
+            background: transparent;
+            border: none;
         }
     }
-    .filter{
+    .pin-filter{
         label {
             margin-top: 3px;
+            font-weight: bold;
+            font-size: 12px;
+            color: #33a2e5;
+        }
+        div.filter{
+            font-size: 12px;
+            padding: 0px 5px;
         }
     }
 }

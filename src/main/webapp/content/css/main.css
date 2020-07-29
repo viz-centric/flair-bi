@@ -1450,7 +1450,7 @@ nav.navbar-static-top {
   border-left: 1px solid #e1e3e3;
   z-index: 10;
   height: 100%;
-  margin-top: 70px; }
+  margin-top: 40px; }
   .resource-tabs button {
     background: none;
     border: 0;
@@ -4378,13 +4378,30 @@ jhi-alert .alerts .alert-danger {
     padding: 0px;
     margin: 0px;
     height: 0px; }
+  .flairbi-content-header .dropdown-menu li {
+    padding-bottom: 1px; }
+    .flairbi-content-header .dropdown-menu li a {
+      padding: 0px 20px; }
+    .flairbi-content-header .dropdown-menu li .dropdown-header {
+      padding: 0px 5px; }
+      .flairbi-content-header .dropdown-menu li .dropdown-header input {
+        height: 20px; }
   .flairbi-content-header .dimensionFilter {
     float: right;
-    margin: 2px 10px; }
+    margin: 2px 5px; }
     .flairbi-content-header .dimensionFilter button {
-      padding: 0px; }
-  .flairbi-content-header .filter label {
-    margin-top: 3px; }
+      padding: 0px 5px;
+      font-size: 12px;
+      background: transparent;
+      border: none; }
+  .flairbi-content-header .pin-filter label {
+    margin-top: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    color: #33a2e5; }
+  .flairbi-content-header .pin-filter div.filter {
+    font-size: 12px;
+    padding: 0px 5px; }
 
 .alarm-icon-off {
   fill: #676a6c !important;
@@ -4718,7 +4735,11 @@ jhi-alert .alerts .alert-danger {
   #grid-container.filters-applied {
     margin-top: 65px; }
   #grid-container.filters-not-applied {
+    margin-top: 30px; }
+  #grid-container.filter-without-pin {
     margin-top: 60px; }
+  #grid-container.filter-with-pin {
+    margin-top: 90px; }
   #grid-container.filters-applied-fullscreen, #grid-container.fullscreen-show-filter {
     margin-top: 87px; }
   #grid-container.filters-not-applied-fullscreen, #grid-container.fullscreen-hide-filter {

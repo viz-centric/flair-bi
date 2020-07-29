@@ -153,6 +153,7 @@
         vm.viewFeatureCriteriaReady = false;
         vm.canEdit = false;
         vm.editOn = false;
+        vm.showPinFilter = false;
         vm.share = share;
        
 
@@ -186,6 +187,7 @@
             vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
             });
+            loadPinDimensions();
 
             if (configuration.readOnly) {
                 var vms = states.viewState.visualMetadataSet || [];
@@ -207,6 +209,7 @@
             } else {
                 applyFilters();
             }
+
         }
 
         function getClientLogo() {
@@ -215,6 +218,18 @@
                     vm.clientLogo = result[0];
                 }
             });
+        }
+
+        function loadPinDimensions() {
+            vm.pinDimensions = vm.dimensions.slice(0, 5);
+            if (vm.pinDimensions.length > 0) {
+                vm.showPinFilter = true;
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
+            }
+            else{
+                vm.showPinFilter = false;
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
+            }
         }
 
         function applyDefaultFilters(excluded) {
@@ -404,6 +419,10 @@
             $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters", vm.showFSFilter);
         }
 
+        function gridContainer(){
+
+        }
+
         function ifFSFilterToggled() {
             return vm.filtersLength > 0 && ($rootScope.isFullScreen == false || (vm.showFSFilter == true && $rootScope.isFullScreen == true));
         }
@@ -427,6 +446,7 @@
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;
                 $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
+
             } else {
                 vm.showFSFilter = true;
                 $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);

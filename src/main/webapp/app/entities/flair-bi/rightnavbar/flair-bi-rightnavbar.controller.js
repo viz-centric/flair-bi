@@ -62,6 +62,7 @@
         vm.getSelectedItem = getSelectedItem;
         vm.onWidgetsOpen = onWidgetsOpen;
         vm.onWidgetsClose = onWidgetsClose;
+        vm.pinDimensions = [];
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.apply = apply;
         activate();
@@ -279,7 +280,11 @@
         }
 
         function setThinBarStyle(isFiltersApplied) {
-            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "70px" } : { "margin-top": "75px" }
+            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
+            if (vm.pinDimensions.length > 0) {
+                var margin = parseFloat($("#leftside-thinbar").css('margin-top'))+30;
+                vm.thinbarStyle =  { "margin-top": margin };
+            }
         }
 
         function registerToggleAppliedFilterOn() {
@@ -522,6 +527,7 @@
             });
 
             vm.dimensions = vm.dateDimensions.concat(vm.allDimensions);
+            vm.pinDimensions = vm.dimensions;
         }
 
         function registerToggleRightNavBarOff() {

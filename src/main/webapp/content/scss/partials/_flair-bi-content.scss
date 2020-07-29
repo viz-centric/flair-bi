@@ -180,7 +180,13 @@
         margin-top: 65px;
     }
     &.filters-not-applied{
+        margin-top: 30px;
+    }
+    &.filter-without-pin{
         margin-top: 60px;
+    }
+    &.filter-with-pin{
+        margin-top: 90px;
     }
     &.filters-applied-fullscreen {
         margin-top: 87px;

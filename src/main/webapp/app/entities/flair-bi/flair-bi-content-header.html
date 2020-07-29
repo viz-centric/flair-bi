@@ -197,9 +197,9 @@
     </div>
 
 
-    <div class="row headerMenu" ng-if="$root.isFullScreen == false">
+    <div class="row headerMenu" ng-if="vm.showPinFilter == true">
         <div class="col-md-12 col-sm-6 col-xs-6 header-first">
-            <filter-penal-pin-component  view="vm.view" dimensions="vm.dimensions">
+            <filter-penal-pin-component  view="vm.view" dimensions="vm.pinDimensions">
             </filter-penal-pin-component>
         </div>
     </div>

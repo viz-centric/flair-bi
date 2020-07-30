@@ -389,18 +389,7 @@
             margin: 0px;
             height: 0px;
         }
-        li{
-            padding-bottom: 1px;
-            a{
-                padding: 0px 20px;
-            }
-            .dropdown-header{
-                padding: 0px 5px;
-                input{
-                    height: 20px;
-                }
-            }
-        }
+       
     } 
     .dimensionFilter{
         float: right;
@@ -413,7 +402,7 @@
         }
     }
     .pin-filter{
-        label {
+        .dimension-label {
             margin-top: 3px;
             font-weight: bold;
             font-size: 12px;
@@ -422,6 +411,23 @@
         div.filter{
             font-size: 12px;
             padding: 0px 5px;
+        }
+        div.filter-section{
+            padding: 0px 5px;
+            margin: 0px 3px;
+            border: 1px #e1e3e3 solid;
+        }
+        li{
+            padding-bottom: 1px;
+            a{
+                padding: 0px 20px;
+            }
+            .dropdown-header{
+                padding: 0px 5px;
+                input{
+                    height: 20px;
+                }
+            }
         }
     }
 }

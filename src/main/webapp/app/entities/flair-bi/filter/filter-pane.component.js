@@ -16,9 +16,9 @@
             }
         });
 
-    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService','SEPARATORS'];
+    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService','SEPARATORS','$stateParams','Views','IFRAME'];
 
-    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService,SEPARATORS) {
+    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService,SEPARATORS,$stateParams,Views,IFRAME) {
         var vm = this;
 
         vm.filter = filter;
@@ -94,8 +94,17 @@
         }
 
         function addFilterInIframeURL() {
-            var filters = filterParametersService.getSelectedFilter();
-            filterParametersService.setFilterInIframeURL(filters,vm.iframes,vm.dimensions);
+            Views.getCurrentEditState({
+                id: $stateParams.id
+            },
+                function (result, headers) {
+                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                        return item.metadataVisual.name === IFRAME.iframe;
+                    })
+                    var filters = filterParametersService.get();
+                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                }
+            );
         }
     }
 })();

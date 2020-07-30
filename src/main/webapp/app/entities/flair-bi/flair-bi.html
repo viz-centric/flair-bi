@@ -35,7 +35,13 @@
                             <div class="viz-header-content">
                                 <div class="viz-title flair-text">
                                     <i ng-show="v.isLiveEnabled" class="fa fa-circle text-danger live-icon"></i>
-                                    {{v.titleProperties.titleText}}
+                                    <a ng-show="v.metadataVisual.name === 'Iframe'" href="#"
+                                        title="Dashboard Name : Dashboard&#013;View Name: View">
+                                        {{v.titleProperties.titleText}}
+                                    </a>
+                                    <span
+                                        ng-show="v.metadataVisual.name !== 'Iframe'">{{v.titleProperties.titleText}}</span>
+
                                     <i ng-if="v.cacheDate" class="fa fa-circle text-danger live-icon"
                                         title="{{(v.cacheDate * 1000) | date:'MMM d, h:mm:ss a'}}"></i>
                                 </div>
@@ -78,7 +84,8 @@
                                                         </svg>
                                                     </span></a>
                                             </div>
-                                            <div class="item" role="menuitem" ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()">
+                                            <div class="item" role="menuitem"
+                                                ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()">
                                                 <a href ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
                                                     <span uib-tooltip="Save" tooltip-placement="top">
                                                         <svg class="flaticons-save-button">
@@ -141,7 +148,7 @@
                                                     </span>
                                                 </a>
                                             </div>
-                                            <div class="item" role="menuitem"  ng-if="vm.canCreateReport">
+                                            <div class="item" role="menuitem" ng-if="vm.canCreateReport">
                                                 <a href ng-click="vm.openSchedulerDialog(v,false)">
                                                     <span uib-tooltip="Schedule&nbsp;Report" tooltip-placement="top">
                                                         <svg class="calendar">
@@ -150,7 +157,8 @@
                                                     </span>
                                                 </a>
                                             </div>
-                                            <div  ng-if="vm.hideThreshold(v)" class="item" role="menuitem" ng-show="vm.canCreateReport">
+                                            <div ng-if="vm.hideThreshold(v)" class="item" role="menuitem"
+                                                ng-show="vm.canCreateReport">
                                                 <a href ng-click="vm.openSchedulerDialog(v,true)">
                                                     <span uib-tooltip="Schedule&nbsp;Threshold&nbsp;Alert&nbsp;Report"
                                                         tooltip-placement="top">
@@ -180,10 +188,12 @@
                     </div>
                     <div ng-style="{'opacity': v.bodyProperties.opacity}"
                         ng-if="$root.vizualizationServiceMode == 'grpc'" id="content-{{v.visualBuildId}}"
-                        class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()" data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
+                        class="printme content widget-content" visualization-render-grpc can-build="v.canBuild()"
+                        data="v" id="v.id || v.visualBuildId" widget="{{v.metadataVisual.functionname}}"
                         reload="vm.change" drilldowns="vm.drilldowns" datasource="vm.datasource">
                         <div class="loader-spinner" ng-if="v.metadataVisual.functionname==='GenerateTable'">
-                            <img class="vizualization" src="../../../content/svgs/loader.svg" style="height: 100px;width: 100px;">
+                            <img class="vizualization" src="../../../content/svgs/loader.svg"
+                                style="height: 100px;width: 100px;">
                         </div>
                     </div>
                     <div ng-if="$root.vizualizationServiceMode == 'http'" id="content-{{v.visualBuildId}}"
@@ -221,7 +231,8 @@
                                             </span>
                                         </a>
                                         <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href=""
-                                            class="viz-header-button" ng-click="vm.saveFeatures(v)" ng-disabled="vm.isSaving">
+                                            class="viz-header-button" ng-click="vm.saveFeatures(v)"
+                                            ng-disabled="vm.isSaving">
                                             <span uib-tooltip="Save" tooltip-placement="bottom">
                                                 <svg class="viz-header-icon flaticons-save-button">
                                                     <use xlink:href="#save-button" />
@@ -242,8 +253,8 @@
                             <div class="dim-measure-area" ng-show="v.metadataVisual.name == 'Iframe'">
                                 <div class="form-group" style="margin: 10px;">
                                     <label for="iframelink">I-Frame Link</label>
-                                    <input type="text" class="form-control"
-                                        ng-model="v.properties[0].value" style="margin-top: 10px;" id="iframelink" placeholder="I frame link">
+                                    <input type="text" class="form-control" ng-model="v.properties[0].value"
+                                        style="margin-top: 10px;" id="iframelink" placeholder="I frame link">
                                 </div>
                             </div>
                             <div class="dim-measure-area" ng-hide="v.metadataVisual.name == 'Iframe'">

@@ -1,5 +1,19 @@
 <div class="fbibox user-management-table">
     <div class="fbibox-content">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 com-xs-12">
+                    <div class="btn-group">
+                        <input id="searchinput" type="text" class="form-control" id="user" name="user"
+                            placeholder="Search User..."
+                            ng-model="vm.searchedUser"
+                            ng-change="vm.searchUser(vm.searchedUser)"
+                            ng-model-options="{ debounce: 100 }"  />
+                          <span id="searchclear" class="glyphicon glyphicon-remove-circle" ng-click="vm.onClear()">
+                          </span>
+                    </div>
+            </div>
+        </div>
+        <br/>
         <div class="table-responsive">
             <table class="table table-striped flair-table-v1">
                 <thead>

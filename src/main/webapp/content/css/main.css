@@ -5827,6 +5827,18 @@ ui bootstrap tweaks
   color: #439dd3;
   font-size: 1.5em; }
 
+.user-management-table #searchclear {
+  position: absolute;
+  top: -1px;
+  bottom: 0;
+  height: 14px;
+  margin: auto;
+  font-size: 14px;
+  cursor: pointer;
+  color: #439dd3;
+  left: 186px;
+  outline: none; }
+
 .filter-area .filter-element label {
   font-weight: 600;
   margin-left: 0.5vw; }

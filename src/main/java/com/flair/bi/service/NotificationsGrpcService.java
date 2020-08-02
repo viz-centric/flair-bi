@@ -1,17 +1,5 @@
 package com.flair.bi.service;
 
-import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
-import static java.util.stream.Collectors.toList;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import com.flair.bi.messages.report.AddEmailConfigsRequest;
 import com.flair.bi.messages.report.AddTeamConfigsRequest;
 import com.flair.bi.messages.report.ChannelParameters;
@@ -90,40 +78,53 @@ import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
 import com.flair.bi.websocket.grpc.config.ManagedChannelFactory;
-
+import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
 @Profile("!test")
+@RequiredArgsConstructor
 public class NotificationsGrpcService implements INotificationsGrpcService {
 
-    private final ManagedChannelFactory managedChannelFactory;
+    private final ManagedChannelFactory notificationsChannelFactory;
+    private final GrpcCredentialsService grpcCredentialsService;
     private volatile ReportServiceGrpc.ReportServiceBlockingStub reportServiceBlockingStub;
     private volatile ManagedChannel channel;
-
-    @Autowired
-    public NotificationsGrpcService(@Qualifier("notificationsChannelFactory") ManagedChannelFactory managedChannelFactory) {
-        this.managedChannelFactory = managedChannelFactory;
-    }
 
     private ReportServiceGrpc.ReportServiceBlockingStub getReportStub() {
         if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
             synchronized (this) {
                 if (reportServiceBlockingStub == null || (channel != null && channel.isShutdown())) {
-                    reportServiceBlockingStub = ReportServiceGrpc.newBlockingStub(getChannel());
+                    reportServiceBlockingStub = ReportServiceGrpc.newBlockingStub(getChannel())
+                            .withCallCredentials(getCredentials().orElse(null));
                 }
             }
         }
         return reportServiceBlockingStub;
     }
 
+    private Optional<CallCredentials> getCredentials() {
+        return grpcCredentialsService.getCredentials();
+    }
+
     private ManagedChannel getChannel() {
         if (channel == null || channel.isShutdown()) {
             synchronized (this) {
                 if (channel == null || channel.isShutdown()) {
-                    channel = managedChannelFactory.getInstance();
+                    channel = notificationsChannelFactory.getInstance();
                 }
             }
         }

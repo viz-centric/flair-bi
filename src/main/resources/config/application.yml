@@ -25,4 +25,4 @@ spring:
 
 app:
     auth:
-        jwt-key: "dGhpcyBpcyBhIHRvcCBzZWNyZXQga2V5IDE1MXEtLTI0IyUk"
+        jwt-key: secretKey1secretKey1secretKey1secretKey1secretKey1secretKey1secretKey1

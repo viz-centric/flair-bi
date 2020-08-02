@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
 
 @RequiredArgsConstructor
@@ -20,11 +21,10 @@ public class JwtCredential extends CallCredentials {
                                      final MetadataApplier metadataApplier) {
         // Make a JWT compact serialized string.
         // This example omits setting the expiration, but a real application should do it.
-        final String jwt =
-                Jwts.builder()
-                        .setSubject(userId)
-                        .signWith(SignatureAlgorithm.HS256, key)
-                        .compact();
+        final String jwt = Jwts.builder()
+                .setSubject(userId)
+                .signWith(SignatureAlgorithm.HS256, key.getBytes(StandardCharsets.UTF_8))
+                .compact();
 
         executor.execute(() -> {
             try {

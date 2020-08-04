@@ -40,16 +40,17 @@
             vm.totalItems = null;
             vm.clear = clear;
             vm.links = null;
+            vm.searchedUser = "";
             vm.loadPage = loadPage;
             vm.predicate = vm.pagingParams.predicate;
             vm.reverse = vm.pagingParams.ascending;
             vm.itemsPerPage = paginationConstants.itemsPerPage;
             vm.transition = transition;
-
+            vm.searchUser = searchUser;
+            vm.onClear = onClear;
             vm.canWrite = Principal.hasAuthority(PERMISSIONS.WRITE_USER_MANAGEMENT);
             vm.canEdit = Principal.hasAuthority(PERMISSIONS.UPDATE_USER_MANAGEMENT);
             vm.canDelete = Principal.hasAuthority(PERMISSIONS.DELETE_USER_MANAGEMENT);
-
             vm.loadAll();
             JhiLanguageService.getAll().then(function (languages) {
                 vm.languages = languages;
@@ -146,6 +147,22 @@
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 search: vm.currentSearch
             });
+        }
+
+        function searchUser(searchedText) {
+            if (searchedText && searchedText.length >=2) {
+                User.search({
+                    login: searchedText,
+                    page: vm.pagingParams.page - 1,
+                    size: vm.itemsPerPage,
+                    sort: sort()
+                }, onSuccess, onError);
+            }
+        }
+
+        function onClear(){
+            vm.searchedUser = "";
+            vm.loadAll();
         }
     }
 })();

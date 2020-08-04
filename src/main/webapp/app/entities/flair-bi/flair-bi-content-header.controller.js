@@ -682,8 +682,18 @@
             vm.filters[key] = list;
             removeTagInBI({ 'text': val });
             setNoOfPages();
-            var filters = filterParametersService.get();
-            filterParametersService.setFilterInIframeURL(filters,vm.iFrames,vm.dimensions);
+            Views.getCurrentEditState({
+                id: $stateParams.id
+            },
+                function (result, headers) {
+                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                        return item.metadataVisual.name === IFRAME.iframe;
+                    })
+                    var filters = filterParametersService.get();
+                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                }
+            );
+           
         }
 
         function removeFilter($event, key) {
@@ -751,8 +761,17 @@
                         $rootScope.$broadcast("flairbiApp:filter");
                         $rootScope.$broadcast('flairbiApp:filter-add');
                         var filters = filterParametersService.get();
-                        filterParametersService.setFilterInIframeURL(filters,vm.iFrames,vm.dimensions);
-                        recentBookmarkService.saveRecentBookmark(item.id, $stateParams.id);
+                        Views.getCurrentEditState({
+                            id: $stateParams.id
+                        },
+                            function (result, headers) {
+                                vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                                    return item.metadataVisual.name === IFRAME.iframe;
+                                })
+                                var filters = filterParametersService.get();
+                                filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                            }
+                        );
                     }
                 );
             }
@@ -791,7 +810,7 @@
                     filterCriterias.push({
                         value: params[key].join('||'),
                         metaData: isItemDateRange ? filterParametersService.buildFilterCriteriasForDynamicDateRange(key) : null,
-                        dateRange: param._meta.valueType !== "castValueType" ? true : false,
+                        dateRange: param._meta.valueType === "dateRangeValueType" ? true : false,
                         key,
                         feature: vm.features.filter(function (item) {
                             return item.name.toLowerCase() === key;

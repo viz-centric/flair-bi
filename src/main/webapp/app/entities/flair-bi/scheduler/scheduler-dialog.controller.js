@@ -628,9 +628,9 @@
         function setDimentionsAndMeasures(fields) {
             fields.filter(function (item) {
                 if (item.feature.featureType === "DIMENSION") {
-                    vm.scheduleObj.report_line_item.dimension.push(item.feature.definition);
+                    vm.scheduleObj.report_line_item.dimension.push(item.feature.name);
                 } else if (item.feature.featureType === "MEASURE") {
-                    vm.scheduleObj.report_line_item.measure.push(item.feature.definition);
+                    vm.scheduleObj.report_line_item.measure.push(item.feature.name);
                 }
             });
         }

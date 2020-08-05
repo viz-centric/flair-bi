@@ -3224,8 +3224,7 @@ input[type="search"] {
 #page-wrapper {
   min-height: 100vh;
   margin: 0 !important;
-  border: 0 !important;
-  background-color: #fff; }
+  border: 0 !important; }
 
 .page-wrapper-full-screen {
   margin: 0 !important;

@@ -35,8 +35,8 @@
                             <div class="viz-header-content">
                                 <div class="viz-title flair-text">
                                     <i ng-show="v.isLiveEnabled" class="fa fa-circle text-danger live-icon"></i>
-                                    <a ng-show="v.metadataVisual.name === 'Iframe'" href="#"
-                                        title="Dashboard Name : Dashboard&#013;View Name: View">
+                                    <a ng-show="v.metadataVisual.name === 'Iframe'" target="_blank" href="{{v.dashboardroperties.buildUrl}}"
+                                        title="Dashboard Name : {{v.dashboardroperties.dashboardName}}&#013;View Name: {{v.dashboardroperties.viewName}}">
                                         {{v.titleProperties.titleText}}
                                     </a>
                                     <span

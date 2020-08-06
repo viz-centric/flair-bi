@@ -1,17 +1,5 @@
 package com.flair.bi.service;
 
-import static com.project.bi.query.SQLUtil.sanitize;
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
@@ -32,9 +20,19 @@ import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import com.project.bi.query.expression.operations.Operation;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import static com.project.bi.query.SQLUtil.sanitize;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -67,12 +65,13 @@ public class QueryTransformerService {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
 
-        return toQuery(queryDTO, params.getConnectionName(), params.getVId(),
-                params.getUserId(), features);
+        return toQuery(queryDTO, features, params);
     }
 
-    private Query toQuery(QueryDTO queryDTO, String connectionName, String vId, String userId,
-                          Map<String, Feature> features) {
+    private Query toQuery(QueryDTO queryDTO, Map<String, Feature> features, QueryTransformerParams params) {
+        String connectionName = params.getConnectionName();
+        String vId = params.getVId();
+        String userId = params.getUserId();
         List<FieldDTO> fields = transformSelectFields(features, queryDTO.getFields());
         List<FieldDTO> groupBy = transformGroupByFields(features, queryDTO.getGroupBy());
 
@@ -81,6 +80,14 @@ public class QueryTransformerService {
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(toProtoFields(fields))
                 .addAllGroupBy(toProtoFields(groupBy));
+
+        if (params.getDatasourceId() != null) {
+            builder.putMeta("datasourceId", String.valueOf(params.getDatasourceId()));
+        }
+
+        if (params.getDashboardId() != null) {
+            builder.putMeta("dashboardId", String.valueOf(params.getDashboardId()));
+        }
 
         if (queryDTO.getQuerySource() != null) {
             builder.setQuerySource(toQuerySource(queryDTO.getQuerySource()));

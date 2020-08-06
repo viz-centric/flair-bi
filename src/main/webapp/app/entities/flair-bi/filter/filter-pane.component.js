@@ -86,11 +86,12 @@
         }
 
         function filter() {
+            addFilterInIframeURL();
             filterParametersService.save(filterParametersService.getSelectedFilter());
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
-            addFilterInIframeURL();
+           
         }
 
         function addFilterInIframeURL() {

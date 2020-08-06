@@ -91,7 +91,7 @@
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
-          
+           
         }
 
         function addFilterInIframeURL() {

@@ -323,7 +323,7 @@
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
             if (myFilters && myFilters.length > 0) {
-                if(!filterParametersService.isDateType(vm.dimension)){
+                if(myFilters._meta.valueType !== "dateRangeValueType"){
                     vm.dimension.selected = myFilters.map(function (item) {
                         var newItem = {};
                         newItem['text'] = item;

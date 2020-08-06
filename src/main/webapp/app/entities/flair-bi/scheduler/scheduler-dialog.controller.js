@@ -5,9 +5,9 @@
         .module('flairbiApp')
         .controller('SchedulerDialogController', SchedulerDialogController);
 
-    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES', 'QueryValidationService', '$q', '$translate','VisualDispatchService', '$state'];
+    SchedulerDialogController.$inject = ['$uibModalInstance', '$scope', 'TIMEZONES', '$rootScope', 'visualMetaData', 'filterParametersService', 'schedulerService', 'datasource', 'view', 'SCHEDULER_CHANNELS', 'dashboard', 'ShareLinkService', 'Dashboards', 'Views', 'Visualmetadata', 'VisualWrap', 'scheduledObj', 'Features', 'COMPARISIONS', 'thresholdAlert', 'ReportManagementUtilsService', 'ChannelService', 'REPORTMANAGEMENTCONSTANTS', 'CommunicationDispatcherService', '$uibModal', 'AccountDispatch', 'COMPARABLE_DATA_TYPES', 'AGGREGATION_TYPES', 'QueryValidationService', '$q', '$translate', 'VisualDispatchService', '$state'];
 
-    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES, QueryValidationService, $q, $translate,VisualDispatchService, $state){
+    function SchedulerDialogController($uibModalInstance, $scope, TIMEZONES, $rootScope, visualMetaData, filterParametersService, schedulerService, datasource, view, SCHEDULER_CHANNELS, dashboard, ShareLinkService, Dashboards, Views, Visualmetadata, VisualWrap, scheduledObj, Features, COMPARISIONS, thresholdAlert, ReportManagementUtilsService, ChannelService, REPORTMANAGEMENTCONSTANTS, CommunicationDispatcherService, $uibModal, AccountDispatch, COMPARABLE_DATA_TYPES, AGGREGATION_TYPES, QueryValidationService, $q, $translate, VisualDispatchService, $state) {
 
         var vm = this;
         var reportManagement = 'report-management';
@@ -423,7 +423,7 @@
 
         function getShareLink(visualMetaData, datasource, viewId) {
             return ShareLinkService.createLink(
-                visualMetaData.getSharePath(datasource, viewId)
+                visualMetaData.getSharePath(vm.scheduleObj.report.dashboard_name, vm.scheduleObj.report.view_name, vm.view.viewDashboard.id, datasource, viewId)
             );
         }
 
@@ -540,7 +540,7 @@
                     vm.isSaving = false;
                     if (success.status == 200 && (success.data.message == "report is updated" || success.data.message == "Report is scheduled successfully")) {
                         $uibModalInstance.close(vm.scheduleObj);
-                        if($state.$current.name==='report-management'){
+                        if ($state.$current.name === 'report-management') {
                             $state.go("report-management", null, {
                                 reload: "report-management"
                             });
@@ -942,8 +942,8 @@
         }
         function displayTextboxForValues() {
             vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
-            if(vm.selectedUsers && vm.selectedUsers.length>0){
-                vm.commaSeparatedValues = vm.selectedUsers.map(function(elem){
+            if (vm.selectedUsers && vm.selectedUsers.length > 0) {
+                vm.commaSeparatedValues = vm.selectedUsers.map(function (elem) {
                     return elem.text.split(" ")[1];
                 }).join(",");
             }
@@ -958,7 +958,7 @@
                 var getList = vm.commaSeparatedValues.split(',');
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
-                    schedulerService.getUserNameByEmail(element).then(function(emailObj){
+                    schedulerService.getUserNameByEmail(element).then(function (emailObj) {
                         added({ text: emailObj });
                         vm.selectedUsers.push({ text: emailObj });
                     });

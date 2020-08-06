@@ -341,7 +341,10 @@
                     vm.dimension.selected2 = [];
                 }
             }
-            addFilterInIframeURL();
+            if(myFilters){
+                addFilterInIframeURL();
+            }
+            
         }
 
         function addFilterInIframeURL() {

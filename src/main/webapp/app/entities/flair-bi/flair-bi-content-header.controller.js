@@ -201,7 +201,6 @@
                 vm.selectedBookmark = VisualDispatchService.getFeatureBookmark();
                 applyBookmark(vm.selectedBookmark);
                 VisualDispatchService.setFeatureBookmark({});
-                recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
             } else {
                 applyFilters();
             }
@@ -726,6 +725,7 @@
                 clearFilters();
             } else {
                 vm.selectedBookmark = item;
+                recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
                 FeatureCriteria.query(
                     {
                         featureBookmark: item.id

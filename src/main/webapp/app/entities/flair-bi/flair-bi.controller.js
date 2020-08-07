@@ -40,7 +40,8 @@
         '$transitions',
         "favouriteFilterService",
         "schedulerService",
-        "AccountDispatch"
+        "AccountDispatch",
+        "IFRAME"
     ];
 
     function FlairBiController(
@@ -78,7 +79,8 @@
         $transitions,
         favouriteFilterService,
         schedulerService,
-        AccountDispatch
+        AccountDispatch,
+        IFRAME
     ) {
         var vm = this;
         var editMode = false;
@@ -171,6 +173,16 @@
             }
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
+            vm.visualmetadata.map(function (item) {
+                if (item.metadataVisual.name === IFRAME.iframe) {
+                    var url = item.properties[0].value;
+                    item.dashboardroperties = {
+                        dashboardName: filterParametersService.getParameterByName('dashboardName', url),
+                        viewName: filterParametersService.getParameterByName('viewName',url),
+                        buildUrl: '#/dashboards/' + filterParametersService.getParameterByName('dashboarID',url) + '/views/' + filterParametersService.getParameterByName('viewId',url) + '/build'
+                    }
+                }
+            })
             registerButtonToggleEvent();
             registerScopeDestroy();
             openSchedulerDialogForThreshold();
@@ -545,7 +557,7 @@
             v.isSaved = true;
             if (v.id) {
                 VisualMetadataContainer.update(v.id, v, 'id');
-            } 
+            }
             else{
                 saveFeatures(v);
             }
@@ -997,7 +1009,7 @@
                     resolve: {
                         shareLink: function () {
                             return ShareLinkService.createLink(
-                                v.getSharePath(vm.datasource,$stateParams.id)
+                                v.getSharePath(vm.view.viewDashboard.dashboardName, vm.view.viewName, vm.view.viewDashboard.id, vm.datasource, $stateParams.id)
                             );
                         }
                     }
@@ -1184,11 +1196,6 @@
                     backgroundColor: "#fafafa",
                     borderBottom: "none",
                     color: "#676a6c"
-                },
-                dashboardroperties: {
-                    dashboardName :  vm.view.viewDashboard.dashboardName,
-                    viewName: vm.view.viewName,
-                    buildUrl: $window.location.href
                 },
                 bodyProperties: {
                     opacity: 1,

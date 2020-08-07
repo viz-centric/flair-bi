@@ -167,7 +167,7 @@
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
             var type = meta ? meta.dataType : '';
-            if (isDateFilterType(type)) {
+            if (isDateFilterType(type) && type === "dateRangeValueType") {
                 console.log('create body exp ', values, name);
                 if (values[1]) {
                     values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
@@ -487,6 +487,7 @@
                             filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
                         });
                         element.properties[0].value = filterUrl;
+                        $rootScope.$broadcast("update-widget-content-" + element.id);
                     },
                     function (_) { }
                 );

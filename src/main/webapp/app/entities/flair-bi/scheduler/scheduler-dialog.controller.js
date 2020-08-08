@@ -533,6 +533,7 @@
 
         function continueSchedule() {
             vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
+            vm.scheduleObj.dashboardId = vm.dashboard.id;
             if (validateAndSetHaving()) {
                 vm.isSaving = true;
                 setCronExpression();

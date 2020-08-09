@@ -3,13 +3,15 @@ spring:
         name: flairbi
     cloud:
         config:
-            uri: ${CONFIG_URI:http://localhost:8761}
+            uri: ${CONFIG_URI:http://localhost:8761/}
             username: ${CONFIG_USER:admin}
             password: ${CONFIG_PASS:admin}
-    profiles:
-        active: dev
+            name: flairbi
+            label: ${CONFIG_LABEL:master}
+   # profiles:
+   #     active: dev
+
 eureka:
     client:
         serviceUrl:
             defaultZone: ${EUREKA_URL:http://admin:admin@localhost:8761/eureka/}
-

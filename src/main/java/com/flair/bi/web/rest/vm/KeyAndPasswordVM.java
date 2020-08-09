@@ -5,26 +5,26 @@ package com.flair.bi.web.rest.vm;
  */
 public class KeyAndPasswordVM {
 
-    private String key;
+	private String key;
 
-    private String newPassword;
+	private String newPassword;
 
-    public KeyAndPasswordVM() {
-    }
+	public KeyAndPasswordVM() {
+	}
 
-    public String getKey() {
-        return key;
-    }
+	public String getKey() {
+		return key;
+	}
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+	public void setKey(String key) {
+		this.key = key;
+	}
 
-    public String getNewPassword() {
-        return newPassword;
-    }
+	public String getNewPassword() {
+		return newPassword;
+	}
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 }

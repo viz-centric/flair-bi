@@ -12,13 +12,15 @@
                 view: '=',
                 dimensions: '=',
                 tab: '=',
-                list: '='
+                list: '=',
+                separator: '=',
+                iframes: '='
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -34,8 +36,10 @@
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
         vm.isActive = isActive;
-        vm.activeForText = "disable"
-
+        vm.activeForText = "disable";
+        vm.isCommaSeparatedInput = false;
+        vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+        vm.lastQuery = {};
         ////////////////
 
         function activate() {
@@ -70,6 +74,7 @@
                             return item[dimensionName];
                         });
                         vm.list[dimensionName] = retVal;
+                        setSelectedFilter(vm.list[dimensionName]);
                     }
                 }
             );
@@ -115,8 +120,12 @@
             };
             filterParametersService.saveSelectedFilter(filterParameters);
             vm.isActive(filter);
+            vm.searchText = "";
+            vm.load(vm.searchText, vm.dimension)
+
             if (isFavouriteFilter())
-                displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+                vm.list[vm.dimension.name] = displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+
 
 
         }/////
@@ -157,11 +166,11 @@
                 vm.dimension.selected = startDate;
                 vm.dimension.selected2 = endDate;
             } else {
-                filterParametersService.saveDynamicDateRangeMetaData(filterParametersService.buildDateRangeFilterName(vm.dimension.name), metadata);
+                filterParametersService.saveDynamicDateRangeMetaData(vm.dimension.name, metadata);
             }
             console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
                 typeof endDate, endDate);
-            removeFilter(filterParametersService.buildDateRangeFilterName(vm.dimension.name));
+            removeFilter(vm.dimension.name);
             if (startDate) {
                 startDate = resetTimezone(startDate);
                 addDateRangeFilter(startDate);
@@ -245,30 +254,37 @@
         }
 
         function load(q, dimension) {
-            var vId = dimension.id;
+            var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
-            if (q) {
-                query.conditionExpressions = [{
-                    sourceType: 'FILTER',
-                    conditionExpression: {
-                        '@type': 'Like',
-                        featureType: { featureName: dimension.name, type: dimension.type },
-                        caseInsensitive: true,
-                        value: q
-                    }
-                }];
+            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q) || q === "") {
+                if (q) {
+                    query.conditionExpressions = [{
+                        sourceType: 'FILTER',
+                        conditionExpression: {
+                            '@type': 'Like',
+                            featureType: { featureName: dimension.name, type: dimension.type },
+                            caseInsensitive: true,
+                            value: q
+                        }
+                    }];
+                }
+                query.distinct = true;
+                query.limit = 100;
+                favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
+                proxyGrpcService.forwardCall(
+                    vm.view.viewDashboard.dashboardDatasource.id, {
+                    queryDTO: query,
+                    vId: vId,
+                    type: $stateParams.id ? 'filters' : 'share-link-filter'
+                },
+                    $stateParams.id ? $stateParams.id : $stateParams.viewId
+                );
+
+                vm.lastQuery.filterKey=q;
+                vm.lastQuery.filterDimension=dimension.id;
             }
-            query.distinct = true;
-            query.limit = 100;
-            favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
-            proxyGrpcService.forwardCall(
-                vm.view.viewDashboard.dashboardDatasource.id, {
-                queryDTO: query,
-                vId: vId
-            },
-                $stateParams.id
-            );
+
         }
 
         function isFavouriteFilter() {
@@ -307,13 +323,15 @@
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
             if (myFilters && myFilters.length > 0) {
-                vm.dimension.selected = myFilters.map(function (item) {
-                    var newItem = {};
-                    newItem['text'] = item;
-                    if (isFavouriteFilter())
-                        displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
-                    return newItem;
-                });
+                if(myFilters._meta.valueType !== "dateRangeValueType"){
+                    vm.dimension.selected = myFilters.map(function (item) {
+                        var newItem = {};
+                        newItem['text'] = item;
+                        if (isFavouriteFilter())
+                            displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(item), myFilters[vm.dimension.name].length - 1);
+                        return newItem;
+                    });
+                }
             } else {
                 if (filterParametersService.isDateType(vm.dimension)) {
                     vm.dimension.selected = null;
@@ -323,6 +341,24 @@
                     vm.dimension.selected2 = [];
                 }
             }
+            if(myFilters){
+                addFilterInIframeURL();
+            }
+            
+        }
+
+        function addFilterInIframeURL() {
+            Views.getCurrentEditState({
+                id: $stateParams.id
+            },
+                function (result, headers) {
+                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                        return item.metadataVisual.name === IFRAME.iframe;
+                    })
+                    var filters = filterParametersService.get();
+                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                }
+            );
         }
 
         function added(tag) {
@@ -342,13 +378,11 @@
 
         function addDateRangeFilter(date) {
             var filterParameters = filterParametersService.getSelectedFilter();
-            var dateRangeName = filterParametersService.buildDateRangeFilterName(vm.dimension.name);
-            delete filterParameters[vm.dimension.name];
-            if (!filterParameters[dateRangeName]) {
-                filterParameters[dateRangeName] = [];
+            if (!filterParameters[vm.dimension.name]) {
+                filterParameters[vm.dimension.name] = [];
             }
-            filterParameters[dateRangeName].push(date);
-            filterParameters[dateRangeName]._meta = {
+            filterParameters[vm.dimension.name].push(date);
+            filterParameters[vm.dimension.name]._meta = {
                 dataType: vm.dimension.type,
                 valueType: 'dateRangeValueType'
             };
@@ -366,28 +400,50 @@
             return arr;
         }
 
-        function displayTextboxForValues(dimension) {
-            vm.filterDimension = dimension;
-            vm.isBulkValue = true;
+        function setSelectedFilter() {
+            var filterParameters = filterParametersService.getSelectedFilter()[vm.dimension.name]
+            if (filterParameters) {
+                if (vm.list[vm.dimension.name] && vm.list[vm.dimension.name]) {
+                    var selectedFilter = vm.list[vm.dimension.name].filter(function (item) {
+                        return filterParameters.indexOf(item) !== -1
+                    })
+                    var unSelectedFilter = vm.list[vm.dimension.name].filter(function (item) {
+                        return filterParameters.indexOf(item) === -1
+                    })
+                    vm.list[vm.dimension.name] = selectedFilter.concat(unSelectedFilter);
+                } 
+            }
         }
 
+        function displayTextboxForValues(dimension) {
+            vm.filterDimension = dimension;
+            vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
+            if(vm.dimension.selected && vm.dimension.selected.length>0){
+                vm.dimension.commaSeparatedValues = vm.dimension.selected.map(function(elem){
+                    return elem.text;
+                }).join(getSeparator());
+            }
+            vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+        }
         function addToFilter(dimension) {
-            if (vm.commaValue && vm.commaValue.length > 0) {
-                vm.isBulkValue = false;
+            if (vm.dimension.commaSeparatedValues && vm.dimension.commaSeparatedValues.length > 0) {
+                vm.isCommaSeparatedInput = false;
                 vm.activeForText = "active";
                 vm.dimension.selected = [];
                 var filterParameters = filterParametersService.getSelectedFilter();
                 filterParameters[vm.dimension.name] = [];
-                var getList = vm.commaValue.split(',');
+                var getList = vm.dimension.commaSeparatedValues.split(getSeparator());
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element });
                     vm.dimension.selected.push({ text: element });
                 });
-                vm.commaValue = '';
+                vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
-
         }
 
+        function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
+        }
     }
 })();

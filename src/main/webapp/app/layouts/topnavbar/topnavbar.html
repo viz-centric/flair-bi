@@ -2,8 +2,11 @@
     <nav class="navbar navbar-static-top" role="navigation">
         <div class="navbar-header">
             <div class="row">
-                <a class="logo" ui-sref="home">
-                    <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
+                <a class="common ng-class:{'flair-logo':vm.clientLogo,'logo':!vm.clientLogo}" ui-sref="home">
+                    <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi" >
+                </a>
+                <a uib-tooltip={{vm.clientLogo.name}} tooltip-placement="right" ng-if="vm.clientLogo" class="common client-logo" ui-sref="home" >
+                    <img ng-src={{vm.clientLogo.url}} alt={{vm.clientLogo.name}}>
                 </a>
             </div>
         </div>

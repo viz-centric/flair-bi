@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+	<changeSet id="20200625230000" author="vizcentric">
+
+		<createTable tableName="SPRING_SESSION">
+			<column name="PRIMARY_ID" type="CHAR(36)">
+				<constraints nullable="false" />
+			</column>
+			<column name="SESSION_ID" type="CHAR(36)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATION_TIME" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="LAST_ACCESS_TIME" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="MAX_INACTIVE_INTERVAL" type="INT">
+				<constraints nullable="false" />
+			</column>
+			<column name="EXPIRY_TIME" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="PRINCIPAL_NAME" type="VARCHAR(100)" />
+		</createTable>
+		<addPrimaryKey columnNames="PRIMARY_ID"
+			tableName="SPRING_SESSION" />
+
+		<createIndex tableName="SPRING_SESSION"
+			indexName="SPRING_SESSION_IX1" unique="true">
+			<column name="SESSION_ID" />
+		</createIndex>
+		<createIndex tableName="SPRING_SESSION"
+			indexName="SPRING_SESSION_IX2">
+			<column name="EXPIRY_TIME" />
+		</createIndex>
+		<createIndex tableName="SPRING_SESSION"
+			indexName="SPRING_SESSION_IX3">
+			<column name="PRINCIPAL_NAME" />
+		</createIndex>
+
+
+		<createTable tableName="SPRING_SESSION_ATTRIBUTES">
+			<column name="SESSION_PRIMARY_ID" type="CHAR(36)">
+				<constraints nullable="false" />
+			</column>
+			<column name="ATTRIBUTE_NAME" type="VARCHAR(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="ATTRIBUTE_BYTES" type="BYTEA">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+
+		<addPrimaryKey
+			columnNames="SESSION_PRIMARY_ID, ATTRIBUTE_NAME"
+			tableName="SPRING_SESSION_ATTRIBUTES" />
+		<addForeignKeyConstraint
+			constraintName="SPRING_SESSION_ATTRIBUTES_FK"
+			referencedTableName="SPRING_SESSION"
+			baseColumnNames="SESSION_PRIMARY_ID"
+			baseTableName="SPRING_SESSION_ATTRIBUTES"
+			referencedColumnNames="PRIMARY_ID" onDelete="CASCADE" />
+
+	</changeSet>
+</databaseChangeLog>

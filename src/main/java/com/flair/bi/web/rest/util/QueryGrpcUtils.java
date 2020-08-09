@@ -1,5 +1,13 @@
 package com.flair.bi.web.rest.util;
 
+import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
@@ -10,7 +18,7 @@ import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.dto.QuerySource;
 import com.project.bi.query.dto.SortDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -21,14 +29,8 @@ import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import com.project.bi.query.expression.operations.Operation;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
 
 @Slf4j
 public final class QueryGrpcUtils {
@@ -75,11 +77,11 @@ public final class QueryGrpcUtils {
         return queryDTO;
     }
 
-    private static QuerySourceDTO getQuerySourceDTO(Query.QuerySource querySource) {
-        if (querySource == null) {
-            return null;
+    private static QuerySource getQuerySourceDTO(Query.QuerySource querySource) {
+        if (!StringUtils.isEmpty(querySource.getSource())) {
+            return JacksonUtil.fromString(querySource.getSource(), QuerySource.class);
         }
-        return new QuerySourceDTO(querySource.getSource(), querySource.getAlias());
+        return null;
     }
 
     private static List<FieldDTO> toFieldDTOs(List<Query.Field> fieldsList) {

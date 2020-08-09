@@ -13,13 +13,13 @@
     HomeController.$inject = ['$scope', 'Principal',
         '$state', 'Information', 'alertsService', 'screenDetectService', 'adminListService',
         'AccountDispatch', 'proxyGrpcService', 'AlertsDispatcherService',
-        '$transitions'
+        '$transitions','ClientLogo','ClientLogoDataService','$rootScope'
     ];
 
     function HomeController($scope, Principal,
         $state, Information, alertsService, screenDetectService, adminListService,
         AccountDispatch, proxyGrpcService, AlertsDispatcherService,
-        $transitions) {
+        $transitions,ClientLogo,ClientLogoDataService,$rootScope) {
         var vm = this;
         vm.account = null;
         vm.isAuthenticated = null;
@@ -112,6 +112,7 @@
             getAccount();
             vm.menuItems = adminListService.getHomeList();
             registerOnSetTotalReleaseAlerts();
+            getClientLogo();
         }
 
         function getReleaseAlerts() {
@@ -146,6 +147,15 @@
                 }
             );
             $scope.$on("$destroy", unsubscribe);
+        }
+
+        function getClientLogo() {
+            ClientLogo.query(function(result) {
+                if(result && result.length > 0){
+                    ClientLogoDataService.setClientLogo(result[0]);
+                    $rootScope.$broadcast("flairbiApp:set-client-logo");
+                }
+            });
         }
 
 

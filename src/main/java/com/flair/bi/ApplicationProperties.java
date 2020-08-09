@@ -1,62 +1,46 @@
 package com.flair.bi;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 @Getter
 @Setter
 public class ApplicationProperties {
 
-    private final FbiEngine fbiEngine = new FbiEngine();
+	private final LdapProperties ldap = new LdapProperties();
 
-    @Getter
-    @Setter
-    public static class FbiEngine {
+	private final ImageUpload imageUpload = new ImageUpload();
 
-        private final Authentication authentication = new Authentication();
+	private final StorageData storageUpload = new StorageData();
 
-        @Getter
-        @Setter
-        public static class Authentication {
+	@Getter
+	@Setter
+	public class LdapProperties {
+		private boolean enabled = false;
+		private String url;
+		private String base;
+		private String userDn;
+		private String password;
+	}
 
-            private final Pki pki = new Pki();
+	@Getter
+	@Setter
+	public class ImageUpload {
 
-            private final BasicAuthentication basicAuthentication = new BasicAuthentication();
+		private String location;
+		private String maxSizeMb;
+	}
 
-            @Getter
-            @Setter
-            public static class Pki {
+	@Getter
+	@Setter
+	public class StorageData {
 
-                private String keyStore;
+		private String location;
+		private String maxSizeMb;
 
-                private String keyStorePassword;
-
-                private String keyPassword;
-
-                private String trustStore;
-
-                private String trustStorePassword;
-
-                private boolean enabled;
-            }
-
-            @Getter
-            @Setter
-            public static class BasicAuthentication {
-
-                private String username;
-
-                private String password;
-
-                private boolean enabled;
-            }
-
-        }
-
-
-    }
-
+	}
 
 }

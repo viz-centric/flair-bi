@@ -1,5 +1,17 @@
 package com.flair.bi.service;
 
+import static com.project.bi.query.SQLUtil.sanitize;
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
@@ -7,7 +19,9 @@ import com.flair.bi.messages.Query;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.HavingDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.QuerySource;
 import com.project.bi.query.dto.QuerySourceDTO;
+import com.project.bi.query.dto.RawQuerySourceDTO;
 import com.project.bi.query.expression.condition.CompositeConditionExpression;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import com.project.bi.query.expression.condition.impl.AndConditionExpression;
@@ -18,19 +32,9 @@ import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import com.project.bi.query.expression.operations.Operation;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
-import static com.project.bi.query.SQLUtil.sanitize;
-import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -43,6 +47,10 @@ public class QueryTransformerService {
 
     public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) throws QueryTransformerException {
         log.debug("Map to query {} params {}", queryDTO.toString(), params);
+
+        if (queryDTO.getQuerySource() == null) {
+            queryDTO.setQuerySource(composeQuerySource(params));
+        }
 
         Map<String, Feature> features = Optional.ofNullable(params.getDatasourceId())
                 .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
@@ -124,10 +132,9 @@ public class QueryTransformerService {
         return builder.build();
     }
 
-    private Query.QuerySource toQuerySource(QuerySourceDTO querySource) {
+    private Query.QuerySource toQuerySource(QuerySource querySource) {
         return Query.QuerySource.newBuilder()
-                .setSource(querySource.getSource())
-                .setAlias(querySource.getAlias())
+                .setSource(JacksonUtil.toString(querySource))
                 .build();
     }
 
@@ -292,4 +299,11 @@ public class QueryTransformerService {
                 .collect(toList());
     }
 
+    public QuerySource composeQuerySource(QueryTransformerParams params) {
+        String alias = params.getSourceAlias() != null ? params.getSourceAlias() : params.getSourceName();
+        if (params.getSql() == null) {
+            return new QuerySourceDTO(params.getSourceName(), alias);
+        }
+        return new RawQuerySourceDTO(params.getSql().replaceAll("[\\n\\r]+", " "), alias);
+    }
 }

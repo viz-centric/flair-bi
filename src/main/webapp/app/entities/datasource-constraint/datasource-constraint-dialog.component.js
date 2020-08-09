@@ -28,7 +28,9 @@
         "stompClientService",
         "QueryValidationService",
         "$stateParams",
-        "$state"
+        "$state",
+        "VisualDispatchService",
+        'SEPARATORS'
     ];
 
     function DatasourceConstraintDialogController(
@@ -45,7 +47,9 @@
         stompClientService,
         QueryValidationService,
         $stateParams,
-        $state
+        $state,
+        VisualDispatchService,
+        SEPARATORS
     ) {
         var vm = this;
 
@@ -63,8 +67,10 @@
         vm.added = added;
         vm.removed = removed;
         vm.validate = validate;
-
-
+        vm.displayTextboxForValues = displayTextboxForValues;
+        vm.addToFilter = addToFilter;
+        vm.separators = SEPARATORS;
+        vm.separator =  vm.separators[0];
         vm.$onInit = function () {
             activate();
             $timeout(function () {
@@ -188,6 +194,8 @@
             constraint.type=type;
             constraint.selected=new Array();
             constraint.values=new Array();
+            constraint.isCommaSeparatedInput = false;
+            vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(constraint.isCommaSeparatedInput);
         }
 
         function load(q,constraint) {
@@ -209,7 +217,8 @@
             query.limit = 20;
             proxyGrpcService.forwardCallV2(
                 vm.datasourceConstraint.datasource.id, {
-                queryDTO: query
+                queryDTO: query,
+                type: 'filters'
             }
             );
         }
@@ -306,6 +315,7 @@
                     vm.datasourceConstraint.constraintDefinition.featureConstraints.forEach(
                         function (item) {
                             if (item.values) {
+                                item.isCommaSeparatedInput = false;
                                 item.selected = item.values.map(function (item) {
                                     var newItem = {};
                                     newItem['text'] = item;
@@ -317,6 +327,33 @@
                     datasourceChange(vm.datasourceConstraint.datasource.id);
                 }
             });
+        }
+        function displayTextboxForValues(constraint) {
+            constraint.isCommaSeparatedInput = !constraint.isCommaSeparatedInput;
+            if(constraint.selected && constraint.selected.length>0){
+                vm.commaSeparatedValues = constraint.selected.map(function(elem){
+                    return elem.text;
+                }).join(getSeparator());
+            }
+            vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(constraint.isCommaSeparatedInput);
+        }
+
+        function addToFilter(constraint) {
+            if (vm.commaSeparatedValues && vm.commaSeparatedValues.length > 0) {
+                constraint.isCommaSeparatedInput = false;
+                constraint.selected =[];
+                constraint.values = [];
+                var getList = vm.commaSeparatedValues.split(getSeparator());
+                getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
+                getList.forEach(element => {
+                    added({ text: element },constraint);
+                    constraint.selected.push({ text: element });
+                });
+                vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(constraint.isCommaSeparatedInput);
+            }
+        }
+            function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
         }
     }
 })();

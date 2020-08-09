@@ -1,5 +1,20 @@
 package com.flair.bi.domain.visualmetadata;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
+
+import com.flair.bi.domain.DashboardProperties;
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,14 +27,6 @@ import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.property.Property;
 import com.flair.bi.web.rest.errors.CustomParameterizedException;
 import com.project.bi.query.expression.condition.ConditionExpression;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * A VisualMetadata.
@@ -79,6 +86,14 @@ public class VisualMetadata extends AbstractAuditingEntity implements Serializab
         @AttributeOverride(name = "opacity", column = @Column(name = "body_opacity"))
     })
     private BodyProperties bodyProperties;
+
+    @Embedded
+    @AttributeOverrides(value = {
+            @AttributeOverride(name = "dashboardName", column = @Column(name = "dashboard_name")),
+            @AttributeOverride(name = "viewName", column = @Column(name = "view_name")),
+            @AttributeOverride(name = "buildUrl", column = @Column(name = "build_url"))
+    })
+    private DashboardProperties dashboardProperties;
 
     @NotNull
     private Visualization metadataVisual;

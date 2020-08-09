@@ -1,15 +1,16 @@
 package com.flair.bi.domain.security;
 
-import lombok.Data;
+import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import java.io.Serializable;
+
+import lombok.Data;
 
 @Embeddable
 @Data
 public class PermissionEdgeKey implements Serializable {
 
-    private PermissionKey fromKey;
+	private PermissionKey fromKey;
 
-    private PermissionKey toKey;
+	private PermissionKey toKey;
 }

@@ -51,50 +51,56 @@
 
         function addFieldDimension() {
             var fieldType = vm.visual.nextFieldDimension();
-            var field = {
-                fieldType: fieldType,
-                feature: null,
-                constraint: fieldType.constraint
-            };
-            Visualizations.getFieldType({
-                id: vm.visual.metadataVisual.id,
-                fieldTypeId: field.fieldType.id
-            }, function (result) {
-                field.fieldType = result;
-                field.properties = field.fieldType.propertyTypes.map(function (item) {
-                    return {
-                        propertyType: item.propertyType,
-                        value: item.propertyType.defaultValue,
-                        type: item.propertyType.type,
-                        order: item.order,
-                    };
-                });
-            }, function (error) {});
-            vm.visual.fields.push(field);
+            if(fieldType != undefined){
+                var field = {
+                    fieldType: fieldType,
+                    feature: null,
+                    constraint: fieldType.constraint,
+                    order : VisualDispatchService.getFieldMaxOrder(vm.visual.fields)
+                };
+                Visualizations.getFieldType({
+                    id: vm.visual.metadataVisual.id,
+                    fieldTypeId: field.fieldType.id
+                }, function (result) {
+                    field.fieldType = result;
+                    field.properties = field.fieldType.propertyTypes.map(function (item) {
+                        return {
+                            propertyType: item.propertyType,
+                            value: item.propertyType.defaultValue,
+                            type: item.propertyType.type,
+                            order: item.order,
+                        };
+                    });
+                }, function (error) {});
+                vm.visual.fields.push(field);
+            }
         }
 
         function addFieldMeasure() {
             var fieldType = vm.visual.nextFieldMeasure();
-            var field = {
-                fieldType: fieldType,
-                feature: null,
-                constraint: fieldType.constraint
-            };
-            Visualizations.getFieldType({
-                id: vm.visual.metadataVisual.id,
-                fieldTypeId: field.fieldType.id
-            }, function (result) {
-                field.fieldType = result;
-                field.properties = field.fieldType.propertyTypes.map(function (item) {
-                    return {
-                        propertyType: item.propertyType,
-                        value: item.propertyType.defaultValue,
-                        type: item.propertyType.type,
-                        order: item.order,
-                    };
-                });
-            }, function (error) {});
-            vm.visual.fields.push(field);
+            if(fieldType != undefined){
+                var field = {
+                    fieldType: fieldType,
+                    feature: null,
+                    constraint: fieldType.constraint,
+                    order : VisualDispatchService.getFieldMaxOrder(vm.visual.fields)
+                };
+                Visualizations.getFieldType({
+                    id: vm.visual.metadataVisual.id,
+                    fieldTypeId: field.fieldType.id
+                }, function (result) {
+                    field.fieldType = result;
+                    field.properties = field.fieldType.propertyTypes.map(function (item) {
+                        return {
+                            propertyType: item.propertyType,
+                            value: item.propertyType.defaultValue,
+                            type: item.propertyType.type,
+                            order: item.order,
+                        };
+                    });
+                }, function (error) {});
+                vm.visual.fields.push(field);
+            }
         }
 
         function filterHierarchies(item) {

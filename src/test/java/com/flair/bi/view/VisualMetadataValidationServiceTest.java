@@ -1,5 +1,8 @@
 package com.flair.bi.view;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
@@ -13,15 +16,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class VisualMetadataValidationServiceTest {
 
-    @Mock
-    private GrpcQueryService grpcQueryService;
+	@Mock
+	private GrpcQueryService grpcQueryService;
 
     @Mock
     private DatasourceService datasourceService;
@@ -39,20 +39,20 @@ public class VisualMetadataValidationServiceTest {
         service = new VisualMetadataValidationService(grpcQueryService, datasourceService, schedulerService, visualMetadataService);
     }
 
-    @Test
-    public void validate() {
-        long datasourceId = 1L;
-        QueryDTO queryDTO = new QueryDTO();
-        String visualId = "visualId";
-        LikeConditionExpression conditionExpression = new LikeConditionExpression();
-        String user_id = "user id";
-        QueryValidationResponseDTO result = new QueryValidationResponseDTO();
-        when(grpcQueryService.sendValidateQuery(datasourceId, queryDTO, visualId, conditionExpression, user_id))
-                .thenReturn(result);
+	@Test
+	public void validate() {
+		long datasourceId = 1L;
+		QueryDTO queryDTO = new QueryDTO();
+		String visualId = "visualId";
+		LikeConditionExpression conditionExpression = new LikeConditionExpression();
+		String user_id = "user id";
+		QueryValidationResponseDTO result = new QueryValidationResponseDTO();
+		when(grpcQueryService.sendValidateQuery(datasourceId, queryDTO, visualId, conditionExpression, user_id))
+				.thenReturn(result);
 
-        QueryValidationResponseDTO validate = service.validate(datasourceId, queryDTO, visualId, conditionExpression,
-                user_id);
+		QueryValidationResponseDTO validate = service.validate(datasourceId, queryDTO, visualId, conditionExpression,
+				user_id);
 
-        assertEquals(result, validate);
-    }
+		assertEquals(result, validate);
+	}
 }

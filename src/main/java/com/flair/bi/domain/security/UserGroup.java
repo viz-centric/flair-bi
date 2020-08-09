@@ -1,14 +1,9 @@
 package com.flair.bi.domain.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.authorization.PermissionGrantee;
-import com.flair.bi.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +17,17 @@ import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.authorization.PermissionGrantee;
+import com.flair.bi.domain.User;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "user_group")
@@ -37,66 +39,59 @@ import java.util.Set;
 @ToString(of = "name")
 public class UserGroup implements Serializable, PermissionGrantee {
 
-    @NotNull
-    @Size(max = 50)
-    @Id
-    @Column(length = 50)
-    private String name;
+	@NotNull
+	@Size(max = 50)
+	@Id
+	@Column(length = 50)
+	private String name;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_group_permission",
-        foreignKey = @ForeignKey(name = "fk_user_grp_name"),
-        inverseForeignKey = @ForeignKey(name = "fk_permission_key"),
-        joinColumns = {
-            @JoinColumn(name = "user_grp_name", referencedColumnName = "name")
-        },
-        inverseJoinColumns = {
-            @JoinColumn(name = "permission_resource", referencedColumnName = "resource"),
-            @JoinColumn(name = "permission_action", referencedColumnName = "action"),
-            @JoinColumn(name = "permission_scope", referencedColumnName = "scope")})
-    private Set<Permission> permissions = new HashSet<>();
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_group_permission", foreignKey = @ForeignKey(name = "fk_user_grp_name"), inverseForeignKey = @ForeignKey(name = "fk_permission_key"), joinColumns = {
+			@JoinColumn(name = "user_grp_name", referencedColumnName = "name") }, inverseJoinColumns = {
+					@JoinColumn(name = "permission_resource", referencedColumnName = "resource"),
+					@JoinColumn(name = "permission_action", referencedColumnName = "action"),
+					@JoinColumn(name = "permission_scope", referencedColumnName = "scope") })
+	private Set<Permission> permissions = new HashSet<>();
 
+	@ManyToMany(mappedBy = "userGroups")
+	private Set<User> users = new HashSet<>();
 
-    @ManyToMany(mappedBy = "userGroups")
-    private Set<User> users = new HashSet<>();
+	public UserGroup(String name) {
+		this.name = name;
+	}
 
-    public UserGroup(String name) {
-        this.name = name;
-    }
+	@PreRemove
+	public void preRemove() {
+		this.getUsers().forEach(x -> x.getUserGroups().remove(this));
+		this.getUsers().clear();
 
-    @PreRemove
-    public void preRemove() {
-        this.getUsers().forEach(x -> x.getUserGroups().remove(this));
-        this.getUsers().clear();
+		this.getPermissions().forEach(x -> x.getUserGroups().remove(this));
+		this.getPermissions().clear();
+	}
 
-        this.getPermissions().forEach(x -> x.getUserGroups().remove(this));
-        this.getPermissions().clear();
-    }
+	@Override
+	@JsonIgnore
+	public Set<Permission> getAvailablePermissions() {
+		return getPermissions();
+	}
 
-    @Override
-    @JsonIgnore
-    public Set<Permission> getAvailablePermissions() {
-        return getPermissions();
-    }
+	public void addPermission(Permission permission) {
+		this.permissions.add(permission);
+		permission.getUserGroups().add(this);
+	}
 
-    public void addPermission(Permission permission) {
-        this.permissions.add(permission);
-        permission.getUserGroups().add(this);
-    }
+	public void removePermission(Permission permission) {
+		this.permissions.remove(permission);
+		permission.getUserGroups().remove(this);
+	}
 
-    public void removePermission(Permission permission) {
-        this.permissions.remove(permission);
-        permission.getUserGroups().remove(this);
-    }
+	public void addPermissions(Collection<Permission> permissions) {
+		permissions.forEach(this::addPermission);
+	}
 
-    public void addPermissions(Collection<Permission> permissions) {
-        permissions.forEach(this::addPermission);
-    }
-
-    public void removePermissions(Collection<Permission> permissions) {
-        permissions.forEach(this::removePermission);
-    }
+	public void removePermissions(Collection<Permission> permissions) {
+		permissions.forEach(this::removePermission);
+	}
 
 }

@@ -1,13 +1,19 @@
 package com.flair.bi.domain.hierarchy;
 
+import java.io.Serializable;
 
-import com.flair.bi.domain.Feature;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import com.flair.bi.domain.Feature;
 
 /**
  * A Drilldown.
@@ -15,61 +21,57 @@ import java.io.Serializable;
 @Embeddable
 public class Drilldown implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Column(name = "sequence_number")
-    private int order;
+	@Column(name = "sequence_number")
+	private int order;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "feature_id", foreignKey = @ForeignKey(name = "fk_feature_id"),
-        referencedColumnName = "id", nullable = false)
-    private Feature feature;
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "feature_id", foreignKey = @ForeignKey(name = "fk_feature_id"), referencedColumnName = "id", nullable = false)
+	private Feature feature;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
 
-    public int getOrder() {
-        return order;
-    }
+	public int getOrder() {
+		return order;
+	}
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
-    public Feature getFeature() {
-        return feature;
-    }
+	public Feature getFeature() {
+		return feature;
+	}
 
-    public void setFeature(Feature feature) {
-        this.feature = feature;
-    }
+	public void setFeature(Feature feature) {
+		this.feature = feature;
+	}
 
-    @PreRemove
-    public void preRemove() {
-        this.feature = null;
-    }
+	@PreRemove
+	public void preRemove() {
+		this.feature = null;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 
-        if (o == null || getClass() != o.getClass()) return false;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
-        Drilldown drilldown = (Drilldown) o;
+		Drilldown drilldown = (Drilldown) o;
 
-        return new EqualsBuilder()
-            .append(getOrder(), drilldown.getOrder())
-            .append(getFeature(), drilldown.getFeature())
-            .isEquals();
-    }
+		return new EqualsBuilder().append(getOrder(), drilldown.getOrder()).append(getFeature(), drilldown.getFeature())
+				.isEquals();
+	}
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-            .append(getOrder())
-            .append(getFeature())
-            .toHashCode();
-    }
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37).append(getOrder()).append(getFeature()).toHashCode();
+	}
 }

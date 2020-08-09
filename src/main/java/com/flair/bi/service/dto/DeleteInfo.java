@@ -14,9 +14,8 @@ import lombok.Setter;
 @Setter
 public class DeleteInfo {
 
-    private String type;
+	private String type;
 
-    private String name;
-
+	private String name;
 
 }

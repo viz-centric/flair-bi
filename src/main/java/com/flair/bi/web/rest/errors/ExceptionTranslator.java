@@ -1,6 +1,7 @@
 package com.flair.bi.web.rest.errors;
 
 import com.flair.bi.exception.UniqueConstraintsException;
+import com.flair.bi.service.ViewExportImportException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -22,88 +23,98 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
 /**
- * Controller advice to translate the server side exceptions to client-friendly json structures.
+ * Controller advice to translate the server side exceptions to client-friendly
+ * json structures.
  */
 @ControllerAdvice
 public class ExceptionTranslator {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @ExceptionHandler(ConcurrencyFailureException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ResponseBody
-    public ErrorVM processConcurencyError(ConcurrencyFailureException ex) {
-        return new ErrorVM(ErrorConstants.ERR_CONCURRENCY_FAILURE);
-    }
+	@ExceptionHandler(ViewExportImportException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ErrorVM processViewExportImportException(ViewExportImportException ex) {
+		return new ErrorVM(ErrorConstants.ERR_VIEW_IMPORT_EXPORT_ERROR, ex.getMessage(),
+				List.of(new FieldErrorVM("", ex.getField(), "", ex.getKind().name().toLowerCase() + "." + ex.getType().name().toLowerCase())));
+	}
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ErrorVM processValidationError(MethodArgumentNotValidException ex) {
-        BindingResult result = ex.getBindingResult();
-        List<FieldError> fieldErrors = result.getFieldErrors();
+	@ExceptionHandler(ConcurrencyFailureException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ResponseBody
+	public ErrorVM processConcurencyError(ConcurrencyFailureException ex) {
+		return new ErrorVM(ErrorConstants.ERR_CONCURRENCY_FAILURE);
+	}
 
-        return processFieldErrors(fieldErrors);
-    }
-    
-    @ExceptionHandler(UniqueConstraintsException.class)
-    @ResponseStatus(code = HttpStatus.CONFLICT,reason=ErrorConstants.UNIQUE_CONSTRAINTS_ERROR)
-    @ResponseBody
-    public ErrorVM processValidationError(UniqueConstraintsException ex) {
-    	return new ErrorVM(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR,ex.getMessage());
-    }
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ErrorVM processValidationError(MethodArgumentNotValidException ex) {
+		BindingResult result = ex.getBindingResult();
+		List<FieldError> fieldErrors = result.getFieldErrors();
 
-    @ExceptionHandler(CustomParameterizedException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ParameterizedErrorVM processParameterizedValidationError(CustomParameterizedException ex) {
-        return ex.getErrorVM();
-    }
+		return processFieldErrors(fieldErrors);
+	}
 
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    public ErrorVM processAccessDeniedException(AccessDeniedException e) {
-        return new ErrorVM(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
-    }
+	@ExceptionHandler(UniqueConstraintsException.class)
+	@ResponseStatus(code = HttpStatus.CONFLICT, reason = ErrorConstants.UNIQUE_CONSTRAINTS_ERROR)
+	@ResponseBody
+	public ErrorVM processValidationError(UniqueConstraintsException ex) {
+		return new ErrorVM(ErrorConstants.UNIQUE_CONSTRAINTS_ERROR, ex.getMessage());
+	}
 
-    private ErrorVM processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
+	@ExceptionHandler(CustomParameterizedException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ParameterizedErrorVM processParameterizedValidationError(CustomParameterizedException ex) {
+		return ex.getErrorVM();
+	}
 
-        for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode(), fieldError.getDefaultMessage());
-        }
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseBody
+	public ErrorVM processAccessDeniedException(AccessDeniedException e) {
+		return new ErrorVM(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
+	}
 
-        return dto;
-    }
+	private ErrorVM processFieldErrors(List<FieldError> fieldErrors) {
+		ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorVM processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return new ErrorVM(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
-    }
+		for (FieldError fieldError : fieldErrors) {
+			dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode(),
+					fieldError.getDefaultMessage());
+		}
 
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorVM processNotSupportedTypeExcception(HttpMediaTypeNotSupportedException ex) {
-        return new ErrorVM("Media type not supported", ex.getMessage());
-    }
+		return dto;
+	}
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorVM> processRuntimeException(Exception ex) {
-        log.error(ex.getMessage(), ex);
-        BodyBuilder builder;
-        ErrorVM errorVM;
-        ResponseStatus responseStatus = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
-        if (responseStatus != null) {
-            builder = ResponseEntity.status(responseStatus.value());
-            errorVM = new ErrorVM("error." + responseStatus.value().value(), responseStatus.reason());
-        } else {
-            builder = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-            errorVM = new ErrorVM(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, "Internal server error");
-        }
-        return builder.body(errorVM);
-    }
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+	public ErrorVM processMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+		return new ErrorVM(ErrorConstants.ERR_METHOD_NOT_SUPPORTED, exception.getMessage());
+	}
+
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorVM processNotSupportedTypeExcception(HttpMediaTypeNotSupportedException ex) {
+		return new ErrorVM("Media type not supported", ex.getMessage());
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorVM> processRuntimeException(Exception ex) {
+		log.error(ex.getMessage(), ex);
+		BodyBuilder builder;
+		ErrorVM errorVM;
+		ResponseStatus responseStatus = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);
+		if (responseStatus != null) {
+			builder = ResponseEntity.status(responseStatus.value());
+			errorVM = new ErrorVM("error." + responseStatus.value().value(), responseStatus.reason());
+		} else {
+			builder = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+			errorVM = new ErrorVM(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, "Internal server error");
+		}
+		return builder.body(errorVM);
+	}
 }

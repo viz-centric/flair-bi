@@ -16,23 +16,31 @@
         }
     });
 
-    DatasourceWizardStepController.$inject = ["$scope", "$timeout", "Datasources", "$rootScope", "$translate", "Query", "Connections", "WizardHandler", "$q", "AlertService", "QueryValidationService", "$uibModal", 'Toastr'];
-    function DatasourceWizardStepController($scope, $timeout, Datasources, $rootScope, $translate, Query, Connections, WizardHandler, $q, AlertService, QueryValidationService, $uibModal, Toastr) {
+    DatasourceWizardStepController.$inject = ["$scope", "$timeout", "Datasources", "$rootScope", "$translate", "Query", "Connections", "WizardHandler", "$q", "AlertService", "QueryValidationService", "$uibModal", 'Toastr','SqlFormatter'];
+    function DatasourceWizardStepController($scope, $timeout, Datasources, $rootScope, $translate, Query, Connections, WizardHandler, $q, AlertService, QueryValidationService, $uibModal, Toastr,SqlFormatter) {
         var vm = this;
         var delayedSearch;
 
+        vm.onSubmitDisabled = onSubmitDisabled;
+        vm.tabIndex = 0;
+        vm.sql = null;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
-        vm.setDataSource = setDataSource;
         vm.onSearchKeyUp = onSearchKeyUp;
+        vm.onSelectedTableChanged = onSelectedTableChanged;
         vm.search = search;
         vm.tables = [];
-        vm.datasources.name = null;
+        vm.displayTables = [];
         vm.createDataSource = createDataSource;
+        vm.isShowDataEnabled = isShowDataEnabled;
+        vm.getDatasourceNames = getDatasourceNames;
         vm.features = [];
         vm.resetTest = resetTest;
         vm.showData = showData;
+        vm.onTabClick = onTabClick;
         vm.data = [];
+        vm.formatSql = formatSql;
+        vm.sqlQuerylength = 10;
 
 
 
@@ -50,11 +58,40 @@
             })
         }
 
+        function isShowDataEnabled() {
+            if (vm.loading) {
+                return true;
+            }
+            if (vm.tabIndex === 0) {
+                return !vm.selectedTable;
+            } else if (vm.tabIndex === 1) {
+                return !vm.sql || !vm.selectedTable;
+            }
+            return false;
+        }
+
+        function onTabClick(tabIndex) {
+            vm.tabIndex = tabIndex;
+            vm.selectedTable = null;
+            vm.sql = null;
+            vm.tables = [];
+            vm.displayTables = [];
+        }
+
+        function onSelectedTableChanged(table) {
+            vm.selectedTable = table;
+            vm.sql = table.sql || vm.sql;
+            if(vm.tabIndex==1){
+                formatSql(vm.sql);
+            }
+        }
+
+        function onSubmitDisabled() {
+            return isShowDataEnabled();
+        }
+
         function openCalendar(date) {
             vm.datePickerOpenStatus[date] = true;
-        }
-        function setDataSource(name) {
-            vm.datasources.name = name;
         }
 
         function clearDelayedSearch() {
@@ -70,10 +107,24 @@
             }, 1000);
         }
 
+        function getDatasourceNames(search) {
+            if (search) {
+                const existingList = vm.displayTables
+                    .filter(item => !vm.tables.includes(item));
+                existingList
+                    .forEach(item => item.name = search);
+                if (existingList.length === 0) {
+                    vm.displayTables.unshift({name: search, sql: null, temp: true});
+                }
+            }
+            return vm.displayTables;
+        }
+
         function search(searchedText) {
             if (searchedText) {
                 var body = {
-                    searchTerm: searchedText
+                    searchTerm: searchedText,
+                    filter: vm.tabIndex === 0 ? 'TABLE' : 'SQL'
                 };
                 if (vm.selectedConnection) {
                     body.connectionLinkId = vm.connection.linkId;
@@ -84,10 +135,8 @@
                 Datasources.listTables(
                     body,
                     function (data) {
-                        vm.tables = data.tableNames;
-                        if (data.tableNames.length === 0) {
-                            setInputText(searchedText);
-                        }
+                        vm.tables = data.tables;
+                        vm.displayTables = vm.tables.concat();
                     },
                     function () {
                         Toastr.error({
@@ -107,11 +156,6 @@
             return conn;
         }
 
-        function setInputText(searchedText) {
-            vm.datasources.name = searchedText;
-            vm.datasource = vm.datasources.name;
-        }
-
         function createDataSource() {
             saveConnection(
                 function (conn) {
@@ -123,27 +167,24 @@
 
         function saveConnection(cb, err) {
             var connection = prepareConnection();
+            const success = function (result) {
+                vm.connection = result;
+                return cb(result);
+            };
+            const failure = function (error) {
+                return err(error);
+            };
             if (!vm.selectedConnection) {
                 return Connections.save(
                     connection,
-                    function (result) {
-                        vm.connection = result;
-                        return cb(result);
-                    },
-                    function (error) {
-                        return err(error);
-                    }
+                    success,
+                    failure
                 );
             } else {
                 return Connections.update(
                     connection,
-                    function (result) {
-                        vm.connection = result;
-                        return cb(result);
-                    },
-                    function (error) {
-                        return err(error);
-                    }
+                    success,
+                    failure
                 );
             }
         }
@@ -174,6 +215,8 @@
         }
 
         function saveDatasource(connectionLinkId, customAction) {
+            vm.datasources.sql = vm.sql;
+            vm.datasources.name = vm.selectedTable.name;
             vm.datasources.connectionName = connectionLinkId;
             sendSaveDatasource(customAction);
         }
@@ -271,8 +314,9 @@
                     fields: [],
                     distinct: true,
                     limit: 10,
-                    source: vm.datasources.name,
+                    source: vm.selectedTable.name,
                 },
+                sql: vm.sql,
                 sourceId: vm.datasources.id
             };
             if (vm.selectedConnection) {
@@ -295,5 +339,14 @@
                 vm.loading = false;
             });
         }
+
+        function formatSql(sqlQuery){
+            vm.lines = [];
+            var result = SqlFormatter.formatSql(sqlQuery);
+            vm.lines = result.split('\n');
+            vm.sqlQuerylength = vm.lines.length+1;
+            vm.sql = result;
+        }
+
     }
 })();

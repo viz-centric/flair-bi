@@ -62,13 +62,22 @@
                             </ui-select>
                         </div>
                         <div class="col-md-4">
-                            <tags-input-grpc placeholder="Search for {{constraint.featureName}}" ng-disabled="!vm.datasourceConstraint.datasource" on-tag-added="vm.added($tag,constraint)"
+                            <tags-input-grpc ng-if="!constraint.isCommaSeparatedInput" nplaceholder="Search for {{constraint.featureName}}" ng-disabled="!vm.datasourceConstraint.datasource" on-tag-added="vm.added($tag,constraint)"
                                 on-tag-removed="vm.removed($tag,constraint)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
                                 min-length="1" ng-model="constraint.selected" replace-spaces-with-dashes="false">
                                 <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query,constraint)"
                                     min-length="0
                         " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
                             </tags-input-grpc>
+                            <input ng-if="constraint.isCommaSeparatedInput" type="text" placeholder="Add comma separated values" ng-model="vm.commaSeparatedValues"
+                            class="form-control" ng-blur="vm.addToFilter(constraint)" />
+                        </div>
+                        <div class="comma-separated">
+                            <label class="pull-right">
+                                 <i ng-click="vm.displayTextboxForValues(constraint)" class="fa fa-text-width" ng-class="{'comma-separated-on' : constraint.isCommaSeparatedInput,'comma-separated-off' : !constraint.isCommaSeparatedInput}" 
+                                  uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">
+                                 </i>
+                            </label>
                         </div>
                         <div class="col-md-2">
                             <div ng-disabled="!vm.datasourceConstraint.datasource" ng-show="$index === 0"
@@ -100,6 +109,16 @@
                     <span class="glyphicon glyphicon-glass"></span>&nbsp;
                     <span>validate</span>
                 </button>
+                <div class="filter-separator-container" style="float: left;">
+                    <ui-select ng-model="vm.separator" class="separator-select separator-list-constaraint">
+                        <ui-select-match placeholder="Select Separator...">{{$select.selected.displayName}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            repeat="separator in vm.separators | filter: $select.search track by separator.displayName">
+                            <div ng-bind="separator.displayName"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
                 <button style="float: right;" type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
                     <span class="glyphicon glyphicon-save"></span>&nbsp;<span
                         data-translate="entity.action.save">Save</span>

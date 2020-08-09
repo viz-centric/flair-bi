@@ -5,9 +5,9 @@
         .module("flairbiApp")
         .factory("AuthServerProvider", AuthServerProvider);
 
-    AuthServerProvider.$inject = ["$http", "$localStorage"];
+    AuthServerProvider.$inject = ["$http", "$localStorage", '$q'];
 
-    function AuthServerProvider($http, $localStorage) {
+    function AuthServerProvider($http, $localStorage, $q) {
         var service = {
             getToken: getToken,
             hasValidToken: hasValidToken,
@@ -29,8 +29,8 @@
         function login(credentials) {
             return $http
                 .post("api/authenticate", credentials)
-                .then(function(response) {
-                    $localStorage.authenticationToken = response.id_token;
+                .then(function (response) {
+                    $localStorage.authenticationToken = response.data.id_token;
                     return response;
                 });
         }

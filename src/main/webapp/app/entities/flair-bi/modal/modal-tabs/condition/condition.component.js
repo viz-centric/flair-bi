@@ -12,13 +12,14 @@
                 features: '=',
                 showAdd: '@',
                 showDelete: '@',
-                datasourceId: '='
+                datasourceId: '=',
+                separator: '='
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService','$stateParams'];
+    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService','$stateParams','VisualDispatchService', 'SEPARATORS'];
 
-    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService,$stateParams) {
+    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService,$stateParams,VisualDispatchService, SEPARATORS  ) {
         var vm = this;
         vm.load = load;
         vm.showInfo = false;
@@ -42,12 +43,17 @@
         vm.onContainsRemoved = onContainsRemoved;
         vm.onFeatureSelect = onFeatureSelect;
         vm.getMetadataTooltip = getMetadataTooltip;
+        vm.displayTextboxForValues = displayTextboxForValues;
+        vm.addToFilter = addToFilter;
         vm.dateRangeReload = false;
         vm.dataType = "";
         vm.$onInit = activate;
         const SIMPLE_DATE_TYPES_FOR_DATES = ['Between', 'Compare'];
         const SIMPLE_DATE_TYPES_OTHER = ['Compare', 'Contains', 'NotContains', 'Like'];
         vm.dimension = vm.features[0];
+        vm.isCommaSeparatedInput = false;
+        vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+
         ////////////////
 
         function activate() {
@@ -72,7 +78,7 @@
                 return [];
             }
             const dataType = dimension.type;
-            const isDateType = COMPARABLE_DATA_TYPES.indexOf(dataType) > -1;
+            const isDateType = COMPARABLE_DATA_TYPES.indexOf(dataType.toLowerCase()) > -1;
 
             if (isDateType) {
                 return vm.dateRangeSupportedTypes;
@@ -189,10 +195,39 @@
             proxyGrpcService.forwardCall(
                 vm.datasourceId, {
                 queryDTO: query,
-                vId: dimensions[0].id
+                vId: dimensions[0].id,
+                type: 'filters'
             },
             $stateParams.id
             );
+        }
+
+        function displayTextboxForValues() {
+            vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
+            if(vm.condition.values.length > 0){
+                vm.commaSeparatedValues = vm.condition.values.join(getSeparator());
+            }else{
+                vm.commaSeparatedValues = null;
+            }
+            vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+        }
+
+        function addToFilter() {
+            if (vm.commaSeparatedValues && vm.commaSeparatedValues.length > 0) {
+                vm.isCommaSeparatedInput = false;
+                vm.condition.values = [];
+                vm.condition.valueTypes = [];
+                var getList = vm.commaSeparatedValues.split(getSeparator());
+                getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
+                getList.forEach(element => {
+                    onContainsAdded({ text: element });
+                    vm.condition.values.push(element);
+                });
+                vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+            }
+        }
+            function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
         }
     }
 })();

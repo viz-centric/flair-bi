@@ -6,14 +6,14 @@
         .controller('FlairBiRightNavBarController', FlairBiRightNavBarController);
 
     FlairBiRightNavBarController.$inject = ['Visualizations', '$rootScope',
-        'entity', 'Features', '$uibModal',
+        'entity', 'states','Features', '$uibModal',
         '$state', '$scope', 'featureEntities',
         'Hierarchies', '$timeout', "filterParametersService", "FilterStateManagerService",
-        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService"
+        "Visualmetadata", "VisualDispatchService", "VisualMetadataContainer", "$translate", "schedulerService", "configuration","IFRAME"
     ];
 
     function FlairBiRightNavBarController(Visualizations, $rootScope,
-        entity, Features, $uibModal,
+        entity,states, Features, $uibModal,
         $state, $scope, featureEntities,
         Hierarchies, $timeout,
         filterParametersService,
@@ -21,7 +21,7 @@
         Visualmetadata,
         VisualDispatchService,
         VisualMetadataContainer,
-        $translate, schedulerService) {
+        $translate, schedulerService, configuration,IFRAME) {
         var vm = this;
         vm.visualizations = [];
         vm.addVisual = addVisual;
@@ -93,6 +93,15 @@
             registerBookmarkUpdateDynamicDateRange();
             setDateRangeSubscription();
             filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
+
+            if (configuration.readOnly) {
+                var vms = states.viewState.visualMetadataSet || [];
+            } else {
+                var vms = states.visualMetadataSet || [];
+            }
+            vm.iFrames = vms.filter(function(item){
+                return item.metadataVisual.name === IFRAME.iframe;
+            })
         }
 
         ////////////////
@@ -126,6 +135,9 @@
 
         function setProperties(visual, view) {
             vm.visual = visual;
+            vm.visual.fields = vm.visual.fields.sort(function (a, b) {
+                return a.order - b.order;
+            });
             vm.visual.titleProperties.titleText =
                 vm.visual.titleProperties.titleText.trim() == ""
                     ? vm.visual.metadataVisual.name
@@ -189,7 +201,7 @@
                         vm.isSaving = false;
                         VisualDispatchService.setViewEditedBeforeSave(false);
                         VisualMetadataContainer.update(vm.visual.id, result, 'id');
-                        vm.visual = result;
+                        vm.visual = VisualMetadataContainer.getOne(vm.visual.id);
                         var info = { text: $translate.instant('flairbiApp.visualmetadata.updated', { param: result.id }), title: "Updated" }
                         $rootScope.showSuccessToast(info);
 
@@ -207,7 +219,7 @@
                         vm.isSaving = false;
                         VisualDispatchService.setViewEditedBeforeSave(false);
                         VisualMetadataContainer.update(vm.visual.visualBuildId, result, 'visualBuildId');
-                        vm.visual = result;
+                        vm.visual = VisualMetadataContainer.getOne(vm.visual.visualBuildId);
                         var info = { text: $translate.instant('flairbiApp.visualmetadata.created', { param: result.id }), title: "Created" }
                         $rootScope.showSuccessToast(info);
                     },
@@ -221,8 +233,8 @@
             if (vm.visual.id) {
                 VisualMetadataContainer.update(vm.visual.id, vm.visual, 'id');
                 VisualDispatchService.setViewEditedBeforeSave(false);
-            } 
-            else{
+            }
+            else {
                 save();
             }
         }
@@ -409,12 +421,8 @@
         function getAppliedFiltersDimentions() {
             var filters = filterParametersService.get();
             vm.appliedFiltersDimensions = vm.dimensions.filter(function (item) {
-                return filters[getDimensionName(item.name, item.type)] ? true : false;
+                return filters[item.name] ? true : false;
             });
-        }
-
-        function getDimensionName(name, type) {
-            return type === 'timestamp' ? filterParametersService.buildDateRangeFilterName(name) : name;
         }
 
         function openFilters() {
@@ -431,6 +439,7 @@
             vm.favouriteDimensions = vm.dimensions.filter(function (item) {
                 return item.favouriteFilter === true;
             });
+            debugger
             $('#slider').css('display', 'block');
         }
 
@@ -512,7 +521,7 @@
                 return item.featureType === "DIMENSION" && item.dateFilter !== "ENABLED";
             });
 
-            vm.dimensions =  vm.dateDimensions.concat( vm.allDimensions);
+            vm.dimensions = vm.dateDimensions.concat(vm.allDimensions);
         }
 
         function registerToggleRightNavBarOff() {

@@ -1,5 +1,13 @@
 package com.flair.bi.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionType;
@@ -18,14 +26,8 @@ import com.flair.bi.web.rest.dto.ConnectionPropertiesSchemaDTO;
 import com.flair.bi.web.rest.dto.ConnectionPropertyDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -67,8 +69,11 @@ public class GrpcConnectionService {
             int maxEntries) {
         ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries,
                 QueryGrpcUtils.toProtoConnection(connection));
-        return new ListTablesResponseDTO().setTableNames(
-                result.getTablesList().stream().map(table -> table.getTableName()).collect(Collectors.toList()));
+        return new ListTablesResponseDTO().setTables(
+                result.getTablesList()
+                        .stream()
+                        .map(table -> new ListTablesResponseDTO.Table(table.getTableName(), null))
+                        .collect(Collectors.toList()));
     }
 
     public ConnectionDTO saveConnection(ConnectionDTO connection) {

@@ -8,18 +8,18 @@ import javax.persistence.Entity;
 @DiscriminatorValue(value = "number")
 public class NumberProperty extends Property {
 
-    @Column(name = "number_value")
-    private int value;
+	@Column(name = "number_value")
+	private int value;
 
-    public NumberProperty() {
-        this.setType("NUMBER");
-    }
+	public NumberProperty() {
+		this.setType("NUMBER");
+	}
 
-    public int getValue() {
-        return value;
-    }
+	public int getValue() {
+		return value;
+	}
 
-    public void setValue(int value) {
-        this.value = value;
-    }
+	public void setValue(int value) {
+		this.value = value;
+	}
 }

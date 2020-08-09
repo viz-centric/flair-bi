@@ -19,7 +19,8 @@
             filterScheduledReports: filterScheduledReports,
             getReportLogByMetaId: getReportLogByMetaId,
             disableTicketCreation: disableTicketCreation,
-            searchUsers:searchUsers
+            searchUsers:searchUsers,
+            getUserNameByEmail:getUserNameByEmail
         };
 
         return service;
@@ -73,9 +74,11 @@
                 method: 'GET'
             });
         }
-        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert) {
+        function filterScheduledReports(userName, reportName, startDate, endDate, pageSize, page,thresholdAlert,dashboardName,viewName) {
             return $http({
-                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName + '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' + page+'&thresholdAlert='+thresholdAlert,
+                url: 'api/schedule/searchReports/?userName=' + userName + '&reportName=' + reportName +
+                 '&startDate=' + startDate + '&endDate=' + endDate + '&pageSize=' + pageSize + '&page=' +
+                  page+'&thresholdAlert='+thresholdAlert+"&dashboardName="+dashboardName+"&viewName="+viewName,
                 method: 'GET'
             });
         }
@@ -105,6 +108,21 @@
                     }
                 },function(){
                     reject(emptyList);
+                });
+            });
+        }
+
+        function getUserNameByEmail(email){
+            return $q(function(resolve, reject) {
+                var promise=User.getUserNameByEmail({email: email}).$promise;
+                promise.then(function (data) {
+                    if (data.email) {
+                        resolve(data.firstName + " " + data.email);
+                    } else {
+                        reject("");
+                    }
+                },function(){
+                    reject("");
                 });
             });
         }

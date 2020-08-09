@@ -67,6 +67,17 @@
             return null;
         }
 
+        function getStartDateRangeTimeUnit() {
+            var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
+            if (config.toDate) {
+                return null;
+            } else if (config.isCustom && config.startDay) {
+                return "'" + config.startDayUnit + "'";
+            }
+            return null;
+        }
+
+
         function getStartDateRange() {
             var date = new Date();
             var config = vm.dimension.metadata.currentDynamicDateRangeConfig;
@@ -116,7 +127,8 @@
                     startDate = formatDate(resetTimezone(strToDate(startDateRange)));
                 } else {
                     var startDateRangeInterval = getStartDateRangeInterval();
-                    startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                    var timeUnit = getStartDateRangeTimeUnit() || '';
+                    startDate = "__FLAIR_INTERVAL_OPERATION(NOW(" + timeUnit + "), '-', '" + startDateRangeInterval + "')";
                 }
                 var endDate = '__FLAIR_NOW()';
                 console.log('filter-date-range-component: input change dynamic', typeof startDate, startDate,
@@ -136,7 +148,7 @@
 
         function getDynamicDateRangeToolTip(dimensionName,currentDynamicDateRangeConfig,customDynamicDateRange){
             var dynamicDateRangeToolTip = {name:'',text:''};
-                dynamicDateRangeToolTip.name = filterParametersService.buildDateRangeFilterName(dimensionName);
+                dynamicDateRangeToolTip.name = dimensionName;
             if(currentDynamicDateRangeConfig.isCustom){
                 dynamicDateRangeToolTip.text = 'Last '+customDynamicDateRange; 
             }else{

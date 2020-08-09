@@ -34,6 +34,13 @@
                                 </svg>
                             </a>
                         </div>
+                        <div class="item" role="menuitem">
+                            <a uib-tooltip="Export" class="pull-right" href="api/views/{{ vm.view.id }}/export" download="{{vm.view.viewName}}-{{vm.view.id}}.json">
+                                <svg class="flaticons-export">
+                                    <use xlink:href="#export" />
+                                </svg>
+                            </a>
+                        </div>
                         <div class="item" role="menuitem" ng-if="vm.view.published">
                             <a ng-if="vm.view.published && vm.canReadPublish"
                                 ui-sref="flair-bi-publish({id:vm.view.id, dashboardId:vm.view.viewDashboard.id})">

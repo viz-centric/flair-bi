@@ -31,7 +31,13 @@
                 "searched": "Dashboard search error"
             },
             "selectDatasource": "Search Available Data Sources",
-            "uniqueError" : "A dashboard with this name already exists"
+            "uniqueError" : "A dashboard with this name already exists",
+            "upload.success": "File {{file}} uploaded successfully.",
+            "upload.failure": "File {{file}} failed to upload.",
+            "upload.failure.error.viewImportExportError.features.none": "File {{file}} failed to upload because feature {{field}} does not exist.",
+            "upload.failure.error.viewImportExportError.hierarchies.none": "File {{file}} failed to upload because hierarchy {{field}} does not exist.",
+            "upload.failure.error.viewImportExportError.features.multiple": "File {{file}} failed to upload because multiple features {{field}} found.",
+            "upload.failure.error.viewImportExportError.hierarchies.multiple": "File {{file}} failed to upload because multiple hierarchies {{field}} found."
         }
     }
 }

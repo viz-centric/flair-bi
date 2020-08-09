@@ -40,9 +40,6 @@
         vm.featureBookmark = entity;
         vm.clear = clear;
         vm.save = save;
-        //vm.featurecriteria = FeatureCriteria.query();
-        //vm.users = User.query();
-        //vm.datasources = Datasources.query();
 
         $timeout(function() {
             angular.element(".form-group:eq(1)>input").focus();

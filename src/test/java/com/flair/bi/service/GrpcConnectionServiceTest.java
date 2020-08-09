@@ -1,5 +1,24 @@
 package com.flair.bi.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionType;
@@ -16,24 +35,6 @@ import com.flair.bi.service.dto.TestConnectionResultDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
@@ -132,7 +133,7 @@ public class GrpcConnectionServiceTest {
     @Test
     public void testConnectionWorksByConnection() throws IOException {
         doAnswer(invocationOnMock -> {
-            Connection c = invocationOnMock.getArgumentAt(2, Connection.class);
+            Connection c = invocationOnMock.getArgument(2, Connection.class);
             assertEquals("connection name", c.getName());
             assertEquals(1L, c.getId());
             assertEquals("linkid", c.getLinkId());
@@ -256,8 +257,8 @@ public class GrpcConnectionServiceTest {
                         .addTables(ListTablesResponse.Table.newBuilder().setTableName("table name2").build()).build());
         ListTablesResponseDTO response = service.listTables("linkid", "table", null, 10);
 
-        assertEquals("table name", response.getTableNames().get(0));
-        assertEquals("table name2", response.getTableNames().get(1));
+        assertEquals("table name", response.getTables().get(0));
+        assertEquals("table name2", response.getTables().get(1));
 
     }
 }

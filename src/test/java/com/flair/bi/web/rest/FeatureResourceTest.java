@@ -1,20 +1,21 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.Feature;
-import com.flair.bi.domain.enumeration.FeatureType;
-import com.flair.bi.service.FeatureService;
-import com.flair.bi.service.dto.FeatureDTO;
-import com.flair.bi.service.dto.FeatureListDTO;
-import com.flair.bi.service.mapper.FeatureMapper;
-import com.flair.bi.web.rest.params.FeatureRequestParams;
-import com.querydsl.core.types.Predicate;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyListOf;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -24,17 +25,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.enumeration.FeatureType;
+import com.flair.bi.service.FeatureService;
+import com.flair.bi.service.dto.FeatureDTO;
+import com.flair.bi.service.dto.FeatureListDTO;
+import com.querydsl.core.types.Predicate;
 
 @Ignore
 public class FeatureResourceTest extends AbstractIntegrationTest {
@@ -63,12 +61,11 @@ public class FeatureResourceTest extends AbstractIntegrationTest {
 		map.add("view", "7");
 		map.add("name", "test");
 
-		ResponseEntity<FeatureDTO[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
+		ResponseEntity<FeatureDTO[]> response = restTemplate.withBasicAuth("flairuser", "flairpass")
 				.exchange(getUrl() + "/api/features", HttpMethod.GET, new HttpEntity<>(map), FeatureDTO[].class);
 
 		assertEquals(OK, response.getStatusCode());
-		assertEquals(10L, (long)response.getBody()[0].getId());
+		assertEquals(10L, (long) response.getBody()[0].getId());
 		assertEquals("def", response.getBody()[0].getDefinition());
 		assertEquals(FeatureType.DIMENSION, response.getBody()[0].getFeatureType());
 		assertEquals("test", response.getBody()[0].getName());
@@ -88,8 +85,7 @@ public class FeatureResourceTest extends AbstractIntegrationTest {
 		datasource.setId(10L);
 		feature.setDatasource(datasource);
 
-		ResponseEntity<Feature> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
+		ResponseEntity<Feature> response = restTemplate.withBasicAuth("flairuser", "flairpass")
 				.exchange(getUrl() + "/api/features", HttpMethod.PUT, new HttpEntity<>(feature), Feature.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -119,12 +115,11 @@ public class FeatureResourceTest extends AbstractIntegrationTest {
 		when(featureService.getOne(eq(feature.getId()))).thenReturn(existingFeature);
 		when(featureService.save(eq(existingFeature))).thenReturn(existingFeature);
 
-		ResponseEntity<Feature> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
+		ResponseEntity<Feature> response = restTemplate.withBasicAuth("flairuser", "flairpass")
 				.exchange(getUrl() + "/api/features", HttpMethod.PUT, new HttpEntity<>(feature), Feature.class);
 
 		assertEquals(OK, response.getStatusCode());
-		assertEquals(10L, (long)response.getBody().getId());
+		assertEquals(10L, (long) response.getBody().getId());
 		assertEquals("def", response.getBody().getDefinition());
 		assertEquals(FeatureType.DIMENSION, response.getBody().getFeatureType());
 		assertEquals("test", response.getBody().getName());
@@ -133,9 +128,9 @@ public class FeatureResourceTest extends AbstractIntegrationTest {
 
 	@Test
 	public void deleteFeature() {
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/features/3", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()), String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/features/3", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				String.class);
 
 		verify(featureService, times(1)).delete(eq(3L));
 
@@ -163,12 +158,11 @@ public class FeatureResourceTest extends AbstractIntegrationTest {
 
 		when(featureService.save(any(Feature.class))).thenReturn(feature2);
 
-		ResponseEntity<Feature> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
+		ResponseEntity<Feature> response = restTemplate.withBasicAuth("flairuser", "flairpass")
 				.exchange(getUrl() + "/api/features", HttpMethod.POST, new HttpEntity<>(request), Feature.class);
 
 		assertEquals(CREATED, response.getStatusCode());
-		assertEquals(15L, (long)response.getBody().getId());
+		assertEquals(15L, (long) response.getBody().getId());
 		assertEquals("def", response.getBody().getDefinition());
 		assertEquals(FeatureType.DIMENSION, response.getBody().getFeatureType());
 		assertEquals("test", response.getBody().getName());
@@ -188,9 +182,8 @@ public class FeatureResourceTest extends AbstractIntegrationTest {
 		featureListDTO.setDatasourceId(20L);
 		featureListDTO.setFeatureList(Arrays.asList(request));
 
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/features/list", HttpMethod.POST, new HttpEntity<>(featureListDTO), String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/features/list", HttpMethod.POST, new HttpEntity<>(featureListDTO), String.class);
 
 		verify(featureService, times(1)).save(anyListOf(Feature.class));
 

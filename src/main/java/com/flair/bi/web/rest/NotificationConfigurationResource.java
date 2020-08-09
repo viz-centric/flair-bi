@@ -14,24 +14,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.flair.bi.service.SchedulerService;
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.JiraParametersDTO;
-import com.flair.bi.service.dto.scheduler.JiraTicketsDTO;
 import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Slf4j
 public class NotificationConfigurationResource {
 
 	private final SchedulerService schedulerService;
@@ -118,7 +115,7 @@ public class NotificationConfigurationResource {
 	public JiraParametersDTO getJiraConfig(@RequestParam(required = false) Integer id) {
 		return schedulerService.getJiraConfig(id);
 	}
-	
+
 	@GetMapping("/notification/createJiraTicket/")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
@@ -129,8 +126,9 @@ public class NotificationConfigurationResource {
 	@GetMapping("/notification/getJiraTickets/")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('NOTIFICATION_CONFIG', 'READ','APPLICATION')")
-	GetJiraTicketsDTO getJiraTickets(@RequestParam String status,@RequestParam Integer page,@RequestParam Integer pageSize) {
-		return schedulerService.getJiraTickets(status,page,pageSize);
+	GetJiraTicketsDTO getJiraTickets(@RequestParam String status, @RequestParam Integer page,
+			@RequestParam Integer pageSize) {
+		return schedulerService.getJiraTickets(status, page, pageSize);
 	}
 
 	@GetMapping("/notification/disableTicketCreationRequest/")

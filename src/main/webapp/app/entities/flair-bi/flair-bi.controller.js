@@ -40,7 +40,8 @@
         '$transitions',
         "favouriteFilterService",
         "schedulerService",
-        "AccountDispatch"
+        "AccountDispatch",
+        "IFRAME"
     ];
 
     function FlairBiController(
@@ -78,7 +79,8 @@
         $transitions,
         favouriteFilterService,
         schedulerService,
-        AccountDispatch
+        AccountDispatch,
+        IFRAME
     ) {
         var vm = this;
         var editMode = false;
@@ -171,6 +173,16 @@
             }
 
             vm.visualmetadata = VisualMetadataContainer.add(vms);
+            vm.visualmetadata.map(function (item) {
+                if (item.metadataVisual.name === IFRAME.iframe) {
+                    var url = item.properties[0].value;
+                    item.dashboardroperties = {
+                        dashboardName: filterParametersService.getParameterByName('dashboardName', url),
+                        viewName: filterParametersService.getParameterByName('viewName',url),
+                        buildUrl: '#/dashboards/' + filterParametersService.getParameterByName('dashboarID',url) + '/views/' + filterParametersService.getParameterByName('viewId',url) + '/build'
+                    }
+                }
+            })
             registerButtonToggleEvent();
             registerScopeDestroy();
             openSchedulerDialogForThreshold();
@@ -300,7 +312,9 @@
                     id: v.metadataVisual.id
                 },
                 function (success) {
-                    saveClonedVisual(setVisualProps(v, createVisualMetadata(success)));
+                    var config = createVisualMetadata(success)
+                    config.isSaved = true;
+                    saveClonedVisual(setVisualProps(v, config));
                 },
                 function (error) { }
             );
@@ -429,7 +443,8 @@
                 var field = {
                     fieldType: fieldType,
                     feature: null,
-                    constraint: fieldType.constraint
+                    constraint: fieldType.constraint,
+                    order : VisualDispatchService.getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -463,7 +478,8 @@
                 var field = {
                     fieldType: fieldType,
                     feature: null,
-                    constraint: fieldType.constraint
+                    constraint: fieldType.constraint,
+                    order : VisualDispatchService.getFieldMaxOrder(v.fields)
                 };
                 Visualizations.getFieldType(
                     {
@@ -541,7 +557,7 @@
             v.isSaved = true;
             if (v.id) {
                 VisualMetadataContainer.update(v.id, v, 'id');
-            } 
+            }
             else{
                 saveFeatures(v);
             }
@@ -748,6 +764,7 @@
                 Visualmetadata.get({
                     id: $rootScope.activePage.visualizationID
                 }, function (v) {
+                    v.isSaved = true;
                     refreshWidget(v);
                 });
             });
@@ -992,7 +1009,7 @@
                     resolve: {
                         shareLink: function () {
                             return ShareLinkService.createLink(
-                                v.getSharePath(vm.datasource,$stateParams.id)
+                                v.getSharePath(vm.view.viewDashboard.dashboardName, vm.view.viewName, vm.view.viewDashboard.id, vm.datasource, $stateParams.id)
                             );
                         }
                     }
@@ -1211,6 +1228,7 @@
         }
 
         function createFields(newVM) {
+            var order = 0;
             newVM.fields = newVM.metadataVisual.fieldTypes
                 .filter(function (item) {
                     return item.constraint === "REQUIRED";
@@ -1230,6 +1248,7 @@
                     },
                     function (result) {
                         field.fieldType = result;
+                        field.order = order + 1;
                         field.properties = field.fieldType.propertyTypes.map(
                             function (item) {
                                 return {

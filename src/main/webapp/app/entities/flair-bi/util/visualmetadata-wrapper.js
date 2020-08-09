@@ -94,8 +94,8 @@
     /**
      * @return url location of this visual metadata
      */
-    function getSharePath(datasource,viewId) {
-        return '/visual/?visualisationId=' + this.id + "&datasourceId=" + datasource.id +"&viewId=" + viewId;
+    function getSharePath(dashboardName, viewName, dashboarID, datasource, viewId) {
+        return '/visual/?dashboardName=' + dashboardName + '&viewName=' + viewName + '&dashboarID=' + dashboarID + '&visualisationId=' + this.id + "&datasourceId=" + datasource.id + "&viewId=" + viewId;
     }
 
     /**
@@ -248,9 +248,9 @@
      */
     function constructMeasureField(fieldMeasure) {
         var agg = getProperty(fieldMeasure.properties, 'Aggregation type', null);
-        if (agg !== null && agg !== 'NONE') {
+        if (agg !== null) {
             return {
-                aggregation: agg,
+                aggregation: (agg !== 'NONE') ? agg : null,
                 name: fieldMeasure.feature.definition,
                 alias: fieldMeasure.feature.name,
             };
@@ -268,7 +268,6 @@
         }
         return null;
     }
-
 
     function getQueryParameters(filters, conditionExpression, offset) {
 
@@ -296,8 +295,7 @@
                 return result;
             });
 
-        var measureFields = this.fields
-            .filter(isMeasure)
+        var measureFields = measures
             .map(function (item) {
                 return constructMeasureField(item);
             });

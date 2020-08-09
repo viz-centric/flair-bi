@@ -10,7 +10,7 @@
             .state(
                 "flair-bi-build",
                 viewAndDeveloperSettings(
-                    "/dashboards/{dashboardId}/views/{id}/build",
+                    "/dashboards/{dashboardId}/views/{id}/build?isIframe",
                     false
                 )
             )
@@ -30,7 +30,7 @@
             )
             .state("table-view", {
                 parent: "entity",
-                url: "/visual-table/?schedulerId&datasourceId&viewId&chartType=table",
+                url: "/visual-table/?visualisationId&schedulerId&datasourceId&viewId&chartType=table",
                 data: {
                     authorities: []
                 },
@@ -76,7 +76,7 @@
             })
             .state("fullscreen", {
                 parent: "entity",
-                url: "/visual/?visualisationId&datasourceId&viewId&filters",
+                url: "/visual/?dashboardName&viewName&dashboarID&visualisationId&datasourceId&viewId&filters",
                 data: {
                     authorities: []
                 },
@@ -111,6 +111,22 @@
                             if (!isNaN($stateParams.viewId)) {
                                 return Features.query({
                                     view: $stateParams.viewId
+                                }).$promise;
+                            } else {
+                                var deferred = $q.defer();
+                                deferred.reject("Not valid id");
+                                return deferred.promise;
+                            }
+                        }
+                    ],
+                    entity: [
+                        "$stateParams",
+                        "Views",
+                        "$q",
+                        function($stateParams, Views, $q) {
+                            if (!isNaN($stateParams.viewId)) {
+                                return Views.get({
+                                    id: $stateParams.viewId
                                 }).$promise;
                             } else {
                                 var deferred = $q.defer();
@@ -298,6 +314,12 @@
                             hasViewAccess($stateParams.id,Principal,$q,$state);
                         }
                     ]
+                },
+                params: {
+                    isIframe: {
+                        value: 'false',
+                        squash: true
+                    }
                 }
             };
         }

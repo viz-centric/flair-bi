@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class CreateViewReleaseRequestDTO {
 
-    private String comment;
+	private String comment;
 }

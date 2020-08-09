@@ -1,14 +1,14 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.Feature;
-import com.flair.bi.domain.hierarchy.Drilldown;
-import com.flair.bi.domain.hierarchy.Hierarchy;
-import com.flair.bi.service.BookMarkWatchService;
-import com.flair.bi.service.HierarchyService;
-import com.flair.bi.service.dto.HierarchyDTO;
-import com.querydsl.core.types.Predicate;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,14 +19,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableSet;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.hierarchy.Drilldown;
+import com.flair.bi.domain.hierarchy.Hierarchy;
+import com.flair.bi.service.HierarchyService;
+import com.flair.bi.service.dto.HierarchyDTO;
+import com.querydsl.core.types.Predicate;
 
 @Ignore
 public class HierarchyResourceTest extends AbstractIntegrationTest {
@@ -40,15 +40,12 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 		hierarchy.setName("nm");
 		hierarchy.setId(1L);
 		when(hierarchyService.findAll(any(Predicate.class))).thenReturn(Arrays.asList(hierarchy));
-		ResponseEntity<Hierarchy[]> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/hierarchies",
-						HttpMethod.GET,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						Hierarchy[].class);
+		ResponseEntity<Hierarchy[]> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/hierarchies", HttpMethod.GET, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				Hierarchy[].class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("nm", response.getBody()[0].getName());
-		assertEquals(1L, (long)response.getBody()[0].getId());
+		assertEquals(1L, (long) response.getBody()[0].getId());
 	}
 
 	@Test
@@ -56,12 +53,8 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 		HierarchyDTO request = new HierarchyDTO();
 		request.setName("nm");
 
-		ResponseEntity<Hierarchy> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/hierarchies",
-						HttpMethod.PUT,
-						new HttpEntity<>(request),
-						Hierarchy.class);
+		ResponseEntity<Hierarchy> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/hierarchies", HttpMethod.PUT, new HttpEntity<>(request), Hierarchy.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
@@ -72,12 +65,8 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 		request.setId(1L);
 		request.setName("nm");
 
-		ResponseEntity<Hierarchy> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/hierarchies",
-						HttpMethod.PUT,
-						new HttpEntity<>(request),
-						Hierarchy.class);
+		ResponseEntity<Hierarchy> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/hierarchies", HttpMethod.PUT, new HttpEntity<>(request), Hierarchy.class);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
@@ -100,17 +89,13 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 		when(hierarchyService.findOne(eq(1L))).thenReturn(h);
 		when(hierarchyService.save(eq(h))).thenReturn(h);
 
-		ResponseEntity<Hierarchy> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/hierarchies",
-						HttpMethod.PUT,
-						new HttpEntity<>(request),
-						Hierarchy.class);
+		ResponseEntity<Hierarchy> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/hierarchies", HttpMethod.PUT, new HttpEntity<>(request), Hierarchy.class);
 
 		Drilldown drilldown = response.getBody().getDrilldown().iterator().next();
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(1L, (long)response.getBody().getId());
+		assertEquals(1L, (long) response.getBody().getId());
 		assertEquals("nm", response.getBody().getName());
 		assertEquals(5L, (long) drilldown.getFeature().getId());
 		assertEquals(10, (int) drilldown.getOrder());
@@ -136,15 +121,11 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 
 		when(hierarchyService.save(eq(request))).thenReturn(request2);
 
-		ResponseEntity<Hierarchy> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/hierarchies",
-						HttpMethod.POST,
-						new HttpEntity<>(request),
-						Hierarchy.class);
+		ResponseEntity<Hierarchy> response = restTemplate.withBasicAuth("flairuser", "flairpass")
+				.exchange(getUrl() + "/api/hierarchies", HttpMethod.POST, new HttpEntity<>(request), Hierarchy.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(11L, (long)response.getBody().getId());
+		assertEquals(11L, (long) response.getBody().getId());
 		assertEquals("nm", response.getBody().getName());
 		assertEquals(5L, (long) drilldown.getFeature().getId());
 		assertEquals(10, (int) drilldown.getOrder());
@@ -152,12 +133,9 @@ public class HierarchyResourceTest extends AbstractIntegrationTest {
 
 	@Test
 	public void deleteHierarchies() {
-		ResponseEntity<String> response = restTemplate
-				.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/hierarchies/3",
-						HttpMethod.DELETE,
-						new HttpEntity<>(new LinkedMultiValueMap<>()),
-						String.class);
+		ResponseEntity<String> response = restTemplate.withBasicAuth("flairuser", "flairpass").exchange(
+				getUrl() + "/api/hierarchies/3", HttpMethod.DELETE, new HttpEntity<>(new LinkedMultiValueMap<>()),
+				String.class);
 
 		verify(hierarchyService, times(1)).delete(eq(3L));
 	}

@@ -1,5 +1,13 @@
 <div class="dropdown-options-v2 menu-container">
-    <a class="dropdown-toggle" type="button" id="dropdownMainMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    <a ng-if="vm.disabled" class="dropdown-toggle" type="button" id="dropdownMainMenu"  aria-haspopup="true" aria-expanded="true">
+        <div class="menu">
+            <svg class="more">
+                <use xlink:href="#more" />
+            </svg>
+        </div>
+    </a>
+
+    <a ng-if="!vm.disabled" class="dropdown-toggle" type="button" id="dropdownMainMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <div class="menu">
             <svg class="more">
                 <use xlink:href="#more" />
@@ -8,7 +16,6 @@
     </a>
 
     <div class="dropdown-menu" aria-labelledby="dropdownMainMenu">
-
         <div class=" user-holder">
                 <svg>
                 <use xlink:href="#more" />

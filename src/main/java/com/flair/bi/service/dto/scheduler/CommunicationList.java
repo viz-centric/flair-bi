@@ -2,8 +2,6 @@ package com.flair.bi.service.dto.scheduler;
 
 import java.util.Arrays;
 
-import com.flair.bi.service.dto.scheduler.emailsDTO;
-
 public class CommunicationList {
 	emailsDTO email[];
 	Integer teams[];

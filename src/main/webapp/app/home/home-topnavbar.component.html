@@ -2,10 +2,13 @@
     <nav class="navbar navbar-static-top" role="navigation">
         <div class="navbar-header">
             <div class="row home-row">
-                <a class="logo" ui-sref="home">
+                <a class="common ng-class:{'flair-logo':vm.clientLogo,'logo':!vm.clientLogo}" ui-sref="home">
                     <img src="content/svgs/flairbi-logo-no-text.svg" alt="flair bi">
                 </a>
-                <div class="col-md-3 home-header-search-box" style="left: 62px;display:none;">
+                <a ng-if="vm.clientLogo" uib-tooltip={{vm.clientLogo.name}} tooltip-placement="right" class="common client-logo" ui-sref="home">
+                    <img ng-src={{vm.clientLogo.url}} alt={{vm.clientLogo.name}}>
+                </a>
+                <div class="col-md-3 home-header-search-box ng-class:{'home-header-search-box': vm.clientLogo,'home-header-search-box1':!vm.clientLogo}">
                     <form role="form" ng-submit="vm.search()">
                         <div class="input-group">
                             <span class="input-group-btn">

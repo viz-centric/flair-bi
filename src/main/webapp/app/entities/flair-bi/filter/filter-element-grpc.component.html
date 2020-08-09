@@ -3,9 +3,10 @@
     <label class="pull-right"> <i ng-click="vm.addToFavourite(vm.dimension.id)" ng-class="vm.checkFavouriteFilter()"
             aria-hidden="true" class="favouritefilter"></i></label>
 
-    <label ng-if="!vm.canDisplayDateRangeControls(vm.dimension)" class="pull-right"> <i
-            ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width"
-            ng-class="{'active' : vm.isBulkValue}"></i></label>
+    <label ng-if="!vm.canDisplayDateRangeControls(vm.dimension)" class="pull-right">
+         <i ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width" ng-class="{'active' : vm.isCommaSeparatedInput}" uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom" >
+        </i>
+    </label>
 
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension" reload="vm.dateRangeReload"
@@ -14,7 +15,7 @@
     </div>
     <div ng-if="!vm.canDisplayDateRangeControls(vm.dimension)">
         <div>
-            <div ng-if="!vm.isBulkValue">
+            <div ng-if="!vm.isCommaSeparatedInput">
                 <tags-input-grpc placeholder="Search for {{vm.dimension.name}}" on-tag-added="vm.added($tag)"
                     on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
                     min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
@@ -23,9 +24,9 @@
             " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
                 </tags-input-grpc>
             </div>
-            <div ng-if="vm.isBulkValue">
-                <input type="text" placeholder="Enter values for {{vm.dimension.name}}" ng-model="vm.commaValue"
-                    class="form-control" ng-blur="vm.addToFilter(vm.dimension)" />
+            <div ng-if="vm.isCommaSeparatedInput" class="comma-separated-box">
+                <input type="text" placeholder="Add comma separated values" ng-model="vm.dimension.commaSeparatedValues"
+                    class="form-control comma-separated-input" ng-blur="vm.addToFilter(vm.dimension)" />
             </div>
         </div>
     </div>

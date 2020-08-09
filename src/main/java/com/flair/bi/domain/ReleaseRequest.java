@@ -1,10 +1,5 @@
 package com.flair.bi.domain;
 
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Holds a request by the user to create a new release
  */
@@ -26,17 +25,17 @@ import javax.persistence.Table;
 @EqualsAndHashCode(of = "id")
 public class ReleaseRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "requested_by_login", referencedColumnName = "login", nullable = false)
-    private User requestedBy;
+	@ManyToOne
+	@JoinColumn(name = "requested_by_login", referencedColumnName = "login", nullable = false)
+	private User requestedBy;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private DashboardRelease release;
+	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	private DashboardRelease release;
 
-    @Column(name = "release_request_comment")
-    private String comment;
+	@Column(name = "release_request_comment")
+	private String comment;
 }

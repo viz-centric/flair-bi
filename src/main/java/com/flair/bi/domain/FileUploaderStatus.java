@@ -1,10 +1,15 @@
 package com.flair.bi.domain;
 
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * A FileUploaderStatus.
@@ -13,132 +18,127 @@ import java.util.Objects;
 @Table(name = "file_uploader_status")
 public class FileUploaderStatus implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    @NotNull
-    @Column(name = "file_system", nullable = false)
-    private String fileSystem;
+	@NotNull
+	@Column(name = "file_system", nullable = false)
+	private String fileSystem;
 
-    @NotNull
-    @Column(name = "file_name", nullable = false)
-    private String fileName;
+	@NotNull
+	@Column(name = "file_name", nullable = false)
+	private String fileName;
 
-    @Column(name = "content_type")
-    private String contentType;
+	@Column(name = "content_type")
+	private String contentType;
 
-    @NotNull
-    @Column(name = "is_file_processed", nullable = false)
-    private Boolean isFileProcessed;
+	@NotNull
+	@Column(name = "is_file_processed", nullable = false)
+	private Boolean isFileProcessed;
 
-    @Column(name = "file_location")
-    private String fileLocation;
+	@Column(name = "file_location")
+	private String fileLocation;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getFileSystem() {
-        return fileSystem;
-    }
+	public String getFileSystem() {
+		return fileSystem;
+	}
 
-    public FileUploaderStatus fileSystem(String fileSystem) {
-        this.fileSystem = fileSystem;
-        return this;
-    }
+	public FileUploaderStatus fileSystem(String fileSystem) {
+		this.fileSystem = fileSystem;
+		return this;
+	}
 
-    public void setFileSystem(String fileSystem) {
-        this.fileSystem = fileSystem;
-    }
+	public void setFileSystem(String fileSystem) {
+		this.fileSystem = fileSystem;
+	}
 
-    public String getFileName() {
-        return fileName;
-    }
+	public String getFileName() {
+		return fileName;
+	}
 
-    public FileUploaderStatus fileName(String fileName) {
-        this.fileName = fileName;
-        return this;
-    }
+	public FileUploaderStatus fileName(String fileName) {
+		this.fileName = fileName;
+		return this;
+	}
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
-    public String getContentType() {
-        return contentType;
-    }
+	public String getContentType() {
+		return contentType;
+	}
 
-    public FileUploaderStatus contentType(String contentType) {
-        this.contentType = contentType;
-        return this;
-    }
+	public FileUploaderStatus contentType(String contentType) {
+		this.contentType = contentType;
+		return this;
+	}
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
 
-    public Boolean isIsFileProcessed() {
-        return isFileProcessed;
-    }
+	public Boolean isIsFileProcessed() {
+		return isFileProcessed;
+	}
 
-    public FileUploaderStatus isFileProcessed(Boolean isFileProcessed) {
-        this.isFileProcessed = isFileProcessed;
-        return this;
-    }
+	public FileUploaderStatus isFileProcessed(Boolean isFileProcessed) {
+		this.isFileProcessed = isFileProcessed;
+		return this;
+	}
 
-    public void setIsFileProcessed(Boolean isFileProcessed) {
-        this.isFileProcessed = isFileProcessed;
-    }
+	public void setIsFileProcessed(Boolean isFileProcessed) {
+		this.isFileProcessed = isFileProcessed;
+	}
 
-    public String getFileLocation() {
-        return fileLocation;
-    }
+	public String getFileLocation() {
+		return fileLocation;
+	}
 
-    public FileUploaderStatus fileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
-        return this;
-    }
+	public FileUploaderStatus fileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
+		return this;
+	}
 
-    public void setFileLocation(String fileLocation) {
-        this.fileLocation = fileLocation;
-    }
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        FileUploaderStatus fileUploaderStatus = (FileUploaderStatus) o;
-        if (fileUploaderStatus.id == null || id == null) {
-            return false;
-        }
-        return Objects.equals(id, fileUploaderStatus.id);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		FileUploaderStatus fileUploaderStatus = (FileUploaderStatus) o;
+		if (fileUploaderStatus.id == null || id == null) {
+			return false;
+		}
+		return Objects.equals(id, fileUploaderStatus.id);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
 
-    @Override
-    public String toString() {
-        return "FileUploaderStatus{" +
-            "id=" + id +
-            ", fileSystem='" + fileSystem + "'" +
-            ", fileName='" + fileName + "'" +
-            ", contentType='" + contentType + "'" +
-            ", isFileProcessed='" + isFileProcessed + "'" +
-            ", fileLocation='" + fileLocation + "'" +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "FileUploaderStatus{" + "id=" + id + ", fileSystem='" + fileSystem + "'" + ", fileName='" + fileName
+				+ "'" + ", contentType='" + contentType + "'" + ", isFileProcessed='" + isFileProcessed + "'"
+				+ ", fileLocation='" + fileLocation + "'" + '}';
+	}
 }

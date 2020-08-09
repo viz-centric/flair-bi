@@ -1,13 +1,18 @@
 package com.flair.bi.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.messages.Query;
+import com.flair.bi.messages.QueryValidationResponse;
+import com.flair.bi.messages.RunQueryResponse;
+import com.flair.bi.service.dto.RunQueryResponseDTO;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
+import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.flair.bi.web.websocket.FbEngineWebSocketService;
+import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,19 +20,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.messages.Query;
-import com.flair.bi.messages.QueryValidationResponse;
-import com.flair.bi.messages.RunQueryResponse;
-import com.flair.bi.service.dto.RunQueryResponseDTO;
-import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
-import com.flair.bi.web.rest.errors.EntityNotFoundException;
-import com.flair.bi.web.websocket.FbEngineWebSocketService;
-import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
+import java.util.ArrayList;
 
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
@@ -43,13 +42,15 @@ public class GrpcQueryServiceTest {
 	private FbEngineWebSocketService fbEngineWebSocketService;
 	@Mock
 	private QueryTransformerService queryTransformerService;
+	@Mock
+	private ViewService viewService;
 
 	private GrpcQueryService grpcQueryService;
 
 	@Before
 	public void setUp() {
 		grpcQueryService = new GrpcQueryService(datasourceService, datasourceConstraintService,
-				fbEngineWebSocketService, grpcService, queryTransformerService);
+				fbEngineWebSocketService, grpcService, queryTransformerService, viewService);
 	}
 
 	@Test(expected = EntityNotFoundException.class)

@@ -1,31 +1,9 @@
 
 package com.flair.bi.web.rest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.MockitoAnnotations;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import com.flair.bi.AbstractIntegrationTest;
 import com.flair.bi.domain.User;
+import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.GrpcQueryService;
 import com.flair.bi.service.SchedulerService;
@@ -40,6 +18,27 @@ import com.flair.bi.service.dto.scheduler.emailsDTO;
 import com.flair.bi.view.VisualMetadataService;
 import com.project.bi.query.dto.FieldDTO;
 import com.project.bi.query.dto.QueryDTO;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Ignore
 public class SchedulerResourceIntTest extends AbstractIntegrationTest {
@@ -65,6 +64,9 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest {
 
 	@Inject
 	private DatasourceService datasourceService;
+
+	@Inject
+	private DashboardService dashboardService;
 
 	@Inject
 	private GrpcQueryService grpcQueryService;
@@ -131,7 +133,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		SchedulerResource schedulerResource = new SchedulerResource(visualMetadataService, datasourceService,
-				schedulerService);
+				schedulerService, dashboardService);
 		this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
 				.setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
 				.setMessageConverters(jacksonMessageConverter).build();

@@ -4,8 +4,11 @@ import com.flair.bi.domain.Realm;
 import com.flair.bi.repository.RealmRepository;
 import com.flair.bi.service.mapper.RealmMapper;
 import com.flair.bi.web.rest.dto.RealmDTO;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +31,17 @@ public class RealmService {
     }
 
     @Transactional(readOnly = true)
-    public List<RealmDTO> findAll() {
+    public List<RealmDTO> findAll(Pageable pageable) {
         log.debug("Request to get all realms");
-        List<Realm> entities = realmRepository.findAll();
-        return realmMapper.toDTOs(entities);
+        Page<Realm> entities = realmRepository.findAll(pageable);
+        return realmMapper.toDTOs(entities.getContent());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Realm> findAll(Predicate predicate, Pageable pageable) {
+        log.debug("Request to get all realms");
+        Page<Realm> entities = realmRepository.findAll(predicate,pageable);
+        return entities;
     }
 
     @Transactional(readOnly = true)

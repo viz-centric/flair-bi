@@ -1,0 +1,20 @@
+{
+    "flairbiApp": {
+        "realm" : {
+            "home": {
+                "title": "Realms",
+                "createLabel": "Create a new Realm",
+                "createOrEditLabel": "Create or edit a Realm"
+            },
+            "created": "A new Realm is created with identifier {{ param }}",
+            "updated": "A Realm is updated with identifier {{ param }}",
+            "deleted": "A Realm is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Realm {{ id }}?"
+            },
+            "detail": {
+                "title": "Realm"
+            }
+        }
+    }
+}

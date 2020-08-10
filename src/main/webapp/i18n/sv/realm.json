@@ -1,0 +1,20 @@
+{
+    "flairbiApp": {
+        "realm" : {
+            "home": {
+                "title": "Realms",
+                "createLabel": "Skapa en ny Realm",
+                "createOrEditLabel": "Skapa eller ändra en Realm"
+            },
+            "created": "En ny Realm är skapad med id {{ param }}",
+            "updated": "En Realm är uppdaterad med id  {{ param }}",
+            "deleted": "En Realm är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Realm {{ id }}?"
+            },
+            "detail": {
+                "title": "Realm"
+            }
+        }
+    }
+}

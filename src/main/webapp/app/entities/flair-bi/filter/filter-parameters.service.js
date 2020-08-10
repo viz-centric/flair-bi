@@ -445,7 +445,7 @@
         function setFilterInIframeURL(filters, iframes, filterDimensions) {
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
-                removeFilterInIframeURL(iframes);
+               
                 if(iframes){
                     iframes.forEach(element => {
                         var id = getParameterByName('datasourceId', element.properties[0].value)
@@ -525,6 +525,8 @@
             if(iframes){
                 iframes.forEach(element => {
                     element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
+                    $rootScope.$broadcast("update-widget-content-" + element.id);
+                    
                 });
             }
         }

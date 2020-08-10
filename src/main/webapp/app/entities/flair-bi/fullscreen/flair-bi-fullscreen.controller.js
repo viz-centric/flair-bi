@@ -246,7 +246,7 @@
                         }
                     }
 
-
+                    
                 }
             });
         }
@@ -290,7 +290,9 @@
             visualizationRenderService.setMetaData(
                 vm.visualMetadata,
                 metaData,
-                contentId
+                contentId,
+                false,
+                true
             );
         }
 

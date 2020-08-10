@@ -9,7 +9,7 @@
 
     function GeneratePivotTable(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, isNotification) {
+            build: function (record, element, panel, isNotification, isIframe) {
                 if ($rootScope.activePage.activePageNo === 0) {
                     if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                         element.css({
@@ -131,7 +131,7 @@
 
                     return pivot;
                 }
-                if (isNotification) {
+                 if (isNotification || isIframe) {
                     createChart();
                 }
                 else {

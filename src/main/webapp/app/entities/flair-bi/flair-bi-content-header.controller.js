@@ -652,22 +652,24 @@
 
         function removeFilterTag($event, val, list, key) {
             $event.preventDefault();
-            var index = list.indexOf(val);
-            if (index > -1) {
-                list.splice(index, 1);
-            }
-            vm.filters[key] = list;
-            removeTagInBI({ 'text': val });
-            setNoOfPages();
             Views.getCurrentEditState({
                 id: $stateParams.id
             },
                 function (result, headers) {
-                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
-                        return item.metadataVisual.name === IFRAME.iframe;
-                    })
+                    $rootScope.updateWidget = {};
+                    //comment for now 
+                    // vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                    //     return item.metadataVisual.name === IFRAME.iframe;
+                    // })
+                    var index = list.indexOf(val);
+                    if (index > -1) {
+                        list.splice(index, 1);
+                    }
+                    vm.filters[key] = list;
                     var filters = filterParametersService.get();
-                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                    filterParametersService.setFilterInIframeURL(filters, vm.iFrames, vm.dimensions);
+                    removeTagInBI({ 'text': val });
+                    setNoOfPages();
                 }
             );
            
@@ -743,9 +745,9 @@
                             id: $stateParams.id
                         },
                             function (result, headers) {
-                                vm.iFrames = result.visualMetadataSet.filter(function (item) {
-                                    return item.metadataVisual.name === IFRAME.iframe;
-                                })
+                                // vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                                //     return item.metadataVisual.name === IFRAME.iframe;
+                                // })
                                 var filters = filterParametersService.get();
                                 filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
                             }

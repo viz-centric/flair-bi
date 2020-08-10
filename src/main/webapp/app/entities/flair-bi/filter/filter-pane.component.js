@@ -80,8 +80,8 @@
                 });
                 filterParametersService.clear();
                 filterParametersService.saveSelectedFilter($rootScope.updateWidget);
-                filter();
                 filterParametersService.removeFilterInIframeURL(vm.iframes);
+                filter();
             }
         }
 

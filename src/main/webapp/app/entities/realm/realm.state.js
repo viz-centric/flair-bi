@@ -83,7 +83,7 @@
                 }]
             }
         })
-        .state('realm-detail.edit', {
+        .state('realm-detail-edit', {
             parent: 'realm-detail',
             url: '/detail/edit',
             data: {
@@ -108,7 +108,7 @@
                 });
             }]
         })
-        .state('realm.new', {
+        .state('realm-new', {
             parent: 'realm',
             url: '/new',
             data: {
@@ -135,7 +135,7 @@
                 });
             }]
         })
-        .state('realm.edit', {
+        .state('realm-edit', {
             parent: 'realm',
             url: '/{id}/edit',
             data: {
@@ -160,7 +160,7 @@
                 });
             }]
         })
-        .state('realm.delete', {
+        .state('realm-delete', {
             parent: 'realm',
             url: '/{id}/delete',
             data: {

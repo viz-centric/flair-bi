@@ -442,7 +442,8 @@
             };
         }
 
-        function setFilterInIframeURL(filters, iframes, filterDimensions) {
+        function setFilterInIframeURL(iframes, filterDimensions) {
+            var filters= get();
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
                

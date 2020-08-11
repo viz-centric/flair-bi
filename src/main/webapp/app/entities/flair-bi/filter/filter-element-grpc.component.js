@@ -355,8 +355,7 @@
                     vm.iFrames = result.visualMetadataSet.filter(function (item) {
                         return item.metadataVisual.name === IFRAME.iframe;
                     })
-                    var filters = filterParametersService.get();
-                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                    filterParametersService.setFilterInIframeURL(vm.iframes, vm.dimension);
                 }
             );
         }

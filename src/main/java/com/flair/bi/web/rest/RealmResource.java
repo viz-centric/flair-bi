@@ -30,8 +30,8 @@ import java.util.Optional;
  * REST controller for managing Realm.
  */
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class RealmResource {
 
     private final Logger log = LoggerFactory.getLogger(RealmResource.class);
@@ -43,18 +43,18 @@ public class RealmResource {
     /**
      * POST  /realms : Create a new realm.
      *
-     * @param realm the realm to create
+     * @param realmDTO the realm to create
      * @return the ResponseEntity with status 201 (Created) and with body the new realm, or with status 400 (Bad Request) if the realm has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/realms")
     @Timed
-    public ResponseEntity<RealmDTO> createRealm(@RequestBody RealmDTO realm) throws URISyntaxException {
-        log.debug("REST request to save Realm : {}", realm);
-        if (realm.getId() != null) {
+    public ResponseEntity<RealmDTO> createRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
+        log.debug("REST request to save Realm : {}", realmDTO);
+        if (realmDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new realm cannot already have an ID")).body(null);
         }
-        RealmDTO result = realmService.save(realm);
+        RealmDTO result = realmService.save(realmDTO);
         return ResponseEntity.created(new URI("/api/realms/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -63,7 +63,7 @@ public class RealmResource {
     /**
      * PUT  /realms : Updates an existing realm.
      *
-     * @param realm the realm to update
+     * @param realmDTO the realm to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated realm,
      * or with status 400 (Bad Request) if the realm is not valid,
      * or with status 500 (Internal Server Error) if the realm couldnt be updated
@@ -71,14 +71,14 @@ public class RealmResource {
      */
     @PutMapping("/realms")
     @Timed
-    public ResponseEntity<RealmDTO> updateRealm(@RequestBody RealmDTO realm) throws URISyntaxException {
-        log.debug("REST request to update Realm : {}", realm);
-        if (realm.getId() == null) {
-            return createRealm(realm);
+    public ResponseEntity<RealmDTO> updateRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
+        log.debug("REST request to update Realm : {}", realmDTO);
+        if (realmDTO.getId() == null) {
+            return createRealm(realmDTO);
         }
-        RealmDTO result = realmService.save(realm);
+        RealmDTO result = realmService.save(realmDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, realm.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, realmDTO.getId().toString()))
             .body(result);
     }
 

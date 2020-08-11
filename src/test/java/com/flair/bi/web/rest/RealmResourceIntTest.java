@@ -9,6 +9,7 @@ import com.flair.bi.web.rest.dto.RealmDTO;
 import com.flair.bi.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -35,8 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see RealmResource
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = FlairbiApp.class)
+@Ignore
 public class RealmResourceIntTest {
 
     @Autowired

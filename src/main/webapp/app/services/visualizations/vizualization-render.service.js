@@ -114,7 +114,7 @@
         }
 
 
-        function createWidget(visualMetadata, contentId, isNotification) {
+        function createWidget(visualMetadata, contentId, isNotification,isIframe) {
             var widgetId = '#' + contentId;
             var el = $(widgetId);
             var width = el.width(),
@@ -126,17 +126,23 @@
                 visualMetadata,
                 el,
                 panel,
-                isNotification
+                isNotification,
+                isIframe
             );
         }
 
-        function setMetaData(v, metadata, contentId, isNotification) {
+        function setMetaData(v, metadata, contentId, isNotification,isIframe) {
             if (v) {
                 addWidgets();
                 vm.data = v;
                 vm.data.data = metadata.data;
                 vm.widget = v.metadataVisual.functionname;
-                createWidget(vm.data, contentId, isNotification);
+                if(vm.widget==="GenerateIframe"){
+                    createWidget(vm.data, contentId, isNotification,true);
+                }
+                else{
+                    createWidget(vm.data, contentId, isNotification,isIframe);
+                }
             }
         }
 

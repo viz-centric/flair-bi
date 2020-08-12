@@ -21,7 +21,12 @@
                     templateUrl: 'app/entities/realm/realms.html',
                     controller: 'RealmController',
                     controllerAs: 'vm'
-                }
+                },
+                "content-header@": {
+                    templateUrl:"app/entities/realm/realm-header.html",
+                    controller: "RealmController",
+                    controllerAs: "vm"
+                },
             },
             params: {
                 page: {

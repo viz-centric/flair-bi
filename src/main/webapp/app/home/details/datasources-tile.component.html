@@ -1,7 +1,7 @@
 <div class="table-responsive tile-area-table dataSourceTable">
     <div class="search-box inner-addon left-addon b-b-xs">
         <i class="glyphicon glyphicon-search"></i>
-        <input type="text" ng-model="vm.search.name" class="form-control" placeholder="Search DataSource..." />
+        <input type="text" class="form-control" placeholder="Search DataSource..." ng-model="vm.searchedDatasources" ng-change="vm.searchDatasources(vm.searchedDatasources)" ng-model-options="{ debounce: 100 }" />
         <button type="submit" ui-sref="connection.new" class="btn btn-default btn-sm new-datasource" ng-if="vm.isAdmin">
             <span uib-tooltip="New DataSource" tooltip-placement="left" class="fa fa-edit edit-icon fa-2x"></span>
         </button>

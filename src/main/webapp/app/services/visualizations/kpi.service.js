@@ -9,7 +9,7 @@
 
     function GenerateKPI(VisualizationUtils, $rootScope, D3Utils) {
         return {
-            build: function (record, element, panel, isNotification) {
+            build: function (record, element, panel, isNotification, isIframe) {
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
                         'display': 'flex',
@@ -85,7 +85,7 @@
                     kpi(div[0])
                     return kpi;
                 }
-                if (isNotification) {
+                 if (isNotification || isIframe) {
                     createChart();
                 }
                 else {

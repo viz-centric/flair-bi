@@ -63,6 +63,10 @@
             if ($stateParams.filters) {
                 addFilterInQueryDTO();
             }
+            else {
+                filterParametersService.clear();
+            }
+
             const applied = filterParametersService.applyViewFeatureCriteria(vm.view.viewFeatureCriterias, featureEntities);
             filterParametersService.applyDefaultFilters(applied, featureEntities);
             connectWebSocket();
@@ -290,7 +294,9 @@
             visualizationRenderService.setMetaData(
                 vm.visualMetadata,
                 metaData,
-                contentId
+                contentId,
+                false,
+                true
             );
         }
 

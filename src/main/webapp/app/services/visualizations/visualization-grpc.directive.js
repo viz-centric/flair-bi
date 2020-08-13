@@ -214,7 +214,6 @@
                     validationType: 'REQUIRED_FIELDS',
                     type : $stateParams.id ? null : 'share-link'
                 }, $stateParams.id ? $stateParams.id : $stateParams.viewId);
-                angular.element("#loader-spinner").hide();
 
             } else {
                 if (!vm.data.data) {

@@ -1,47 +1,45 @@
-<div>
-    <div class="table-responsive">
-        <table class="table table-striped flair-table-v1">
-            <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id">
-                            <span data-translate="global.field.id">ID</span>
+<div class="fbibox realms-table">
+    <div class="fbibox-content">
+        <div class="table-responsive">
+            <table class="table table-striped flair-table-v1">
+                <thead>
+                    <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                        <th jh-sort-by="id">
+                                <span data-translate="global.field.id">ID</span>
+                                <span class="fa fa-sort"></span>
+                            </th>
+                        <th jh-sort-by="id">
+                            <span data-translate="flairbiApp.realm.name">Name</span>
                             <span class="fa fa-sort"></span>
                         </th>
-                    <th jh-sort-by="id">
-                        <span data-translate="flairbiApp.realm.name">Name</span> 
-                        <span class="fa fa-sort"></span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="realm in vm.realms track by realm.id">
-                    <td><a ui-sref="realm-detail({id:realm.id})">{{realm.id}}</a></td>
-                    <td>{{realm.name}}</td>
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container">
-                            <button type="submit"
-                                    ui-sref="realm-detail({id:realm.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-sm-down" data-translate="entity.action.view"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="realm-edit({id:realm.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="realm-delete({id:realm.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <th><span>Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="realm in vm.realms track by realm.id">
+                        <td><a ui-sref="realm-detail({id:realm.id})">{{realm.id}}</a></td>
+                        <td>{{realm.name}}</td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                    <button type="submit" ui-sref="realm-detail({id:realm.id})" class="btn btn-default btn-sm">
+                                        <span class="fa fa-eye view-icon fa-2x"></span>
+                                    </button>
+                                    &nbsp;
+                                    <button type="submit" ui-sref="realm-edit({id:realm.id})"class="btn btn-default btn-sm">
+                                        <span class="fa fa-edit edit-icon fa-2x"></span>
+                                    </button>
+                                    &nbsp;
+                                    <button type="submit" ui-sref="realm-delete({id:realm.id})" class="btn btn-default btn-sm">
+                                        <span class="fa fa-trash delete-icon fa-2x"></span>
+                                    </button>
+                                    &nbsp;
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="text-center">
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <ul uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></ul>

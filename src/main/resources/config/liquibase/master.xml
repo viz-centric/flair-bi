@@ -83,10 +83,12 @@
     <include file="config/liquibase/changelog/20200705100000_aggregate_percent_function.xml" relativeToChangelogFile="false"/>
 
 
-    
+
     <include file="config/liquibase/changelog/20200628183700_realm_table.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200628183701_populate_realm_id.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200705183701_remove_default_realm_id.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200814183700_add_realm_ID_user_permission.xml" relativeToChangelogFile="false" />
+<!--    <include file="config/liquibase/changelog/20200813113701_remove_unique_constraint_name_user_group.xml" relativeToChangelogFile="false"/>-->
 
 </databaseChangeLog>
 <!--@formatter:on-->

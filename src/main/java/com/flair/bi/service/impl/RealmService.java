@@ -41,7 +41,8 @@ public class RealmService {
         Realm realm = realmMapper.fromDTO(realmDTO);
         realm = realmRepository.save(realm);
         userRepository.save(createUser(realm));
-        userGroupService.save(createUserGroup(realm));
+        // TODO
+        //userGroupService.save(createUserGroup(realm));
         return realmMapper.toDTO(realm);
     }
 
@@ -69,6 +70,7 @@ public class RealmService {
     @Transactional
     public void delete(Long id) {
         log.debug("Request to delete Functions : {}", id);
+        // TODO
         realmRepository.deleteById(id);
     }
 
@@ -85,12 +87,6 @@ public class RealmService {
         newUser.setCreatedBy("system");
         newUser.setLastModifiedBy("system");
         newUser.setRealm(realm);
-        //Set<UserGroup> userGroups = new HashSet<>();
-//        UserGroup userGroup = new UserGroup();
-//        userGroup.setName("ROLE_ADMIN");
-//        userGroup.setRealm(realmMapper.fromDTO(realmDTO));
-        //userGroups.add(userGroup);
-        //newUser.setUserGroups(userGroups);
         return newUser;
     }
 

@@ -5,6 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet  id="20200813113701" author="johib">
+<!--        this is not completely done .primary group name will be replaced in all tables related to user_group table-->
         <dropPrimaryKey  constraintName="pk_user_group"  tableName="user_group"/>
         <addUniqueConstraint columnNames="name, realm_id"  constraintName="pk_user_group" tableName="user_group"/>
     </changeSet>

@@ -13,8 +13,10 @@
             parent: 'entity',
             url: '/realm?page&sort&search',
             data: {
-                authorities: ['ROLE_USER'],
-                pageTitle: 'flairbiApp.realm.home.title'
+                authorities: [],
+                pageTitle: 'flairbiApp.realm.home.title',
+                displayName: 'Realm'
+
             },
             views: {
                 'content@': {
@@ -23,9 +25,9 @@
                     controllerAs: 'vm'
                 },
                 "content-header@": {
-                    templateUrl:"app/entities/realm/realm-header.html",
-                    controller: "RealmController",
-                    controllerAs: "vm"
+                    templateUrl:'app/entities/realm/realm-header.html',
+                    controller: 'RealmController',
+                    controllerAs: 'vm'
                 },
             },
             params: {
@@ -58,10 +60,11 @@
         })
         .state('realm-detail', {
             parent: 'realm',
-            url: '/realm/{id}',
+            url: '/detail/{id}',
             data: {
-                authorities: ['ROLE_USER'],
-                pageTitle: 'flairbiApp.realm.detail.title'
+                authorities: [],
+                pageTitle: 'flairbiApp.realm.detail.title',
+                displayName: "Realm Details"
             },
             views: {
                 'content@': {
@@ -88,36 +91,11 @@
                 }]
             }
         })
-        .state('realm-detail-edit', {
-            parent: 'realm-detail',
-            url: '/detail/edit',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/entities/realm/realm-dialog.html',
-                    controller: 'RealmDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: ['Realm', function(Realm) {
-                            return Realm.get({id : $stateParams.id}).$promise;
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('^', {}, { reload: false });
-                }, function() {
-                    $state.go('^');
-                });
-            }]
-        })
         .state('realm-new', {
             parent: 'realm',
             url: '/new',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: []
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
@@ -129,7 +107,8 @@
                     resolve: {
                         entity: function () {
                             return {
-                                id: null
+                                id: null,
+                                name: null
                             };
                         }
                     }
@@ -144,7 +123,7 @@
             parent: 'realm',
             url: '/{id}/edit',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: []
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
@@ -169,7 +148,7 @@
             parent: 'realm',
             url: '/{id}/delete',
             data: {
-                authorities: ['ROLE_USER']
+                authorities: []
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({

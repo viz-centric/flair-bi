@@ -13,7 +13,7 @@
                 "question": "Etes-vous certain de vouloir supprimer le Realm {{ id }} ?"
             },
             "detail": {
-                "title": "Realm"
+                "title": "Realm Details"
             }
         }
     }

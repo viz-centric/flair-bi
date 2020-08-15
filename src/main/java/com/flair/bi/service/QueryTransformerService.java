@@ -307,7 +307,9 @@ public class QueryTransformerService {
     }
 
     public QuerySource composeQuerySource(QueryTransformerParams params) {
-        String alias = params.getSourceAlias() != null ? params.getSourceAlias() : params.getSourceName();
+        String alias = params.getSourceAlias() != null
+                ? params.getSourceAlias()
+                : params.getSourceName().replaceAll("\\.", "_");
         if (params.getSql() == null) {
             return new QuerySourceDTO(params.getSourceName(), alias);
         }

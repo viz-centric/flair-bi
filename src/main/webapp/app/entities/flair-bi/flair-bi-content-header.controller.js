@@ -205,7 +205,6 @@
                 vm.selectedBookmark = VisualDispatchService.getFeatureBookmark();
                 applyBookmark(vm.selectedBookmark);
                 VisualDispatchService.setFeatureBookmark({});
-                recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
             } else {
                 applyFilters();
             }
@@ -675,22 +674,23 @@
 
         function removeFilterTag($event, val, list, key) {
             $event.preventDefault();
-            var index = list.indexOf(val);
-            if (index > -1) {
-                list.splice(index, 1);
-            }
-            vm.filters[key] = list;
-            removeTagInBI({ 'text': val });
-            setNoOfPages();
             Views.getCurrentEditState({
                 id: $stateParams.id
             },
                 function (result, headers) {
-                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
-                        return item.metadataVisual.name === IFRAME.iframe;
-                    })
-                    var filters = filterParametersService.get();
-                    filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
+                    $rootScope.updateWidget = {};
+                    //comment for now 
+                    // vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                    //     return item.metadataVisual.name === IFRAME.iframe;
+                    // })
+                    var index = list.indexOf(val);
+                    if (index > -1) {
+                        list.splice(index, 1);
+                    }
+                    vm.filters[key] = list;
+                    filterParametersService.setFilterInIframeURL(vm.iFrames, vm.dimensions);
+                    removeTagInBI({ 'text': val });
+                    setNoOfPages();
                 }
             );
            
@@ -748,6 +748,7 @@
                 clearFilters();
             } else {
                 vm.selectedBookmark = item;
+                recentBookmarkService.saveRecentBookmark(vm.selectedBookmark.id, $stateParams.id);
                 FeatureCriteria.query(
                     {
                         featureBookmark: item.id
@@ -760,21 +761,23 @@
                         );
                         $rootScope.$broadcast("flairbiApp:filter");
                         $rootScope.$broadcast('flairbiApp:filter-add');
-                        var filters = filterParametersService.get();
-                        Views.getCurrentEditState({
-                            id: $stateParams.id
-                        },
-                            function (result, headers) {
-                                vm.iFrames = result.visualMetadataSet.filter(function (item) {
-                                    return item.metadataVisual.name === IFRAME.iframe;
-                                })
-                                var filters = filterParametersService.get();
-                                filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimension);
-                            }
-                        );
+                        applyFilterOnIframe();
                     }
                 );
             }
+        }
+
+        function applyFilterOnIframe(){
+            Views.getCurrentEditState({
+                id: $stateParams.id
+            },
+                function (result, headers) {
+                    // vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                    //     return item.metadataVisual.name === IFRAME.iframe;
+                    // })
+                    filterParametersService.setFilterInIframeURL(vm.iFrames, vm.dimension);
+                }
+            );
         }
 
         function registerEditModeToggle() {
@@ -900,6 +903,16 @@
         function clearFiltersClick() {
             clearFilters();
             $rootScope.$broadcast("flairbiApp:clearFiltersClicked");
+            // Views.getCurrentEditState({
+            //     id: $stateParams.id
+            // },
+            //     function (result, headers) {
+            //         // vm.iFrames = result.visualMetadataSet.filter(function (item) {
+            //         //     return item.metadataVisual.name === IFRAME.iframe;
+            //         // })
+            //         filterParametersService.removeFilterInIframeURL(vm.iFrames);
+            //     }
+            // );
         }
 
         function onWriteToPg() {

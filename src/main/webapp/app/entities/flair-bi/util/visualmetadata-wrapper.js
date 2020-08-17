@@ -94,8 +94,8 @@
     /**
      * @return url location of this visual metadata
      */
-    function getSharePath(datasource,viewId) {
-        return '/visual/?visualisationId=' + this.id + "&datasourceId=" + datasource.id +"&viewId=" + viewId;
+    function getSharePath(dashboardName, viewName, dashboarID, datasource, viewId) {
+        return '/visual/?dashboardName=' + dashboardName + '&viewName=' + viewName + '&dashboarID=' + dashboarID + '&visualisationId=' + this.id + "&datasourceId=" + datasource.id + "&viewId=" + viewId;
     }
 
     /**

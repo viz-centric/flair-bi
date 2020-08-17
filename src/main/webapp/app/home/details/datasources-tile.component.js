@@ -22,6 +22,8 @@
         vm.transition = transition;
         vm.page = 1;
         vm.currentSearch = null;
+        vm.searchedDatasources = "";
+        vm.searchDatasources = searchDatasources;
 
 
         ////////////////
@@ -40,6 +42,17 @@
         };
         vm.$onChanges = function (_changesObj) { };
         vm.$onDestroy = function () { };
+
+        function searchDatasources(searchedText) {
+            if (searchedText.length >= 2 || searchedText.length == 0) {
+                Datasources.query({
+                    name: searchedText,
+                    page: vm.pagingParams.page - 1,
+                    size: vm.itemsPerPage,
+                    paginate: true
+                }, onSuccess, onError);
+            }
+        }
 
         function onSuccess(data, headers) {
             vm.links = ParseLinks.parse(headers('link'));

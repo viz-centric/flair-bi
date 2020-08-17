@@ -9,7 +9,7 @@
 
     function GenerateWordCloud(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, isNotification) {
+            build: function (record, element, panel, isNotification, isIframe) {
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
                         'display': 'flex',
@@ -61,7 +61,7 @@
 
                     return wordcloud;
                 }
-                if (isNotification) {
+                 if (isNotification || isIframe) {
                     createChart();
                 }
                 if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {

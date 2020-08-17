@@ -9,7 +9,7 @@
 
     function GenerateHeatmap(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, isNotification) {
+            build: function (record, element, panel, isNotification, isIframe) {
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
                         'display': 'flex',
@@ -103,7 +103,7 @@
                     heatmap(div[0])
                     return heatmap;
                 }
-                if (isNotification) {
+                 if (isNotification || isIframe) {
                     createChart();
                 }
                 else {

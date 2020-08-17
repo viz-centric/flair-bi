@@ -1,12 +1,6 @@
 package com.flair.bi.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
+import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.User;
@@ -34,9 +28,14 @@ import com.project.bi.query.dto.QuerySource;
 import com.project.bi.query.expression.operations.CompositeOperation;
 import com.project.bi.query.expression.operations.Operation;
 import com.project.bi.query.expression.operations.QueryOperation;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -195,7 +194,7 @@ public class SchedulerService {
 	}
 
 	public String buildQuery(QueryDTO queryDTO, VisualMetadata visualMetadata, Datasource datasource,
-							 String visualizationId, String userId)
+							 Dashboard dashboard, String visualizationId, String userId)
 			throws InvalidProtocolBufferException, QueryTransformerException {
 		preprocessQuery(queryDTO, visualMetadata, datasource, userId);
 
@@ -203,6 +202,7 @@ public class SchedulerService {
 				QueryTransformerParams.builder()
 						.sql(datasource.getSql())
 						.datasourceId(datasource.getId())
+						.dashboardId(dashboard.getId())
 						.sourceName(queryDTO.getSource())
 						.connectionName(datasource.getConnectionName())
 						.vId(visualizationId != null ? visualizationId : "")

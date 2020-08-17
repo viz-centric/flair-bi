@@ -19,8 +19,6 @@ public class JwtCredential extends CallCredentials {
     @Override
     public void applyRequestMetadata(final RequestInfo requestInfo, final Executor executor,
                                      final MetadataApplier metadataApplier) {
-        // Make a JWT compact serialized string.
-        // This example omits setting the expiration, but a real application should do it.
         final String jwt = Jwts.builder()
                 .setSubject(userId)
                 .signWith(SignatureAlgorithm.HS256, key.getBytes(StandardCharsets.UTF_8))
@@ -40,6 +38,9 @@ public class JwtCredential extends CallCredentials {
 
     @Override
     public void thisUsesUnstableApi() {
+<<<<<<< HEAD
         // noop
+=======
+>>>>>>> 465cfca8daa723f355010a144349de1ab49bce48
     }
 }

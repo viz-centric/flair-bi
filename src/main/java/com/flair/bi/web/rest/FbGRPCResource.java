@@ -46,6 +46,7 @@ public class FbGRPCResource {
 		grpcQueryService.sendGetDataStream(
 				SendGetDataDTO.builder()
 						.datasourcesId(datasourcesId)
+						.viewId(viewId)
 						.userId(headerAccessor.getUser().getName())
 						.visualMetadata(fbiEngineDTO.getVisualMetadata())
 						.queryDTO(fbiEngineDTO.getQueryDTO())

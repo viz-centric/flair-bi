@@ -1,15 +1,5 @@
 package com.flair.bi.service;
 
-import static com.flair.bi.web.rest.util.QueryGrpcUtils.toProtoConnection;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.Datasource;
@@ -23,6 +13,7 @@ import com.flair.bi.messages.QueryValidationResponse;
 import com.flair.bi.messages.RunQueryResponse;
 import com.flair.bi.service.dto.RunQueryResponseDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
+import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.dto.QueryAllRequestDTO;
 import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
@@ -31,12 +22,20 @@ import com.google.common.collect.ImmutableMap;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
-
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.flair.bi.web.rest.util.QueryGrpcUtils.toProtoConnection;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +49,7 @@ public class GrpcQueryService {
     private final IEngineGrpcService grpcService;
     private final QueryTransformerService queryTransformerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ViewService viewService;
 
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
         log.debug("Sending run query request for datasource {} id {}", datasource.getName(),
@@ -200,11 +200,16 @@ public class GrpcQueryService {
                                                       SendGetDataDTO sendGetDataDTO) throws InterruptedException {
         QueryDTO queryDTO = sendGetDataDTO.getQueryDTO();
         String userId = sendGetDataDTO.getUserId();
+        Long dashboardId = Optional.ofNullable(sendGetDataDTO.getViewId())
+                .map(viewId -> viewService.findOne(viewId))
+                .map(view -> view.getViewDashboard().getId())
+                .orElse(null);
         Query query;
         try {
             query = queryTransformerService.toQuery(queryDTO,
                     QueryTransformerParams.builder()
                             .datasourceId(datasource.getId())
+                            .dashboardId(dashboardId)
                             .sourceName(datasource.getName())
                             .sql(datasource.getSql())
                             .connectionName(datasource.getConnectionName())

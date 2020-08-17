@@ -167,7 +167,7 @@
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
             var type = meta ? meta.dataType : '';
-            if (isDateFilterType(type)) {
+            if (isDateFilterType(type) && type === "dateRangeValueType") {
                 console.log('create body exp ', values, name);
                 if (values[1]) {
                     values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
@@ -442,10 +442,11 @@
             };
         }
 
-        function setFilterInIframeURL(filters, iframes, filterDimensions) {
+        function setFilterInIframeURL(iframes, filterDimensions) {
+            var filters= get();
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
-                removeFilterInIframeURL(iframes);
+               
                 if(iframes){
                     iframes.forEach(element => {
                         var id = getParameterByName('datasourceId', element.properties[0].value)
@@ -487,6 +488,7 @@
                             filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
                         });
                         element.properties[0].value = filterUrl;
+                        $rootScope.$broadcast("update-widget-content-" + element.id);
                     },
                     function (_) { }
                 );
@@ -524,6 +526,8 @@
             if(iframes){
                 iframes.forEach(element => {
                     element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
+                    $rootScope.$broadcast("update-widget-content-" + element.id);
+                    
                 });
             }
         }

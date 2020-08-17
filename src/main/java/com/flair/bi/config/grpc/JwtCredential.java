@@ -38,9 +38,4 @@ public class JwtCredential extends CallCredentials {
 
     @Override
     public void thisUsesUnstableApi() {
-<<<<<<< HEAD
-        // noop
-=======
->>>>>>> 465cfca8daa723f355010a144349de1ab49bce48
     }
-}

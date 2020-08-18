@@ -282,8 +282,7 @@
         function setThinBarStyle(isFiltersApplied) {
             vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
             if (vm.pinDimensions.length > 0) {
-                var margin = parseFloat($("#leftside-thinbar").css('margin-top'))+30;
-                vm.thinbarStyle =  { "margin-top": margin };
+                vm.thinbarStyle = isFiltersApplied ? { "margin-top": "70px" } : { "margin-top": "105px" }
             }
         }
 
@@ -444,7 +443,6 @@
             vm.favouriteDimensions = vm.dimensions.filter(function (item) {
                 return item.favouriteFilter === true;
             });
-            debugger
             $('#slider').css('display', 'block');
         }
 

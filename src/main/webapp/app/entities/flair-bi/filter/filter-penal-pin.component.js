@@ -37,39 +37,7 @@
                 showCheckAll: false,
                 showUncheckAll: false
             };
-
-            vm.setting2 = {
-
-            };
-
-            vm.example14data = [{
-                "label": "Alabama",
-                "id": "AL"
-            }, {
-                "label": "Alaska",
-                "id": "AK"
-            }, {
-                "label": "American Samoa",
-                "id": "AS"
-            }, {
-                "label": "Arizona",
-                "id": "AZ"
-            }, {
-                "label": "Arkansas",
-                "id": "AR"
-            }, {
-                "label": "California",
-                "id": "CA"
-            }, {
-                "label": "Colorado",
-                "id": "CO"
-            }, {
-                "label": "Wyoming",
-                "id": "WY a"
-            }];
-            vm.example2settings = {
-                displayProp: 'id'
-            };
+           
             receivedMetaData();
             vm.dimensions.forEach(element => {
                 vm.load("", element);

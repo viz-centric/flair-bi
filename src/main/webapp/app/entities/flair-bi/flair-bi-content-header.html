@@ -1,7 +1,7 @@
 <div
     class="flairbi-content-header ng-class:{'flairbi-content-header-fullscreen':$root.isFullScreen == true, 'get-sticky':$root.isFullScreen == false}">
 
-    <div class="row headerMenu" ng-if="$root.isFullScreen == false">
+    <div class="row" ng-if="$root.isFullScreen == false">
         <div class="col-md-7 col-sm-6 col-xs-6 header-first">
             <a ng-disabled="vm.isIframe" uib-tooltip={{vm.clientLogo.name}} tooltip-placement="right" ng-if="vm.clientLogo" class="client-logo-viz"  ui-sref="home">
                 <img ng-src={{vm.clientLogo.url}} alt={{vm.clientLogo.name}}>

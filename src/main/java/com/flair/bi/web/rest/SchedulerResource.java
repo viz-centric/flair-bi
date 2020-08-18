@@ -1,28 +1,10 @@
 package com.flair.bi.web.rest;
 
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
@@ -38,13 +20,30 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
-
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -87,6 +86,7 @@ public class SchedulerResource {
 	private final DatasourceService datasourceService;
 
 	private final SchedulerService schedulerService;
+	private final DashboardService dashboardService;
 
 	@PostMapping("/schedule")
 	@Timed
@@ -95,6 +95,7 @@ public class SchedulerResource {
 		log.info("Creating schedule report {}", schedulerDTO);
 		VisualMetadata visualMetadata = visualMetadataService
 				.findOne(schedulerDTO.getReport_line_item().getVisualizationid());
+		Dashboard dashboard = dashboardService.findOne(schedulerDTO.getDashboardId());
 		Datasource datasource = datasourceService.findOne(schedulerDTO.getDatasourceid());
 		if (!SecurityUtils.iAdmin()) {
 			schedulerDTO.getAssign_report().getCommunication_list()
@@ -106,7 +107,7 @@ public class SchedulerResource {
 		schedulerDTO.getReport_line_item().setVisualization(visualMetadata.getMetadataVisual().getName());
 		String query;
 		try {
-			query = schedulerService.buildQuery(schedulerDTO.getQueryDTO(), visualMetadata, datasource,
+			query = schedulerService.buildQuery(schedulerDTO.getQueryDTO(), visualMetadata, datasource, dashboard,
 					schedulerDTO.getReport_line_item().getVisualizationid(), schedulerDTO.getReport().getUserid());
 		} catch (QueryTransformerException e) {
 			log.error("Error validating a query " + schedulerDTO.getQueryDTO(), e);

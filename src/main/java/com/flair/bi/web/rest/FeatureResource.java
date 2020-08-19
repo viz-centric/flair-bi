@@ -218,4 +218,24 @@ public class FeatureResource {
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("features", id.toString())).body(null);
 	}
 
+	/**
+	 * PUT /feature : Updates an existing feature.
+	 *
+	 * @param pin filter
+	 * @param id  the feature to update
+	 * @return the ResponseEntity with status 200 (OK) and with body the updated
+	 *         feature, or with status 400 (Bad Request) if the feature is not
+	 *         valid, or with status 500 (Internal Server Error) if the feature
+	 *         couldn't be updated
+	 * @throws URISyntaxException if the Location URI syntax is incorrect
+	 */
+	@PutMapping("/features/pinFilter/")
+	@Timed
+	public ResponseEntity<?> pinFilter(@RequestParam Boolean pin, @RequestParam Long id)
+			throws URISyntaxException {
+		log.debug("REST request to mark favourite filter : {}", pin, id);
+		featureService.pinFilter(pin, id);
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("features", id.toString())).body(null);
+	}
+
 }

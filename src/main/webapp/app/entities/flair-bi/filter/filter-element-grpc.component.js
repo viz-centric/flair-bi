@@ -18,9 +18,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME','headerPinFilterService'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME,headerPinFilterService) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -149,7 +149,7 @@
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
                     var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " Bookmark filter panelr",
+                        text: "Dimensions " + opration + " Bookmark filter panel",
                         title: "Saved"
                     }
                     $rootScope.showSuccessToast(info);
@@ -346,7 +346,7 @@
             if(myFilters){
                 addFilterInIframeURL();
             }
-            
+            $rootScope.$broadcast("flairbiApp:update-heder-filter");
         }
 
         function addFilterInIframeURL() {
@@ -447,10 +447,24 @@
             return vm.separator ? vm.separator.value : ",";
         }
         function toggleHeaderFilter(dimension) {
-            if (vm.pinFilter.length < 5) {
-                vm.pinFilter.push(dimension);
-                $rootScope.$broadcast("flairbiApp:toggle-headers-pin-filters");
-            }
+            headerPinFilterService.markPinFilter(dimension.id, !vm.dimension.pin)
+                .then(function (data) {
+                    vm.dimension.pin = !vm.dimension.pin;
+                    var opration = vm.dimension.pin === true ? 'added to' : 'removed from';
+                    var info = {
+                        text: "Dimensions " + opration + " pin filter panel",
+                        title: "Saved"
+                    }
+                    $rootScope.showSuccessToast(info);
+                    $rootScope.$broadcast("flairbiApp:toggle-headers-pin-filters");
+
+                }).catch(function (error) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
         }
     }
 })();

@@ -1,7 +1,7 @@
 <div visualization-window-resize class="row print-visibility-hide widget-container-resized" id="widget-container"
     style="min-height:70vh;">
     <div id="grid-container"
-        class="col-md-12 ng-class:{'worksheet':!$root.isFullScreen,'filters-applied':vm.filtersLength>0 && !$root.isFullScreen,'filters-not-applied':vm.filtersLength==0 && !$root.isFullScreen,'filters-applied-fullscreen':vm.filtersLength>0 && $root.isFullScreen,'filters-not-applied-fullscreen':vm.filtersLength==0 && $root.isFullScreen,'fullscreen-hide-filter':!vm.showFSFilter && $root.isFullScreen,'fullscreen-show-filter':vm.showFSFilter && $root.isFullScreen,'filter-with-pin':vm.filtersLength!=0 && vm.showPinFilter,'filter-without-pin':vm.filtersLength==0 && vm.showPinFilter}">
+        class="col-md-12 ng-class:{'worksheet':!$root.isFullScreen,'filters-applied':vm.filtersLength>0 && !$root.isFullScreen,'filters-not-applied':vm.filtersLength==0 && !$root.isFullScreen,'filters-applied-fullscreen':vm.filtersLength>0 && $root.isFullScreen,'filters-not-applied-fullscreen':vm.filtersLength==0 && $root.isFullScreen,'fullscreen-hide-filter':!vm.showFSFilter && $root.isFullScreen,'fullscreen-show-filter':vm.showFSFilter && $root.isFullScreen,'filter-with-pin':vm.filtersLength!=0 && vm.showPinFilter,'filter-without-pin':vm.filtersLength==0 && vm.showPinFilter,'nofilter-nopin':vm.filtersLength==0 && !vm.showPinFilter}">
         <div gridstack class="flip-container grid-stack grid1" options="vm.gridStackOptions"
             on-change="vm.onChange(event,items)" on-drag-start="vm.onDragStart(event,ui)"
             on-drag-stop="vm.onDragStop(event,ui)" on-resize-start="vm.onResizeStart(event,ui)"

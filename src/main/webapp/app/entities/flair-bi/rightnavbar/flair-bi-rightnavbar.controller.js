@@ -93,7 +93,14 @@
             registerToggleAppliedFilterOn();
             registerBookmarkUpdateDynamicDateRange();
             setDateRangeSubscription();
-            filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
+            registerAddFilterInFinterPenal();
+           
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+            }
+            setThinBarStyle(headerSettings)
+            //filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
 
             if (configuration.readOnly) {
                 var vms = states.viewState.visualMetadataSet || [];
@@ -279,10 +286,13 @@
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
         }
 
-        function setThinBarStyle(isFiltersApplied) {
-            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
+        function setThinBarStyle(setting) {
+            vm.thinbarStyle = setting.showFSFilter ? { "margin-top": "75px" } : { "margin-top": "40px" }
+            vm.pinDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });
             if (vm.pinDimensions.length > 0) {
-                vm.thinbarStyle = isFiltersApplied ? { "margin-top": "70px" } : { "margin-top": "105px" }
+                vm.thinbarStyle = setting.showFSFilter ? { "margin-top": "105px" } : { "margin-top": "70px" }
             }
         }
 
@@ -315,6 +325,33 @@
                     $timeout(function () {
                         vm.filterToggled = false;
                         hideSidebar();
+                    });
+                }
+            );
+
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerAddFilterInFinterPenal() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:add-filter-In-FinterPenal",
+                function () {
+                    var filterParameters;
+                    filterParameters = filterParametersService.get();
+                    var filter = Object.keys(filterParameters);
+
+                    filter.forEach(element => {
+                        vm.dimensions.map(function (item) {
+                            if (item.name === element) {
+                                item.selected = filterParameters[element]
+                                    .map(function (item) {
+                                        return {
+                                            text: item
+                                        }
+                                    });
+                            }
+                        })
+
                     });
                 }
             );
@@ -525,7 +562,6 @@
             });
 
             vm.dimensions = vm.dateDimensions.concat(vm.allDimensions);
-            vm.pinDimensions = vm.dimensions;
         }
 
         function registerToggleRightNavBarOff() {

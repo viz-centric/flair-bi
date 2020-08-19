@@ -208,7 +208,7 @@
             } else {
                 applyFilters();
             }
-
+            registerToggleHeaderPinFilter();
         }
 
         function getClientLogo() {
@@ -220,14 +220,20 @@
         }
 
         function loadPinDimensions() {
-            vm.pinDimensions = vm.dimensions.slice(0, 5);
+            vm.pinDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true;
+            });
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+            }
             if (vm.pinDimensions.length > 0) {
                 vm.showPinFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
             }
             else{
                 vm.showPinFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
             }
         }
 
@@ -442,13 +448,17 @@
         }
 
         function hideFiltersHeaderAndSideBar() {
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+            }
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
 
             } else {
                 vm.showFSFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
             }
         }
 
@@ -691,6 +701,8 @@
                     filterParametersService.setFilterInIframeURL(vm.iFrames, vm.dimensions);
                     removeTagInBI({ 'text': val });
                     setNoOfPages();
+                    $rootScope.$broadcast("flairbiApp:update-heder-filter");
+
                 }
             );
            
@@ -708,6 +720,7 @@
             } else {
                 removeTagInBI(key);
             }
+            $rootScope.$broadcast("flairbiApp:update-heder-filter");
             // Remove entry from rootScope filterSelection property
             delete $rootScope.filterSelection.filter[key];
             vm.filters[key] = [];
@@ -972,6 +985,16 @@
         function changeContainerColor(containerColor) {
             if (containerColor)
                 $('.page-wrapper-full-screen').css('background-color', containerColor)
+        }
+
+        function registerToggleHeaderPinFilter() {
+            var registerToggleHeaderPinFilter = $scope.$on(
+                "flairbiApp:toggle-headers-pin-filters",
+                function (event, result) {
+                   loadPinDimensions();
+                }
+            );
+            $scope.$on("$destroy", registerToggleHeaderPinFilter);
         }
 
         function share() {

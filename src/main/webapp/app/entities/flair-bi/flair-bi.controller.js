@@ -209,7 +209,6 @@
             registerAlternateDimension();
             vm.features = featureEntities;
             registerToggleHeaderFilter();
-            registerToggleHeaderPinFilter();
             registerToggleFullScreenFilter();
             vm.filtersLength = filterParametersService.getFiltersCount();
             showPinFilter();
@@ -227,14 +226,20 @@
         }
 
         function showPinFilter() {
-            vm.pinDimensions = vm.dimensions;
+            vm.pinDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });;
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+            }
             if (vm.pinDimensions.length > 0) {
                 vm.showPinFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
             }
             else{
                 vm.showPinFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
+                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
             }
         }
 
@@ -864,22 +869,11 @@
                 "flairbiApp:toggle-headers-filters",
                 function (event, result) {
                     onFiltersCountChange();
-                    vm.showFSFilter = !result;
+                    vm.showFSFilter = !result.showFSFilter;
+                    vm.showPinFilter = result.showPinFilter;
                 }
             );
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
-        }
-
-        function registerToggleHeaderPinFilter() {
-            var registerToggleHeaderPinFilter = $scope.$on(
-                "flairbiApp:toggle-headers-pin-filters",
-                function (event, result) {
-                    //alert('demo')
-                    console.log('demo')
-                    vm.showPinFilter = result;
-                }
-            );
-            $scope.$on("$destroy", registerToggleHeaderPinFilter);
         }
 
         function onFiltersCountChange() {

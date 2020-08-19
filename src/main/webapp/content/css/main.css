@@ -4380,14 +4380,14 @@ jhi-alert .alerts .alert-danger {
     height: 0px; }
   .flairbi-content-header .dimensionFilter {
     float: right;
-    margin: 2px 5px; }
+    margin: 4px 5px; }
     .flairbi-content-header .dimensionFilter button {
       padding: 0px 5px;
       font-size: 12px;
       background: transparent;
       border: none; }
   .flairbi-content-header .pin-filter .dimension-label {
-    margin-top: 3px;
+    margin-top: 5px;
     font-weight: bold;
     font-size: 12px;
     color: #33a2e5; }
@@ -4742,6 +4742,8 @@ jhi-alert .alerts .alert-danger {
     margin-top: 30px; }
   #grid-container.filter-without-pin {
     margin-top: 60px; }
+  #grid-container.nofilter-nopin {
+    margin-top: 30px; }
   #grid-container.filter-with-pin {
     margin-top: 90px; }
   #grid-container.filters-applied-fullscreen, #grid-container.fullscreen-show-filter {
@@ -5909,6 +5911,12 @@ ui bootstrap tweaks
 
 .filter-area .favouritefilter {
   margin: auto; }
+
+.filter-area i.favouritefilter.fa.fa-star {
+  color: #1c84c6; }
+
+.filter-area i.activePin {
+  color: #1c84c6; }
 
 .filter-element-widget {
   margin-bottom: 5px;

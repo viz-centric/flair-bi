@@ -37,7 +37,9 @@
                 showCheckAll: false,
                 showUncheckAll: false
             };
-           
+            $scope.$on('flairbiApp:update-heder-filter', function () {
+                updateHeaderFilter();
+            });
             receivedMetaData();
             vm.dimensions.forEach(element => {
                 vm.load("", element);
@@ -101,6 +103,35 @@
             );
         }
 
+
+        function updateHeaderFilter() {
+            var filterParameters;
+            filterParameters = filterParametersService.get();
+            var filter = Object.keys(filterParameters);
+
+            if (filter.length == 0) {
+                vm.dimensions.map(function (item) {
+                    vm.selectedFilter[item.name] = [];
+                })
+            }
+            else {
+                filter.forEach(element => {
+                    vm.dimensions.map(function (item) {
+                        if (item.name === element) {
+                            vm.selectedFilter[element] = filterParameters[element]
+                                .map(function (item) {
+                                    return {
+                                        label: item,
+                                        id: item
+                                    }
+                                });
+                        }
+                    })
+
+                });
+            }
+        }
+
         function applyFilter() {
             var filter = Object.keys(vm.selectedFilter);
             var filterParameters = filterParametersService.getSelectedFilter();
@@ -123,23 +154,24 @@
                 }
             });
             FilterStateManagerService.add(angular.copy(filterParametersService.get()));
-            dd();
+            filters();
         }
 
-        function dd() {
+        function filters() {
             filterParametersService.save(filterParametersService.getSelectedFilter());
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
-            addFilterInIframeURL();
+            //addFilterInIframeURL();
             $rootScope.$broadcast("flairbiApp:filterClicked");
+            $rootScope.$broadcast("flairbiApp:add-filter-In-FinterPenal");
+
         }
 
         function addFilterInIframeURL() {
             var filters = filterParametersService.getSelectedFilter();
             filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimensions);
         }
-
 
     }
 })();

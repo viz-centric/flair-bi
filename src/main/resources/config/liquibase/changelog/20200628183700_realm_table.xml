@@ -26,11 +26,24 @@
             </column>
         </addColumn>
 
-        <addColumn tableName="user_group">
-            <column name="realm_id" type="bigint"  defaultValue="0">
+        <createTable tableName="user_group2">
+            <column type="bigint" name="id" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-        </addColumn>
+            <column name="realm_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="uk_user_group2_name_realm_id"
+                     tableName="user_group2"
+                     unique="true">
+            <column name="name" />
+            <column name="realm_id" />
+        </createIndex>
 
         <addColumn tableName="dashboards">
             <column name="realm_id" type="bigint" defaultValue="0">

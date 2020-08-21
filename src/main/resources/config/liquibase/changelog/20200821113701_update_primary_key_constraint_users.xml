@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet  id="20200821113701" author="johib">
+
+        <dropForeignKeyConstraint baseTableName="user_user_group" constraintName="fk_user_group_name"/>
+        <dropForeignKeyConstraint baseTableName="user_group_permission" constraintName="fk_user_grp_name"/>
+        <dropPrimaryKey  constraintName="pk_user_group"  tableName="user_group"/>
+        <addPrimaryKey columnNames="name, realm_id"  constraintName="pk_user_group" tableName="user_group"/>
+        <addForeignKeyConstraint baseTableName="user_group_permission" baseColumnNames="user_grp_name, realm_id" constraintName="fk_user_grp_name" referencedTableName="user_group" referencedColumnNames="name, realm_id"/>
+        <addForeignKeyConstraint baseTableName="user_user_group" baseColumnNames="user_group_name, realm_id" constraintName="fk_user_group_name" referencedTableName="user_group" referencedColumnNames="name,realm_id"/>
+
+        <dropPrimaryKey  constraintName="primary_key_user_group_permission"  tableName="user_group_permission"/>
+        <dropPrimaryKey  constraintName="primary_key_user_permission"  tableName="user_permission"/>
+        <dropPrimaryKey  constraintName="user_user_group_pkey"  tableName="user_user_group"/>
+        <addPrimaryKey columnNames="user_grp_name, permission_resource, permission_action, permission_scope,realm_id"  constraintName="primary_key_user_group_permission" tableName="user_group_permission"/>
+        <addPrimaryKey columnNames="user_id, permission_resource, permission_action, permission_scope,realm_id"  constraintName="primary_key_user_permission" tableName="user_permission"/>
+        <addPrimaryKey columnNames="user_id, user_group_name,realm_id"  constraintName="user_user_group_pkey" tableName="user_user_group"/>
+
+    </changeSet>
+</databaseChangeLog>

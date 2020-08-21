@@ -79,10 +79,10 @@ public class DashboardServiceImpl implements DashboardService {
 			if (!create) {
 				Optional<Dashboard> oldOpt = dashboardRepository.findById(dashboard.getId());
 
-				if (oldOpt.isEmpty()) {
-					throw new com.flair.bi.web.rest.errors.EntityNotFoundException(
-							"The dashboard that suppose to exist does not exist.");
-				}
+//				if (oldOpt.isEmpty()) {
+//					throw new com.flair.bi.web.rest.errors.EntityNotFoundException(
+//							"The dashboard that suppose to exist does not exist.");
+//				}
 
 				Dashboard old = oldOpt.get();
 
@@ -219,9 +219,9 @@ public class DashboardServiceImpl implements DashboardService {
 
 		final Optional<Dashboard> dashboardOpt = dashboardRepository.findById(id);
 
-		if (dashboardOpt.isEmpty()) {
-			return;
-		}
+//		if (dashboardOpt.isEmpty()) {
+//			return;
+//		}
 
 		final Dashboard dashboard = dashboardOpt.get();
 

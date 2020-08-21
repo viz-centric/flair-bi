@@ -103,6 +103,9 @@
     <include file="config/liquibase/changelog/20200628183701_populate_realm_id.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200705183701_remove_default_realm_id.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200814183700_add_realm_ID_user_permission.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20200821083800_add_realm_id_user_user_group_populate_realm_id.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200821113701_update_primary_key_constraint_users.xml" relativeToChangelogFile="false"/>
+
 
 </databaseChangeLog>
 <!--@formatter:on-->

@@ -47,11 +47,17 @@ public class UserGroup implements Serializable, PermissionGrantee {
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_group_permission", foreignKey = @ForeignKey(name = "fk_user_grp_name"), inverseForeignKey = @ForeignKey(name = "fk_permission_key"), joinColumns = {
-			@JoinColumn(name = "user_grp_name", referencedColumnName = "name") }, inverseJoinColumns = {
+	@JoinTable(name = "user_group_permission",
+			foreignKey = @ForeignKey(name = "fk_user_grp_name"),
+			inverseForeignKey = @ForeignKey(name = "fk_permission_key"),
+			joinColumns = {
+				@JoinColumn(name = "user_grp_name", referencedColumnName = "name")
+			},
+			inverseJoinColumns = {
 					@JoinColumn(name = "permission_resource", referencedColumnName = "resource"),
 					@JoinColumn(name = "permission_action", referencedColumnName = "action"),
-					@JoinColumn(name = "permission_scope", referencedColumnName = "scope") })
+					@JoinColumn(name = "permission_scope", referencedColumnName = "scope")
+			})
 	private Set<Permission> permissions = new HashSet<>();
 
 	@ManyToMany(mappedBy = "userGroups")

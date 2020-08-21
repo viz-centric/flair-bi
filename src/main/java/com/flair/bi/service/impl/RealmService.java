@@ -7,6 +7,8 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.RealmRepository;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
+import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.mapper.RealmMapper;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.dto.RealmDTO;
@@ -21,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import static java.util.Arrays.asList;
 
 @Service
 @Slf4j
@@ -31,19 +34,27 @@ public class RealmService {
     private final RealmRepository realmRepository;
     private final RealmMapper realmMapper;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final UserGroupService userGroupService;
     private final PasswordEncoder passwordEncoder;
+    private final UserGroupRepository userGroupRepository;
 
 
     @Transactional
     public RealmDTO save(RealmDTO realmDTO) {
         log.debug("Saving realm : {}", realmDTO);
         Realm realm = realmMapper.fromDTO(realmDTO);
-        realm = realmRepository.save(realm);
-        userRepository.save(createUser(realm));
-        // TODO
-        //userGroupService.save(createUserGroup(realm));
-        return realmMapper.toDTO(realm);
+        Realm finalRealm = realmRepository.save(realm);
+        AuthoritiesConstants.ALL.stream()
+                .forEach(auth -> {
+                    UserGroup ug = userGroupService.save(createUserGroup(finalRealm, auth));
+                    if (ug.getName().equals(AuthoritiesConstants.ADMIN)) {
+                        userRepository.save(createUser(finalRealm, ug));
+                    }
+                });
+//        userService.createUser(new ManagedUserVM());
+
+        return realmMapper.toDTO(finalRealm);
     }
 
     @Transactional(readOnly = true)
@@ -74,10 +85,11 @@ public class RealmService {
         realmRepository.deleteById(id);
     }
 
-    private User createUser(Realm realm){
+    private User createUser(Realm realm, UserGroup userGroup){
         User newUser = new User();
         newUser.setLogin(realm.getName().trim()+realm.getId());
         String encryptedPassword = passwordEncoder.encode(realm.getName().trim()+realm.getId()+"@123");
+        newUser.setUserGroups(new HashSet<>(asList(userGroup)));
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(realm.getName());
         newUser.setLastName("Administrator");
@@ -90,9 +102,9 @@ public class RealmService {
         return newUser;
     }
 
-    private UserGroup createUserGroup(Realm realm){
+    private UserGroup createUserGroup(Realm realm, String name){
         UserGroup userGroup = new UserGroup();
-        userGroup.setName("ROLE_ADMIN");
+        userGroup.setName(name);
         userGroup.setRealm(realm);
         return userGroup;
     }

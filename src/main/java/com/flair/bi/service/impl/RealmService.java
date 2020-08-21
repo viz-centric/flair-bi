@@ -1,12 +1,15 @@
 package com.flair.bi.service.impl;
 
 import com.flair.bi.config.Constants;
+import com.flair.bi.domain.Functions;
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
+import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.repository.FunctionsRepository;
 import com.flair.bi.repository.RealmRepository;
 import com.flair.bi.repository.UserRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
+import com.flair.bi.repository.VisualizationColorsRepository;
 import com.flair.bi.service.mapper.RealmMapper;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.dto.RealmDTO;
@@ -18,10 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,6 +34,8 @@ public class RealmService {
     private final UserRepository userRepository;
     private final UserGroupService userGroupService;
     private final PasswordEncoder passwordEncoder;
+    private final FunctionsRepository functionsRepository;
+    private final VisualizationColorsRepository visualizationColorsRepository;
 
 
     @Transactional
@@ -40,9 +43,13 @@ public class RealmService {
         log.debug("Saving realm : {}", realmDTO);
         Realm realm = realmMapper.fromDTO(realmDTO);
         realm = realmRepository.save(realm);
-        userRepository.save(createUser(realm));
         // TODO
+        //userRepository.save(createUser(realm));
         //userGroupService.save(createUserGroup(realm));
+        Realm realmV = realmRepository.findByName("vizcentric");
+        //below services are throwing the exception "identifier of an instance of com.flair.bi.domain.Realm was altered from 1 to 1007]"
+        functionsRepository.saveAll(buildFunctionsList(realm.getId(),realmV.getId()));
+        visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm.getId(),realmV.getId()));
         return realmMapper.toDTO(realm);
     }
 
@@ -71,6 +78,8 @@ public class RealmService {
     public void delete(Long id) {
         log.debug("Request to delete Functions : {}", id);
         // TODO
+        visualizationColorsRepository.deleteByRealmId(id);
+        functionsRepository.deleteByRealmId(id);
         realmRepository.deleteById(id);
     }
 
@@ -95,5 +104,29 @@ public class RealmService {
         userGroup.setName("ROLE_ADMIN");
         userGroup.setRealm(realm);
         return userGroup;
+    }
+
+    private List<Functions> buildFunctionsList(Long realmId,Long realmIdV){
+        List<Functions> functions = functionsRepository.findByRealmId(realmIdV)
+                .stream()
+                .map(f -> {
+                    Realm realm = f.getRealm();
+                    realm.setId(realmId);
+                    f.setRealm(realm);
+                    return f;
+                }).collect(Collectors.toList());
+        return functions;
+    }
+
+    private List<VisualizationColors> buildVisualizationColorsList(Long realmId,Long realmIdV){
+        List<VisualizationColors> visualizationColors = visualizationColorsRepository.findByRealmId(realmIdV)
+                .stream()
+                .map(v ->{
+                    Realm realm = v.getRealm();
+                    realm.setId(realmId);
+                    v.setRealm(realm);
+                    return v;
+                }).collect(Collectors.toList());
+        return visualizationColors;
     }
 }

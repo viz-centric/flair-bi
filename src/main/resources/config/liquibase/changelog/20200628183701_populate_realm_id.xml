@@ -7,13 +7,15 @@
     <changeSet id="20200624183700" author="sergeil">
         <sql stripComments="true">
             INSERT INTO realm (name) VALUES('vizcentric');
+            INSERT INTO user_group2 (name, realm_id)
+                select name, (select id from realm order by id desc limit 1) from user_group;
 
             UPDATE jhi_user SET realm_id =
                 (select id from realm order by id desc limit 1);
             UPDATE user_group_permission SET realm_id =
                 (select id from realm order by id desc limit 1);
-            UPDATE user_group SET realm_id =
-                (select id from realm order by id desc limit 1);
+<!--            UPDATE user_group SET realm_id =-->
+<!--                (select id from realm order by id desc limit 1);-->
             UPDATE dashboards SET realm_id =
                 (select id from realm order by id desc limit 1);
             UPDATE datasources SET realm_id =

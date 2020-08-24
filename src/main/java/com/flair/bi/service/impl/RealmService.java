@@ -43,13 +43,12 @@ public class RealmService {
         log.debug("Saving realm : {}", realmDTO);
         Realm realm = realmMapper.fromDTO(realmDTO);
         realm = realmRepository.save(realm);
-        // TODO
+        // TODO create user group service is not done yet
         //userRepository.save(createUser(realm));
         //userGroupService.save(createUserGroup(realm));
         Realm realmV = realmRepository.findByName("vizcentric");
-        //below services are throwing the exception "identifier of an instance of com.flair.bi.domain.Realm was altered from 1 to 1007]"
-        functionsRepository.saveAll(buildFunctionsList(realm.getId(),realmV.getId()));
-        visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm.getId(),realmV.getId()));
+        functionsRepository.saveAll(buildFunctionsList(realm,realmV.getId()));
+        visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm,realmV.getId()));
         return realmMapper.toDTO(realm);
     }
 
@@ -106,26 +105,31 @@ public class RealmService {
         return userGroup;
     }
 
-    private List<Functions> buildFunctionsList(Long realmId,Long realmIdV){
+    private List<Functions> buildFunctionsList(Realm realm,Long realmIdV){
         List<Functions> functions = functionsRepository.findByRealmId(realmIdV)
                 .stream()
                 .map(f -> {
-                    Realm realm = f.getRealm();
-                    realm.setId(realmId);
-                    f.setRealm(realm);
-                    return f;
+                    Functions function = new Functions();
+                    function.setDescription(f.getDescription());
+                    function.dimensionUse(f.isDimensionUse());
+                    function.measureUse(f.isMeasureUse());
+                    function.setName(f.getName());
+                    function.setValidation(f.getValidation());
+                    function.setValue(f.getValue());
+                    function.setRealm(realm);
+                    return function;
                 }).collect(Collectors.toList());
         return functions;
     }
 
-    private List<VisualizationColors> buildVisualizationColorsList(Long realmId,Long realmIdV){
+    private List<VisualizationColors> buildVisualizationColorsList(Realm realm,Long realmIdV){
         List<VisualizationColors> visualizationColors = visualizationColorsRepository.findByRealmId(realmIdV)
                 .stream()
                 .map(v ->{
-                    Realm realm = v.getRealm();
-                    realm.setId(realmId);
-                    v.setRealm(realm);
-                    return v;
+                    VisualizationColors visualizationColor = new VisualizationColors();
+                    visualizationColor.setCode(v.getCode());
+                    visualizationColor.setRealm(realm);
+                    return visualizationColor;
                 }).collect(Collectors.toList());
         return visualizationColors;
     }

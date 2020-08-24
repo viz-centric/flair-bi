@@ -18,9 +18,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME','headerPinFilterService'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams', 'Views', 'IFRAME', 'Features'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME,headerPinFilterService) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams, Views, IFRAME, Features) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -412,7 +412,7 @@
                         return filterParameters.indexOf(item) === -1
                     })
                     vm.list[vm.dimension.name] = selectedFilter.concat(unSelectedFilter);
-                } 
+                }
             }
         }
 
@@ -447,8 +447,10 @@
             return vm.separator ? vm.separator.value : ",";
         }
         function toggleHeaderFilter(dimension) {
-            headerPinFilterService.markPinFilter(dimension.id, !vm.dimension.pin)
-                .then(function (data) {
+            Features.markPinFilter({
+                id: dimension.id, pin: !vm.dimension.pin
+            },
+                function (result) {
                     vm.dimension.pin = !vm.dimension.pin;
                     var opration = vm.dimension.pin === true ? 'added to' : 'removed from';
                     var info = {
@@ -457,8 +459,7 @@
                     }
                     $rootScope.showSuccessToast(info);
                     $rootScope.$broadcast("flairbiApp:toggle-headers-pin-filters");
-
-                }).catch(function (error) {
+                }, function (err) {
                     var info = {
                         text: error.data.message,
                         title: "Error"

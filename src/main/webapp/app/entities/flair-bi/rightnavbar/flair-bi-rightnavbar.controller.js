@@ -62,7 +62,7 @@
         vm.getSelectedItem = getSelectedItem;
         vm.onWidgetsOpen = onWidgetsOpen;
         vm.onWidgetsClose = onWidgetsClose;
-        vm.pinDimensions = [];
+        vm.pinedDimensions = [];
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.apply = apply;
         activate();
@@ -93,11 +93,11 @@
             registerToggleAppliedFilterOn();
             registerBookmarkUpdateDynamicDateRange();
             setDateRangeSubscription();
-            registerAddFilterInFinterPenal();
+            registerAddFilterInFinterPanel();
            
             var headerSettings = {
                 showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
-                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
             setThinBarStyle(headerSettings)
             //filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
@@ -288,10 +288,10 @@
 
         function setThinBarStyle(setting) {
             vm.thinbarStyle = setting.showFSFilter ? { "margin-top": "75px" } : { "margin-top": "40px" }
-            vm.pinDimensions = vm.dimensions.filter(function (item) {
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
                 return item.pin === true
             });
-            if (vm.pinDimensions.length > 0) {
+            if (vm.pinedDimensions.length > 0) {
                 vm.thinbarStyle = setting.showFSFilter ? { "margin-top": "105px" } : { "margin-top": "70px" }
             }
         }
@@ -332,9 +332,9 @@
             $scope.$on("$destroy", unsubscribe);
         }
 
-        function registerAddFilterInFinterPenal() {
+        function registerAddFilterInFinterPanel() {
             var unsubscribe = $scope.$on(
-                "flairbiApp:add-filter-In-FinterPenal",
+                "flairbiApp:add-filter-In-FinterPanel",
                 function () {
                     var filterParameters;
                     filterParameters = filterParametersService.get();

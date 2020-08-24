@@ -32,6 +32,14 @@
                 },
                 update: {
                     method: "PUT"
+                },
+                markPinFilter: {
+                    url: "api/features/pinFilter/?id=:id&pin=:pin",
+                    method: "PUT",
+                    params:{ 
+                        id:'@id', 
+                        pin: '@pin'
+                    }
                 }
             }
         );

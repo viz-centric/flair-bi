@@ -226,21 +226,14 @@
         }
 
         function showPinFilter() {
-            vm.pinDimensions = vm.dimensions.filter(function (item) {
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
                 return item.pin === true
-            });;
+            });
             var headerSettings = {
                 showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
-                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
-            if (vm.pinDimensions.length > 0) {
-                vm.showPinFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-            }
-            else{
-                vm.showPinFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-            }
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
         }
 
 

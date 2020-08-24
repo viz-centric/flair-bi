@@ -3,9 +3,9 @@
 
     angular
         .module('flairbiApp')
-        .component('filterPenalPinComponent', {
-            templateUrl: 'app/entities/flair-bi/filter/filter-penal-pin.component.html',
-            controller: filterPenalPinController,
+        .component('filterHeaderPanelComponent', {
+            templateUrl: 'app/entities/flair-bi/filter/filter-header-panel.component.html',
+            controller: filterHeaderPanelController,
             controllerAs: 'vm',
             bindings: {
                 dimensions: '=',
@@ -13,22 +13,25 @@
             }
         });
 
-    filterPenalPinController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService', 'SEPARATORS', '$stateParams', 'proxyGrpcService', 'favouriteFilterService'];
+        filterHeaderPanelController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService', 'SEPARATORS', '$stateParams', 'proxyGrpcService', 'favouriteFilterService', 'DateUtils'];
 
-    function filterPenalPinController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService, SEPARATORS, $stateParams, proxyGrpcService, favouriteFilterService) {
+    function filterHeaderPanelController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService, SEPARATORS, $stateParams, proxyGrpcService, favouriteFilterService, DateUtils) {
         var vm = this;
 
         vm.load = load;
         vm.applyFilter = applyFilter;
+        vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.list = {};
+        vm.dateRangeReload = false;
         vm.selectedFilter = {};
+        vm.onDateChange = onDateChange;
         activate();
 
         ////////////////
 
         function activate() {
 
-            vm.setting1 = {
+            vm.settingStyle = {
                 scrollableHeight: '200px',
                 scrollable: true,
                 enableSearch: true,
@@ -133,6 +136,7 @@
         }
 
         function applyFilter() {
+            $(".pin-filter div.collapse.in").removeClass("in");
             var filter = Object.keys(vm.selectedFilter);
             var filterParameters = filterParametersService.getSelectedFilter();
 
@@ -164,7 +168,7 @@
             $rootScope.$broadcast('flairbiApp:filter-add');
             //addFilterInIframeURL();
             $rootScope.$broadcast("flairbiApp:filterClicked");
-            $rootScope.$broadcast("flairbiApp:add-filter-In-FinterPenal");
+            $rootScope.$broadcast("flairbiApp:add-filter-In-FinterPanel");
 
         }
 
@@ -172,6 +176,50 @@
             var filters = filterParametersService.getSelectedFilter();
             filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimensions);
         }
+        function canDisplayDateRangeControls(dimension) {
+            return filterParametersService.isDateType(dimension);
+        }
+        function removeFilter(filter) {
+            var filterParameters;
+            filterParameters = filterParametersService.get();
+            filterParameters[filter] = [];
+            filterParametersService.save(filterParameters);
 
+            filterParameters = filterParametersService.getSelectedFilter();
+            filterParameters[filter] = [];
+            filterParametersService.saveSelectedFilter(filterParameters);
+        }
+        function onDateChange(startDate, endDate, metadata, dimension) {
+            //vm.dimension.metadata = metadata;
+            if (metadata.dateRangeTab !== 2) {
+                dimension.selected = startDate;
+                dimension.selected2 = endDate;
+            } else {
+                filterParametersService.saveDynamicDateRangeMetaData(dimension.name, metadata);
+            }
+            console.log('filter-element-grpc: refresh for range', typeof startDate, startDate,
+                typeof endDate, endDate);
+            removeFilter(dimension.name);
+            if (startDate) {
+                startDate = DateUtils.resetTimezoneDate(startDate);
+                addDateRangeFilter(startDate, dimension);
+            }
+            if (endDate) {
+                endDate = DateUtils.resetTimezoneDate(endDate);
+                addDateRangeFilter(endDate, dimension);
+            }
+        }
+        function addDateRangeFilter(date, dimension) {
+            var filterParameters = filterParametersService.getSelectedFilter();
+            if (!filterParameters[dimension.name]) {
+                filterParameters[dimension.name] = [];
+            }
+            filterParameters[dimension.name].push(date);
+            filterParameters[dimension.name]._meta = {
+                dataType: dimension.type,
+                valueType: 'dateRangeValueType'
+            };
+            filterParametersService.save(filterParameters);
+        }
     }
 })();

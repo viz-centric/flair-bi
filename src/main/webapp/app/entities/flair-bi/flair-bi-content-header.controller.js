@@ -220,14 +220,14 @@
         }
 
         function loadPinDimensions() {
-            vm.pinDimensions = vm.dimensions.filter(function (item) {
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
                 return item.pin === true;
             });
             var headerSettings = {
                 showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
-                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
-            if (vm.pinDimensions.length > 0) {
+            if (vm.pinedDimensions.length > 0) {
                 vm.showPinFilter = true;
                 $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
             }
@@ -450,7 +450,7 @@
         function hideFiltersHeaderAndSideBar() {
             var headerSettings = {
                 showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
-                showPinFilter: vm.pinDimensions.length == 0 ? false : true
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
             if (vm.filtersLength == 0) {
                 vm.showFSFilter = false;

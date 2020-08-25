@@ -14,18 +14,6 @@
             </column>
         </createTable>
 
-        <addColumn tableName="jhi_user">
-            <column name="realm_id" type="bigint"  defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-
-        <addColumn tableName="user_group_permission">
-            <column name="realm_id" type="bigint"  defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-
         <createTable tableName="user_group2">
             <column type="bigint" name="id" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true"/>
@@ -44,6 +32,27 @@
             <column name="name" />
             <column name="realm_id" />
         </createIndex>
+
+        <addColumn tableName="jhi_user">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="user_group_permission">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_group_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="user_user_group">
+            <column name="user_group_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
 
         <addColumn tableName="dashboards">
             <column name="realm_id" type="bigint" defaultValue="0">

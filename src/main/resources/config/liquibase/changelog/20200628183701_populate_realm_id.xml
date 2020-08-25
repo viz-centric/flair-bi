@@ -12,10 +12,9 @@
 
             UPDATE jhi_user SET realm_id =
                 (select id from realm order by id desc limit 1);
-            UPDATE user_group_permission SET realm_id =
-                (select id from realm order by id desc limit 1);
-<!--            UPDATE user_group SET realm_id =-->
-<!--                (select id from realm order by id desc limit 1);-->
+            UPDATE user_group_permission SET realm_id = (select id from realm order by id desc limit 1),
+                user_group_id = (select id from user_group2 where name = user_grp_name);
+            UPDATE user_user_group SET user_group_id = (select id from user_group2 where name = user_group_name);
             UPDATE dashboards SET realm_id =
                 (select id from realm order by id desc limit 1);
             UPDATE datasources SET realm_id =

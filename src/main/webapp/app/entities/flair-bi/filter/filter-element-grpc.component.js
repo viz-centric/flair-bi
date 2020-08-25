@@ -18,9 +18,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams', 'Views', 'IFRAME', 'Features'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams', 'Views', 'IFRAME', 'Features','$translate'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams, Views, IFRAME, Features) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams, Views, IFRAME, Features,$translate) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -147,11 +147,10 @@
             favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
                 .then(function (data) {
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " Bookmark filter panel",
-                        title: "Saved"
-                    }
+                        text: $translate.instant(vm.dimension.favouriteFilter === true ? 'flairbiApp.bookmarkFilter' : 'flairbiApp.removeBookmarkFilter'),
+                        title: "Saved" 
+                   }
                     $rootScope.showSuccessToast(info);
                 }).catch(function (error) {
                     var info = {
@@ -446,16 +445,15 @@
         function getSeparator(){
             return vm.separator ? vm.separator.value : ",";
         }
-        function toggleHeaderFilter(dimension) {
+        function toggelPinDimension(dimension){
             Features.markPinFilter({
                 id: dimension.id, pin: !vm.dimension.pin
             },
                 function (result) {
                     vm.dimension.pin = !vm.dimension.pin;
-                    var opration = vm.dimension.pin === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " pin filter panel",
-                        title: "Saved"
+                         text: $translate.instant(vm.dimension.pin === true ? 'flairbiApp.pinedDimensions' : 'flairbiApp.unPinedDimensions'),
+                         title: "Saved" 
                     }
                     $rootScope.showSuccessToast(info);
                     $rootScope.$broadcast("flairbiApp:toggle-headers-pin-filters");
@@ -466,6 +464,28 @@
                     }
                     $rootScope.showErrorSingleToast(info);
                 });
+        }
+        function toggleHeaderFilter(dimension) {
+            if(dimension.pin){
+                toggelPinDimension(dimension);
+            }
+            else{
+                if(getPinedDimensionsCount().length < 5 ){
+                    toggelPinDimension(dimension);
+                }
+                else{
+                    var info = {
+                        text: $translate.instant('flairbiApp.pinedDimensionsError'),
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                }
+            }
+        }
+        function getPinedDimensionsCount(){
+            return vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });
         }
     }
 })();

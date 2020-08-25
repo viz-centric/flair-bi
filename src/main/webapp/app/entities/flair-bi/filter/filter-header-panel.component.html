@@ -1,5 +1,5 @@
 <form class="form-inline pin-filter">
-    <div class="form-group" ng-repeat="dimension in vm.dimensions">
+    <div class="form-group" ng-repeat="dimension in vm.pinedDimensions">
         <div class="filter-section">
             <div ng-if="!vm.canDisplayDateRangeControls(dimension)">
                 <label class="dimension-label">{{dimension.name}}</label>

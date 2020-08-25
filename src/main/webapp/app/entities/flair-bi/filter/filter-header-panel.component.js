@@ -10,6 +10,8 @@
             bindings: {
                 dimensions: '=',
                 view: '=',
+                iframes: '=',
+                pinedDimensions: '='
             }
         });
 
@@ -166,15 +168,14 @@
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
-            //addFilterInIframeURL();
+            addFilterInIframeURL();
             $rootScope.$broadcast("flairbiApp:filterClicked");
             $rootScope.$broadcast("flairbiApp:add-filter-In-FinterPanel");
 
         }
 
         function addFilterInIframeURL() {
-            var filters = filterParametersService.getSelectedFilter();
-            filterParametersService.setFilterInIframeURL(filters, vm.iframes, vm.dimensions);
+            filterParametersService.setFilterInIframeURL(vm.iframes, vm.dimensions);
         }
         function canDisplayDateRangeControls(dimension) {
             return filterParametersService.isDateType(dimension);

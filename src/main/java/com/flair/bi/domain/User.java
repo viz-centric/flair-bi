@@ -109,9 +109,13 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "user_user_group", foreignKey = @ForeignKey(name = "fk_user_id"), inverseForeignKey = @ForeignKey(name = "fk_user_group_name"), joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "user_group_name", referencedColumnName = "name") })
+	@JoinTable(name = "user_user_group",
+			foreignKey = @ForeignKey(name = "fk_user_id"),
+			inverseForeignKey = @ForeignKey(name = "fk_user_group_id"),
+			joinColumns = {
+				@JoinColumn(name = "user_id", referencedColumnName = "id") },
+			inverseJoinColumns = {
+				@JoinColumn(name = "user_group_id", referencedColumnName = "id") })
 	private Set<UserGroup> userGroups = new HashSet<>();
 
 	@JsonIgnore

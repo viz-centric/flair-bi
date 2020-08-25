@@ -23,7 +23,7 @@ public class FunctionsDTO implements Serializable {
 
 	private String validation;
 
-    private RealmDTO real;
+    private RealmDTO realm;
 
     @Override
     public boolean equals(Object o) {

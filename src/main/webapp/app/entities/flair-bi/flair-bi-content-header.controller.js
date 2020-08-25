@@ -227,14 +227,9 @@
                 showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
                 showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
-            if (vm.pinedDimensions.length > 0) {
-                vm.showPinFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-            }
-            else{
-                vm.showPinFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-            }
+            vm.showPinFilter = headerSettings.showPinFilter;
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
+            $rootScope.$broadcast("flairbiApp:toggle-grid-filters");
         }
 
         function applyDefaultFilters(excluded) {
@@ -452,16 +447,11 @@
                 showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
                 showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
-            if (vm.filtersLength == 0) {
-                vm.showFSFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-
-            } else {
-                vm.showFSFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-            }
+            vm.showFSFilter = headerSettings.showFSFilter;
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
+            $rootScope.$broadcast("flairbiApp:toggle-grid-filters");
         }
-
+        
         function fetchDashboardsAndViews() {
             loadDashboards();
             loadViews();

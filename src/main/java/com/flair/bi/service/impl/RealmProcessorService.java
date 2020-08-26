@@ -9,6 +9,7 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.FunctionsRepository;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.VisualizationColorsRepository;
+import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.service.security.UserGroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +31,8 @@ public class RealmProcessorService {
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         // TODO create user group service is not done yet
-        //userRepository.save(createUser(realm));
-        //userGroupService.save(createUserGroup(realm));
+        userGroupService.save(createUserGroup(realm));
+        userRepository.save(createUser(realm));
         functionsRepository.saveAll(buildFunctionsList(realm,vizcentricId));
         visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm,vizcentricId));
     }
@@ -60,7 +61,7 @@ public class RealmProcessorService {
 
     private UserGroup createUserGroup(Realm realm){
         UserGroup userGroup = new UserGroup();
-        userGroup.setName("ROLE_ADMIN");
+        userGroup.setName(AuthoritiesConstants.ADMIN);
         userGroup.setRealm(realm);
         return userGroup;
     }

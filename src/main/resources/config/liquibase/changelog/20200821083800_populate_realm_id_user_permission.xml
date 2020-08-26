@@ -5,18 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet  id="20200821083800" author="johib">
-        <addColumn tableName="user_user_group">
-            <column name="realm_id" type="bigint"  defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-
         <sql stripComments="true">
             UPDATE user_permission SET realm_id =
             (select id from realm order by id desc limit 1);
-            UPDATE user_user_group SET realm_id =
-            (select id from realm order by id desc limit 1);
-
         </sql>
 
     </changeSet>

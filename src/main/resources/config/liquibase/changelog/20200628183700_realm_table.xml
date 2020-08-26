@@ -40,9 +40,6 @@
         </addColumn>
 
         <addColumn tableName="user_group_permission">
-            <column name="realm_id" type="bigint"  defaultValue="0">
-                <constraints nullable="false"/>
-            </column>
             <column name="user_group_id" type="bigint"  defaultValue="0">
                 <constraints nullable="false"/>
             </column>

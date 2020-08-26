@@ -248,7 +248,6 @@
                 showPinFilter: vm.showPinFilte
             }
             $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
-            $rootScope.$broadcast("flairbiApp:toggle-grid-filters");
         }
 
 

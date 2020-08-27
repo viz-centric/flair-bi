@@ -42,7 +42,7 @@ public class RealmProcessorService {
         // TODO
         visualizationColorsRepository.deleteByRealmId(id);
         functionsRepository.deleteByRealmId(id);
-
+        userRepository.deleteByRealmId(id);
     }
 
     private User createUser(Realm realm,UserGroup userGroup){

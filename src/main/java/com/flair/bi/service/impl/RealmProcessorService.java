@@ -16,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,9 +32,8 @@ public class RealmProcessorService {
     private final VisualizationColorsRepository visualizationColorsRepository;
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
-        // TODO create user group service is not done yet
-        userGroupService.save(createUserGroup(realm));
-        userRepository.save(createUser(realm));
+        UserGroup userGroup = userGroupService.save(createUserGroup(realm));
+        userRepository.save(createUser(realm,userGroup));
         functionsRepository.saveAll(buildFunctionsList(realm,vizcentricId));
         visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm,vizcentricId));
     }
@@ -41,9 +42,10 @@ public class RealmProcessorService {
         // TODO
         visualizationColorsRepository.deleteByRealmId(id);
         functionsRepository.deleteByRealmId(id);
+
     }
 
-    private User createUser(Realm realm){
+    private User createUser(Realm realm,UserGroup userGroup){
         User newUser = new User();
         newUser.setLogin(realm.getName().trim()+realm.getId());
         String encryptedPassword = passwordEncoder.encode(realm.getName().trim()+realm.getId()+"@123");
@@ -56,7 +58,14 @@ public class RealmProcessorService {
         newUser.setCreatedBy("system");
         newUser.setLastModifiedBy("system");
         newUser.setRealm(realm);
+        newUser.setUserGroups(assignGroupToUser(userGroup));
         return newUser;
+    }
+
+    private Set<UserGroup> assignGroupToUser(UserGroup userGroup){
+        Set<UserGroup> userGroups = new HashSet<>();
+        userGroups.add(userGroup);
+        return userGroups;
     }
 
     private UserGroup createUserGroup(Realm realm){

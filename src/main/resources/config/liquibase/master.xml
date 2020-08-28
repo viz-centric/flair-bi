@@ -81,19 +81,15 @@
     <include file="config/liquibase/changelog/2020070200000_update_column_propertytyprname_propertytype_iframe_setting.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200704100000_add_date_datetime_functions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200705100000_aggregate_percent_function.xml" relativeToChangelogFile="false"/>
-    
     <include file="config/liquibase/changelog/20200707100000_update_column_propertytype_iframe_setting.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200714055120_added_entity_ClientLogo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200717023012_added_client-logo-user_permissions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200701600000_add_sorting_in_pivot_table.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200702200000_update_pivot_table_sorting_option.xml" relativeToChangelogFile="false"/>
-
-
     <include file="config/liquibase/changelog/20200628183700_realm_table.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200628183701_populate_realm_id.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200705183701_remove_default_realm_id.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200820125700_added_realm_constraints.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200825125700_remove_user_group.xml" relativeToChangelogFile="false" />
-
 </databaseChangeLog>
 <!--@formatter:on-->

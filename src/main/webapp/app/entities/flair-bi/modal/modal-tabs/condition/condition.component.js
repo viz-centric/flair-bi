@@ -12,13 +12,14 @@
                 features: '=',
                 showAdd: '@',
                 showDelete: '@',
-                datasourceId: '='
+                datasourceId: '=',
+                separator: '='
             }
         });
 
-    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService','$stateParams','VisualDispatchService'];
+    conditionComponent.$inject = ['$scope', 'COMPARABLE_DATA_TYPES', 'CONDITION_TYPES', 'COMPARE_TYPES', '$rootScope', 'CryptoService', 'proxyGrpcService', 'filterParametersService','favouriteFilterService','$stateParams','VisualDispatchService', 'SEPARATORS'];
 
-    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService,$stateParams,VisualDispatchService) {
+    function conditionComponent($scope, COMPARABLE_DATA_TYPES, CONDITION_TYPES, COMPARE_TYPES, $rootScope, CryptoService, proxyGrpcService, filterParametersService,favouriteFilterService,$stateParams,VisualDispatchService, SEPARATORS  ) {
         var vm = this;
         vm.load = load;
         vm.showInfo = false;
@@ -52,6 +53,7 @@
         vm.dimension = vm.features[0];
         vm.isCommaSeparatedInput = false;
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
+
         ////////////////
 
         function activate() {
@@ -202,7 +204,11 @@
 
         function displayTextboxForValues() {
             vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
-            vm.commaSeparatedValues = vm.condition.values.join(",");
+            if(vm.condition.values.length > 0){
+                vm.commaSeparatedValues = vm.condition.values.join(getSeparator());
+            }else{
+                vm.commaSeparatedValues = null;
+            }
             vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         }
 
@@ -211,7 +217,7 @@
                 vm.isCommaSeparatedInput = false;
                 vm.condition.values = [];
                 vm.condition.valueTypes = [];
-                var getList = vm.commaSeparatedValues.split(',');
+                var getList = vm.commaSeparatedValues.split(getSeparator());
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     onContainsAdded({ text: element });
@@ -219,6 +225,9 @@
                 });
                 vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
+        }
+            function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
         }
     }
 })();

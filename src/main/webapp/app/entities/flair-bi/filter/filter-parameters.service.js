@@ -37,7 +37,9 @@
             applyDefaultFilters : applyDefaultFilters,
             applyViewFeatureCriteria : applyViewFeatureCriteria,
             removeFilterInIframeURL: removeFilterInIframeURL,
-            setFilterInIframeURL: setFilterInIframeURL
+            setFilterInIframeURL: setFilterInIframeURL,
+            removeURLParameter : removeURLParameter,
+            getParameterByName : getParameterByName
 
         };
 
@@ -142,7 +144,7 @@
             };
         }
 
-        function createCompareExpressionBodyForInterval(value, featureName, interval, operator) {
+        function createCompareExpressionBodyForInterval(initialValue, endValue, featureName, interval, operator) {
             return {
                 '@type': 'Between',
                 featureName: featureName,
@@ -150,14 +152,14 @@
                     '@type': 'intervalValueType',
                     operator: operator,
                     interval: interval,
-                    value: value
+                    value: initialValue
                 },
                 secondValueType: {
                     '@type': 'valueType',
-                    value: value
+                    value: endValue
                 },
-                secondValue: value,
-                activeTab : value
+                secondValue: initialValue,
+                activeTab : initialValue
             };
         }
 
@@ -165,7 +167,7 @@
             var meta = values._meta || {};
             var valueType = meta.valueType || '';
             var type = meta ? meta.dataType : '';
-            if (isDateFilterType(type)) {
+            if (isDateFilterType(type) && type === "dateRangeValueType") {
                 console.log('create body exp ', values, name);
                 if (values[1]) {
                     values = [changeDateFormat(values[0]), changeDateFormat(values[1])];
@@ -191,9 +193,10 @@
             } else if (valueType === 'intervalValueType') {
                 var operator = meta.operator;
                 var initialValue = meta.initialValue;
+                var endValue = meta.endValue;
                 var value = values[0];
-                console.log('interval value type value', value, 'operator', operator, 'initialValue', initialValue);
-                return createCompareExpressionBodyForInterval(initialValue, name, value, operator);
+                console.log('interval value type value', value, 'operator', operator, 'initialValue', initialValue, 'endValue', endValue);
+                return createCompareExpressionBodyForInterval(initialValue, endValue, name, value, operator);
             }
             return createContainsExpressionBody(values, name);
         }
@@ -439,14 +442,17 @@
             };
         }
 
-        function setFilterInIframeURL(filters, iframes, filterDimensions) {
+        function setFilterInIframeURL(iframes, filterDimensions) {
+            var filters= get();
             var filtersList = Object.keys(filters);
             if (filtersList.length > 0) {
-                removeFilterInIframeURL(iframes);
-                iframes.forEach(element => {
-                    var id = getParameterByName('datasourceId', element.properties[0].value)
-                    validateFilter(id, filtersList, filterDimensions, filters, element);
-                });
+               
+                if(iframes){
+                    iframes.forEach(element => {
+                        var id = getParameterByName('datasourceId', element.properties[0].value)
+                        validateFilter(id, filtersList, filterDimensions, filters, element);
+                    });
+                }
             }
         }
 
@@ -476,11 +482,13 @@
                                 }
                             }
                         });
-                        filterUrl = element.properties[0].value + "&filters=" + JSON.stringify(filterUrl);
+                        var url = removeURLParameter(element.properties[0].value, "filters");
+                        filterUrl = url + "&filters=" + JSON.stringify(filterUrl);
                         filtersList.forEach(item => {
                             filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
                         });
                         element.properties[0].value = filterUrl;
+                        $rootScope.$broadcast("update-widget-content-" + element.id);
                     },
                     function (_) { }
                 );
@@ -515,9 +523,13 @@
         }
 
         function removeFilterInIframeURL(iframes) {
-            iframes.forEach(element => {
-                element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
-            });
+            if(iframes){
+                iframes.forEach(element => {
+                    element.properties[0].value = removeURLParameter(element.properties[0].value, "filters");
+                    $rootScope.$broadcast("update-widget-content-" + element.id);
+                    
+                });
+            }
         }
 
         function removeURLParameter(url, parameter) {

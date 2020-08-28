@@ -9,7 +9,7 @@
 
     function GenerateDoughnutChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, isNotification) {
+            build: function (record, element, panel, isNotification, isIframe) {
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
                         'display': 'flex',
@@ -66,7 +66,7 @@
                     doughnut(div[0])
                     return doughnut;
                 }
-                if (isNotification) {
+                 if (isNotification || isIframe) {
                     createChart();
                 }
                 else {

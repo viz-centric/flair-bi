@@ -21,7 +21,8 @@
         vm.transition = transition;
         vm.page = 1;
         vm.currentSearch = null;
-
+        vm.searchedView = "";
+        vm.searchView = searchView;
 
         ////////////////
 
@@ -39,6 +40,19 @@
         };
         vm.$onChanges = function (_changesObj) { };
         vm.$onDestroy = function () { };
+
+
+        function searchView(searchedText) {
+            if (searchedText.length >= 2 || searchedText.length == 0) {
+                Views.query({
+                    viewName: searchedText,
+                    page: vm.pagingParams.page - 1,
+                    size: vm.itemsPerPage,
+                    sort: sort(),
+                    paginate: true
+                }, onSuccess, onError);
+            }
+        }
 
         function onSuccess(data, headers) {
             vm.links = ParseLinks.parse(headers('link'));

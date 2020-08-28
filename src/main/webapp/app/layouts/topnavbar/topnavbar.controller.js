@@ -5,13 +5,14 @@
         .module('flairbiApp')
         .controller('TopNavBarController', TopNavBarController);
 
-    TopNavBarController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'PERMISSIONS'];
+    TopNavBarController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'PERMISSIONS','ClientLogoDataService'];
 
-    function TopNavBarController($scope, $state, Auth, Principal, PERMISSIONS) {
+    function TopNavBarController($scope, $state, Auth, Principal, PERMISSIONS,ClientLogoDataService) {
         var vm = this;
         vm.$state = $state;
         vm.logout = logout;
         vm.mobileNavidationSlide = false;
+        vm.clientLogo = ClientLogoDataService.getClientLogo();
         vm.activateMobileNavigation = activateMobileNavigation;
         vm.administrationPermissions = [
             PERMISSIONS.READ_USER_MANAGEMENT,
@@ -52,6 +53,14 @@
         ////////////////
 
         function activate() {
+            registerSetClientLogo();
+        }
+
+        function registerSetClientLogo() {
+            var unsubscribe = $scope.$on('flairbiApp:set-client-logo', function () {
+                vm.clientLogo = ClientLogoDataService.getClientLogo();
+            });
+            $scope.$on('$destroy', unsubscribe);
         }
     }
 })();

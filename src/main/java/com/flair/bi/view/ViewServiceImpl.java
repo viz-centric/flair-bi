@@ -1,26 +1,5 @@
 package com.flair.bi.view;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.QView;
 import com.flair.bi.domain.Release;
@@ -36,12 +15,32 @@ import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.BookMarkWatchService;
 import com.flair.bi.service.ViewWatchService;
+import com.flair.bi.view.export.ViewExportDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing View.
@@ -454,6 +453,15 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	public View findByDashboardIdAndViewName(Long id, String viewName) {
 		return viewRepository.findByDashboardIdAndViewName(id, viewName);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ViewExportDTO exportView(Long id) {
+		return viewRepository.findById(id).map(view -> {
+			view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
+			return ViewExportDTO.from(view);
+		}).orElse(null);
 	}
 
 }

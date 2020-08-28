@@ -79,6 +79,12 @@
                 label: "Report Configuration",
                 href: "report-management({id:'configuration'})",
                 order: 11
+            },
+            {
+                image: "#upload-logo",
+                label: "Upload Logo",
+                href: "client-logo",
+                order: 12
             }
 
         ];
@@ -137,6 +143,12 @@
                 label: "Report Configuration",
                 href: "report-management({id:'configuration'})",
                 order: 12
+            },
+            {
+                image: "#upload-logo",
+                label: "Upload Logo",
+                href: "client-logo",
+                order: 13
             }
 
         ];

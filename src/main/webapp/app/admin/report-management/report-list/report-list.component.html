@@ -1,70 +1,12 @@
 <div class="fbibox report-management">
         <div class="fbibox-content">
-            <div class="row filters">
-                <div class="col-xs-3">
-                    <div class="input-group">
-                        <h4 class="control-label" data-translate="reportManagement.filters.fromDate"
-                            for="fromDate">
-                            From
-                            Date</h4>
-                        <input type="text" class="form-control" name="fromDate" enable-time="false"
-                            uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.fromDate"
-                            is-open="vm.datePickerOpenStatus.fromDate" />
-                        <span class="input-group-btn flair-date-icon">
-                            <button type="button" class="btn btn-default"
-                                ng-click="vm.openCalendar('fromDate')">
-                                <i class="glyphicon glyphicon-calendar"></i>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-3">
-                    <div class="input-group">
-                        <h4 class="control-label" data-translate="reportManagement.filters.toDate"
-                            for="toDate">
-                            To
-                            Date</h4>
-                        <input type="text" class="form-control" name="toDate" enable-time="false"
-                            uib-datepicker-popup="{{vm.dateFormat}}" ng-model="vm.toDate"
-                            is-open="vm.datePickerOpenStatus.toDate" />
-                        <span class="input-group-btn flair-date-icon">
-                            <button type="button" class="btn btn-default"
-                                ng-click="vm.openCalendar('toDate')">
-                                <i class="glyphicon glyphicon-calendar"></i>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-2">
-                    <div class="input-group">
-                        <h4 class="control-label" data-translate="reportManagement.filters.reportName">
-                            Report
-                            Name
-                        </h4>
-                        <input type="text" class="report-name input-sm form-control" name="reportName"
-                            ng-model="vm.reportName" />
-                    </div>
-                </div>
-                <div ng-if="vm.isAdmin" class="col-md-3">
-                    <user-search-component user="vm.user" />
-                </div>
-                <div class="col-xs-1">
-                    <label uib-tooltip="Threshold Alerts" class="flair-checkbox"
-                        ng-click="vm.setThresholdAlert(vm.thresholdAlert)">
-                        <i
-                            class="checkbox-icon fa fa-square-o fa-2x ng-class:{'fa-square-o-checked':vm.thresholdAlert,'fa-square-o-unchecked':!vm.thresholdAlert} "></i>
-                        <i
-                            class="checkbox-icon fa fa-check-square-o fa-2x ng-class:{'fa-check-square-o-checked':vm.thresholdAlert,'fa-check-square-o-unchecked':!vm.thresholdAlert}"></i>
-                    </label>
-                    &nbsp;
-                    &nbsp;
-                    &nbsp;
-                    <svg class="search-icon" ng-click="vm.searchReports()">
-                        <use xlink:href="#search" />
+            <div class="filters-row row">
+                <div uib-tooltip="Filters" tooltip-placement="bottom" class="filters-box" ng-click="vm.toggleFilters()">
+                    <svg class="flaticons-filter">
+                        <use xlink:href="#filter" />
                     </svg>
                 </div>
             </div>
-            <br />
             <div class="table-responsive" ng-if="vm.reports.length>0">
                 <table class="table table-striped flair-table-v1">
                     <thead>
@@ -158,3 +100,4 @@
 <div ng-show="vm.totalItems==0">
     <no-data-found-component message="No reports available"></no-data-found-component>
 </div>
+<report-filters-component is-open="vm.isOpen" on-filter-applied="vm.onFilterApplied(filters)"></report-filters-component>

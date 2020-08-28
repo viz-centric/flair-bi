@@ -14,10 +14,12 @@
         "PERMISSIONS",
         "Principal",
         "$state",
-        "$stateParams"
+        "$stateParams",
+        "$scope",
+        "ClientLogoDataService"
     ];
 
-    function HomeTopNavBarController(PERMISSIONS, Principal, $state, $stateParams) {
+    function HomeTopNavBarController(PERMISSIONS, Principal, $state, $stateParams,$scope,ClientLogoDataService) {
         var vm = this;
 
         vm.search = search;
@@ -55,6 +57,7 @@
             if (vm.searchCriteria && isSearchPage()) {
                 floatSearch();
             }
+            registerSetClientLogo();
         }
 
         function isSearchPage() {
@@ -86,6 +89,13 @@
 
         function activateMobileNavigation() {
             vm.mobileNavidationSlide = !vm.mobileNavidationSlide;
+        }
+
+        function registerSetClientLogo() {
+            var unsubscribe = $scope.$on('flairbiApp:set-client-logo', function () {
+                vm.clientLogo = ClientLogoDataService.getClientLogo();
+            });
+            $scope.$on('$destroy', unsubscribe);
         }
     }
 })();

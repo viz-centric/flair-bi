@@ -65,10 +65,12 @@ nav.navbar-static-top {
             fill: $anchor-color;
             margin-right: -9px;
         }
-        .logo {
+        .common{
             position: absolute;
             top: 0px;
             left: 0px;
+        }
+        .logo {
             border-right: 1px #ced0d1 solid;
             height:41px;
             width: 37px;
@@ -76,6 +78,21 @@ nav.navbar-static-top {
                 width: 25px;
                 height: 40px;
                 margin-left: 6px;
+            }
+        }
+        .client-logo {
+            img {
+                width: 50px;
+                height: 40px;
+                border-right: 1px #ced0d1 solid;
+                padding: 2px;
+            }
+        }
+        .flair-logo {
+            img {
+                width: 25px;
+                height: 40px;
+                margin-left: 57px;
             }
         }
         .home-row {
@@ -93,9 +110,14 @@ nav.navbar-static-top {
         .search-right-icon-active {
             left: 62px;
         }
-        // .home-header-search-box{
-        //     display: none;
-        // }
+         .home-header-search-box{
+            display: none;
+            left: 103px;
+         }
+         .home-header-search-box1{
+            display: none;
+            left: 44px;
+         }
         // .home-header-search-box-active{
         //     display: block;
         //     -webkit-transition: width 0.4s ease-in-out;

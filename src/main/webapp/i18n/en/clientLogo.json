@@ -1,0 +1,24 @@
+{
+    "flairbiApp": {
+        "clientLogo" : {
+            "home": {
+                "title": "Client Logos",
+                "createLabel": "Create a new Client Logo",
+                "createOrEditLabel": "Create or edit a Client Logo"
+            },
+            "created": "logo is created",
+            "updated": "logo is updated",
+            "deleted": "logo is deleted",
+            "delete": {
+                "question": "Are you sure you want to delete Client Logo {{ id }}?"
+            },
+            "detail": {
+                "title": "Client Logo"
+            },
+            "name": "Name",
+            "url": "Url",
+            "imageContentType": "Image Content Type",
+            "image": "Logo"
+        }
+    }
+}

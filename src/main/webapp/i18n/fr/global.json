@@ -26,6 +26,7 @@
                 "visualizationColors": "Visualization Colors",
                 "fileUploaderStatus": "File Uploader Status",
                 "realm": "Realm",
+                "clientLogo": "Client Logo",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

@@ -9,7 +9,7 @@
 
     function GenerateLineChart(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, isNotification) {
+            build: function (record, element, panel, isNotification, isIframe) {
 
                 if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
                     element.css({
@@ -51,7 +51,7 @@
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
                     result['isFilterGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Filter Grid');
                     result['showSorting'] = VisualizationUtils.getPropertyValue(record.properties, 'Allow Sorting');
-                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0]; 
+                    result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0];
                     result['alternateDimension'] = VisualizationUtils.getPropertyValue(record.properties, 'Alternative Dimensions');
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];
@@ -117,7 +117,7 @@
 
                     return line;
                 }
-                if (isNotification) {
+                if (isNotification || isIframe) {
                     createChart();
                 }
                 else {

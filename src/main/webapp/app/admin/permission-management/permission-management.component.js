@@ -67,6 +67,7 @@
         vm.isPredefinedGroup = isPredefinedGroup;
         vm.onSearchClick = onSearchClick;
         vm.toggle = toggle;
+        vm.onClearClick = onClearClick;
 
         var actionOrder = {
             READ: 1,
@@ -571,6 +572,10 @@
                     getUserGroupDatasourcePermissions();
                 }
             }
+        }
+        function onClearClick(){
+            vm.searchCriteria = "";
+            onSearchClick();
         }
 
     }

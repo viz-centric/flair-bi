@@ -20,7 +20,8 @@
         "DYNAMIC_DATE_RANGE_CONFIG",
         "DateUtils",
         "favouriteFilterService",
-        "$rootScope"
+        "$rootScope",
+        "$window"
     ];
 
     function FlairBiFullscreenController($scope,
@@ -38,7 +39,8 @@
         DYNAMIC_DATE_RANGE_CONFIG,
         DateUtils,
         favouriteFilterService,
-        $rootScope) {
+        $rootScope,
+        $window) {
         var vm = this;
 
         vm.visualMetadata = new VisualWrap(visualMetadata);
@@ -57,18 +59,17 @@
         ////////////////
 
         function activate() {
+            $('body').css('overflow-y', "hidden");
             if ($stateParams.filters) {
                 addFilterInQueryDTO();
             }
+            else {
+                filterParametersService.clear();
+            }
+
             const applied = filterParametersService.applyViewFeatureCriteria(vm.view.viewFeatureCriterias, featureEntities);
             filterParametersService.applyDefaultFilters(applied, featureEntities);
             connectWebSocket();
-            proxyGrpcService.forwardCall(vm.datasource.id, {
-                queryDTO: vm.visualMetadata.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
-                visualMetadata: vm.visualMetadata,
-                type: 'share-link',
-                validationType: 'REQUIRED_FIELDS'
-            }, $stateParams.viewId);
         }
 
         function connectWebSocket() {
@@ -128,6 +129,7 @@
             var activeFilter = vm.dynamicDateRangeConfig.filter(function (item) {
                 return item.title === vm.currentDynamicDateRangeConfig;
             });
+            vm.activeFilter = activeFilter;
 
             var config = vm.currentDynamicDateRangeConfig;
             if (config.toDate) {
@@ -138,6 +140,21 @@
                 return activeFilter[0].period.days + ' days';
             } else if (activeFilter[0].period.months) {
                 return activeFilter[0].period.months + ' months';
+            }
+            return null;
+        }
+
+        function getStartDateRangeTimeUnit(filterTime) {
+
+            var activeFilter = vm.dynamicDateRangeConfig.filter(function (item) {
+                return item.title === vm.currentDynamicDateRangeConfig;
+            });
+
+            var config = vm.currentDynamicDateRangeConfig;
+            if (config.toDate) {
+                return null;
+            } else if (activeFilter[0].isCustom && activeFilter[0].startDay) {
+                return "'" + activeFilter[0].startDayUnit + "'";
             }
             return null;
         }
@@ -162,6 +179,11 @@
             var filterParameters = filterParametersService.getSelectedFilter();
 
             filterKey.forEach(element => {
+                vm.dimensions.map(function (item, index) {
+                    if (item.name === element) {
+                        vm.dimensionPosition = index;
+                    };
+                })
                 var validDimension = findDimension(element);
                 if (validDimension && validDimension.length > 0) {
 
@@ -172,6 +194,17 @@
                             valueType: 'castValueType'
                         };
                         filterParametersService.save(filterParameters);
+
+                        var myFilters = filterParametersService.get()[element] || filterParametersService.get()[element.toLowerCase()];
+
+                        vm.dimensions[vm.dimensionPosition].selected = []
+                        if (myFilters && myFilters.length > 0) {
+                            vm.dimensions[vm.dimensionPosition].selected = myFilters.map(function (item) {
+                                var newItem = {};
+                                newItem['text'] = item;
+                                return newItem;
+                            });
+                        }
                     }
                     else {
                         if (filters[element].type == "date-range") {
@@ -182,6 +215,12 @@
                                 valueType: 'dateRangeValueType'
                             };
                             filterParametersService.save(filterParameters);
+                            vm.dimensions[vm.dimensionPosition].metadata = {}
+                            vm.dimensions[vm.dimensionPosition].selected = filters[element].value[0]
+                            vm.dimensions[vm.dimensionPosition].selected2 = filters[element].value[1]
+                            vm.dimensions[vm.dimensionPosition].metadata.currentDynamicDateRangeConfig = null;
+                            vm.dimensions[vm.dimensionPosition].metadata.dateRangeTab = 1;
+                            vm.dimensions[vm.dimensionPosition].metadata.customDynamicDateRange = 0;
                         }
                         else if (filters[element].type == "custom-date") {
                             vm.currentDynamicDateRangeConfig = filters[element].value[0];
@@ -191,7 +230,8 @@
                                 startDate = DateUtils.formatDate(DateUtils.resetTimezone(DateUtils.strToDate(startDateRange)));
                             } else {
                                 var startDateRangeInterval = getStartDateRangeInterval(filters[element].value[1]);
-                                startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                                const timeUnit = getStartDateRangeTimeUnit() || '';
+                                startDate = "__FLAIR_INTERVAL_OPERATION(NOW(" + timeUnit + "), '-', '" + startDateRangeInterval + "')";
                             }
                             var endDate = '__FLAIR_NOW()';
                             if (startDate) {
@@ -202,8 +242,14 @@
                                 endDate = DateUtils.resetTimezoneDate(endDate);
                                 addDateRangeFilter(endDate, validDimension[0]);
                             }
+                            vm.dimensions[vm.dimensionPosition].metadata = {}
+                            vm.dimensions[vm.dimensionPosition].metadata.currentDynamicDateRangeConfig = vm.activeFilter[0];
+                            vm.dimensions[vm.dimensionPosition].metadata.dateRangeTab = 2;
+                            vm.dimensions[vm.dimensionPosition].metadata.customDynamicDateRange = 0;
+
                         }
                     }
+
 
                 }
             });
@@ -213,15 +259,23 @@
             $rootScope.updateWidget = {};
             vm.isOpen = !vm.isOpen;
             $rootScope.$broadcast("flairbiApp:toggleFilters-on");
-            if (vm.isOpen) {
-                showSideBar();
-                $('#slider').css('display', 'block');
-                createVisualisation();
+
+            var isIframe = filterParametersService.getParameterByName("ifIframe", $window.location.href);
+            if (isIframe) {
+                var url = filterParametersService.removeURLParameter($window.location.href, "ifIframe");
+                $window.open(url, '_blank');
             }
             else {
-                $('.widget-container-share-link').css('width', '100%').css('width', '-=16px');
-                $('#slider').css('display', 'none');
-                createVisualisation()
+                if (vm.isOpen) {
+                    showSideBar();
+                    $('#slider').css('display', 'block');
+                    createVisualisation();
+                }
+                else {
+                    $('.widget-container-share-link').css('width', '100%').css('width', '-=16px');
+                    $('#slider').css('display', 'none');
+                    createVisualisation()
+                }
             }
         }
 
@@ -240,7 +294,9 @@
             visualizationRenderService.setMetaData(
                 vm.visualMetadata,
                 metaData,
-                contentId
+                contentId,
+                false,
+                true
             );
         }
 

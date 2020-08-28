@@ -881,6 +881,9 @@ ui-breadcrumbs .breadcrumb li.active {
   padding: 10px;
   background: rgba(234, 234, 234, 0.6); }
 
+.separator-list-constaraint {
+  width: 191px; }
+
 /* Flair BI custom css*/
 body::-webkit-scrollbar {
   width: 3px; }
@@ -1187,10 +1190,11 @@ nav.navbar-static-top {
       height: 20px;
       fill: #404345;
       margin-right: -9px; }
-    nav.navbar-static-top .navbar-header .logo {
+    nav.navbar-static-top .navbar-header .common {
       position: absolute;
       top: 0px;
-      left: 0px;
+      left: 0px; }
+    nav.navbar-static-top .navbar-header .logo {
       border-right: 1px #ced0d1 solid;
       height: 41px;
       width: 37px; }
@@ -1198,6 +1202,15 @@ nav.navbar-static-top {
         width: 25px;
         height: 40px;
         margin-left: 6px; }
+    nav.navbar-static-top .navbar-header .client-logo img {
+      width: 50px;
+      height: 40px;
+      border-right: 1px #ced0d1 solid;
+      padding: 2px; }
+    nav.navbar-static-top .navbar-header .flair-logo img {
+      width: 25px;
+      height: 40px;
+      margin-left: 57px; }
     nav.navbar-static-top .navbar-header .home-row {
       display: flex;
       align-items: center; }
@@ -1210,6 +1223,12 @@ nav.navbar-static-top {
       margin-right: -18px; }
     nav.navbar-static-top .navbar-header .search-right-icon-active {
       left: 62px; }
+    nav.navbar-static-top .navbar-header .home-header-search-box {
+      display: none;
+      left: 103px; }
+    nav.navbar-static-top .navbar-header .home-header-search-box1 {
+      display: none;
+      left: 44px; }
   nav.navbar-static-top user-profile-component .dropdown-menu {
     font-size: 12px; }
     nav.navbar-static-top user-profile-component .dropdown-menu a {
@@ -1579,6 +1598,12 @@ span.rz-pointer {
     .login-page-container .login-form .okta-login .okta-icon img {
       width: 70px;
       margin-bottom: 2px; }
+    .login-page-container .login-form .okta-login .SS0 {
+      color: #19427D;
+      font-size: 18px;
+      font-weight: bolder;
+      vertical-align: middle;
+      margin: 15px; }
     .login-page-container .login-form .hr-text {
       margin-bottom: 10px;
       line-height: 1em;
@@ -2283,6 +2308,12 @@ a {
             font-weight: bold; }
   .home-container .tooltip {
     display: none; }
+  .home-container .flair-insights-filters {
+    display: flex; }
+    .home-container .flair-insights-filters .filter {
+      align-self: center; }
+      .home-container .flair-insights-filters .filter .report-name {
+        height: 34px; }
 
 @media screen and (max-width: 990px) {
   .home-container {
@@ -2636,6 +2667,20 @@ tags-input-grpc .autocomplete {
   .comma-separated-box .comma-separated-input {
     font: 13px "open sans";
     height: 38px; }
+
+.filter-separator-container {
+  margin-right: 0.5vw;
+  margin-left: 0.5vw; }
+  .filter-separator-container .separator-select {
+    font: 13px "open sans"; }
+
+.comma-separated-off {
+  color: #404345;
+  outline: none; }
+
+.comma-separated-on {
+  color: #439dd3;
+  outline: none; }
 
 @media screen {
   #printSection {
@@ -3138,8 +3183,9 @@ input[type="search"] {
   box-shadow: none; }
 
 .dropdown-options-v4 div.dropdown-menu {
-  top: 56%;
+  top: -97px;
   left: 56%;
+  min-width: 46px;
   border-radius: 0;
   border: 0;
   padding: 10px;
@@ -4114,6 +4160,19 @@ jhi-alert .alerts .alert-danger {
       .flairbi-content-header .header-first .logo img {
         width: 25px;
         height: 40px; }
+    .flairbi-content-header .header-first .client-logo-viz {
+      position: absolute;
+      left: 10px; }
+      .flairbi-content-header .header-first .client-logo-viz img {
+        width: 50px;
+        height: 40px;
+        padding: 2px;
+        border-right: 1px #ced0d1 solid; }
+    .flairbi-content-header .header-first .flair-logo-viz img {
+      width: 25px;
+      height: 40px;
+      margin-left: 50px;
+      margin-right: 15px; }
   .flairbi-content-header h2 {
     margin: 0px;
     line-height: 40px;
@@ -4757,7 +4816,8 @@ jhi-alert .alerts .alert-danger {
 #shareLink #slider {
   margin-right: 0px !important;
   margin-top: 25px !important;
-  min-width: 250px !important; }
+  min-width: 250px !important;
+  top: 25px; }
 
 .field-properties .property-header {
   border-bottom: 1px solid #e5e6e7;
@@ -4857,12 +4917,6 @@ jhi-alert .alerts .alert-danger {
     display: flex; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field {
       align-self: center; }
-      .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field .comma-separated-off {
-        color: #404345;
-        outline: none; }
-      .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .field .comma-separated-on {
-        color: #439dd3;
-        outline: none; }
     .data-constrains-properties .data-constaraint-conditions-container .simple-condition .fields .between-label {
       width: 7%;
       margin: auto; }
@@ -5764,12 +5818,6 @@ ui bootstrap tweaks
     .constraint-field .user-data-constraint-operation-button.icon i {
       color: #439dd3;
       font-size: 16px; }
-  .constraint-field .comma-separated .comma-separated-on {
-    color: #439dd3;
-    outline: none; }
-  .constraint-field .comma-separated .comma-separated-off {
-    color: #404345;
-    outline: none; }
 
 .user-management-table .datasource-constraints-icon {
   width: 16px;
@@ -5778,6 +5826,18 @@ ui bootstrap tweaks
 .user-management-table .click-here-dc-icon {
   color: #439dd3;
   font-size: 1.5em; }
+
+.user-management-table #searchclear {
+  position: absolute;
+  top: -1px;
+  bottom: 0;
+  height: 14px;
+  margin: auto;
+  font-size: 14px;
+  cursor: pointer;
+  color: #439dd3;
+  left: 186px;
+  outline: none; }
 
 .filter-area .filter-element label {
   font-weight: 600;
@@ -6580,12 +6640,17 @@ disabled look for disabled choices in the results dropdown
 
 .scheduler-modal-body .scheduler-tags .tooltip-position {
   position: absolute;
-  top: 23px;
-  right: -20px; }
+  top: 27px;
+  right: -41px; }
   .scheduler-modal-body .scheduler-tags .tooltip-position .more-icon {
     width: 24px;
     height: 24px;
     fill: #439dd3; }
+
+.scheduler-modal-body .scheduler-tags .comma-separated-icon {
+  position: absolute;
+  top: 33px;
+  right: -9px; }
 
 .scheduler-modal-body .scheduler-webhooks .webhooks {
   display: flex;
@@ -6628,6 +6693,9 @@ disabled look for disabled choices in the results dropdown
 
 .scheduler-modal-body label.disabled i {
   opacity: 0.5; }
+
+.scheduler-modal-body .scheduler-label-comments {
+  margin-top: 10px; }
 
 .scheduler-footer .cancel-job-icon {
   color: #ED5565; }
@@ -6852,6 +6920,15 @@ disabled look for disabled choices in the results dropdown
     fill: #439dd3; }
   .report-management .filters .flair-checkbox .checkbox-icon {
     vertical-align: 6px; }
+  .report-management .filters-row {
+    display: flex;
+    margin-left: 0px;
+    margin-bottom: 5px; }
+    .report-management .filters-row .filters-box {
+      outline: none; }
+      .report-management .filters-row .filters-box .flaticons-filter {
+        width: 22px;
+        height: 22px; }
 
 .report-actions svg {
   width: 19px;
@@ -7049,3 +7126,63 @@ disabled look for disabled choices in the results dropdown
     height: 50px;
     margin-top: 24px;
     margin-right: 7px; }
+
+.ng-pageslide {
+  background: #eee; }
+
+body.ng-pageslide-body-open::before {
+  content: '.';
+  display: block;
+  position: absolute;
+  top: 0;
+  background-color: black;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0.5;
+  transition: opacity 1s;
+  opacity: 0.5;
+  pointer-events: all; }
+
+body.ng-pageslide-body-closed::before {
+  transition: opacity 1s;
+  content: '.';
+  display: block;
+  position: absolute;
+  top: 0;
+  background-color: black;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none; }
+
+.reports-filters-slider .user-name {
+  margin-left: 0.5vw;
+  margin-bottom: 5px; }
+
+.reports-filters-slider .report-name {
+  height: 34px; }
+
+.client-logo-body .logo-upload-inner {
+  border: 1px dashed #439dd3;
+  border-radius: 8px 8px;
+  padding: 15px 0;
+  text-align: center; }
+
+.client-logo-body .client-logo {
+  margin-left: auto;
+  margin-right: auto;
+  width: 9%; }
+
+.client-logo-body .logo-row {
+  margin: 0px; }
+  .client-logo-body .logo-row .remove-logo {
+    color: #439dd3; }
+
+.client-logo-body .logo-display-container {
+  max-height: 100px;
+  width: 100%;
+  margin-bottom: 32px; }

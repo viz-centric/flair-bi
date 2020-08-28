@@ -1,0 +1,23 @@
+{
+    "flairbiApp": {
+        "clientLogo" : {
+            "home": {
+                "title": "Client Logos",
+                "createLabel": "Skapa en ny Client Logo",
+                "createOrEditLabel": "Skapa eller ändra en Client Logo"
+            },
+            "created": "En ny Client Logo är skapad med id {{ param }}",
+            "updated": "En Client Logo är uppdaterad med id  {{ param }}",
+            "deleted": "En Client Logo är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Client Logo {{ id }}?"
+            },
+            "detail": {
+                "title": "Client Logo"
+            },
+            "name": "Name",
+            "url": "Url",
+            "imageContentType": "Image Content Type"
+        }
+    }
+}

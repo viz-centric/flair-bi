@@ -34,17 +34,6 @@
           
         }
     }
-    .comma-separated{
-        .comma-separated-on{
-            color: $primary-color;
-            outline: none;
-        }
-        .comma-separated-off{
-            color: $flair-text;
-            outline: none;
-        }
-    }
-    
 }
 
 .user-management-table{
@@ -55,5 +44,17 @@
     .click-here-dc-icon{
         color: $primary-color;
         font-size: 1.5em;
+    }
+    #searchclear {
+        position: absolute;
+        top: -1px;
+        bottom: 0;
+        height: 14px;
+        margin: auto;
+        font-size: 14px;
+        cursor: pointer;
+        color: $primary-color;
+        left: 186px;
+        outline: none;
     }
 }

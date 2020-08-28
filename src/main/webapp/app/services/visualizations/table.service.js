@@ -9,16 +9,19 @@
 
     function GenerateTable(VisualizationUtils, $rootScope, D3Utils, filterParametersService) {
         return {
-            build: function (record, element, panel, isNotification) {
-                if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
-                    element.css({
-                        'display': 'flex',
-                        'align-items': 'center',
-                        'justify-content': 'center'
-                    });
-                    element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
-                    return;
+            build: function (record, element, panel, isNotification, isIframe) {
+                if ($rootScope.activePage.activePageNo === 0) {
+                    if ((!record.data) || ((record.data instanceof Array) && (!record.data.length))) {
+                        element.css({
+                            'display': 'flex',
+                            'align-items': 'center',
+                            'justify-content': 'center'
+                        });
+                        element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
+                        return;
+                    }
                 }
+
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -115,7 +118,7 @@
 
                     return table;
                 }
-                if (isNotification) {
+                 if (isNotification || isIframe) {
                     createChart();
                 }
                 else {

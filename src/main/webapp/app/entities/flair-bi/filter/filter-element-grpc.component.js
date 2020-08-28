@@ -12,13 +12,15 @@
                 view: '=',
                 dimensions: '=',
                 tab: '=',
-                list: '='
+                list: '=',
+                separator: '=',
+                iframes: '='
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -37,7 +39,7 @@
         vm.activeForText = "disable";
         vm.isCommaSeparatedInput = false;
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
-
+        vm.lastQuery = {};
         ////////////////
 
         function activate() {
@@ -72,6 +74,7 @@
                             return item[dimensionName];
                         });
                         vm.list[dimensionName] = retVal;
+                        setSelectedFilter(vm.list[dimensionName]);
                     }
                 }
             );
@@ -117,8 +120,12 @@
             };
             filterParametersService.saveSelectedFilter(filterParameters);
             vm.isActive(filter);
+            vm.searchText = "";
+            vm.load(vm.searchText, vm.dimension)
+
             if (isFavouriteFilter())
-                displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+                vm.list[vm.dimension.name] = displaySelectedFilterAtTop(vm.list[vm.dimension.name], vm.list[vm.dimension.name].indexOf(filter), filterParameters[vm.dimension.name].length - 1);
+
 
 
         }/////
@@ -250,28 +257,34 @@
             var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{ name: dimension.name }];
-            if (q) {
-                query.conditionExpressions = [{
-                    sourceType: 'FILTER',
-                    conditionExpression: {
-                        '@type': 'Like',
-                        featureType: { featureName: dimension.name, type: dimension.type },
-                        caseInsensitive: true,
-                        value: q
-                    }
-                }];
+            if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q) || q === "") {
+                if (q) {
+                    query.conditionExpressions = [{
+                        sourceType: 'FILTER',
+                        conditionExpression: {
+                            '@type': 'Like',
+                            featureType: { featureName: dimension.name, type: dimension.type },
+                            caseInsensitive: true,
+                            value: q
+                        }
+                    }];
+                }
+                query.distinct = true;
+                query.limit = 100;
+                favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
+                proxyGrpcService.forwardCall(
+                    vm.view.viewDashboard.dashboardDatasource.id, {
+                    queryDTO: query,
+                    vId: vId,
+                    type: $stateParams.id ? 'filters' : 'share-link-filter'
+                },
+                    $stateParams.id ? $stateParams.id : $stateParams.viewId
+                );
+
+                vm.lastQuery.filterKey=q;
+                vm.lastQuery.filterDimension=dimension.id;
             }
-            query.distinct = true;
-            query.limit = 100;
-            favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
-            proxyGrpcService.forwardCall(
-                vm.view.viewDashboard.dashboardDatasource.id, {
-                queryDTO: query,
-                vId: vId,
-                type : $stateParams.id ? 'filters' : 'share-link-filter'
-            },
-                $stateParams.id ? $stateParams.id : $stateParams.viewId
-            );
+
         }
 
         function isFavouriteFilter() {
@@ -310,7 +323,7 @@
         function refresh() {
             var myFilters = filterParametersService.get()[vm.dimension.name] || filterParametersService.get()[vm.dimension.name.toLowerCase()];
             if (myFilters && myFilters.length > 0) {
-                if(!filterParametersService.isDateType(vm.dimension)){
+                if(myFilters._meta.valueType !== "dateRangeValueType"){
                     vm.dimension.selected = myFilters.map(function (item) {
                         var newItem = {};
                         newItem['text'] = item;
@@ -328,6 +341,23 @@
                     vm.dimension.selected2 = [];
                 }
             }
+            if(myFilters){
+                addFilterInIframeURL();
+            }
+            
+        }
+
+        function addFilterInIframeURL() {
+            Views.getCurrentEditState({
+                id: $stateParams.id
+            },
+                function (result, headers) {
+                    vm.iFrames = result.visualMetadataSet.filter(function (item) {
+                        return item.metadataVisual.name === IFRAME.iframe;
+                    })
+                    filterParametersService.setFilterInIframeURL(vm.iframes, vm.dimension);
+                }
+            );
         }
 
         function added(tag) {
@@ -369,13 +399,28 @@
             return arr;
         }
 
+        function setSelectedFilter() {
+            var filterParameters = filterParametersService.getSelectedFilter()[vm.dimension.name]
+            if (filterParameters) {
+                if (vm.list[vm.dimension.name] && vm.list[vm.dimension.name]) {
+                    var selectedFilter = vm.list[vm.dimension.name].filter(function (item) {
+                        return filterParameters.indexOf(item) !== -1
+                    })
+                    var unSelectedFilter = vm.list[vm.dimension.name].filter(function (item) {
+                        return filterParameters.indexOf(item) === -1
+                    })
+                    vm.list[vm.dimension.name] = selectedFilter.concat(unSelectedFilter);
+                } 
+            }
+        }
+
         function displayTextboxForValues(dimension) {
             vm.filterDimension = dimension;
             vm.isCommaSeparatedInput = !vm.isCommaSeparatedInput;
             if(vm.dimension.selected && vm.dimension.selected.length>0){
                 vm.dimension.commaSeparatedValues = vm.dimension.selected.map(function(elem){
                     return elem.text;
-                }).join(",");
+                }).join(getSeparator());
             }
             vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         }
@@ -386,7 +431,7 @@
                 vm.dimension.selected = [];
                 var filterParameters = filterParametersService.getSelectedFilter();
                 filterParameters[vm.dimension.name] = [];
-                var getList = vm.dimension.commaSeparatedValues.split(',');
+                var getList = vm.dimension.commaSeparatedValues.split(getSeparator());
                 getList = getList.filter((item, i, ar) => ar.indexOf(item) === i);
                 getList.forEach(element => {
                     added({ text: element });
@@ -394,6 +439,10 @@
                 });
                 vm.commaSeparatedToolTip =  VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
             }
+        }
+
+        function getSeparator(){
+            return vm.separator ? vm.separator.value : ",";
         }
     }
 })();

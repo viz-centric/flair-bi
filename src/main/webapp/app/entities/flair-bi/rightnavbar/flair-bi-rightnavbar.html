@@ -441,7 +441,7 @@
                                     </div>
                                     <div class="resource-list" dnd-draggable="vm.getSelectedItem(dimension)"
                                         dnd-moved="vm.features.splice($index, 1)" dnd-effect-allowed="move"
-                                        ng-repeat="dimension in vm.features | filter: {featureType: 'DIMENSION'} | filter: {name: searchDimention} ">
+                                        ng-repeat="dimension in vm.features | orderBy: 'name' | filter: {featureType: 'DIMENSION'} | filter: {name: searchDimention}">
                                         <div class="list-group-item">
                                             <span uib-tooltip="Drag and Drop into Visualization"
                                                 tooltip-placement="right"><i class="fa fa-arrows-alt"></i></span>
@@ -484,7 +484,7 @@
                                         dnd-moved="vm.features.splice($index, 1)" dnd-effect-allowed="move"
                                         dnd-selected="vm.selected = measure"
                                         ng-class="{'selected': vm.selected === measure}"
-                                        ng-repeat="measure in vm.features | filter: {featureType: 'MEASURE'} | filter: {name: searchMeasure}">
+                                        ng-repeat="measure in vm.features | orderBy: 'name' | filter: {featureType: 'MEASURE'} | filter: {name: searchMeasure}">
                                         <div class="list-group-item" href>
                                             <span uib-tooltip="Drag and Drop into chart" tooltip-placement="right"><i
                                                     class="fa fa-arrows-alt"></i></span>
@@ -544,11 +544,11 @@
             </div>
 
             <div ng-show="vm.sideBarTab == 'applied-filters'">
-                <filter-pane-component view="vm.view" dimensions="vm.appliedFiltersDimensions" type="Applied Filters" tab="vm.sideBarTab"></filter-pane-component>
+                <filter-pane-component iframes="vm.iFrames" view="vm.view" dimensions="vm.appliedFiltersDimensions" type="Applied Filters" tab="vm.sideBarTab"></filter-pane-component>
             </div>
 
             <div ng-show="vm.sideBarTab == 'widgets'">
-                <filter-pane-component view="vm.view" dimensions="vm.favouriteDimensions" type="Favourite Filters" tab="vm.sideBarTab"></filter-pane-component>
+                <filter-pane-component iframes="vm.iFrames" view="vm.view" dimensions="vm.favouriteDimensions" type="Favourite Filters" tab="vm.sideBarTab"></filter-pane-component>
             </div>
 
             <div class="properties-sidebar" ng-show="vm.sideBarTab == 'properties'">

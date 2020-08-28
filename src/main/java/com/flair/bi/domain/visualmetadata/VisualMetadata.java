@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotNull;
 
+import com.flair.bi.domain.DashboardProperties;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -85,6 +86,14 @@ public class VisualMetadata extends AbstractAuditingEntity implements Serializab
         @AttributeOverride(name = "opacity", column = @Column(name = "body_opacity"))
     })
     private BodyProperties bodyProperties;
+
+    @Embedded
+    @AttributeOverrides(value = {
+            @AttributeOverride(name = "dashboardName", column = @Column(name = "dashboard_name")),
+            @AttributeOverride(name = "viewName", column = @Column(name = "view_name")),
+            @AttributeOverride(name = "buildUrl", column = @Column(name = "build_url"))
+    })
+    private DashboardProperties dashboardProperties;
 
     @NotNull
     private Visualization metadataVisual;

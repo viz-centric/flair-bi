@@ -152,6 +152,14 @@
                         <div class="form-group">
                             <input type="search"
                                    name="search"
+                                   ng-if="vm.tabIndex === 0"
+                                   id="search-datasource-view"
+                                   class="form-control"
+                                   placeholder="Search Views"
+                                   ng-model="vm.searchCriteria">
+                            <input type="search"
+                                   name="search"
+                                   ng-if="vm.tabIndex === 1"
                                    id="search-datasource-view"
                                    class="form-control"
                                    placeholder="Search Datasources"
@@ -162,6 +170,10 @@
                         <button class="btn btn-primary" type="submit" ng-click="vm.onSearchClick()">
                             <span class="glyphicon glyphicon-search"></span>
                             Search
+                        </button>
+                        &nbsp;
+                        <button class="btn btn-default" type="submit" ng-click="vm.onClearClick()">
+                            Clear
                         </button>
                     </div>
                 </div>

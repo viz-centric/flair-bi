@@ -1,7 +1,6 @@
 package com.flair.bi.service.dto.scheduler;
 
 import com.project.bi.query.dto.QueryDTO;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +17,7 @@ public class SchedulerDTO {
 	private QueryDTO queryDTO;
 	private boolean putcall;
 	private boolean emailReporter;
+	private Long dashboardId;
 
 	public SchedulerDTO() {
 	}
@@ -101,7 +101,14 @@ public class SchedulerDTO {
 	public String toString() {
 		return "SchedulerDTO [datasourceid=" + datasourceid + ", report=" + report + ", report_line_item="
 				+ report_line_item + ", assign_report=" + assign_report + ", schedule=" + schedule + ", queryDTO="
-				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + "]";
+				+ queryDTO + ", putcall=" + putcall + ", emailReporter=" + emailReporter + ", dashboardId=" + dashboardId + "]";
 	}
 
+	public Long getDashboardId() {
+		return dashboardId;
+	}
+
+	public void setDashboardId(Long dashboardId) {
+		this.dashboardId = dashboardId;
+	}
 }

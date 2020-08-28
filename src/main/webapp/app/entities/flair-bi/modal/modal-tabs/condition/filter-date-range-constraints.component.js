@@ -72,6 +72,19 @@
             return null;
         }
 
+        function getStartDateRangeTimeUnit() {
+            var config = vm.currentDynamicDateRangeConfig;
+            if (!config) {
+                return null;
+            }
+            if (config.toDate) {
+                return null;
+            } else if (config.isCustom && config.startDay) {
+                return "'" + config.startDayUnit + "'";
+            }
+            return null;
+        }
+
         function adjustStartDateRangeInterval() {
             var config = vm.currentDynamicDateRangeConfig;
             if (!config) {
@@ -128,7 +141,8 @@
                     if (!startDateRangeInterval) {
                         return;
                     }
-                    startDate = "__FLAIR_INTERVAL_OPERATION(NOW(), '-', '" + startDateRangeInterval + "')";
+                    var timeUnit = getStartDateRangeTimeUnit() || '';
+                    startDate = "__FLAIR_INTERVAL_OPERATION(NOW(" + timeUnit + "), '-', '" + startDateRangeInterval + "')";
                     var adjustedDate = adjustStartDateRangeInterval();
                     startDateFormatted = formatDate(resetTimezone(startOfDay(adjustedDate)));
                 }

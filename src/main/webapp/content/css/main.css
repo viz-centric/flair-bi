@@ -4876,6 +4876,12 @@ jhi-alert .alerts .alert-danger {
 #shareLink .dashboard-text {
   color: #1c84c6; }
 
+#shareLink #slider {
+  margin-right: 0px !important;
+  margin-top: 25px !important;
+  min-width: 250px !important;
+  top: 25px; }
+
 .field-properties .property-header {
   border-bottom: 1px solid #e5e6e7;
   padding: 12px 15px;

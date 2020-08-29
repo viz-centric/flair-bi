@@ -9,7 +9,6 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
@@ -21,7 +20,6 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.querydsl.core.types.Predicate;
-
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -79,8 +77,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserResource {
 
-    private final UserRepository userRepository;
-
     private final MailService mailService;
 
     private final UserService userService;
@@ -111,11 +107,11 @@ public class UserResource {
         log.debug("REST request to save User : {}", managedUserVM);
 
         //Lowercase the user login before comparing with database
-        if (userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
+        if (userService.getUserByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert("userManagement", "userexists", "Login already in use"))
                 .body(null);
-        } else if (userRepository.findOneByEmail(managedUserVM.getEmail()).isPresent()) {
+        } else if (userService.getUserByEmail(managedUserVM.getEmail()).isPresent()) {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "Email already in use"))
                 .body(null);
@@ -140,11 +136,11 @@ public class UserResource {
     @Timed
     public ResponseEntity<ManagedUserVM> updateUser(@RequestBody ManagedUserVM managedUserVM) {
         log.debug("REST request to update User : {}", managedUserVM);
-        Optional<User> existingUser = userRepository.findOneByEmail(managedUserVM.getEmail());
+        Optional<User> existingUser = userService.getUserByEmail(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "E-mail already in use")).body(null);
         }
-        existingUser = userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase());
+        existingUser = userService.getUserByLogin(managedUserVM.getLogin().toLowerCase());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "userexists", "Login already in use")).body(null);
         }

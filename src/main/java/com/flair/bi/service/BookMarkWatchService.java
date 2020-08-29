@@ -1,19 +1,5 @@
 package com.flair.bi.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
@@ -22,12 +8,23 @@ import com.flair.bi.domain.bookmarkwatch.BookmarkWatchId;
 import com.flair.bi.domain.bookmarkwatch.QBookmarkWatch;
 import com.flair.bi.repository.BookmarkWatchRepository;
 import com.flair.bi.repository.FeatureBookmarkRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.querydsl.core.types.Predicate;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -35,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BookMarkWatchService {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final BookmarkWatchRepository bookmarkWatchRepository;
 
@@ -53,7 +50,7 @@ public class BookMarkWatchService {
 		if (null == login || null == view || null == bookmarkId) {
 			return;
 		}
-		Optional<User> user = userRepository.findOneByLogin(login);
+		Optional<User> user = userService.getUserByLogin(login);
 
 		BookmarkWatchId id = user.map(x -> {
 			BookmarkWatchId bookmarkWatchId = new BookmarkWatchId();

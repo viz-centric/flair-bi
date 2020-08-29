@@ -1,15 +1,24 @@
 package com.flair.bi.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.flair.bi.config.Constants;
+import com.flair.bi.domain.QUser;
+import com.flair.bi.domain.Realm;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.repository.PersistentTokenRepository;
+import com.flair.bi.repository.UserRepository;
+import com.flair.bi.repository.security.UserGroupRepository;
+import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.dto.UserBasicDTO;
+import com.flair.bi.service.util.RandomUtil;
+import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,30 +29,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.Realm;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.PersistentTokenRepository;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
-import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.util.RandomUtil;
-import com.flair.bi.web.rest.vm.ManagedUserVM;
-import com.google.common.collect.ImmutableSet;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -239,6 +226,11 @@ public class UserService {
 	}
 
 	@Transactional(readOnly = true)
+	public Optional<User> getUserByLogin(String login) {
+		return userRepository.findOneByLogin(login);
+	}
+
+	@Transactional(readOnly = true)
 	public User getUserWithAuthoritiesByLoginOrError(String login) {
 		return getUserWithAuthoritiesByLogin(login).orElseThrow(RuntimeException::new);
 	}
@@ -276,6 +268,15 @@ public class UserService {
 		Page<User> users = userRepository.findAll(booleanBuilder, pageable);
 		users.getContent().forEach(x -> x.retrieveAllUserPermissions().size());
 		return users;
+	}
+
+	@Transactional(readOnly = true)
+	public List<User> findAllWithAuthorities(Predicate predicate) {
+		User user = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		Long realmId = user.getRealm().getId();
+		Iterable<User> users = userRepository.findAll(QUser.user.realm.id.eq(realmId).and(predicate));
+		users.forEach(x -> x.retrieveAllUserPermissions().size());
+		return ImmutableList.copyOf(users);
 	}
 
 	public UserBasicDTO getUserNameByEmail(String email) {
@@ -335,4 +336,20 @@ public class UserService {
 		}
 	}
 
+	public void saveUser(User user) {
+		userRepository.save(user);
+	}
+
+	public void saveAllUsers(Iterable<User> users) {
+		userRepository.saveAll(users);
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<User> getUserByEmail(String email) {
+		return userRepository.findOneByEmail(email);
+	}
+
+	public void deleteAllByRealmId(Long realmId) {
+		userRepository.deleteAllByRealmId(realmId);
+	}
 }

@@ -8,7 +8,6 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.repository.DatasourceRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.querydsl.core.BooleanBuilder;
@@ -39,7 +38,7 @@ public class DatasourceServiceImpl implements DatasourceService {
 
     private final DatasourceRepository datasourceRepository;
     private final AccessControlManager accessControlManager;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * Save a datasource.
@@ -175,7 +174,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     }
 
     private BooleanExpression hasUserPermissions() {
-        final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
         final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
         final Set<Permission> permissions = user
                 .getPermissionsByActionAndPermissionType(Collections.singletonList(Action.READ), "DATASOURCE");

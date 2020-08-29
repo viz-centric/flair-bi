@@ -9,9 +9,9 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
+import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.UserResourceIntTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class AccessControlManagerImplTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserGroupRepository userGroupRepository;
+    UserGroupService userGroupService;
     @Autowired
     PermissionRepository permissionRepository;
     @Autowired
@@ -61,7 +61,7 @@ public class AccessControlManagerImplTest {
 
     @Before
     public void setup() {
-        accessControlManager = new AccessControlManagerImpl(userRepository, userGroupRepository, permissionRepository,
+        accessControlManager = new AccessControlManagerImpl(userRepository, userGroupService, permissionRepository,
                 permissionEdgeRepository);
     }
 
@@ -508,18 +508,18 @@ public class AccessControlManagerImplTest {
         UserGroup test = new UserGroup();
 
         test.setName("test");
-        userGroupRepository.save(test);
+        userGroupService.save(test);
         accessControlManager.addPermissions(a);
         accessControlManager.assignPermission("test", new Permission("test", Action.READ, "b"));
 
         // assert that user group has permissions
-        Assert.assertTrue(userGroupRepository.getOne("test").getPermissions()
+        Assert.assertTrue(userGroupService.findOne("test").getPermissions()
                 .contains(new Permission("test", Action.READ, "b")));
 
         accessControlManager.dissociatePermission("test", new Permission("test", Action.READ, "b"));
 
         // assert that user group does not have a permission
-        Assert.assertFalse(userGroupRepository.getOne("test").getPermissions()
+        Assert.assertFalse(userGroupService.findOne("test").getPermissions()
                 .contains(new Permission("test", Action.READ, "b")));
     }
 

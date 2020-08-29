@@ -17,7 +17,6 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.querydsl.core.types.Predicate;
-
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +70,7 @@ public class UserGroupResource {
     @PostMapping("/userGroups")
     @Timed
     public ResponseEntity<UserGroup> createUserGroup(@Valid @RequestBody UserGroup userGroup) throws URISyntaxException {
-
-        if (null != userGroupService.findOne(userGroup.getName())) {
+        if (userGroupService.exists(userGroup)) {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil
                     .createFailureAlert(ENTITY_NAME,

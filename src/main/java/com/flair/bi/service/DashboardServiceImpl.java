@@ -1,25 +1,5 @@
 package com.flair.bi.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
@@ -33,16 +13,32 @@ import com.flair.bi.domain.security.Permission;
 import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.DashboardReleaseRepository;
 import com.flair.bi.repository.DashboardRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.errors.ErrorConstants;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Dashboard.
@@ -55,7 +51,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 	private final DashboardRepository dashboardRepository;
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final AccessControlManager accessControlManager;
 
@@ -185,7 +181,7 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	private Predicate userHasPermission() {
-		final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+		final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 		final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
 		// retrieve all dashboard permissions that we have 'READ' permission
 		final Set<Permission> permissions = user.getPermissionsByActionAndPermissionType(

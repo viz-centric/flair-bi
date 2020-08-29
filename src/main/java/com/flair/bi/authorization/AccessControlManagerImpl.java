@@ -10,11 +10,11 @@ import com.flair.bi.domain.security.QPermission;
 import com.flair.bi.domain.security.QPermissionEdge;
 import com.flair.bi.domain.security.QUserGroup;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.security.PermissionGrantedAuthority;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Transactional
 class AccessControlManagerImpl implements AccessControlManager {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final UserGroupService userGroupService;
 
@@ -72,7 +72,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	@Override
 	public boolean hasAccess(String login, Permission permission) {
 		log.debug("Checking access for {}", permission);
-		Optional<User> user = userRepository.findOneByLogin(login);
+		Optional<User> user = userService.getUserByLogin(login);
 
 		return user.map(User::retrieveAllUserPermissions).map(x -> x.stream().anyMatch(y -> y.equals(permission)))
 				.orElse(false);
@@ -143,9 +143,9 @@ class AccessControlManagerImpl implements AccessControlManager {
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
-		userRepository.findOneByLogin(login).ifPresent(x -> {
+		userService.getUserByLogin(login).ifPresent(x -> {
 			x.addPermissions(perms);
-			userRepository.save(x);
+			userService.saveUser(x);
 		});
 
 		// if we're granting access to authenticated user we must add permissions to him
@@ -255,9 +255,9 @@ class AccessControlManagerImpl implements AccessControlManager {
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
-		userRepository.findOneByLogin(login).ifPresent(x -> {
+		userService.getUserByLogin(login).ifPresent(x -> {
 			x.removePermissions(perms);
-			userRepository.save(x);
+			userService.saveUser(x);
 		});
 	}
 
@@ -393,8 +393,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 *                   user groups
 	 */
 	private void updatePermissionState(final Permission criteria, final Permission permission, boolean add) {
-
-		Iterable<User> it = userRepository.findAll(QUser.user.permissions.contains(criteria));
+		Iterable<User> it = userService.findAllWithAuthorities(QUser.user.permissions.contains(criteria));
 		Iterable<UserGroup> userGroups = userGroupService
 				.findAll(QUserGroup.userGroup.permissions.contains(criteria));
 		if (add) {
@@ -404,7 +403,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 			it.forEach(x -> x.getPermissions().remove(permission));
 			userGroups.forEach(x -> x.getPermissions().remove(permission));
 		}
-		userRepository.saveAll(it);
+		userService.saveAllUsers(it);
 		userGroupService.saveAll(userGroups);
 	}
 

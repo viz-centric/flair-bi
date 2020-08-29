@@ -10,10 +10,10 @@ import com.flair.bi.domain.ViewState;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.BookMarkWatchService;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.ViewWatchService;
 import com.flair.bi.view.export.ViewExportDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
@@ -53,7 +53,7 @@ class ViewServiceImpl implements ViewService {
 
 	private final ViewRepository viewRepository;
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
@@ -175,7 +175,7 @@ class ViewServiceImpl implements ViewService {
 	}
 
 	private BooleanExpression userHasPermission() {
-		final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+		final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 		final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
 		// retrieve all view permissions that we have 'READ' permission or
 		// 'READ_PUBLISHED'

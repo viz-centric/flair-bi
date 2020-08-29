@@ -6,7 +6,6 @@ import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.security.SecurityUtils;
@@ -40,8 +39,6 @@ import java.util.List;
 public class AccessControlManagerImplTest {
 
     @Autowired
-    UserRepository userRepository;
-    @Autowired
     UserGroupService userGroupService;
     @Autowired
     PermissionRepository permissionRepository;
@@ -61,7 +58,7 @@ public class AccessControlManagerImplTest {
 
     @Before
     public void setup() {
-        accessControlManager = new AccessControlManagerImpl(userRepository, userGroupService, permissionRepository,
+        accessControlManager = new AccessControlManagerImpl(userService, userGroupService, permissionRepository,
                 permissionEdgeRepository);
     }
 
@@ -457,20 +454,20 @@ public class AccessControlManagerImplTest {
         test.setLogin("test");
         test.setPassword(passwordEncoder.encode("test"));
         test.setActivated(true);
-        userRepository.save(test);
+        userService.saveUser(test);
 
         accessControlManager.addPermissions(a);
 
         accessControlManager.grantAccess("test", "test", Action.READ, "a");
 
         // assert that user has
-        Assert.assertTrue(userRepository.findOneByLogin("test").map(User::getPermissions).orElse(Collections.emptySet())
+        Assert.assertTrue(userService.getUserByLogin("test").map(User::getPermissions).orElse(Collections.emptySet())
                 .contains(new Permission("test", Action.READ, "a")));
 
         accessControlManager.revokeAccess("test", "test", Action.READ, "a");
 
         // assert that user has
-        Assert.assertFalse(userRepository.findOneByLogin("test").map(User::getPermissions)
+        Assert.assertFalse(userService.getUserByLogin("test").map(User::getPermissions)
                 .orElse(Collections.emptySet()).contains(new Permission("test", Action.READ, "a")));
 
     }

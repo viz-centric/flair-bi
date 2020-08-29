@@ -7,9 +7,9 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.FunctionsRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.VisualizationColorsRepository;
 import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class RealmProcessorService {
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserGroupService userGroupService;
     private final PasswordEncoder passwordEncoder;
     private final FunctionsRepository functionsRepository;
@@ -33,7 +33,7 @@ public class RealmProcessorService {
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         UserGroup userGroup = userGroupService.save(createUserGroup(realm));
-        userRepository.save(createUser(realm,userGroup));
+        userService.saveUser(createUser(realm,userGroup));
         functionsRepository.saveAll(buildFunctionsList(realm,vizcentricId));
         visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm,vizcentricId));
     }
@@ -42,7 +42,7 @@ public class RealmProcessorService {
         // TODO
         visualizationColorsRepository.deleteByRealmId(id);
         functionsRepository.deleteByRealmId(id);
-        userRepository.deleteByRealmId(id);
+        userService.deleteAllByRealmId(id);
     }
 
     private User createUser(Realm realm,UserGroup userGroup){

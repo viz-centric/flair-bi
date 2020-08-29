@@ -1,12 +1,11 @@
 package com.flair.bi.security;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.flair.bi.config.Constants;
+import com.flair.bi.domain.ExternalUser;
+import com.flair.bi.domain.User;
+import com.flair.bi.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,14 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.ExternalUser;
-import com.flair.bi.domain.User;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.service.UserService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 /**
  * An instance of this class will be created and onAuthenticationSuccess method
@@ -38,8 +34,6 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 	private final UserService userService;
 
-	private final UserRepository userRepository;
-
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
@@ -49,7 +43,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof ExternalUser) {
 			ExternalUser externalUser = (ExternalUser) SecurityContextHolder.getContext().getAuthentication()
 					.getPrincipal();
-			Optional<User> user = userRepository.findOneByEmail(externalUser.getEmail());
+			Optional<User> user = userService.getUserByEmail(externalUser.getEmail());
 			if (!user.isPresent()) {
 				log.info("-------------User is not found in application database. -> replicating the user :"
 						+ externalUser.getUsername());

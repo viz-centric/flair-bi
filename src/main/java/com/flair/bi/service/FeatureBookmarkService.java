@@ -1,22 +1,19 @@
 package com.flair.bi.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.QFeatureBookmark;
 import com.flair.bi.repository.FeatureBookmarkRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing FeatureBookmark.
@@ -29,7 +26,7 @@ public class FeatureBookmarkService {
 
 	private final FeatureBookmarkRepository featureBookmarkRepository;
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final BookMarkWatchService bookMarkWatchService;
 
@@ -49,7 +46,7 @@ public class FeatureBookmarkService {
 				return x;
 			}).map(featureBookmarkRepository::save).orElseThrow(EntityNotFoundException::new);
 		} else {
-			return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).map(x -> {
+			return userService.getUserByLogin(SecurityUtils.getCurrentUserLogin()).map(x -> {
 				featureBookmark.setUser(x);
 				if (featureBookmark.getFeatureCriteria() != null) {
 					featureBookmark.getFeatureCriteria().forEach(y -> y.setFeatureBookmark(featureBookmark));

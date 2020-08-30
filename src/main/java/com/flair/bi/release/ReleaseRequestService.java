@@ -1,11 +1,11 @@
 package com.flair.bi.release;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.flair.bi.domain.Release;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.service.dto.ReleasesAlertsDTO;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Service responsible for handling and managing Releases and release requests
@@ -93,4 +93,5 @@ public interface ReleaseRequestService {
 
 	int getOlderReleasedCount();
 
+    ReleaseRequest save(ReleaseRequest request);
 }

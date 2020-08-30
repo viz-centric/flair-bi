@@ -6,9 +6,9 @@ import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.FunctionsRepository;
 import com.flair.bi.repository.VisualizationColorsRepository;
 import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.service.FunctionsService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +28,20 @@ public class RealmProcessorService {
     private final UserService userService;
     private final UserGroupService userGroupService;
     private final PasswordEncoder passwordEncoder;
-    private final FunctionsRepository functionsRepository;
+    private final FunctionsService functionsService;
     private final VisualizationColorsRepository visualizationColorsRepository;
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         UserGroup userGroup = userGroupService.save(createUserGroup(realm));
         userService.saveUser(createUser(realm,userGroup));
-        functionsRepository.saveAll(buildFunctionsList(realm,vizcentricId));
+        functionsService.saveAll(buildFunctionsList(realm,vizcentricId));
         visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm,vizcentricId));
     }
 
     public void deleteRealmDependentRecords(Long id){
         // TODO
         visualizationColorsRepository.deleteByRealmId(id);
-        functionsRepository.deleteByRealmId(id);
+        functionsService.deleteByRealmId(id);
         userService.deleteAllByRealmId(id);
     }
 
@@ -76,7 +76,7 @@ public class RealmProcessorService {
     }
 
     private List<Functions> buildFunctionsList(Realm realm, Long vizcentricId){
-        List<Functions> functions = functionsRepository.findByRealmId(vizcentricId)
+        List<Functions> functions = functionsService.findByRealmId(vizcentricId)
                 .stream()
                 .map(f -> {
                     Functions function = new Functions();

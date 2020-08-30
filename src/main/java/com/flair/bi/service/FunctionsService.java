@@ -1,8 +1,9 @@
 package com.flair.bi.service;
 
-import java.util.List;
-
+import com.flair.bi.domain.Functions;
 import com.flair.bi.service.dto.FunctionsDTO;
+
+import java.util.List;
 
 /**
  * Service Interface for managing Functions.
@@ -38,4 +39,10 @@ public interface FunctionsService {
 	 * @param id the id of the entity
 	 */
 	void delete(Long id);
+
+    void saveAll(List<Functions> functions);
+
+	void deleteByRealmId(Long realmId);
+
+	List<Functions> findByRealmId(Long realmId);
 }

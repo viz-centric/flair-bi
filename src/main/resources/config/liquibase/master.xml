@@ -105,5 +105,6 @@
     <include file="config/liquibase/changelog/20200820125700_added_realm_constraints.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20200825125700_remove_user_group.xml" relativeToChangelogFile="false" />
 
+    <include file="config/liquibase/changelog/20200830023012_realm-permissions.xml" relativeToChangelogFile="false" />
 </databaseChangeLog>
 <!--@formatter:on-->

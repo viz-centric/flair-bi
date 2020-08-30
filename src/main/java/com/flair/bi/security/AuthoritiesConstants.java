@@ -1,13 +1,15 @@
 package com.flair.bi.security;
 
-import java.util.Set;
-
 import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
 
 /**
  * Constants for Spring Security authorities.
  */
 public final class AuthoritiesConstants {
+
+	public static final String SUPERADMIN = "ROLE_SUPERADMIN";
 
 	public static final String ADMIN = "ROLE_ADMIN";
 
@@ -17,5 +19,5 @@ public final class AuthoritiesConstants {
 
 	public static final String DEVELOPER = "ROLE_DEVELOPER";
 
-	public static final Set<String> ALL = ImmutableSet.of(ADMIN, USER, ANONYMOUS, DEVELOPER);
+	public static final Set<String> ALL = ImmutableSet.of(SUPERADMIN, ADMIN, USER, ANONYMOUS, DEVELOPER);
 }

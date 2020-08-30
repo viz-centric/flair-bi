@@ -99,6 +99,17 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/v2/api-docs/**").permitAll().antMatchers("/swagger-resources/configuration/ui")
 				.permitAll()
 
+				// REALM MANAGEMENT
+				.antMatchers(HttpMethod.GET, "/api/realm/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
+				.antMatchers(HttpMethod.POST, "/api/realm/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
+				.antMatchers(HttpMethod.PUT, "/api/realm/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'UPDATE', 'APPLICATION')")
+				.antMatchers(HttpMethod.DELETE, "/api/realm/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE', 'APPLICATION')")
+
+
 				// USER MANAGEMENT
 				.antMatchers(HttpMethod.GET, "/api/users/**")
 				.access("@accessControlManager.hasAccess('USER-MANAGEMENT', 'READ', 'APPLICATION')")

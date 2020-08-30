@@ -1,5 +1,15 @@
 package com.flair.bi.view;
 
+import com.flair.bi.domain.View;
+import com.flair.bi.domain.ViewState;
+import com.flair.bi.domain.listeners.VisualMetadataListener;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,20 +17,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.flair.bi.domain.QView;
-import com.flair.bi.domain.View;
-import com.flair.bi.domain.ViewState;
-import com.flair.bi.domain.listeners.VisualMetadataListener;
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.ViewRepository;
-import com.flair.bi.web.rest.errors.EntityNotFoundException;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for managing VisualMetadata.
@@ -31,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 class VisualMetadataServiceImpl implements VisualMetadataService {
 
-	private final ViewRepository viewRepository;
+	private final ViewService viewService;
 
 	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
@@ -47,7 +43,7 @@ class VisualMetadataServiceImpl implements VisualMetadataService {
 		boolean create = null == visualMetadata.getId();
 		VisualMetadataListener.addParents(visualMetadata);
 
-		View view = viewRepository.getOne(viewId);
+		View view = viewService.findOne(viewId);
 
 		ViewState currentEditingViewState = viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
 		view.setCurrentEditingState(currentEditingViewState);
@@ -79,7 +75,7 @@ class VisualMetadataServiceImpl implements VisualMetadataService {
 	 */
 	@Override
 	public List<VisualMetadata> findAllByPrincipalPermissionsByViewId(Serializable viewId) {
-		View view = viewRepository.getOne(Long.parseLong(viewId.toString()));
+		View view = viewService.findOne(Long.parseLong(viewId.toString()));
 		return new ArrayList<>(
 				viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()).getVisualMetadataSet());
 	}
@@ -116,7 +112,7 @@ class VisualMetadataServiceImpl implements VisualMetadataService {
 
 		ViewState viewState = viewStateCouchDbRepository.get(parentId);
 
-		final Optional<View> viewOpt = viewRepository.findOne(QView.view.currentEditingState.id.eq(viewState.getId()));
+		final Optional<View> viewOpt = viewService.findViewCurrentEditingStateId(viewState.getId());
 		viewOpt.ifPresent(view -> {
 			view.setCurrentEditingState(viewState);
 

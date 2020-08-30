@@ -100,13 +100,13 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.permitAll()
 
 				// REALM MANAGEMENT
-				.antMatchers(HttpMethod.GET, "/api/realm/**")
+				.antMatchers(HttpMethod.GET, "/api/realms/**")
 				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
-				.antMatchers(HttpMethod.POST, "/api/realm/**")
+				.antMatchers(HttpMethod.POST, "/api/realms/**")
 				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
-				.antMatchers(HttpMethod.PUT, "/api/realm/**")
+				.antMatchers(HttpMethod.PUT, "/api/realms/**")
 				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'UPDATE', 'APPLICATION')")
-				.antMatchers(HttpMethod.DELETE, "/api/realm/**")
+				.antMatchers(HttpMethod.DELETE, "/api/realms/**")
 				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE', 'APPLICATION')")
 
 

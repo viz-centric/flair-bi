@@ -6,10 +6,10 @@ import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.VisualizationColorsRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.service.FunctionsService;
 import com.flair.bi.service.UserService;
+import com.flair.bi.service.VisualizationColorsService;
 import com.flair.bi.service.security.UserGroupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,18 +29,18 @@ public class RealmProcessorService {
     private final UserGroupService userGroupService;
     private final PasswordEncoder passwordEncoder;
     private final FunctionsService functionsService;
-    private final VisualizationColorsRepository visualizationColorsRepository;
+    private final VisualizationColorsService visualizationColorsService;
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         UserGroup userGroup = userGroupService.save(createUserGroup(realm));
         userService.saveUser(createUser(realm,userGroup));
         functionsService.saveAll(buildFunctionsList(realm,vizcentricId));
-        visualizationColorsRepository.saveAll(buildVisualizationColorsList(realm,vizcentricId));
+        visualizationColorsService.saveAll(buildVisualizationColorsList(realm,vizcentricId));
     }
 
     public void deleteRealmDependentRecords(Long id){
         // TODO
-        visualizationColorsRepository.deleteByRealmId(id);
+        visualizationColorsService.deleteByRealmId(id);
         functionsService.deleteByRealmId(id);
         userService.deleteAllByRealmId(id);
     }
@@ -93,7 +93,7 @@ public class RealmProcessorService {
     }
 
     private List<VisualizationColors> buildVisualizationColorsList(Realm realm, Long vizcentricId){
-        List<VisualizationColors> visualizationColors = visualizationColorsRepository.findByRealmId(vizcentricId)
+        List<VisualizationColors> visualizationColors = visualizationColorsService.findByRealmId(vizcentricId)
                 .stream()
                 .map(v ->{
                     VisualizationColors visualizationColor = new VisualizationColors();

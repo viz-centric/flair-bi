@@ -1,16 +1,15 @@
 package com.flair.bi.repository;
 
-import java.util.List;
-
+import com.flair.bi.domain.Dashboard;
+import com.flair.bi.domain.QDashboard;
+import com.querydsl.core.types.dsl.SimpleExpression;
+import com.querydsl.core.types.dsl.StringExpression;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
-import com.flair.bi.domain.Dashboard;
-import com.flair.bi.domain.QDashboard;
-import com.querydsl.core.types.dsl.SimpleExpression;
-import com.querydsl.core.types.dsl.StringExpression;
+import java.util.List;
 
 /**
  * Spring Data JPA repository for the Dashboard entity.

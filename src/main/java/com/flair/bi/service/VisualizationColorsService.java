@@ -1,8 +1,9 @@
 package com.flair.bi.service;
 
-import java.util.List;
-
+import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.service.dto.VisualizationColorsDTO;
+
+import java.util.List;
 
 /**
  * Service Interface for managing VisualizationColors.
@@ -38,4 +39,10 @@ public interface VisualizationColorsService {
 	 * @param id the id of the entity
 	 */
 	void delete(Long id);
+
+    void saveAll(List<VisualizationColors> colors);
+
+	void deleteByRealmId(Long realmId);
+
+	List<VisualizationColors> findByRealmId(Long realmId);
 }

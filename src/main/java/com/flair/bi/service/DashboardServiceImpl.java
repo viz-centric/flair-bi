@@ -17,8 +17,10 @@ import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.errors.ErrorConstants;
+import com.google.common.collect.ImmutableList;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -112,6 +114,9 @@ public class DashboardServiceImpl implements DashboardService {
 				dashboard = dashboardRepository.save(old);
 			}
 			if (create) {
+				User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+				dashboard.setRealm(user.getRealm());
+
 				dashboard = dashboardRepository.save(dashboard);
 				final Collection<Permission> savedPerms = accessControlManager
 						.addPermissions(dashboard.getPermissions());
@@ -159,7 +164,14 @@ public class DashboardServiceImpl implements DashboardService {
 	@Transactional(readOnly = true)
 	public List<Dashboard> findAll() {
 		log.debug("Request to get all Dashboard");
-		return dashboardRepository.findAll();
+		return ImmutableList.copyOf(
+				dashboardRepository.findAll(hasUserRealmAccess())
+		);
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		return QDashboard.dashboard.realm.id.eq(user.getRealm().getId());
 	}
 
 	/**
@@ -170,13 +182,17 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Dashboard> findAllByPrincipalPermissions(Pageable pageable, Predicate predicate) {
-		BooleanBuilder booleanBuilder = new BooleanBuilder(predicate).and(userHasPermission());
-		return dashboardRepository.findAll(booleanBuilder, pageable);
+		BooleanBuilder expression = new BooleanBuilder(userHasPermission())
+				.and(predicate)
+				.and(hasUserRealmAccess());
+		return dashboardRepository.findAll(expression, pageable);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Long countByPrincipalPermissions() {
+		BooleanBuilder expression = new BooleanBuilder(userHasPermission())
+				.and(hasUserRealmAccess());
 		return dashboardRepository.count(userHasPermission());
 	}
 
@@ -240,7 +256,9 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public Page<Dashboard> findAll(Pageable pageable) {
 		log.debug("Request to get dashboard page: {}", pageable);
-		return dashboardRepository.findAll(pageable);
+		BooleanBuilder expression = new BooleanBuilder(userHasPermission())
+				.and(hasUserRealmAccess());
+		return dashboardRepository.findAll(expression, pageable);
 	}
 
 	/**
@@ -389,6 +407,12 @@ public class DashboardServiceImpl implements DashboardService {
 		return imageLocation;
 	}
 
+	@Override
+	public Optional<Dashboard> findByView(View view) {
+		return dashboardRepository.findOne(QDashboard.dashboard.dashboardViews.contains(view));
+	}
+
+	@Transactional(readOnly = true)
 	@Override
 	public List<DashboardRelease> getDashboardReleasesList(Long dashboardId) {
 		return dashboardReleaseRepository.findByDashboardId(dashboardId);

@@ -10,6 +10,7 @@ import com.flair.bi.domain.security.Permission;
 import com.flair.bi.repository.DatasourceRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
+import com.google.common.collect.ImmutableList;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -52,6 +53,12 @@ public class DatasourceServiceImpl implements DatasourceService {
         log.debug("Request to save Datasource : {}", datasource);
 
         boolean create = null == datasource.getId();
+
+        if (create) {
+            User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+            datasource.setRealm(user.getRealm());
+        }
+
         Datasource ds = datasourceRepository.save(datasource);
 
         if (create) {
@@ -71,8 +78,9 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Transactional(readOnly = true)
     public List<Datasource> findAll(Predicate predicate) {
         log.debug("Request to get all Datasource");
-        return (List<Datasource>) datasourceRepository.findAll(
-                isNotDeleted().and(hasUserPermissions()).and(predicate));
+        return ImmutableList.copyOf(
+                datasourceRepository.findAll(isNotDeleted().and(hasUserPermissions()).and(predicate).and(hasUserRealmAccess()))
+        );
     }
 
     @Override
@@ -80,7 +88,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Page<Datasource> findAll(Pageable pageable) {
         log.debug("Request to get all Datasource");
         return datasourceRepository.findAll(
-                isNotDeleted().and(hasUserPermissions()), pageable);
+                isNotDeleted().and(hasUserPermissions()).andAnyOf(hasUserRealmAccess()), pageable);
     }
 
     @Override
@@ -88,13 +96,15 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Page<Datasource> findAll(Predicate predicate, Pageable pageable) {
         log.debug("Request to get all Datasource");
         return datasourceRepository.findAll(
-                isNotDeleted().and(predicate).and(hasUserPermissions()), pageable);
+                isNotDeleted().and(predicate).and(hasUserPermissions()).and(hasUserRealmAccess()), pageable);
     }
 
     @Override
     public List<Datasource> findAllAndDeleted(Predicate predicate) {
         log.debug("Request to get all Datasource including deleted");
-        return (List<Datasource>) datasourceRepository.findAll(hasUserPermissions().and(predicate));
+        return ImmutableList.copyOf(
+                datasourceRepository.findAll(hasUserPermissions().and(predicate).and(hasUserRealmAccess()))
+        );
     }
 
     /**
@@ -134,7 +144,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Long getCount(Predicate predicate) {
         log.debug("Request to get Datasource count with predicate {}", predicate);
         return datasourceRepository.count(
-                hasUserPermissions().and(isNotDeleted().and(predicate)));
+                hasUserPermissions().and(isNotDeleted()).and(predicate).and(hasUserRealmAccess()));
     }
 
     /**
@@ -145,7 +155,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Override
     public void delete(Predicate predicate) {
         final Iterable<Datasource> datasources = datasourceRepository.findAll(
-                isNotDeleted().and(hasUserPermissions()).and(predicate));
+                isNotDeleted().and(hasUserPermissions()).and(predicate).and(hasUserRealmAccess()));
         for (Datasource datasource : datasources) {
             datasource.setStatus(DatasourceStatus.DELETED);
         }
@@ -157,20 +167,22 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Page<Datasource> search(Pageable pageable, Predicate predicate) {
         log.debug("Request to get Searched Datasource");
         return datasourceRepository.findAll(
-                isNotDeleted().and(predicate).and(hasUserPermissions()), pageable);
+                isNotDeleted().and(predicate).and(hasUserPermissions()).and(hasUserRealmAccess()), pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName) {
         return findAll(hasUserPermissions().and(QDatasource.datasource.connectionName.eq(connectionName)
-                .and(QDatasource.datasource.name.eq(datasourceName))));
+                .and(QDatasource.datasource.name.eq(datasourceName))
+                .and(hasUserRealmAccess())));
     }
 
     @Override
     public void deleteByConnectionAndName(String connectionName, String datasourceName) {
         delete(hasUserPermissions().and(QDatasource.datasource.connectionName.eq(connectionName)
-                .and(QDatasource.datasource.name.eq(datasourceName))));
+                .and(QDatasource.datasource.name.eq(datasourceName))
+                .and(hasUserRealmAccess())));
     }
 
     private BooleanExpression hasUserPermissions() {
@@ -182,6 +194,11 @@ public class DatasourceServiceImpl implements DatasourceService {
                 .in(permissions.stream()
                         .map(x -> Long.parseLong(x.getResource()))
                         .collect(Collectors.toSet()));
+    }
+
+    private BooleanExpression hasUserRealmAccess() {
+        User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+        return QDatasource.datasource.realm.id.eq(user.getRealm().getId());
     }
 
     private BooleanBuilder isNotDeleted() {

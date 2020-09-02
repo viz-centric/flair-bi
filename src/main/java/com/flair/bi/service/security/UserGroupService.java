@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +79,25 @@ public class UserGroupService {
 		// Default permissions required in order to create user_group(DASHBOARDS,
 		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: End
 
+		return userGroupRepository.save(userGroup);
+	}
+
+	/**
+	 * Save a UserGroup. only accessible to superadmin
+	 *
+	 * @param userGroup the entity to save
+	 * @return the persisted entity
+	 */
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE','APPLICATION')")
+	public UserGroup saveDefaultGroup(UserGroup userGroup) {
+		log.debug("Request to saveDefaultGroup UserGroup: {}", userGroup);
+		final Set<Permission> permissions = permissionRepository
+				.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
+						new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
+						new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
+				.stream().collect(Collectors.toSet());
+		userGroup.getPermissions().clear();
+		userGroup.addPermissions(permissions);
 		return userGroupRepository.save(userGroup);
 	}
 
@@ -155,5 +175,9 @@ public class UserGroupService {
 
 	public void saveAll(Iterable<UserGroup> userGroups) {
 		userGroupRepository.saveAll(userGroups);
+	}
+
+	public void deleteAllByRealmId(Long realmId){
+		userGroupRepository.deleteAllByRealmId(realmId);
 	}
 }

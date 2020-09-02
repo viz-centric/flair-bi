@@ -32,17 +32,17 @@ public class RealmProcessorService {
     private final VisualizationColorsService visualizationColorsService;
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
-        UserGroup userGroup = userGroupService.save(createUserGroup(realm));
+        UserGroup userGroup = userGroupService.saveDefaultGroup(createUserGroup(realm));
         userService.saveUser(createUser(realm,userGroup));
         functionsService.saveAll(buildFunctionsList(realm,vizcentricId));
         visualizationColorsService.saveAll(buildVisualizationColorsList(realm,vizcentricId));
     }
 
     public void deleteRealmDependentRecords(Long id){
-        // TODO
         visualizationColorsService.deleteByRealmId(id);
         functionsService.deleteByRealmId(id);
         userService.deleteAllByRealmId(id);
+        userGroupService.deleteAllByRealmId(id);
     }
 
     private User createUser(Realm realm,UserGroup userGroup){

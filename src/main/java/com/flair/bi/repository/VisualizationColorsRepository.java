@@ -29,7 +29,7 @@ public interface VisualizationColorsRepository extends JpaRepository<Visualizati
 
     @Modifying
     @Query("delete from VisualizationColors v where v.realm.id = :id")
-    void deleteByRealmId(@Param("id") Long id);
+    void deleteAllByRealmId(@Param("id") Long id);
 
     /**
      * Customize the {@link QuerydslBindings} for the given root.

@@ -183,6 +183,7 @@ public class UserGroupService {
 		userGroupRepository.saveAll(userGroups);
 	}
 
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
 	public void deleteAllByRealmId(Long realmId){
 		userGroupRepository.deleteAllByRealmId(realmId);
 	}

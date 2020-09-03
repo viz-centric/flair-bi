@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.flair.bi.domain.Datasource;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.repository.query.Param;
 
 public interface DatasourceService {
 	/**
@@ -80,4 +81,6 @@ public interface DatasourceService {
 	List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName);
 
 	void deleteByConnectionAndName(String connectionName, String datasourceName);
+
+	void deleteAllByRealmId(Long realmId);
 }

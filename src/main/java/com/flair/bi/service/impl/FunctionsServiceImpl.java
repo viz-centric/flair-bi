@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,8 +106,9 @@ public class FunctionsServiceImpl implements FunctionsService {
 	}
 
 	@Override
-	public void deleteByRealmId(Long realmId) {
-		functionsRepository.deleteByRealmId(realmId);
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		functionsRepository.deleteAllByRealmId(realmId);
 	}
 
 	@Transactional(readOnly = true)

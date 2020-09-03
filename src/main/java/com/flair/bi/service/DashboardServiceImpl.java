@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -410,6 +411,12 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public Optional<Dashboard> findByView(View view) {
 		return dashboardRepository.findOne(QDashboard.dashboard.dashboardViews.contains(view));
+	}
+
+	@Override
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		dashboardRepository.deleteAllByRealmId(realmId);
 	}
 
 	@Transactional(readOnly = true)

@@ -42,7 +42,7 @@ public interface VisualizationColorsService {
 
     void saveAll(List<VisualizationColors> colors);
 
-	void deleteByRealmId(Long realmId);
+	void deleteAllByRealmId(Long realmId);
 
 	List<VisualizationColors> findByRealmId(Long realmId);
 }

@@ -7,10 +7,9 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.service.FunctionsService;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.VisualizationColorsService;
+import com.flair.bi.service.*;
 import com.flair.bi.service.security.UserGroupService;
+import com.flair.bi.view.ViewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +29,9 @@ public class RealmProcessorService {
     private final PasswordEncoder passwordEncoder;
     private final FunctionsService functionsService;
     private final VisualizationColorsService visualizationColorsService;
+    private final ViewService viewService;
+    private final DashboardService dashboardService;
+    private final DatasourceService datasourceService;
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         UserGroup userGroup = userGroupService.saveDefaultGroup(createUserGroup(realm));
@@ -39,10 +41,13 @@ public class RealmProcessorService {
     }
 
     public void deleteRealmDependentRecords(Long id){
-        visualizationColorsService.deleteByRealmId(id);
-        functionsService.deleteByRealmId(id);
+        visualizationColorsService.deleteAllByRealmId(id);
+        functionsService.deleteAllByRealmId(id);
         userService.deleteAllByRealmId(id);
         userGroupService.deleteAllByRealmId(id);
+        viewService.deleteAllByRealmId(id);
+        dashboardService.deleteAllByRealmId(id);
+        datasourceService.deleteAllByRealmId(id);
     }
 
     private User createUser(Realm realm,UserGroup userGroup){

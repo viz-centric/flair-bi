@@ -3,6 +3,7 @@ package com.flair.bi.repository;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -27,6 +28,10 @@ public interface ViewRepository
 
 	@Query(value = "select view from View view where view.viewDashboard.id = :id and view.viewName=:viewName")
 	View findByDashboardIdAndViewName(@Param("id") Long id, @Param("viewName") String viewName);
+
+	@Modifying
+	@Query("delete from View v where v.realm.id = :id")
+	void deleteAllByRealmId(@Param("id") Long id);
 
 	/**
 	 * Customize the {@link QuerydslBindings} for the given root.

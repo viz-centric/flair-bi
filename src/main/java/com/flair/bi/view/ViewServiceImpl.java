@@ -29,6 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -477,6 +478,12 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	public Optional<View> findViewCurrentEditingStateId(String viewStateId) {
 		return viewRepository.findOne(QView.view.currentEditingState.id.eq(viewStateId));
+	}
+
+	@Override
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		viewRepository.deleteAllByRealmId(realmId);
 	}
 
 	private BooleanExpression hasUserRealmAccess() {

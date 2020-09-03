@@ -28,7 +28,7 @@ public interface FunctionsRepository extends JpaRepository<Functions, Long>,
 
     @Modifying
     @Query("delete from Functions f where f.realm.id = :id")
-    void deleteByRealmId(@Param("id") Long id);
+    void deleteAllByRealmId(@Param("id") Long id);
 
     /**
      * Customize the {@link QuerydslBindings} for the given root.

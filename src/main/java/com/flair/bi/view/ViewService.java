@@ -167,4 +167,6 @@ public interface ViewService {
     ViewExportDTO exportView(Long id);
 
 	Optional<View> findViewCurrentEditingStateId(String viewStateId);
+
+	void deleteAllByRealmId(Long realmId);
 }

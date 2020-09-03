@@ -133,4 +133,6 @@ public interface DashboardService {
 	String getImageLocation(Long id);
 
 	Optional<Dashboard> findByView(View view);
+
+	void deleteAllByRealmId(Long realmId);
 }

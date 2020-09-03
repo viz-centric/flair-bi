@@ -42,7 +42,7 @@ public interface FunctionsService {
 
     void saveAll(List<Functions> functions);
 
-	void deleteByRealmId(Long realmId);
+	void deleteAllByRealmId(Long realmId);
 
 	List<Functions> findByRealmId(Long realmId);
 }

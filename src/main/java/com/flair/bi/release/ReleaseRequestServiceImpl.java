@@ -402,6 +402,8 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 	@Override
 	public ReleaseRequest save(ReleaseRequest request) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		request.setRealm(user.getRealm());
 		return releaseRequestRepository.save(request);
 	}
 

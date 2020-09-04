@@ -16,7 +16,7 @@ public class VisualizationColorsDTO implements Serializable {
 	@NotNull
 	private String code;
 
-    private RealmDTO real;
+    private RealmDTO realm;
 
     public Long getId() {
         return id;
@@ -51,6 +51,14 @@ public class VisualizationColorsDTO implements Serializable {
 		return true;
 	}
 
+	public RealmDTO getRealm() {
+		return realm;
+	}
+
+	public void setRealm(RealmDTO realm) {
+		this.realm = realm;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
@@ -64,11 +72,4 @@ public class VisualizationColorsDTO implements Serializable {
             '}';
     }
 
-    public RealmDTO getReal() {
-        return real;
-    }
-
-    public void setReal(RealmDTO real) {
-        this.real = real;
-    }
 }

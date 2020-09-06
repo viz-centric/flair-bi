@@ -15,6 +15,8 @@ public interface UserGroupRepository extends JpaRepository<UserGroup, Long>, Que
 
     List<UserGroup> findAllByNameInAndRealmId(Set<String> groupName, Long realmId);
 
+    List<UserGroup> findAllByRealmId(Long realmId);
+
     @Modifying
     void deleteAllByNameAndRealmId(String groupName, Long realmId);
 

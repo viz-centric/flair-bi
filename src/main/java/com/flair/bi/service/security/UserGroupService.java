@@ -54,6 +54,11 @@ public class UserGroupService {
 		return userGroupRepository.findAllByNameInAndRealmId(groupNames, realmId);
 	}
 
+	@Transactional(readOnly = true)
+	public List<UserGroup> findAllByRealmId(Long realmId) {
+		return userGroupRepository.findAllByRealmId(realmId);
+	}
+
 	/**
 	 * Save a UserGroup.
 	 *
@@ -79,25 +84,6 @@ public class UserGroupService {
 		// Default permissions required in order to create user_group(DASHBOARDS,
 		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: End
 
-		return userGroupRepository.save(userGroup);
-	}
-
-	/**
-	 * Save a UserGroup. only accessible to superadmin
-	 *
-	 * @param userGroup the entity to save
-	 * @return the persisted entity
-	 */
-	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE','APPLICATION')")
-	public UserGroup saveDefaultGroup(UserGroup userGroup) {
-		log.debug("Request to saveDefaultGroup UserGroup: {}", userGroup);
-		final Set<Permission> permissions = permissionRepository
-				.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
-						new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
-						new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
-				.stream().collect(Collectors.toSet());
-		userGroup.getPermissions().clear();
-		userGroup.addPermissions(permissions);
 		return userGroupRepository.save(userGroup);
 	}
 

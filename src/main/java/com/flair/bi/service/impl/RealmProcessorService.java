@@ -5,9 +5,14 @@ import com.flair.bi.domain.Functions;
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
+import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.service.*;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.FunctionsService;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.VisualizationColorsService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,10 +40,52 @@ public class RealmProcessorService {
     private final DatasourceService datasourceService;
 
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
-        UserGroup userGroup = userGroupService.saveDefaultGroup(createUserGroup(realm));
-        userService.saveUser(createUser(realm,userGroup));
+        buildUserGroups(realm, vizcentricId);
+        UserGroup adminGroup = getAdminGroup(realm);
+        userService.saveUser(createUser(realm,adminGroup));
         functionsService.saveAll(buildFunctionsList(realm,vizcentricId));
         visualizationColorsService.saveAll(buildVisualizationColorsList(realm,vizcentricId));
+    }
+
+    private UserGroup getAdminGroup(Realm realm) {
+        return userGroupService.findAllByNameInAndRealmId(Set.of(AuthoritiesConstants.ADMIN), realm.getId()).get(0);
+    }
+
+    private void buildUserGroups(Realm realm, Long vizcentricId) {
+        List<UserGroup> existingGroups = userGroupService.findAllByRealmId(vizcentricId);
+        Set<UserGroup> userGroups = existingGroups.stream()
+                .filter(g -> !g.getName().equals(AuthoritiesConstants.SUPERADMIN))
+                .map(g -> createGroup(realm, g))
+                .collect(Collectors.toSet());
+        userGroupService.saveAll(userGroups);
+    }
+
+    private UserGroup createGroup(Realm realm, UserGroup g) {
+        UserGroup group = new UserGroup();
+        group.setName(g.getName());
+        group.setPermissions(g.getPermissions()
+                .stream()
+                .map(p -> createPermission(p))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
+        group.setRealm(realm);
+        group.setUsers(new HashSet<>());
+        return group;
+    }
+
+    private Permission createPermission(Permission p) {
+        // we skip all permissions assigned to specific dashboards, views, etc
+        try {
+            Long.parseLong(p.getResource());
+            return null;
+        } catch (NumberFormatException ignored) {
+        }
+        Permission permission = new Permission();
+        permission.setAction(p.getAction());
+        permission.setKey(p.getKey());
+        permission.setScope(p.getScope());
+        permission.setResource(p.getResource());
+        return permission;
     }
 
     public void deleteRealmDependentRecords(Long id){
@@ -71,13 +119,6 @@ public class RealmProcessorService {
         Set<UserGroup> userGroups = new HashSet<>();
         userGroups.add(userGroup);
         return userGroups;
-    }
-
-    private UserGroup createUserGroup(Realm realm){
-        UserGroup userGroup = new UserGroup();
-        userGroup.setName(AuthoritiesConstants.ADMIN);
-        userGroup.setRealm(realm);
-        return userGroup;
     }
 
     private List<Functions> buildFunctionsList(Realm realm, Long vizcentricId){

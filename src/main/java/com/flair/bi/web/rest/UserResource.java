@@ -118,12 +118,16 @@ public class UserResource {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "Email already in use"))
                 .body(null);
+        } else if (!userService.isAllowed(managedUserVM)) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("userManagement", "usernotallowed", "User creation now allowed with these parameters"))
+                    .body(null);
         } else {
             User newUser = userService.createUser(managedUserVM);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))
-                .body(newUser);
+                    .headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))
+                    .body(newUser);
         }
     }
 
@@ -143,6 +147,11 @@ public class UserResource {
         Optional<User> existingUser = userService.getUserByEmail(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "E-mail already in use")).body(null);
+        }
+        if (!userService.isAllowed(managedUserVM)) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("userManagement", "usernotallowed", "User creation now allowed with these parameters"))
+                    .body(null);
         }
         existingUser = userService.getUserByLogin(managedUserVM.getLogin().toLowerCase());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {

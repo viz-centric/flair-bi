@@ -9,6 +9,7 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
@@ -334,13 +335,19 @@ public class UserResource {
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<Void> changePermissions(@PathVariable String login, @RequestBody List<ChangePermissionVM> changePermissionVMS) {
-        changePermissionVMS.forEach(x -> {
-            if (x.getAction() == ChangePermissionVM.Action.ADD) {
-                accessControlManager.grantAccess(login, Permission.fromStringValue(x.getId()));
-            } else {
-                accessControlManager.revokeAccess(login, Permission.fromStringValue(x.getId()));
-            }
-        });
+        changePermissionVMS
+                .stream()
+                .filter(x -> {
+                    Permission permission = Permission.fromStringValue(x.getId());
+                    return !RestrictedResources.RESTRICTED_RESOURCES.contains(permission.getResource());
+                })
+                .forEach(x -> {
+                    if (x.getAction() == ChangePermissionVM.Action.ADD) {
+                        accessControlManager.grantAccess(login, Permission.fromStringValue(x.getId()));
+                    } else {
+                        accessControlManager.revokeAccess(login, Permission.fromStringValue(x.getId()));
+                    }
+                });
 
         return ResponseEntity.ok().build();
     }

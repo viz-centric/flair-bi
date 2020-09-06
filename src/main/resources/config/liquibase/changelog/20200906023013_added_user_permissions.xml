@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="ir73" id="20200906023013">
+
+        <insert tableName="permission">
+            <column name="resource" value="USER" />
+            <column name="action" value="READ" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="permission">
+            <column name="resource" value="USER" />
+            <column name="action" value="WRITE" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="permission">
+            <column name="resource" value="USER" />
+            <column name="action" value="UPDATE" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="permission">
+            <column name="resource" value="USER" />
+            <column name="action" value="DELETE" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_ADMIN" />
+            <column name="permission_resource" value="USER" />
+            <column name="permission_action" value="READ" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_ADMIN" />
+            <column name="permission_resource" value="USER" />
+            <column name="permission_action" value="WRITE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_ADMIN" />
+            <column name="permission_resource" value="USER" />
+            <column name="permission_action" value="UPDATE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="user_group_permission">
+            <column name="user_grp_name" value="ROLE_ADMIN" />
+            <column name="permission_resource" value="USER" />
+            <column name="permission_action" value="DELETE" />
+            <column name="permission_scope" value="APPLICATION" />
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

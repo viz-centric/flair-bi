@@ -72,8 +72,7 @@ public class UserGroupResource {
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'WRITE', 'APPLICATION')")
     public ResponseEntity<UserGroup> createUserGroup(@Valid @RequestBody UserGroup userGroup) throws URISyntaxException {
-
-        if (null != userGroupService.findOne(userGroup.getName())) {
+        if (userGroupService.exists(userGroup)) {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil
                     .createFailureAlert(ENTITY_NAME,

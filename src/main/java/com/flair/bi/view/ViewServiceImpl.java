@@ -10,13 +10,14 @@ import com.flair.bi.domain.ViewState;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.BookMarkWatchService;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.ViewWatchService;
 import com.flair.bi.view.export.ViewExportDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,7 @@ class ViewServiceImpl implements ViewService {
 
 	private final ViewRepository viewRepository;
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
@@ -97,6 +99,10 @@ class ViewServiceImpl implements ViewService {
 			view.setViewName(views.getViewName());
 			view.setViewDashboard(views.getViewDashboard());
 		} else {
+
+			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			view.setRealm(user.getRealm());
+
 			// we temporary set the invalid id, because first we want to make sure that
 			// saving into couchdb was successfull
 			// and then fully commit on postgres.
@@ -157,25 +163,29 @@ class ViewServiceImpl implements ViewService {
 	@Transactional(readOnly = true)
 	public List<View> findAll() {
 		log.debug("Request to get all View");
-		return viewRepository.findAll();
+		return ImmutableList.copyOf(
+				viewRepository.findAll(hasUserRealmAccess())
+		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<View> findAllByPrincipalPermissions(Predicate predicate) {
 		log.debug("Request to get all View");
-		return (List<View>) viewRepository.findAll(userHasPermission().and(predicate));
+		return ImmutableList.copyOf(
+				viewRepository.findAll(userHasPermission().and(predicate).and(hasUserRealmAccess()))
+		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<View> findAllByPrincipalPermissions(Predicate predicate, Pageable pageable) {
 		log.debug("Request to get paginated View");
-		return viewRepository.findAll(userHasPermission().and(predicate), pageable);
+		return viewRepository.findAll(userHasPermission().and(predicate).and(hasUserRealmAccess()), pageable);
 	}
 
 	private BooleanExpression userHasPermission() {
-		final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+		final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 		final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
 		// retrieve all view permissions that we have 'READ' permission or
 		// 'READ_PUBLISHED'
@@ -188,7 +198,7 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	@Transactional(readOnly = true)
 	public Long countByPrincipalPermissions() {
-		return viewRepository.count(userHasPermission());
+		return viewRepository.count(userHasPermission().and(hasUserRealmAccess()));
 	}
 
 	@Override
@@ -198,7 +208,7 @@ class ViewServiceImpl implements ViewService {
 		final Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
 		final PageRequest pageRequest = PageRequest.of(0, 5, sort);
 
-		return viewRepository.findAll(createdBy.and(userHasPermission()), pageRequest).getContent();
+		return viewRepository.findAll(createdBy.and(userHasPermission().and(hasUserRealmAccess())), pageRequest).getContent();
 	}
 
 	@Override
@@ -206,7 +216,7 @@ class ViewServiceImpl implements ViewService {
 	public List<View> mostPopular() {
 		final Sort sort = Sort.by(Sort.Direction.DESC, "watchCount");
 		final PageRequest pageRequest = PageRequest.of(0, 5, sort);
-		return viewRepository.findAll(userHasPermission(), pageRequest).getContent();
+		return viewRepository.findAll(userHasPermission().and(hasUserRealmAccess()), pageRequest).getContent();
 	}
 
 	/**
@@ -464,4 +474,20 @@ class ViewServiceImpl implements ViewService {
 		}).orElse(null);
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public Optional<View> findViewCurrentEditingStateId(String viewStateId) {
+		return viewRepository.findOne(QView.view.currentEditingState.id.eq(viewStateId));
+	}
+
+	@Override
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		viewRepository.deleteAllByRealmId(realmId);
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		return QView.view.realm.id.eq(user.getRealm().getId());
+	}
 }

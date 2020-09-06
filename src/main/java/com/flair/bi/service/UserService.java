@@ -1,5 +1,35 @@
 package com.flair.bi.service;
 
+import com.flair.bi.config.Constants;
+import com.flair.bi.domain.QUser;
+import com.flair.bi.domain.Realm;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.repository.PersistentTokenRepository;
+import com.flair.bi.repository.UserRepository;
+import com.flair.bi.repository.security.UserGroupRepository;
+import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.dto.UserBasicDTO;
+import com.flair.bi.service.util.RandomUtil;
+import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -8,34 +38,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.flair.bi.service.dto.UserBasicDTO;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.PersistentTokenRepository;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
-import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.util.RandomUtil;
-import com.flair.bi.web.rest.vm.ManagedUserVM;
-import com.google.common.collect.ImmutableSet;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service class for managing users.
@@ -100,7 +102,8 @@ public class UserService {
 
 	public User createUser(String login, String password, String firstName, String lastName, String email,
 			String langKey, String userType, Set<String> authorities) {
-
+		User user = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		Realm realm = user.getRealm();
 		Set<String> foundAuthorityNames = ImmutableSet.of();
 		if (authorities != null) {
 			foundAuthorityNames = AuthoritiesConstants.ALL.stream().filter(authority -> authorities.contains(authority))
@@ -109,7 +112,7 @@ public class UserService {
 		if (foundAuthorityNames.isEmpty()) {
 			foundAuthorityNames = ImmutableSet.of(AuthoritiesConstants.USER);
 		}
-		List<UserGroup> userGroups = userGroupRepository.findAllById(foundAuthorityNames);
+		List<UserGroup> userGroups = userGroupRepository.findAllByNameInAndRealmId(foundAuthorityNames, realm.getId());
 		User newUser = new User();
 		String encryptedPassword = passwordEncoder.encode(password);
 		newUser.setLogin(login);
@@ -121,6 +124,7 @@ public class UserService {
 		newUser.setLangKey(langKey);
 		newUser.setActivated(true);
 		newUser.addUserGroups(userGroups);
+		newUser.setRealm(realm);
 		newUser.setUserType(StringUtils.isNoneBlank(userType) ? userType : Constants.INTERNAL_USER);
 		userRepository.save(newUser);
 		log.debug("Created Information for User: {} authorities {}", newUser, foundAuthorityNames);
@@ -128,6 +132,7 @@ public class UserService {
 	}
 
 	public User createUser(ManagedUserVM managedUserVM) {
+		User currentUser = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
 		User user = new User();
 		user.setLogin(managedUserVM.getLogin());
 		user.setFirstName(managedUserVM.getFirstName());
@@ -139,8 +144,11 @@ public class UserService {
 			user.setLangKey(managedUserVM.getLangKey());
 		}
 		if (managedUserVM.getUserGroups() != null) {
-			user.setUserGroups(userGroupRepository.findAllById(managedUserVM.getUserGroups()).stream()
-					.collect(Collectors.toSet()));
+			user.setUserGroups(
+					userGroupRepository.findAllByNameInAndRealmId(managedUserVM.getUserGroups(), currentUser.getRealm().getId())
+							.stream()
+							.collect(Collectors.toSet())
+			);
 		}
 		String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
 		user.setPassword(encryptedPassword);
@@ -148,6 +156,7 @@ public class UserService {
 		user.setResetDate(ZonedDateTime.now());
 		user.setActivated(true);
 		user.setUserType(Constants.INTERNAL_USER);
+		user.setRealm(currentUser.getRealm());
 		user = userRepository.save(user);
 		log.debug("Created Information for User: {}", user);
 		return user;
@@ -177,7 +186,11 @@ public class UserService {
 			user.setLangKey(langKey);
 
 			user.getUserGroups().clear();
-			user.addUserGroups(userGroupRepository.findAllById(userGroups).stream().collect(Collectors.toSet()));
+			user.addUserGroups(
+					userGroupRepository.findAllByNameInAndRealmId(userGroups, user.getRealm().getId())
+							.stream()
+							.collect(Collectors.toSet())
+			);
 
 			userRepository.save(user);
 
@@ -214,6 +227,16 @@ public class UserService {
 	}
 
 	@Transactional(readOnly = true)
+	public Optional<User> getUserByLogin(String login) {
+		return userRepository.findOneByLogin(login);
+	}
+
+	@Transactional(readOnly = true)
+	public User getUserWithAuthoritiesByLoginOrError(String login) {
+		return getUserWithAuthoritiesByLogin(login).orElseThrow(RuntimeException::new);
+	}
+
+	@Transactional(readOnly = true)
 	public User getUserWithAuthorities(Long id) {
 		User user = userRepository.getOne(id);
 		// eagerly load the association
@@ -246,6 +269,15 @@ public class UserService {
 		Page<User> users = userRepository.findAll(booleanBuilder, pageable);
 		users.getContent().forEach(x -> x.retrieveAllUserPermissions().size());
 		return users;
+	}
+
+	@Transactional(readOnly = true)
+	public List<User> findAllWithAuthorities(Predicate predicate) {
+		User user = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		Long realmId = user.getRealm().getId();
+		Iterable<User> users = userRepository.findAll(QUser.user.realm.id.eq(realmId).and(predicate));
+		users.forEach(x -> x.retrieveAllUserPermissions().size());
+		return ImmutableList.copyOf(users);
 	}
 
 	public UserBasicDTO getUserNameByEmail(String email) {
@@ -305,4 +337,21 @@ public class UserService {
 		}
 	}
 
+	public void saveUser(User user) {
+		userRepository.save(user);
+	}
+
+	public void saveAllUsers(Iterable<User> users) {
+		userRepository.saveAll(users);
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<User> getUserByEmail(String email) {
+		return userRepository.findOneByEmail(email);
+	}
+
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		userRepository.deleteAllByRealmId(realmId);
+	}
 }

@@ -1,11 +1,11 @@
 package com.flair.bi.config.security;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.flair.bi.ApplicationProperties;
+import com.flair.bi.security.UserDetailsService;
+import com.flair.bi.security.jwt.JWTConfigurer;
+import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,13 +28,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
-import com.flair.bi.ApplicationProperties;
-import com.flair.bi.security.UserDetailsService;
-import com.flair.bi.security.jwt.JWTConfigurer;
-import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @EnableOAuth2Sso
 @Configuration
@@ -101,6 +98,17 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 
 				.antMatchers("/v2/api-docs/**").permitAll().antMatchers("/swagger-resources/configuration/ui")
 				.permitAll()
+
+				// REALM MANAGEMENT
+				.antMatchers(HttpMethod.GET, "/api/realms/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
+				.antMatchers(HttpMethod.POST, "/api/realms/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
+				.antMatchers(HttpMethod.PUT, "/api/realms/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'UPDATE', 'APPLICATION')")
+				.antMatchers(HttpMethod.DELETE, "/api/realms/**")
+				.access("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE', 'APPLICATION')")
+
 
 				// USER MANAGEMENT
 				.antMatchers(HttpMethod.GET, "/api/users/**")

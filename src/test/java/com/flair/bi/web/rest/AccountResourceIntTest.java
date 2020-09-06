@@ -1,22 +1,15 @@
 package com.flair.bi.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.User;
+import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.repository.UserRepository;
+import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.service.MailService;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.dto.UserDTO;
+import com.flair.bi.web.rest.dto.RealmDTO;
+import com.flair.bi.web.rest.vm.ManagedUserVM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,15 +20,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.User;
-import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.service.MailService;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.dto.UserDTO;
-import com.flair.bi.web.rest.vm.ManagedUserVM;
+import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for the AccountResource REST controller.
@@ -67,8 +66,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 		MockitoAnnotations.initMocks(this);
 		doNothing().when(mockMailService).sendActivationEmail((User) anyObject());
 
-		AccountResource accountResource = new AccountResource(userRepository, userService, null, mockMailService);
-		AccountResource accountUserMockResource = new AccountResource(userRepository, mockUserService, null,
+		AccountResource accountResource = new AccountResource(userService, null, mockMailService);
+		AccountResource accountUserMockResource = new AccountResource(mockUserService, null,
 				mockMailService);
 
 		this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).build();
@@ -129,7 +128,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -153,7 +153,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -177,7 +178,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -201,7 +203,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -226,14 +229,15 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		// Duplicate login, different e-mail
 		ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(),
 				validUser.getPassword(), validUser.getLogin(), validUser.getLastName(), "alicejr@example.com", true,
 				validUser.getLangKey(), validUser.getPermissions(), validUser.getUserGroups(), validUser.getCreatedBy(),
-				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate());
+				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(),validUser.getRealm());
 
 		// Good user
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -262,14 +266,15 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		// Duplicate e-mail, different login
 		ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(),
 				validUser.getLogin(), validUser.getLastName(), validUser.getEmail(), true, validUser.getLangKey(),
 				validUser.getPermissions(), validUser.getUserGroups(), validUser.getCreatedBy(),
-				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate());
+				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(),validUser.getRealm());
 
 		// Good user
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -297,7 +302,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)), null, null, // createdBy
 				null, // createdDate
 				null, // lastModifiedBy
-				null // lastModifiedDate
+				null, // lastModifiedDate
+				new RealmDTO(1L,"test")
 		);
 
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -317,7 +323,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				true, // activated
 				"en", // langKey
 				null, // userType
-				new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)), null);
+				new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)), null,new RealmDTO(1L,"test"));
 
 		restUserMockMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(invalidUser))).andExpect(status().isBadRequest());

@@ -1,21 +1,26 @@
 package com.flair.bi.service.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.flair.bi.domain.QVisualizationColors;
+import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.repository.VisualizationColorsRepository;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.VisualizationColorsService;
 import com.flair.bi.service.dto.VisualizationColorsDTO;
 import com.flair.bi.service.mapper.VisualizationColorsMapper;
-
+import com.google.common.collect.ImmutableList;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing VisualizationColors.
@@ -30,6 +35,8 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 
 	private final VisualizationColorsMapper visualizationColorsMapper;
 
+	private final UserService userService;
+
 	/**
 	 * Save a visualizationColors.
 	 *
@@ -40,6 +47,10 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 		log.debug("Request to save VisualizationColors : {}", visualizationColorsDTO);
 		VisualizationColors visualizationColors = visualizationColorsMapper
 				.visualizationColorsDTOToVisualizationColors(visualizationColorsDTO);
+		if (visualizationColors.getId() == null) {
+			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			visualizationColors.setRealm(user.getRealm());
+		}
 		visualizationColors = visualizationColorsRepository.save(visualizationColors);
 		VisualizationColorsDTO result = visualizationColorsMapper
 				.visualizationColorsToVisualizationColorsDTO(visualizationColors);
@@ -55,7 +66,8 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 	public List<VisualizationColorsDTO> findAll() {
 		log.debug("Request to get all VisualizationColors");
 		final Sort sort = Sort.by(Sort.Direction.ASC, "id");
-		List<VisualizationColorsDTO> result = visualizationColorsRepository.findAll(sort).stream()
+		List<VisualizationColorsDTO> result = ImmutableList.copyOf(visualizationColorsRepository.findAll(hasUserRealmAccess(), sort))
+				.stream()
 				.map(visualizationColorsMapper::visualizationColorsToVisualizationColorsDTO)
 				.collect(Collectors.toCollection(LinkedList::new));
 
@@ -85,5 +97,27 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 	public void delete(Long id) {
 		log.debug("Request to delete VisualizationColors : {}", id);
 		visualizationColorsRepository.deleteById(id);
+	}
+
+	@Override
+	public void saveAll(List<VisualizationColors> colors) {
+		visualizationColorsRepository.saveAll(colors);
+	}
+
+	@Override
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		visualizationColorsRepository.deleteAllByRealmId(realmId);
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<VisualizationColors> findByRealmId(Long realmId) {
+		return visualizationColorsRepository.findByRealmId(realmId);
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		return QVisualizationColors.visualizationColors.realm.id.eq(user.getRealm().getId());
 	}
 }

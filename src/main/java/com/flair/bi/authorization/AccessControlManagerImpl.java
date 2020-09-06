@@ -1,19 +1,5 @@
 package com.flair.bi.authorization;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.QUser;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
@@ -24,25 +10,37 @@ import com.flair.bi.domain.security.QPermission;
 import com.flair.bi.domain.security.QPermissionEdge;
 import com.flair.bi.domain.security.QUserGroup;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.PermissionGrantedAuthority;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.security.UserGroupService;
 import com.querydsl.core.types.dsl.BooleanExpression;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
 class AccessControlManagerImpl implements AccessControlManager {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
-	private final UserGroupRepository userGroupRepository;
+	private final UserGroupService userGroupService;
 
 	private final PermissionRepository permissionRepository;
 
@@ -74,7 +72,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	@Override
 	public boolean hasAccess(String login, Permission permission) {
 		log.debug("Checking access for {}", permission);
-		Optional<User> user = userRepository.findOneByLogin(login);
+		Optional<User> user = userService.getUserByLogin(login);
 
 		return user.map(User::retrieveAllUserPermissions).map(x -> x.stream().anyMatch(y -> y.equals(permission)))
 				.orElse(false);
@@ -145,9 +143,9 @@ class AccessControlManagerImpl implements AccessControlManager {
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
-		userRepository.findOneByLogin(login).ifPresent(x -> {
+		userService.getUserByLogin(login).ifPresent(x -> {
 			x.addPermissions(perms);
-			userRepository.save(x);
+			userService.saveUser(x);
 		});
 
 		// if we're granting access to authenticated user we must add permissions to him
@@ -187,14 +185,14 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void assignPermissions(String role, Collection<Permission> permissions) {
-		Optional<UserGroup> userGroup = userGroupRepository.findById(role);
+		Optional<UserGroup> userGroup = Optional.ofNullable(userGroupService.findOne(role));
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
 		userGroup.ifPresent(x -> {
 			x.addPermissions(perms);
-			userGroupRepository.save(x);
+			userGroupService.save(x);
 		});
 	}
 
@@ -211,14 +209,14 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void dissociatePermissions(String role, Collection<Permission> permissions) {
-		Optional<UserGroup> userGroup = userGroupRepository.findById(role);
+		Optional<UserGroup> userGroup = Optional.ofNullable(userGroupService.findOne(role));
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
 		userGroup.ifPresent(x -> {
 			x.removePermissions(perms);
-			userGroupRepository.save(x);
+			userGroupService.save(x);
 		});
 	}
 
@@ -257,9 +255,9 @@ class AccessControlManagerImpl implements AccessControlManager {
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
-		userRepository.findOneByLogin(login).ifPresent(x -> {
+		userService.getUserByLogin(login).ifPresent(x -> {
 			x.removePermissions(perms);
-			userRepository.save(x);
+			userService.saveUser(x);
 		});
 	}
 
@@ -395,9 +393,8 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 *                   user groups
 	 */
 	private void updatePermissionState(final Permission criteria, final Permission permission, boolean add) {
-
-		Iterable<User> it = userRepository.findAll(QUser.user.permissions.contains(criteria));
-		Iterable<UserGroup> userGroups = userGroupRepository
+		Iterable<User> it = userService.findAllWithAuthorities(QUser.user.permissions.contains(criteria));
+		Iterable<UserGroup> userGroups = userGroupService
 				.findAll(QUserGroup.userGroup.permissions.contains(criteria));
 		if (add) {
 			it.forEach(x -> x.getPermissions().add(permission));
@@ -406,8 +403,8 @@ class AccessControlManagerImpl implements AccessControlManager {
 			it.forEach(x -> x.getPermissions().remove(permission));
 			userGroups.forEach(x -> x.getPermissions().remove(permission));
 		}
-		userRepository.saveAll(it);
-		userGroupRepository.saveAll(userGroups);
+		userService.saveAllUsers(it);
+		userGroupService.saveAll(userGroups);
 	}
 
 	/**

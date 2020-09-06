@@ -1,36 +1,36 @@
 package com.flair.bi.release;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
-import com.flair.bi.domain.QDashboard;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
-import com.flair.bi.repository.DashboardRepository;
-import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component(value = "viewReleaseProcessor")
 @Transactional
 @RequiredArgsConstructor
 class ViewReleaseRequestProcessor implements ReleaseRequestProcessor<ViewRelease> {
 
-	private final ReleaseRequestRepository releaseRequestRepository;
+	@Autowired
+	@Lazy // TODO: remove this dependency to avoid cycling dependency issue
+	private ReleaseRequestService releaseRequestService;
 
 	private final UserService userService;
 
-	private final DashboardRepository dashboardRepository;
+	private final DashboardService dashboardService;
 
 	@Override
 	public ReleaseRequest requestRelease(ViewRelease entity) {
@@ -40,8 +40,7 @@ class ViewReleaseRequestProcessor implements ReleaseRequestProcessor<ViewRelease
 				.orElseThrow(RuntimeException::new));
 		request.setComment(entity.getComment());
 
-		Optional<Dashboard> dashboard = dashboardRepository
-				.findOne(QDashboard.dashboard.dashboardViews.contains(entity.getView()));
+		Optional<Dashboard> dashboard = dashboardService.findByView(entity.getView());
 
 		DashboardRelease dashboardRelease = new DashboardRelease();
 		dashboardRelease.setRequestedBy(request.getRequestedBy());
@@ -62,8 +61,8 @@ class ViewReleaseRequestProcessor implements ReleaseRequestProcessor<ViewRelease
 					.map(View::getCurrentRelease).collect(Collectors.toList());
 			dashboardRelease.add(viewReleases);
 			request.setRelease(dashboardRelease);
-			ReleaseRequest r = releaseRequestRepository.save(request);
-			dashboardRepository.save(dash);
+			ReleaseRequest r = releaseRequestService.save(request);
+			dashboardService.save(dash);
 			return r;
 		}).orElseThrow(() -> new EntityNotFoundException("Cannot make a release no dashboard found"));
 	}

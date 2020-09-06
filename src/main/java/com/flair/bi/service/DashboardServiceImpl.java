@@ -1,25 +1,5 @@
 package com.flair.bi.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
@@ -33,16 +13,35 @@ import com.flair.bi.domain.security.Permission;
 import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.repository.DashboardReleaseRepository;
 import com.flair.bi.repository.DashboardRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.errors.ErrorConstants;
+import com.google.common.collect.ImmutableList;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Dashboard.
@@ -55,7 +54,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 	private final DashboardRepository dashboardRepository;
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final AccessControlManager accessControlManager;
 
@@ -79,10 +78,10 @@ public class DashboardServiceImpl implements DashboardService {
 			if (!create) {
 				Optional<Dashboard> oldOpt = dashboardRepository.findById(dashboard.getId());
 
-				if (oldOpt.isEmpty()) {
-					throw new com.flair.bi.web.rest.errors.EntityNotFoundException(
-							"The dashboard that suppose to exist does not exist.");
-				}
+//				if (oldOpt.isEmpty()) {
+//					throw new com.flair.bi.web.rest.errors.EntityNotFoundException(
+//							"The dashboard that suppose to exist does not exist.");
+//				}
 
 				Dashboard old = oldOpt.get();
 
@@ -116,6 +115,9 @@ public class DashboardServiceImpl implements DashboardService {
 				dashboard = dashboardRepository.save(old);
 			}
 			if (create) {
+				User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+				dashboard.setRealm(user.getRealm());
+
 				dashboard = dashboardRepository.save(dashboard);
 				final Collection<Permission> savedPerms = accessControlManager
 						.addPermissions(dashboard.getPermissions());
@@ -163,7 +165,14 @@ public class DashboardServiceImpl implements DashboardService {
 	@Transactional(readOnly = true)
 	public List<Dashboard> findAll() {
 		log.debug("Request to get all Dashboard");
-		return dashboardRepository.findAll();
+		return ImmutableList.copyOf(
+				dashboardRepository.findAll(hasUserRealmAccess())
+		);
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		return QDashboard.dashboard.realm.id.eq(user.getRealm().getId());
 	}
 
 	/**
@@ -174,18 +183,22 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Dashboard> findAllByPrincipalPermissions(Pageable pageable, Predicate predicate) {
-		BooleanBuilder booleanBuilder = new BooleanBuilder(predicate).and(userHasPermission());
-		return dashboardRepository.findAll(booleanBuilder, pageable);
+		BooleanBuilder expression = new BooleanBuilder(userHasPermission())
+				.and(predicate)
+				.and(hasUserRealmAccess());
+		return dashboardRepository.findAll(expression, pageable);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Long countByPrincipalPermissions() {
+		BooleanBuilder expression = new BooleanBuilder(userHasPermission())
+				.and(hasUserRealmAccess());
 		return dashboardRepository.count(userHasPermission());
 	}
 
 	private Predicate userHasPermission() {
-		final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+		final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 		final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
 		// retrieve all dashboard permissions that we have 'READ' permission
 		final Set<Permission> permissions = user.getPermissionsByActionAndPermissionType(
@@ -219,9 +232,9 @@ public class DashboardServiceImpl implements DashboardService {
 
 		final Optional<Dashboard> dashboardOpt = dashboardRepository.findById(id);
 
-		if (dashboardOpt.isEmpty()) {
-			return;
-		}
+//		if (dashboardOpt.isEmpty()) {
+//			return;
+//		}
 
 		final Dashboard dashboard = dashboardOpt.get();
 
@@ -244,7 +257,9 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public Page<Dashboard> findAll(Pageable pageable) {
 		log.debug("Request to get dashboard page: {}", pageable);
-		return dashboardRepository.findAll(pageable);
+		BooleanBuilder expression = new BooleanBuilder(userHasPermission())
+				.and(hasUserRealmAccess());
+		return dashboardRepository.findAll(expression, pageable);
 	}
 
 	/**
@@ -393,6 +408,18 @@ public class DashboardServiceImpl implements DashboardService {
 		return imageLocation;
 	}
 
+	@Override
+	public Optional<Dashboard> findByView(View view) {
+		return dashboardRepository.findOne(QDashboard.dashboard.dashboardViews.contains(view));
+	}
+
+	@Override
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+	public void deleteAllByRealmId(Long realmId) {
+		dashboardRepository.deleteAllByRealmId(realmId);
+	}
+
+	@Transactional(readOnly = true)
 	@Override
 	public List<DashboardRelease> getDashboardReleasesList(Long dashboardId) {
 		return dashboardReleaseRepository.findByDashboardId(dashboardId);

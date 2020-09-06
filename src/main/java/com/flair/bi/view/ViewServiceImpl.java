@@ -100,7 +100,7 @@ class ViewServiceImpl implements ViewService {
 			view.setViewDashboard(views.getViewDashboard());
 		} else {
 
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			view.setRealm(user.getRealm());
 
 			// we temporary set the invalid id, because first we want to make sure that
@@ -487,7 +487,7 @@ class ViewServiceImpl implements ViewService {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return QView.view.realm.id.eq(user.getRealm().getId());
 	}
 }

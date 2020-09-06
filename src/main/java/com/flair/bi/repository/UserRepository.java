@@ -21,13 +21,17 @@ public interface UserRepository
 
 	Optional<User> findOneByActivationKey(String activationKey);
 
+	Optional<User> findOneByIdAndRealmId(Long id, Long realmId);
+
 	List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
 
 	Optional<User> findOneByResetKey(String resetKey);
 
-	Optional<User> findOneByEmail(String email);
+	Optional<User> findOneByEmailAndRealmId(String email, Long realmId);
 
 	Optional<User> findOneByLogin(String login);
+
+	Optional<User> findOneByLoginAndRealmId(String login, Long realmId);
 
 	@Modifying
 	void deleteAllByRealmId(Long realmId);

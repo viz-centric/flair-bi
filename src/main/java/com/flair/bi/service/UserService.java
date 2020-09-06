@@ -16,8 +16,8 @@ import com.flair.bi.service.util.RandomUtil;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -87,7 +87,8 @@ public class UserService {
 	}
 
 	public Optional<User> requestPasswordReset(String mail) {
-		return userRepository.findOneByEmail(mail).filter(User::isActivated).map(user -> {
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
+		return userRepository.findOneByEmailAndRealmId(mail, currentUser.getRealm().getId()).filter(User::isActivated).map(user -> {
 			user.setResetKey(RandomUtil.generateResetKey());
 			user.setResetDate(ZonedDateTime.now());
 
@@ -103,7 +104,7 @@ public class UserService {
 
 	public User createUser(String login, String password, String firstName, String lastName, String email,
 			String langKey, String userType, Set<String> authorities) {
-		User user = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = getUserWithAuthoritiesByLoginOrError();
 		Realm realm = user.getRealm();
 		Set<String> foundAuthorityNames = ImmutableSet.of();
 		if (authorities != null) {
@@ -133,7 +134,7 @@ public class UserService {
 	}
 
 	public User createUser(ManagedUserVM managedUserVM) {
-		User currentUser = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
 		User user = new User();
 		user.setLogin(managedUserVM.getLogin());
 		user.setFirstName(managedUserVM.getFirstName());
@@ -177,8 +178,8 @@ public class UserService {
 
 	public void updateUser(Long id, String login, String firstName, String lastName, String email, boolean activated,
 			String langKey, Set<String> userGroups) {
-
-		userRepository.findById(id).ifPresent(user -> {
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
+		userRepository.findOneByIdAndRealmId(id, currentUser.getRealm().getId()).ifPresent(user -> {
 			user.setLogin(login);
 			user.setFirstName(firstName);
 			user.setLastName(lastName);
@@ -200,7 +201,8 @@ public class UserService {
 	}
 
 	public void deleteUser(String login) {
-		userRepository.findOneByLogin(login).ifPresent(user -> {
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
+		userRepository.findOneByLoginAndRealmId(login, currentUser.getRealm().getId()).ifPresent(user -> {
 			userRepository.delete(user);
 			log.debug("Deleted User: {}", user);
 		});
@@ -221,7 +223,8 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-		return userRepository.findOneByLogin(login).map(user -> {
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
+		return userRepository.findOneByLoginAndRealmId(login, currentUser.getRealm().getId()).map(user -> {
 			user.retrieveAllUserPermissions().size();
 			return user;
 		});
@@ -229,17 +232,19 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public Optional<User> getUserByLogin(String login) {
-		return userRepository.findOneByLogin(login);
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
+		return userRepository.findOneByLoginAndRealmId(login, currentUser.getRealm().getId());
 	}
 
 	@Transactional(readOnly = true)
-	public User getUserWithAuthoritiesByLoginOrError(String login) {
-		return getUserWithAuthoritiesByLogin(login).orElseThrow(RuntimeException::new);
+	public User getUserWithAuthoritiesByLoginOrError() {
+		return getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElseThrow(RuntimeException::new);
 	}
 
 	@Transactional(readOnly = true)
 	public User getUserWithAuthorities(Long id) {
-		User user = userRepository.getOne(id);
+		User currentUser = getUserWithAuthoritiesByLoginOrError();
+		User user = userRepository.findOneByIdAndRealmId(id, currentUser.getRealm().getId()).orElseThrow();
 		// eagerly load the association
 		user.retrieveAllUserPermissions(false).size();
 		return user;
@@ -259,35 +264,33 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public Page<User> findAllWithAuthorities(Pageable pageable) {
-		Page<User> users = userRepository.findAll(pageable);
+		Page<User> users = userRepository.findAll(hasUserRealmAccess(), pageable);
 		users.getContent().forEach(x -> x.retrieveAllUserPermissions().size());
 		return users;
 	}
 
 	@Transactional(readOnly = true)
 	public Page<User> findAllWithAuthorities(Pageable pageable, Predicate predicate) {
-		BooleanBuilder booleanBuilder = new BooleanBuilder(predicate);
-		Page<User> users = userRepository.findAll(booleanBuilder, pageable);
+		Page<User> users = userRepository.findAll(hasUserRealmAccess().and(predicate), pageable);
 		users.getContent().forEach(x -> x.retrieveAllUserPermissions().size());
 		return users;
 	}
 
 	@Transactional(readOnly = true)
 	public List<User> findAllWithAuthorities(Predicate predicate) {
-		User user = getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
-		Long realmId = user.getRealm().getId();
-		Iterable<User> users = userRepository.findAll(QUser.user.realm.id.eq(realmId).and(predicate));
+		Iterable<User> users = userRepository.findAll(hasUserRealmAccess().and(predicate));
 		users.forEach(x -> x.retrieveAllUserPermissions().size());
 		return ImmutableList.copyOf(users);
 	}
 
 	public UserBasicDTO getUserNameByEmail(String email) {
+		User user = getUserWithAuthoritiesByLoginOrError();
 		List<UserBasicDTO> userBasicDTOList = null;
 		UserBasicDTO userBasicDTO = null;
 		try {
 			userBasicDTOList = jdbcTemplate.query(
-					"select first_name,email from jhi_user where email = ?",
-					new Object[] {email}, new RowMapper<UserBasicDTO>() {
+					"select first_name,email from jhi_user where email = ? and realm_id = ?",
+					new Object[] {email, user.getRealm().getId()}, new RowMapper<UserBasicDTO>() {
 						public UserBasicDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
 							UserBasicDTO userBasicDTO = new UserBasicDTO();
 							String firstName = srs.getString("first_name") !=null ? srs.getString("first_name") : "User";
@@ -348,7 +351,8 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public Optional<User> getUserByEmail(String email) {
-		return userRepository.findOneByEmail(email);
+		User user = getUserWithAuthoritiesByLoginOrError();
+		return userRepository.findOneByEmailAndRealmId(email, user.getRealm().getId());
 	}
 
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
@@ -364,5 +368,10 @@ public class UserService {
 		return managedUserVM.getUserGroups()
 				.stream()
 				.noneMatch(ug -> RestrictedResources.RESTRICTED_ROLES.contains(ug));
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = getUserWithAuthoritiesByLoginOrError();
+		return QUser.user.realm.id.eq(user.getRealm().getId());
 	}
 }

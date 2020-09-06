@@ -115,7 +115,7 @@ public class DashboardServiceImpl implements DashboardService {
 				dashboard = dashboardRepository.save(old);
 			}
 			if (create) {
-				User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+				User user = userService.getUserWithAuthoritiesByLoginOrError();
 				dashboard.setRealm(user.getRealm());
 
 				dashboard = dashboardRepository.save(dashboard);
@@ -171,7 +171,7 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return QDashboard.dashboard.realm.id.eq(user.getRealm().getId());
 	}
 

@@ -169,7 +169,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	public List<ReleasesAlertsDTO> getTodaysReleasedAlerts(int offset) {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and date_part('day',age(current_date, vr.last_modified_date::date))=0 "
@@ -192,7 +192,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	public List<ReleasesAlertsDTO> getYesterdaysReleasedAlerts(int offset) {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from (select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and date_part('day',age(current_date, vr.last_modified_date::date))=1 "
@@ -215,7 +215,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	public List<ReleasesAlertsDTO> getThisWeekReleasedAlerts(int offset) {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and vr.last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER+1 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+7 "
@@ -238,7 +238,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	public List<ReleasesAlertsDTO> getLastWeekReleasedAlerts(int offset) {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and vr.last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-6 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER "
@@ -261,7 +261,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	public List<ReleasesAlertsDTO> getOlderReleasedAlerts(int offset) {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and vr.last_modified_date::date < NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER-6 "
@@ -402,13 +402,13 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 	@Override
 	public ReleaseRequest save(ReleaseRequest request) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		request.setRealm(user.getRealm());
 		return releaseRequestRepository.save(request);
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return QReleaseRequest.releaseRequest.realm.id.eq(user.getRealm().getId());
 	}
 }

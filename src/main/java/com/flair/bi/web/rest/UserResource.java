@@ -9,6 +9,7 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.MailService;
@@ -117,12 +118,16 @@ public class UserResource {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "Email already in use"))
                 .body(null);
+        } else if (!userService.isAllowed(managedUserVM)) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("userManagement", "usernotallowed", "User creation now allowed with these parameters"))
+                    .body(null);
         } else {
             User newUser = userService.createUser(managedUserVM);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))
-                .body(newUser);
+                    .headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))
+                    .body(newUser);
         }
     }
 
@@ -142,6 +147,11 @@ public class UserResource {
         Optional<User> existingUser = userService.getUserByEmail(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "emailexists", "E-mail already in use")).body(null);
+        }
+        if (!userService.isAllowed(managedUserVM)) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert("userManagement", "usernotallowed", "User creation now allowed with these parameters"))
+                    .body(null);
         }
         existingUser = userService.getUserByLogin(managedUserVM.getLogin().toLowerCase());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
@@ -334,13 +344,19 @@ public class UserResource {
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<Void> changePermissions(@PathVariable String login, @RequestBody List<ChangePermissionVM> changePermissionVMS) {
-        changePermissionVMS.forEach(x -> {
-            if (x.getAction() == ChangePermissionVM.Action.ADD) {
-                accessControlManager.grantAccess(login, Permission.fromStringValue(x.getId()));
-            } else {
-                accessControlManager.revokeAccess(login, Permission.fromStringValue(x.getId()));
-            }
-        });
+        changePermissionVMS
+                .stream()
+                .filter(x -> {
+                    Permission permission = Permission.fromStringValue(x.getId());
+                    return !RestrictedResources.RESTRICTED_RESOURCES.contains(permission.getResource());
+                })
+                .forEach(x -> {
+                    if (x.getAction() == ChangePermissionVM.Action.ADD) {
+                        accessControlManager.grantAccess(login, Permission.fromStringValue(x.getId()));
+                    } else {
+                        accessControlManager.revokeAccess(login, Permission.fromStringValue(x.getId()));
+                    }
+                });
 
         return ResponseEntity.ok().build();
     }

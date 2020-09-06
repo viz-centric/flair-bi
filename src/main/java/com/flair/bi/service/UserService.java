@@ -9,6 +9,7 @@ import com.flair.bi.repository.PersistentTokenRepository;
 import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.dto.UserBasicDTO;
 import com.flair.bi.service.util.RandomUtil;
@@ -353,5 +354,15 @@ public class UserService {
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
 	public void deleteAllByRealmId(Long realmId) {
 		userRepository.deleteAllByRealmId(realmId);
+	}
+
+	public boolean isAllowed(ManagedUserVM managedUserVM) {
+		if (managedUserVM.getUserGroups() == null) {
+			return true;
+		}
+
+		return managedUserVM.getUserGroups()
+				.stream()
+				.noneMatch(ug -> RestrictedResources.RESTRICTED_ROLES.contains(ug));
 	}
 }

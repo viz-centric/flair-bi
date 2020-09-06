@@ -8,6 +8,7 @@ import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.security.UserGroupService;
@@ -83,6 +84,15 @@ public class UserGroupResource {
                 .body(null);
         }
 
+        if (RestrictedResources.RESTRICTED_ROLES.contains(userGroup.getName())) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil
+                            .createFailureAlert(ENTITY_NAME,
+                                    "restricted role",
+                                    "User group cannot be created with this name"))
+                    .body(null);
+        }
+
         UserGroup result = userGroupService.save(userGroup);
         return ResponseEntity.created(new URI("/api/userGroups/" + result.getName()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getName()))
@@ -99,6 +109,15 @@ public class UserGroupResource {
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<UserGroup> updateUserGroup(@Valid @RequestBody UserGroup userGroup) {
+        if (RestrictedResources.RESTRICTED_ROLES.contains(userGroup.getName())) {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil
+                            .createFailureAlert(ENTITY_NAME,
+                                    "restricted role",
+                                    "User group cannot be created with this name"))
+                    .body(null);
+        }
+
         final UserGroup result = userGroupService.save(userGroup);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, userGroup.getName()))
@@ -215,7 +234,6 @@ public class UserGroupResource {
         final Page<Dashboard> dashboardPage = dashboardService.findAll(pageable);
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
             .orElseThrow(() -> new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
-
 
         List<GranteePermissionReport<UserGroup>> body = dashboardPage
             .getContent()
@@ -334,13 +352,19 @@ public class UserGroupResource {
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<Void> changePermissions(@PathVariable String name, @RequestBody List<ChangePermissionVM> changePermissionVMS) {
-        changePermissionVMS.forEach(x -> {
-            if (x.getAction() == ChangePermissionVM.Action.ADD) {
-                accessControlManager.assignPermission(name, Permission.fromStringValue(x.getId()));
-            } else {
-                accessControlManager.dissociatePermission(name, Permission.fromStringValue(x.getId()));
-            }
-        });
+        changePermissionVMS
+                .stream()
+                .filter(x -> {
+                    Permission permission = Permission.fromStringValue(x.getId());
+                    return !RestrictedResources.RESTRICTED_RESOURCES.contains(permission.getResource());
+                })
+                .forEach(x -> {
+                    if (x.getAction() == ChangePermissionVM.Action.ADD) {
+                        accessControlManager.assignPermission(name, Permission.fromStringValue(x.getId()));
+                    } else {
+                        accessControlManager.dissociatePermission(name, Permission.fromStringValue(x.getId()));
+                    }
+                });
 
         return ResponseEntity.ok().build();
     }

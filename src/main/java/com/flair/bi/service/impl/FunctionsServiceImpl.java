@@ -4,7 +4,6 @@ import com.flair.bi.domain.Functions;
 import com.flair.bi.domain.QFunctions;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.FunctionsRepository;
-import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.FunctionsService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.FunctionsDTO;
@@ -46,7 +45,7 @@ public class FunctionsServiceImpl implements FunctionsService {
 		log.debug("Request to save Functions : {}", functionsDTO);
 		Functions functions = functionsMapper.functionsDTOToFunctions(functionsDTO);
 		if (functions.getId() == null) {
-			User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			functions.setRealm(user.getRealm());
 		}
 		functions = functionsRepository.save(functions);
@@ -96,7 +95,7 @@ public class FunctionsServiceImpl implements FunctionsService {
 
 	@Override
 	public void saveAll(List<Functions> functions) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		functions.forEach(function -> {
 			if (function.getId() == null) {
 				function.setRealm(user.getRealm());
@@ -118,7 +117,7 @@ public class FunctionsServiceImpl implements FunctionsService {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return QFunctions.functions.realm.id.eq(user.getRealm().getId());
 	}
 }

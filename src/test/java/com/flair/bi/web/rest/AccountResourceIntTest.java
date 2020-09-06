@@ -160,7 +160,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(invalidUser))).andExpect(status().isBadRequest());
 
-		Optional<User> user = userRepository.findOneByEmail("funky@example.com");
+		Optional<User> user = userRepository.findOneByEmailAndRealmId("funky@example.com", 1L);
 		assertThat(user.isPresent()).isFalse();
 	}
 
@@ -247,7 +247,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(duplicatedUser))).andExpect(status().is4xxClientError());
 
-		Optional<User> userDup = userRepository.findOneByEmail("alicejr@example.com");
+		Optional<User> userDup = userRepository.findOneByEmailAndRealmId("alicejr@example.com", 1L);
 		assertThat(userDup.isPresent()).isFalse();
 	}
 
@@ -328,7 +328,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 		restUserMockMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(invalidUser))).andExpect(status().isBadRequest());
 
-		Optional<User> user = userRepository.findOneByEmail("funky@example.com");
+		Optional<User> user = userRepository.findOneByEmailAndRealmId("funky@example.com", 1L);
 		assertThat(user.isPresent()).isFalse();
 	}
 }

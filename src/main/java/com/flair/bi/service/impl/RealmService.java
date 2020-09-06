@@ -3,7 +3,6 @@ package com.flair.bi.service.impl;
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.RealmRepository;
-import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.mapper.RealmMapper;
 import com.flair.bi.web.rest.dto.RealmDTO;
@@ -32,7 +31,7 @@ public class RealmService {
         log.debug("Saving realm : {}", realmDTO);
         Realm realm = realmMapper.fromDTO(realmDTO);
         realm = realmRepository.save(realm);
-        User user = userService.getUserWithAuthoritiesByLoginOrError(SecurityUtils.getCurrentUserLogin());
+        User user = userService.getUserWithAuthoritiesByLoginOrError();
         realmProcessorService.saveRealmDependentRecords(realm, user.getRealm().getId());
         return realmMapper.toDTO(realm);
     }

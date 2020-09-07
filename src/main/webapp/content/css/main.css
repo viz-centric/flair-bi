@@ -2158,7 +2158,7 @@ a {
     .home-container .box .box-content .quick-box:hover > .blue-line {
       width: 100%; }
   .home-container .tile-area-table {
-    overflow-x: hidden; }
+    overflow-x: auto; }
     .home-container .tile-area-table .inner-addon {
       position: relative; }
       .home-container .tile-area-table .inner-addon .glyphicon {

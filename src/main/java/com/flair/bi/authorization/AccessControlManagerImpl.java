@@ -13,6 +13,7 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.security.PermissionGrantedAuthority;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.security.UserGroupService;
@@ -139,6 +140,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void grantAccess(String login, Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+					if (isRestrictedPermission(permission)) {
+						throw new IllegalStateException("Permission " + permission + " cannot be assigned");
+					}
+				});
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
@@ -177,6 +183,14 @@ class AccessControlManagerImpl implements AccessControlManager {
 		assignPermissions(role, Collections.singletonList(permission));
 	}
 
+	private boolean isRestrictedRole(String role) {
+		return RestrictedResources.RESTRICTED_ROLES.contains(role);
+	}
+
+	private boolean isRestrictedPermission(Permission permission) {
+		return RestrictedResources.RESTRICTED_RESOURCES.contains(permission.getResource());
+	}
+
 	/**
 	 * Assign list of permissions to a given role
 	 *
@@ -185,6 +199,16 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void assignPermissions(String role, Collection<Permission> permissions) {
+		if (isRestrictedRole(role)) {
+			throw new IllegalStateException("User role " + role + " cannot be assigned");
+		}
+
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be assigned");
+			}
+		});
+
 		Optional<UserGroup> userGroup = Optional.ofNullable(userGroupService.findOne(role));
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
@@ -209,6 +233,16 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void dissociatePermissions(String role, Collection<Permission> permissions) {
+		if (isRestrictedRole(role)) {
+			throw new IllegalStateException("User role " + role + " cannot be unassigned");
+		}
+
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be unassigned");
+			}
+		});
+
 		Optional<UserGroup> userGroup = Optional.ofNullable(userGroupService.findOne(role));
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
@@ -252,6 +286,12 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void revokeAccess(String login, Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be unassigned");
+			}
+		});
+
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
@@ -262,17 +302,6 @@ class AccessControlManagerImpl implements AccessControlManager {
 	}
 
 	/**
-	 * Adds a new permission to the context
-	 *
-	 * @param permission permission to be added
-	 * @return newly added permission
-	 */
-	@Override
-	public Permission addPermission(Permission permission) {
-		return permissionRepository.save(permission);
-	}
-
-	/**
 	 * Add new permissions to the context
 	 *
 	 * @param permissions permissions to be added
@@ -280,6 +309,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public Collection<Permission> addPermissions(Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be assigned");
+			}
+		});
 		return permissionRepository.saveAll(permissions);
 	}
 
@@ -314,7 +348,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	}
 
 	private Permission deleteEdges(Permission permission) {
-
+		// TODO: add realm ID
 		Iterable<PermissionEdge> permissionEdges = permissionEdgeRepository
 				.findAll(QPermissionEdge.permissionEdge.from.key.eq(permission.getKey())
 						.or(QPermissionEdge.permissionEdge.to.key.eq(permission.getKey())));
@@ -330,6 +364,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void removePermissions(Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be unassigned");
+			}
+		});
 		((List<Permission>) permissionRepository.findAll(QPermission.permission.key
 				.in(permissions.stream().map(Permission::getKey).collect(Collectors.toSet())))).stream()
 						.map(this::removeForeignConstraints).map(this::deleteEdges)

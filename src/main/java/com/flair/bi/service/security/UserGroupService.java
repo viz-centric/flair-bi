@@ -12,11 +12,11 @@ import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +72,7 @@ public class UserGroupService {
 
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (userGroup.getId() != null) {
-			if (userGroup.getRealm().getId() != user.getRealm().getId()) {
+			if (!user.getRealm().getId().equals(userGroup.getRealm().getId())) {
 				throw new IllegalStateException("User group " + userGroup.getId() + " does not belong to realm " + user.getRealm().getId());
 			}
 		}
@@ -102,16 +102,14 @@ public class UserGroupService {
 	@Transactional(readOnly = true)
 	public Page<UserGroup> findAll(Pageable pageable) {
 		log.debug("Request to get all UserGroups");
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return userGroupRepository.findAll(QUserGroup.userGroup.realm.id.eq(user.getRealm().getId()), pageable);
+		return userGroupRepository.findAll(hasUserGroupPermission(), pageable);
 	}
 
 	@Transactional(readOnly = true)
 	public List<UserGroup> findAll(Predicate predicate) {
 		log.debug("Request to get all UserGroups");
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return ImmutableList.copyOf(
-				userGroupRepository.findAll(QUserGroup.userGroup.realm.id.eq(user.getRealm().getId()).and(predicate))
+				userGroupRepository.findAll(hasUserGroupPermission().and(predicate))
 		);
 	}
 
@@ -175,8 +173,12 @@ public class UserGroupService {
 		userGroupRepository.saveAll(userGroups);
 	}
 
-	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
 	public void deleteAllByRealmId(Long realmId){
 		userGroupRepository.deleteAllByRealmId(realmId);
+	}
+
+	private BooleanExpression hasUserGroupPermission() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QUserGroup.userGroup.realm.id.eq(user.getRealm().getId());
 	}
 }

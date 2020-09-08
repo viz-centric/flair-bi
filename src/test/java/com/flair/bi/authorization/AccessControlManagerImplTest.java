@@ -77,14 +77,13 @@ public class AccessControlManagerImplTest {
 
     }
 
-    @Test
     public void hasAccessNoPermissionReturnsFalseTest() {
 
         // create user
         User user = UserResourceIntTest.createEntity(userService);
 
         Permission a = new Permission("a", Action.READ, "a");
-        accessControlManager.addPermission(a);
+        accessControlManager.addPermissions(Collections.singleton(a));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
 
@@ -106,7 +105,7 @@ public class AccessControlManagerImplTest {
         User user = UserResourceIntTest.createEntity(userService);
 
         Permission a = new Permission("a", Action.READ, "a");
-        accessControlManager.addPermission(a);
+        accessControlManager.addPermissions(Collections.singleton(a));
 
         // grant access
         accessControlManager.grantAccess(user.getLogin(), a);
@@ -134,9 +133,9 @@ public class AccessControlManagerImplTest {
         Permission a = new Permission("a", Action.READ, "a");
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
 
         accessControlManager.connectPermissions(a, b, true, false);
         accessControlManager.connectPermissions(a, c, false, false);
@@ -172,9 +171,9 @@ public class AccessControlManagerImplTest {
         Permission a = new Permission("a", Action.READ, "a");
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
 
         accessControlManager.connectPermissions(a, b, false, false);
         accessControlManager.connectPermissions(b, c, false, true);
@@ -198,10 +197,10 @@ public class AccessControlManagerImplTest {
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
         Permission d = new Permission("d", Action.READ, "d");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
-        accessControlManager.addPermission(d);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
+        accessControlManager.addPermissions(Collections.singleton(d));
 
         accessControlManager.connectPermissions(a, b, false, false);
         accessControlManager.connectPermissions(c, d, false, false);
@@ -237,12 +236,12 @@ public class AccessControlManagerImplTest {
         Permission b3 = new Permission("b3", Action.READ, "b");
         Permission c1 = new Permission("c1", Action.READ, "c");
         Permission c2 = new Permission("c2", Action.READ, "c");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b1);
-        accessControlManager.addPermission(b2);
-        accessControlManager.addPermission(b3);
-        accessControlManager.addPermission(c1);
-        accessControlManager.addPermission(c2);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b1));
+        accessControlManager.addPermissions(Collections.singleton(b2));
+        accessControlManager.addPermissions(Collections.singleton(b3));
+        accessControlManager.addPermissions(Collections.singleton(c1));
+        accessControlManager.addPermissions(Collections.singleton(c2));
 
         accessControlManager.connectPermissions(b1, a, true, true);
         accessControlManager.connectPermissions(b2, a, true, true);
@@ -284,10 +283,10 @@ public class AccessControlManagerImplTest {
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
         Permission d = new Permission("d", Action.READ, "d");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
-        accessControlManager.addPermission(d);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
+        accessControlManager.addPermissions(Collections.singleton(d));
 
         accessControlManager.connectPermissions(a, b, true, false);
         accessControlManager.connectPermissions(c, d, true, false);

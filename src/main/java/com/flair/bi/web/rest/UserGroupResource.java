@@ -353,7 +353,6 @@ public class UserGroupResource {
     @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<Void> changePermissions(@PathVariable String name, @RequestBody List<ChangePermissionVM> changePermissionVMS) {
         changePermissionVMS
-                .stream()
                 .forEach(x -> {
                     if (x.getAction() == ChangePermissionVM.Action.ADD) {
                         accessControlManager.assignPermission(name, Permission.fromStringValue(x.getId()));

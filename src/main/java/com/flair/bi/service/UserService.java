@@ -232,13 +232,15 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public Optional<User> getUserByLogin(String login) {
-		User currentUser = getUserWithAuthoritiesByLoginOrError();
-		return userRepository.findOneByLoginAndRealmId(login, currentUser.getRealm().getId());
+		return userRepository.findOneByLogin(login).map(user -> {
+			user.retrieveAllUserPermissions().size();
+			return user;
+		});
 	}
 
 	@Transactional(readOnly = true)
 	public User getUserWithAuthoritiesByLoginOrError() {
-		return getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElseThrow(RuntimeException::new);
+		return getUserByLogin(SecurityUtils.getCurrentUserLogin()).orElseThrow(RuntimeException::new);
 	}
 
 	@Transactional(readOnly = true)

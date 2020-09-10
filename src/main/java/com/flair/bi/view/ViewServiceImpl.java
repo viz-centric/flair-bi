@@ -270,7 +270,9 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<View> findByDashboardId(Long dashboardId) {
-		return viewRepository.findByDashboardId(dashboardId).collect(Collectors.toList());
+		return ImmutableList.copyOf(
+				viewRepository.findAll(hasUserRealmAccess().and(QView.view.viewDashboard.id.eq(dashboardId)))
+		);
 	}
 
 	/**
@@ -281,7 +283,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewState getCurrentEditingViewState(Long viewId) {
-		final View view = viewRepository.getOne(viewId);
+		final View view = viewRepository.findAll(hasUserRealmAccess().and(QView.view.id.eq(viewId))).iterator().next();
 
 		return viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
 	}

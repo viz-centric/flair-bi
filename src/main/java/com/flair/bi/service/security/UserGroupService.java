@@ -8,6 +8,7 @@ import com.flair.bi.domain.security.QUserGroup;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.google.common.collect.ImmutableList;
@@ -70,6 +71,8 @@ public class UserGroupService {
 		// Default permissions required in order to create user_group(DASHBOARDS,
 		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: Start
 
+		boolean isCreate = userGroup.getId() == null;
+
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (userGroup.getId() != null) {
 			if (!user.getRealm().getId().equals(userGroup.getRealm().getId())) {
@@ -77,16 +80,19 @@ public class UserGroupService {
 			}
 		}
 
-		userGroup.setRealm(user.getRealm());
+		if (isCreate) {
+			userGroup.setRealm(user.getRealm());
 
-		final Set<Permission> permissions = permissionRepository
-				.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
-						new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
-						new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
-				.stream().collect(Collectors.toSet());
+			final Set<Permission> permissions = permissionRepository
+					.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
+							new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
+							new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
+					.stream().collect(Collectors.toSet());
 
-		userGroup.getPermissions().clear();
-		userGroup.addPermissions(permissions);
+			userGroup.getPermissions().clear();
+			userGroup.addPermissions(permissions);
+		}
+
 		// Default permissions required in order to create user_group(DASHBOARDS,
 		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: End
 
@@ -102,14 +108,34 @@ public class UserGroupService {
 	@Transactional(readOnly = true)
 	public Page<UserGroup> findAll(Pageable pageable) {
 		log.debug("Request to get all UserGroups");
-		return userGroupRepository.findAll(hasUserGroupPermission(), pageable);
+		return userGroupRepository.findAll(hasRoleRestrictions(), pageable);
+	}
+
+	private BooleanExpression hasRoleRestrictions() {
+		User userWithAuthoritiesByLoginOrError = userService.getUserWithAuthoritiesByLoginOrError();
+
+		boolean hasRestrictedRole = userWithAuthoritiesByLoginOrError.getUserGroups()
+				.stream()
+				.anyMatch(ug -> isRestrictedRole(ug.getName()));
+
+		BooleanExpression expression;
+		if (!hasRestrictedRole) {
+			expression = hasUserGroupPermission().and(QUserGroup.userGroup.name.notIn(RestrictedResources.RESTRICTED_ROLES));
+		} else {
+			expression = hasUserGroupPermission();
+		}
+		return expression;
+	}
+
+	private boolean isRestrictedRole(String role) {
+		return RestrictedResources.RESTRICTED_ROLES.contains(role);
 	}
 
 	@Transactional(readOnly = true)
 	public List<UserGroup> findAll(Predicate predicate) {
 		log.debug("Request to get all UserGroups");
 		return ImmutableList.copyOf(
-				userGroupRepository.findAll(hasUserGroupPermission().and(predicate))
+				userGroupRepository.findAll(hasRoleRestrictions().and(predicate))
 		);
 	}
 

@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -232,15 +233,29 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public Optional<User> getUserByLogin(String login) {
-		return userRepository.findOneByLogin(login).map(user -> {
+		Optional<User> usr = userRepository.findOneByLogin(login);
+		if (usr.isPresent()) {
+			User user = checkLoginBelongsToCurrentRealm(login, usr);
 			user.retrieveAllUserPermissions().size();
-			return user;
-		});
+		}
+		return usr;
+	}
+
+	private User checkLoginBelongsToCurrentRealm(String login, Optional<User> usr) {
+		User user = usr.get();
+		User currentUser = getUserWithAuthorities();
+		if (currentUser != null && !Objects.equals(user.getRealm().getId(), currentUser.getRealm().getId())) {
+			throw new IllegalStateException("User " + login + " cannot access another realm " + user.getRealm().getName());
+		}
+		return user;
 	}
 
 	@Transactional(readOnly = true)
 	public User getUserWithAuthoritiesByLoginOrError() {
-		return getUserByLogin(SecurityUtils.getCurrentUserLogin()).orElseThrow(RuntimeException::new);
+		return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).map(user -> {
+			user.retrieveAllUserPermissions().size();
+			return user;
+		}).orElseThrow(RuntimeException::new);
 	}
 
 	@Transactional(readOnly = true)

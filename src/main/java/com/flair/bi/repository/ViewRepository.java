@@ -13,8 +13,6 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.stream.Stream;
-
 /**
  * Spring Data JPA repository for the View entity.
  */
@@ -22,12 +20,8 @@ import java.util.stream.Stream;
 public interface ViewRepository
 		extends JpaRepository<View, Long>, QuerydslPredicateExecutor<View>, QuerydslBinderCustomizer<QView> {
 
-	Stream<View> findAllByViewDashboardId(Long id);
-
-	Stream<View> findAllByViewDashboardIdAndRealmId(Long id, Long realmId);
-
-	@Query(value = "select view from View view where view.viewDashboard.id = :id and view.viewName=:viewName")
-	View findByDashboardIdAndViewName(@Param("id") Long id, @Param("viewName") String viewName);
+	@Query(value = "select view from View view where view.viewDashboard.id = :id and view.viewName=:viewName and view.realm.id = :realmId")
+	View findByDashboardIdAndViewNameAndRealmId(@Param("id") Long id, @Param("viewName") String viewName, @Param("realmId") Long realmId);
 
 	@Modifying
 	@Query("delete from View v where v.realm.id = :id")

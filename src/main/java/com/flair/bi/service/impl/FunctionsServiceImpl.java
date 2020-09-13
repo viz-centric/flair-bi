@@ -12,12 +12,12 @@ import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -78,9 +78,13 @@ public class FunctionsServiceImpl implements FunctionsService {
 	@Transactional(readOnly = true)
 	public FunctionsDTO findOne(Long id) {
 		log.debug("Request to get Functions : {}", id);
-		Functions functions = functionsRepository.getOne(id);
+		Functions functions = findById(id);
 		FunctionsDTO functionsDTO = functionsMapper.functionsToFunctionsDTO(functions);
 		return functionsDTO;
+	}
+
+	private Functions findById(Long id) {
+		return functionsRepository.findOne(QFunctions.functions.id.eq(id).and(hasUserRealmAccess())).orElseThrow();
 	}
 
 	/**
@@ -90,22 +94,16 @@ public class FunctionsServiceImpl implements FunctionsService {
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete Functions : {}", id);
-		functionsRepository.deleteById(id);
+		Functions functions = findById(id);
+		functionsRepository.delete(functions);
 	}
 
 	@Override
 	public void saveAll(List<Functions> functions) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		functions.forEach(function -> {
-			if (function.getId() == null) {
-				function.setRealm(user.getRealm());
-			}
-		});
 		functionsRepository.saveAll(functions);
 	}
 
 	@Override
-	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
 	public void deleteAllByRealmId(Long realmId) {
 		functionsRepository.deleteAllByRealmId(realmId);
 	}
@@ -113,6 +111,10 @@ public class FunctionsServiceImpl implements FunctionsService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Functions> findByRealmId(Long realmId) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		if (!Objects.equals(user.getRealm().getId(), realmId)) {
+			throw new IllegalStateException("Cannot access realm " + realmId + " from realm " + user.getRealm().getId());
+		}
 		return functionsRepository.findByRealmId(realmId);
 	}
 

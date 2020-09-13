@@ -12,17 +12,11 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 /**
  * Spring Data JPA repository for the Dashboard entity.
  */
 public interface DashboardRepository extends JpaRepository<Dashboard, Long>, QuerydslPredicateExecutor<Dashboard>,
 		QuerydslBinderCustomizer<QDashboard> {
-
-	Dashboard findByDashboardViews(Long id);
-
-	List<Dashboard> findByDashboardDatasourceIdIn(List<Long> datasourceIdList);
 
 	@Modifying
 	@Query("delete from Dashboard d where d.realm.id = :id")

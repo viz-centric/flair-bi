@@ -1,6 +1,7 @@
 package com.flair.bi.authorization;
 
 import com.flair.bi.domain.QUser;
+import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
@@ -350,11 +351,16 @@ class AccessControlManagerImpl implements AccessControlManager {
 	private Permission deleteEdges(Permission permission) {
 		// TODO: add realm ID
 		Iterable<PermissionEdge> permissionEdges = permissionEdgeRepository
-				.findAll(QPermissionEdge.permissionEdge.from.key.eq(permission.getKey())
-						.or(QPermissionEdge.permissionEdge.to.key.eq(permission.getKey())));
+				.findAll(hasUserRealmAccess().and(QPermissionEdge.permissionEdge.from.key.eq(permission.getKey())
+						.or(QPermissionEdge.permissionEdge.to.key.eq(permission.getKey()))));
 
 		permissionEdgeRepository.deleteAll(permissionEdges);
 		return permission;
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QPermissionEdge.permissionEdge.realm.id.eq(user.getRealm().getId());
 	}
 
 	/**
@@ -405,13 +411,14 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 *                      WARNING: It is advised to use this method only after
 	 *                      creating new permissions to make initial connections
 	 *                      between permissions
+	 * @param realm
 	 * @return created connection
 	 */
 	@Override
 	public PermissionEdge connectPermissions(Permission from, Permission to, boolean bidirectional,
-			boolean transitive) {
+											 boolean transitive, Realm realm) {
 		final PermissionEdge edge = permissionEdgeRepository
-				.save(new PermissionEdge(from, to, bidirectional, transitive));
+				.save(new PermissionEdge(from, to, bidirectional, transitive, realm));
 
 		updatePermissionState(to, from, true);
 
@@ -458,7 +465,8 @@ class AccessControlManagerImpl implements AccessControlManager {
 		permissionEdgeKey.setFromKey(from.getKey());
 		permissionEdgeKey.setToKey(to.getKey());
 
-		PermissionEdge edge = permissionEdgeRepository.getOne(permissionEdgeKey);
+		PermissionEdge edge = permissionEdgeRepository.findOne(
+				hasUserRealmAccess().and(QPermissionEdge.permissionEdge.key.eq(permissionEdgeKey))).orElseThrow();
 
 		updatePermissionState(to, from, false);
 
@@ -501,10 +509,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 				.and(QPermissionEdge.permissionEdge.biDirectional.eq(true)
 						.and(QPermissionEdge.permissionEdge.notIn(visited)));
 
-		List<PermissionEdge> permissions = (List<PermissionEdge>) permissionEdgeRepository.findAll(givesPerm);
+		List<PermissionEdge> permissions = (List<PermissionEdge>) permissionEdgeRepository
+				.findAll(hasUserRealmAccess().and(givesPerm));
 
 		List<PermissionEdge> permissionEdges = (List<PermissionEdge>) permissionEdgeRepository
-				.findAll(givesBiDirectPerm);
+				.findAll(hasUserRealmAccess().and(givesBiDirectPerm));
 
 		// add those edges to visited
 		visited.addAll(permissions);

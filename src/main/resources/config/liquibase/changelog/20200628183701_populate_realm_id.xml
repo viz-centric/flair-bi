@@ -18,6 +18,8 @@
                 (select id from realm order by id desc limit 1);
             UPDATE datasources SET realm_id =
                 (select id from realm order by id desc limit 1);
+            UPDATE permission_edge SET realm_id =
+                (select id from realm order by id desc limit 1);
             UPDATE functions SET realm_id =
                 (select id from realm order by id desc limit 1);
             UPDATE views SET realm_id =

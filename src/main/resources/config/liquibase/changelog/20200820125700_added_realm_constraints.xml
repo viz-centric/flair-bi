@@ -38,5 +38,12 @@
                        constraintName="pk_ug_user_user_group"
                        tableName="user_user_group"/>
 
+        <dropPrimaryKey constraintName="permission_edge_pkey"
+                        tableName="permission_edge"/>
+
+        <addPrimaryKey columnNames="from_resource, from_action, from_scope, to_resource, to_action, to_scope, realm_id"
+                       constraintName="permission_edge_pkey"
+                       tableName="permission_edge"/>
+
     </changeSet>
 </databaseChangeLog>

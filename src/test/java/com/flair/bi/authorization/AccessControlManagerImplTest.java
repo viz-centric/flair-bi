@@ -1,6 +1,7 @@
 package com.flair.bi.authorization;
 
 import com.flair.bi.FlairbiApp;
+import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
@@ -137,9 +138,9 @@ public class AccessControlManagerImplTest {
         accessControlManager.addPermissions(Collections.singleton(b));
         accessControlManager.addPermissions(Collections.singleton(c));
 
-        accessControlManager.connectPermissions(a, b, true, false);
-        accessControlManager.connectPermissions(a, c, false, false);
-        accessControlManager.connectPermissions(b, c, false, false);
+        accessControlManager.connectPermissions(a, b, true, false, new Realm());
+        accessControlManager.connectPermissions(a, c, false, false, new Realm());
+        accessControlManager.connectPermissions(b, c, false, false, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(a);
 
@@ -175,8 +176,8 @@ public class AccessControlManagerImplTest {
         accessControlManager.addPermissions(Collections.singleton(b));
         accessControlManager.addPermissions(Collections.singleton(c));
 
-        accessControlManager.connectPermissions(a, b, false, false);
-        accessControlManager.connectPermissions(b, c, false, true);
+        accessControlManager.connectPermissions(a, b, false, false, new Realm());
+        accessControlManager.connectPermissions(b, c, false, true, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(c);
 
@@ -202,8 +203,8 @@ public class AccessControlManagerImplTest {
         accessControlManager.addPermissions(Collections.singleton(c));
         accessControlManager.addPermissions(Collections.singleton(d));
 
-        accessControlManager.connectPermissions(a, b, false, false);
-        accessControlManager.connectPermissions(c, d, false, false);
+        accessControlManager.connectPermissions(a, b, false, false, new Realm());
+        accessControlManager.connectPermissions(c, d, false, false, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(a);
 
@@ -243,11 +244,11 @@ public class AccessControlManagerImplTest {
         accessControlManager.addPermissions(Collections.singleton(c1));
         accessControlManager.addPermissions(Collections.singleton(c2));
 
-        accessControlManager.connectPermissions(b1, a, true, true);
-        accessControlManager.connectPermissions(b2, a, true, true);
-        accessControlManager.connectPermissions(b3, a, true, true);
-        accessControlManager.connectPermissions(c1, b1, true, true);
-        accessControlManager.connectPermissions(c2, b1, true, true);
+        accessControlManager.connectPermissions(b1, a, true, true, new Realm());
+        accessControlManager.connectPermissions(b2, a, true, true, new Realm());
+        accessControlManager.connectPermissions(b3, a, true, true, new Realm());
+        accessControlManager.connectPermissions(c1, b1, true, true, new Realm());
+        accessControlManager.connectPermissions(c2, b1, true, true, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(b1);
 
@@ -288,8 +289,8 @@ public class AccessControlManagerImplTest {
         accessControlManager.addPermissions(Collections.singleton(c));
         accessControlManager.addPermissions(Collections.singleton(d));
 
-        accessControlManager.connectPermissions(a, b, true, false);
-        accessControlManager.connectPermissions(c, d, true, false);
+        accessControlManager.connectPermissions(a, b, true, false, new Realm());
+        accessControlManager.connectPermissions(c, d, true, false, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(a);
 

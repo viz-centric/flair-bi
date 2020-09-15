@@ -124,7 +124,8 @@ class ViewServiceImpl implements ViewService {
 					x.getAction().equals(Action.READ) || x.getAction().equals(Action.REQUEST_PUBLISH)
 							|| x.getAction().equals(Action.MANAGE_PUBLISH)
 							|| x.getAction().equals(Action.READ_PUBLISHED),
-					true));
+					true,
+					vw.getRealm()));
 
 			ViewState viewState = new ViewState();
 			viewStateCouchDbRepository.add(viewState);

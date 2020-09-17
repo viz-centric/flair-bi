@@ -4,6 +4,7 @@ import com.flair.bi.authorization.AccessControlManager;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
 import com.flair.bi.domain.QDashboard;
+import com.flair.bi.domain.QDashboardRelease;
 import com.flair.bi.domain.Release;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
@@ -236,10 +237,6 @@ public class DashboardServiceImpl implements DashboardService {
 
 		final Optional<Dashboard> dashboardOpt = findById(id);
 
-//		if (dashboardOpt.isEmpty()) {
-//			return;
-//		}
-
 		final Dashboard dashboard = dashboardOpt.get();
 
 		if (dashboard.isPublished()
@@ -434,6 +431,9 @@ public class DashboardServiceImpl implements DashboardService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<DashboardRelease> getDashboardReleasesList(Long dashboardId) {
-		return dashboardReleaseRepository.findByDashboardId(dashboardId);
+		return ImmutableList.copyOf(
+				dashboardReleaseRepository.findAll(hasUserRealmAccess().and(QDashboardRelease.dashboardRelease.dashboard.id.eq(dashboardId)))
+		);
 	}
+
 }

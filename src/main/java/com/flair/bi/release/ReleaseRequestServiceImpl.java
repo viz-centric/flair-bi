@@ -93,12 +93,12 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	 */
 	@Override
 	public ReleaseRequest getRequestById(Long id) {
-		return releaseRequestRepository.findOne(hasUserRealmAccess().and(QReleaseRequest.releaseRequest.id.eq(id))).orElseThrow();
+		return findById(id);
 	}
 
 	@Override
 	public void approveRelease(Long requestId) {
-		ReleaseRequest releaseRequest = getRequestById(requestId);
+		ReleaseRequest releaseRequest = findById(requestId);
 
 		User user = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin())
 				.orElseThrow(RuntimeException::new);
@@ -128,7 +128,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 	@Override
 	public void rejectRelease(Long requestId) {
-		ReleaseRequest releaseRequest = getRequestById(requestId);
+		ReleaseRequest releaseRequest = findById(requestId);
 
 		DashboardRelease release = releaseRequest.getRelease();
 
@@ -147,6 +147,11 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 		releaseRequestRepository.deleteById(requestId);
 		dashboardReleaseRepository.save(release);
+	}
+
+	private ReleaseRequest findById(Long requestId) {
+		return releaseRequestRepository.findOne(hasUserRealmAccess().and(QReleaseRequest.releaseRequest.id.eq(requestId)))
+				.orElseThrow();
 	}
 
 	/**

@@ -1,12 +1,18 @@
 package com.flair.bi.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import com.flair.bi.domain.FeatureCriteria;
+import com.flair.bi.domain.View;
+import com.flair.bi.service.BookMarkWatchService;
+import com.flair.bi.service.FeatureCriteriaService;
+import com.flair.bi.service.mapper.FeatureCriteriaMapper;
+import com.flair.bi.view.ViewService;
+import com.flair.bi.web.rest.dto.CreateUpdateFeatureCriteriaDTO;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.util.ResponseUtil;
+import com.querydsl.core.types.Predicate;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,21 +24,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flair.bi.domain.FeatureCriteria;
-import com.flair.bi.domain.View;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.BookMarkWatchService;
-import com.flair.bi.service.FeatureCriteriaService;
-import com.flair.bi.service.mapper.FeatureCriteriaMapper;
-import com.flair.bi.view.ViewService;
-import com.flair.bi.web.rest.dto.CreateUpdateFeatureCriteriaDTO;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.util.ResponseUtil;
-import com.querydsl.core.types.Predicate;
-
-import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing FeatureCriteria.
@@ -147,6 +143,6 @@ public class FeatureCriteriaResource {
 	public void saveRecentBookmark(@PathVariable Long bookmarkId, @PathVariable Long viewId) {
 		log.debug("REST request to get FeatureCriteria : {}", bookmarkId);
 		View view = viewService.findOne(viewId);
-		bookMarkWatchService.saveBookmarkWatchAsync(bookmarkId, viewId, SecurityUtils.getCurrentUserLogin(), view);
+		bookMarkWatchService.saveBookmarkWatchAsync(bookmarkId, viewId, view);
 	}
 }

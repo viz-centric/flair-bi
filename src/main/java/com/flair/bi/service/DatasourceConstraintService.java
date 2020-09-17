@@ -1,17 +1,20 @@
 package com.flair.bi.service;
 
-import java.util.List;
-
+import com.flair.bi.domain.DatasourceConstraint;
+import com.flair.bi.domain.QDatasourceConstraint;
+import com.flair.bi.domain.User;
+import com.flair.bi.repository.DatasourceConstraintRepository;
+import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.google.common.collect.ImmutableList;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.domain.DatasourceConstraint;
-import com.flair.bi.repository.DatasourceConstraintRepository;
-import com.flair.bi.web.rest.errors.EntityNotFoundException;
-import com.querydsl.core.types.Predicate;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Service Implementation for managing DatasourceConstraint.
@@ -23,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DatasourceConstraintService {
 
 	private final DatasourceConstraintRepository datasourceConstraintRepository;
+	private final UserService userService;
 
 	/**
 	 * Save a datasourceConstraint.
@@ -32,6 +36,12 @@ public class DatasourceConstraintService {
 	 */
 	public DatasourceConstraint save(DatasourceConstraint datasourceConstraint) {
 		log.debug("Request to save DatasourceConstraint : {}", datasourceConstraint);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		if (datasourceConstraint.getUser() != null) {
+			if (!Objects.equals(user.getRealm().getId(), datasourceConstraint.getUser().getRealm().getId())) {
+				throw new IllegalStateException("Data constraint for user " + datasourceConstraint.getUser().getId() + " is not allowed");
+			}
+		}
 		return datasourceConstraintRepository.save(datasourceConstraint);
 	}
 
@@ -44,7 +54,14 @@ public class DatasourceConstraintService {
 	@Transactional(readOnly = true)
 	public List<DatasourceConstraint> findAll(Predicate predicate) {
 		log.debug("Request to get all DatasourceConstraints");
-		return (List<DatasourceConstraint>) datasourceConstraintRepository.findAll(predicate);
+		return ImmutableList.copyOf(
+				datasourceConstraintRepository.findAll(hasRealmAccess().and(predicate))
+		);
+	}
+
+	private BooleanExpression hasRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QDatasourceConstraint.datasourceConstraint.user.realm.id.eq(user.getId());
 	}
 
 	/**
@@ -56,7 +73,7 @@ public class DatasourceConstraintService {
 	@Transactional(readOnly = true)
 	public DatasourceConstraint findOne(Long id) {
 		log.debug("Request to get DatasourceConstraint : {}", id);
-		return datasourceConstraintRepository.findById(id)
+		return datasourceConstraintRepository.findOne(hasRealmAccess().and(QDatasourceConstraint.datasourceConstraint.id.eq(id)))
 				.orElseThrow(() -> new EntityNotFoundException("Datasource constraint cannot be found"));
 	}
 
@@ -67,11 +84,15 @@ public class DatasourceConstraintService {
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete DatasourceConstraint : {}", id);
-		datasourceConstraintRepository.deleteById(id);
+		DatasourceConstraint datasourceConstraint = findOne(id);
+		datasourceConstraintRepository.delete(datasourceConstraint);
 	}
 
 	@Transactional(readOnly = true)
 	public DatasourceConstraint findByUserAndDatasource(String login, Long datasourceId) {
-		return datasourceConstraintRepository.findByUserLoginAndDatasourceId(login, datasourceId);
+		return datasourceConstraintRepository.findOne(hasRealmAccess()
+				.and(QDatasourceConstraint.datasourceConstraint.datasource.id.eq(datasourceId))
+				.and(QDatasourceConstraint.datasourceConstraint.user.login.eq(login)))
+				.orElseThrow(() -> new EntityNotFoundException("Datasource constraint cannot be found"));
 	}
 }

@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -46,26 +47,28 @@ public class BookMarkWatchService {
 				pageable);
 	}
 
-	public void saveBookmarkWatch(Long bookmarkId, Long viewId, String login, View view) {
-		if (null == login || null == view || null == bookmarkId) {
+	@Async
+	public void saveBookmarkWatchAsync(Long bookmarkId, Long viewId, View view) {
+		if (null == view || null == bookmarkId) {
 			return;
 		}
-		Optional<User> user = userService.getUserByLogin(login);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 
-		BookmarkWatchId id = user.map(x -> {
-			BookmarkWatchId bookmarkWatchId = new BookmarkWatchId();
-			bookmarkWatchId.setUserId(x.getId());
-			bookmarkWatchId.setBookmarkId(bookmarkId);
-			bookmarkWatchId.setViewId(viewId);
-			return bookmarkWatchId;
-		}).orElseThrow(IllegalArgumentException::new);
+		if (!Objects.equals(user.getRealm().getId(), view.getRealm().getId())) {
+			throw new IllegalStateException("User " + user.getId() + " does not belong to realm " + view.getRealm().getId());
+		}
+
+		BookmarkWatchId id = new BookmarkWatchId();
+		id.setUserId(user.getId());
+		id.setBookmarkId(bookmarkId);
+		id.setViewId(viewId);
 
 		BookmarkWatch bookmarkWatch = bookmarkWatchRepository.findById(id).map(x -> x.incrementWatchCount())
 				.orElseGet(() -> {
 					final BookmarkWatch x = new BookmarkWatch();
 					x.setId(id);
 					x.setWatchCount(1L);
-					x.setUser(user.orElseThrow(IllegalArgumentException::new));
+					x.setUser(user);
 					x.setView(view);
 					Optional<FeatureBookmark> featureBookmark = featureBookmarkRepository.findById(bookmarkId);
 					featureBookmark.ifPresent(x::setFeatureBookmark);
@@ -78,22 +81,18 @@ public class BookMarkWatchService {
 
 	}
 
-	@Async
-	public void saveBookmarkWatchAsync(Long bookmarkId, Long viewId, String login, View view) {
-		saveBookmarkWatch(bookmarkId, viewId, login, view);
-	}
-
-	public int getCreatedBookmarkCount(long userId) {
-		List<Integer> counts = null;
+	public int getCreatedBookmarkCount() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		List<Integer> counts;
 		int count = 0;
 		try {
 			counts = jdbcTemplate.query("select count(*) as count  from bookmark_watches where user_id=?",
-					new Object[] { userId }, new RowMapper<Integer>() {
+					new Object[] { user.getId() }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
 					});
-			if (!counts.isEmpty() && counts != null)
+			if (!counts.isEmpty())
 				count = counts.get(0);
 
 		} catch (Exception e) {
@@ -103,16 +102,20 @@ public class BookMarkWatchService {
 	}
 
 	public void deleteBookmarkWatchesByViewId(Long viewId) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		try {
-			jdbcTemplate.update("delete from bookmark_watches where view_id=?", viewId);
+			jdbcTemplate.update("delete from bookmark_watches where view_id=? and user_id=?",
+					viewId, user.getId());
 		} catch (Exception e) {
 			log.error("error occured while deleting bookmark watches" + e.getMessage());
 		}
 	}
 
 	public void deleteBookmarkWatchesByBookmarkId(Long bookmarkId) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		try {
-			jdbcTemplate.update("delete from bookmark_watches where bookmark_id=?", bookmarkId);
+			jdbcTemplate.update("delete from bookmark_watches where bookmark_id=? and user_id=?",
+					bookmarkId, user.getId());
 		} catch (Exception e) {
 			log.error("error occured while deleting bookmark watches" + e.getMessage());
 		}

@@ -1,22 +1,19 @@
 package com.flair.bi.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.FeatureCriteria;
 import com.flair.bi.domain.QFeatureCriteria;
-import com.flair.bi.repository.FeatureBookmarkRepository;
 import com.flair.bi.repository.FeatureCriteriaRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing FeatureCriteria.
@@ -29,7 +26,7 @@ public class FeatureCriteriaService {
 
 	private final FeatureCriteriaRepository featureCriteriaRepository;
 
-	private final FeatureBookmarkRepository featureBookmarkRepository;
+	private final FeatureBookmarkService featureBookmarkService;
 
 	/**
 	 * Save a featureCriteria.
@@ -43,8 +40,8 @@ public class FeatureCriteriaService {
 		boolean create = featureCriteria.getId() == null;
 
 		if (create) {
-			FeatureBookmark featureBookmark = featureBookmarkRepository
-					.getOne(featureCriteria.getFeatureBookmark().getId());
+			FeatureBookmark featureBookmark = featureBookmarkService
+					.findOne(featureCriteria.getFeatureBookmark().getId());
 			featureBookmark.addFeatureCriteria(featureCriteria);
 			return featureCriteriaRepository.save(featureCriteria);
 		} else {
@@ -96,13 +93,12 @@ public class FeatureCriteriaService {
 		Optional<FeatureCriteria> featureCriteria = featureCriteriaRepository.findById(id);
 
 		featureCriteria.ifPresent(x -> {
-			Optional<FeatureBookmark> featureBookmark = featureBookmarkRepository
-					.findById(x.getFeatureBookmark().getId());
-			featureBookmark.ifPresent(y -> {
-				y.removeFeatureCriteria(x);
-				featureBookmarkRepository.save(y);
-			});
-
+			FeatureBookmark featureBookmark = featureBookmarkService
+					.findOne(x.getFeatureBookmark().getId());
+			if (featureBookmark != null) {
+				featureBookmark.removeFeatureCriteria(x);
+				featureBookmarkService.save(featureBookmark);
+			}
 		});
 	}
 }

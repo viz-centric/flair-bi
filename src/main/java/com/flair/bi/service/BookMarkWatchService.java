@@ -1,17 +1,17 @@
 package com.flair.bi.service;
 
-import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.bookmarkwatch.BookmarkWatch;
 import com.flair.bi.domain.bookmarkwatch.BookmarkWatchId;
 import com.flair.bi.domain.bookmarkwatch.QBookmarkWatch;
 import com.flair.bi.repository.BookmarkWatchRepository;
-import com.flair.bi.repository.FeatureBookmarkRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,7 +36,9 @@ public class BookMarkWatchService {
 
 	private final BookmarkWatchRepository bookmarkWatchRepository;
 
-	private final FeatureBookmarkRepository featureBookmarkRepository;
+	@Lazy // TODO: remove this dependency to avoid cycling dependency issue
+	@Autowired
+	private FeatureBookmarkService featureBookmarkService;
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -70,8 +71,7 @@ public class BookMarkWatchService {
 					x.setWatchCount(1L);
 					x.setUser(user);
 					x.setView(view);
-					Optional<FeatureBookmark> featureBookmark = featureBookmarkRepository.findById(bookmarkId);
-					featureBookmark.ifPresent(x::setFeatureBookmark);
+					x.setFeatureBookmark(featureBookmarkService.findOne(bookmarkId));
 					return x;
 				});
 

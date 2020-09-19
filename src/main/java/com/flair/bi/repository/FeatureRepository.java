@@ -1,5 +1,10 @@
 package com.flair.bi.repository;
 
+import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.QFeature;
+import com.querydsl.core.types.dsl.SimpleExpression;
+import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,12 +13,6 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.query.Param;
-
-import com.flair.bi.domain.Feature;
-import com.flair.bi.domain.QFeature;
-import com.querydsl.core.types.dsl.SimpleExpression;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.core.types.dsl.StringPath;
 
 public interface FeatureRepository
 		extends JpaRepository<Feature, Long>, QuerydslPredicateExecutor<Feature>, QuerydslBinderCustomizer<QFeature> {
@@ -38,8 +37,8 @@ public interface FeatureRepository
 	}
 
 	@Modifying
-	@Query("update Feature u set u.favouriteFilter = :favouriteFilter where u.id = :id")
-	void markFavouriteFilter(@Param("favouriteFilter") Boolean favouriteFilter, @Param("id") Long id);
+	@Query("update Feature u set u.favouriteFilter = :favouriteFilter where u.id = :id and u.datasource.realm.id = :realmId")
+	void markFavouriteFilter(@Param("favouriteFilter") Boolean favouriteFilter, @Param("id") Long id, @Param("realmId") Long realmId);
 
 	@Modifying
 	@Query("update Feature u set u.pin = :pin where u.id = :id")

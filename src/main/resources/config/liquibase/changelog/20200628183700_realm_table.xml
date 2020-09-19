@@ -49,6 +49,17 @@
             <column name="realm_id" />
         </createIndex>
 
+        <addColumn tableName="client_logo">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_client_logo_realm_id"
+                     tableName="client_logo">
+            <column name="realm_id" />
+        </createIndex>
+
         <addColumn tableName="permission_edge">
             <column name="realm_id" type="bigint"  defaultValue="0">
                 <constraints nullable="false"/>

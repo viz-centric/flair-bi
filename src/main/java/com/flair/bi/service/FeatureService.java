@@ -2,16 +2,19 @@ package com.flair.bi.service;
 
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QFeature;
+import com.flair.bi.domain.User;
 import com.flair.bi.repository.FeatureRepository;
 import com.flair.bi.service.dto.FunctionsDTO;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,27 +26,40 @@ public class FeatureService {
 
 	private final FeatureRepository featureRepository;
 	private final FunctionsService functionsService;
+	private final UserService userService;
 
 	@Transactional(readOnly = true)
 	public List<Feature> getFeatures(Predicate predicate) {
 		log.debug("Attempt to retrieve features with predicate {}", predicate);
-		return ImmutableList.copyOf(featureRepository.findAll(predicate));
+		return ImmutableList.copyOf(
+				featureRepository.findAll(hasRealmPermissions().and(predicate))
+		);
 	}
 
 	@Transactional(readOnly = true)
 	public Feature getOne(Long id) {
 		log.debug("Attempt to retrieve feature with id: {}", id);
-		return featureRepository.getOne(id);
+		return featureRepository.findOne(hasRealmPermissions().and(QFeature.feature.id.eq(id))).orElseThrow();
 	}
 
 	public Feature save(Feature feature) {
 		log.debug("Saving feature {}", feature);
+		validatePermissions(feature);
 		return featureRepository.save(feature);
+	}
+
+	private void validatePermissions(Feature feature) {
+		Long datasourceRealmId = feature.getDatasource().getRealm().getId();
+		Long realmId = userService.getUserWithAuthoritiesByLoginOrError().getRealm().getId();
+		if (!Objects.equals(datasourceRealmId, realmId)) {
+			throw new IllegalStateException("Cannot save feature for with realm " + datasourceRealmId);
+		}
 	}
 
 	public void delete(Long id) {
 		log.debug("Attempt to delete feature with id {}", id);
-		featureRepository.deleteById(id);
+		Feature feature = getOne(id);
+		featureRepository.delete(feature);
 	}
 
 	public FeatureValidationResult validate(Feature feature) {
@@ -79,15 +95,22 @@ public class FeatureService {
 
 	public void save(List<Feature> features) {
 		log.debug("Saving feature {}", features);
+		features.forEach(f -> validatePermissions(f));
 		featureRepository.saveAll(features);
 	}
 
 	public void markFavouriteFilter(Boolean favouriteFilter, Long id) {
-		log.debug("FeatureService markFavouriteFilter ", favouriteFilter, id);
-		featureRepository.markFavouriteFilter(favouriteFilter, id);
+		log.debug("FeatureService markFavouriteFilter {} {}", favouriteFilter, id);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		featureRepository.markFavouriteFilter(favouriteFilter, id, user.getRealm().getId());
 	}
 
 	public List<FeatureValidationResult> validate(List<Feature> features) {
 		return features.stream().map(f -> validate(f)).collect(Collectors.toList());
+	}
+
+	private BooleanExpression hasRealmPermissions() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QFeature.feature.datasource.realm.id.eq(user.getRealm().getId());
 	}
 }

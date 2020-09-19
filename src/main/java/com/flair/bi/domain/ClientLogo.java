@@ -3,8 +3,16 @@ package com.flair.bi.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -35,6 +43,9 @@ public class ClientLogo implements Serializable {
 
     @Column(name = "image_content_type")
     private String imageContentType;
+
+    @ManyToOne
+    private Realm realm;
 
     @Transient
     public byte[] getImage() {
@@ -114,5 +125,13 @@ public class ClientLogo implements Serializable {
             ", name='" + getName() + "'" +
             ", url='" + getUrl() + "'" +
             "}";
+    }
+
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public void setRealm(Realm realm) {
+        this.realm = realm;
     }
 }

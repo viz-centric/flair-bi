@@ -12,6 +12,7 @@
         <dropDefaultValue columnName="realm_id" tableName="datasources"/>
         <dropDefaultValue columnName="realm_id" tableName="functions"/>
         <dropDefaultValue columnName="realm_id" tableName="views"/>
+        <dropDefaultValue columnName="realm_id" tableName="client_logo"/>
         <dropDefaultValue columnName="realm_id" tableName="visualization_colors"/>
         <dropDefaultValue columnName="realm_id" tableName="permission_edge"/>
     </changeSet>

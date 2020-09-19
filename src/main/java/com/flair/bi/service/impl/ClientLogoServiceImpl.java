@@ -1,29 +1,34 @@
 package com.flair.bi.service.impl;
 
-import com.flair.bi.service.ClientLogoService;
 import com.flair.bi.domain.ClientLogo;
+import com.flair.bi.domain.QClientLogo;
+import com.flair.bi.domain.User;
 import com.flair.bi.repository.ClientLogoRepository;
+import com.flair.bi.service.ClientLogoService;
+import com.flair.bi.service.UserService;
+import com.google.common.collect.ImmutableList;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service Implementation for managing ClientLogo.
  */
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class ClientLogoServiceImpl implements ClientLogoService{
 
     private final Logger log = LoggerFactory.getLogger(ClientLogoServiceImpl.class);
     
     private final ClientLogoRepository clientLogoRepository;
-
-    public ClientLogoServiceImpl(ClientLogoRepository clientLogoRepository) {
-        this.clientLogoRepository = clientLogoRepository;
-    }
+    private final UserService userService;
 
     /**
      * Save a clientLogo.
@@ -34,6 +39,14 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     @Override
     public ClientLogo save(ClientLogo clientLogo) {
         log.debug("Request to save ClientLogo : {}", clientLogo);
+        User user = userService.getUserWithAuthoritiesByLoginOrError();
+        if (clientLogo.getRealm() == null) {
+            clientLogo.setRealm(user.getRealm());
+        } else {
+            if (!Objects.equals(clientLogo.getRealm().getId(), user.getRealm().getId())) {
+                throw new IllegalStateException("Cannot update client logo for realm " + clientLogo.getRealm().getId());
+            }
+        }
         ClientLogo result = clientLogoRepository.save(clientLogo);
         return result;
     }
@@ -47,9 +60,14 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     @Transactional(readOnly = true)
     public List<ClientLogo> findAll() {
         log.debug("Request to get all ClientLogos");
-        List<ClientLogo> result = clientLogoRepository.findAll();
+        return ImmutableList.copyOf(
+                clientLogoRepository.findAll(hasRealmPermissions())
+        );
+    }
 
-        return result;
+    private BooleanExpression hasRealmPermissions() {
+        User user = userService.getUserWithAuthoritiesByLoginOrError();
+        return QClientLogo.clientLogo.realm.id.eq(user.getRealm().getId());
     }
 
     /**
@@ -62,8 +80,8 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     @Transactional(readOnly = true)
     public ClientLogo findOne(Long id) {
         log.debug("Request to get ClientLogo : {}", id);
-        ClientLogo clientLogo = clientLogoRepository.getOne(id);
-        return clientLogo;
+        return clientLogoRepository.findOne(hasRealmPermissions()
+                .and(QClientLogo.clientLogo.id.eq(id))).orElse(null);
     }
 
     /**
@@ -74,7 +92,8 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     @Override
     public void delete(Long id) {
         log.debug("Request to delete ClientLogo : {}", id);
-        clientLogoRepository.deleteById(id);
+        ClientLogo clientLogo = findOne(id);
+        clientLogoRepository.delete(clientLogo);
     }
 
     /**
@@ -84,7 +103,8 @@ public class ClientLogoServiceImpl implements ClientLogoService{
      */
     @Override
     public void updateImageLocation(String url, Long id) {
-        log.debug("Request to update ClientLogo url : {}",url, id);
-        clientLogoRepository.updateImageLocation(url,id);
+        log.debug("Request to update ClientLogo url : {} id {}", url, id);
+        User user = userService.getUserWithAuthoritiesByLoginOrError();
+        clientLogoRepository.updateImageLocation(url, id, user.getRealm().getId());
     }
 }

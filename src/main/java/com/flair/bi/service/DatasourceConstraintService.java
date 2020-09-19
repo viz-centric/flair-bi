@@ -61,7 +61,7 @@ public class DatasourceConstraintService {
 
 	private BooleanExpression hasRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceConstraint.datasourceConstraint.user.realm.id.eq(user.getId());
+		return QDatasourceConstraint.datasourceConstraint.user.realm.id.eq(user.getRealm().getId());
 	}
 
 	/**
@@ -93,6 +93,6 @@ public class DatasourceConstraintService {
 		return datasourceConstraintRepository.findOne(hasRealmAccess()
 				.and(QDatasourceConstraint.datasourceConstraint.datasource.id.eq(datasourceId))
 				.and(QDatasourceConstraint.datasourceConstraint.user.login.eq(login)))
-				.orElseThrow(() -> new EntityNotFoundException("Datasource constraint cannot be found"));
+				.orElse(null);
 	}
 }

@@ -20,6 +20,8 @@
                 (select id from realm order by id desc limit 1);
             UPDATE permission_edge SET realm_id =
                 (select id from realm order by id desc limit 1);
+            UPDATE client_logo SET realm_id =
+                (select id from realm order by id desc limit 1);
             UPDATE functions SET realm_id =
                 (select id from realm order by id desc limit 1);
             UPDATE views SET realm_id =

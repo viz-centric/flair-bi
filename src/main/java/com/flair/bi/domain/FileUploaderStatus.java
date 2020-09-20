@@ -1,15 +1,15 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A FileUploaderStatus.
@@ -41,6 +41,9 @@ public class FileUploaderStatus implements Serializable {
 
 	@Column(name = "file_location")
 	private String fileLocation;
+
+	@ManyToOne
+	private Realm realm;
 
 	public Long getId() {
 		return id;
@@ -140,5 +143,13 @@ public class FileUploaderStatus implements Serializable {
 		return "FileUploaderStatus{" + "id=" + id + ", fileSystem='" + fileSystem + "'" + ", fileName='" + fileName
 				+ "'" + ", contentType='" + contentType + "'" + ", isFileProcessed='" + isFileProcessed + "'"
 				+ ", fileLocation='" + fileLocation + "'" + '}';
+	}
+
+	public Realm getRealm() {
+		return realm;
+	}
+
+	public void setRealm(Realm realm) {
+		this.realm = realm;
 	}
 }

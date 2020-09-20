@@ -16,5 +16,6 @@
         <dropDefaultValue columnName="realm_id" tableName="visualization_colors"/>
         <dropDefaultValue columnName="realm_id" tableName="permission_edge"/>
         <dropDefaultValue columnName="realm_id" tableName="file_uploader_status"/>
+        <dropDefaultValue columnName="realm_id" tableName="field_types"/>
     </changeSet>
 </databaseChangeLog>

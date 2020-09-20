@@ -44,13 +44,16 @@ public class FunctionsServiceImpl implements FunctionsService {
 	public FunctionsDTO save(FunctionsDTO functionsDTO) {
 		log.debug("Request to save Functions : {}", functionsDTO);
 		Functions functions = functionsMapper.functionsDTOToFunctions(functionsDTO);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (functions.getId() == null) {
-			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			functions.setRealm(user.getRealm());
+		} else {
+			if (!Objects.equals(functions.getRealm().getId(), user.getRealm().getId())) {
+				throw new IllegalStateException("Cannot save function for realm " + functions.getRealm().getId());
+			}
 		}
 		functions = functionsRepository.save(functions);
-		FunctionsDTO result = functionsMapper.functionsToFunctionsDTO(functions);
-		return result;
+		return functionsMapper.functionsToFunctionsDTO(functions);
 	}
 
 	/**
@@ -79,8 +82,7 @@ public class FunctionsServiceImpl implements FunctionsService {
 	public FunctionsDTO findOne(Long id) {
 		log.debug("Request to get Functions : {}", id);
 		Functions functions = findById(id);
-		FunctionsDTO functionsDTO = functionsMapper.functionsToFunctionsDTO(functions);
-		return functionsDTO;
+		return functionsMapper.functionsToFunctionsDTO(functions);
 	}
 
 	private Functions findById(Long id) {

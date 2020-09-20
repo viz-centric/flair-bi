@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -92,12 +93,12 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	 */
 	@Override
 	public ReleaseRequest getRequestById(Long id) {
-		return releaseRequestRepository.getOne(id);
+		return releaseRequestRepository.findOne(hasUserRealmAccess().and(QReleaseRequest.releaseRequest.id.eq(id))).orElseThrow();
 	}
 
 	@Override
 	public void approveRelease(Long requestId) {
-		ReleaseRequest releaseRequest = releaseRequestRepository.getOne(requestId);
+		ReleaseRequest releaseRequest = getRequestById(requestId);
 
 		User user = userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin())
 				.orElseThrow(RuntimeException::new);
@@ -127,7 +128,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 	@Override
 	public void rejectRelease(Long requestId) {
-		ReleaseRequest releaseRequest = releaseRequestRepository.getOne(requestId);
+		ReleaseRequest releaseRequest = getRequestById(requestId);
 
 		DashboardRelease release = releaseRequest.getRelease();
 
@@ -403,7 +404,13 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	@Override
 	public ReleaseRequest save(ReleaseRequest request) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		request.setRealm(user.getRealm());
+		if (request.getRealm() == null) {
+			request.setRealm(user.getRealm());
+		} else {
+			if (!Objects.equals(request.getRealm().getId(), user.getRealm().getId())) {
+				throw new IllegalStateException("Cannot save release request for realm " + request.getRealm().getId());
+			}
+		}
 		return releaseRequestRepository.save(request);
 	}
 

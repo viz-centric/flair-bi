@@ -52,7 +52,9 @@ public class ViewWatchService {
 			return viewWatchId;
 		}).orElseThrow(IllegalArgumentException::new);
 
-		final ViewWatch viewWatch = viewWatchRepository.findById(id).map(x -> x.incrementWatchCount()).orElseGet(() -> {
+		final ViewWatch viewWatch = viewWatchRepository.findOne(
+				QViewWatch.viewWatch.user.login.eq(SecurityUtils.getCurrentUserLogin()).and(QViewWatch.viewWatch.id.eq(id))
+		).map(x -> x.incrementWatchCount()).orElseGet(() -> {
 			ViewWatch x = new ViewWatch();
 			x.setId(id);
 			x.setWatchCount(1L);

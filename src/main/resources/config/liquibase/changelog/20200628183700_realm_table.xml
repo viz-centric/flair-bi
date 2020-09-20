@@ -82,6 +82,17 @@
             <column name="realm_id" />
         </createIndex>
 
+        <addColumn tableName="field_types">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_field_types_realm_id"
+                     tableName="field_types">
+            <column name="realm_id" />
+        </createIndex>
+
         <addColumn tableName="user_group_permission">
             <column name="user_group_id" type="bigint"  defaultValue="0">
                 <constraints nullable="false"/>

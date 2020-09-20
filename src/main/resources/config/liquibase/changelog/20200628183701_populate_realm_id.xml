@@ -26,6 +26,8 @@
                 (select id from realm order by id desc limit 1);
             UPDATE functions SET realm_id =
                 (select id from realm order by id desc limit 1);
+            UPDATE field_types SET realm_id =
+                (select id from realm order by id desc limit 1);
             UPDATE views SET realm_id =
                 (select id from realm order by id desc limit 1);
             UPDATE visualization_colors SET realm_id =

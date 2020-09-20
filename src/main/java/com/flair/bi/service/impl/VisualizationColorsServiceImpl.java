@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -45,9 +46,13 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 		log.debug("Request to save VisualizationColors : {}", visualizationColorsDTO);
 		VisualizationColors visualizationColors = visualizationColorsMapper
 				.visualizationColorsDTOToVisualizationColors(visualizationColorsDTO);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (visualizationColors.getId() == null) {
-			User user = userService.getUserWithAuthoritiesByLoginOrError();
 			visualizationColors.setRealm(user.getRealm());
+		} else {
+			if (!Objects.equals(visualizationColors.getRealm().getId(), user.getRealm().getId())) {
+				throw new IllegalStateException("Cannot save visualization colors for realm " + visualizationColors.getRealm().getId());
+			}
 		}
 		visualizationColors = visualizationColorsRepository.save(visualizationColors);
 		VisualizationColorsDTO result = visualizationColorsMapper
@@ -81,10 +86,15 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 	@Transactional(readOnly = true)
 	public VisualizationColorsDTO findOne(Long id) {
 		log.debug("Request to get VisualizationColors : {}", id);
-		VisualizationColors visualizationColors = visualizationColorsRepository.getOne(id);
+		VisualizationColors visualizationColors = findById(id);
 		VisualizationColorsDTO visualizationColorsDTO = visualizationColorsMapper
 				.visualizationColorsToVisualizationColorsDTO(visualizationColors);
 		return visualizationColorsDTO;
+	}
+
+	private VisualizationColors findById(Long id) {
+		return visualizationColorsRepository.findOne(hasUserRealmAccess().eq(QVisualizationColors.visualizationColors.id.eq(id)))
+				.orElseThrow();
 	}
 
 	/**
@@ -94,7 +104,8 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete VisualizationColors : {}", id);
-		visualizationColorsRepository.deleteById(id);
+		VisualizationColors visualizationColors = findById(id);
+		visualizationColorsRepository.delete(visualizationColors);
 	}
 
 	@Override

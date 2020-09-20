@@ -60,6 +60,17 @@
             <column name="realm_id" />
         </createIndex>
 
+        <addColumn tableName="file_uploader_status">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_file_uploader_status_realm_id"
+                     tableName="file_uploader_status">
+            <column name="realm_id" />
+        </createIndex>
+
         <addColumn tableName="permission_edge">
             <column name="realm_id" type="bigint"  defaultValue="0">
                 <constraints nullable="false"/>

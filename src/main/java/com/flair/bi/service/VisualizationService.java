@@ -1,23 +1,20 @@
 package com.flair.bi.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.flair.bi.domain.Visualization;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.domain.propertytype.PropertyType;
+import com.flair.bi.repository.PropertyTypeRepository;
+import com.flair.bi.repository.VisualizationRepository;
+import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.domain.Visualization;
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.domain.propertytype.PropertyType;
-import com.flair.bi.repository.FieldTypeRepository;
-import com.flair.bi.repository.PropertyTypeRepository;
-import com.flair.bi.repository.VisualizationRepository;
-import com.flair.bi.web.rest.errors.EntityNotFoundException;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Visualization.
@@ -30,7 +27,7 @@ public class VisualizationService {
 
 	private final VisualizationRepository visualizationRepository;
 
-	private final FieldTypeRepository fieldTypeRepository;
+	private final FieldTypeService fieldTypeService;
 
 	private final PropertyTypeRepository propertyTypeRepository;
 
@@ -86,7 +83,7 @@ public class VisualizationService {
 	@Transactional(readOnly = true)
 	public Page<FieldType> getFieldTypes(Long visualizationId, Pageable pageable) {
 		log.debug("Request to get field types for visualizations: {}", visualizationId);
-		return fieldTypeRepository.findByVisualizationId(visualizationId, pageable);
+		return fieldTypeService.findByVisualizationId(visualizationId, pageable);
 	}
 
 	@Transactional(readOnly = true)
@@ -94,7 +91,7 @@ public class VisualizationService {
 		log.debug("Request to get field type with visualizations id: {} and field type id: {}", visualizationsId,
 				fieldTypeId);
 
-		final FieldType fieldType = fieldTypeRepository.findByIdAndVisualizationId(fieldTypeId, visualizationsId);
+		final FieldType fieldType = fieldTypeService.findByIdAndVisualizationId(fieldTypeId, visualizationsId);
 		fieldType.getPropertyTypes().size();// fetch property types
 
 		return fieldType;

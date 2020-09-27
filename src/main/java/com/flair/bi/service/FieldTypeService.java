@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -76,6 +75,7 @@ public class FieldTypeService {
 		return QFieldType.fieldType.realm.id.eq(user.getRealm().getId());
 	}
 
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
 	public List<FieldType> getAllByRealmId(Long realmId) {
 		return ImmutableList.copyOf(
 				fieldTypeRepository.findAll(QFieldType.fieldType.realm.id.eq(realmId))

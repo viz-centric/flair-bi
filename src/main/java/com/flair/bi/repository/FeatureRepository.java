@@ -32,7 +32,6 @@ public interface FeatureRepository
 		bindings.bind(root.type).first((StringExpression::contains));
 		bindings.bind(root.functionId).first((SimpleExpression::eq));
 		bindings.bind(root.id).first(SimpleExpression::eq);
-		bindings.bind(root.featureType).first(SimpleExpression::eq);
 		bindings.bind(root.datasource).first((path, value) -> path.id.eq(value.getId()));
 	}
 

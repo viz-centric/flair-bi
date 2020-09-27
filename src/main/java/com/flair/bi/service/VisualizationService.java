@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class VisualizationService {
 	 * @param visualization the entity to save
 	 * @return the persisted entity
 	 */
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
 	public Visualization save(Visualization visualization) {
 		log.debug("Request to save Visualization : {}", visualization);
 		return visualizationRepository.save(visualization);
@@ -75,6 +77,7 @@ public class VisualizationService {
 	 *
 	 * @param id the id of the entity
 	 */
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
 	public void delete(Long id) {
 		log.debug("Request to delete Visualization : {}", id);
 		visualizationRepository.deleteById(id);
@@ -108,6 +111,13 @@ public class VisualizationService {
 	}
 
 	public Visualization assignPropertyType(Long id, Long propertyTypeId) {
+		final PropertyType propertyType = propertyTypeRepository.getOne(propertyTypeId);
+		return visualizationRepository.findById(id).map(x -> x.addPropertyType(propertyType))
+				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);
+	}
+
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
+	public Visualization assignPropertyTypeByAdmin(Long id, Long propertyTypeId) {
 		final PropertyType propertyType = propertyTypeRepository.getOne(propertyTypeId);
 		return visualizationRepository.findById(id).map(x -> x.addPropertyType(propertyType))
 				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);

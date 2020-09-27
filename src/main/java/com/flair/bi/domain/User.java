@@ -139,7 +139,8 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<DatasourceConstraint> datasourceConstraints = new HashSet<>();
 
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@NotNull
 	private Realm realm;
 
 	@PreDestroy

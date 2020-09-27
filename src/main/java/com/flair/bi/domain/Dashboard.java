@@ -103,7 +103,8 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     @JoinColumn(name = "current_release_id", referencedColumnName = "id")
     private DashboardRelease currentRelease;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     private Realm realm;
 
     public Dashboard add(DashboardRelease dashboardRelease) {

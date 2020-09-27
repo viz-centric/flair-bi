@@ -68,7 +68,8 @@ public class UserGroup implements Serializable, PermissionGrantee {
 	@ManyToMany(mappedBy = "userGroups")
 	private Set<User> users = new HashSet<>();
 
-    @ManyToOne
+	@ManyToOne(optional = false)
+	@NotNull
     private Realm realm;
 
     public UserGroup(String name) {

@@ -47,9 +47,10 @@ public class VisualizationService {
 	 * @return the persisted entity
 	 */
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
-	public Visualization save(Visualization visualization) {
+	public VisualizationDTO save(Visualization visualization) {
 		log.debug("Request to save Visualization : {}", visualization);
-		return visualizationRepository.save(visualization);
+		Visualization vis = visualizationRepository.save(visualization);
+		return visualizationMapper.visualizationToVisualizationDTO(vis);
 	}
 
 	/**
@@ -130,20 +131,29 @@ public class VisualizationService {
 		return fieldType;
 	}
 
-	public Visualization saveFieldType(Long visualizationId, FieldType fieldType) {
-		return visualizationRepository.findById(visualizationId).map(x -> x.addFieldType(fieldType))
-				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);
+	public VisualizationDTO saveFieldType(Long visualizationId, FieldType fieldType) {
+		return visualizationRepository.findById(visualizationId)
+				.map(x -> x.addFieldType(fieldType))
+				.map(visualizationRepository::save)
+				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
+				.orElseThrow(EntityNotFoundException::new);
 	}
 
-	public Visualization deleteFieldType(Long visualizationsId, Long fieldTypeId) {
-		return visualizationRepository.findById(visualizationsId).map(x -> x.removeFieldType(fieldTypeId))
-				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);
+	public VisualizationDTO deleteFieldType(Long visualizationsId, Long fieldTypeId) {
+		return visualizationRepository.findById(visualizationsId)
+				.map(x -> x.removeFieldType(fieldTypeId))
+				.map(visualizationRepository::save)
+				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
+				.orElseThrow(EntityNotFoundException::new);
 	}
 
-	public Visualization assignPropertyType(Long id, Long propertyTypeId) {
+	public VisualizationDTO assignPropertyType(Long id, Long propertyTypeId) {
 		final PropertyType propertyType = propertyTypeRepository.getOne(propertyTypeId);
-		return visualizationRepository.findById(id).map(x -> x.addPropertyType(propertyType))
-				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);
+		return visualizationRepository.findById(id)
+				.map(x -> x.addPropertyType(propertyType))
+				.map(visualizationRepository::save)
+				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
+				.orElseThrow(EntityNotFoundException::new);
 	}
 
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
@@ -153,8 +163,11 @@ public class VisualizationService {
 				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);
 	}
 
-	public Visualization removePropertyType(Long id, Long propertyTypeId) {
-		return visualizationRepository.findById(id).map(x -> x.removePropertyType(propertyTypeId))
-				.map(visualizationRepository::save).orElseThrow(EntityNotFoundException::new);
+	public VisualizationDTO removePropertyType(Long id, Long propertyTypeId) {
+		return visualizationRepository.findById(id)
+				.map(x -> x.removePropertyType(propertyTypeId))
+				.map(visualizationRepository::save)
+				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
+				.orElseThrow(EntityNotFoundException::new);
 	}
 }

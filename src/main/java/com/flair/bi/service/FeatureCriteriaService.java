@@ -3,11 +3,9 @@ package com.flair.bi.service;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.FeatureCriteria;
-import com.flair.bi.domain.QFeatureCriteria;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.FeatureCriteriaRepository;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing FeatureCriteria.
@@ -79,12 +78,14 @@ public class FeatureCriteriaService {
 	public List<FeatureCriteria> findAll(Predicate predicate) {
 		log.debug("Request to get all FeatureCriteria");
 
-		BooleanExpression pred = hasRealmPermissions();
-		if (predicate != null) {
-			pred = pred.and(predicate);
-		}
+		return filterByRealm((List<FeatureCriteria>) featureCriteriaRepository.findAll(predicate));
+	}
 
-		return (List<FeatureCriteria>) featureCriteriaRepository.findAll(pred);
+	private List<FeatureCriteria> filterByRealm(List<FeatureCriteria> all) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return all.stream()
+				.filter(fc -> Objects.equals(fc.getFeature().getDatasource().getRealm().getId(), user.getRealm().getId()))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -96,7 +97,13 @@ public class FeatureCriteriaService {
 	@Transactional(readOnly = true)
 	public FeatureCriteria findOne(Long id) {
 		log.debug("Request to get FeatureCriteria : {}", id);
-		return featureCriteriaRepository.findOne(hasRealmPermissions().and(QFeatureCriteria.featureCriteria.id.eq(id))).orElseThrow();
+		FeatureCriteria result = featureCriteriaRepository.getOne(id);
+
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		if (!Objects.equals(result.getFeature().getDatasource().getRealm().getId(), user.getRealm().getId())) {
+			throw new IllegalStateException("Cannot access feature criteria for realm " + result.getFeature().getDatasource().getRealm().getId());
+		}
+		return result;
 	}
 
 	/**
@@ -114,10 +121,5 @@ public class FeatureCriteriaService {
 			featureBookmark.removeFeatureCriteria(featureCriteria);
 			featureBookmarkService.save(featureBookmark);
 		}
-	}
-
-	private BooleanExpression hasRealmPermissions() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFeatureCriteria.featureCriteria.featureBookmark.user.realm.id.eq(user.getRealm().getId());
 	}
 }

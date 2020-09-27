@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * Holds a request by the user to create a new release
@@ -39,6 +40,7 @@ public class ReleaseRequest {
     @Column(name = "release_request_comment")
     private String comment;
 
-    @ManyToOne
+	@ManyToOne(optional = false)
+	@NotNull
     private Realm realm;
 }

@@ -42,7 +42,8 @@ public class FileUploaderStatus implements Serializable {
 	@Column(name = "file_location")
 	private String fileLocation;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@NotNull
 	private Realm realm;
 
 	public Long getId() {

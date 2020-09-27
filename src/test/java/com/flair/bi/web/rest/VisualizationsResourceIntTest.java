@@ -38,7 +38,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setFunctionname("func name");
 		visualization.setName("vis name");
 
-		Visualization visualization1 = new Visualization();
+		VisualizationDTO visualization1 = new VisualizationDTO();
 		visualization1.setFunctionname("func name");
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
@@ -75,7 +75,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setFunctionname("func name");
 		visualization.setName("vis name");
 
-		Visualization visualization1 = new Visualization();
+		VisualizationDTO visualization1 = new VisualizationDTO();
 		visualization1.setFunctionname("func name");
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
@@ -98,7 +98,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setName("vis name");
 		visualization.setId(7L);
 
-		Visualization visualization1 = new Visualization();
+		VisualizationDTO visualization1 = new VisualizationDTO();
 		visualization1.setFunctionname("func name");
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
@@ -195,7 +195,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 		when(visualizationService.getFieldType(eq(10L), eq(11L))).thenReturn(fieldType);
 
-		Visualization visualization = new Visualization();
+		VisualizationDTO visualization = new VisualizationDTO();
 		visualization.setId(10L);
 		visualization.setCustomId(9);
 		visualization.setName("vis name");
@@ -230,7 +230,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		IdentifierDTO<Long> dto = new IdentifierDTO<>();
 		dto.setId(27L);
 
-		Visualization t = new Visualization();
+		VisualizationDTO t = new VisualizationDTO();
 		t.setId(18L);
 		when(visualizationService.assignPropertyType(eq(10L), eq(27L))).thenReturn(t);
 
@@ -244,7 +244,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 	@Test
 	public void removePropertyType() {
-		Visualization t = new Visualization();
+		VisualizationDTO t = new VisualizationDTO();
 		t.setId(18L);
 		when(visualizationService.removePropertyType(eq(10L), eq(18L))).thenReturn(t);
 

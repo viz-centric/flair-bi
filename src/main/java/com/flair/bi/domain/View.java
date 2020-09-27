@@ -116,7 +116,8 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
     @OneToMany(mappedBy = "view", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ViewFeatureCriteria> viewFeatureCriterias = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     private Realm realm;
 
     public View add(ViewRelease viewRelease) {

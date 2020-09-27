@@ -1,14 +1,13 @@
 package com.flair.bi.repository;
 
+import com.flair.bi.domain.FeatureCriteria;
+import com.flair.bi.domain.QFeatureCriteria;
+import com.querydsl.core.types.dsl.SimpleExpression;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.stereotype.Repository;
-
-import com.flair.bi.domain.FeatureCriteria;
-import com.flair.bi.domain.QFeatureCriteria;
-import com.querydsl.core.types.dsl.SimpleExpression;
 
 /**
  * Spring Data JPA repository for the FeatureCriteria entity.

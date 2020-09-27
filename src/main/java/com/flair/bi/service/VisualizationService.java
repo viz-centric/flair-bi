@@ -1,10 +1,14 @@
 package com.flair.bi.service;
 
+import com.flair.bi.domain.Realm;
+import com.flair.bi.domain.User;
 import com.flair.bi.domain.Visualization;
 import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.propertytype.PropertyType;
 import com.flair.bi.repository.PropertyTypeRepository;
 import com.flair.bi.repository.VisualizationRepository;
+import com.flair.bi.service.dto.VisualizationDTO;
+import com.flair.bi.service.mapper.VisualizationMapper;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Visualization.
@@ -31,6 +37,8 @@ public class VisualizationService {
 	private final FieldTypeService fieldTypeService;
 
 	private final PropertyTypeRepository propertyTypeRepository;
+	private final VisualizationMapper visualizationMapper;
+	private final UserService userService;
 
 	/**
 	 * Save a visualization.
@@ -50,9 +58,14 @@ public class VisualizationService {
 	 * @return the list of entities
 	 */
 	@Transactional(readOnly = true)
-	public List<Visualization> findAll() {
+	public List<VisualizationDTO> findAll() {
 		log.debug("Request to get all Visualization");
-		return visualizationRepository.findAll();
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		List<Visualization> all = visualizationRepository.findAll();
+		return visualizationMapper.visualizationToVisualizationDTOs(all)
+				.stream()
+				.peek(x -> filterFieldTypesByRealm(x, user.getRealm()))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -62,14 +75,31 @@ public class VisualizationService {
 	 * @return the entity
 	 */
 	@Transactional(readOnly = true)
-	public Visualization findOne(Long id) {
+	public VisualizationDTO findOne(Long id) {
 		log.debug("Request to get Visualization : {}", id);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Optional<Visualization> visualization = visualizationRepository.findById(id);
-		return visualization.map(x -> {
-			x.getFieldTypes().size();
-			x.getPropertyTypes().size();
-			return x;
-		}).orElse(null);
+		VisualizationDTO visualizationDTO = visualization
+				.map(x -> {
+					x.getFieldTypes().size();
+					x.getPropertyTypes().size();
+					return x;
+				})
+				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
+				.orElse(null);
+		if (visualizationDTO != null) {
+			filterFieldTypesByRealm(visualizationDTO, user.getRealm());
+		}
+		return visualizationDTO;
+    }
+
+	private void filterFieldTypesByRealm(VisualizationDTO visualizationDTO, Realm realm) {
+		visualizationDTO.setFieldTypes(
+				visualizationDTO.getFieldTypes()
+				.stream()
+				.filter(x -> Objects.equals(x.getRealm().getId(), realm.getId()))
+				.collect(Collectors.toSet())
+		);
 	}
 
 	/**

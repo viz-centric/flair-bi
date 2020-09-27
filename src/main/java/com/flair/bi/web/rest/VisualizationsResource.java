@@ -1,12 +1,14 @@
 package com.flair.bi.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import com.flair.bi.domain.Visualization;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.service.VisualizationService;
+import com.flair.bi.service.dto.IdentifierDTO;
+import com.flair.bi.service.dto.VisualizationDTO;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,15 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flair.bi.domain.Visualization;
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.service.VisualizationService;
-import com.flair.bi.service.dto.IdentifierDTO;
-import com.flair.bi.web.rest.util.HeaderUtil;
-
-import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing Visualization.
@@ -98,7 +96,7 @@ public class VisualizationsResource {
 	@GetMapping("/visualizations")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('VISUALIZATIONS', 'READ','APPLICATION')")
-	public List<Visualization> getAllVisualizations() {
+	public List<VisualizationDTO> getAllVisualizations() {
 		log.debug("REST request to get all Visualization");
 		return visualizationService.findAll();
 	}
@@ -113,9 +111,9 @@ public class VisualizationsResource {
 	@GetMapping("/visualizations/{id}")
 	@Timed
 	@PreAuthorize("@accessControlManager.hasAccess('VISUALIZATIONS', 'READ', 'APPLICATION')")
-	public ResponseEntity<Visualization> getVisualizations(@PathVariable Long id) {
+	public ResponseEntity<VisualizationDTO> getVisualizations(@PathVariable Long id) {
 		log.debug("REST request to get Visualization : {}", id);
-		Visualization visualization = visualizationService.findOne(id);
+		VisualizationDTO visualization = visualizationService.findOne(id);
 		return Optional.ofNullable(visualization).map(result -> new ResponseEntity<>(result, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}

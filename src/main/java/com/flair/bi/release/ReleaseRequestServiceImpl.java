@@ -292,11 +292,22 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 		int totalAlerts = 0;
 		try {
-			// TODO: add realm into account
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
+			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
-					"select count(*) as count from (select 1 from view_releases where release_status='APPROVED' and date_part('day',age(current_date, last_modified_date::date))=0 UNION ALL "
-							+ "select 1  from  dashboard_releases  where release_status='APPROVED' and date_part('day',age(current_date, last_modified_date::date))=0 ) alert",
-					new Object[] {}, new RowMapper<Integer>() {
+					"select count(*) as count\n" +
+							"from (select 1\n" +
+							"      from view_releases vr\n" +
+							"               join views v on v.id = vr.view_id and v.realm_id = ?\n" +
+							"      where vr.release_status = 'APPROVED'\n" +
+							"        and date_part('day', age(current_date, vr.last_modified_date::date)) = 0\n" +
+							"      UNION ALL\n" +
+							"      select 1\n" +
+							"      from dashboard_releases dr\n" +
+							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
+							"      where dr.release_status = 'APPROVED'\n" +
+							"        and date_part('day', age(current_date, dr.last_modified_date::date)) = 0) alert",
+					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -316,11 +327,22 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 		int totalAlerts = 0;
 		try {
-			// TODO: add realm into account
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
+			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
-					"select count(*) as count from (select 1 from view_releases where release_status='APPROVED' and date_part('day',age(current_date, last_modified_date::date))=1 UNION ALL "
-							+ "select 1  from  dashboard_releases  where release_status='APPROVED' and date_part('day',age(current_date, last_modified_date::date))=1 ) alert",
-					new Object[] {}, new RowMapper<Integer>() {
+					"select count(*) as count\n" +
+							"from (select 1\n" +
+							"      from view_releases vr\n" +
+							"               join views v on v.id = vr.view_id and v.realm_id = ?\n" +
+							"      where vr.release_status = 'APPROVED'\n" +
+							"        and date_part('day', age(current_date, vr.last_modified_date::date)) = 1\n" +
+							"      UNION ALL\n" +
+							"      select 1\n" +
+							"      from dashboard_releases dr\n" +
+							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
+							"      where dr.release_status = 'APPROVED'\n" +
+							"        and date_part('day', age(current_date, dr.last_modified_date::date)) = 1) alert",
+					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -340,11 +362,22 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 		int totalAlerts = 0;
 		try {
-			// TODO: add realm into account
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
+			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
-					"select count(*) as count from (select 1 from view_releases where release_status='APPROVED' and last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER+1 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+7 UNION ALL "
-							+ "select 1  from  dashboard_releases  where release_status='APPROVED' and last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER+1 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+7) alert",
-					new Object[] {}, new RowMapper<Integer>() {
+					"select count(*) as count\n" +
+							"from (select 1\n" +
+							"      from view_releases vr\n" +
+							"               join views v on v.id = vr.view_id and v.realm_id = ?\n" +
+							"      where vr.release_status = 'APPROVED'\n" +
+							"        and vr.last_modified_date::date BETWEEN NOW()::DATE - EXTRACT(DOW FROM NOW())::INTEGER + 1 AND NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER + 7\n" +
+							"      UNION ALL\n" +
+							"      select 1\n" +
+							"      from dashboard_releases dr\n" +
+							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
+							"      where dr.release_status = 'APPROVED'\n" +
+							"        and dr.last_modified_date::date BETWEEN NOW()::DATE - EXTRACT(DOW FROM NOW())::INTEGER + 1 AND NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER + 7) alert",
+					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -364,11 +397,22 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 		int totalAlerts = 0;
 		try {
-			// TODO: add realm into account
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
+			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
-					"select count(*) as count from (select 1 from view_releases where release_status='APPROVED' and last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-6 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER UNION ALL "
-							+ "select 1  from  dashboard_releases  where release_status='APPROVED' and last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-6 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER ) alert",
-					new Object[] {}, new RowMapper<Integer>() {
+					"select count(*) as count\n" +
+							"from (select 1\n" +
+							"      from view_releases vr\n" +
+							"               join views v on v.id = vr.view_id and v.realm_id = ?\n" +
+							"      where vr.release_status = 'APPROVED'\n" +
+							"        and vr.last_modified_date::date BETWEEN NOW()::DATE - EXTRACT(DOW FROM NOW())::INTEGER - 6 AND NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER\n" +
+							"      UNION ALL\n" +
+							"      select 1\n" +
+							"      from dashboard_releases dr\n" +
+							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
+							"      where dr.release_status = 'APPROVED'\n" +
+							"        and dr.last_modified_date::date BETWEEN NOW()::DATE - EXTRACT(DOW FROM NOW())::INTEGER - 6 AND NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER) alert",
+					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -388,11 +432,22 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 
 		int totalAlerts = 0;
 		try {
-			// TODO: add realm into account
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
+			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
-					"select count(*) as count from (select 1 from view_releases where release_status='APPROVED' and last_modified_date::date < NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER-6 UNION ALL "
-							+ "select 1  from  dashboard_releases  where release_status='APPROVED' and last_modified_date::date < NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER-6 ) alert",
-					new Object[] {}, new RowMapper<Integer>() {
+					"select count(*) as count\n" +
+							"from (select 1\n" +
+							"      from view_releases vr\n" +
+							"               join views v on v.id = vr.view_id and v.realm_id = ?\n" +
+							"      where vr.release_status = 'APPROVED'\n" +
+							"        and vr.last_modified_date::date < NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER - 6\n" +
+							"      UNION ALL\n" +
+							"      select 1\n" +
+							"      from dashboard_releases dr\n" +
+							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
+							"      where dr.release_status = 'APPROVED'\n" +
+							"        and dr.last_modified_date::date < NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER - 6) alert",
+					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}

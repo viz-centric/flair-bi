@@ -349,7 +349,6 @@ class AccessControlManagerImpl implements AccessControlManager {
 	}
 
 	private Permission deleteEdges(Permission permission) {
-		// TODO: add realm ID
 		Iterable<PermissionEdge> permissionEdges = permissionEdgeRepository
 				.findAll(hasUserRealmAccess().and(QPermissionEdge.permissionEdge.from.key.eq(permission.getKey())
 						.or(QPermissionEdge.permissionEdge.to.key.eq(permission.getKey()))));

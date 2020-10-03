@@ -45,7 +45,6 @@ public class ClientLogo implements Serializable {
     private String imageContentType;
 
     @ManyToOne(optional = false)
-    @NotNull
     private Realm realm;
 
     @Transient

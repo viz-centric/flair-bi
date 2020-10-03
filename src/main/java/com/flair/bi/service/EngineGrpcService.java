@@ -1,13 +1,13 @@
 package com.flair.bi.service;
 
 import com.flair.bi.messages.Connection;
-import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionServiceGrpc;
 import com.flair.bi.messages.ConnectionTypesResponses;
 import com.flair.bi.messages.DeleteConnectionRequest;
 import com.flair.bi.messages.DeleteConnectionResponse;
-import com.flair.bi.messages.EmptyConnection;
 import com.flair.bi.messages.GetAllConnectionTypesRequest;
+import com.flair.bi.messages.GetAllConnectionsRequest;
+import com.flair.bi.messages.GetAllConnectionsResponse;
 import com.flair.bi.messages.GetConnectionRequest;
 import com.flair.bi.messages.GetConnectionResponse;
 import com.flair.bi.messages.ListTablesRequest;
@@ -107,8 +107,12 @@ public class EngineGrpcService implements IEngineGrpcService {
 	}
 
 	@Override
-	public ConnectionResponses getAllConnections() {
-		return getConnectionStub().getAllConnections(EmptyConnection.newBuilder().build());
+	public GetAllConnectionsResponse getAllConnections(Long realmId, String linkId, Long connectionType) {
+		return getConnectionStub().getAllConnections(GetAllConnectionsRequest.newBuilder()
+				.setRealmId(realmId)
+				.setLinkId(linkId == null ? "" : linkId)
+				.setConnectionType(connectionType == null ? 0 : connectionType)
+				.build());
 	}
 
 	@Override

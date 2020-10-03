@@ -1,11 +1,19 @@
 package com.flair.bi.web.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
+import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.QDatasource;
+import com.flair.bi.service.DashboardService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.GrpcConnectionService;
+import com.flair.bi.service.GrpcQueryService;
+import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
+import com.flair.bi.service.dto.DeleteInfo;
+import com.flair.bi.service.dto.RunQueryResponseDTO;
+import com.flair.bi.web.rest.dto.ConnectionDTO;
+import com.project.bi.query.dto.QueryDTO;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,21 +27,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flair.bi.domain.Datasource;
-import com.flair.bi.domain.QDatasource;
-import com.flair.bi.service.DashboardService;
-import com.flair.bi.service.DatasourceService;
-import com.flair.bi.service.GrpcConnectionService;
-import com.flair.bi.service.GrpcQueryService;
-import com.flair.bi.service.dto.ConnectionFilterParamsDTO;
-import com.flair.bi.service.dto.DeleteInfo;
-import com.flair.bi.service.dto.RunQueryResponseDTO;
-import com.flair.bi.web.rest.dto.ConnectionDTO;
-import com.project.bi.query.dto.QueryDTO;
-
-import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,7 +68,9 @@ public class ConnectionResource {
 		log.debug("Get connections by link {} and connection type {}", linkId, connectionType);
 
 		List<ConnectionDTO> connections = grpcConnectionService
-				.getAllConnections(new ConnectionFilterParamsDTO().setConnectionType(connectionType).setLinkId(linkId));
+				.getAllConnections(new ConnectionFilterParamsDTO()
+						.setConnectionType(connectionType)
+						.setLinkId(linkId));
 
 		log.debug("Get connections returned {}", connections);
 

@@ -99,7 +99,6 @@ public class Datasource implements Serializable, SecuredEntity {
     private String sql;
 
     @ManyToOne(optional = false)
-    @NotNull
     private Realm realm;
 
     @PreRemove

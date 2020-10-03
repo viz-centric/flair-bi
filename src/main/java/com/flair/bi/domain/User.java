@@ -140,7 +140,6 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 	private Set<DatasourceConstraint> datasourceConstraints = new HashSet<>();
 
 	@ManyToOne(optional = false)
-	@NotNull
 	private Realm realm;
 
 	@PreDestroy

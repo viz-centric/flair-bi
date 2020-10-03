@@ -29,7 +29,6 @@ public class VisualizationColors implements Serializable {
 	private String code;
 
 	@ManyToOne(optional = false)
-	@NotNull
     private Realm realm;
 
     public Long getId() {

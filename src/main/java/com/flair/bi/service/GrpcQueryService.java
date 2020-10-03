@@ -50,6 +50,7 @@ public class GrpcQueryService {
     private final QueryTransformerService queryTransformerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ViewService viewService;
+    private final UserService userService;
 
     public RunQueryResponseDTO sendRunQuery(QueryDTO queryDTO, Datasource datasource) {
         log.debug("Sending run query request for datasource {} id {}", datasource.getName(),
@@ -187,7 +188,7 @@ public class GrpcQueryService {
             throw new RuntimeException(e);
         }
 
-        Connection connection = toProtoConnection(requestDTO.getConnection());
+        Connection connection = toProtoConnection(requestDTO.getConnection(), userService);
         QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
 
         return QueryResponse.newBuilder().setUserId(queryAllResponse.getUserId())

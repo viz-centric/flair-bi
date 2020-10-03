@@ -15,7 +15,6 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "permission_edge")
@@ -50,7 +49,6 @@ public class PermissionEdge {
 	private boolean transitive;
 
 	@ManyToOne(optional = false)
-	@NotNull
 	private Realm realm;
 
 	public PermissionEdge(Permission from, Permission to, boolean biDirectional, boolean transitive, Realm realm) {

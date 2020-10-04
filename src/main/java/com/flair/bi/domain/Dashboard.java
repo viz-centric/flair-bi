@@ -104,7 +104,6 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     private DashboardRelease currentRelease;
 
     @ManyToOne(optional = false)
-    @NotNull
     private Realm realm;
 
     public Dashboard add(DashboardRelease dashboardRelease) {

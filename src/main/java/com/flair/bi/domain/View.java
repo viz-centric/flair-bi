@@ -117,7 +117,6 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
     private Set<ViewFeatureCriteria> viewFeatureCriterias = new HashSet<>();
 
     @ManyToOne(optional = false)
-    @NotNull
     private Realm realm;
 
     public View add(ViewRelease viewRelease) {

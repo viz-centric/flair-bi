@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -42,7 +41,6 @@ public class Functions implements Serializable {
 	private String validation;
 
 	@ManyToOne(optional = false)
-	@NotNull
     private Realm realm;
 
     public Long getId() {

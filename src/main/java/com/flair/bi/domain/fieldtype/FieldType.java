@@ -68,7 +68,6 @@ public class FieldType extends AbstractAuditingEntity implements Serializable {
 	private FeatureType featureType;
 
 	@ManyToOne(optional = false)
-	@NotNull
 	private Realm realm;
 
 	public FieldType addPropertyType(PropertyType propertyType) {

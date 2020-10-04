@@ -192,6 +192,14 @@ public class DatasourceServiceImpl implements DatasourceService {
         datasourceRepository.deleteAllByRealmId(realmId);
     }
 
+    @Override
+    public void verifyConnectionLinkBelongsToRealm(String connectionLinkId) {
+        List<Datasource> connections = findAll(hasUserRealmAccess().and(QDatasource.datasource.connectionName.eq(connectionLinkId)));
+        if (connections.isEmpty()) {
+            throw new IllegalStateException("No connection link " + connectionLinkId + " found for current realm");
+        }
+    }
+
     private BooleanExpression hasUserPermissions() {
         final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
         final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));

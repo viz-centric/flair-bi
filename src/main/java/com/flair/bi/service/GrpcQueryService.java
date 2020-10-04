@@ -188,6 +188,10 @@ public class GrpcQueryService {
             throw new RuntimeException(e);
         }
 
+        if (StringUtils.isNotEmpty(requestDTO.getConnectionLinkId())) {
+            datasourceService.verifyConnectionLinkBelongsToRealm(requestDTO.getConnectionLinkId());
+        }
+
         Connection connection = toProtoConnection(requestDTO.getConnection(), userService);
         QueryAllResponse queryAllResponse = grpcService.queryAll(requestDTO.getConnectionLinkId(), query, connection);
 

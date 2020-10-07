@@ -1,11 +1,11 @@
 package com.flair.bi.config.security;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.flair.bi.ApplicationProperties;
+import com.flair.bi.security.UserDetailsService;
+import com.flair.bi.security.jwt.JWTConfigurer;
+import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,13 +28,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
-import com.flair.bi.ApplicationProperties;
-import com.flair.bi.security.UserDetailsService;
-import com.flair.bi.security.jwt.JWTConfigurer;
-import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.security.ldap.LDAPUserDetailsContextMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @EnableOAuth2Sso
 @Configuration
@@ -89,12 +86,12 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				// exception handling
 				.exceptionHandling().authenticationEntryPoint(problemSupport).accessDeniedHandler(problemSupport).and()
 				// Login for okta
-				.logout().logoutUrl("/api/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID").and()
+				.logout().logoutUrl("/api/logout").logoutSuccessUrl("/").clearAuthentication(true).invalidateHttpSession(true)
+				.and()
 				// disable CSRF
 				.csrf().disable().headers().frameOptions().disable().and()
 				// session management
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).and()
 				// permission configuration
 				.antMatcher("/**").authorizeRequests().antMatchers("/flair-ws**").permitAll()
 				.antMatchers("/", "/login**").permitAll()

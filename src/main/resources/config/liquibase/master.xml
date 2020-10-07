@@ -86,8 +86,13 @@
     <include file="config/liquibase/changelog/20200717023012_added_client-logo-user_permissions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200701600000_add_sorting_in_pivot_table.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200702200000_update_pivot_table_sorting_option.xml" relativeToChangelogFile="false"/>
+
+    <include file="config/liquibase/changelog/20200819150000_added_pin_column_features.xml" relativeToChangelogFile="false"/>
+    
+
     <include file="config/liquibase/changelog/20200906023012_added_usergroup_permissions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200906023013_added_user_permissions.xml" relativeToChangelogFile="false"/>
+
 
 </databaseChangeLog>
 <!--@formatter:on-->

@@ -87,6 +87,11 @@ public class FeatureService {
 		featureRepository.markFavouriteFilter(favouriteFilter, id);
 	}
 
+	public void pinFilter(Boolean pin, Long id) {
+		log.debug("FeatureService pinFilter ", pin, id);
+		featureRepository.pinFilter(pin, id);
+	}
+
 	public List<FeatureValidationResult> validate(List<Feature> features) {
 		return features.stream().map(f -> validate(f)).collect(Collectors.toList());
 	}

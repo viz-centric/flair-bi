@@ -208,9 +208,11 @@
             connectWebSocket();
             registerAlternateDimension();
             vm.features = featureEntities;
-            registerToggleHeaderFilter();
+            registerToggleGridFilter();
+          
             registerToggleFullScreenFilter();
             vm.filtersLength = filterParametersService.getFiltersCount();
+            hideShowPinFilter();
         }
 
         function registerFilterCountChanged() {
@@ -222,6 +224,32 @@
             );
             $scope.$on("$destroy", unsubscribe);
         }
+        function getGridStyle(){
+            if( !vm.showFSFilter && !vm.showPinFilter){
+                vm.gridStyle ={ "margin-top": "30px"}; 
+            }
+            else if(vm.showFSFilter && vm.showPinFilter){
+                vm.gridStyle ={ "margin-top": "90px" }
+            }
+            else if(vm.showFSFilter || vm.showPinFilter){
+                vm.gridStyle ={ "margin-top": "60px" }
+            }
+        }
+
+        function hideShowPinFilter() {
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });
+            vm.showFSFilter = filterParametersService.getFiltersCount() == 0 ? false : true,
+            vm.showPinFilter = vm.pinedDimensions.length == 0 ? false : true
+            getGridStyle();
+            var headerSettings = {
+                showFSFilter: vm.showFSFilter,
+                showPinFilter: vm.showPinFilte
+            }
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
+        }
+
 
         function showVizLoader(isCardRevealed, loading, dataReceived) {
             return isCardRevealed && loading && !dataReceived;
@@ -843,12 +871,11 @@
             });
         }
 
-        function registerToggleHeaderFilter() {
+        function registerToggleGridFilter() {
             var toggleHeaderFiltersUnsubscribeOff = $scope.$on(
-                "flairbiApp:toggle-headers-filters",
+                "flairbiApp:toggle-grid-filters",
                 function (event, result) {
-                    onFiltersCountChange();
-                    vm.showFSFilter = !result;
+                    hideShowPinFilter();
                 }
             );
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);

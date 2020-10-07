@@ -16,9 +16,9 @@
             }
         });
 
-    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService','SEPARATORS','$stateParams','Views','IFRAME'];
+    filterPaneController.$inject = ['$scope', '$rootScope', 'filterParametersService', 'FilterStateManagerService', 'VisualDispatchService', 'SEPARATORS', '$stateParams', 'Views', 'IFRAME'];
 
-    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService,SEPARATORS,$stateParams,Views,IFRAME) {
+    function filterPaneController($scope, $rootScope, filterParametersService, FilterStateManagerService, VisualDispatchService, SEPARATORS, $stateParams, Views, IFRAME) {
         var vm = this;
 
         vm.filter = filter;
@@ -28,7 +28,7 @@
         vm.list = {};
         vm.dateFilter = [];
         vm.separators = SEPARATORS;
-        vm.separator =  vm.separators[0];
+        vm.separator = vm.separators[0];
         activate();
 
         ////////////////
@@ -57,11 +57,13 @@
         function onClearClick() {
             $rootScope.$broadcast("flairbiApp:clearFilters");
             $rootScope.$broadcast("flairbiApp:clearFiltersClicked");
+            $rootScope.$broadcast("flairbiApp:update-heder-filter");
         }
 
         function onFilterClick() {
-            filter();
+            filter()
             $rootScope.$broadcast("flairbiApp:filterClicked");
+            $rootScope.$broadcast("flairbiApp:update-heder-filter");
         }
 
         function clear() {
@@ -71,7 +73,7 @@
                     item.selected = null;
                     item.selected2 = null;
                     item.commaSeparatedValues = '';
-                    if(filterParametersService.isDateType(item)) {
+                    if (filterParametersService.isDateType(item)) {
                         item.metadata = {};
                         item.metadata.dateRangeTab = 0;
                         item.metadata.currentDynamicDateRangeConfig = null;
@@ -82,6 +84,7 @@
                 filterParametersService.saveSelectedFilter($rootScope.updateWidget);
                 filterParametersService.removeFilterInIframeURL(vm.iframes);
                 filter();
+                $rootScope.$broadcast("flairbiApp:update-heder-filter");
             }
         }
 
@@ -91,7 +94,7 @@
             $rootScope.updateWidget = {};
             $rootScope.$broadcast('flairbiApp:filter');
             $rootScope.$broadcast('flairbiApp:filter-add');
-           
+
         }
 
         function addFilterInIframeURL() {

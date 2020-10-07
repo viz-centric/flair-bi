@@ -21,7 +21,6 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.querydsl.core.types.Predicate;
-
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +31,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,6 +107,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'WRITE', 'APPLICATION')")
     public ResponseEntity<?> createUser(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserVM);
 
@@ -138,6 +139,7 @@ public class UserResource {
      */
     @PutMapping("/users")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<ManagedUserVM> updateUser(@RequestBody ManagedUserVM managedUserVM) {
         log.debug("REST request to update User : {}", managedUserVM);
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserVM.getEmail());
@@ -166,6 +168,7 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<ManagedUserVM>> getAllUsers(@ApiParam Pageable pageable)
         throws URISyntaxException {
 
@@ -185,6 +188,7 @@ public class UserResource {
      */
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
@@ -201,6 +205,7 @@ public class UserResource {
      */
     @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'DELETE', 'APPLICATION')")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
@@ -218,6 +223,7 @@ public class UserResource {
      */
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<User>>> getDashboardPermissionMetadataUser(@PathVariable String login, @ApiParam Pageable pageable) throws URISyntaxException {
         final Page<Dashboard> dashboardPage = dashboardService.findAll(pageable);
         final User user = userService.getUserWithAuthoritiesByLogin(login)
@@ -236,6 +242,7 @@ public class UserResource {
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/datasourcePermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<User>>> getDatasourcePermissions(@PathVariable String login,
                                                                                         @ApiParam Pageable pageable) throws URISyntaxException {
         final Page<Datasource> page = datasourceService.findAll(pageable);
@@ -254,6 +261,7 @@ public class UserResource {
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<DashboardGranteePermissionReport<User>>> searchDashboardPermissionMetadataUser(@QuerydslPredicate(root = Dashboard.class) Predicate predicate,@PathVariable String login, @ApiParam Pageable pageable) throws URISyntaxException {
         Page<Dashboard> dashboardPage = dashboardService.findAllByPrincipalPermissions(pageable, predicate);
         final User user = userService.getUserWithAuthoritiesByLogin(login)
@@ -277,6 +285,7 @@ public class UserResource {
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/datasourcePermissions/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<User>>> searchDatasourcePermission(@QuerydslPredicate(root = Datasource.class) Predicate predicate, @PathVariable String login) {
         List<Datasource> datasources = datasourceService.findAll(predicate);
         final User user = userService.getUserWithAuthoritiesByLogin(login)
@@ -293,6 +302,7 @@ public class UserResource {
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/viewPermissions/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<DashboardGranteePermissionReport<User>>> searchViewPermissionMetadataUser(@QuerydslPredicate(root = View.class) Predicate predicate, @PathVariable String login) throws URISyntaxException {
         List<View> views = viewService.findAllByPrincipalPermissions(predicate);
         final User user = userService.getUserWithAuthoritiesByLogin(login)
@@ -309,6 +319,7 @@ public class UserResource {
 
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions/{id}/viewPermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<User>>> getViewPermissionMetadataUser(@PathVariable String login, @PathVariable Long id) {
         final User user = userService.getUserWithAuthoritiesByLogin(login)
             .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
@@ -324,6 +335,7 @@ public class UserResource {
 
     @PutMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/changePermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<Void> changePermissions(@PathVariable String login, @RequestBody List<ChangePermissionVM> changePermissionVMS) {
         changePermissionVMS.forEach(x -> {
             if (x.getAction() == ChangePermissionVM.Action.ADD) {
@@ -346,6 +358,7 @@ public class UserResource {
      */
     @GetMapping("/users/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
     public ResponseEntity<List<ManagedUserVM>> getSearchedUsers(@ApiParam Pageable pageable,@QuerydslPredicate(root = User.class) Predicate predicate)
         throws URISyntaxException {
         Page<User> page = userService.findAllWithAuthorities(pageable,predicate);

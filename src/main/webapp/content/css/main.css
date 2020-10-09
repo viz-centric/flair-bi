@@ -1399,6 +1399,14 @@ nav.navbar-static-top {
               height: 10px; }
           #slider .resource-nav .panel .panel-body .list-group .list-group-item:hover {
             color: #0f1010; }
+  #slider .resource-nav .dimensionList {
+    display: flex;
+    flex-wrap: wrap; }
+  #slider .resource-nav .filter-form {
+    border: 1px solid #e4e4e4;
+    margin: 5px;
+    padding: 5px;
+    max-width: 17vw; }
   #slider label {
     font-weight: 600; }
   #slider #right-nav-footer button {
@@ -1407,6 +1415,9 @@ nav.navbar-static-top {
     max-height: calc(100vh - 200px);
     min-height: calc(100vh - 200px);
     overflow-y: auto; }
+
+.fullScreenPanel {
+  width: calc(100% - 50px) !important; }
 
 .right-nav-option-tabs .first-tab .tooltip {
   left: 0px !important; }

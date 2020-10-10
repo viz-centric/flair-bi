@@ -30,3 +30,8 @@ spring:
 app:
     auth:
         jwt-key: ${GRPC_JWT_KEY:secretKey1secretKey1secretKey1secretKey1secretKey1secretKey1secretKey1}
+    jobs:
+        refresh-feature-cache-job-weekdays:
+            cron: "0 0/15 9-18 * * * 1-5"
+        refresh-feature-cache-job-weekends:
+            cron: "0 0/30 * * * 6,0"

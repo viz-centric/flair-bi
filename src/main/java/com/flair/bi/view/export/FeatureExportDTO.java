@@ -2,6 +2,7 @@ package com.flair.bi.view.export;
 
 import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.FeatureCacheType;
 import com.flair.bi.domain.enumeration.FeatureType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +25,11 @@ public class FeatureExportDTO {
 
 	private DateFilterType dateFilter;
 
+	private FeatureCacheType featureCacheType;
+
 	public static FeatureExportDTO from(Feature feature) {
 		return new FeatureExportDTO(feature.getName(), feature.getType(), feature.getFunctionId(),
-				feature.getFeatureType(), feature.getFavouriteFilter(), feature.getDateFilter());
+				feature.getFeatureType(), feature.getFavouriteFilter(), feature.getDateFilter(), feature.getFeatureCacheType());
 	}
 
 	public static Feature to(FeatureExportDTO featureExportDTO) {
@@ -37,6 +40,7 @@ public class FeatureExportDTO {
 		feature.setFeatureType(featureExportDTO.getFeatureType());
 		feature.setFavouriteFilter(featureExportDTO.getFavouriteFilter());
 		feature.setDateFilter(featureExportDTO.getDateFilter());
+		feature.setFeatureCacheType(featureExportDTO.getFeatureCacheType());
 		return feature;
 	}
 }

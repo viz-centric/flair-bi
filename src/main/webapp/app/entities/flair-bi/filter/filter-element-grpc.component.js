@@ -259,19 +259,7 @@
             var query = {};
             query.fields = [{ name: dimension.name }];
             if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q) || q === "") {
-                if (q) {
-                    query.conditionExpressions = [{
-                        sourceType: 'FILTER',
-                        conditionExpression: {
-                            '@type': 'Like',
-                            featureType: { featureName: dimension.name, type: dimension.type },
-                            caseInsensitive: true,
-                            value: q
-                        }
-                    }];
-                }
                 query.distinct = true;
-                query.limit = 100;
                 favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
                 proxyGrpcService.forwardCall(
                     vm.view.viewDashboard.dashboardDatasource.id, {

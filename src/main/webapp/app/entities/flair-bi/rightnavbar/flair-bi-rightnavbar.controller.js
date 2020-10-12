@@ -36,6 +36,8 @@
         vm.deleteFeature = deleteFeature;
         vm.deleteHierarchy = deleteHierarchy;
         vm.ngIfResources = ngIfResources;
+        vm.ngIfResourcesTable = ngIfResourcesTable;
+        vm.showTableResources = false;
         vm.activeTab = "dimensions";
         vm.navbarToggled = false;
         vm.onFiltersOpen = onFiltersOpen;
@@ -616,6 +618,12 @@
             return editMode && !$rootScope.exploration;
         }
 
+        function ngIfResourcesTable(data) {
+            vm.showTableResources =  !editMode && data  && data.metadataVisual.name==="Table";
+            if(vm.showTableResources)
+                vm.sideBarTab = "datafilter";
+        }
+
         function openVisualizations() {
             showSideBar();
             vm.sideBarTab = "vizualizations";
@@ -908,8 +916,10 @@
         function registerRightNavBarDataOpen() {
             var unsubscribe = $scope.$on(
                 "flairbiApp:onData-open",
-                function () {
+                function (event, data) {
                     onDataOpen();
+                    ngIfResourcesTable(data)
+
                 }
             );
 

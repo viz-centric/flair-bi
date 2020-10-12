@@ -104,6 +104,8 @@
         vm.removeWidget = removeWidget;
         vm.ngIfDelete = ngIfDelete;
         vm.ngIfSettings = ngIfSettings;
+        vm.ngIfSettingsTable = ngIfSettingsTable;
+        vm.resetTable = resetTable;
         vm.settings = settings;
         vm.canBuild = canBuild;
         vm.onResizeStart = onResizeStart;
@@ -604,7 +606,7 @@
             );
             v.isCardRevealed = v.isCardRevealed == undefined ? true : !v.isCardRevealed;
             if (!v.isCardRevealed) {
-                $rootScope.$broadcast("flairbiApp:onData-open");
+                $rootScope.$broadcast("flairbiApp:onData-open",v);
             }
         }
 
@@ -1379,6 +1381,18 @@
 
         function ngIfSettings() {
             return editMode;
+        }
+
+        function ngIfSettingsTable(v) {
+            if(editMode)
+                return editMode;
+            else{
+                return v.metadataVisual.name === "Table" ? true : false;
+            }
+        }
+
+        function resetTable(v){
+            v.fields = [];
         }
 
         function hideThreshold(v) {

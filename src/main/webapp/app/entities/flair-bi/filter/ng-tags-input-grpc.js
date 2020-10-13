@@ -832,29 +832,33 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             });
 
             function receivedMetaData(){
-            var unsubscribe = scope.$on(
-                "flairbiApp:filters-meta-Data",
-                function(event,metaData,isFavouriteFilter) {
-                    if(!isFavouriteFilter){
-                        var obj = metaData[0];
-                        var dimensionName = '';
-                        for(var i in obj){
-                            dimensionName = i;
-                            break;
-                        }
-                        var retVal = metaData.map(function (item) {
-                            return item[dimensionName];
-                        }).filter(function (item) {
-                            if (!suggestionList.query) {
-                                return true;
+                var unsubscribe = scope.$on(
+                    "flairbiApp:filters-meta-Data",
+                    function(event,metaData,isFavouriteFilter) {
+                        if(!isFavouriteFilter){
+                            var obj = metaData[0];
+                            var dimensionName = '';
+                            for(var i in obj){
+                                dimensionName = i;
+                                break;
                             }
-                            return item.indexOf(suggestionList.query) > -1;
-                        });
-                        suggestionListG.receivedMetaData(retVal);
+                            var retVal = metaData.map(function (item) {
+                                return item[dimensionName];
+                            });
+
+                            if (suggestionListG.filtering) {
+                                retVal = retVal.filter(function (item) {
+                                    if (!suggestionList.query) {
+                                        return true;
+                                    }
+                                    return item.indexOf(suggestionList.query) > -1;
+                                });
+                            }
+                            suggestionListG.receivedMetaData(retVal);
+                        }
                     }
-                }
-            );
-            scope.$on("$destroy", unsubscribe);
+                );
+                scope.$on("$destroy", unsubscribe);
             };
         }
     };

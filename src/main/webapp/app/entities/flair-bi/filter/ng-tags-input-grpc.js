@@ -637,13 +637,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
         self.load = function(query, tags) {
             self.query = query;
             self.tags=tags;
-            var promise = $q.when(loadFn({ $query: query }));
-            lastPromise = promise;
-            promise.then(function() {
-            if (promise !== lastPromise) {
-                    return;
-            }
-            });
+            lastPromise = $q.when(loadFn({$query: query}));
         };
 
         self.selectNext = function() {
@@ -847,7 +841,12 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
                             break;
                         }
                         var retVal = metaData.map(function (item) {
-                                return item[dimensionName];
+                            return item[dimensionName];
+                        }).filter(function (item) {
+                            if (!suggestionList.query) {
+                                return true;
+                            }
+                            return item.indexOf(suggestionList.query) > -1;
                         });
                         suggestionListG.receivedMetaData(retVal);
                     }

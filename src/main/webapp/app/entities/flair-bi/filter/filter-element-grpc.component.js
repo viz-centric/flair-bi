@@ -33,6 +33,7 @@
         vm.addToFavourite = addToFavourite;
         vm.checkFavouriteFilter = checkFavouriteFilter;
         vm.addFilter = addFilter;
+        vm.isFilteringEnabled = isFilteringEnabled;
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
         vm.isActive = isActive;
@@ -248,6 +249,9 @@
             return tag == undefined ? false : true;
         }
 
+        function isFilteringEnabled(dimension) {
+            return dimension.featureCacheType === 'ENABLED';
+        }
 
         function applyFilter() {
             FilterStateManagerService.add(angular.copy(filterParametersService.get()));
@@ -260,6 +264,9 @@
             query.fields = [{ name: dimension.name }];
             if (!vm.lastQuery.filterDimension || (vm.lastQuery.filterKey!==q) || q === "") {
                 query.distinct = true;
+                if (!isFilteringEnabled(vm.dimension)) {
+                    addQueryConstraints(query, q, dimension);
+                }
                 favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
                 proxyGrpcService.forwardCall(
                     vm.view.viewDashboard.dashboardDatasource.id, {
@@ -274,6 +281,21 @@
                 vm.lastQuery.filterDimension=dimension.id;
             }
 
+        }
+
+        function addQueryConstraints(query, q, dimension) {
+            if (q) {
+                query.conditionExpressions = [{
+                    sourceType: 'FILTER',
+                    conditionExpression: {
+                        '@type': 'Like',
+                        featureType: { featureName: dimension.name, type: dimension.type },
+                        caseInsensitive: true,
+                        value: q
+                    }
+                }];
+            }
+            query.limit = 100;
         }
 
         function isFavouriteFilter() {

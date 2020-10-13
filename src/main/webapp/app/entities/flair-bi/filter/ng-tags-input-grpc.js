@@ -584,11 +584,12 @@ tagsInputGrpc.directive('tiTagItemGrpc', ["tiUtil", function(tiUtil) {
  *    See https://docs.angularjs.org/api/ng/directive/ngClass for more information.
  */
 tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$q", "tagsInputConfig", "tiUtil", function($document, $timeout, $sce, $q, tagsInputConfig, tiUtil) {
-    function SuggestionList(loadFn, options, events) {
+    function SuggestionList(loadFn, options, events, filtering) {
         var self = {}, getDifference, lastPromise, getTagId;
         self.tags=[];
         self.isDataReceived=false;
         self.items=[];
+        self.filtering = filtering;
         getTagId = function() {
             return options.tagsInputGrpc.keyProperty || options.tagsInputGrpc.displayProperty;
         };
@@ -684,6 +685,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
         require: '^tagsInputGrpc',
         scope: {
             source: '&',
+            filtering: '=',
             matchClass: '&'
         },
         templateUrl: 'ngTagsInputGrpc/auto-complete-grpc.html',
@@ -704,7 +706,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
                 displayProperty: [String, '']
             });
 
-            $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events);
+            $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events, $scope.filtering);
 
             this.registerAutocompleteMatch = function() {
                 return {

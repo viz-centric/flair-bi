@@ -618,8 +618,9 @@
             return editMode && !$rootScope.exploration;
         }
 
-        function ngIfResourcesTable(data) {
-            vm.showTableResources =  !editMode && data  && data.metadataVisual.name==="Table";
+        function ngIfResourcesTable() {
+            var data = VisualDispatchService.getVisual();           
+            vm.showTableResources =  !editMode && data.visual  && data.visual.metadataVisual.name==="Table";
             if(vm.showTableResources)
                 vm.sideBarTab = "datafilter";
         }

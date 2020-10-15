@@ -606,7 +606,8 @@
             );
             v.isCardRevealed = v.isCardRevealed == undefined ? true : !v.isCardRevealed;
             if (!v.isCardRevealed) {
-                $rootScope.$broadcast("flairbiApp:onData-open",v);
+                VisualDispatchService.setVisual({ visual: v, view: entity });
+                $rootScope.$broadcast("flairbiApp:onData-open");
             }
         }
 

@@ -654,7 +654,7 @@
             </svg>
         </button>
         <button uib-tooltip="Data filter" tooltip-placement="left" ng-toggled="vm.dataToggled"
-        ng-class="{selected: vm.sideBarTab == 'datafilter'}"  ng-click="vm.onDataOpen()">
+        ng-class="{selected: vm.sideBarTab === 'datafilter'}"  ng-click="vm.onDataOpen()">
             <svg class="flaticons-data-properties">
                 <use xlink:href="#data-properties" />
             </svg>

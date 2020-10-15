@@ -14,6 +14,7 @@
             sortBySequenceNumber: sortBySequenceNumber,
             getFieldPropertyValue: getFieldPropertyValue,
             getPropertyValue: getPropertyValue,
+            setPropertyValue : setPropertyValue,
             getDimensionsAndMeasures: getDimensionsAndMeasures,
             getFormattedNumber: getFormattedNumber,
             getDimensionsAndMeasuresForNotification:getDimensionsAndMeasuresForNotification
@@ -116,6 +117,20 @@
                     return property.value.value
                 } else {
                     return property.value;
+                }
+            }
+        }
+
+        function setPropertyValue(properties, propertyName, orElse) {
+            var properties = properties.filter(function (item) {
+                return item.propertyType.name === propertyName;
+            });
+            var property = properties[0];
+            if (property) {               
+                if (property.value && property.value.value) {
+                    property.value.value = 0;
+                } else {
+                    property.value = 0;
                 }
             }
         }

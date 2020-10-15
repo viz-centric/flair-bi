@@ -315,7 +315,9 @@
             query.groupBy = dimensionFields;
         }
 
-        query.limit = this.getChartPropertyValue('Limit', 20);
+        if(this.getChartPropertyValue('Limit', 20) !==0 ){
+            query.limit = this.getChartPropertyValue('Limit', 20);
+        }
 
         var ordersListSortMeasures = measures
             .filter(function (item) {

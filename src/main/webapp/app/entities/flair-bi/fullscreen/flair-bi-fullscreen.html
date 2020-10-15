@@ -1,14 +1,23 @@
 <div id="shareLink">
-   
-    <div uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()" ng-toggled="vm.filterToggled" class="filterIcon">
-        <svg class="filter">
-            <use xlink:href="#filter" />
-        </svg>
+    <div>
+        <div ng-if="!vm.isExport" uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()" ng-toggled="vm.filterToggled"
+            class="filterIcon">
+            <svg class="filter">
+                <use xlink:href="#filter" />
+            </svg>
+        </div>
+        <div   ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()" ng-toggled="vm.filterToggled"
+            class="filterIcon">
+            <svg class="filter">
+                <use xlink:href="#export" />
+            </svg>
+        </div>
     </div>
+
     <div class="row">
-        <div style="min-height:92.5vh;top: 0px;" class="col-md-12 widget-container-share-link"
-            data="vm.visualMetadata"
-            visualization-render-grpc can-build="vm.visualMetadata.canBuild()"
+        <div style="min-height:92.5vh;top: 0px;" class="col-md-12 widget-container-share-link" data="vm.visualMetadata"
+            ng-style="{'background-color': vm.visualMetadata.bodyProperties.backgroundColor}" visualization-render-grpc
+            can-build="vm.visualMetadata.canBuild()"
             id="content-{{vm.visualMetadata.id || vm.visualMetadata.visualBuildId}}"
             widget="{{vm.visualMetadata.metadataVisual.functionname}}" reload="vm.change" datasource="vm.datasource">
         </div>

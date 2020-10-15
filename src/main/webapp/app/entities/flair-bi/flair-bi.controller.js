@@ -1116,8 +1116,19 @@
          * @param {any} visualMetadata : selected visual metadata
          */
         function exportCSV(visualMetadata) {
-            var csv = transformToCsv(visualMetadata.data);
-            ExportService.exportCSV(visualMetadata.titleProperties.titleText + ".csv", csv);
+            
+            if(visualMetadata.metadataVisual.name === "Table"){
+                var url = ShareLinkService.createLink(
+                    visualMetadata.getSharePath(vm.view.viewDashboard.dashboardName, vm.view.viewName, vm.view.viewDashboard.id, vm.datasource, $stateParams.id)
+                );
+                url = url + "&isExport=true";
+                $window.open(url, '_blank');
+            }
+            else
+            {
+                var csv = transformToCsv(visualMetadata.data);
+                ExportService.exportCSV(visualMetadata.titleProperties.titleText + ".csv", csv);
+            }
         }
 
         function applyToDigitDecimals(v) {

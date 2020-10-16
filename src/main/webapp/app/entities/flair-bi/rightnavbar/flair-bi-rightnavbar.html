@@ -382,7 +382,7 @@
 
             </div>
 
-            <div ng-show="vm.sideBarTab == 'data'" ng-cloak>
+            <div ng-show="vm.sideBarTab == 'data' || vm.sideBarTab == 'datafilter'" ng-cloak>
 
                 <ul class="nav nav-tabs right-nav-option-tabs">
                     <li class="first-tab">
@@ -406,7 +406,7 @@
                             </span>
                         </a>
                     </li>
-                    <li>
+                    <li ng-disabled="vm.sideBarTab == 'datafilter'">
                         <a data-toggle="tab" class="tab" ng-class="{selected: vm.activeTab == 'hierarchy'}"
                             ng-click="vm.activeTab = 'hierarchy' ">
                             <span uib-tooltip="Hierarchy" tooltip-placement="bottom">
@@ -479,7 +479,7 @@
                                     <div class="search-box inner-addon left-addon b-b-xs">
                                         <i class="glyphicon glyphicon-search"></i>
                                         <input type="text" ng-model="searchMeasure" class="form-control  rounded-corner"
-                                            placeholder="Search Measures..." /></div>
+                                        placeholder="Search Measures..." /></div>
                                     <div class="resource-list" dnd-draggable="vm.getSelectedItem(measure)"
                                         dnd-moved="vm.features.splice($index, 1)" dnd-effect-allowed="move"
                                         dnd-selected="vm.selected = measure"
@@ -651,6 +651,12 @@
             ng-class="{selected: vm.sideBarTab == 'properties',optiondisabled:!vm.propertiesToggled}">
             <svg class="flaticons-settings">
                 <use xlink:href="#settings-right-thinbar" />
+            </svg>
+        </button>
+        <button uib-tooltip="Data filter" tooltip-placement="left" ng-toggled="vm.dataToggled"
+        ng-class="{selected: vm.sideBarTab === 'datafilter'}"  ng-click="vm.onDataOpen()">
+            <svg class="flaticons-data-properties">
+                <use xlink:href="#data-properties" />
             </svg>
         </button>
 

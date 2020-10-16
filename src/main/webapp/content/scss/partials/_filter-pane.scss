@@ -14,6 +14,14 @@
       color:$primary-color;
     }
   }
+  .toggalFullScreenMode{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+  }
   .dimensions-container {
     padding: 10px 5px;
     height: 100%;

@@ -30,6 +30,12 @@
   .favouritefilter {
     margin: auto;
   }
+  i.favouritefilter.fa.fa-star{
+      color: $primary-color;
+  }
+  i.activePin{
+      color: $primary-color;  
+  }
 }
 
 .filter-element-widget {

@@ -34,6 +34,8 @@ public class FeatureDTO {
 
 	private Boolean favouriteFilter;
 
+	private Boolean pin;
+
 	private DateFilterType dateFilter;
 
 }

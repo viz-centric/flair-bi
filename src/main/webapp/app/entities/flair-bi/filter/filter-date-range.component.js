@@ -104,7 +104,8 @@
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
                         currentDynamicDateRangeConfig : {},
                         customDynamicDateRange : 0
-                    }
+                    },
+                    dimension : vm.dimension
                 });
             } else if (vm.dimension.metadata.dateRangeTab === TAB_RANGE) {
                 var startDate = formatDate(resetTimezone(strToDate(vm.dimension.selected)));
@@ -118,7 +119,8 @@
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
                         currentDynamicDateRangeConfig : {},
                         customDynamicDateRange : 0
-                    }
+                    },
+                    dimension : vm.dimension
                 });
             } else if (vm.dimension.metadata.dateRangeTab === TAB_DYNAMIC) {
                 var startDateRange = getStartDateRange();
@@ -140,7 +142,8 @@
                         dateRangeTab: vm.dimension.metadata.dateRangeTab,
                         currentDynamicDateRangeConfig : vm.dimension.metadata.currentDynamicDateRangeConfig,
                         customDynamicDateRange : vm.dimension.metadata.customDynamicDateRange
-                    }
+                    },
+                    dimension : vm.dimension
                 });
                 filterParametersService.saveDynamicDateRangeToolTip(getDynamicDateRangeToolTip(vm.dimension.name,vm.dimension.metadata.currentDynamicDateRangeConfig,vm.dimension.metadata.customDynamicDateRange));
             }

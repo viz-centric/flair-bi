@@ -18,9 +18,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams','Views','IFRAME'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams', 'Views', 'IFRAME', 'Features','$translate'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams,Views,IFRAME) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams, Views, IFRAME, Features,$translate) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -36,8 +36,10 @@
         vm.displayTextboxForValues = displayTextboxForValues;
         vm.addToFilter = addToFilter;
         vm.isActive = isActive;
+        vm.toggleHeaderFilter = toggleHeaderFilter;
         vm.activeForText = "disable";
         vm.isCommaSeparatedInput = false;
+        vm.pinFilter = [];
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         vm.lastQuery = {};
         ////////////////
@@ -145,11 +147,10 @@
             favouriteFilterService.markFavouriteFilter(id, !vm.dimension.favouriteFilter)
                 .then(function (data) {
                     vm.dimension.favouriteFilter = !vm.dimension.favouriteFilter;
-                    var opration = vm.dimension.favouriteFilter === true ? 'added to' : 'removed from';
                     var info = {
-                        text: "Dimensions " + opration + " Bookmark filter panelr",
-                        title: "Saved"
-                    }
+                        text: $translate.instant(vm.dimension.favouriteFilter === true ? 'flairbiApp.bookmarkFilter' : 'flairbiApp.removeBookmarkFilter'),
+                        title: "Saved" 
+                   }
                     $rootScope.showSuccessToast(info);
                 }).catch(function (error) {
                     var info = {
@@ -344,7 +345,7 @@
             if(myFilters){
                 addFilterInIframeURL();
             }
-            
+            $rootScope.$broadcast("flairbiApp:update-heder-filter");
         }
 
         function addFilterInIframeURL() {
@@ -410,7 +411,7 @@
                         return filterParameters.indexOf(item) === -1
                     })
                     vm.list[vm.dimension.name] = selectedFilter.concat(unSelectedFilter);
-                } 
+                }
             }
         }
 
@@ -443,6 +444,48 @@
 
         function getSeparator(){
             return vm.separator ? vm.separator.value : ",";
+        }
+        function toggelPinDimension(dimension){
+            Features.markPinFilter({
+                id: dimension.id, pin: !vm.dimension.pin
+            },
+                function (result) {
+                    vm.dimension.pin = !vm.dimension.pin;
+                    var info = {
+                         text: $translate.instant(vm.dimension.pin === true ? 'flairbiApp.pinedDimensions' : 'flairbiApp.unPinedDimensions'),
+                         title: "Saved" 
+                    }
+                    $rootScope.showSuccessToast(info);
+                    $rootScope.$broadcast("flairbiApp:toggle-headers-pin-filters");
+                }, function (err) {
+                    var info = {
+                        text: error.data.message,
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                });
+        }
+        function toggleHeaderFilter(dimension) {
+            if(dimension.pin){
+                toggelPinDimension(dimension);
+            }
+            else{
+                if(getPinedDimensionsCount().length < 5 ){
+                    toggelPinDimension(dimension);
+                }
+                else{
+                    var info = {
+                        text: $translate.instant('flairbiApp.pinedDimensionsError'),
+                        title: "Error"
+                    }
+                    $rootScope.showErrorSingleToast(info);
+                }
+            }
+        }
+        function getPinedDimensionsCount(){
+            return vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });
         }
     }
 })();

@@ -153,7 +153,9 @@
         vm.viewFeatureCriteriaReady = false;
         vm.canEdit = false;
         vm.editOn = false;
+        vm.showPinFilter = false;
         vm.share = share;
+       
 
         Principal.identity().then(function (account) {
             vm.account = account;
@@ -175,6 +177,7 @@
         ////////////////
 
         function activate() {
+           
             registerEditModeToggle();
             registerFilterRefresh();
             registerAddFilter();
@@ -184,6 +187,7 @@
             vm.dimensions = featureEntities.filter(function (item) {
                 return item.featureType === "DIMENSION";
             });
+            loadPinDimensions();
 
             if (configuration.readOnly) {
                 var vms = states.viewState.visualMetadataSet || [];
@@ -204,6 +208,7 @@
             } else {
                 applyFilters();
             }
+            registerToggleHeaderPinFilter();
         }
 
         function getClientLogo() {
@@ -212,6 +217,19 @@
                     vm.clientLogo = result[0];
                 }
             });
+        }
+
+        function loadPinDimensions() {
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true;
+            });
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
+            }
+            vm.showPinFilter = headerSettings.showPinFilter;
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
+            $rootScope.$broadcast("flairbiApp:toggle-grid-filters");
         }
 
         function applyDefaultFilters(excluded) {
@@ -401,6 +419,10 @@
             $rootScope.$broadcast("flairbiApp:toggle-fullscreen-header-filters", vm.showFSFilter);
         }
 
+        function gridContainer(){
+
+        }
+
         function ifFSFilterToggled() {
             return vm.filtersLength > 0 && ($rootScope.isFullScreen == false || (vm.showFSFilter == true && $rootScope.isFullScreen == true));
         }
@@ -421,15 +443,15 @@
         }
 
         function hideFiltersHeaderAndSideBar() {
-            if (vm.filtersLength == 0) {
-                vm.showFSFilter = false;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", true);
-            } else {
-                vm.showFSFilter = true;
-                $rootScope.$broadcast("flairbiApp:toggle-headers-filters", false);
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
             }
+            vm.showFSFilter = headerSettings.showFSFilter;
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
+            $rootScope.$broadcast("flairbiApp:toggle-grid-filters");
         }
-
+        
         function fetchDashboardsAndViews() {
             loadDashboards();
             loadViews();
@@ -669,6 +691,8 @@
                     filterParametersService.setFilterInIframeURL(vm.iFrames, vm.dimensions);
                     removeTagInBI({ 'text': val });
                     setNoOfPages();
+                    $rootScope.$broadcast("flairbiApp:update-heder-filter");
+
                 }
             );
            
@@ -686,6 +710,7 @@
             } else {
                 removeTagInBI(key);
             }
+            $rootScope.$broadcast("flairbiApp:update-heder-filter");
             // Remove entry from rootScope filterSelection property
             delete $rootScope.filterSelection.filter[key];
             vm.filters[key] = [];
@@ -950,6 +975,16 @@
         function changeContainerColor(containerColor) {
             if (containerColor)
                 $('.page-wrapper-full-screen').css('background-color', containerColor)
+        }
+
+        function registerToggleHeaderPinFilter() {
+            var registerToggleHeaderPinFilter = $scope.$on(
+                "flairbiApp:toggle-headers-pin-filters",
+                function (event, result) {
+                   loadPinDimensions();
+                }
+            );
+            $scope.$on("$destroy", registerToggleHeaderPinFilter);
         }
 
         function share() {

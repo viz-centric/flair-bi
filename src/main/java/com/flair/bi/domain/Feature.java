@@ -80,6 +80,9 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "favourite_filter")
 	private Boolean favouriteFilter;
 
+	@Column(name = "pin")
+	private Boolean pin;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "date_filter")
 	private DateFilterType dateFilter;

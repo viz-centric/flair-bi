@@ -4367,6 +4367,45 @@ jhi-alert .alerts .alert-danger {
     height: 40px;
     padding: 0 8px;
     margin-top: 0px; }
+  .flairbi-content-header .headerMenu {
+    height: 35px;
+    display: flex;
+    border-bottom: 1px #e1e3e3 solid;
+    border-top: 1px #e1e3e3 solid;
+    margin-left: -10px;
+    margin-top: 0px; }
+  .flairbi-content-header .dropdown-menu .divider {
+    padding: 0px;
+    margin: 0px;
+    height: 0px; }
+  .flairbi-content-header .dimensionFilter {
+    float: right;
+    margin: 4px 5px; }
+    .flairbi-content-header .dimensionFilter button {
+      padding: 0px 5px;
+      font-size: 12px;
+      background: transparent;
+      border: none; }
+  .flairbi-content-header .pin-filter .dimension-label {
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    color: #33a2e5; }
+  .flairbi-content-header .pin-filter div.filter {
+    font-size: 12px;
+    padding: 0px 5px; }
+  .flairbi-content-header .pin-filter div.filter-section {
+    padding: 0px 5px;
+    margin: 0px 3px;
+    border: 1px #e1e3e3 solid; }
+  .flairbi-content-header .pin-filter li {
+    padding-bottom: 1px; }
+    .flairbi-content-header .pin-filter li a {
+      padding: 0px 20px; }
+    .flairbi-content-header .pin-filter li .dropdown-header {
+      padding: 0px 5px; }
+      .flairbi-content-header .pin-filter li .dropdown-header input {
+        height: 20px; }
 
 .alarm-icon-off {
   fill: #676a6c !important;
@@ -4701,6 +4740,12 @@ jhi-alert .alerts .alert-danger {
     margin-top: 65px; }
   #grid-container.filters-not-applied {
     margin-top: 30px; }
+  #grid-container.filter-without-pin {
+    margin-top: 60px; }
+  #grid-container.nofilter-nopin {
+    margin-top: 30px; }
+  #grid-container.filter-with-pin {
+    margin-top: 90px; }
   #grid-container.filters-applied-fullscreen, #grid-container.fullscreen-show-filter {
     margin-top: 87px; }
   #grid-container.filters-not-applied-fullscreen, #grid-container.fullscreen-hide-filter {
@@ -5866,6 +5911,12 @@ ui bootstrap tweaks
 
 .filter-area .favouritefilter {
   margin: auto; }
+
+.filter-area i.favouritefilter.fa.fa-star {
+  color: #439dd3; }
+
+.filter-area i.activePin {
+  color: #439dd3; }
 
 .filter-element-widget {
   margin-bottom: 5px;

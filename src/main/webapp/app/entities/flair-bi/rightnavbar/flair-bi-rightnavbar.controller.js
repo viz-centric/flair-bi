@@ -62,6 +62,7 @@
         vm.getSelectedItem = getSelectedItem;
         vm.onWidgetsOpen = onWidgetsOpen;
         vm.onWidgetsClose = onWidgetsClose;
+        vm.pinedDimensions = [];
         vm.vizIdPrefix = 'threshold_alert_:';
         vm.apply = apply;
         activate();
@@ -92,7 +93,14 @@
             registerToggleAppliedFilterOn();
             registerBookmarkUpdateDynamicDateRange();
             setDateRangeSubscription();
-            filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
+            registerAddFilterInFinterPanel();
+           
+            var headerSettings = {
+                showFSFilter: filterParametersService.getFiltersCount() == 0 ? false : true,
+                showPinFilter: vm.pinedDimensions.length == 0 ? false : true
+            }
+            setThinBarStyle(headerSettings)
+            //filterParametersService.getFiltersCount() == 0 ? setThinBarStyle(true) : setThinBarStyle(false);
 
             if (configuration.readOnly) {
                 var vms = states.viewState.visualMetadataSet || [];
@@ -278,8 +286,14 @@
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
         }
 
-        function setThinBarStyle(isFiltersApplied) {
-            vm.thinbarStyle = isFiltersApplied ? { "margin-top": "40px" } : { "margin-top": "75px" }
+        function setThinBarStyle(setting) {
+            vm.thinbarStyle = setting.showFSFilter ? { "margin-top": "75px" } : { "margin-top": "40px" }
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });
+            if (vm.pinedDimensions.length > 0) {
+                vm.thinbarStyle = setting.showFSFilter ? { "margin-top": "105px" } : { "margin-top": "70px" }
+            }
         }
 
         function registerToggleAppliedFilterOn() {
@@ -311,6 +325,33 @@
                     $timeout(function () {
                         vm.filterToggled = false;
                         hideSidebar();
+                    });
+                }
+            );
+
+            $scope.$on("$destroy", unsubscribe);
+        }
+
+        function registerAddFilterInFinterPanel() {
+            var unsubscribe = $scope.$on(
+                "flairbiApp:add-filter-In-FinterPanel",
+                function () {
+                    var filterParameters;
+                    filterParameters = filterParametersService.get();
+                    var filter = Object.keys(filterParameters);
+
+                    filter.forEach(element => {
+                        vm.dimensions.map(function (item) {
+                            if (item.name === element) {
+                                item.selected = filterParameters[element]
+                                    .map(function (item) {
+                                        return {
+                                            text: item
+                                        }
+                                    });
+                            }
+                        })
+
                     });
                 }
             );
@@ -439,7 +480,6 @@
             vm.favouriteDimensions = vm.dimensions.filter(function (item) {
                 return item.favouriteFilter === true;
             });
-            debugger
             $('#slider').css('display', 'block');
         }
 

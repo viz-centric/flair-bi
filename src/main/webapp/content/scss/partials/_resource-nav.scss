@@ -124,7 +124,19 @@
                         }
                     }
                 }
+                
             }
+        }
+        .dimensionList{
+            display: flex;
+            flex-wrap: wrap;
+            
+        }
+        .filter-form {
+            border: 1px solid $dropdown-border-color;
+            margin: 5px;
+            padding: 5px;
+            max-width: 17vw;
         }
     }
     label {
@@ -138,6 +150,10 @@
         min-height:calc(100vh - 200px);
         overflow-y: auto;
     }
+}
+
+.fullScreenPanel{
+    width: calc(100% - 50px) !important;
 }
 
 .right-nav-option-tabs {

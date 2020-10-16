@@ -19,6 +19,7 @@
                     element[0].innerHTML = '<i class="fa fa-exclamation-circle noDataFound" aria-hidden="true"></i> <p class="noDataText">  No data found with current filters</p>';
                     return;
                 }
+
                 function getProperties(VisualizationUtils, record) {
                     var result = {};
 
@@ -42,7 +43,7 @@
                     result['showXaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show X Axis Label');
                     result['showYaxisLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Y Axis Label');
                     result['axisScaleLabel'] = VisualizationUtils.getPropertyValue(record.properties, 'Axis Scale Label');
-
+                    result['showMoreDimension'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Show more dimension char');
                     result['showLegend'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Legend');
                     result['legendPosition'] = VisualizationUtils.getPropertyValue(record.properties, 'Legend position').toLowerCase();
                     result['showGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show grid');
@@ -110,10 +111,9 @@
                     return clusteredhorizontalbar;
 
                 }
-                 if (isNotification || isIframe) {
+                if (isNotification || isIframe) {
                     createChart();
-                }
-                else {
+                } else {
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
                             var clusteredhorizontalbar = $rootScope.updateWidget[record.id];

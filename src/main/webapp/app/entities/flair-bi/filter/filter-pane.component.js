@@ -29,6 +29,8 @@
         vm.dateFilter = [];
         vm.separators = SEPARATORS;
         vm.separator = vm.separators[0];
+        vm.filterToggal = "fa fa-window-maximize";
+        vm.toggalFullScreenMode = toggalFullScreenMode;
         activate();
 
         ////////////////
@@ -44,6 +46,19 @@
             });
 
             $scope.$on('$destroy', unsub);
+        }
+
+        function toggalFullScreenMode() {
+            angular.element("#slider").toggleClass('fullScreenPanel');
+            if (angular.element("#slider").hasClass('fullScreenPanel')) {
+                angular.element("#slider .toggalFullScreenMode").addClass('fa-window-maximize');
+                angular.element("#slider .toggalFullScreenMode").removeClass('fa-window-minimize');
+
+            } else {
+                angular.element("#slider .toggalFullScreenMode").remove('fa-window-maximize');
+                angular.element("#slider .toggalFullScreenMode").addClass('fa-window-minimize');
+
+            }
         }
 
         function filterChangedSubscription() {
@@ -99,8 +114,8 @@
 
         function addFilterInIframeURL() {
             Views.getCurrentEditState({
-                id: $stateParams.id
-            },
+                    id: $stateParams.id
+                },
                 function (result, headers) {
                     vm.iFrames = result.visualMetadataSet.filter(function (item) {
                         return item.metadataVisual.name === IFRAME.iframe;

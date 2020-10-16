@@ -49,6 +49,7 @@
                     result['isFilterGrid'] = VisualizationUtils.getPropertyValue(record.properties, 'Show Filter Grid');
                     result['showSorting'] = VisualizationUtils.getPropertyValue(record.properties, 'Allow Sorting');
                     result['displayName'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Display name') || result['dimension'][0]; 
+                    result['showMoreDimension'] = VisualizationUtils.getFieldPropertyValue(dimensions[0], 'Show more dimension char');
                     result['alternateDimension'] = VisualizationUtils.getPropertyValue(record.properties, 'Alternative Dimensions');                    
                     result['showValues'] = [];
                     result['displayNameForMeasure'] = [];

@@ -21,7 +21,10 @@
         "DateUtils",
         "favouriteFilterService",
         "$rootScope",
-        "$window"
+        "$window",
+        "VisualizationUtils",
+        "ExportService",
+        "D3Utils",
     ];
 
     function FlairBiFullscreenController($scope,
@@ -40,7 +43,10 @@
         DateUtils,
         favouriteFilterService,
         $rootScope,
-        $window) {
+        $window,
+        VisualizationUtils,
+        ExportService,
+        D3Utils) {
         var vm = this;
 
         vm.visualMetadata = new VisualWrap(visualMetadata);
@@ -53,29 +59,34 @@
         vm.addFilterInQueryDTO = addFilterInQueryDTO;
         vm.dynamicDateRangeConfig = DYNAMIC_DATE_RANGE_CONFIG;
         vm.onFiltersOpen = onFiltersOpen;
+        vm.exportData = exportData;
         vm.sideBarTab = "filters";
+        vm.isExport = false;
         activate();
 
         ////////////////
 
         function activate() {
             $('body').css('overflow-y', "hidden");
+            vm.isExport = filterParametersService.getParameterByName("isExport", $window.location.href);
             if ($stateParams.filters) {
                 addFilterInQueryDTO();
-            }
-            else {
+            } else {
                 filterParametersService.clear();
             }
-
             const applied = filterParametersService.applyViewFeatureCriteria(vm.view.viewFeatureCriterias, featureEntities);
             filterParametersService.applyDefaultFilters(applied, featureEntities);
+            if (vm.isExport) {
+                VisualizationUtils.setPropertyValue(vm.visualMetadata.properties, 'Limit');
+            }
             connectWebSocket();
         }
 
         function connectWebSocket() {
             console.log('flair-bi fullscreen controller connect web socket');
-            stompClientService.connect(
-                { token: AuthServerProvider.getToken() },
+            stompClientService.connect({
+                    token: AuthServerProvider.getToken()
+                },
                 function (frame) {
                     console.log('flair-bi fullscreen controller connected web socket');
                     stompClientService.subscribe("/user/exchange/metaData/" + $stateParams.visualisationId, onExchangeMetadata);
@@ -96,7 +107,9 @@
 
         function onExchangeMetadata(data) {
             console.log('controller on metadata', data);
-            var metaData = data.body === "" ? { data: [] } : JSON.parse(data.body);
+            var metaData = data.body === "" ? {
+                data: []
+            } : JSON.parse(data.body);
             if (data.headers.request === "share-link-filter") {
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
@@ -115,6 +128,7 @@
                 return item.name === dimension;
             })
         }
+
         function getStartDateRange() {
             var date = new Date();
             var config = vm.currentDynamicDateRangeConfig;
@@ -124,6 +138,7 @@
             }
             return null;
         }
+
         function getStartDateRangeInterval(filterTime) {
 
             var activeFilter = vm.dynamicDateRangeConfig.filter(function (item) {
@@ -205,8 +220,7 @@
                                 return newItem;
                             });
                         }
-                    }
-                    else {
+                    } else {
                         if (filters[element].type == "date-range") {
                             filterParameters[element] = filters[element].value;
 
@@ -221,8 +235,7 @@
                             vm.dimensions[vm.dimensionPosition].metadata.currentDynamicDateRangeConfig = null;
                             vm.dimensions[vm.dimensionPosition].metadata.dateRangeTab = 1;
                             vm.dimensions[vm.dimensionPosition].metadata.customDynamicDateRange = 0;
-                        }
-                        else if (filters[element].type == "custom-date") {
+                        } else if (filters[element].type == "custom-date") {
                             vm.currentDynamicDateRangeConfig = filters[element].value[0];
                             var startDateRange = getStartDateRange();
                             var startDate;
@@ -264,14 +277,12 @@
             if (isIframe) {
                 var url = filterParametersService.removeURLParameter($window.location.href, "ifIframe");
                 $window.open(url, '_blank');
-            }
-            else {
+            } else {
                 if (vm.isOpen) {
                     showSideBar();
                     $('#slider').css('display', 'block');
                     createVisualisation();
-                }
-                else {
+                } else {
                     $('.widget-container-share-link').css('width', '100%').css('width', '-=16px');
                     $('#slider').css('display', 'none');
                     createVisualisation()
@@ -298,6 +309,59 @@
                 false,
                 true
             );
+        }
+
+        function exportData() {
+            var csv = transformToCsv(vm.visualMetadata.data);
+            ExportService.exportCSV(vm.visualMetadata.titleProperties.titleText + ".csv", csv);
+        }
+
+        function transformToCsv(data) {
+            var csv = [];
+
+            var features = VisualizationUtils.getDimensionsAndMeasures(vm.visualMetadata.fields),
+                measures = features.measures,
+                measuresList = D3Utils.getNames(measures),
+                footer = [],
+                values = [],
+                header = [];
+
+            data.forEach(function (item, index) {
+                values = [];
+                header = [];
+                for (var key in item) {
+                    if (Object.prototype.hasOwnProperty.call(item, key)) {
+                        var val = item[key] === null ? "null" : item[key];
+                        if (index == 0) {
+                            header.push(key);
+                        }
+                        values.push(val);
+                    }
+                }
+                if (header.length > 0) {
+                    csv.push(header);
+                }
+                csv.push(values);
+            });
+
+            csv[0].forEach(key => {
+                if (measuresList.indexOf(key) !== -1) {
+                    var sum = getTotal(data, key)
+                    footer.push(sum);
+                } else {
+                    footer.push("");
+                }
+            });
+            csv.push(footer);
+            return csv;
+        }
+
+        function getTotal(data, key) {
+            var sum = 0;
+            data.forEach(element => {
+                sum += element[key];
+            });
+            return parseFloat(sum).toFixed(2);
         }
 
     }

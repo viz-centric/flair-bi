@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="khushbu" id="20200800700012">
+        <insert tableName="property_types">
+            <column name="id" value="695" />
+            <column name="property_type_name" value="Show more dimension char" />
+            <column name="property_type_description" value="Show more dimension char" />
+            <column name="d_type" value="CHECKBOX" />
+            <column name="checkbox_default_value" value="false" />
+            <column name="text_default_value" value="null" />
+            <column name="color_picker_default_value" value="null" />
+            <column name="number_default_value" value="null" />
+            <column name="created_by" value="flairadmin" />
+            <column name="select_data_type" value="null" />
+
+        </insert>
+
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="125" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="3" />
+        </insert>
+
+        <insert tableName="field_types_property_types">
+            <column name="field_type_id" value="113" />
+            <column name="property_type_id" value="695" />
+            <column name="sequence_number" value="3" />
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,8 +1,17 @@
 <div class="flair-scroll side-widgets overflow resource-nav">
     <div class="panel panel-default filter-area">
         <div class="panel-heading">
-            <div class="panel-title">{{vm.type}} 
-                 <i ng-show="vm.type=='Filters'"  ng-click="vm.toggalFullScreenMode()" class="toggalFullScreenMode fa fa-window-minimize" aria-hidden="true"></i>
+            <div class="panel-title"><span>{{vm.type}} </span>
+                 <i  ng-show="vm.type=='Filters' && vm.isFullScreenFilter"  ng-click="vm.toggalFullScreenMode()">
+                    <svg class="toggalFullScreenMode">
+                        <use xlink:href="#full-screen-filter-on" />
+                    </svg>
+                 </i>
+                 <i  ng-show="vm.type=='Filters' && !vm.isFullScreenFilter"  ng-click="vm.toggalFullScreenMode()">
+                    <svg class="toggalFullScreenMode">
+                        <use xlink:href="#full-screen-filter-off" />
+                    </svg>
+                 </i>
             </div>
             
         </div>

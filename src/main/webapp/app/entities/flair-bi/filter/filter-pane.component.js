@@ -31,6 +31,7 @@
         vm.separator = vm.separators[0];
         vm.filterToggal = "fa fa-window-maximize";
         vm.toggalFullScreenMode = toggalFullScreenMode;
+        vm.isFullScreenFilter = false;
         activate();
 
         ////////////////
@@ -51,13 +52,9 @@
         function toggalFullScreenMode() {
             angular.element("#slider").toggleClass('fullScreenPanel');
             if (angular.element("#slider").hasClass('fullScreenPanel')) {
-                angular.element("#slider .toggalFullScreenMode").addClass('fa-window-maximize');
-                angular.element("#slider .toggalFullScreenMode").removeClass('fa-window-minimize');
-
+                vm.isFullScreenFilter = true;
             } else {
-                angular.element("#slider .toggalFullScreenMode").remove('fa-window-maximize');
-                angular.element("#slider .toggalFullScreenMode").addClass('fa-window-minimize');
-
+                vm.isFullScreenFilter = false;
             }
         }
 

@@ -178,7 +178,7 @@
                                         </svg>
                                     </span>
                                 </a>
-                                <a ng-show="vm.ngIfSettings()" href class="viz-header-button" ng-click="vm.flipCard(v)">
+                                <a ng-show="vm.ngIfSettingsTable(v)" href class="viz-header-button" ng-click="vm.flipCard(v)">
                                     <span uib-tooltip="Flip" tooltip-placement="bottom">
                                         <i class="viz-header-icon fa fa-rotate-right"></i>
                                     </span>
@@ -224,7 +224,7 @@
                                                 </svg>
                                             </span>
                                         </a>
-                                        <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettings()" href=""
+                                        <a ng-show="vm.isRequiredFeatureEmpty(v.fields) && vm.ngIfSettingsTable(v)" href=""
                                             class="viz-header-button" ng-click="vm.applyFeatures(v)">
                                             <span uib-tooltip="Apply" tooltip-placement="bottom">
                                                 <i class="viz-header-icon fa fa-gavel"></i>
@@ -242,7 +242,14 @@
                                         <a href="" class="viz-header-button" ng-click="vm.flipCard(v)">
                                             <span uib-tooltip="Flip" tooltip-placement="bottom">
                                                 <i class="viz-header-icon fa fa-rotate-right"></i>
-                                                <span>
+                                            <span>
+                                        </a>
+                                        <a href="" class="viz-header-button" ng-click="vm.resetTable(v)">
+                                            <span uib-tooltip="Reset" tooltip-placement="bottom">
+                                                <svg class="viz-header-icon flaticons-close">
+                                                    <use xlink:href="#close" />
+                                                </svg>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>

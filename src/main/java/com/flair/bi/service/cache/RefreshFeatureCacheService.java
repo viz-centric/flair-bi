@@ -11,8 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 @Service
 @RequiredArgsConstructor
@@ -24,17 +24,12 @@ public class RefreshFeatureCacheService {
 
     public void refresh() {
         List<Feature> cacheableFeatures = featureService.getCacheableFeatures();
-        Map<Datasource, List<Feature>> featureMap = cacheableFeatures
-                .stream()
-                .collect(Collectors.groupingBy(feature -> feature.getDatasource()));
-
-        featureMap
-                .forEach((datasource, featureList)  -> queryFeaturesForDatasource(datasource, featureList));
+        cacheableFeatures.forEach(feature -> queryFeaturesForDatasource(feature.getDatasource(), feature));
     }
 
-    private void queryFeaturesForDatasource(Datasource datasource, List<Feature> featureList) {
+    private void queryFeaturesForDatasource(Datasource datasource, Feature feature) {
         QueryDTO queryDTO = new QueryDTO();
-        queryDTO.setFields(featureList.stream().map(f -> new FieldDTO(f.getName())).collect(Collectors.toList()));
+        queryDTO.setFields(asList(new FieldDTO(feature.getName())));
         queryDTO.setDistinct(true);
         grpcQueryService.sendRunQuery(queryDTO, datasource);
     }

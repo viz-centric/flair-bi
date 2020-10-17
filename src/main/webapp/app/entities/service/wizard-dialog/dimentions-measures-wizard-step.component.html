@@ -9,6 +9,7 @@
                      <th></th>
                      <th></th>
                      <th class="text-center">Enable Date Time Filter</th>
+                     <th class="text-center">Cache</th>
                  </tr>
              </thead>
  
@@ -53,6 +54,22 @@
                          </div>
                      </div>
  
+                 </td>
+
+                 <td class="text-center">
+                     <div class="form-inline">
+                         <div class="form-group">
+                             <input id="feature_cache{{$index}}"
+                                    style="width: 15px;"
+                                    type="checkbox"
+                                    ng-model="feature.featureCacheType"
+                                    ng-true-value="'ENABLED'"
+                                    ng-false-value="'DISABLED'"
+                                    class="form-control"
+                                    aria-label="Cache">
+                         </div>
+                     </div>
+
                  </td>
              </tr>
              

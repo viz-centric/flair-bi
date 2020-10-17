@@ -584,11 +584,12 @@ tagsInputGrpc.directive('tiTagItemGrpc', ["tiUtil", function(tiUtil) {
  *    See https://docs.angularjs.org/api/ng/directive/ngClass for more information.
  */
 tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$q", "tagsInputConfig", "tiUtil", function($document, $timeout, $sce, $q, tagsInputConfig, tiUtil) {
-    function SuggestionList(loadFn, options, events) {
+    function SuggestionList(loadFn, options, events, filtering) {
         var self = {}, getDifference, lastPromise, getTagId;
         self.tags=[];
         self.isDataReceived=false;
         self.items=[];
+        self.filtering = filtering;
         getTagId = function() {
             return options.tagsInputGrpc.keyProperty || options.tagsInputGrpc.displayProperty;
         };
@@ -637,13 +638,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
         self.load = function(query, tags) {
             self.query = query;
             self.tags=tags;
-            var promise = $q.when(loadFn({ $query: query }));
-            lastPromise = promise;
-            promise.then(function() {
-            if (promise !== lastPromise) {
-                    return;
-            }
-            });
+            lastPromise = $q.when(loadFn({$query: query}));
         };
 
         self.selectNext = function() {
@@ -690,6 +685,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
         require: '^tagsInputGrpc',
         scope: {
             source: '&',
+            filtering: '=',
             matchClass: '&'
         },
         templateUrl: 'ngTagsInputGrpc/auto-complete-grpc.html',
@@ -710,7 +706,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
                 displayProperty: [String, '']
             });
 
-            $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events);
+            $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events, $scope.filtering);
 
             this.registerAutocompleteMatch = function() {
                 return {
@@ -836,24 +832,33 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             });
 
             function receivedMetaData(){
-            var unsubscribe = scope.$on(
-                "flairbiApp:filters-meta-Data",
-                function(event,metaData,isFavouriteFilter) {
-                    if(!isFavouriteFilter){
-                        var obj = metaData[0];
-                        var dimensionName = '';
-                        for(var i in obj){
-                            dimensionName = i;
-                            break;
-                        }
-                        var retVal = metaData.map(function (item) {
+                var unsubscribe = scope.$on(
+                    "flairbiApp:filters-meta-Data",
+                    function(event,metaData,isFavouriteFilter) {
+                        if(!isFavouriteFilter){
+                            var obj = metaData[0];
+                            var dimensionName = '';
+                            for(var i in obj){
+                                dimensionName = i;
+                                break;
+                            }
+                            var retVal = metaData.map(function (item) {
                                 return item[dimensionName];
-                        });
-                        suggestionListG.receivedMetaData(retVal);
+                            });
+
+                            if (suggestionListG.filtering) {
+                                retVal = retVal.filter(function (item) {
+                                    if (!suggestionList.query) {
+                                        return true;
+                                    }
+                                    return item.indexOf(suggestionList.query) > -1;
+                                });
+                            }
+                            suggestionListG.receivedMetaData(retVal);
+                        }
                     }
-                }
-            );
-            scope.$on("$destroy", unsubscribe);
+                );
+                scope.$on("$destroy", unsubscribe);
             };
         }
     };

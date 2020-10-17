@@ -93,6 +93,8 @@
     <include file="config/liquibase/changelog/20200906023012_added_usergroup_permissions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200906023013_added_user_permissions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200800700012_add_show_more_dimension_char.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201016100000_added_features_cache.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201016100001_added_schedlock.xml" relativeToChangelogFile="false"/>
 
 
 </databaseChangeLog>

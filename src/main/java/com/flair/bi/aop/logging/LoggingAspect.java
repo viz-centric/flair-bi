@@ -1,7 +1,10 @@
 package com.flair.bi.aop.logging;
 
-import java.util.Arrays;
-
+import com.flair.bi.config.Constants;
+import com.flair.bi.exception.UniqueConstraintsException;
+import com.flair.bi.web.rest.errors.ErrorConstants;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -11,12 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.exception.UniqueConstraintsException;
-import com.flair.bi.web.rest.errors.ErrorConstants;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
@@ -71,14 +69,14 @@ public class LoggingAspect {
 	@Around("loggingPointcut()")
 	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 		if (log.isDebugEnabled()) {
-			log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
-					joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+//			log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
+//					joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
 		}
 		try {
 			Object result = joinPoint.proceed();
 			if (log.isDebugEnabled()) {
-				log.debug("Exit: {}.{}() with result = {}", joinPoint.getSignature().getDeclaringTypeName(),
-						joinPoint.getSignature().getName(), result);
+//				log.debug("Exit: {}.{}() with result = {}", joinPoint.getSignature().getDeclaringTypeName(),
+//						joinPoint.getSignature().getName(), result);
 			}
 			return result;
 		} catch (IllegalArgumentException e) {

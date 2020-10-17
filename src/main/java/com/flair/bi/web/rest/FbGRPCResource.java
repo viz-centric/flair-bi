@@ -50,6 +50,7 @@ public class FbGRPCResource {
 						.userId(headerAccessor.getUser().getName())
 						.visualMetadata(fbiEngineDTO.getVisualMetadata())
 						.queryDTO(fbiEngineDTO.getQueryDTO())
+						.actionType(fbiEngineDTO.getActionType())
 						.visualMetadataId(fbiEngineDTO.getvId())
 						.type(fbiEngineDTO.getType())
                         .validationType(fbiEngineDTO.getValidationType())

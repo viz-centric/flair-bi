@@ -212,6 +212,7 @@
                     queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression(), $rootScope.activePage.activePageNo),
                     visualMetadata: vm.data,
                     validationType: 'REQUIRED_FIELDS',
+                    actionType: $stateParams.isExport ? 'EXPORT' : null,
                     type : $stateParams.id ? null : 'share-link'
                 }, $stateParams.id ? $stateParams.id : $stateParams.viewId);
 

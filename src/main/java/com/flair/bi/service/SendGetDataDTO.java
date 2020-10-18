@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.service.dto.QueryActionType;
 import com.flair.bi.service.dto.QueryValidationType;
 import com.project.bi.query.dto.QueryDTO;
 import lombok.Builder;
@@ -17,4 +18,5 @@ public class SendGetDataDTO {
 	private String visualMetadataId;
 	private String type;
 	private QueryValidationType validationType;
+	private QueryActionType actionType;
 }

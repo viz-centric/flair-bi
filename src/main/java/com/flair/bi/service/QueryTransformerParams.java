@@ -1,5 +1,6 @@
 package com.flair.bi.service;
 
+import com.flair.bi.service.dto.QueryActionType;
 import com.flair.bi.service.dto.QueryValidationType;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class QueryTransformerParams {
     private final String userId;
     private final Long datasourceId;
     private final Long dashboardId;
+    private final QueryActionType action;
     @Builder.Default
     private final QueryValidationType validationType = QueryValidationType.NONE;
 }

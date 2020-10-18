@@ -1,11 +1,10 @@
 package com.flair.bi.service.dto;
 
-import javax.validation.constraints.NotNull;
-
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
 import com.project.bi.query.dto.QueryDTO;
-
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Request body that contains which widget is making request with which queries.
@@ -21,6 +20,8 @@ public class FbiEngineDTO {
 	private String vId;
 
 	private String type;
+
+	private QueryActionType actionType;
 
 	private QueryValidationType validationType;
 

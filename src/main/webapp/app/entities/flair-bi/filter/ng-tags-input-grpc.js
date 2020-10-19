@@ -689,7 +689,7 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             matchClass: '&'
         },
         templateUrl: 'ngTagsInputGrpc/auto-complete-grpc.html',
-        controller: ["$scope", "$element", "$attrs", function($scope, $element, $attrs) {
+        controller: ["$scope", "$element", "$attrs", "$timeout", function($scope, $element, $attrs, $timeout) {
             $scope.events = tiUtil.simplePubSub();
             //receivedMetaData();
 
@@ -846,15 +846,16 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
                                 return item[dimensionName];
                             });
 
-                            if (suggestionListG.filtering) {
+                            if (suggestionListG.filtering && suggestionList.query) {
                                 retVal = retVal.filter(function (item) {
-                                    if (!suggestionList.query) {
-                                        return true;
-                                    }
-                                    return item.indexOf(suggestionList.query) > -1;
+                                    return item && item.toUpperCase().indexOf(suggestionList.query.toUpperCase()) > -1;
                                 });
+                                $timeout(function () {
+                                    suggestionListG.receivedMetaData(retVal);
+                                }, 1);
+                            } else {
+                                suggestionListG.receivedMetaData(retVal);
                             }
-                            suggestionListG.receivedMetaData(retVal);
                         }
                     }
                 );

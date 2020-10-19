@@ -344,6 +344,10 @@
             return getQueryString('datasourceId', share_link);
         }
 
+        function getDashboardId(share_link) {
+            return getQueryString('dashboarID', share_link);
+        }
+
         function getQueryString(field, url) {
             var href = url ? url : window.location.href;
             var reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
@@ -533,7 +537,7 @@
 
         function continueSchedule() {
             vm.scheduleObj.queryDTO = buildQueryDTO(vm.visualMetaData);
-            vm.scheduleObj.dashboardId = vm.dashboard.id;
+            vm.scheduleObj.dashboardId = getDashboardId(vm.scheduleObj.report.share_link);
             if (validateAndSetHaving()) {
                 vm.isSaving = true;
                 setCronExpression();

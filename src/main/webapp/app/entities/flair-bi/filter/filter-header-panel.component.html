@@ -14,7 +14,7 @@
                         {{dimension.name}}
                         <span class="caret"></span>
                     </label>
-                    <div class="dropdown-menu" id="collapse-{{dimension.id}}" style="width: 17vw;">
+                    <div class="dropdown-menu header-date-filter" id="collapse-{{dimension.id}}" style="width: 17vw;">
                         <filter-date-range dimension="dimension" reload="vm.dateRangeReload"
                             on-date-change="vm.onDateChange(startDate, endDate, metadata,dimension)">
                         </filter-date-range>

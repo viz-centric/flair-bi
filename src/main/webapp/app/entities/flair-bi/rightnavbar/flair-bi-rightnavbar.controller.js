@@ -711,6 +711,10 @@
         }
 
         $(document).on("click", function (event) {
+            if(!event.target.closest('.header-date-filter') && !event.target.closest('.md-calendar-date-selection-indicator')){
+                $('.header-date-filter').collapse('hide');
+            }
+           
             if (isRightSideBarOpen()) {
                 //var p=$(event.target).parents();
                 var gridLen = $(event.target).parents().is('.grid-back,.grid-front,.grid-stack-item,.grid-stack,.viz-header,.viz-header-content,.grid-stack-item-content,.viz-settings') == true ? 1 : 0;

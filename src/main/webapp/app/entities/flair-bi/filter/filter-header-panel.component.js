@@ -40,7 +40,8 @@
                 selectedToTop: true,
                 styleActive: true,
                 showCheckAll: false,
-                showUncheckAll: false
+                showUncheckAll: false,
+                checkBoxes : true
             };
             $scope.$on('flairbiApp:update-heder-filter', function () {
                 updateHeaderFilter();

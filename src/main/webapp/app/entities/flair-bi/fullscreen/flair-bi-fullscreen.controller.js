@@ -335,7 +335,15 @@
                         if (index == 0) {
                             header.push(key);
                         }
-                        values.push(val);
+                        if (measuresList.indexOf(key) !== -1) 
+                        {
+                            values.push(Math.round(val * Math.pow(10,2)) / Math.pow(10,2));
+                        }
+                        else
+                        {
+                            values.push(val);
+                        }
+                        
                     }
                 }
                 if (header.length > 0) {

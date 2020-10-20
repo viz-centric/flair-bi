@@ -473,7 +473,7 @@
                         </div>
                         <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel"
                             aria-labelledby="headingThree">
-                            <div class="panel-body">
+                            <div class="panel-body properties">
                                 <div class="list-group" dnd-list="vm.features"
                                     dnd-drop="vm.dropCallback(index, item, external, type)">
                                     <div class="search-box inner-addon left-addon b-b-xs">
@@ -515,7 +515,7 @@
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel"
                             aria-labelledby="headingTwo">
-                            <div class="panel-body">
+                            <div class="panel-body properties">
                                 <div class="list-group">
                                     <div class="resource-list" ng-repeat="hierarchy in vm.hierarchies">
                                         <a class="list-group-item" href>
@@ -656,7 +656,7 @@
         <button uib-tooltip="Data filter" tooltip-placement="left" ng-toggled="vm.dataToggled"
         ng-class="{selected: vm.sideBarTab === 'datafilter'}"  ng-click="vm.onDataOpen()">
             <svg class="flaticons-data-properties">
-                <use xlink:href="#data-properties" />
+                <use xlink:href="#field-search" />
             </svg>
         </button>
 

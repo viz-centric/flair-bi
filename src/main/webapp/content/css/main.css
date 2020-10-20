@@ -4867,7 +4867,9 @@ jhi-alert .alerts .alert-danger {
 #shareLink .filterIcon {
   height: 20px;
   width: 20px;
-  margin-left: 99%; }
+  display: flex;
+  float: right;
+  margin-right: 35px; }
 
 #shareLink #slider {
   margin-right: 0px !important;

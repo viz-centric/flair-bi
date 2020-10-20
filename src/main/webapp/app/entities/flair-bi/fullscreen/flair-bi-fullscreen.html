@@ -4,15 +4,15 @@
             <span class="dashboard-text">Dashboard : {{vm.view.viewDashboard.dashboardName}}</span>
 
         </div>
-        <div class="col-md-2">
-            <div ng-if="!vm.isExport" uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()"
-                ng-toggled="vm.filterToggled" class="filterIcon">
+        <div class="col-md-2 filterIcon">
+            <div type="button" uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()"
+                ng-toggled="vm.filterToggled" class="">
                 <svg class="filter">
                     <use xlink:href="#filter" />
                 </svg>
             </div>
-            <div ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()"
-                ng-toggled="vm.filterToggled" class="filterIcon">
+            <div type="button" ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()"
+                ng-toggled="vm.filterToggled" class="">
                 <svg class="filter">
                     <use xlink:href="#export" />
                 </svg>

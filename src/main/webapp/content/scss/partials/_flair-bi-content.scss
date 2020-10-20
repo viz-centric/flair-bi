@@ -334,7 +334,9 @@
     .filterIcon{
         height: 20px;
         width: 20px;
-        margin-left: 99%;
+        display: flex;
+        float: right;
+        margin-right: 35px;
     }
     #slider{
         margin-right: 0px !important; 

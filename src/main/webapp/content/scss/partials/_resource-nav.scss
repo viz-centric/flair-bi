@@ -132,12 +132,6 @@
             flex-wrap: wrap;
             
         }
-        .filter-form {
-            border: 1px solid $dropdown-border-color;
-            margin: 5px;
-            padding: 5px;
-            max-width: 17vw;
-        }
     }
     label {
         font-weight: 600;
@@ -150,10 +144,25 @@
         min-height:calc(100vh - 200px);
         overflow-y: auto;
     }
+    .filter-item{
+        // border: 1px solid $dropdown-border-color;
+        // margin: 5px;
+        // padding: 5px;
+        width: 100%;
+    }
 }
+
 
 .fullScreenPanel{
     width: calc(100% - 50px) !important;
+    .filter-form {
+        border: 1px solid $dropdown-border-color;
+        margin: 5px;
+        padding: 5px;
+    }
+    .filter-item{
+        max-width: 17vw;
+    }
 }
 
 .right-nav-option-tabs {

@@ -1124,7 +1124,8 @@
                 var url = ShareLinkService.createLink(
                     visualMetadata.getSharePath(vm.view.viewDashboard.dashboardName, vm.view.viewName, vm.view.viewDashboard.id, vm.datasource, $stateParams.id)
                 );
-                url = url + "&isExport=true";
+                var filterUrl = filterParametersService.getFilterURL(vm.dimensions);
+                url = url + "&isExport=true" + filterUrl;
                 $window.open(url, '_blank');
             }
             else

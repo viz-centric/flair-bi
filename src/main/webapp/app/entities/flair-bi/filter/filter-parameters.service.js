@@ -39,7 +39,8 @@
             removeFilterInIframeURL: removeFilterInIframeURL,
             setFilterInIframeURL: setFilterInIframeURL,
             removeURLParameter : removeURLParameter,
-            getParameterByName : getParameterByName
+            getParameterByName : getParameterByName,
+            getFilterURL : getFilterURL
 
         };
 
@@ -454,6 +455,24 @@
                     });
                 }
             }
+        }
+
+        function getFilterURL(filterDimensions) {
+            var filters = get();
+            var filtersList = Object.keys(filters);
+            var filterUrl = {};
+            filtersList.forEach(item => {
+                if (filters[item]._meta.valueType === "dateRangeValueType") {
+                    filterUrl[item] = setDateFilterValue(filterDimensions, item, filters);
+                } else {
+                    filterUrl[item] = Array(filters[item]);
+                }
+            });
+            filterUrl = "&filters=" + JSON.stringify(filterUrl);
+            filtersList.forEach(item => {
+                filterUrl = filterUrl.replace("[[", "[").replace("]]", "]");
+            });
+            return filterUrl;
         }
 
         function getDateFilterValue(filterDimensions, dimension) {

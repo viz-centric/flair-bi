@@ -1,6 +1,7 @@
 package com.flair.bi.domain;
 
 import com.flair.bi.domain.constraintdefinition.ConstraintDefinition;
+import com.flair.bi.domain.security.UserGroup;
 import com.project.bi.general.Builder;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import lombok.EqualsAndHashCode;
@@ -39,6 +40,10 @@ public class DatasourceGroupConstraint extends BaseEntity implements Builder<Con
 	@ManyToOne(optional = false)
 	@NotNull
 	private Datasource datasource;
+
+	@ManyToOne
+	@NotNull
+	private UserGroup userGroup;
 
 	@Override
 	public ConditionExpressionDTO build() {

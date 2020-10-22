@@ -15,7 +15,19 @@
             <column name="datasource_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="user_group" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <createIndex indexName="idx_datasource_group_constraint_user_group"
+                     tableName="datasource_group_constraint">
+            <column name="user_group"/>
+        </createIndex>
+        <createIndex indexName="idx_datasource_group_constraint_datasource_id"
+                     tableName="datasource_group_constraint">
+            <column name="datasource_id"/>
+        </createIndex>
 
     </changeSet>
 </databaseChangeLog>

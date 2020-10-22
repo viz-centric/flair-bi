@@ -1,0 +1,129 @@
+<div class="fbibox">
+    <div class="fbibox-content" style="padding-bottom: 50px;">
+        <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" ng-show="vm.datasourceGroupConstraint.id">
+                    <label for="id" data-translate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" ng-model="vm.datasourceGroupConstraint.id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <user-search-component user="vm.datasourceGroupConstraint.group" />
+                </div>
+                <div ng-show="editForm.user.$invalid">
+                    <p class="help-block" ng-show="editForm.user.$error.required"
+                        data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label data-translate="flairbiApp.datasourceGroupConstraint.datasources" for="field_datasources">Data
+                        Sources</label>
+                    <ui-select ng-keyup="vm.search($event,$select.search)" id="field_datasources" name="datasources"
+                        ng-model="vm.datasourceGroupConstraint.datasource" required ng-change="vm.datasourceChange(vm.datasourceGroupConstraint.datasource.id)">
+                        <ui-select-match placeholder="{{ 'flairbiApp.datasourceGroupConstraint.selectDatasource' | translate }}">
+                            {{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="datasource in vm.datasources">
+                            <div ng-bind="datasource.name "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div ng-show="editForm.datasources.$invalid">
+                    <p class="help-block" ng-show="editForm.datasources.$error.required"
+                        data-translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Constraints</label>
+                    <div ng-repeat="constraint in vm.datasourceGroupConstraint.constraintDefinition.featureConstraints"
+                        class="row m-b-md constraint-field">
+                        <div class="col-md-3">
+                            <ui-select required ng-model="constraint['@type']" theme="bootstrap"
+                                ng-disabled="!vm.datasourceGroupConstraint.datasource">
+                                <ui-select-match placeholder="Select constraint type">
+                                    {{constraint['@type']}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="type as type in vm.constraintTypes">
+                                    {{type}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-3">
+                            <ui-select required ng-model="constraint.featureName" theme="bootstrap"
+                                ng-disabled="!vm.datasourceGroupConstraint.datasource" on-select="vm.featureChange($item.type,constraint)">
+                                <ui-select-match placeholder="Select Fields" allow-clear="true">
+                                    {{constraint.featureName}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="feature.name as feature in vm.features | filter: $select.search track by feature.id">
+                                    {{feature.name}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-4">
+                            <tags-input-grpc ng-if="!constraint.isCommaSeparatedInput" nplaceholder="Search for {{constraint.featureName}}" ng-disabled="!vm.datasourceGroupConstraint.datasource" on-tag-added="vm.added($tag,constraint)"
+                                on-tag-removed="vm.removed($tag,constraint)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
+                                min-length="1" ng-model="constraint.selected" replace-spaces-with-dashes="false">
+                                <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query,constraint)"
+                                    min-length="0
+                        " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
+                            </tags-input-grpc>
+                            <input ng-if="constraint.isCommaSeparatedInput" type="text" placeholder="Add comma separated values" ng-model="vm.commaSeparatedValues"
+                            class="form-control" ng-blur="vm.addToFilter(constraint)" />
+                        </div>
+                        <div class="comma-separated">
+                            <label class="pull-right">
+                                 <i ng-click="vm.displayTextboxForValues(constraint)" class="fa fa-text-width" ng-class="{'comma-separated-on' : constraint.isCommaSeparatedInput,'comma-separated-off' : !constraint.isCommaSeparatedInput}" 
+                                  uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom">
+                                 </i>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
+                            <div ng-disabled="!vm.datasourceGroupConstraint.datasource" ng-show="$index === 0"
+                                class="user-data-constraint-operation-button add-button icon" ng-click="vm.addConstraint()">
+                                <svg style="margin-top:0px;" class="flair-add-icon flair-oprations-icon">
+                                    <use xlink:href="#flair-add-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    </use>
+                                </svg>
+                            </div>
+                            <div ng-disabled="!vm.datasourceGroupConstraint.datasource" ng-show="$index !== 0"
+                                class="user-data-constraint-operation-button remove-button icon"
+                                ng-click="vm.removeConstraint(constraint)">
+                                <svg style="margin-top:0px;" class="flair-delete-icon flair-oprations-icon">
+                                    <use xlink:href="#flair-delete-icon" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    </use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div ng-show="vm.query" class="query">
+                        <label class="control-label">SQL Condition :  </label> <kbd>{{vm.query}}</kbd>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button style="float: left;" type="button" class="btn btn-primary" ng-click="vm.validate()">
+                    <span class="glyphicon glyphicon-glass"></span>&nbsp;
+                    <span>validate</span>
+                </button>
+                <div class="filter-separator-container" style="float: left;">
+                    <ui-select ng-model="vm.separator" class="separator-select separator-list-constaraint">
+                        <ui-select-match placeholder="Select Separator...">{{$select.selected.displayName}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            repeat="separator in vm.separators | filter: $select.search track by separator.displayName">
+                            <div ng-bind="separator.displayName"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <button style="float: right;" type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span
+                        data-translate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

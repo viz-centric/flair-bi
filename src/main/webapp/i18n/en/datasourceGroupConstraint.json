@@ -1,0 +1,28 @@
+{
+    "flairbiApp": {
+        "datasourceGroupConstraint": {
+            "home": {
+                "title": "Data Source Group Constraints",
+                "createLabel": "Create Constraint",
+                "createOrEditLabel": "Create or Edit a Data Source Group Constraint"
+            },
+            "created": "A new Datasource Group Constraint is created with identifier {{ param }}",
+            "updated": "A new DataSource Group Constraint is updated with identifier {{ param }}",
+            "deleted": "A new DataSource Group Constraint is deleted with identifier {{ param }}",
+            "errorSaving":"Error while saving new Datasource Group Constraint",
+            "errorDeleting":"Error while deleting new Datasource Group Constraint",
+            "delete": {
+                "question": "Confirm deletion of Datasource Group Constraint {{ id }}?"
+            },
+            "detail": {
+                "title": "Datasource Group Constraint"
+            },
+            "errorFetching":"Error fetching Datasource Group Constraints",
+            "constraintDefinition": "Constraint Definition",
+            "user": "User",
+            "datasources": "Data Sources",
+            "selectUser": "Select Group ...",
+            "selectDatasource": "Search Available Data Sources"
+        }
+    }
+}

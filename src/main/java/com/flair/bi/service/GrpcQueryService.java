@@ -78,8 +78,6 @@ public class GrpcQueryService {
 
         String resultString = result.getResult();
 
-        log.debug("Sending run query result {}", resultString);
-
         Map<String, Object> map = Optional.ofNullable(resultString).filter(r -> StringUtils.isNotEmpty(resultString))
                 .map(r -> {
                     try {

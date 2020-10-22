@@ -116,6 +116,42 @@
                     ]
                 }
             })
+            .state('datasource-group-constraints', {
+                parent: 'permission-management',
+                url: '/datasource-group-constraints/:group',
+                data: {
+                    authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
+                    pageTitle: "flairbiApp.datasourceGroupConstraint.home.title",
+                    displayName: "Datasource Group Constraints"
+                },
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceGroupConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraints.html",
+                        controller: "DatasourceGroupConstraintController",
+                        controllerAs: "vm"
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: [
+                        "$translate",
+                        "$translatePartialLoader",
+                        function ($translate, $translatePartialLoader) {
+                            $translatePartialLoader.addPart(
+                                "datasourceGroupConstraint"
+                            );
+                            $translatePartialLoader.addPart("global");
+                            return $translate.refresh();
+                        }
+                    ]
+                }
+            })
             .state("datasource-constraints-detail", {
                 parent: "datasource-constraints",
                 url: "/{id}",

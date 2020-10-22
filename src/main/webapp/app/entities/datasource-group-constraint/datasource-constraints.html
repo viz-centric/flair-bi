@@ -1,0 +1,51 @@
+<div class="dataconstraint-container">
+    <div class="fbibox">
+        <div class="fbibox-content">
+            <div class="table-responsive">
+                    <table class="jh-table table table-striped flair-table-v1">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Constraint Id</span>
+                                </th>
+                                <th>
+                                    <span>Data Source Name</span>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="datasourceConstraint in vm.datasourceGroupConstraints">
+                                <td>
+                                    <a>{{datasourceConstraint.id}}</a>
+                                </td>
+                                <td>
+                                    <a ui-sref="datasources-detail({id: datasourceConstraint.datasource.id})">{{datasourceConstraint.datasource.name}}</a>
+                                </td>
+                                <td class="text-right">
+                                    <div class="btn-group flex-btn-group-container">
+                                        <button type="submit" class="btn btn-default btn-sm" ui-sref="datasource-constraints-detail({id: datasourceConstraint.id,login:vm.login})">
+                                            <span class="fa fa-eye view-icon fa-2x"></span>
+                                        </button>
+                                        &nbsp;
+                                        <button type="submit" class="btn btn-default btn-sm" ui-sref="datasource-constraints-edit({id: datasourceConstraint.id})">
+                                            <span class="fa fa-edit edit-icon fa-2x"></span>
+                                        </button>
+                                        &nbsp;
+                                        <button type="submit" class="btn btn-default btn-sm" ui-sref="datasource-constraints-delete({constraintId: datasourceConstraint.id})">
+                                            <span class="fa fa-trash delete-icon fa-2x"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<button type="submit" ng-click="vm.back()"
+        class="btn btn-primary">
+    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+</button>

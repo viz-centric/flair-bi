@@ -1,9 +1,7 @@
 package com.flair.bi.domain;
 
-import com.flair.bi.domain.constraintdefinition.ConstraintDefinition;
+import com.flair.bi.domain.constraintdefinition.ConstraintGroupDefinition;
 import com.flair.bi.domain.security.UserGroup;
-import com.project.bi.general.Builder;
-import com.project.bi.query.dto.ConditionExpressionDTO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class DatasourceGroupConstraint extends BaseEntity implements Builder<ConditionExpressionDTO> {
+public class DatasourceGroupConstraint extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,7 +33,7 @@ public class DatasourceGroupConstraint extends BaseEntity implements Builder<Con
 	@NotNull
 	@Type(type = "jsonb")
 	@Column(name = "constraint_definition", nullable = false, columnDefinition = "jsonb")
-	private ConstraintDefinition constraintDefinition;
+	private ConstraintGroupDefinition constraintDefinition;
 
 	@ManyToOne(optional = false)
 	@NotNull
@@ -44,13 +42,5 @@ public class DatasourceGroupConstraint extends BaseEntity implements Builder<Con
 	@ManyToOne
 	@NotNull
 	private UserGroup userGroup;
-
-	@Override
-	public ConditionExpressionDTO build() {
-		ConditionExpressionDTO dto = new ConditionExpressionDTO();
-		dto.setConditionExpression(constraintDefinition.build());
-		dto.setSourceType(ConditionExpressionDTO.SourceType.REDUCTION);
-		return dto;
-	}
 
 }

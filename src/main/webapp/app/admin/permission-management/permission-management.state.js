@@ -133,7 +133,7 @@
                     },
                     "content@": {
                         templateUrl:
-                            "app/entities/datasource-group-constraint/datasource-constraints.html",
+                            "app/entities/datasource-group-constraint/datasource-group-constraints.html",
                         controller: "DatasourceGroupConstraintController",
                         controllerAs: "vm"
                     }
@@ -343,6 +343,31 @@
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('datasourceConstraint');
+                        return $translate.refresh();
+                    }]
+                }
+            })
+            .state('datasource-group-constraints-edit', {
+                parent: 'datasource-group-constraints',
+                url: '/edit/{id}',
+                data: {
+                    authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT],
+                    displayName: "Update datasource group constraint"
+                },
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceGroupConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        component: "datasourceGroupConstraintDialogComponent",
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('datasourceGroupConstraint');
                         return $translate.refresh();
                     }]
                 }

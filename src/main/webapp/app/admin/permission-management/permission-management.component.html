@@ -108,7 +108,7 @@
                     <div class="tree-handle user-tree" ng-class="{active: vm.selectedEntity === group.name}"
                         ng-repeat="group in vm.userGroups | filter: vm.filterUserGroup">
                         <span>{{group.name}}</span>
-                        <button type="submit" ui-sref="datasource-constraints({group:group.name})">
+                        <button type="submit" ui-sref="datasource-group-constraints({group:group.name})">
                             <svg class="datasource-constraints-icon">
                                 <use xlink:href="#data-constraints" />
                             </svg>

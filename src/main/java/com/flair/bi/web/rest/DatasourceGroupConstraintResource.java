@@ -1,11 +1,17 @@
 package com.flair.bi.web.rest;
 
+import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceGroupConstraint;
+import com.flair.bi.domain.constraintdefinition.ConstraintGroupDefinition;
+import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.service.DatasourceGroupConstraintService;
+import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.querydsl.core.types.Predicate;
 import io.micrometer.core.annotation.Timed;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -33,17 +39,34 @@ public class DatasourceGroupConstraintResource {
 
 	private static final String ENTITY_NAME = "datasourceGroupConstraint";
 	private final DatasourceGroupConstraintService datasourceGroupConstraintService;
+	private final UserGroupService userGroupService;
+	private final DatasourceService datasourceService;
+
+	@Data
+	private static class CreateDatasourceGroupConstraintRequest {
+		private Long id;
+		private ConstraintGroupDefinition constraintDefinition;
+		private Long datasourceId;
+		private String userGroupName;
+	}
 
 	@PostMapping
 	@Timed
 	public ResponseEntity<DatasourceGroupConstraint> createDatasourceGroupConstraint(
-			@Valid @RequestBody DatasourceGroupConstraint datasourceGroupConstraint) throws URISyntaxException {
+			@Valid @RequestBody CreateDatasourceGroupConstraintRequest datasourceGroupConstraint) throws URISyntaxException {
 		log.debug("REST request to save DatasourceGroupConstraint : {}", datasourceGroupConstraint);
 		if (datasourceGroupConstraint.getId() != null) {
 			return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists",
 					"A new datasourceGroupConstraint cannot already have an ID")).body(null);
 		}
-		DatasourceGroupConstraint result = datasourceGroupConstraintService.save(datasourceGroupConstraint);
+		UserGroup userGroup = userGroupService.findOne(datasourceGroupConstraint.getUserGroupName());
+		Datasource datasource = datasourceService.findOne(datasourceGroupConstraint.getDatasourceId());
+
+		DatasourceGroupConstraint constraint = new DatasourceGroupConstraint();
+		constraint.setUserGroup(userGroup);
+		constraint.setConstraintDefinition(datasourceGroupConstraint.getConstraintDefinition());
+		constraint.setDatasource(datasource);
+		DatasourceGroupConstraint result = datasourceGroupConstraintService.save(constraint);
 		return ResponseEntity.created(new URI("/api/datasource-group-constraints/" + result.getId()))
 				.headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
 	}
@@ -51,12 +74,20 @@ public class DatasourceGroupConstraintResource {
 	@PutMapping
 	@Timed
 	public ResponseEntity<DatasourceGroupConstraint> updateDatasourceConstraint(
-			@Valid @RequestBody DatasourceGroupConstraint datasourceGroupConstraint) throws URISyntaxException {
+			@Valid @RequestBody CreateDatasourceGroupConstraintRequest datasourceGroupConstraint) throws URISyntaxException {
 		log.debug("REST request to update DatasourceGroupConstraint : {}", datasourceGroupConstraint);
 		if (datasourceGroupConstraint.getId() == null) {
 			return createDatasourceGroupConstraint(datasourceGroupConstraint);
 		}
-		DatasourceGroupConstraint result = datasourceGroupConstraintService.save(datasourceGroupConstraint);
+		UserGroup userGroup = userGroupService.findOne(datasourceGroupConstraint.getUserGroupName());
+		Datasource datasource = datasourceService.findOne(datasourceGroupConstraint.getDatasourceId());
+
+		DatasourceGroupConstraint constraint = new DatasourceGroupConstraint();
+		constraint.setUserGroup(userGroup);
+		constraint.setConstraintDefinition(datasourceGroupConstraint.getConstraintDefinition());
+		constraint.setDatasource(datasource);
+		constraint.setId(datasourceGroupConstraint.getId());
+		DatasourceGroupConstraint result = datasourceGroupConstraintService.save(constraint);
 		return ResponseEntity.ok()
 				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, datasourceGroupConstraint.getId().toString()))
 				.body(result);

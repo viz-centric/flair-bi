@@ -469,7 +469,12 @@ input[type="search"] {
     margin: 0 !important;
     border: 0 !important;
 }
-
+.page-wrapper-full-screen-share{
+    background-color: $body-main;
+    .wrapper-content{
+        padding-top: 5px;
+    }
+}
 .wrapper {
     &.wrapper-content {
         #widget-container {

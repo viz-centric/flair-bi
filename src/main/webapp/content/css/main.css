@@ -3241,6 +3241,11 @@ input[type="search"] {
   margin: 0 !important;
   border: 0 !important; }
 
+.page-wrapper-full-screen-share {
+  background-color: #fafafa; }
+  .page-wrapper-full-screen-share .wrapper-content {
+    padding-top: 5px; }
+
 .wrapper.wrapper-content #widget-container {
   overflow: visible !important; }
 
@@ -4865,18 +4870,8 @@ jhi-alert .alerts .alert-danger {
   width: 20px;
   fill: #404345; }
 
-#shareLink .filterIcon {
-  height: 20px;
-  width: 20px;
-  display: flex;
-  float: right;
-  margin-right: 35px; }
-
-#shareLink #slider {
-  margin-right: 0px !important;
-  margin-top: 25px !important;
-  min-width: 250px !important;
-  top: 25px; }
+#shareLink .filterIcon button {
+  padding: 0px 5px; }
 
 #shareLink .dashboard-text {
   color: #1c84c6; }

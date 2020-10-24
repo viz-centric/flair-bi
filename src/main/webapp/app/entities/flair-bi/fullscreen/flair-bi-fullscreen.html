@@ -1,28 +1,28 @@
-<div id="shareLink">
+
+<div class="container-fluid" id="shareLink">
+
     <div class="row">
         <div class="col-md-10">
-            <span class="dashboard-text">Dashboard : {{vm.view.viewDashboard.dashboardName}}</span>
-
+            <span ng-if="vm.isExport" class="dashboard-text">Dashboard : {{vm.view.viewDashboard.dashboardName}}</span>
         </div>
-        <div class="col-md-2 filterIcon">
-            <div type="button" uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()"
-                ng-toggled="vm.filterToggled" class="">
+        <div class="col-md-2 filterIcon text-right">
+            <button uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()"
+                ng-toggled="vm.filterToggled" type="button" class="btn btn-link btn-sm">
                 <svg class="filter">
-                    <use xlink:href="#filter" />
+                    <use xlink:href="#export-filter" />
                 </svg>
-            </div>
-            <div type="button" ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()"
-                ng-toggled="vm.filterToggled" class="">
+            </button>
+            <button ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()"
+                type="button" class="btn btn-link btn-sm">
                 <svg class="filter">
                     <use xlink:href="#export" />
                 </svg>
-            </div>
+            </button>
+            
         </div>
-
     </div>
-
     <div class="row">
-        <div style="min-height:92.5vh;top: 0px;" class="col-md-12 widget-container-share-link" data="vm.visualMetadata"
+        <div style="min-height:92.5vh;top: 0px;padding-left: 0px;" class="col-md-12 widget-container-share-link" data="vm.visualMetadata"
             ng-style="{'background-color': vm.visualMetadata.bodyProperties.backgroundColor}" visualization-render-grpc
             can-build="vm.visualMetadata.canBuild()"
             id="content-{{vm.visualMetadata.id || vm.visualMetadata.visualBuildId}}"
@@ -30,11 +30,10 @@
         </div>
 
         <div class="col-md-2">
-            <div id="slider" class="flair-scroll-gray" ng-style="vm.thinbarStyle">
+            <div id="slider" style="margin: auto;" class="flair-scroll-gray" ng-style="vm.thinbarStyle">
                 <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters" tab="vm.sideBarTab">
                 </filter-pane-component>
             </div>
         </div>
     </div>
-
 </div>

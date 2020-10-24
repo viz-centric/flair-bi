@@ -68,6 +68,7 @@
 
         function activate() {
             $('body').css('overflow-y', "hidden");
+            $('#page-wrapper').addClass('page-wrapper-full-screen-share');
             vm.isExport = filterParametersService.getParameterByName("isExport", $window.location.href);
             if ($stateParams.filters) {
                 addFilterInQueryDTO();
@@ -78,6 +79,7 @@
             filterParametersService.applyDefaultFilters(applied, featureEntities);
             if (vm.isExport) {
                 VisualizationUtils.setPropertyValue(vm.visualMetadata.properties, 'Limit');
+                vm.visualMetadata.fields = JSON.parse( $window.localStorage.getItem($stateParams.visualisationId));
             }
             connectWebSocket();
         }

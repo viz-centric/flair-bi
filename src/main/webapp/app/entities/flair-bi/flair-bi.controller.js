@@ -1126,6 +1126,7 @@
                 );
                 var filterUrl = filterParametersService.getFilterURL(vm.dimensions);
                 url = url + "&isExport=true" + filterUrl;
+                $window.localStorage.setItem(visualMetadata.id,JSON.stringify( visualMetadata.fields));
                 $window.open(url, '_blank');
             }
             else

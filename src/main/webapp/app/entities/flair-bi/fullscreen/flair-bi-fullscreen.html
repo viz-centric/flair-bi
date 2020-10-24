@@ -1,43 +1,3 @@
-<!-- <div id="shareLink">
-    <div class="row">
-        <div class="col-md-10" ng-if="vm.isExport">
-            <span class="dashboard-text">Dashboard : {{vm.view.viewDashboard.dashboardName}}</span>
-
-        </div>
-        <div class="col-md-2 filterIcon">
-            <div type="button" uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()"
-                ng-toggled="vm.filterToggled" class="">
-                <svg class="filter">
-                    <use xlink:href="#filter" />
-                </svg>
-            </div>
-            <div type="button" ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()"
-                ng-toggled="vm.filterToggled" class="">
-                <svg class="filter">
-                    <use xlink:href="#export" />
-                </svg>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="">
-        <div style="min-height:92.5vh;top: 0px;" class="col-md-12 widget-container-share-link" data="vm.visualMetadata"
-            ng-style="{'background-color': vm.visualMetadata.bodyProperties.backgroundColor}" visualization-render-grpc
-            can-build="vm.visualMetadata.canBuild()"
-            id="content-{{vm.visualMetadata.id || vm.visualMetadata.visualBuildId}}"
-            widget="{{vm.visualMetadata.metadataVisual.functionname}}" reload="vm.change" datasource="vm.datasource">
-        </div>
-
-        <div class="col-md-2">
-            <div id="slider" class="flair-scroll-gray" ng-style="vm.thinbarStyle">
-                <filter-pane-component view="vm.view" dimensions="vm.dimensions" type="Filters" tab="vm.sideBarTab">
-                </filter-pane-component>
-            </div>
-        </div>
-    </div>
-
-</div> -->
 
 <div class="container-fluid" id="shareLink">
 
@@ -58,14 +18,7 @@
                     <use xlink:href="#export" />
                 </svg>
             </button>
-            <!-- <div type="button" uib-tooltip="Filters" tooltip-placement="left" ng-click="vm.onFiltersOpen()"
-                ng-toggled="vm.filterToggled" class="">
-              
-            </div>
-            <div type="button" ng-if="vm.isExport" uib-tooltip="Export" tooltip-placement="left" ng-click="vm.exportData()"
-                ng-toggled="vm.filterToggled" class="">
-              
-            </div> -->
+            
         </div>
     </div>
     <div class="row">

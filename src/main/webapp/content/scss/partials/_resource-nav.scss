@@ -124,7 +124,13 @@
                         }
                     }
                 }
+                
             }
+        }
+        .dimensionList{
+            display: flex;
+            flex-wrap: wrap;
+            
         }
     }
     label {
@@ -137,6 +143,25 @@
         max-height:calc(100vh - 200px);
         min-height:calc(100vh - 200px);
         overflow-y: auto;
+    }
+    .filter-item{
+        // border: 1px solid $dropdown-border-color;
+        // margin: 5px;
+        // padding: 5px;
+        width: 100%;
+    }
+}
+
+
+.fullScreenPanel{
+    width: calc(100% - 50px) !important;
+    .filter-form {
+        border: 1px solid $dropdown-border-color;
+        margin: 5px;
+        padding: 5px;
+    }
+    .filter-item{
+        max-width: 17vw;
     }
 }
 

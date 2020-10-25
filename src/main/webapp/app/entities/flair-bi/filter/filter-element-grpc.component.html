@@ -1,4 +1,4 @@
-<div class="filter-element form-group" ng-show="vm.tab != 'widgets'">
+<div class="filter-element form-group filter-form" ng-show="vm.tab != 'widgets'">
     <label class="control-label">{{vm.dimension.name}} </label>
     <label class="pull-right"> <i ng-click="vm.addToFavourite(vm.dimension.id)" ng-class="vm.checkFavouriteFilter()"
             aria-hidden="true" class="favouritefilter"></i></label>
@@ -7,6 +7,10 @@
          <i ng-click="vm.displayTextboxForValues(vm.dimension)" aria-hidden="true" class="fa fa-text-width" ng-class="{'active' : vm.isCommaSeparatedInput}" uib-tooltip={{vm.commaSeparatedToolTip}} tooltip-placement="bottom" >
         </i>
     </label>
+    <label class="pull-right">
+        <i ng-click="vm.toggleHeaderFilter(vm.dimension)" aria-hidden="true" class="fa fa-thumb-tack" ng-class="{'activePin' : vm.dimension.pin}">
+       </i>
+   </label>
 
     <div ng-if="vm.canDisplayDateRangeControls(vm.dimension)">
         <filter-date-range dimension="vm.dimension" reload="vm.dateRangeReload"
@@ -20,6 +24,7 @@
                     on-tag-removed="vm.removed($tag)" class="filter-input" add-from-autocomplete-only="true" minTags="5"
                     min-length="1" ng-model="vm.dimension.selected" replace-spaces-with-dashes="false">
                     <auto-complete-grpc match-class=" filter-autocomplete " source="vm.load($query, vm.dimension)"
+                                        filtering="vm.isFilteringEnabled(vm.dimension)"
                         min-length="0
             " load-on-focus="true " load-on-empty="true " max-results-to-show="32 "></auto-complete-grpc>
                 </tags-input-grpc>

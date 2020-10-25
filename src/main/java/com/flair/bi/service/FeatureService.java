@@ -1,6 +1,7 @@
 package com.flair.bi.service;
 
 import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.FeatureCacheType;
 import com.flair.bi.domain.QFeature;
 import com.flair.bi.repository.FeatureRepository;
 import com.flair.bi.service.dto.FunctionsDTO;
@@ -87,7 +88,19 @@ public class FeatureService {
 		featureRepository.markFavouriteFilter(favouriteFilter, id);
 	}
 
+	public void pinFilter(Boolean pin, Long id) {
+		log.debug("FeatureService pinFilter ", pin, id);
+		featureRepository.pinFilter(pin, id);
+	}
+
 	public List<FeatureValidationResult> validate(List<Feature> features) {
 		return features.stream().map(f -> validate(f)).collect(Collectors.toList());
+	}
+
+	public List<Feature> getCacheableFeatures() {
+		List<Feature> cacheableFeatures = ImmutableList.copyOf(
+				featureRepository.findAll(QFeature.feature.featureCacheType.eq(FeatureCacheType.ENABLED))
+		);
+		return cacheableFeatures;
 	}
 }

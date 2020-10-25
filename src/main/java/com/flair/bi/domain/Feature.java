@@ -1,8 +1,12 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import com.flair.bi.domain.enumeration.FeatureType;
+import com.flair.bi.domain.field.Field;
+import com.flair.bi.domain.listeners.FeatureListener;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,15 +25,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.flair.bi.domain.enumeration.FeatureType;
-import com.flair.bi.domain.field.Field;
-import com.flair.bi.domain.listeners.FeatureListener;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents type of data being retrieved from {@link Datasource}
@@ -80,9 +78,16 @@ public class Feature extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "favourite_filter")
 	private Boolean favouriteFilter;
 
+	@Column(name = "pin")
+	private Boolean pin;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "date_filter")
 	private DateFilterType dateFilter;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "cache")
+	private FeatureCacheType featureCacheType;
 
 	public void clearFields() {
 		getFields().forEach(x -> x.setFeature(null));

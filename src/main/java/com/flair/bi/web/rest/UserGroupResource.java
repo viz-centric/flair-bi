@@ -17,7 +17,6 @@ import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
 import com.querydsl.core.types.Predicate;
-
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +70,7 @@ public class UserGroupResource {
      */
     @PostMapping("/userGroups")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'WRITE', 'APPLICATION')")
     public ResponseEntity<UserGroup> createUserGroup(@Valid @RequestBody UserGroup userGroup) throws URISyntaxException {
 
         if (null != userGroupService.findOne(userGroup.getName())) {
@@ -95,6 +96,7 @@ public class UserGroupResource {
      */
     @PutMapping("/userGroups")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<UserGroup> updateUserGroup(@Valid @RequestBody UserGroup userGroup) {
         final UserGroup result = userGroupService.save(userGroup);
         return ResponseEntity.ok()
@@ -105,6 +107,7 @@ public class UserGroupResource {
 
     @GetMapping("/userGroups/all")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<String>> getAllUserGroups() {
         return ResponseEntity.ok(userGroupService
             .findAll()
@@ -122,6 +125,7 @@ public class UserGroupResource {
      */
     @GetMapping("/userGroups")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<UserGroup>> getAllUserGroups(@ApiParam Pageable pageable) throws URISyntaxException {
         Page<UserGroup> page = userGroupService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/userGroups");
@@ -136,6 +140,7 @@ public class UserGroupResource {
      */
     @GetMapping("/userGroups/{name}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<UserGroup> getUserGroup(@PathVariable String name) {
         UserGroup userGroup = userGroupService.findOne(name);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(userGroup));
@@ -149,6 +154,7 @@ public class UserGroupResource {
      */
     @DeleteMapping("/userGroups/{name}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<?> deleteUserGroup(@PathVariable String name) {
     	if(userGroupService.isNotPredefinedGroup(name)){
     		userGroupService.delete(name);
@@ -169,6 +175,7 @@ public class UserGroupResource {
      */
     @PostMapping("/userGroups/{name}/permissions/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<?> addPermission(@PathVariable String name, @PathVariable String id) {
         accessControlManager.assignPermission(name, Permission.fromStringValue(id));
         return ResponseEntity.ok(null);
@@ -184,6 +191,7 @@ public class UserGroupResource {
      */
     @DeleteMapping("/userGroups/{name}/permissions/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'DELETE', 'APPLICATION')")
     public ResponseEntity<?> removePermission(@PathVariable String name, @PathVariable String id) {
         accessControlManager.dissociatePermission(name, Permission.fromStringValue(id));
         return ResponseEntity.ok(null);
@@ -201,6 +209,7 @@ public class UserGroupResource {
      */
     @GetMapping("/userGroups/{name}/dashboardPermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getDashboardPermissionMetadataUserGroup(@PathVariable String name, @ApiParam Pageable pageable) throws URISyntaxException {
         final Page<Dashboard> dashboardPage = dashboardService.findAll(pageable);
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
@@ -221,6 +230,7 @@ public class UserGroupResource {
 
     @GetMapping("/userGroups/{name}/datasourcePermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getDatasourcePermissionMetadataUserGroup(@PathVariable String name, @ApiParam Pageable pageable) throws URISyntaxException {
         Page<Datasource> page = datasourceService.findAll(pageable);
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
@@ -240,6 +250,7 @@ public class UserGroupResource {
 
     @GetMapping("/userGroups/{name}/dashboardPermissions/{id}/viewPermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getViewPermissionMetadataUserGroup(@PathVariable String name, @PathVariable Long id) {
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
             .orElseThrow(() ->
@@ -258,6 +269,7 @@ public class UserGroupResource {
 
     @GetMapping("/userGroups/{name}/dashboardPermissions/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<DashboardGranteePermissionReport<UserGroup>>> searchDashboardPermissionMetadataUser(@QuerydslPredicate(root = Dashboard.class) Predicate predicate, @PathVariable String name, @ApiParam Pageable pageable) throws URISyntaxException {
         Page<Dashboard> dashboardPage = dashboardService.findAllByPrincipalPermissions(pageable, predicate);
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
@@ -282,6 +294,7 @@ public class UserGroupResource {
 
     @GetMapping("/userGroups/{groupName}/datasourcePermissions/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<GranteePermissionReport<UserGroup>>> searchDatasourcePermissions(@QuerydslPredicate(root = Datasource.class) Predicate predicate,
                                                                                                 @PathVariable String groupName,
                                                                                                 @ApiParam Pageable pageable) {
@@ -300,6 +313,7 @@ public class UserGroupResource {
 
     @GetMapping("/userGroups/{name}/viewPermissions/search")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
     public ResponseEntity<List<DashboardGranteePermissionReport<UserGroup>>> searchViewPermissionMetadataUser(@QuerydslPredicate(root = View.class) Predicate predicate, @PathVariable String name) throws URISyntaxException {
         List<View> views = viewService.findAllByPrincipalPermissions(predicate);
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
@@ -317,6 +331,7 @@ public class UserGroupResource {
 
     @PutMapping("/userGroups/{name}/changePermissions")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<Void> changePermissions(@PathVariable String name, @RequestBody List<ChangePermissionVM> changePermissionVMS) {
         changePermissionVMS.forEach(x -> {
             if (x.getAction() == ChangePermissionVM.Action.ADD) {

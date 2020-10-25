@@ -89,6 +89,10 @@ public class QueryTransformerService {
             builder.putMeta("dashboardId", String.valueOf(params.getDashboardId()));
         }
 
+        if (params.getAction() != null) {
+            builder.putMeta("action", params.getAction().name());
+        }
+
         if (queryDTO.getQuerySource() != null) {
             builder.setQuerySource(toQuerySource(queryDTO.getQuerySource()));
         }

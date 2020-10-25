@@ -1,0 +1,30 @@
+<form class="form-inline pin-filter">
+    <div class="form-group" ng-repeat="dimension in vm.pinedDimensions">
+        <div class="filter-section">
+            <div ng-if="!vm.canDisplayDateRangeControls(dimension)">
+                <label class="dimension-label">{{dimension.name}}</label>
+                <div class="dimensionFilter" ng-dropdown-multiselect="" options="vm.list[dimension.name]"
+                    selected-model="vm.selectedFilter[dimension.name]" checkboxes="true" selectedToTop="true"
+                    extra-settings="vm.settingStyle"></div>
+            </div>
+            <div ng-if="vm.canDisplayDateRangeControls(dimension)">
+                <div class="dropdown">
+                    <label class="dimension-label dropdown-toggle" type="button" data-toggle="collapse" data-target="#collapse-{{dimension.id}}"
+                    aria-expanded="false" aria-controls="collapse-{{dimension.id}}">
+                        {{dimension.name}}
+                        <span class="caret"></span>
+                    </label>
+                    <div class="dropdown-menu header-date-filter" id="collapse-{{dimension.id}}" style="width: 17vw;">
+                        <filter-date-range dimension="dimension" reload="vm.dateRangeReload"
+                            on-date-change="vm.onDateChange(startDate, endDate, metadata,dimension)">
+                        </filter-date-range>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="btn btn-primary filter" ng-click="vm.applyFilter()">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+</form>

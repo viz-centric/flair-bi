@@ -1,13 +1,13 @@
 package com.flair.bi.service.dto;
 
+import com.flair.bi.domain.DateFilterType;
+import com.flair.bi.domain.FeatureCacheType;
+import com.flair.bi.domain.enumeration.FeatureType;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import com.flair.bi.domain.DateFilterType;
-import com.flair.bi.domain.enumeration.FeatureType;
-
-import lombok.Data;
 
 @Data
 public class FeatureDTO {
@@ -32,8 +32,14 @@ public class FeatureDTO {
 
 	private Long functionId;
 
+	private Long datasourceId;
+
 	private Boolean favouriteFilter;
 
+	private Boolean pin;
+
 	private DateFilterType dateFilter;
+
+	private FeatureCacheType featureCacheType;
 
 }

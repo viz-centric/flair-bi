@@ -1,7 +1,19 @@
 <div class="flair-scroll side-widgets overflow resource-nav">
     <div class="panel panel-default filter-area">
         <div class="panel-heading">
-            <div class="panel-title">{{vm.type}}</div>
+            <div class="panel-title"><span>{{vm.type}} </span>
+                 <i  ng-show="vm.type=='Filters' && vm.isFullScreenFilter"  ng-click="vm.toggalFullScreenMode()">
+                    <svg class="toggalFullScreenMode">
+                        <use xlink:href="#full-screen-filter-on" />
+                    </svg>
+                 </i>
+                 <i  ng-show="vm.type=='Filters' && !vm.isFullScreenFilter"  ng-click="vm.toggalFullScreenMode()">
+                    <svg class="toggalFullScreenMode">
+                        <use xlink:href="#full-screen-filter-off" />
+                    </svg>
+                 </i>
+            </div>
+            
         </div>
         <!-- added condition for time being ng-if="vm.tab!='widgets'" -->
         <div class="dimensions-container flair-scroll-gray properties">
@@ -16,12 +28,15 @@
                 </ui-select>
             </div>
             <br ng-if="vm.tab!='widgets'"/>
-            <div ng-repeat="dimension in vm.dimensions" class="filter-item">
-                <filter-element-grpc-component iframes="vm.iframes" ng-if="$root.vizualizationServiceMode == 'grpc'"
-                    dimensions="vm.dimensions" dimension="dimension" view="vm.view" tab="vm.tab" list="{}"  separator="vm.separator"></filter-element-grpc-component>
-                <filter-element-component ng-if="$root.vizualizationServiceMode == 'http'" dimensions="vm.dimensions"
-                    dimension="dimension" view="vm.view"></filter-element-component>
+            <div class="dimensionList">
+                <div ng-repeat="dimension in vm.dimensions  | orderBy: ['dateFilter','name']" class="filter-item">
+                    <filter-element-grpc-component iframes="vm.iframes" ng-if="$root.vizualizationServiceMode == 'grpc'"
+                        dimensions="vm.dimensions" dimension="dimension" view="vm.view" tab="vm.tab" list="{}"  separator="vm.separator"></filter-element-grpc-component>
+                    <filter-element-component ng-if="$root.vizualizationServiceMode == 'http'" dimensions="vm.dimensions"
+                        dimension="dimension" view="vm.view"></filter-element-component>
+                </div>
             </div>
+            
         </div>
 
         <div class="filter-button">

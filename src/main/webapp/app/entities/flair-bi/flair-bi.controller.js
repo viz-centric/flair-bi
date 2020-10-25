@@ -104,6 +104,8 @@
         vm.removeWidget = removeWidget;
         vm.ngIfDelete = ngIfDelete;
         vm.ngIfSettings = ngIfSettings;
+        vm.ngIfSettingsTable = ngIfSettingsTable;
+        vm.resetTable = resetTable;
         vm.settings = settings;
         vm.canBuild = canBuild;
         vm.onResizeStart = onResizeStart;
@@ -208,9 +210,11 @@
             connectWebSocket();
             registerAlternateDimension();
             vm.features = featureEntities;
-            registerToggleHeaderFilter();
+            registerToggleGridFilter();
+          
             registerToggleFullScreenFilter();
             vm.filtersLength = filterParametersService.getFiltersCount();
+            hideShowPinFilter();
         }
 
         function registerFilterCountChanged() {
@@ -222,6 +226,32 @@
             );
             $scope.$on("$destroy", unsubscribe);
         }
+        function getGridStyle(){
+            if( !vm.showFSFilter && !vm.showPinFilter){
+                vm.gridStyle ={ "margin-top": "30px"}; 
+            }
+            else if(vm.showFSFilter && vm.showPinFilter){
+                vm.gridStyle ={ "margin-top": "90px" }
+            }
+            else if(vm.showFSFilter || vm.showPinFilter){
+                vm.gridStyle ={ "margin-top": "60px" }
+            }
+        }
+
+        function hideShowPinFilter() {
+            vm.pinedDimensions = vm.dimensions.filter(function (item) {
+                return item.pin === true
+            });
+            vm.showFSFilter = filterParametersService.getFiltersCount() == 0 ? false : true,
+            vm.showPinFilter = vm.pinedDimensions.length == 0 ? false : true
+            getGridStyle();
+            var headerSettings = {
+                showFSFilter: vm.showFSFilter,
+                showPinFilter: vm.showPinFilte
+            }
+            $rootScope.$broadcast("flairbiApp:toggle-headers-filters", headerSettings);
+        }
+
 
         function showVizLoader(isCardRevealed, loading, dataReceived) {
             return isCardRevealed && loading && !dataReceived;
@@ -576,6 +606,7 @@
             );
             v.isCardRevealed = v.isCardRevealed == undefined ? true : !v.isCardRevealed;
             if (!v.isCardRevealed) {
+                VisualDispatchService.setVisual({ visual: v, view: entity });
                 $rootScope.$broadcast("flairbiApp:onData-open");
             }
         }
@@ -843,12 +874,11 @@
             });
         }
 
-        function registerToggleHeaderFilter() {
+        function registerToggleGridFilter() {
             var toggleHeaderFiltersUnsubscribeOff = $scope.$on(
-                "flairbiApp:toggle-headers-filters",
+                "flairbiApp:toggle-grid-filters",
                 function (event, result) {
-                    onFiltersCountChange();
-                    vm.showFSFilter = !result;
+                    hideShowPinFilter();
                 }
             );
             $scope.$on("$destroy", toggleHeaderFiltersUnsubscribeOff);
@@ -1089,8 +1119,21 @@
          * @param {any} visualMetadata : selected visual metadata
          */
         function exportCSV(visualMetadata) {
-            var csv = transformToCsv(visualMetadata.data);
-            ExportService.exportCSV(visualMetadata.titleProperties.titleText + ".csv", csv);
+            
+            if(visualMetadata.metadataVisual.name === "Table"){
+                var url = ShareLinkService.createLink(
+                    visualMetadata.getSharePath(vm.view.viewDashboard.dashboardName, vm.view.viewName, vm.view.viewDashboard.id, vm.datasource, $stateParams.id)
+                );
+                var filterUrl = filterParametersService.getFilterURL(vm.dimensions);
+                url = url + "&isExport=true" + filterUrl;
+                $window.localStorage.setItem(visualMetadata.id,JSON.stringify( visualMetadata.fields));
+                $window.open(url, '_blank');
+            }
+            else
+            {
+                var csv = transformToCsv(visualMetadata.data);
+                ExportService.exportCSV(visualMetadata.titleProperties.titleText + ".csv", csv);
+            }
         }
 
         function applyToDigitDecimals(v) {
@@ -1352,6 +1395,18 @@
 
         function ngIfSettings() {
             return editMode;
+        }
+
+        function ngIfSettingsTable(v) {
+            if(editMode)
+                return editMode;
+            else{
+                return v.metadataVisual.name === "Table" ? true : false;
+            }
+        }
+
+        function resetTable(v){
+            v.fields = [];
         }
 
         function hideThreshold(v) {

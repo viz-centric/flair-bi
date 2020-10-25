@@ -40,4 +40,8 @@ public interface FeatureRepository
 	@Modifying
 	@Query("update Feature u set u.favouriteFilter = :favouriteFilter where u.id = :id")
 	void markFavouriteFilter(@Param("favouriteFilter") Boolean favouriteFilter, @Param("id") Long id);
+
+	@Modifying
+	@Query("update Feature u set u.pin = :pin where u.id = :id")
+	void pinFilter(@Param("pin") Boolean pin, @Param("id") Long id);
 }

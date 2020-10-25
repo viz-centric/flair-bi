@@ -97,6 +97,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-utils-ui-breadcrumbs/uiBreadcrumbs.js',
             'src/main/webapp/bower_components/angular-jwt/dist/angular-jwt.js',
             'src/main/webapp/bower_components/flair-visualizations/dist/main.bundle.js',
+            'src/main/webapp/bower_components/angularjs-dropdown-multiselect/component/component.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'src/main/webapp/app/app.module.js',

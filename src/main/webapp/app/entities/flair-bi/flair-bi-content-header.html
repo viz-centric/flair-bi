@@ -40,7 +40,8 @@
                 </div> -->
                 <div class="form-group">
                     <div class="dropdown">
-                        <button  ng-disabled="vm.isIframe" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button ng-disabled="vm.isIframe" class="btn btn-primary dropdown-toggle" type="button"
+                            data-toggle="dropdown">
                             <svg class="field-icon-left">
                                 <use xlink:href="#eye" />
                             </svg>
@@ -103,7 +104,7 @@
                             </div>
                         </div>
 
-                        <top-nav-button-component is-disabled="!vm.ngIfSave()" click="vm.onWriteToPg()">
+                        <top-nav-button-component click="vm.onWriteToPg()">
                             <span uib-tooltip="Save" tooltip-placement="bottom">
                                 <svg class="flaticons-save-button">
                                     <use xlink:href="#save-button" />
@@ -194,6 +195,13 @@
         </div>
     </div>
 
+
+    <div class="row headerMenu" ng-if="vm.showPinFilter == true">
+        <div class="col-md-12 col-sm-6 col-xs-6 header-first">
+            <filter-header-panel-component iframes="vm.iFrames" view="vm.view" pined-dimensions="vm.pinedDimensions" dimensions="vm.dimensions">
+            </filter-header-panel-component>
+        </div>
+    </div>
 
     <div class="row full-screen-topbar ng-class:{'full-screen-topbar-filter-toggled':vm.showFSFilter == false}"
         ng-if="$root.isFullScreen == true">

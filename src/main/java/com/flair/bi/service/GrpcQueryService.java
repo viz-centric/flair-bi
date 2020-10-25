@@ -212,6 +212,7 @@ public class GrpcQueryService {
                             .dashboardId(dashboardId)
                             .sourceName(datasource.getName())
                             .sql(datasource.getSql())
+                            .action(sendGetDataDTO.getActionType())
                             .connectionName(datasource.getConnectionName())
                             .validationType(sendGetDataDTO.getValidationType())
                             .vId(vId)

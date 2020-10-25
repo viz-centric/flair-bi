@@ -1,27 +1,5 @@
 package com.flair.bi.web.rest;
 
-import static java.util.stream.Collectors.toList;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.QDashboard;
@@ -36,10 +14,29 @@ import com.flair.bi.web.rest.params.FeatureRequestParams;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
-
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
@@ -181,6 +178,7 @@ public class FeatureResource {
 					feature.setFunctionId(featureDTO.getFunctionId());
 					feature.setDatasource(datasource);
 					feature.setDateFilter(featureDTO.getDateFilter());
+					feature.setFeatureCacheType(featureDTO.getFeatureCacheType());
 					return feature;
 				}).collect(toList());
 		List<FeatureValidationResult> validate = featureService.validate(features);
@@ -215,6 +213,26 @@ public class FeatureResource {
 			throws URISyntaxException {
 		log.debug("REST request to mark favourite filter : {}", favouriteFilter, id);
 		featureService.markFavouriteFilter(favouriteFilter, id);
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("features", id.toString())).body(null);
+	}
+
+	/**
+	 * PUT /feature : Updates an existing feature.
+	 *
+	 * @param pin filter
+	 * @param id  the feature to update
+	 * @return the ResponseEntity with status 200 (OK) and with body the updated
+	 *         feature, or with status 400 (Bad Request) if the feature is not
+	 *         valid, or with status 500 (Internal Server Error) if the feature
+	 *         couldn't be updated
+	 * @throws URISyntaxException if the Location URI syntax is incorrect
+	 */
+	@PutMapping("/features/pinFilter/")
+	@Timed
+	public ResponseEntity<?> pinFilter(@RequestParam Boolean pin, @RequestParam Long id)
+			throws URISyntaxException {
+		log.debug("REST request to mark favourite filter : {}", pin, id);
+		featureService.pinFilter(pin, id);
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert("features", id.toString())).body(null);
 	}
 

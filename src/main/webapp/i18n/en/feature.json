@@ -11,6 +11,11 @@
             "error": {
                 "name.Pattern": "Feature name should contain only lowercase characters and numbers and underscores."
             }
-        }
+        },
+        "pinedDimensions": "Dimensions added to pin filter panel",
+        "unPinedDimensions": "Dimensions removed from pin filter panel",
+        "pinedDimensionsError" : "Only 5 dimensions can be pin",
+        "bookmarkFilter": "Dimensions added to Bookmark filter panel",
+        "removeBookmarkFilter": "Dimensions removed from Bookmark filter panel"
     }
 }

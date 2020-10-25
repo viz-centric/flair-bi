@@ -333,17 +333,9 @@
         fill: #404345;
     }
     .filterIcon{
-        height: 20px;
-        width: 20px;
-        display: flex;
-        float: right;
-        margin-right: 35px;
-    }
-    #slider{
-        margin-right: 0px !important; 
-        margin-top: 25px !important;
-        min-width: 250px !important;
-        top: 25px;
+      button{
+          padding: 0px 5px;
+      }
     }
     .dashboard-text{
         color: $blue;

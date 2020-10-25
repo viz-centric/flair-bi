@@ -406,6 +406,42 @@
                         return $translate.refresh();
                     }]
                 }
-            });
+            })
+            .state('datasource-group-constraints-delete', {
+                parent: 'datasource-group-constraints',
+                url: '/delete/:id',
+                data: {
+                    authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT],
+                    displayName: "Datasource Group Constraints"
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/datasource-group-constraint/datasource-constraint-delete-dialog.html',
+                        controller: 'DatasourceGroupConstraintDeleteController',
+                        controllerAs: 'vm',
+                        size: 'md',
+                        resolve: {
+                            entity: ['DatasourceGroupConstraint', function (DatasourceGroupConstraint) {
+                                return DatasourceGroupConstraint.get({
+                                    id: $stateParams.id
+                                }).$promise;
+                            }]
+                        }
+                    }).result.then(function () {
+                        $state.go('^', null, {
+                            reload: true
+                        });
+                    }, function () {
+                        $state.go('^');
+                    });
+                }],
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('datasourceGroupConstraint');
+                        return $translate.refresh();
+                    }]
+                }
+            })
+        ;
     }
 })();

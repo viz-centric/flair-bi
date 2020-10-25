@@ -41,7 +41,7 @@ public class QueryTransformerServiceTest {
 		QueryTransformerParams params = QueryTransformerParams.builder().build();
 
 		QueryValidationResult result = QueryValidationResult.builder()
-				.errors(asList(QueryValidationError.of("value", "error"))).build();
+				.errors(asList(QueryValidationError.of("value", QueryValidationError.Error.HavingValueInvalid))).build();
 		Mockito.when(queryValidationService.validate(eq(query), any(QueryValidationParams.class))).thenReturn(result);
 
 		service.toQuery(query, params);

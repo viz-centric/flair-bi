@@ -5,5 +5,9 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class QueryValidationError {
 	String value;
-	String error;
+	Error error;
+
+	enum Error {
+		RequiredConditionFeatureMissing, HavingValueInvalid, RestrictedFeatureUsed
+	}
 }

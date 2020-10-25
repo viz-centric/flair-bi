@@ -59,7 +59,7 @@
         }
 
         function activate() {
-            vm.datasourceGroupConstraint = {constraintDefinition: [], id: null, userGroupName: $stateParams.group};
+            vm.datasourceGroupConstraint = {constraintDefinition: [], id: $stateParams.id, userGroupName: $stateParams.group};
             if ($stateParams.id) {
                 getDatasourceGroupConstraint();
             } else {
@@ -83,17 +83,22 @@
             }
         }
 
+        function loadFeatures(id) {
+            return Features.query({
+                    datasource: id,
+                    featureType: "DIMENSION"
+                },
+                function (result) {
+                    vm.features = result;
+                },
+                function (_) {
+                }
+            );
+        }
+
         function datasourceChange(id) {
             if (id) {
-                return Features.query({
-                        datasource: id,
-                        featureType: "DIMENSION"
-                    },
-                    function (result) {
-                        vm.features = result;
-                    },
-                    function (_) { }
-                );
+                return loadFeatures(id);
             }
         }
 
@@ -140,6 +145,7 @@
             onSave(result);
             var info = { text: $translate.instant('flairbiApp.DatasourceGroupConstraint.updated', { param: result.id }), title: "Updated" }
             $rootScope.showSuccessToast(info);
+            $state.go('^');
         }
 
         function onSaveError() {
@@ -173,13 +179,13 @@
             }
         }
 
-        function onDatasourceGroupConstraingLoaded(result) {
+        function onDatasourceGroupConstraintLoaded(result) {
             vm.datasourceGroupConstraint.datasource = result.datasource;
 
-            datasourceChange(vm.datasourceGroupConstraint.datasource.id)
+            loadFeatures(vm.datasourceGroupConstraint.datasource.id)
                 .$promise
                 .then(function () {
-                    onFeaturesLoaded();
+                    onFeaturesLoaded(result.constraintDefinition.featureConstraints);
                 });
         }
 
@@ -187,12 +193,12 @@
             DatasourceGroupConstraint.get({
                 id: $stateParams.id
             }, function (result) {
-                onDatasourceGroupConstraingLoaded(result);
+                onDatasourceGroupConstraintLoaded(result);
             });
         }
 
-        function onFeaturesLoaded() {
-            vm.datasourceGroupConstraint.constraintDefinition = result.constraintDefinition.featureConstraints
+        function onFeaturesLoaded(featureConstraints) {
+            vm.datasourceGroupConstraint.constraintDefinition = featureConstraints
                 .map(function (fk) {
                     return {
                         feature: vm.features.find(function (i) {

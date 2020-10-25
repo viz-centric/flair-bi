@@ -1,14 +1,5 @@
 package com.flair.bi.service;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.service.dto.QueryValidationType;
@@ -24,11 +15,18 @@ import com.project.bi.query.expression.condition.impl.CompareConditionExpression
 import com.project.bi.query.expression.condition.impl.ContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class QueryValidationService {
 
     public QueryValidationResult validate(QueryDTO queryDTO, QueryValidationParams params) {
         log.info("Validate query {}", queryDTO);
-        List<QueryValidationError> selectFieldsValidationResult = validateFields(queryDTO.getFields());
+        List<QueryValidationError> selectFieldsValidationResult = validateFields(params, queryDTO.getFields());
         if (!selectFieldsValidationResult.isEmpty()) {
             return QueryValidationResult.builder()
                     .errors(selectFieldsValidationResult)
@@ -45,7 +43,7 @@ public class QueryValidationService {
                     .build();
         }
 
-        List<QueryValidationError> groupByValidationResult = validateFields(queryDTO.getGroupBy());
+        List<QueryValidationError> groupByValidationResult = validateFields(params, queryDTO.getGroupBy());
         if (!groupByValidationResult.isEmpty()) {
             return QueryValidationResult.builder()
                     .errors(groupByValidationResult)
@@ -53,7 +51,7 @@ public class QueryValidationService {
                     .build();
         }
 
-        List<QueryValidationError> orderByValidationResult = validateOrders(queryDTO.getOrders());
+        List<QueryValidationError> orderByValidationResult = validateOrders(params, queryDTO.getOrders());
         if (!orderByValidationResult.isEmpty()) {
             return QueryValidationResult.builder()
                     .errors(orderByValidationResult)
@@ -61,7 +59,7 @@ public class QueryValidationService {
                     .build();
         }
 
-        List<QueryValidationError> havingResult = validateHavings(queryDTO.getHaving());
+        List<QueryValidationError> havingResult = validateHavings(params, queryDTO.getHaving());
         if (!havingResult.isEmpty()) {
             return QueryValidationResult.builder()
                     .errors(havingResult)
@@ -147,28 +145,28 @@ public class QueryValidationService {
         return set;
     }
 
-    private List<QueryValidationError> validateOrders(List<SortDTO> orders) {
+    private List<QueryValidationError> validateOrders(QueryValidationParams params, List<SortDTO> orders) {
         return orders.stream()
-                .map(order -> validateOrder(order))
+                .map(order -> validateOrder(params, order))
                 .filter(optional -> optional.isPresent())
                 .map(optional -> optional.get())
                 .collect(toList());
     }
 
-    private Optional<QueryValidationError> validateOrder(SortDTO order) {
-        return validateField(order.getFeature());
+    private Optional<QueryValidationError> validateOrder(QueryValidationParams params, SortDTO order) {
+        return validateField(params, order.getFeature());
     }
 
-    private List<QueryValidationError> validateHavings(List<HavingDTO> havings) {
+    private List<QueryValidationError> validateHavings(QueryValidationParams params, List<HavingDTO> havings) {
         return havings.stream()
-                .map(having -> validateHaving(having))
+                .map(having -> validateHaving(params, having))
                 .filter(optional -> optional.isPresent())
                 .map(optional -> optional.get())
                 .collect(toList());
     }
 
-    private Optional<QueryValidationError> validateHaving(HavingDTO having) {
-        Optional<QueryValidationError> validationError = validateField(having.getFeature());
+    private Optional<QueryValidationError> validateHaving(QueryValidationParams params, HavingDTO having) {
+        Optional<QueryValidationError> validationError = validateField(params, having.getFeature());
         if (validationError.isPresent()) {
             return validationError;
         }
@@ -180,15 +178,18 @@ public class QueryValidationService {
         return Optional.empty();
     }
 
-    private List<QueryValidationError> validateFields(List<FieldDTO> fields) {
+    private List<QueryValidationError> validateFields(QueryValidationParams params, List<FieldDTO> fields) {
         return fields.stream()
-                .map(field -> validateField(field))
+                .map(field -> validateField(params, field))
                 .filter(field -> field.isPresent())
                 .map(field -> field.get())
                 .collect(toList());
     }
 
-    private Optional<QueryValidationError> validateField(FieldDTO field) {
-        return Optional.empty();
+    private Optional<QueryValidationError> validateField(QueryValidationParams params, FieldDTO field) {
+        Feature feature = params.getFeatures().get(field.getName());
+        return Optional.ofNullable(feature)
+                .filter(item -> !params.getRestrictedFeatureIds().contains(item.getId()))
+                .map(item -> QueryValidationError.of(field.getName(), "RestrictedFeatureUsed"));
     }
 }

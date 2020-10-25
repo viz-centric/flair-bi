@@ -9,9 +9,14 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Set;
+
 @Repository
 public interface DatasourceGroupConstraintRepository extends JpaRepository<DatasourceGroupConstraint, Long>,
 		QuerydslPredicateExecutor<DatasourceGroupConstraint>, QuerydslBinderCustomizer<QDatasourceGroupConstraint> {
+
+	List<DatasourceGroupConstraint> findAllByDatasourceIdAndUserGroupNameIn(Long datasourceId, Set<String> userGroupName);
 
 	@Override
 	default void customize(QuerydslBindings bindings, QDatasourceGroupConstraint root) {

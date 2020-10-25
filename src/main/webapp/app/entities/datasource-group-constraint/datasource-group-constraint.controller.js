@@ -14,14 +14,14 @@
         var vm = this;
 
         vm.datasourceGroupConstraints = [];
-        vm.login = $stateParams.login;
+        vm.group = $stateParams.group;
         vm.back = back;
 
         loadAll();
 
         function loadAll() {
             DatasourceGroupConstraint.query({
-                'user.login': vm.login
+                'userGroup.name': vm.group
             }, function (result) {
                 vm.datasourceGroupConstraints = result;
                 vm.searchQuery = null;

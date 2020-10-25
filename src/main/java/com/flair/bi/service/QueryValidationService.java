@@ -188,8 +188,9 @@ public class QueryValidationService {
 
     private Optional<QueryValidationError> validateField(QueryValidationParams params, FieldDTO field) {
         Feature feature = params.getFeatures().get(field.getName());
-        return Optional.ofNullable(feature)
-                .filter(item -> !params.getRestrictedFeatureIds().contains(item.getId()))
+        Optional<QueryValidationError> restrictedFeatureUsed = Optional.ofNullable(feature)
+                .filter(item -> params.getRestrictedFeatureIds().contains(item.getId()))
                 .map(item -> QueryValidationError.of(field.getName(), "RestrictedFeatureUsed"));
+        return restrictedFeatureUsed;
     }
 }

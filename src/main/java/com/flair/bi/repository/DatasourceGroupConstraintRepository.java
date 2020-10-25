@@ -16,6 +16,8 @@ import java.util.Set;
 public interface DatasourceGroupConstraintRepository extends JpaRepository<DatasourceGroupConstraint, Long>,
 		QuerydslPredicateExecutor<DatasourceGroupConstraint>, QuerydslBinderCustomizer<QDatasourceGroupConstraint> {
 
+	List<DatasourceGroupConstraint> findAllByUserGroupName(String userGroupName);
+
 	List<DatasourceGroupConstraint> findAllByDatasourceIdAndUserGroupNameIn(Long datasourceId, Set<String> userGroupName);
 
 	@Override

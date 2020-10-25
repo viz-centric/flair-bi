@@ -31,16 +31,16 @@ public class DatasourceGroupConstraintService {
 		return datasourceGroupConstraintRepository.save(datasourceGroupConstraint);
 	}
 
-	/**
-	 * Get all the datasourceConstraints.
-	 *
-	 * @param predicate predicate
-	 * @return the list of entities
-	 */
 	@Transactional(readOnly = true)
 	public List<DatasourceGroupConstraint> findAll(Predicate predicate) {
 		log.debug("Request to get all DatasourceGroupConstraint");
 		return (List<DatasourceGroupConstraint>) datasourceGroupConstraintRepository.findAll(predicate);
+	}
+
+	@Transactional(readOnly = true)
+	public List<DatasourceGroupConstraint> findAllByUserGroupName(String userGroup) {
+		log.debug("Request to get all DatasourceGroupConstraint");
+		return datasourceGroupConstraintRepository.findAllByUserGroupName(userGroup);
 	}
 
 	/**

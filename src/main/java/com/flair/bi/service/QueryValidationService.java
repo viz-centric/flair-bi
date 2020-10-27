@@ -39,19 +39,21 @@ public class QueryValidationService {
 
     public QueryValidationResult validate(QueryDTO queryDTO, QueryValidationParams params) {
         log.info("Validate query {}", queryDTO);
-        List<QueryValidationError> selectFieldsValidationResult = validateFields(params, queryDTO.getFields());
-        if (!selectFieldsValidationResult.isEmpty()) {
-            return QueryValidationResult.builder()
-                    .errors(selectFieldsValidationResult)
-                    .group(QueryValidationResult.Group.SELECT)
-                    .build();
+
+        QueryValidationResult selectFieldsValidationResult = validateSelectFields(params, queryDTO.getFields());
+        if (!selectFieldsValidationResult.success()) {
+            return selectFieldsValidationResult;
         }
 
-        List<QueryValidationError> groupByValidationResult = validateFields(queryDTO.getGroupBy());
-        if (!groupByValidationResult.isEmpty()) {
+        QueryValidationResult groupByValidationResult = validateGroupByFields(selectFieldsValidationResult.getRestrictedFieldNames(), queryDTO.getGroupBy());
+        if (!groupByValidationResult.success()) {
+            return groupByValidationResult;
+        }
+
+        if (selectFieldsValidationResult.hasModifications() || groupByValidationResult.hasModifications()) {
             return QueryValidationResult.builder()
-                    .errors(groupByValidationResult)
-                    .group(QueryValidationResult.Group.GROUP_BY)
+                    .newGroupByFields(groupByValidationResult.getNewGroupByFields())
+                    .newSelectFields(selectFieldsValidationResult.getNewSelectFields())
                     .build();
         }
 
@@ -190,7 +192,36 @@ public class QueryValidationService {
                 .collect(toList());
     }
 
-    private List<QueryValidationError> validateFields(QueryValidationParams params, List<FieldDTO> fields) {
+    private QueryValidationResult validateGroupByFields(Set<String> restrictedFieldNames, List<FieldDTO> fields) {
+        List<FieldDTO> newGroupByFields;
+        if (restrictedFieldNames != null) {
+            newGroupByFields = fields.stream()
+                    .filter(f -> !restrictedFieldNames.contains(f.getName()))
+                    .collect(toList());
+        } else {
+            newGroupByFields = fields;
+        }
+
+        List<QueryValidationError> errors = validateFields(newGroupByFields);
+
+        if (!errors.isEmpty()) {
+            return QueryValidationResult.builder()
+                    .group(QueryValidationResult.Group.GROUP_BY)
+                    .errors(errors)
+                    .build();
+        }
+
+        if (!newGroupByFields.equals(fields)) {
+            return QueryValidationResult.builder()
+                    .newGroupByFields(newGroupByFields)
+                    .build();
+        }
+
+        return QueryValidationResult.builder()
+                .build();
+    }
+
+    private QueryValidationResult validateSelectFields(QueryValidationParams params, List<FieldDTO> fields) {
         List<QueryValidationError> errors = fields.stream()
                 .map(field -> validateField(params, field))
                 .filter(field -> field.isPresent())
@@ -209,6 +240,11 @@ public class QueryValidationService {
                     return feature.getFeatureType();
                 }));
 
+        Set<String> restrictedFieldNames = restrictedErrorsMap.values().stream()
+                .flatMap(v -> v.stream())
+                .map(e -> e.getValue())
+                .collect(toSet());
+
         boolean allowRestrictedFeatures = restrictedErrorsMap.keySet()
                 .stream()
                 .allMatch(ft -> {
@@ -218,12 +254,20 @@ public class QueryValidationService {
                 });
 
         if (allowRestrictedFeatures) {
-            return errors.stream()
-                    .filter(e -> !restrictedErrorsMap.values().stream().flatMap(v -> v.stream()).collect(toList()).contains(e))
+            List<FieldDTO> nonRestrictedFields = fields.stream()
+                    .filter(f -> !restrictedFieldNames.contains(f.getName()))
                     .collect(toList());
+            return QueryValidationResult.builder()
+                    .newSelectFields(nonRestrictedFields)
+                    .restrictedFieldNames(restrictedFieldNames)
+                    .build();
         }
 
-        return errors;
+        return QueryValidationResult
+                .builder()
+                .errors(errors)
+                .group(QueryValidationResult.Group.SELECT)
+                .build();
     }
 
     private Optional<QueryValidationError> validateField(QueryValidationParams params, FieldDTO field) {

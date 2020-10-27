@@ -72,7 +72,7 @@ public class GrpcQueryService {
         try {
             result = grpcService.runQuery(query, queryDTO.isMetaRetrieved());
         } catch (StatusRuntimeException e) {
-            log.error("Error running a query {}", queryDTO, e);
+            log.error("Error running a query {}", query, e);
             return new RunQueryResponseDTO();
         }
 

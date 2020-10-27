@@ -68,17 +68,24 @@ public class QueryTransformerService {
                         .restrictedFeatureIds(restrictedFeatureIds)
                         .validationType(params.getValidationType())
                         .build());
-        if (!validationResult.success()) {
+        if (validationResult.isFatal()) {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
+
+//        List<FieldDTO> queryFields = queryDTO.getFields();
+//        List<FieldDTO> groupByFields = queryDTO.getGroupBy();
+        List<FieldDTO> queryFields = Optional.ofNullable(validationResult.getNewSelectFields())
+                .orElse(queryDTO.getFields());
+        List<FieldDTO> groupByFields = Optional.ofNullable(validationResult.getNewGroupByFields())
+                .orElse(queryDTO.getGroupBy());
 
         QueryTransformerPayload payload = new QueryTransformerPayload(features, restrictedFeatureIds);
 
         String connectionName = params.getConnectionName();
         String vId = params.getVId();
         String userId = params.getUserId();
-        List<FieldDTO> fields = transformSelectFields(payload, queryDTO.getFields());
-        List<FieldDTO> groupBy = transformGroupByFields(payload, queryDTO.getGroupBy());
+        List<FieldDTO> fields = transformSelectFields(payload, queryFields);
+        List<FieldDTO> groupBy = transformGroupByFields(payload, groupByFields);
 
         Query.Builder builder = Query.newBuilder();
         builder

@@ -1,13 +1,5 @@
 package com.flair.bi.service;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
-
 import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.service.dto.QueryValidationType;
@@ -18,6 +10,15 @@ import com.project.bi.query.dto.QueryDTO;
 import com.project.bi.query.dto.SortDTO;
 import com.project.bi.query.expression.condition.impl.BetweenConditionExpression;
 import com.project.bi.query.expression.operations.ScalarOperation;
+import org.junit.Before;
+import org.junit.Test;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+
+import static com.flair.bi.service.QueryValidationError.Error.HavingValueInvalid;
+import static com.flair.bi.service.QueryValidationError.Error.RequiredConditionFeatureMissing;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class QueryValidationServiceTest {
 
@@ -78,7 +79,7 @@ public class QueryValidationServiceTest {
         query.setHaving(asList(new HavingDTO(field, HavingDTO.ComparatorType.GT, null)));
         QueryValidationResult result = service.validate(query, QueryValidationParams.builder().build());
         assertEquals(QueryValidationResult.Group.HAVING, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("", "HavingValueInvalid")), result.getErrors());
+        assertEquals(asList(QueryValidationError.of("", HavingValueInvalid)), result.getErrors());
     }
 
     @Test
@@ -114,6 +115,8 @@ public class QueryValidationServiceTest {
                 .build();
         QueryValidationResult result = service.validate(query, validationParams);
         assertEquals(QueryValidationResult.Group.CONDITIONS, result.getGroup());
-        assertEquals(asList(QueryValidationError.of("order_date", "RequiredConditionFeatureMissing")), result.getErrors());
+        assertEquals(asList(QueryValidationError.of("order_date", RequiredConditionFeatureMissing)), result.getErrors());
+
+
     }
 }

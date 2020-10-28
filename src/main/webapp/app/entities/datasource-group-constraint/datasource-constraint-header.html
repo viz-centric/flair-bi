@@ -1,0 +1,18 @@
+<div class="content-header-container">
+    <div class="containder-fluid">
+        <div class="row">
+            <div class="dashboards-header-text header-text col-md-8 col-sm-6 com-xs-12">
+                <h2 data-translate="flairbiApp.datasourceGroupConstraint.home.title">Data Source Constraints</h2>
+                <div class="bread-crumb">
+                    <ui-breadcrumbs displayname-property="data.displayName" template-url="templates/angular-utils-ui-breadcrumbs/uiBreadcrumbs.tpl.html" ></ui-breadcrumbs>
+                </div>
+            </div>
+            <div class="dashboards-create-button col-md-4 col-sm-6 hidden-xs" ng-if="!vm.isNewConstraint">
+                <button class="btn btn-primary pull-right" ui-sref="datasource-group-constraints-new">
+                        <span class="fa fa-plus"></span>
+                        <span data-translate="flairbiApp.datasourceGroupConstraint.home.createLabel">Create Constraint</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

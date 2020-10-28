@@ -1,16 +1,8 @@
 package com.flair.bi.service;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 import com.flair.bi.domain.DateFilterType;
 import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.enumeration.FeatureType;
 import com.flair.bi.service.dto.QueryValidationType;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.FieldDTO;
@@ -24,11 +16,21 @@ import com.project.bi.query.expression.condition.impl.CompareConditionExpression
 import com.project.bi.query.expression.condition.impl.ContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.flair.bi.service.QueryValidationError.Error.RequiredConditionFeatureMissing;
+import static com.flair.bi.service.QueryValidationError.Error.RestrictedFeatureUsed;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 @RequiredArgsConstructor
@@ -37,19 +39,21 @@ public class QueryValidationService {
 
     public QueryValidationResult validate(QueryDTO queryDTO, QueryValidationParams params) {
         log.info("Validate query {}", queryDTO);
-        List<QueryValidationError> selectFieldsValidationResult = validateFields(queryDTO.getFields());
-        if (!selectFieldsValidationResult.isEmpty()) {
-            return QueryValidationResult.builder()
-                    .errors(selectFieldsValidationResult)
-                    .group(QueryValidationResult.Group.SELECT)
-                    .build();
+
+        QueryValidationResult selectFieldsValidationResult = validateSelectFields(params, queryDTO.getFields());
+        if (!selectFieldsValidationResult.success()) {
+            return selectFieldsValidationResult;
         }
 
-        List<QueryValidationError> groupByValidationResult = validateFields(queryDTO.getGroupBy());
-        if (!groupByValidationResult.isEmpty()) {
+        QueryValidationResult groupByValidationResult = validateGroupByFields(selectFieldsValidationResult.getRestrictedFieldNames(), queryDTO.getGroupBy());
+        if (!groupByValidationResult.success()) {
+            return groupByValidationResult;
+        }
+
+        if (selectFieldsValidationResult.hasModifications() || groupByValidationResult.hasModifications()) {
             return QueryValidationResult.builder()
-                    .errors(groupByValidationResult)
-                    .group(QueryValidationResult.Group.GROUP_BY)
+                    .newGroupByFields(groupByValidationResult.getNewGroupByFields())
+                    .newSelectFields(selectFieldsValidationResult.getNewSelectFields())
                     .build();
         }
 
@@ -91,7 +95,7 @@ public class QueryValidationService {
                         validateCondition(conditionExpressionDTO.getConditionExpression(), features)
                                 .forEach(featureName -> featureNamesWithDateFilterEnabled.remove(featureName)));
         return featureNamesWithDateFilterEnabled.stream()
-                .map(featureName -> QueryValidationError.of(featureName, "RequiredConditionFeatureMissing"))
+                .map(featureName -> QueryValidationError.of(featureName, RequiredConditionFeatureMissing))
                 .collect(toList());
     }
 
@@ -174,7 +178,7 @@ public class QueryValidationService {
         }
         if (having.getOperation() == null) {
             return Optional.ofNullable(
-                    QueryValidationError.of("", "HavingValueInvalid")
+                    QueryValidationError.of("", QueryValidationError.Error.HavingValueInvalid)
             );
         }
         return Optional.empty();
@@ -186,6 +190,92 @@ public class QueryValidationService {
                 .filter(field -> field.isPresent())
                 .map(field -> field.get())
                 .collect(toList());
+    }
+
+    private QueryValidationResult validateGroupByFields(Set<String> restrictedFieldNames, List<FieldDTO> fields) {
+        List<FieldDTO> newGroupByFields;
+        if (restrictedFieldNames != null) {
+            newGroupByFields = fields.stream()
+                    .filter(f -> !restrictedFieldNames.contains(f.getName()))
+                    .collect(toList());
+        } else {
+            newGroupByFields = fields;
+        }
+
+        List<QueryValidationError> errors = validateFields(newGroupByFields);
+
+        if (!errors.isEmpty()) {
+            return QueryValidationResult.builder()
+                    .group(QueryValidationResult.Group.GROUP_BY)
+                    .errors(errors)
+                    .build();
+        }
+
+        if (restrictedFieldNames != null && !newGroupByFields.equals(fields)) {
+            return QueryValidationResult.builder()
+                    .newGroupByFields(newGroupByFields)
+                    .build();
+        }
+
+        return QueryValidationResult.builder()
+                .build();
+    }
+
+    private QueryValidationResult validateSelectFields(QueryValidationParams params, List<FieldDTO> fields) {
+        List<QueryValidationError> errors = fields.stream()
+                .map(field -> validateField(params, field))
+                .filter(field -> field.isPresent())
+                .map(field -> field.get())
+                .collect(toList());
+
+        Map<FeatureType, List<Feature>> featuresMap = fields.stream()
+                .map(f -> params.getFeatures().get(f.getName()))
+                .filter(f -> f != null)
+                .collect(groupingBy(f -> f.getFeatureType()));
+
+        Map<FeatureType, List<QueryValidationError>> restrictedErrorsMap = errors.stream()
+                .filter(e -> e.getError() == RestrictedFeatureUsed)
+                .collect(groupingBy(e -> {
+                    Feature feature = params.getFeatures().get(e.getValue());
+                    return feature.getFeatureType();
+                }));
+
+        Set<String> restrictedFieldNames = restrictedErrorsMap.values().stream()
+                .flatMap(v -> v.stream())
+                .map(e -> e.getValue())
+                .collect(toSet());
+
+        boolean allowRestrictedFeatures = !restrictedErrorsMap.isEmpty() && restrictedErrorsMap.keySet()
+                .stream()
+                .allMatch(ft -> {
+                    int featuresCount = featuresMap.get(ft).size();
+                    int errorsCount = restrictedErrorsMap.get(ft).size();
+                    return featuresCount - errorsCount > 0;
+                });
+
+        if (allowRestrictedFeatures) {
+            List<FieldDTO> nonRestrictedFields = fields.stream()
+                    .filter(f -> !restrictedFieldNames.contains(f.getName()))
+                    .collect(toList());
+            return QueryValidationResult.builder()
+                    .newSelectFields(nonRestrictedFields)
+                    .restrictedFieldNames(restrictedFieldNames)
+                    .build();
+        }
+
+        return QueryValidationResult
+                .builder()
+                .errors(errors)
+                .group(QueryValidationResult.Group.SELECT)
+                .build();
+    }
+
+    private Optional<QueryValidationError> validateField(QueryValidationParams params, FieldDTO field) {
+        Feature feature = params.getFeatures().get(field.getName());
+        Optional<QueryValidationError> restrictedFeatureUsed = Optional.ofNullable(feature)
+                .filter(item -> params.getRestrictedFeatureIds().contains(item.getId()))
+                .map(item -> QueryValidationError.of(field.getName(), QueryValidationError.Error.RestrictedFeatureUsed));
+        return restrictedFeatureUsed;
     }
 
     private Optional<QueryValidationError> validateField(FieldDTO field) {

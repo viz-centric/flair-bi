@@ -42,6 +42,7 @@ public class QueryTransformerService {
     public static final long MAX_LIMIT = 1000L;
     private final FeatureService featureService;
     private final QueryValidationService queryValidationService;
+    private final DatasourceGroupConstraintService datasourceGroupConstraintService;
 
     public Query toQuery(QueryDTO queryDTO, QueryTransformerParams params) throws QueryTransformerException {
         log.debug("Map to query {} params {}", queryDTO.toString(), params);
@@ -50,30 +51,41 @@ public class QueryTransformerService {
             queryDTO.setQuerySource(composeQuerySource(params));
         }
 
+        List<Long> restrictedFeatureIds = Optional.ofNullable(params.getDatasourceId())
+                .map(dsId -> datasourceGroupConstraintService.getRestrictedFeatureIds(dsId, params.getUserId()))
+                .orElse(null);
+
         Map<String, Feature> features = Optional.ofNullable(params.getDatasourceId())
                 .map(ds -> featureService.getFeatures(QFeature.feature.datasource.id.eq(ds))
                         .stream()
                         .collect(Collectors.toMap(item -> item.getName(), item -> item)))
                 .orElseGet(() -> new ConcurrentHashMap<>());
 
+
         QueryValidationResult validationResult = queryValidationService.validate(queryDTO,
                 QueryValidationParams.builder()
                         .features(features)
+                        .restrictedFeatureIds(restrictedFeatureIds)
                         .validationType(params.getValidationType())
                         .build());
-        if (!validationResult.success()) {
+        if (validationResult.isFatal()) {
             throw new QueryTransformerException("Query validation error", validationResult);
         }
 
-        return toQuery(queryDTO, features, params);
-    }
+//        List<FieldDTO> queryFields = queryDTO.getFields();
+//        List<FieldDTO> groupByFields = queryDTO.getGroupBy();
+        List<FieldDTO> queryFields = Optional.ofNullable(validationResult.getNewSelectFields())
+                .orElse(queryDTO.getFields());
+        List<FieldDTO> groupByFields = Optional.ofNullable(validationResult.getNewGroupByFields())
+                .orElse(queryDTO.getGroupBy());
 
-    private Query toQuery(QueryDTO queryDTO, Map<String, Feature> features, QueryTransformerParams params) {
+        QueryTransformerPayload payload = new QueryTransformerPayload(features, restrictedFeatureIds);
+
         String connectionName = params.getConnectionName();
         String vId = params.getVId();
         String userId = params.getUserId();
-        List<FieldDTO> fields = transformSelectFields(features, queryDTO.getFields());
-        List<FieldDTO> groupBy = transformGroupByFields(features, queryDTO.getGroupBy());
+        List<FieldDTO> fields = transformSelectFields(payload, queryFields);
+        List<FieldDTO> groupBy = transformGroupByFields(payload, groupByFields);
 
         Query.Builder builder = Query.newBuilder();
         builder
@@ -118,7 +130,7 @@ public class QueryTransformerService {
         }
 
         if (queryDTO.getHaving().size() > 0) {
-            builder.addAllHaving(toHaving(features, queryDTO.getHaving()));
+            builder.addAllHaving(toHaving(payload, queryDTO.getHaving()));
         }
 
         if (queryDTO.getOffset() != null) {
@@ -136,7 +148,7 @@ public class QueryTransformerService {
                     .setSourceTypeValue(getFilterType(conditionExpressionDTO.getSourceType().ordinal()))
                     .setExpressionTypeValue(getExpressionType(conditionExpressionDTO.getConditionExpression()))
                     .setAndOrExpressionType(getAndOrExpressionType(conditionExpressionDTO.getConditionExpression()))
-                    .setConditionExpression(getJsonFromConditionExpression(conditionExpressionDTO.getConditionExpression(), features))
+                    .setConditionExpression(getJsonFromConditionExpression(conditionExpressionDTO.getConditionExpression(), payload))
                     .build()
             );
         });
@@ -163,10 +175,10 @@ public class QueryTransformerService {
                 .build();
     }
 
-    private List<Query.HavingHolder> toHaving(Map<String, Feature> features, List<HavingDTO> having) {
+    private List<Query.HavingHolder> toHaving(QueryTransformerPayload payload, List<HavingDTO> having) {
         return having.stream()
                 .map(h -> {
-                    FieldDTO fieldDTO = transformFieldNoAlias(features, h.getFeature());
+                    FieldDTO fieldDTO = transformFieldNoAlias(payload, h.getFeature());
                     return Query.HavingHolder.newBuilder()
                             .setFeature(toProtoField(fieldDTO))
                             .setOperation(getJsonFromOperation(h.getOperation()))
@@ -176,33 +188,38 @@ public class QueryTransformerService {
                 .collect(toList());
     }
 
-    private List<FieldDTO> transformSelectFields(Map<String, Feature> features, List<FieldDTO> fields) {
+    private List<FieldDTO> transformSelectFields(QueryTransformerPayload payload, List<FieldDTO> fields)  {
         return fields
                 .stream()
-                .map(field -> transformField(features, field))
+                .map(field -> transformField(payload, field))
                 .collect(toList());
     }
 
-    private List<FieldDTO> transformGroupByFields(Map<String, Feature> features, List<FieldDTO> fields) {
+    private List<FieldDTO> transformGroupByFields(QueryTransformerPayload payload, List<FieldDTO> fields) {
         return fields
                 .stream()
-                .map(field -> transformFieldNoAlias(features, field))
+                .map(field -> transformFieldNoAlias(payload, field))
                 .collect(toList());
     }
 
-    private FieldDTO transformField(Map<String, Feature> features, FieldDTO field) {
-        return Optional.ofNullable(features.get(field.getName()))
+    private FieldDTO transformField(QueryTransformerPayload payload, FieldDTO field) {
+        Map<String, Feature> features = payload.getFeatures();
+        Feature feature = features.get(field.getName());
+        return Optional.ofNullable(feature)
                 .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation(), item.getName()))
                 .orElse(field);
     }
 
-    private FieldDTO transformFieldNoAlias(Map<String, Feature> features, FieldDTO field) {
-        return Optional.ofNullable(features.get(field.getName()))
+    private FieldDTO transformFieldNoAlias(QueryTransformerPayload payload, FieldDTO field) {
+        Map<String, Feature> features = payload.getFeatures();
+        Feature feature = features.get(field.getName());
+        return Optional.ofNullable(feature)
                 .map(item -> new FieldDTO(item.getDefinition(), field.getAggregation()))
                 .orElse(field);
     }
 
-    private String transformFieldNameOrSanitize(Map<String, Feature> features, String field) {
+    private String transformFieldNameOrSanitize(QueryTransformerPayload payload, String field) {
+        Map<String, Feature> features = payload.getFeatures();
         return Optional.ofNullable(features.get(field))
                 .map(item -> item.getDefinition())
                 .orElse(field);
@@ -261,44 +278,44 @@ public class QueryTransformerService {
         return builder.build();
     }
 
-    private String getJsonFromConditionExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {
-        return JacksonUtil.toString(sanitizeConditionalExpression(conditionExpression, features));
+    private String getJsonFromConditionExpression(ConditionExpression conditionExpression, QueryTransformerPayload payload) {
+        return JacksonUtil.toString(sanitizeConditionalExpression(conditionExpression, payload));
     }
 
     private String getJsonFromOperation(Operation operation) {
         return JacksonUtil.toString(operation);
     }
 
-    private ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression, Map<String, Feature> features) {
+    private ConditionExpression sanitizeConditionalExpression(ConditionExpression conditionExpression, QueryTransformerPayload payload) {
         if (conditionExpression instanceof OrConditionExpression) {
             OrConditionExpression orConditionExpression = (OrConditionExpression) conditionExpression;
-            orConditionExpression.setFirstExpression(sanitizeConditionalExpression(orConditionExpression.getFirstExpression(), features));
-            orConditionExpression.setSecondExpression(sanitizeConditionalExpression(orConditionExpression.getSecondExpression(), features));
+            orConditionExpression.setFirstExpression(sanitizeConditionalExpression(orConditionExpression.getFirstExpression(), payload));
+            orConditionExpression.setSecondExpression(sanitizeConditionalExpression(orConditionExpression.getSecondExpression(), payload));
         } else if (conditionExpression instanceof BetweenConditionExpression) {
             BetweenConditionExpression betweenConditionExpression = (BetweenConditionExpression) conditionExpression;
-            betweenConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, betweenConditionExpression.getFeatureName()));
+            betweenConditionExpression.setFeatureName(transformFieldNameOrSanitize(payload, betweenConditionExpression.getFeatureName()));
             betweenConditionExpression.setValue(sanitize(betweenConditionExpression.getValue()));
             betweenConditionExpression.setSecondValue(sanitize(betweenConditionExpression.getSecondValue()));
         } else if (conditionExpression instanceof CompareConditionExpression) {
             CompareConditionExpression compareConditionExpression = (CompareConditionExpression) conditionExpression;
-            compareConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, compareConditionExpression.getFeatureName()));
+            compareConditionExpression.setFeatureName(transformFieldNameOrSanitize(payload, compareConditionExpression.getFeatureName()));
             compareConditionExpression.setValue(sanitize(compareConditionExpression.getValue()));
         } else if (conditionExpression instanceof AndConditionExpression) {
             AndConditionExpression andConditionExpression = (AndConditionExpression) conditionExpression;
-            andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression(), features));
-            andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression(), features));
+            andConditionExpression.setSecondExpression(sanitizeConditionalExpression(andConditionExpression.getSecondExpression(), payload));
+            andConditionExpression.setFirstExpression(sanitizeConditionalExpression(andConditionExpression.getFirstExpression(), payload));
         } else if (conditionExpression instanceof NotContainsConditionExpression) {
             NotContainsConditionExpression notContainsConditionExpression = (NotContainsConditionExpression) conditionExpression;
-            notContainsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, notContainsConditionExpression.getFeatureName()));
+            notContainsConditionExpression.setFeatureName(transformFieldNameOrSanitize(payload, notContainsConditionExpression.getFeatureName()));
             notContainsConditionExpression.setValues(sanitizeList(notContainsConditionExpression.getValues()));
         } else if (conditionExpression instanceof ContainsConditionExpression) {
             ContainsConditionExpression containsConditionExpression = (ContainsConditionExpression) conditionExpression;
-            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, containsConditionExpression.getFeatureName()));
+            containsConditionExpression.setFeatureName(transformFieldNameOrSanitize(payload, containsConditionExpression.getFeatureName()));
             containsConditionExpression.setValues(sanitizeList(containsConditionExpression.getValues()));
         } else if (conditionExpression instanceof LikeConditionExpression) {
             LikeConditionExpression likeConditionExpression = (LikeConditionExpression) conditionExpression;
             likeConditionExpression.setValue(sanitize(likeConditionExpression.getValue()));
-            likeConditionExpression.setFeatureName(transformFieldNameOrSanitize(features, likeConditionExpression.getFeatureName()));
+            likeConditionExpression.setFeatureName(transformFieldNameOrSanitize(payload, likeConditionExpression.getFeatureName()));
         }
         return conditionExpression;
     }

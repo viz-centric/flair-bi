@@ -51,7 +51,8 @@
             "metadataVisual": "Metadata Visual",
             "errorOnReceivingMataData":"Error receiving data",
             "queryValidation": {
-                "RequiredConditionFeatureMissing": "Missing feature: {{ reason }}"
+                "RequiredConditionFeatureMissing": "Missing feature: {{ reason }}",
+                "RestrictedFeatureUsed": "Missing permissions for the restricted feature: {{ reason }}"
             }
         }
     }

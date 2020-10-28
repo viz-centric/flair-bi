@@ -22,6 +22,7 @@
                 "featureCriteria": "Feature Criteria",
                 "featureBookmark": "Feature Bookmark",
                 "datasourceConstraint": "Datasource Constraint",
+                "datasourceGroupConstraint": "Datasource Group Constraint",
                 "functions": "Functions",
                 "visualizationColors": "Visualization Colors",
                 "fileUploaderStatus": "File Uploader Status",

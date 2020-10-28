@@ -72,13 +72,11 @@ public class GrpcQueryService {
         try {
             result = grpcService.runQuery(query, queryDTO.isMetaRetrieved());
         } catch (StatusRuntimeException e) {
-            log.error("Error running a query {}", queryDTO, e);
+            log.error("Error running a query {}", query, e);
             return new RunQueryResponseDTO();
         }
 
         String resultString = result.getResult();
-
-        log.debug("Sending run query result {}", resultString);
 
         Map<String, Object> map = Optional.ofNullable(resultString).filter(r -> StringUtils.isNotEmpty(resultString))
                 .map(r -> {

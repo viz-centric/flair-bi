@@ -211,7 +211,7 @@ public class QueryValidationService {
                     .build();
         }
 
-        if (!newGroupByFields.equals(fields)) {
+        if (restrictedFieldNames != null && !newGroupByFields.equals(fields)) {
             return QueryValidationResult.builder()
                     .newGroupByFields(newGroupByFields)
                     .build();
@@ -245,7 +245,7 @@ public class QueryValidationService {
                 .map(e -> e.getValue())
                 .collect(toSet());
 
-        boolean allowRestrictedFeatures = restrictedErrorsMap.keySet()
+        boolean allowRestrictedFeatures = !restrictedErrorsMap.isEmpty() && restrictedErrorsMap.keySet()
                 .stream()
                 .allMatch(ft -> {
                     int featuresCount = featuresMap.get(ft).size();

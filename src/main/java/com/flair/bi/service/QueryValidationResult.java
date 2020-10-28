@@ -21,11 +21,11 @@ public class QueryValidationResult {
 	}
 
 	public boolean success() {
-		return errors == null;
+		return errors == null || errors.isEmpty();
 	}
 
 	public boolean isFatal() {
-		return errors != null;
+		return !success();
 	}
 
 	public boolean hasModifications() {

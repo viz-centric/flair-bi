@@ -116,6 +116,42 @@
                     ]
                 }
             })
+            .state('datasource-group-constraints', {
+                parent: 'permission-management',
+                url: '/datasource-group-constraints/:group',
+                data: {
+                    authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
+                    pageTitle: "flairbiApp.datasourceGroupConstraint.home.title",
+                    displayName: "Datasource Group Constraints"
+                },
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceGroupConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-group-constraints.html",
+                        controller: "DatasourceGroupConstraintController",
+                        controllerAs: "vm"
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: [
+                        "$translate",
+                        "$translatePartialLoader",
+                        function ($translate, $translatePartialLoader) {
+                            $translatePartialLoader.addPart(
+                                "datasourceGroupConstraint"
+                            );
+                            $translatePartialLoader.addPart("global");
+                            return $translate.refresh();
+                        }
+                    ]
+                }
+            })
             .state("datasource-constraints-detail", {
                 parent: "datasource-constraints",
                 url: "/{id}",
@@ -176,6 +212,66 @@
                     ]
                 }
             })
+            .state("datasource-group-constraints-detail", {
+                parent: "datasource-group-constraints",
+                url: "/{id}",
+                data: {
+                    authorities: [PERMISSIONS.READ_USER_MANAGEMENT],
+                    pageTitle: "flairbiApp.datasourceGroupConstraint.detail.title",
+                    displayName: "Datasource group constraint detail"
+                },
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceGroupConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-detail.html",
+                        controller: "DatasourceGroupConstraintDetailController",
+                        controllerAs: "vm"
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: [
+                        "$translate",
+                        "$translatePartialLoader",
+                        function ($translate, $translatePartialLoader) {
+                            $translatePartialLoader.addPart(
+                                "datasourceGroupConstraint"
+                            );
+                            return $translate.refresh();
+                        }
+                    ],
+                    entity: [
+                        "$stateParams",
+                        "DatasourceGroupConstraint",
+                        function ($stateParams, DatasourceGroupConstraint) {
+                            return DatasourceGroupConstraint.get({
+                                id: $stateParams.id
+                            }).$promise;
+                        }
+                    ],
+                    previousState: [
+                        "$state",
+                        function ($state) {
+                            var currentStateData = {
+                                name:
+                                    $state.current.name ||
+                                    "datasource-group-constraint",
+                                params: $state.params,
+                                url: $state.href(
+                                    $state.current.name,
+                                    $state.params
+                                )
+                            };
+                            return currentStateData;
+                        }
+                    ]
+                }
+            })
             .state('datasource-constraints-new', {
                 parent: 'datasource-constraints',
                 url: '/new',
@@ -201,6 +297,31 @@
                     }]
                 }
             })
+            .state('datasource-group-constraints-new', {
+                parent: 'datasource-group-constraints',
+                url: '/new',
+                data: {
+                    authorities: [PERMISSIONS.WRITE_USER_MANAGEMENT],
+                    displayName: "New datasource group constraint"
+                },
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceGroupConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        component: "datasourceGroupConstraintDialogComponent",
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('datasourceGroupConstraint');
+                        return $translate.refresh();
+                    }]
+                }
+            })
             .state('datasource-constraints-edit', {
                 parent: 'datasource-constraints',
                 url: '/edit/{id}',
@@ -222,6 +343,31 @@
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('datasourceConstraint');
+                        return $translate.refresh();
+                    }]
+                }
+            })
+            .state('datasource-group-constraints-edit', {
+                parent: 'datasource-group-constraints',
+                url: '/edit/{id}',
+                data: {
+                    authorities: [PERMISSIONS.UPDATE_USER_MANAGEMENT],
+                    displayName: "Update datasource group constraint"
+                },
+                views: {
+                    "content-header@": {
+                        templateUrl:
+                            "app/entities/datasource-group-constraint/datasource-constraint-header.html",
+                        controller: "DatasourceGroupConstraintHeaderController",
+                        controllerAs: "vm"
+                    },
+                    "content@": {
+                        component: "datasourceGroupConstraintDialogComponent",
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('datasourceGroupConstraint');
                         return $translate.refresh();
                     }]
                 }
@@ -260,6 +406,42 @@
                         return $translate.refresh();
                     }]
                 }
-            });
+            })
+            .state('datasource-group-constraints-delete', {
+                parent: 'datasource-group-constraints',
+                url: '/delete/:id',
+                data: {
+                    authorities: [PERMISSIONS.DELETE_USER_MANAGEMENT],
+                    displayName: "Datasource Group Constraints"
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/datasource-group-constraint/datasource-constraint-delete-dialog.html',
+                        controller: 'DatasourceGroupConstraintDeleteController',
+                        controllerAs: 'vm',
+                        size: 'md',
+                        resolve: {
+                            entity: ['DatasourceGroupConstraint', function (DatasourceGroupConstraint) {
+                                return DatasourceGroupConstraint.get({
+                                    id: $stateParams.id
+                                }).$promise;
+                            }]
+                        }
+                    }).result.then(function () {
+                        $state.go('^', null, {
+                            reload: true
+                        });
+                    }, function () {
+                        $state.go('^');
+                    });
+                }],
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('datasourceGroupConstraint');
+                        return $translate.refresh();
+                    }]
+                }
+            })
+        ;
     }
 })();

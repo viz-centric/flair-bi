@@ -1,10 +1,9 @@
 package com.flair.bi.service;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-
+import com.flair.bi.messages.Query;
+import com.project.bi.query.dto.FieldDTO;
+import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.SortDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +11,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.flair.bi.messages.Query;
-import com.project.bi.query.dto.FieldDTO;
-import com.project.bi.query.dto.QueryDTO;
-import com.project.bi.query.dto.SortDTO;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryTransformerServiceTest {
@@ -26,11 +25,14 @@ public class QueryTransformerServiceTest {
 	@Mock
 	private QueryValidationService queryValidationService;
 
+	@Mock
+	private DatasourceGroupConstraintService datasourceGroupConstraintService;
+
 	private QueryTransformerService service;
 
 	@Before
 	public void setUp() throws Exception {
-		service = new QueryTransformerService(featureService, queryValidationService);
+		service = new QueryTransformerService(featureService, queryValidationService, datasourceGroupConstraintService);
 	}
 
 	@Test(expected = QueryTransformerException.class)
@@ -39,7 +41,7 @@ public class QueryTransformerServiceTest {
 		QueryTransformerParams params = QueryTransformerParams.builder().build();
 
 		QueryValidationResult result = QueryValidationResult.builder()
-				.errors(asList(QueryValidationError.of("value", "error"))).build();
+				.errors(asList(QueryValidationError.of("value", QueryValidationError.Error.HavingValueInvalid))).build();
 		Mockito.when(queryValidationService.validate(eq(query), any(QueryValidationParams.class))).thenReturn(result);
 
 		service.toQuery(query, params);

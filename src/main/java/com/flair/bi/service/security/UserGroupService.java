@@ -1,15 +1,5 @@
 package com.flair.bi.service.security;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
@@ -17,9 +7,17 @@ import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.SecurityUtils;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service for managing user groups
@@ -86,6 +84,12 @@ public class UserGroupService {
 	public UserGroup findOne(String name) {
 		log.debug("Request to get UserGroup: {}", name);
 		return userGroupRepository.getOne(name);
+	}
+
+	@Transactional(readOnly = true)
+	public boolean exists(String name) {
+		log.debug("Exists to get UserGroup: {}", name);
+		return userGroupRepository.existsByName(name);
 	}
 
 	/**

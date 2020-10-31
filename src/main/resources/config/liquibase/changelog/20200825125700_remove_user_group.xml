@@ -12,5 +12,7 @@
 
         <dropColumn tableName="user_user_group" columnName="user_group_name"/>
 
+        <dropColumn tableName="datasource_group_constraint" columnName="user_group_name"/>
+
     </changeSet>
 </databaseChangeLog>

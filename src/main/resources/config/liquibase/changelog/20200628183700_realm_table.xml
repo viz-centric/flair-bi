@@ -93,6 +93,17 @@
             <column name="realm_id" />
         </createIndex>
 
+        <addColumn tableName="datasource_group_constraint">
+            <column name="user_group_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_datasource_group_constraint_user_group_id"
+                     tableName="datasource_group_constraint">
+            <column name="user_group_id" />
+        </createIndex>
+
         <addColumn tableName="user_group_permission">
             <column name="user_group_id" type="bigint"  defaultValue="0">
                 <constraints nullable="false"/>

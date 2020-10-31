@@ -8,6 +8,7 @@
         <dropDefaultValue columnName="realm_id" tableName="jhi_user"/>
         <dropDefaultValue columnName="user_group_id" tableName="user_group_permission"/>
         <dropDefaultValue columnName="user_group_id" tableName="user_user_group"/>
+        <dropDefaultValue columnName="user_group_id" tableName="datasource_group_constraint"/>
         <dropDefaultValue columnName="realm_id" tableName="dashboards"/>
         <dropDefaultValue columnName="realm_id" tableName="datasources"/>
         <dropDefaultValue columnName="realm_id" tableName="functions"/>

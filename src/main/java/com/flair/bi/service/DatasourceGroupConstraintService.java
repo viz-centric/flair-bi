@@ -1,12 +1,15 @@
 package com.flair.bi.service;
 
 import com.flair.bi.domain.DatasourceGroupConstraint;
+import com.flair.bi.domain.QDatasourceGroupConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.constraintdefinition.FeatureConstraintGroupExpression;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.DatasourceGroupConstraintRepository;
+import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,24 +27,37 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DatasourceGroupConstraintService {
 
+	private final UserGroupService userGroupService;
 	private final DatasourceGroupConstraintRepository datasourceGroupConstraintRepository;
 	private final UserService userService;
 
 	public DatasourceGroupConstraint save(DatasourceGroupConstraint datasourceGroupConstraint) {
 		log.debug("Request to save DatasourceGroupConstraint : {}", datasourceGroupConstraint);
+		UserGroup userGroup = datasourceGroupConstraint.getUserGroup();
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		if (!Objects.equals(user.getRealm().getId(), userGroup.getRealm().getId())) {
+			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realm " + user.getRealm().getId());
+		}
 		return datasourceGroupConstraintRepository.save(datasourceGroupConstraint);
 	}
 
 	@Transactional(readOnly = true)
 	public List<DatasourceGroupConstraint> findAll(Predicate predicate) {
 		log.debug("Request to get all DatasourceGroupConstraint");
-		return (List<DatasourceGroupConstraint>) datasourceGroupConstraintRepository.findAll(predicate);
+		Predicate b = hasRealmPermissions().and(predicate);
+		return (List<DatasourceGroupConstraint>) datasourceGroupConstraintRepository.findAll(b);
+	}
+
+	private BooleanExpression hasRealmPermissions() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.eq(user.getRealm().getId());
 	}
 
 	@Transactional(readOnly = true)
 	public List<DatasourceGroupConstraint> findAllByUserGroupName(String userGroup) {
 		log.debug("Request to get all DatasourceGroupConstraint");
-		return datasourceGroupConstraintRepository.findAllByUserGroupName(userGroup);
+		UserGroup ug = userGroupService.findOne(userGroup);
+		return datasourceGroupConstraintRepository.findAllByUserGroupId(ug.getId());
 	}
 
 	/**
@@ -52,7 +69,8 @@ public class DatasourceGroupConstraintService {
 	@Transactional(readOnly = true)
 	public DatasourceGroupConstraint findOne(Long id) {
 		log.debug("Request to get DatasourceGroupConstraint : {}", id);
-		return datasourceGroupConstraintRepository.findById(id)
+		BooleanExpression expression = hasRealmPermissions().and(QDatasourceGroupConstraint.datasourceGroupConstraint.id.eq(id));
+		return datasourceGroupConstraintRepository.findOne(expression)
 				.orElseThrow(() -> new EntityNotFoundException("Datasource constraint cannot be found"));
 	}
 
@@ -63,7 +81,8 @@ public class DatasourceGroupConstraintService {
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete DatasourceGroupConstraint : {}", id);
-		datasourceGroupConstraintRepository.deleteById(id);
+		DatasourceGroupConstraint one = findOne(id);
+		datasourceGroupConstraintRepository.delete(one);
 	}
 
 	public List<Long> getRestrictedFeatureIds(Long datasourceId, String username) {
@@ -71,8 +90,8 @@ public class DatasourceGroupConstraintService {
 			return new ArrayList<>();
 		}
 		User user = userService.getUserWithAuthoritiesByLogin(username).orElseThrow();
-		Set<String> userGroups = user.getUserGroups().stream().map(UserGroup::getName).collect(Collectors.toSet());
-		List<DatasourceGroupConstraint> constraints = datasourceGroupConstraintRepository.findAllByDatasourceIdAndUserGroupNameIn(datasourceId, userGroups);
+		Set<Long> userGroupIds = user.getUserGroups().stream().map(UserGroup::getId).collect(Collectors.toSet());
+		List<DatasourceGroupConstraint> constraints = datasourceGroupConstraintRepository.findAllByDatasourceIdAndUserGroupIdIn(datasourceId, userGroupIds);
 		return constraints.stream()
 				.flatMap(c -> c.getConstraintDefinition().getFeatureConstraints()
 						.stream()

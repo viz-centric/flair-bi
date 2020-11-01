@@ -8,6 +8,7 @@ import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.QueryTransformerException;
 import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.CountDTO;
 import com.flair.bi.service.dto.scheduler.ApiErrorDTO;
 import com.flair.bi.service.dto.scheduler.GetSchedulerReportDTO;
@@ -87,6 +88,7 @@ public class SchedulerResource {
 
 	private final SchedulerService schedulerService;
 	private final DashboardService dashboardService;
+	private final UserService userService;
 
 	@PostMapping("/schedule")
 	@Timed
@@ -205,6 +207,11 @@ public class SchedulerResource {
 		if (!SecurityUtils.iAdmin()) {
 			userName = SecurityUtils.getCurrentUserLogin();
 		}
+
+		String finalUserName = userName;
+		userService.getUserByLogin(userName)
+				.orElseThrow(() -> new IllegalStateException("Cannot search report for a user " + finalUserName + " that does not belong to current realm"));
+
 		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate,
 				pageable.getPageSize(), pageable.getPageNumber(), thresholdAlert,dashboardName,viewName);
 		log.info("Search reports result {}", result);

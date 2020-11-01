@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20200820125700" author="ir73">
+
+        <dropForeignKeyConstraint baseTableName="user_group_permission"
+                                  constraintName="fk_user_grp_name" />
+
+        <addForeignKeyConstraint baseTableName="user_group_permission"
+                                 baseColumnNames="user_group_id"
+                                 constraintName="fk_user_group_id"
+                                 referencedTableName="user_group2"
+                                 referencedColumnNames="id"/>
+
+        <dropPrimaryKey constraintName="primary_key_user_group_permission"
+                        tableName="user_group_permission"/>
+
+        <addPrimaryKey columnNames="user_group_id, permission_resource, permission_action, permission_scope"
+                       constraintName="pk_permissions_user_user_group"
+                       tableName="user_group_permission"/>
+
+        <dropForeignKeyConstraint baseTableName="user_user_group"
+                                  constraintName="fk_user_group_name" />
+
+        <addForeignKeyConstraint baseTableName="user_user_group"
+                                 baseColumnNames="user_group_id"
+                                 constraintName="fk_user_group_id"
+                                 referencedTableName="user_group2"
+                                 referencedColumnNames="id"/>
+
+        <dropPrimaryKey constraintName="user_user_group_pkey"
+                        tableName="user_user_group"/>
+
+        <addPrimaryKey columnNames="user_id, user_group_id"
+                       constraintName="pk_ug_user_user_group"
+                       tableName="user_user_group"/>
+
+        <dropPrimaryKey constraintName="permission_edge_pkey"
+                        tableName="permission_edge"/>
+
+        <addPrimaryKey columnNames="from_resource, from_action, from_scope, to_resource, to_action, to_scope, realm_id"
+                       constraintName="permission_edge_pkey"
+                       tableName="permission_edge"/>
+
+    </changeSet>
+</databaseChangeLog>

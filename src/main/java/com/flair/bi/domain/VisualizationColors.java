@@ -1,15 +1,15 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A VisualizationColors.
@@ -28,9 +28,12 @@ public class VisualizationColors implements Serializable {
 	@Column(name = "code", nullable = false)
 	private String code;
 
-	public Long getId() {
-		return id;
-	}
+	@ManyToOne(optional = false)
+    private Realm realm;
+
+    public Long getId() {
+        return id;
+    }
 
 	public void setId(Long id) {
 		this.id = id;
@@ -69,8 +72,19 @@ public class VisualizationColors implements Serializable {
 		return Objects.hashCode(id);
 	}
 
-	@Override
-	public String toString() {
-		return "VisualizationColors{" + "id=" + id + ", code='" + code + "'" + '}';
-	}
+    @Override
+    public String toString() {
+        return "VisualizationColors{" +
+            "id=" + id +
+            ", code='" + code + "'" +
+            '}';
+    }
+
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public void setRealm(Realm realm) {
+        this.realm = realm;
+    }
 }

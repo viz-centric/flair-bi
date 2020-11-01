@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20200705183701" author="ir73">
+        <dropDefaultValue columnName="realm_id" tableName="jhi_user"/>
+        <dropDefaultValue columnName="user_group_id" tableName="user_group_permission"/>
+        <dropDefaultValue columnName="user_group_id" tableName="user_user_group"/>
+        <dropDefaultValue columnName="user_group_id" tableName="datasource_group_constraint"/>
+        <dropDefaultValue columnName="realm_id" tableName="dashboards"/>
+        <dropDefaultValue columnName="realm_id" tableName="datasources"/>
+        <dropDefaultValue columnName="realm_id" tableName="functions"/>
+        <dropDefaultValue columnName="realm_id" tableName="views"/>
+        <dropDefaultValue columnName="realm_id" tableName="client_logo"/>
+        <dropDefaultValue columnName="realm_id" tableName="visualization_colors"/>
+        <dropDefaultValue columnName="realm_id" tableName="permission_edge"/>
+        <dropDefaultValue columnName="realm_id" tableName="file_uploader_status"/>
+        <dropDefaultValue columnName="realm_id" tableName="field_types"/>
+    </changeSet>
+</databaseChangeLog>

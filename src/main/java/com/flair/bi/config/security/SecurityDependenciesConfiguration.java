@@ -1,8 +1,10 @@
 package com.flair.bi.config.security;
 
-import java.util.Collections;
-import java.util.Optional;
-
+import com.flair.bi.config.Constants;
+import com.flair.bi.domain.User;
+import com.flair.bi.security.okta.OktaUser;
+import com.flair.bi.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
@@ -12,13 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.User;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.security.okta.OktaUser;
-import com.flair.bi.service.UserService;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+import java.util.Optional;
 
 @Configuration
 @Slf4j
@@ -35,16 +32,15 @@ public class SecurityDependenciesConfiguration {
 	}
 
 	/**
-	 * @param userRepository user repository
 	 * @param userService    user service
 	 * @return principal extractor
 	 */
 	@Bean
-	public PrincipalExtractor principalExtractor(UserRepository userRepository, UserService userService) {
+	public PrincipalExtractor principalExtractor(UserService userService) {
 		return map -> {
 			final OktaUser oktaUser = OktaUser.from(map);
 			log.debug("Okta user: {}", oktaUser);
-			Optional<User> user = userRepository.findOneByLogin(oktaUser.getUsername());
+			Optional<User> user = userService.getUserByLogin(oktaUser.getUsername());
 			if (!user.isPresent()) {
 				userService.createUser(oktaUser.getUsername(), passwordEncoder().encode(RandomStringUtils.random(10)),
 						oktaUser.getFirstName(), oktaUser.getLastName(), oktaUser.getEmail(),

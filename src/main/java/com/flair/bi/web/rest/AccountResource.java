@@ -1,13 +1,20 @@
 package com.flair.bi.web.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.flair.bi.config.Constants;
+import com.flair.bi.domain.PersistentToken;
+import com.flair.bi.domain.User;
+import com.flair.bi.repository.PersistentTokenRepository;
+import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.MailService;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.dto.UserDTO;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import com.flair.bi.web.rest.vm.KeyAndPasswordVM;
+import com.flair.bi.web.rest.vm.ManagedUserVM;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,23 +30,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flair.bi.config.Constants;
-import com.flair.bi.domain.PersistentToken;
-import com.flair.bi.domain.User;
-import com.flair.bi.repository.PersistentTokenRepository;
-import com.flair.bi.repository.UserRepository;
-import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.security.SecurityUtils;
-import com.flair.bi.service.MailService;
-import com.flair.bi.service.UserService;
-import com.flair.bi.service.dto.UserDTO;
-import com.flair.bi.web.rest.util.HeaderUtil;
-import com.flair.bi.web.rest.vm.KeyAndPasswordVM;
-import com.flair.bi.web.rest.vm.ManagedUserVM;
-
-import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -49,8 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountResource {
-
-	private final UserRepository userRepository;
 
 	private final UserService userService;
 
@@ -73,9 +67,9 @@ public class AccountResource {
 		HttpHeaders textPlainHeaders = new HttpHeaders();
 		textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
 
-		return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
+		return userService.getUserByLogin(managedUserVM.getLogin().toLowerCase())
 				.map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
-				.orElseGet(() -> userRepository.findOneByEmail(managedUserVM.getEmail())
+				.orElseGet(() -> userService.getUserByEmail(managedUserVM.getEmail())
 						.map(user -> new ResponseEntity<>("e-mail address already in use", textPlainHeaders,
 								HttpStatus.BAD_REQUEST))
 						.orElseGet(() -> {
@@ -143,13 +137,13 @@ public class AccountResource {
 	@PostMapping("/account")
 	@Timed
 	public ResponseEntity<String> saveAccount(@Valid @RequestBody UserDTO userDTO) {
-		Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
+		Optional<User> existingUser = userService.getUserByEmail(userDTO.getEmail());
 		if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userDTO.getLogin()))) {
 			return ResponseEntity.badRequest()
 					.headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use"))
 					.body(null);
 		}
-		return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).map(u -> {
+		return userService.getUserByLogin(SecurityUtils.getCurrentUserLogin()).map(u -> {
 			userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
 					userDTO.getLangKey());
 			return new ResponseEntity<String>(HttpStatus.OK);
@@ -183,7 +177,7 @@ public class AccountResource {
 	@GetMapping("/account/sessions")
 	@Timed
 	public ResponseEntity<List<PersistentToken>> getCurrentSessions() {
-		return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
+		return userService.getUserByLogin(SecurityUtils.getCurrentUserLogin())
 				.map(user -> new ResponseEntity<>(persistentTokenRepository.findByUser(user), HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
 	}
@@ -209,7 +203,7 @@ public class AccountResource {
 	@Timed
 	public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
 		String decodedSeries = URLDecoder.decode(series, "UTF-8");
-		userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
+		userService.getUserByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
 			persistentTokenRepository.findByUser(u).stream()
 					.filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries)).findAny()
 					.ifPresent(t -> persistentTokenRepository.deleteById(decodedSeries));

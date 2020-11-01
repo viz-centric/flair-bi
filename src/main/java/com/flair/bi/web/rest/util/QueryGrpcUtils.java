@@ -1,16 +1,9 @@
 package com.flair.bi.web.rest.util;
 
-import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
+import com.flair.bi.service.UserService;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -29,13 +22,19 @@ import com.project.bi.query.expression.condition.impl.LikeConditionExpression;
 import com.project.bi.query.expression.condition.impl.NotContainsConditionExpression;
 import com.project.bi.query.expression.condition.impl.OrConditionExpression;
 import com.project.bi.query.expression.operations.Operation;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.flair.bi.web.rest.util.GrpcUtils.orEmpty;
 
 @Slf4j
 public final class QueryGrpcUtils {
 
-    public static Connection toProtoConnection(ConnectionDTO connection) {
+    public static Connection toProtoConnection(ConnectionDTO connection, UserService userService) {
         return Optional.ofNullable(connection)
                 .map(c -> {
                     Connection.Builder builder = Connection.newBuilder()
@@ -43,6 +42,7 @@ public final class QueryGrpcUtils {
                             .setConnectionUsername(c.getConnectionUsername())
                             .setConnectionType(c.getConnectionTypeId())
                             .setName(c.getName())
+                            .setRealmId(userService.getUserWithAuthoritiesByLoginOrError().getRealm().getId())
                             .putAllDetails(c.getDetails());
                     if (c.getConnectionParameters() != null) {
                         builder.putAllConnectionParameters(c.getConnectionParameters());

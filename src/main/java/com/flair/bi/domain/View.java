@@ -3,7 +3,11 @@ package com.flair.bi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.authorization.*;
+import com.flair.bi.authorization.DashboardGranteePermissionReport;
+import com.flair.bi.authorization.GranteePermissionReport;
+import com.flair.bi.authorization.PermissionGrantee;
+import com.flair.bi.authorization.PermissionReport;
+import com.flair.bi.authorization.SecuredEntity;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.viewwatch.ViewWatch;
 import lombok.EqualsAndHashCode;
@@ -111,6 +115,9 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
 
     @OneToMany(mappedBy = "view", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ViewFeatureCriteria> viewFeatureCriterias = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    private Realm realm;
 
     public View add(ViewRelease viewRelease) {
         viewRelease.setView(this);

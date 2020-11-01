@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20200624183700" author="sergeil">
+        <createTable tableName="realm">
+            <column type="bigint" name="id" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="user_group2">
+            <column type="bigint" name="id" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="realm_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="uk_user_group2_name_realm_id"
+                     tableName="user_group2"
+                     unique="true">
+            <column name="name" />
+            <column name="realm_id" />
+        </createIndex>
+
+        <createIndex indexName="idx_user_group2_realm_id"
+                     tableName="user_group2">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="jhi_user">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_jhi_user_realm_id"
+                     tableName="jhi_user">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="client_logo">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_client_logo_realm_id"
+                     tableName="client_logo">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="file_uploader_status">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_file_uploader_status_realm_id"
+                     tableName="file_uploader_status">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="permission_edge">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_permission_edge_realm_id"
+                     tableName="permission_edge">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="field_types">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_field_types_realm_id"
+                     tableName="field_types">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="datasource_group_constraint">
+            <column name="user_group_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_datasource_group_constraint_user_group_id"
+                     tableName="datasource_group_constraint">
+            <column name="user_group_id" />
+        </createIndex>
+
+        <addColumn tableName="user_group_permission">
+            <column name="user_group_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_user_group_permission_user_group_id"
+                     tableName="user_group_permission">
+            <column name="user_group_id" />
+        </createIndex>
+
+        <addColumn tableName="user_user_group">
+            <column name="user_group_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="dashboards">
+            <column name="realm_id" type="bigint" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_dashboards_realm_id"
+                     tableName="dashboards">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="datasources">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_datasources_realm_id"
+                     tableName="datasources">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="functions">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_functions_realm_id"
+                     tableName="functions">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="release_requests">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_release_requests_realm_id"
+                     tableName="release_requests">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="views">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_views_realm_id"
+                     tableName="views">
+            <column name="realm_id" />
+        </createIndex>
+
+        <addColumn tableName="visualization_colors">
+            <column name="realm_id" type="bigint"  defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="idx_visualization_colors_realm_id"
+                     tableName="visualization_colors">
+            <column name="realm_id" />
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -21,6 +21,7 @@ public class ViewFeatureCriteriaService {
 
     private final ViewService viewService;
 
+    @Transactional
     public Set<ViewFeatureCriteria> create(CreateViewFeatureCriteriaRequest request) {
         View view = viewService.findOne(request.getViewId());
 

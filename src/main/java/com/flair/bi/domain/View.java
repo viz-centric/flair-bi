@@ -138,8 +138,8 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
     }
 
     public View remove(ViewFeatureCriteria criteria){
-        criteria.setView(null);
         viewFeatureCriterias.remove(criteria);
+        criteria.setView(null);
         return this;
     }
 

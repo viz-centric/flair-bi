@@ -8,13 +8,16 @@
     favouriteFilterService.$inject = ['$http'];
 
     var favouriteFilter = false;
+    var pinFilter = false;
 
     function favouriteFilterService($http) {
         var service = {
             markFavouriteFilter: markFavouriteFilter,
             getFtavouriteFilter: getFtavouriteFilter,
             setFavouriteFilter: setFavouriteFilter,
-            getFavouriteFilter: getFavouriteFilter
+            getFavouriteFilter: getFavouriteFilter,
+            setPinFilter: setPinFilter,
+            getPinFilter: getPinFilter
         };
 
         return service;
@@ -40,6 +43,14 @@
 
         function getFavouriteFilter() {
             return favouriteFilter;
+        }
+
+        function setPinFilter(flag) {
+            pinFilter = flag
+        }
+
+        function getPinFilter() {
+            return pinFilter;
         }
     }
 })();

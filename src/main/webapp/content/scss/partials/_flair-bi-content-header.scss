@@ -392,7 +392,6 @@
        
     } 
     .dimensionFilter{
-        float: right;
         margin: 4px 5px;
         button{
             padding: 0px 5px;
@@ -407,6 +406,9 @@
             font-weight: bold;
             font-size: 12px;
             color: #33a2e5; 
+        }
+        .header-date-filter{
+            min-height: 280px;
         }
         div.filter{
             font-size: 12px;

@@ -2,15 +2,33 @@
     <div class="form-group" ng-repeat="dimension in vm.pinedDimensions">
         <div class="filter-section">
             <div ng-if="!vm.canDisplayDateRangeControls(dimension)">
-                <label class="dimension-label">{{dimension.name}}</label>
+                <!-- <label class="dimension-label">{{dimension.name}}</label>
                 <div class="dimensionFilter" ng-dropdown-multiselect="" options="vm.list[dimension.name]"
                     selected-model="vm.selectedFilter[dimension.name]" checkboxes="true" selectedToTop="true"
-                    extra-settings="vm.settingStyle"></div>
+                    extra-settings="vm.settingStyle"></div> -->
+
+                <div class="dropdown">
+                    <label class="dimension-label dropdown-toggle" type="button" data-toggle="collapse"
+                        data-target="#collapse-{{dimension.id}}" aria-expanded="false"
+                        aria-controls="collapse-{{dimension.id}}">
+                        {{dimension.name}}
+                        <span class="caret"></span>
+                    </label>
+                    <div class="dropdown-menu header-date-filter" id="collapse-{{dimension.id}}" style="width: 17vw;">
+                        <input class="form-control input-sm dimensionFilter" type="text"
+                            placeholder="Search for {{dimension.name}}" ng-model="vm.searchText"
+                            ng-change="vm.load(vm.searchText,dimension)" />
+                        <div class="dimensionFilter" ng-dropdown-multiselect="" options="vm.list[dimension.name]"
+                            selected-model="vm.selectedFilter[dimension.name]" checkboxes="true" selectedToTop="true"
+                            extra-settings="vm.settingStyle"></div>
+                    </div>
+                </div>
             </div>
             <div ng-if="vm.canDisplayDateRangeControls(dimension)">
                 <div class="dropdown">
-                    <label class="dimension-label dropdown-toggle" type="button" data-toggle="collapse" data-target="#collapse-{{dimension.id}}"
-                    aria-expanded="false" aria-controls="collapse-{{dimension.id}}">
+                    <label class="dimension-label dropdown-toggle" type="button" data-toggle="collapse"
+                        data-target="#collapse-{{dimension.id}}" aria-expanded="false"
+                        aria-controls="collapse-{{dimension.id}}">
                         {{dimension.name}}
                         <span class="caret"></span>
                     </label>

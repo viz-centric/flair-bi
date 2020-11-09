@@ -268,6 +268,7 @@
                     addQueryConstraints(query, q, dimension);
                 }
                 favouriteFilterService.setFavouriteFilter(isFavouriteFilter());
+                favouriteFilterService.setPinFilter(false);
                 proxyGrpcService.forwardCall(
                     vm.view.viewDashboard.dashboardDatasource.id, {
                     queryDTO: query,

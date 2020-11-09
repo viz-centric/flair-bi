@@ -834,8 +834,8 @@ tagsInputGrpc.directive('autoCompleteGrpc', ["$document", "$timeout", "$sce", "$
             function receivedMetaData(){
                 var unsubscribe = scope.$on(
                     "flairbiApp:filters-meta-Data",
-                    function(event,metaData,isFavouriteFilter) {
-                        if(!isFavouriteFilter){
+                    function(event,metaData,isFavouriteFilter,isPinFilter) {
+                        if((!isFavouriteFilter || isPinFilter) && (isFavouriteFilter || !isPinFilter)){
                             var obj = metaData[0];
                             var dimensionName = '';
                             for(var i in obj){

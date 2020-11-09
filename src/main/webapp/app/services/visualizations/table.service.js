@@ -62,8 +62,7 @@
                     result["iconExpressionForMeasure"] = [];
 
                     result['limit'] = VisualizationUtils.getPropertyValue(record.properties, 'Limit');
-
-
+                    result['dataGrouping'] = VisualizationUtils.getPropertyValue(record.properties, 'Data Grouping');
                     for (var i = 0; i < result.maxDim; i++) {
                         result['displayNameForDimension'].push(
                             VisualizationUtils.getFieldPropertyValue(dimensions[i], 'Display name') ||
@@ -103,25 +102,33 @@
 
                 function createChart() {
                     $(element[0]).html('')
-                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;text-align:center;position:relative" id="table-' + element[0].id + '" ></div>')
-                    var div = $('#table-' + element[0].id)
-
-                    var table = flairVisualizations.table()
-                        .config(config)
-                        .broadcast($rootScope)
-                        .filterParameters(filterParametersService)
-                        .print(isNotification == true ? true : false)
-                        .notification(isNotification == true ? true : false)
-                        .data(record.data);
-
+                    $(element[0]).append('<div height="' + element[0].clientHeight + '" width="' + element[0].clientWidth + '" style="width:' + element[0].clientWidth + 'px; height:' + element[0].clientHeight + 'px;overflow:hidden;position:relative" id="table-' + element[0].id + '" ></div>')
+                    var div = $('#table-' + element[0].id);
+                    var table
+                    if (config["dataGrouping"]) {
+                        table = flairVisualizations.multilevelgrouping()
+                            .config(config)
+                            .broadcast($rootScope)
+                            .filterParameters(filterParametersService)
+                            .print(isNotification == true ? true : false)
+                            .notification(isNotification == true ? true : false)
+                            .data(record.data);
+                    } else {
+                        table = flairVisualizations.table()
+                            .config(config)
+                            .broadcast($rootScope)
+                            .filterParameters(filterParametersService)
+                            .print(isNotification == true ? true : false)
+                            .notification(isNotification == true ? true : false)
+                            .data(record.data);
+                    }
                     table(div[0])
 
                     return table;
                 }
-                 if (isNotification || isIframe) {
+                if (isNotification || isIframe) {
                     createChart();
-                }
-                else {
+                } else {
                     if (Object.keys($rootScope.updateWidget).indexOf(record.id) != -1) {
                         if ($rootScope.filterSelection.id != record.id) {
 

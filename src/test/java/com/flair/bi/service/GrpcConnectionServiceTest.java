@@ -1,29 +1,10 @@
 package com.flair.bi.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
 import com.flair.bi.messages.Connection;
-import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionType;
 import com.flair.bi.messages.ConnectionTypesResponses;
 import com.flair.bi.messages.DeleteConnectionResponse;
+import com.flair.bi.messages.GetAllConnectionsResponse;
 import com.flair.bi.messages.GetConnectionResponse;
 import com.flair.bi.messages.ListTablesResponse;
 import com.flair.bi.messages.SaveConnectionResponse;
@@ -35,6 +16,24 @@ import com.flair.bi.service.dto.TestConnectionResultDTO;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
@@ -43,11 +42,14 @@ public class GrpcConnectionServiceTest {
     @Mock
     IEngineGrpcService grpcService;
 
+    @Mock
+    UserService userService;
+
     private GrpcConnectionService service;
 
     @Before
     public void setUp() throws Exception {
-        service = new GrpcConnectionService(grpcService);
+        service = new GrpcConnectionService(grpcService, userService);
     }
 
     @Test
@@ -88,12 +90,12 @@ public class GrpcConnectionServiceTest {
 
     @Test
     public void getAllConnections() {
-        ConnectionResponses connectionResponses = ConnectionResponses.newBuilder()
+        GetAllConnectionsResponse connectionResponses = GetAllConnectionsResponse.newBuilder()
                 .addConnection(Connection.newBuilder().setConnectionPassword("pass").setConnectionType(1L)
                         .setConnectionUsername("user").putAllDetails(ImmutableMap.of("one", "two", "three", "four"))
                         .setId(7L).setLinkId("linkid").setName("nm").build())
                 .build();
-        when(grpcService.getAllConnections()).thenReturn(connectionResponses);
+        when(grpcService.getAllConnections(any(), any(), any())).thenReturn(connectionResponses);
         List<ConnectionDTO> connections = service.getAllConnections(new ConnectionFilterParamsDTO());
 
         assertEquals(1, connections.size());
@@ -108,7 +110,7 @@ public class GrpcConnectionServiceTest {
 
     @Test
     public void getAllConnectionsWithParameters() {
-        ConnectionResponses connectionResponses = ConnectionResponses.newBuilder()
+        GetAllConnectionsResponse connectionResponses = GetAllConnectionsResponse.newBuilder()
                 .addConnection(Connection.newBuilder().setConnectionPassword("pass").setConnectionType(1L)
                         .setConnectionUsername("user").putAllDetails(ImmutableMap.of("one", "two", "three", "four"))
                         .setId(7L).setLinkId("linkid").setName("nm").build())
@@ -116,7 +118,7 @@ public class GrpcConnectionServiceTest {
                         .setConnectionUsername("user2").putAllDetails(ImmutableMap.of("one", "two2", "three", "four2"))
                         .setId(8L).setLinkId("linkid2").setName("nm2").build())
                 .build();
-        when(grpcService.getAllConnections()).thenReturn(connectionResponses);
+        when(grpcService.getAllConnections(any(), any(), any())).thenReturn(connectionResponses);
         List<ConnectionDTO> connections = service
                 .getAllConnections(new ConnectionFilterParamsDTO().setLinkId("linkid2").setConnectionType(2L));
 

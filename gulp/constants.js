@@ -8,6 +8,7 @@ var sharedConstants = {
             VIEW: "VIEW"
         },
         ROLES: {
+            ROLE_SUPERADMIN: "ROLE_SUPERADMIN",
             ROLE_ADMIN: "ROLE_ADMIN",
             ROLE_DEVELOPMENT: "ROLE_DEVELOPMENT",
             ROLE_USER: "ROLE_USER"

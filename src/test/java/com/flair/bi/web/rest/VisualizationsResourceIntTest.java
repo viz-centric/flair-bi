@@ -1,14 +1,13 @@
 package com.flair.bi.web.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.Visualization;
+import com.flair.bi.domain.enumeration.Constraint;
+import com.flair.bi.domain.enumeration.FeatureType;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.service.VisualizationService;
+import com.flair.bi.service.dto.IdentifierDTO;
+import com.flair.bi.service.dto.VisualizationDTO;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,13 +17,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.Visualization;
-import com.flair.bi.domain.enumeration.Constraint;
-import com.flair.bi.domain.enumeration.FeatureType;
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.service.VisualizationService;
-import com.flair.bi.service.dto.IdentifierDTO;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Ignore
 public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
@@ -38,7 +38,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setFunctionname("func name");
 		visualization.setName("vis name");
 
-		Visualization visualization1 = new Visualization();
+		VisualizationDTO visualization1 = new VisualizationDTO();
 		visualization1.setFunctionname("func name");
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
@@ -75,7 +75,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setFunctionname("func name");
 		visualization.setName("vis name");
 
-		Visualization visualization1 = new Visualization();
+		VisualizationDTO visualization1 = new VisualizationDTO();
 		visualization1.setFunctionname("func name");
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
@@ -98,7 +98,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		visualization.setName("vis name");
 		visualization.setId(7L);
 
-		Visualization visualization1 = new Visualization();
+		VisualizationDTO visualization1 = new VisualizationDTO();
 		visualization1.setFunctionname("func name");
 		visualization1.setName("vis name");
 		visualization1.setId(7L);
@@ -116,7 +116,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 	@Test
 	public void getAllVisualizations() {
-		Visualization visualization = new Visualization();
+		VisualizationDTO visualization = new VisualizationDTO();
 		visualization.setId(10L);
 		visualization.setName("vis name");
 		visualization.setFunctionname("func name");
@@ -135,7 +135,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 	@Test
 	public void getVisualizations() {
-		Visualization visualization = new Visualization();
+		VisualizationDTO visualization = new VisualizationDTO();
 		visualization.setId(10L);
 		visualization.setFunctionname("func name");
 		visualization.setName("vis name");
@@ -195,7 +195,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 		when(visualizationService.getFieldType(eq(10L), eq(11L))).thenReturn(fieldType);
 
-		Visualization visualization = new Visualization();
+		VisualizationDTO visualization = new VisualizationDTO();
 		visualization.setId(10L);
 		visualization.setCustomId(9);
 		visualization.setName("vis name");
@@ -230,7 +230,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 		IdentifierDTO<Long> dto = new IdentifierDTO<>();
 		dto.setId(27L);
 
-		Visualization t = new Visualization();
+		VisualizationDTO t = new VisualizationDTO();
 		t.setId(18L);
 		when(visualizationService.assignPropertyType(eq(10L), eq(27L))).thenReturn(t);
 
@@ -244,7 +244,7 @@ public class VisualizationsResourceIntTest extends AbstractIntegrationTest {
 
 	@Test
 	public void removePropertyType() {
-		Visualization t = new Visualization();
+		VisualizationDTO t = new VisualizationDTO();
 		t.setId(18L);
 		when(visualizationService.removePropertyType(eq(10L), eq(18L))).thenReturn(t);
 

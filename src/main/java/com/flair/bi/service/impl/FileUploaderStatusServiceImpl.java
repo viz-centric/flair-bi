@@ -1,18 +1,22 @@
 package com.flair.bi.service.impl;
 
+import com.flair.bi.domain.FileUploaderStatus;
+import com.flair.bi.domain.QFileUploaderStatus;
+import com.flair.bi.domain.User;
+import com.flair.bi.repository.FileUploaderStatusRepository;
+import com.flair.bi.service.FileUploaderStatusService;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.dto.FileUploaderStatusDTO;
+import com.flair.bi.service.mapper.FileUploaderStatusMapper;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.domain.FileUploaderStatus;
-import com.flair.bi.repository.FileUploaderStatusRepository;
-import com.flair.bi.service.FileUploaderStatusService;
-import com.flair.bi.service.dto.FileUploaderStatusDTO;
-import com.flair.bi.service.mapper.FileUploaderStatusMapper;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Objects;
 
 /**
  * Service Implementation for managing FileUploaderStatus.
@@ -27,6 +31,8 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 
 	private final FileUploaderStatusMapper fileUploaderStatusMapper;
 
+	private final UserService userService;
+
 	/**
 	 * Save a fileUploaderStatus.
 	 *
@@ -35,12 +41,19 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 	 */
 	public FileUploaderStatusDTO save(FileUploaderStatusDTO fileUploaderStatusDTO) {
 		log.debug("Request to save FileUploaderStatus : {}", fileUploaderStatusDTO);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		FileUploaderStatus fileUploaderStatus = fileUploaderStatusMapper
 				.fileUploaderStatusDTOToFileUploaderStatus(fileUploaderStatusDTO);
+		if (fileUploaderStatus.getRealm() == null) {
+			fileUploaderStatus.setRealm(user.getRealm());
+		} else {
+			if (!Objects.equals(fileUploaderStatus.getRealm().getId(), user.getRealm().getId())) {
+				throw new IllegalStateException("Cannot save file uploader status with realm " + fileUploaderStatus.getRealm().getId());
+			}
+		}
 		fileUploaderStatus = fileUploaderStatusRepository.save(fileUploaderStatus);
-		FileUploaderStatusDTO result = fileUploaderStatusMapper
+		return fileUploaderStatusMapper
 				.fileUploaderStatusToFileUploaderStatusDTO(fileUploaderStatus);
-		return result;
 	}
 
 	/**
@@ -52,7 +65,7 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 	@Transactional(readOnly = true)
 	public Page<FileUploaderStatusDTO> findAll(Pageable pageable) {
 		log.debug("Request to get all FileUploaderStatuses");
-		Page<FileUploaderStatus> result = fileUploaderStatusRepository.findAll(pageable);
+		Page<FileUploaderStatus> result = fileUploaderStatusRepository.findAll(hasRealmPermissions(), pageable);
 		return result.map(fileUploaderStatus -> fileUploaderStatusMapper
 				.fileUploaderStatusToFileUploaderStatusDTO(fileUploaderStatus));
 	}
@@ -66,10 +79,10 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 	@Transactional(readOnly = true)
 	public FileUploaderStatusDTO findOne(Long id) {
 		log.debug("Request to get FileUploaderStatus : {}", id);
-		FileUploaderStatus fileUploaderStatus = fileUploaderStatusRepository.getOne(id);
-		FileUploaderStatusDTO fileUploaderStatusDTO = fileUploaderStatusMapper
+		FileUploaderStatus fileUploaderStatus = fileUploaderStatusRepository.findOne(hasRealmPermissions().and(QFileUploaderStatus.fileUploaderStatus.id.eq(id)))
+				.orElseThrow();
+		return fileUploaderStatusMapper
 				.fileUploaderStatusToFileUploaderStatusDTO(fileUploaderStatus);
-		return fileUploaderStatusDTO;
 	}
 
 	/**
@@ -79,6 +92,12 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete FileUploaderStatus : {}", id);
-		fileUploaderStatusRepository.deleteById(id);
+		FileUploaderStatusDTO statusDTO = findOne(id);
+		fileUploaderStatusRepository.deleteById(statusDTO.getId());
+	}
+
+	private BooleanExpression hasRealmPermissions() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QFileUploaderStatus.fileUploaderStatus.realm.id.eq(user.getRealm().getId());
 	}
 }

@@ -1,15 +1,14 @@
 package com.flair.bi.security;
 
-import java.util.EnumSet;
-import java.util.Map;
-
+import com.flair.bi.security.okta.OktaUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
-import com.flair.bi.security.okta.OktaUser;
+import java.util.EnumSet;
+import java.util.Map;
 
 /**
  * Utility class for Spring Security.
@@ -17,7 +16,7 @@ import com.flair.bi.security.okta.OktaUser;
 public final class SecurityUtils {
 
 	public enum roles {
-		ROLE_ADMIN, ROLE_USER, ROLE_DEVELOPMENT
+		ROLE_SUPERADMIN, ROLE_ADMIN, ROLE_USER, ROLE_DEVELOPMENT
 	}
 
 	/**
@@ -77,7 +76,7 @@ public final class SecurityUtils {
 	}
 
 	public static EnumSet<roles> getPredefinedGroups() {
-		return EnumSet.of(roles.ROLE_ADMIN, roles.ROLE_DEVELOPMENT, roles.ROLE_USER);
+		return EnumSet.of(roles.ROLE_SUPERADMIN, roles.ROLE_ADMIN, roles.ROLE_DEVELOPMENT, roles.ROLE_USER);
 	}
 
 }

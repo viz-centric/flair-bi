@@ -8,7 +8,6 @@ import com.flair.bi.domain.field.Field;
 import com.flair.bi.domain.hierarchy.Hierarchy;
 import com.flair.bi.domain.hierarchy.QHierarchy;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.DashboardRepository;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.view.VisualMetadataService;
 import com.flair.bi.view.export.ViewExportDTO;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +27,7 @@ import java.util.Set;
 @Service
 public class ViewExportImportService {
 
-    private final DashboardRepository dashboardRepository;
+    private final DashboardService dashboardService;
     private final ViewService viewService;
     private final VisualMetadataService visualMetadataService;
     private final FeatureService featureService;
@@ -38,7 +36,7 @@ public class ViewExportImportService {
     @Transactional(rollbackFor = Exception.class)
     public ViewImportResult importView(Long dashboardId, ViewExportDTO viewExportDTO) throws ViewExportImportException {
         log.debug("Importing dashboard {} view {}", dashboardId, viewExportDTO);
-        final Dashboard dashboard = dashboardRepository.findById(dashboardId).orElseThrow(EntityNotFoundException::new);
+        final Dashboard dashboard = dashboardService.findOne(dashboardId);
 
         viewExportDTO.getEditState().setId(null);
         viewExportDTO.getEditState().setRevision(null);

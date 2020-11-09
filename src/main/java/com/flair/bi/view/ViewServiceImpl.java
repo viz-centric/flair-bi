@@ -10,13 +10,14 @@ import com.flair.bi.domain.ViewState;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.ViewRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.BookMarkWatchService;
+import com.flair.bi.service.UserService;
 import com.flair.bi.service.ViewWatchService;
 import com.flair.bi.view.export.ViewExportDTO;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
+import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -53,7 +55,7 @@ class ViewServiceImpl implements ViewService {
 
 	private final ViewRepository viewRepository;
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
 
@@ -78,7 +80,7 @@ class ViewServiceImpl implements ViewService {
 		View view = views;
 
 		if (!create) {
-			view = viewRepository.getOne(views.getId());
+			view = findById(views.getId());
 			view.setDescription(views.getDescription());
 			// view.setImage(views.getImage());
 			view.setImageContentType(views.getImageContentType());
@@ -97,6 +99,10 @@ class ViewServiceImpl implements ViewService {
 			view.setViewName(views.getViewName());
 			view.setViewDashboard(views.getViewDashboard());
 		} else {
+
+			User user = userService.getUserWithAuthoritiesByLoginOrError();
+			view.setRealm(user.getRealm());
+
 			// we temporary set the invalid id, because first we want to make sure that
 			// saving into couchdb was successfull
 			// and then fully commit on postgres.
@@ -118,7 +124,8 @@ class ViewServiceImpl implements ViewService {
 					x.getAction().equals(Action.READ) || x.getAction().equals(Action.REQUEST_PUBLISH)
 							|| x.getAction().equals(Action.MANAGE_PUBLISH)
 							|| x.getAction().equals(Action.READ_PUBLISHED),
-					true));
+					true,
+					vw.getRealm()));
 
 			ViewState viewState = new ViewState();
 			viewStateCouchDbRepository.add(viewState);
@@ -157,26 +164,29 @@ class ViewServiceImpl implements ViewService {
 	@Transactional(readOnly = true)
 	public List<View> findAll() {
 		log.debug("Request to get all View");
-		return viewRepository.findAll();
+		return ImmutableList.copyOf(
+				viewRepository.findAll(hasUserRealmAccess())
+		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<View> findAllByPrincipalPermissions(Predicate predicate) {
 		log.debug("Request to get all View");
-		return (List<View>) viewRepository.findAll(userHasPermission().and(predicate));
+		return ImmutableList.copyOf(
+				viewRepository.findAll(userHasPermission().and(predicate).and(hasUserRealmAccess()))
+		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<View> findAllByPrincipalPermissions(Predicate predicate, Pageable pageable) {
 		log.debug("Request to get paginated View");
-		return viewRepository.findAll(userHasPermission().and(predicate), pageable);
+		return viewRepository.findAll(userHasPermission().and(predicate).and(hasUserRealmAccess()), pageable);
 	}
 
 	private BooleanExpression userHasPermission() {
-		final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-		final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
+		final User user = userService.getUserWithAuthoritiesByLoginOrError();
 		// retrieve all view permissions that we have 'READ' permission or
 		// 'READ_PUBLISHED'
 		final Set<Permission> permissions = user
@@ -188,7 +198,7 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	@Transactional(readOnly = true)
 	public Long countByPrincipalPermissions() {
-		return viewRepository.count(userHasPermission());
+		return viewRepository.count(userHasPermission().and(hasUserRealmAccess()));
 	}
 
 	@Override
@@ -198,7 +208,7 @@ class ViewServiceImpl implements ViewService {
 		final Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
 		final PageRequest pageRequest = PageRequest.of(0, 5, sort);
 
-		return viewRepository.findAll(createdBy.and(userHasPermission()), pageRequest).getContent();
+		return viewRepository.findAll(createdBy.and(userHasPermission().and(hasUserRealmAccess())), pageRequest).getContent();
 	}
 
 	@Override
@@ -206,7 +216,7 @@ class ViewServiceImpl implements ViewService {
 	public List<View> mostPopular() {
 		final Sort sort = Sort.by(Sort.Direction.DESC, "watchCount");
 		final PageRequest pageRequest = PageRequest.of(0, 5, sort);
-		return viewRepository.findAll(userHasPermission(), pageRequest).getContent();
+		return viewRepository.findAll(userHasPermission().and(hasUserRealmAccess()), pageRequest).getContent();
 	}
 
 	/**
@@ -216,12 +226,16 @@ class ViewServiceImpl implements ViewService {
 	 * @return the entity
 	 */
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public View findOne(Long id) {
 		log.debug("Request to get View : {}", id);
-		View view = viewRepository.getOne(id);
+		View view = findById(id);
 		viewWatchService.saveViewWatch(SecurityUtils.getCurrentUserLogin(), view);
 		return view;
+	}
+
+	private View findById(Long id) {
+		return viewRepository.findOne(hasUserRealmAccess().and(QView.view.id.eq(id))).orElseThrow();
 	}
 
 	/**
@@ -233,7 +247,7 @@ class ViewServiceImpl implements ViewService {
 	public void delete(Long id) {
 		log.debug("Request to delete View : {}", id);
 		try {
-			final View view = viewRepository.getOne(id);
+			final View view = findById(id);
 			if (view.isPublished() && !accessControlManager.hasAccess(id.toString(), Action.DELETE_PUBLISHED, "VIEW")) {
 				throw new AccessDeniedException("User does not have a priviledge");
 			}
@@ -260,7 +274,9 @@ class ViewServiceImpl implements ViewService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<View> findByDashboardId(Long dashboardId) {
-		return viewRepository.findByDashboardId(dashboardId).collect(Collectors.toList());
+		return ImmutableList.copyOf(
+				viewRepository.findAll(hasUserRealmAccess().and(QView.view.viewDashboard.id.eq(dashboardId)))
+		);
 	}
 
 	/**
@@ -271,7 +287,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewState getCurrentEditingViewState(Long viewId) {
-		final View view = viewRepository.getOne(viewId);
+		final View view = findById(viewId);
 
 		return viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
 	}
@@ -285,13 +301,18 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewState saveViewState(Long viewId, ViewState viewState) {
-		final View view = viewRepository.getOne(viewId);
+		final View view = findById(viewId);
 
 		final ViewState vs = viewStateCouchDbRepository.get(view.getCurrentEditingState().getId());
 		if (null == viewState || vs.isReadOnly()) {
 			throw new EntityNotFoundException("View state not found");
 		}
 
+		if (view.getCurrentEditingState() != null && view.getCurrentEditingState().getId() != null) {
+			if (!Objects.equals(view.getCurrentEditingState().getId(), vs.getId())) {
+				throw new IllegalStateException("Cannot save view state " + vs.getId() + " for view " + viewId);
+			}
+		}
 		view.setCurrentEditingState(vs);
 
 		viewState.getVisualMetadataSet().stream().filter(x -> x.getId() == null).forEach(x -> x.setId(
@@ -312,7 +333,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewRelease getCurrentViewStateRelease(Long viewId) {
-		View view = viewRepository.getOne(viewId);
+		View view = findById(viewId);
 
 		if (view.getCurrentRelease() == null) {
 			return null;
@@ -332,7 +353,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public ViewRelease getReleaseViewStateByVersion(Long viewId, Long version) {
-		View view = viewRepository.getOne(viewId);
+		View view = findById(viewId);
 
 		if (view.getCurrentRelease() != null && view.getCurrentRelease().getVersionNumber().equals(version)) {
 			ViewState state = viewStateCouchDbRepository.get(view.getCurrentRelease().getViewState().getId());
@@ -355,7 +376,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public List<ViewRelease> getViewReleases(Long viewId) {
-		return viewRepository.findById(viewId).map(View::getReleases).map(ArrayList::new).orElse(new ArrayList<>());
+		return new ArrayList<>(findById(viewId).getReleases());
 	}
 
 	/**
@@ -373,7 +394,7 @@ class ViewServiceImpl implements ViewService {
 			throw new IllegalArgumentException("Must be approved");
 		}
 
-		View view = viewRepository.getOne(id);
+		View view = findById(id);
 		view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
 
 		// load view state
@@ -414,7 +435,7 @@ class ViewServiceImpl implements ViewService {
 	 */
 	@Override
 	public View changeCurrentRelease(Long id, Long version) {
-		return viewRepository.findById(id).map(x -> {
+		return Optional.ofNullable(findById(id)).map(x -> {
 			ViewRelease viewRelease = x.getReleases().stream()
 					.filter(y -> y.getReleaseStatus().equals(Release.Status.APPROVED))
 					.filter(y -> y.getVersionNumber().equals(version)).findFirst().orElse(null);
@@ -452,16 +473,32 @@ class ViewServiceImpl implements ViewService {
 
 	@Override
 	public View findByDashboardIdAndViewName(Long id, String viewName) {
-		return viewRepository.findByDashboardIdAndViewName(id, viewName);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return viewRepository.findByDashboardIdAndViewNameAndRealmId(id, viewName, user.getRealm().getId());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public ViewExportDTO exportView(Long id) {
-		return viewRepository.findById(id).map(view -> {
+		return Optional.ofNullable(findById(id)).map(view -> {
 			view.setCurrentEditingState(viewStateCouchDbRepository.get(view.getCurrentEditingState().getId()));
 			return ViewExportDTO.from(view);
 		}).orElse(null);
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public Optional<View> findViewCurrentEditingStateId(String viewStateId) {
+		return viewRepository.findOne(QView.view.currentEditingState.id.eq(viewStateId).and(hasUserRealmAccess()));
+	}
+
+	@Override
+	public void deleteAllByRealmId(Long realmId) {
+		viewRepository.deleteAllByRealmId(realmId);
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QView.view.realm.id.eq(user.getRealm().getId());
+	}
 }

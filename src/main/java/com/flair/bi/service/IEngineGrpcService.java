@@ -1,9 +1,9 @@
 package com.flair.bi.service;
 
 import com.flair.bi.messages.Connection;
-import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionTypesResponses;
 import com.flair.bi.messages.DeleteConnectionResponse;
+import com.flair.bi.messages.GetAllConnectionsResponse;
 import com.flair.bi.messages.GetConnectionResponse;
 import com.flair.bi.messages.ListTablesResponse;
 import com.flair.bi.messages.Query;
@@ -14,7 +14,6 @@ import com.flair.bi.messages.RunQueryResponse;
 import com.flair.bi.messages.SaveConnectionResponse;
 import com.flair.bi.messages.TestConnectionResponse;
 import com.flair.bi.messages.UpdateConnectionResponse;
-
 import io.grpc.stub.StreamObserver;
 
 public interface IEngineGrpcService {
@@ -22,7 +21,7 @@ public interface IEngineGrpcService {
 
 	StreamObserver<Query> getDataStream(StreamObserver<QueryResponse> responseObserver);
 
-	ConnectionResponses getAllConnections();
+	GetAllConnectionsResponse getAllConnections(Long realmId, String linkId, Long connectionType);
 
 	RunQueryResponse runQuery(Query query, boolean metaRetrieved);
 

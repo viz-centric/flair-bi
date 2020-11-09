@@ -1,22 +1,19 @@
 package com.flair.bi.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.flair.bi.domain.Feature;
+import com.flair.bi.domain.FeatureBookmark;
+import com.flair.bi.domain.FeatureCriteria;
+import com.flair.bi.domain.User;
+import com.flair.bi.repository.FeatureCriteriaRepository;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.domain.FeatureBookmark;
-import com.flair.bi.domain.FeatureCriteria;
-import com.flair.bi.domain.QFeatureCriteria;
-import com.flair.bi.repository.FeatureBookmarkRepository;
-import com.flair.bi.repository.FeatureCriteriaRepository;
-import com.flair.bi.security.SecurityUtils;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing FeatureCriteria.
@@ -29,7 +26,9 @@ public class FeatureCriteriaService {
 
 	private final FeatureCriteriaRepository featureCriteriaRepository;
 
-	private final FeatureBookmarkRepository featureBookmarkRepository;
+	private final FeatureBookmarkService featureBookmarkService;
+	private final FeatureService featureService;
+	private final UserService userService;
 
 	/**
 	 * Save a featureCriteria.
@@ -43,15 +42,29 @@ public class FeatureCriteriaService {
 		boolean create = featureCriteria.getId() == null;
 
 		if (create) {
-			FeatureBookmark featureBookmark = featureBookmarkRepository
-					.getOne(featureCriteria.getFeatureBookmark().getId());
+			FeatureBookmark featureBookmark = featureBookmarkService
+					.findOne(featureCriteria.getFeatureBookmark().getId());
 			featureBookmark.addFeatureCriteria(featureCriteria);
+			validatePermissions(featureCriteria);
 			return featureCriteriaRepository.save(featureCriteria);
 		} else {
 			FeatureCriteria featureCrit = featureCriteriaRepository.getOne(featureCriteria.getId());
 			featureCrit.setFeature(featureCrit.getFeature());
 			featureCrit.setValue(featureCrit.getValue());
+			validatePermissions(featureCrit);
 			return featureCriteriaRepository.save(featureCrit);
+		}
+	}
+
+	private void validatePermissions(FeatureCriteria featureCriteria) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		Feature feature = featureService.getOne(featureCriteria.getFeature().getId());
+		FeatureBookmark featureBookmark = featureBookmarkService.findOne(featureCriteria.getFeatureBookmark().getId());
+		if (!Objects.equals(feature.getDatasource().getRealm().getId(), user.getRealm().getId())) {
+			throw new IllegalStateException("Cannot save feature criteria because datasource does not belong to this realm " + feature.getDatasource().getRealm().getId());
+		}
+		if (!Objects.equals(featureBookmark.getUser().getRealm().getId(), user.getRealm().getId())) {
+			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + featureBookmark.getUser().getRealm().getId());
 		}
 	}
 
@@ -65,13 +78,14 @@ public class FeatureCriteriaService {
 	public List<FeatureCriteria> findAll(Predicate predicate) {
 		log.debug("Request to get all FeatureCriteria");
 
-		BooleanExpression pred = QFeatureCriteria.featureCriteria.featureBookmark.user.login
-				.eq(SecurityUtils.getCurrentUserLogin());
-		if (predicate != null) {
-			pred = pred.and(predicate);
-		}
+		return filterByRealm((List<FeatureCriteria>) featureCriteriaRepository.findAll(predicate));
+	}
 
-		return (List<FeatureCriteria>) featureCriteriaRepository.findAll(pred);
+	private List<FeatureCriteria> filterByRealm(List<FeatureCriteria> all) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return all.stream()
+				.filter(fc -> Objects.equals(fc.getFeature().getDatasource().getRealm().getId(), user.getRealm().getId()))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -83,7 +97,13 @@ public class FeatureCriteriaService {
 	@Transactional(readOnly = true)
 	public FeatureCriteria findOne(Long id) {
 		log.debug("Request to get FeatureCriteria : {}", id);
-		return featureCriteriaRepository.getOne(id);
+		FeatureCriteria result = featureCriteriaRepository.getOne(id);
+
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		if (!Objects.equals(result.getFeature().getDatasource().getRealm().getId(), user.getRealm().getId())) {
+			throw new IllegalStateException("Cannot access feature criteria for realm " + result.getFeature().getDatasource().getRealm().getId());
+		}
+		return result;
 	}
 
 	/**
@@ -93,16 +113,13 @@ public class FeatureCriteriaService {
 	 */
 	public void delete(Long id) {
 		log.debug("Request to delete FeatureCriteria : {}", id);
-		Optional<FeatureCriteria> featureCriteria = featureCriteriaRepository.findById(id);
+		FeatureCriteria featureCriteria = findOne(id);
 
-		featureCriteria.ifPresent(x -> {
-			Optional<FeatureBookmark> featureBookmark = featureBookmarkRepository
-					.findById(x.getFeatureBookmark().getId());
-			featureBookmark.ifPresent(y -> {
-				y.removeFeatureCriteria(x);
-				featureBookmarkRepository.save(y);
-			});
-
-		});
+		FeatureBookmark featureBookmark = featureBookmarkService
+				.findOne(featureCriteria.getFeatureBookmark().getId());
+		if (featureBookmark != null) {
+			featureBookmark.removeFeatureCriteria(featureCriteria);
+			featureBookmarkService.save(featureBookmark);
+		}
 	}
 }

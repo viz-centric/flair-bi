@@ -1,8 +1,14 @@
 package com.flair.bi.domain.fieldtype;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flair.bi.domain.AbstractAuditingEntity;
+import com.flair.bi.domain.Realm;
+import com.flair.bi.domain.Visualization;
+import com.flair.bi.domain.enumeration.Constraint;
+import com.flair.bi.domain.enumeration.FeatureType;
+import com.flair.bi.domain.field.Field;
+import com.flair.bi.domain.propertytype.PropertyType;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,16 +26,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flair.bi.domain.AbstractAuditingEntity;
-import com.flair.bi.domain.Visualization;
-import com.flair.bi.domain.enumeration.Constraint;
-import com.flair.bi.domain.enumeration.FeatureType;
-import com.flair.bi.domain.field.Field;
-import com.flair.bi.domain.propertytype.PropertyType;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "field_types")
@@ -67,6 +66,9 @@ public class FieldType extends AbstractAuditingEntity implements Serializable {
 	@Column(name = "feature_type", length = 255)
 	@NotNull
 	private FeatureType featureType;
+
+	@ManyToOne(optional = false)
+	private Realm realm;
 
 	public FieldType addPropertyType(PropertyType propertyType) {
 		final FieldTypePropertyType newPropertyType = new FieldTypePropertyType();
@@ -171,5 +173,13 @@ public class FieldType extends AbstractAuditingEntity implements Serializable {
 		}
 
 		return hashcodeValue;
+	}
+
+	public Realm getRealm() {
+		return realm;
+	}
+
+	public void setRealm(Realm realm) {
+		this.realm = realm;
 	}
 }

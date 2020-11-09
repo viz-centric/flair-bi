@@ -1,17 +1,17 @@
 package com.flair.bi.authorization;
 
 import com.flair.bi.FlairbiApp;
+import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
+import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.UserResourceIntTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,9 +40,7 @@ import java.util.List;
 public class AccessControlManagerImplTest {
 
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserGroupRepository userGroupRepository;
+    UserGroupService userGroupService;
     @Autowired
     PermissionRepository permissionRepository;
     @Autowired
@@ -61,7 +59,7 @@ public class AccessControlManagerImplTest {
 
     @Before
     public void setup() {
-        accessControlManager = new AccessControlManagerImpl(userRepository, userGroupRepository, permissionRepository,
+        accessControlManager = new AccessControlManagerImpl(userService, userGroupService, permissionRepository,
                 permissionEdgeRepository);
     }
 
@@ -80,14 +78,13 @@ public class AccessControlManagerImplTest {
 
     }
 
-    @Test
     public void hasAccessNoPermissionReturnsFalseTest() {
 
         // create user
         User user = UserResourceIntTest.createEntity(userService);
 
         Permission a = new Permission("a", Action.READ, "a");
-        accessControlManager.addPermission(a);
+        accessControlManager.addPermissions(Collections.singleton(a));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
 
@@ -109,7 +106,7 @@ public class AccessControlManagerImplTest {
         User user = UserResourceIntTest.createEntity(userService);
 
         Permission a = new Permission("a", Action.READ, "a");
-        accessControlManager.addPermission(a);
+        accessControlManager.addPermissions(Collections.singleton(a));
 
         // grant access
         accessControlManager.grantAccess(user.getLogin(), a);
@@ -137,13 +134,13 @@ public class AccessControlManagerImplTest {
         Permission a = new Permission("a", Action.READ, "a");
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
 
-        accessControlManager.connectPermissions(a, b, true, false);
-        accessControlManager.connectPermissions(a, c, false, false);
-        accessControlManager.connectPermissions(b, c, false, false);
+        accessControlManager.connectPermissions(a, b, true, false, new Realm());
+        accessControlManager.connectPermissions(a, c, false, false, new Realm());
+        accessControlManager.connectPermissions(b, c, false, false, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(a);
 
@@ -175,12 +172,12 @@ public class AccessControlManagerImplTest {
         Permission a = new Permission("a", Action.READ, "a");
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
 
-        accessControlManager.connectPermissions(a, b, false, false);
-        accessControlManager.connectPermissions(b, c, false, true);
+        accessControlManager.connectPermissions(a, b, false, false, new Realm());
+        accessControlManager.connectPermissions(b, c, false, true, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(c);
 
@@ -201,13 +198,13 @@ public class AccessControlManagerImplTest {
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
         Permission d = new Permission("d", Action.READ, "d");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
-        accessControlManager.addPermission(d);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
+        accessControlManager.addPermissions(Collections.singleton(d));
 
-        accessControlManager.connectPermissions(a, b, false, false);
-        accessControlManager.connectPermissions(c, d, false, false);
+        accessControlManager.connectPermissions(a, b, false, false, new Realm());
+        accessControlManager.connectPermissions(c, d, false, false, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(a);
 
@@ -240,18 +237,18 @@ public class AccessControlManagerImplTest {
         Permission b3 = new Permission("b3", Action.READ, "b");
         Permission c1 = new Permission("c1", Action.READ, "c");
         Permission c2 = new Permission("c2", Action.READ, "c");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b1);
-        accessControlManager.addPermission(b2);
-        accessControlManager.addPermission(b3);
-        accessControlManager.addPermission(c1);
-        accessControlManager.addPermission(c2);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b1));
+        accessControlManager.addPermissions(Collections.singleton(b2));
+        accessControlManager.addPermissions(Collections.singleton(b3));
+        accessControlManager.addPermissions(Collections.singleton(c1));
+        accessControlManager.addPermissions(Collections.singleton(c2));
 
-        accessControlManager.connectPermissions(b1, a, true, true);
-        accessControlManager.connectPermissions(b2, a, true, true);
-        accessControlManager.connectPermissions(b3, a, true, true);
-        accessControlManager.connectPermissions(c1, b1, true, true);
-        accessControlManager.connectPermissions(c2, b1, true, true);
+        accessControlManager.connectPermissions(b1, a, true, true, new Realm());
+        accessControlManager.connectPermissions(b2, a, true, true, new Realm());
+        accessControlManager.connectPermissions(b3, a, true, true, new Realm());
+        accessControlManager.connectPermissions(c1, b1, true, true, new Realm());
+        accessControlManager.connectPermissions(c2, b1, true, true, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(b1);
 
@@ -287,13 +284,13 @@ public class AccessControlManagerImplTest {
         Permission b = new Permission("b", Action.READ, "b");
         Permission c = new Permission("c", Action.READ, "c");
         Permission d = new Permission("d", Action.READ, "d");
-        accessControlManager.addPermission(a);
-        accessControlManager.addPermission(b);
-        accessControlManager.addPermission(c);
-        accessControlManager.addPermission(d);
+        accessControlManager.addPermissions(Collections.singleton(a));
+        accessControlManager.addPermissions(Collections.singleton(b));
+        accessControlManager.addPermissions(Collections.singleton(c));
+        accessControlManager.addPermissions(Collections.singleton(d));
 
-        accessControlManager.connectPermissions(a, b, true, false);
-        accessControlManager.connectPermissions(c, d, true, false);
+        accessControlManager.connectPermissions(a, b, true, false, new Realm());
+        accessControlManager.connectPermissions(c, d, true, false, new Realm());
 
         Collection<Permission> permissions = accessControlManager.getPermissionChain(a);
 
@@ -457,20 +454,20 @@ public class AccessControlManagerImplTest {
         test.setLogin("test");
         test.setPassword(passwordEncoder.encode("test"));
         test.setActivated(true);
-        userRepository.save(test);
+        userService.saveUser(test);
 
         accessControlManager.addPermissions(a);
 
         accessControlManager.grantAccess("test", "test", Action.READ, "a");
 
         // assert that user has
-        Assert.assertTrue(userRepository.findOneByLogin("test").map(User::getPermissions).orElse(Collections.emptySet())
+        Assert.assertTrue(userService.getUserByLogin("test").map(User::getPermissions).orElse(Collections.emptySet())
                 .contains(new Permission("test", Action.READ, "a")));
 
         accessControlManager.revokeAccess("test", "test", Action.READ, "a");
 
         // assert that user has
-        Assert.assertFalse(userRepository.findOneByLogin("test").map(User::getPermissions)
+        Assert.assertFalse(userService.getUserByLogin("test").map(User::getPermissions)
                 .orElse(Collections.emptySet()).contains(new Permission("test", Action.READ, "a")));
 
     }
@@ -508,18 +505,18 @@ public class AccessControlManagerImplTest {
         UserGroup test = new UserGroup();
 
         test.setName("test");
-        userGroupRepository.save(test);
+        userGroupService.save(test);
         accessControlManager.addPermissions(a);
         accessControlManager.assignPermission("test", new Permission("test", Action.READ, "b"));
 
         // assert that user group has permissions
-        Assert.assertTrue(userGroupRepository.getOne("test").getPermissions()
+        Assert.assertTrue(userGroupService.findOne("test").getPermissions()
                 .contains(new Permission("test", Action.READ, "b")));
 
         accessControlManager.dissociatePermission("test", new Permission("test", Action.READ, "b"));
 
         // assert that user group does not have a permission
-        Assert.assertFalse(userGroupRepository.getOne("test").getPermissions()
+        Assert.assertFalse(userGroupService.findOne("test").getPermissions()
                 .contains(new Permission("test", Action.READ, "b")));
     }
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="ir73" id="20200830023012">
+
+        <sql stripComments="true">
+            insert into user_group2 (name, realm_id)
+                (select 'ROLE_SUPERADMIN', id from realm order by id desc limit 1)
+            ON CONFLICT DO NOTHING;
+        </sql>
+
+        <insert tableName="permission">
+            <column name="resource" value="REALM-MANAGEMENT" />
+            <column name="action" value="READ" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="permission">
+            <column name="resource" value="REALM-MANAGEMENT" />
+            <column name="action" value="WRITE" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="permission">
+            <column name="resource" value="REALM-MANAGEMENT" />
+            <column name="action" value="UPDATE" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+        <insert tableName="permission">
+            <column name="resource" value="REALM-MANAGEMENT" />
+            <column name="action" value="DELETE" />
+            <column name="scope" value="APPLICATION" />
+        </insert>
+
+        <sql stripComments="true">
+            insert into user_group_permission (user_group_id,
+                permission_resource,
+                permission_action,
+                permission_scope)
+            (select id, 'REALM-MANAGEMENT',
+                'READ',
+                'APPLICATION' from user_group2 where name = 'ROLE_SUPERADMIN' order by id desc limit 1)
+            ON CONFLICT DO NOTHING;
+        </sql>
+        <sql stripComments="true">
+            insert into user_group_permission (user_group_id,
+                permission_resource,
+                permission_action,
+                permission_scope)
+            (select id, 'REALM-MANAGEMENT',
+                'WRITE',
+                'APPLICATION' from user_group2 where name = 'ROLE_SUPERADMIN' order by id desc limit 1)
+            ON CONFLICT DO NOTHING;
+        </sql>
+         <sql stripComments="true">
+            insert into user_group_permission (user_group_id,
+                permission_resource,
+                permission_action,
+                permission_scope)
+            (select id, 'REALM-MANAGEMENT',
+                'DELETE',
+                'APPLICATION' from user_group2 where name = 'ROLE_SUPERADMIN' order by id desc limit 1)
+            ON CONFLICT DO NOTHING;
+        </sql>
+        <sql stripComments="true">
+            insert into user_group_permission (user_group_id,
+                permission_resource,
+                permission_action,
+                permission_scope)
+            (select id, 'REALM-MANAGEMENT',
+                'UPDATE',
+                'APPLICATION' from user_group2 where name = 'ROLE_SUPERADMIN' order by id desc limit 1)
+            ON CONFLICT DO NOTHING;
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>

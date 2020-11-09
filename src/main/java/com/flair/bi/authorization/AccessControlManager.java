@@ -1,10 +1,11 @@
 package com.flair.bi.authorization;
 
-import java.util.Collection;
-
+import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionEdge;
+
+import java.util.Collection;
 
 /**
  * Responsible for handling authorization features of the application
@@ -128,14 +129,6 @@ public interface AccessControlManager {
 	void revokeAccess(String login, Collection<Permission> permissions);
 
 	/**
-	 * Adds a new permission to the context
-	 *
-	 * @param permission permission to be added
-	 * @return newly added permission
-	 */
-	Permission addPermission(Permission permission);
-
-	/**
 	 * Add new permissions to the context
 	 *
 	 * @param permissions permissions to be added
@@ -188,9 +181,10 @@ public interface AccessControlManager {
 	 *                      A gives
 	 *                      <p>
 	 * @param transitive    transitive
-	 * @return created connection
+	 * @param realm
+     * @return created connection
 	 */
-	PermissionEdge connectPermissions(Permission from, Permission to, boolean bidirectional, boolean transitive);
+	PermissionEdge connectPermissions(Permission from, Permission to, boolean bidirectional, boolean transitive, Realm realm);
 
 	/**
 	 * Remove a connection between two permissions

@@ -1,18 +1,11 @@
 package com.flair.bi.service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
+import com.flair.bi.domain.User;
 import com.flair.bi.messages.Connection;
-import com.flair.bi.messages.ConnectionResponses;
 import com.flair.bi.messages.ConnectionType;
 import com.flair.bi.messages.ConnectionTypesResponses;
 import com.flair.bi.messages.DeleteConnectionResponse;
+import com.flair.bi.messages.GetAllConnectionsResponse;
 import com.flair.bi.messages.GetConnectionResponse;
 import com.flair.bi.messages.ListTablesResponse;
 import com.flair.bi.messages.SaveConnectionResponse;
@@ -26,14 +19,21 @@ import com.flair.bi.web.rest.dto.ConnectionPropertiesSchemaDTO;
 import com.flair.bi.web.rest.dto.ConnectionPropertyDTO;
 import com.flair.bi.web.rest.dto.ConnectionTypeDTO;
 import com.flair.bi.web.rest.util.QueryGrpcUtils;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GrpcConnectionService {
 
     private final IEngineGrpcService grpcService;
+    private final UserService userService;
 
     public List<ConnectionTypeDTO> getAllConnectionTypes() {
         ConnectionTypesResponses connectionTypes = grpcService.getAllConnectionTypes();
@@ -55,20 +55,25 @@ public class GrpcConnectionService {
     }
 
     public List<ConnectionDTO> getAllConnections(ConnectionFilterParamsDTO filterParams) {
-        ConnectionResponses connections = grpcService.getAllConnections();
-        return connections.getConnectionList().stream().filter(filterConnectionByParams(filterParams))
+        User user = userService.getUserWithAuthoritiesByLoginOrError();
+        log.info("getAllConnections for realm {} link {} conn type {}",
+                user.getRealm().getId(), filterParams.getLinkId(), filterParams.getConnectionType());
+        GetAllConnectionsResponse connections = grpcService.getAllConnections(
+                user.getRealm().getId(), filterParams.getLinkId(), filterParams.getConnectionType());
+        return connections.getConnectionList()
+                .stream()
                 .map(conn -> toDto(conn)).collect(Collectors.toList());
     }
 
     public TestConnectionResultDTO testConnection(ConnectionDTO connection) {
-        TestConnectionResponse result = grpcService.testConnection(QueryGrpcUtils.toProtoConnection(connection));
+        TestConnectionResponse result = grpcService.testConnection(QueryGrpcUtils.toProtoConnection(connection, userService));
         return new TestConnectionResultDTO().setSuccess(!StringUtils.isEmpty(result.getResult()));
     }
 
     public ListTablesResponseDTO listTables(String connectionLinkId, String tableNameLike, ConnectionDTO connection,
             int maxEntries) {
         ListTablesResponse result = grpcService.listTables(connectionLinkId, tableNameLike, maxEntries,
-                QueryGrpcUtils.toProtoConnection(connection));
+                QueryGrpcUtils.toProtoConnection(connection, userService));
         return new ListTablesResponseDTO().setTables(
                 result.getTablesList()
                         .stream()
@@ -77,7 +82,7 @@ public class GrpcConnectionService {
     }
 
     public ConnectionDTO saveConnection(ConnectionDTO connection) {
-        SaveConnectionResponse response = grpcService.saveConnection(QueryGrpcUtils.toProtoConnection(connection));
+        SaveConnectionResponse response = grpcService.saveConnection(QueryGrpcUtils.toProtoConnection(connection, userService));
         return toDto(response.getConnection());
     }
 
@@ -92,7 +97,7 @@ public class GrpcConnectionService {
     }
 
     public ConnectionDTO updateConnection(ConnectionDTO connection) {
-        UpdateConnectionResponse response = grpcService.updateConnection(QueryGrpcUtils.toProtoConnection(connection));
+        UpdateConnectionResponse response = grpcService.updateConnection(QueryGrpcUtils.toProtoConnection(connection, userService));
         return toDto(response.getConnection());
     }
 
@@ -104,21 +109,10 @@ public class GrpcConnectionService {
         dto.setConnectionPassword(conn.getConnectionPassword());
         dto.setConnectionTypeId(conn.getConnectionType());
         dto.setLinkId(conn.getLinkId());
+        dto.setRealmId(conn.getRealmId());
         dto.setDetails(conn.getDetailsMap());
         dto.setConnectionParameters(conn.getConnectionParametersMap());
         return dto;
-    }
-
-    private Predicate<Connection> filterConnectionByParams(ConnectionFilterParamsDTO filterParams) {
-        return conn -> {
-            if (filterParams.getConnectionType() != null) {
-                return Objects.equals(conn.getConnectionType(), filterParams.getConnectionType());
-            }
-            if (filterParams.getLinkId() != null) {
-                return Objects.equals(conn.getLinkId(), filterParams.getLinkId());
-            }
-            return true;
-        };
     }
 
 }

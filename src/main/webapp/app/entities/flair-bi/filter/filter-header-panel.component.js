@@ -26,6 +26,8 @@
         vm.list = {};
         vm.dateRangeReload = false;
         vm.selectedFilter = {};
+        vm.onItemSelect = onItemSelect;
+        vm.dimension;
         vm.onDateChange = onDateChange;
         activate();
 
@@ -41,7 +43,7 @@
                 styleActive: true,
                 showCheckAll: false,
                 showUncheckAll: false,
-                checkBoxes: true
+                checkBoxes: true,
             };
             $scope.$on('flairbiApp:update-heder-filter', function () {
                 updateHeaderFilter();
@@ -50,6 +52,13 @@
             vm.dimensions.forEach(element => {
                 vm.load("", element);
             });
+        }
+
+        function onItemSelect() {
+            if (vm.searchText && vm.searchText !== "") {
+                vm.searchText = "";
+                vm.load("", vm.dimension)
+            }
         }
 
         function receivedMetaData() {
@@ -69,8 +78,39 @@
                                 id: item[dimensionName]
                             }
                         });
-                        vm.selectedFilter[dimensionName] = [];
+
                         vm.list[dimensionName] = retVal;
+                        var index = -1;
+                        var lookup = {};
+                        var result = [];
+
+                        if (vm.selectedFilter[dimensionName] && vm.selectedFilter[dimensionName].length > 0) {
+                            vm.selectedFilter[dimensionName].forEach(element => {
+                                var filteredObj = vm.list[dimensionName].find(function (item, i) {
+                                    if (item.label === element.id) {
+                                        index = i;
+                                        return i;
+                                    }
+                                });
+                                if (filteredObj) {
+                                    vm.selectedFilter[dimensionName].push({
+                                        id: vm.list[dimensionName][index].id
+                                    })
+                                }
+                            });
+                            for (var item, i = 0; item = vm.selectedFilter[dimensionName][i++];) {
+                                var name = item.id;
+
+                                if (!(name in lookup)) {
+                                    lookup[name] = 1;
+                                    result.push(item);
+                                }
+                            }
+                            vm.selectedFilter[dimensionName] = result;
+
+                        } else {
+                            vm.selectedFilter[dimensionName] = [];
+                        }
                     }
                 }
             );
@@ -84,6 +124,7 @@
         }
 
         function load(q, dimension) {
+            vm.dimension = dimension;
             var vId = $stateParams.id ? $stateParams.id : $stateParams.visualisationId;
             var query = {};
             query.fields = [{
@@ -116,6 +157,9 @@
                 },
                 $stateParams.id ? $stateParams.id : $stateParams.viewId
             );
+            // if (selectedFilter.length > 0) {
+
+            // }
         }
 
 

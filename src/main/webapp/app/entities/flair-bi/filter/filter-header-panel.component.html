@@ -20,7 +20,7 @@
                             ng-change="vm.load(vm.searchText,dimension)" />
                         <div class="dimensionFilter" ng-dropdown-multiselect="" options="vm.list[dimension.name]"
                             selected-model="vm.selectedFilter[dimension.name]" checkboxes="true" selectedToTop="true"
-                            extra-settings="vm.settingStyle"></div>
+                            extra-settings="vm.settingStyle"  events="{ onItemSelect: vm.onItemSelect }"></div>
                     </div>
                 </div>
             </div>

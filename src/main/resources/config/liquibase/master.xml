@@ -96,7 +96,7 @@
     <include file="config/liquibase/changelog/20201016100000_added_features_cache.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201016100001_added_schedlock.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201022202540_added_entity_DatasourceGroupConstraint.xml" relativeToChangelogFile="false"/>
-
+    <include file="config/liquibase/changelog/20201028100000_add_group_property_in_table.xml" relativeToChangelogFile="false"/>
 
 
     <include file="config/liquibase/changelog/20200628183700_realm_table.xml" relativeToChangelogFile="false" />

@@ -21,6 +21,7 @@ import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerResponse;
 import com.flair.bi.view.VisualMetadataService;
+import com.google.common.base.Strings;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
 import lombok.Builder;
@@ -209,8 +210,10 @@ public class SchedulerResource {
 		}
 
 		String finalUserName = userName;
-		userService.getUserByLogin(userName)
-				.orElseThrow(() -> new IllegalStateException("Cannot search report for a user " + finalUserName + " that does not belong to current realm"));
+		if (!Strings.isNullOrEmpty(finalUserName)) {
+			userService.getUserByLogin(finalUserName)
+					.orElseThrow(() -> new IllegalStateException("Cannot search report for a user " + finalUserName + " that does not belong to current realm"));
+		}
 
 		GetSearchReportsDTO result = schedulerService.searchScheduledReport(userName, reportName, startDate, endDate,
 				pageable.getPageSize(), pageable.getPageNumber(), thresholdAlert,dashboardName,viewName);

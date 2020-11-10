@@ -14,9 +14,9 @@
             }
         });
 
-    viewController.$inject = ['$state', 'AccountDispatch', 'VisualDispatchService', 'Views', 'FileSaver'];
+    viewController.$inject = ['$state', '$rootScope', 'AccountDispatch', 'VisualDispatchService', 'Views', 'FileSaver'];
 
-    function viewController($state, AccountDispatch, VisualDispatchService, Views, FileSaver) {
+    function viewController($state, $rootScope, AccountDispatch, VisualDispatchService, Views, FileSaver) {
         var vm = this;
         vm.$onInit = activate;
         vm.build = build;
@@ -64,6 +64,12 @@
                 .$promise
                 .then(function (data) {
                     FileSaver.saveAs(data.raw, vm.view.viewName + '-' + vm.view.id + '.json');
+                })
+                .catch(function (error) {
+                    $rootScope.showErrorSingleToast({
+                        text: error.data.message,
+                        title: "Error"
+                    });
                 });
         }
 

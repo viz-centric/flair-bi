@@ -14,12 +14,13 @@
             }
         });
 
-    viewController.$inject = ['$state', 'AccountDispatch', 'VisualDispatchService'];
+    viewController.$inject = ['$state', 'AccountDispatch', 'VisualDispatchService', 'Views', 'FileSaver'];
 
-    function viewController($state, AccountDispatch, VisualDispatchService) {
+    function viewController($state, AccountDispatch, VisualDispatchService, Views, FileSaver) {
         var vm = this;
         vm.$onInit = activate;
         vm.build = build;
+        vm.onExportClick = onExportClick;
         vm.getViewName = getViewName;
         ////////////////
 
@@ -56,6 +57,14 @@
                 id: viewId,
                 dashboardId: dashboardId
             });
+        }
+
+        function onExportClick() {
+            Views.download({id: vm.view.id})
+                .$promise
+                .then(function (data) {
+                    FileSaver.saveAs(data.raw, vm.view.viewName + '-' + vm.view.id + '.json');
+                });
         }
 
         function getViewName() {

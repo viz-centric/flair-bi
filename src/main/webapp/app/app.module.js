@@ -35,6 +35,7 @@
             "angular.filter",
             "angularUtils.directives.uiBreadcrumbs",
             "ngFileUpload",
+            "ngFileSaver",
             "angular-cron-generator",
             "angularjs-dropdown-multiselect"
             // jhipster-needle-angularjs-add-module JHipster will add new module here

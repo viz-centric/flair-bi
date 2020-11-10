@@ -2,9 +2,9 @@
     "use strict";
     angular.module("flairbiApp").factory("Views", Views);
 
-    Views.$inject = ["$resource"];
+    Views.$inject = ["$resource", 'Blob'];
 
-    function Views($resource) {
+    function Views($resource, Blob) {
         var resourceUrl = "api/views/:id/:query";
 
         return $resource(
@@ -68,6 +68,15 @@
                 saveViewState: {
                     url: "api/views/:id/viewState",
                     method: "PUT"
+                },
+                download: {
+                    url: 'api/views/:id/export',
+                    method: "GET",
+                    responseType: 'arraybuffer',
+                    transformResponse: function (data) {
+                        const fileData = new Blob([data], {type: 'text/plain;charset=utf-8'});
+                        return { raw: fileData };
+                    }
                 }
             }
         );

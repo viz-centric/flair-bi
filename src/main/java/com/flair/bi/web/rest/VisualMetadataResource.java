@@ -1,12 +1,18 @@
 package com.flair.bi.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import com.flair.bi.service.SchedulerService;
+import com.flair.bi.service.VisualizationColorsService;
+import com.flair.bi.service.dto.VisualizationConfigurationDTO;
+import com.flair.bi.view.VisualMetadataService;
+import com.flair.bi.view.VisualMetadataValidationService;
+import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
+import com.flair.bi.web.rest.dto.SaveVisualMetadataDTO;
+import com.flair.bi.web.rest.dto.ValidateVisualMetadataDTO;
+import com.flair.bi.web.rest.util.HeaderUtil;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,20 +27,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-import com.flair.bi.service.SchedulerService;
-import com.flair.bi.service.VisualizationColorsService;
-import com.flair.bi.service.dto.VisualizationConfigurationDTO;
-import com.flair.bi.view.VisualMetadataService;
-import com.flair.bi.view.VisualMetadataValidationService;
-import com.flair.bi.web.rest.dto.QueryValidationResponseDTO;
-import com.flair.bi.web.rest.dto.SaveVisualMetadataDTO;
-import com.flair.bi.web.rest.dto.ValidateVisualMetadataDTO;
-import com.flair.bi.web.rest.util.HeaderUtil;
-
-import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing VisualMetadata.
@@ -179,8 +176,7 @@ public class VisualMetadataResource {
 	public ResponseEntity<VisualizationConfigurationDTO> getVisualMetadataExternal(@PathVariable String id) {
 		log.debug("REST request to get VisualMetadata : {}", id);
 		return Optional
-				.ofNullable(new VisualizationConfigurationDTO(visualMetadataService.findOne(id),
-						visualizationColorsService.findAll()))
+				.of(new VisualizationConfigurationDTO(visualMetadataService.findOne(id), visualizationColorsService.findAll()))
 				.map(result -> new ResponseEntity<>(result, HttpStatus.OK))
 				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}

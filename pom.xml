@@ -32,8 +32,8 @@
 		<aws-maven.version>5.0.0.RELEASE</aws-maven.version>
         <bucket.name>vizcentric-mvn-repo</bucket.name>
     
-		<flair-messages.version>0.3.22</flair-messages.version>
-		<project-bi-common.version>1.4.17</project-bi-common.version>
+		<flair-messages.version>0.3.23.0-SNAPSHOT</flair-messages.version>
+		<project-bi-common.version>1.4.18.0-SNAPSHOT</project-bi-common.version>
 
 		<!-- GRPC::begin -->
 		<all-grpc.version>1.28.0</all-grpc.version>

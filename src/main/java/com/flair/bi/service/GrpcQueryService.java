@@ -21,6 +21,8 @@ import com.flair.bi.web.websocket.FbEngineWebSocketService;
 import com.google.common.collect.ImmutableMap;
 import com.project.bi.query.dto.ConditionExpressionDTO;
 import com.project.bi.query.dto.QueryDTO;
+import com.project.bi.query.dto.transform.GroupType;
+import com.project.bi.query.dto.transform.GroupingTransformationDTO;
 import com.project.bi.query.expression.condition.ConditionExpression;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -36,6 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.flair.bi.web.rest.util.QueryGrpcUtils.toProtoConnection;
+import static java.util.Arrays.asList;
 
 @Service
 @RequiredArgsConstructor
@@ -202,6 +205,10 @@ public class GrpcQueryService {
                                                       String request,
                                                       SendGetDataDTO sendGetDataDTO) throws InterruptedException {
         QueryDTO queryDTO = sendGetDataDTO.getQueryDTO();
+        GroupingTransformationDTO groupingTransformationDTO = new GroupingTransformationDTO();
+        groupingTransformationDTO.setGroupingField(queryDTO.getFields().get(0));
+        groupingTransformationDTO.setGroupType(GroupType.MONTH);
+        queryDTO.setTransformations(asList(groupingTransformationDTO));
         String userId = sendGetDataDTO.getUserId();
         Long dashboardId = Optional.ofNullable(sendGetDataDTO.getViewId())
                 .map(viewId -> viewService.findOne(viewId))

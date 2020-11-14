@@ -55,7 +55,7 @@ public class DatasourceServiceImpl implements DatasourceService {
 
         boolean create = null == datasource.getId();
 
-        if (create) {
+        if (datasource.getRealm() == null) {
             User user = userService.getUserWithAuthoritiesByLoginOrError();
             datasource.setRealm(user.getRealm());
         }

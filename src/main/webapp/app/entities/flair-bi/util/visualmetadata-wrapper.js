@@ -269,11 +269,12 @@
         return null;
     }
 
-    function getQueryParameters(filters, conditionExpression, offset) {
+    function getQueryParameters(filterParametersService, conditionExpression, offset) {
+        var filters = filterParametersService.get();
+        var groupFilters = filterParametersService.getGroupFilters();
 
         var dimensions = this.fields
             .filter(isDimension);
-
 
         var d = getDimension(dimensions);
 
@@ -360,6 +361,27 @@
             });
 
         query.orders = ordersListSortMeasures.concat(ordersListSortDimensions);
+
+        if (groupFilters.length) {
+            const dateFilterDimension = dimensions
+                .find(function (item) {
+                    console.log('iterating', item);
+                    return item.feature.dateFilter === 'ENABLED';
+                });
+            if (dateFilterDimension) {
+                query.transformations = groupFilters
+                    .map(function (gf) {
+                        return {
+                            '@type': gf.type,
+                            groupType: gf.groupFilter,
+                            groupingField: dimensionFields
+                                .find(function (df) {
+                                    return df.name === dateFilterDimension.feature.name;
+                                }),
+                        };
+                    });
+            }
+        }
 
         return query;
     }

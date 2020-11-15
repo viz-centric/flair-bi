@@ -63,6 +63,7 @@
             } else {
                 vm.groupFilter = group;
             }
+            filterParametersService.saveGroupFilter(vm.groupFilter);
         }
 
         function canDisplayGroupFilter(dimension) {
@@ -158,15 +159,6 @@
                         value: q
                     }
                 }];
-            }
-            if (vm.groupFilter) {
-                q.transformations = [
-                    {
-                        '@type': 'grouping',
-                        groupType: vm.groupFilter,
-                        groupingField: query.fields[0]
-                    }
-                ];
             }
             query.distinct = true;
             query.limit = 100;

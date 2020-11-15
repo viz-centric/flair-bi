@@ -519,7 +519,7 @@
 
         function buildQueryDTO(visualMetaData) {
             return visualMetaData.getQueryParameters(
-                filterParametersService.get(),
+                filterParametersService,
                 filterParametersService.getConditionExpression(getAdditionalConditionalExpressions())
             );
         }

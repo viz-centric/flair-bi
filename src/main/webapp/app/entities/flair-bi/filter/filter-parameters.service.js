@@ -11,6 +11,7 @@
 
         var paramObject = {};
         var selectedFilters={};
+        var groupFilters = [];
         var dynamicDateRangeToolTip={};
         var dynamicDateRangeMetaData={};
 
@@ -40,8 +41,9 @@
             setFilterInIframeURL: setFilterInIframeURL,
             removeURLParameter : removeURLParameter,
             getParameterByName : getParameterByName,
-            getFilterURL : getFilterURL
-
+            getFilterURL : getFilterURL,
+            saveGroupFilter,
+            getGroupFilters,
         };
 
 
@@ -454,6 +456,22 @@
                         validateFilter(id, filtersList, filterDimensions, filters, element);
                     });
                 }
+            }
+        }
+
+        function getGroupFilters() {
+            return groupFilters;
+        }
+
+        function saveGroupFilter(filterType) {
+            console.log('filterType', filterType);
+            if (!filterType) {
+                groupFilters.length = 0;
+            } else {
+                groupFilters.push({
+                    type: 'grouping',
+                    groupType: filterType,
+                });
             }
         }
 

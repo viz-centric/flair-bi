@@ -217,7 +217,8 @@ public class ViewsResource {
 	@PreAuthorize("@accessControlManager.hasAccess(#viewId, 'READ', 'VIEW')")
 	public ResponseEntity<ViewState> getCurrentEditingState(@PathVariable Long viewId) {
 		log.debug("REST request to get editing view state for view {}", viewId);
-		return ResponseEntity.ok(viewService.getCurrentEditingViewState(viewId));
+		ViewState currentEditingViewState = viewService.getCurrentEditingViewState(viewId);
+		return ResponseEntity.ok(currentEditingViewState);
 	}
 
 	@PutMapping("/views/{viewId}/viewState")

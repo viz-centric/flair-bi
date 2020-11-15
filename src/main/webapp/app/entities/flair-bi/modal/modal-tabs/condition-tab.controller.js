@@ -207,7 +207,8 @@
 
             Visualmetadata.validate({}, {
                 datasourceId: datasource.id,
-                queryDTO: visualMetaData.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                queryDTO: visualMetaData.getQueryParameters(filterParametersService,
+                    filterParametersService.getConditionExpression()),
                 visualMetadataId: visualMetaData.id,
                 conditionExpression: vm.conditionExpression
             }).$promise

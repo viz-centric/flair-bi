@@ -25,6 +25,8 @@
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.list = {};
         vm.dateRangeReload = false;
+        vm.onGroupFilterClick = onGroupFilterClick;
+        vm.canDisplayGroupFilter = canDisplayGroupFilter;
         vm.selectedFilter = {};
         vm.onItemSelect = onItemSelect;
         vm.dimension;
@@ -52,6 +54,14 @@
             vm.dimensions.forEach(element => {
                 vm.load("", element);
             });
+        }
+
+        function onGroupFilterClick(group) {
+            vm.groupFilter = group;
+        }
+
+        function canDisplayGroupFilter(dimension) {
+            return dimension.dateFilter === 'ENABLED';
         }
 
         function onItemSelect() {

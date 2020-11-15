@@ -133,7 +133,7 @@ public class SchedulerResourceIntTest extends AbstractIntegrationTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		SchedulerResource schedulerResource = new SchedulerResource(visualMetadataService, datasourceService,
-				schedulerService, dashboardService);
+				schedulerService, dashboardService, userService);
 		this.restSchedulerResourceMockMvc = MockMvcBuilders.standaloneSetup(schedulerResource)
 				.setCustomArgumentResolvers(pageableArgumentResolver, querydslPredicateArgumentResolver)
 				.setMessageConverters(jacksonMessageConverter).build();

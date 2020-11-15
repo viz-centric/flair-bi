@@ -1,16 +1,16 @@
 package com.flair.bi.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
-import org.springframework.data.querydsl.binding.QuerydslBindings;
-
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.QDashboard;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.StringExpression;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
+import org.springframework.data.repository.query.Param;
 
 /**
  * Spring Data JPA repository for the Dashboard entity.
@@ -18,9 +18,9 @@ import com.querydsl.core.types.dsl.StringExpression;
 public interface DashboardRepository extends JpaRepository<Dashboard, Long>, QuerydslPredicateExecutor<Dashboard>,
 		QuerydslBinderCustomizer<QDashboard> {
 
-	Dashboard findByDashboardViews(Long id);
-
-	List<Dashboard> findByDashboardDatasourceIdIn(List<Long> datasourceIdList);
+	@Modifying
+	@Query("delete from Dashboard d where d.realm.id = :id")
+	void deleteAllByRealmId(@Param("id") Long id);
 
 	/**
 	 * Customize the {@link QuerydslBindings} for the given root.

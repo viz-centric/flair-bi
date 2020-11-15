@@ -1,9 +1,9 @@
 package com.flair.bi.web.rest.dto;
 
-import java.util.Map;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.Map;
 
 @Data
 @Accessors(chain = true)
@@ -14,6 +14,7 @@ public class ConnectionDTO {
 	private String connectionPassword;
 	private Long connectionTypeId;
 	private String linkId;
+	private Long realmId;
 	private Map<String, String> details;
 	private Map<String, String> connectionParameters;
 
@@ -26,6 +27,7 @@ public class ConnectionDTO {
 		sb.append(", connectionPassword='").append("***").append('\'');
 		sb.append(", connectionTypeId=").append(connectionTypeId);
 		sb.append(", linkId='").append(linkId).append('\'');
+		sb.append(", realmId='").append(realmId).append('\'');
 		sb.append(", details=").append(details);
 		sb.append(", connectionParameters=").append(connectionParameters);
 		sb.append('}');

@@ -4395,7 +4395,6 @@ jhi-alert .alerts .alert-danger {
     margin: 0px;
     height: 0px; }
   .flairbi-content-header .dimensionFilter {
-    float: right;
     margin: 4px 5px; }
     .flairbi-content-header .dimensionFilter button {
       padding: 0px 5px;
@@ -4407,6 +4406,8 @@ jhi-alert .alerts .alert-danger {
     font-weight: bold;
     font-size: 12px;
     color: #33a2e5; }
+  .flairbi-content-header .pin-filter .header-date-filter {
+    min-height: 280px; }
   .flairbi-content-header .pin-filter div.filter {
     font-size: 12px;
     padding: 0px 5px; }

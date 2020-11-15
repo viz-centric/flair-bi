@@ -1,12 +1,11 @@
 package com.flair.bi.service;
 
-import java.util.List;
-
+import com.flair.bi.domain.Datasource;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.flair.bi.domain.Datasource;
-import com.querydsl.core.types.Predicate;
+import java.util.List;
 
 public interface DatasourceService {
 	/**
@@ -80,4 +79,8 @@ public interface DatasourceService {
 	List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName);
 
 	void deleteByConnectionAndName(String connectionName, String datasourceName);
+
+	void deleteAllByRealmId(Long realmId);
+
+	void verifyConnectionLinkBelongsToRealm(String connectionLinkId);
 }

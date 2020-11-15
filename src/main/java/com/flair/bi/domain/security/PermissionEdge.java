@@ -1,5 +1,12 @@
 package com.flair.bi.domain.security;
 
+import com.flair.bi.domain.Realm;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -8,12 +15,6 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "permission_edge")
@@ -47,10 +48,14 @@ public class PermissionEdge {
 	@Column(name = "transitive", updatable = false)
 	private boolean transitive;
 
-	public PermissionEdge(Permission from, Permission to, boolean biDirectional, boolean transitive) {
+	@ManyToOne(optional = false)
+	private Realm realm;
+
+	public PermissionEdge(Permission from, Permission to, boolean biDirectional, boolean transitive, Realm realm) {
 		this.from = from;
 		this.to = to;
 		this.biDirectional = biDirectional;
 		this.transitive = transitive;
+		this.realm = realm;
 	}
 }

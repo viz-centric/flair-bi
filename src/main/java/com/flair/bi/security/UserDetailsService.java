@@ -1,21 +1,19 @@
 package com.flair.bi.security;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.flair.bi.domain.User;
+import com.flair.bi.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flair.bi.domain.User;
-import com.flair.bi.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Authenticate a user from the database.
@@ -25,14 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(final String login) {
 		log.debug("Authenticating {}", login);
 		String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-		Optional<User> userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
+		Optional<User> userFromDatabase = userService.getUserByLogin(lowercaseLogin);
 		return userFromDatabase.map(user -> {
 			if (!user.isActivated()) {
 				throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");

@@ -1,14 +1,14 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A Functions.
@@ -40,9 +40,12 @@ public class Functions implements Serializable {
 
 	private String validation;
 
-	public Long getId() {
-		return id;
-	}
+	@ManyToOne(optional = false)
+    private Realm realm;
+
+    public Long getId() {
+        return id;
+    }
 
 	public void setId(Long id) {
 		this.id = id;
@@ -147,8 +150,16 @@ public class Functions implements Serializable {
 		this.validation = validation;
 	}
 
-	public Functions validation(String validation) {
-		this.validation = validation;
-		return this;
-	}
+    public Functions validation(String validation) {
+        this.validation = validation;
+        return this;
+    }
+
+    public Realm getRealm() {
+        return realm;
+    }
+
+    public void setRealm(Realm realm) {
+        this.realm = realm;
+    }
 }

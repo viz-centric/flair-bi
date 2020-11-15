@@ -8,9 +8,9 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.repository.DatasourceRepository;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
+import com.google.common.collect.ImmutableList;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,7 @@ public class DatasourceServiceImpl implements DatasourceService {
 
     private final DatasourceRepository datasourceRepository;
     private final AccessControlManager accessControlManager;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * Save a datasource.
@@ -53,6 +54,12 @@ public class DatasourceServiceImpl implements DatasourceService {
         log.debug("Request to save Datasource : {}", datasource);
 
         boolean create = null == datasource.getId();
+
+        if (datasource.getRealm() == null) {
+            User user = userService.getUserWithAuthoritiesByLoginOrError();
+            datasource.setRealm(user.getRealm());
+        }
+
         Datasource ds = datasourceRepository.save(datasource);
 
         if (create) {
@@ -72,8 +79,9 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Transactional(readOnly = true)
     public List<Datasource> findAll(Predicate predicate) {
         log.debug("Request to get all Datasource");
-        return (List<Datasource>) datasourceRepository.findAll(
-                isNotDeleted().and(hasUserPermissions()).and(predicate));
+        return ImmutableList.copyOf(
+                datasourceRepository.findAll(isNotDeleted().and(hasUserPermissions()).and(predicate).and(hasUserRealmAccess()))
+        );
     }
 
     @Override
@@ -81,7 +89,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Page<Datasource> findAll(Pageable pageable) {
         log.debug("Request to get all Datasource");
         return datasourceRepository.findAll(
-                isNotDeleted().and(hasUserPermissions()), pageable);
+                isNotDeleted().and(hasUserPermissions()).andAnyOf(hasUserRealmAccess()), pageable);
     }
 
     @Override
@@ -89,13 +97,15 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Page<Datasource> findAll(Predicate predicate, Pageable pageable) {
         log.debug("Request to get all Datasource");
         return datasourceRepository.findAll(
-                isNotDeleted().and(predicate).and(hasUserPermissions()), pageable);
+                isNotDeleted().and(predicate).and(hasUserPermissions()).and(hasUserRealmAccess()), pageable);
     }
 
     @Override
     public List<Datasource> findAllAndDeleted(Predicate predicate) {
         log.debug("Request to get all Datasource including deleted");
-        return (List<Datasource>) datasourceRepository.findAll(hasUserPermissions().and(predicate));
+        return ImmutableList.copyOf(
+                datasourceRepository.findAll(hasUserPermissions().and(predicate).and(hasUserRealmAccess()))
+        );
     }
 
     /**
@@ -135,7 +145,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Long getCount(Predicate predicate) {
         log.debug("Request to get Datasource count with predicate {}", predicate);
         return datasourceRepository.count(
-                hasUserPermissions().and(isNotDeleted().and(predicate)));
+                hasUserPermissions().and(isNotDeleted()).and(predicate).and(hasUserRealmAccess()));
     }
 
     /**
@@ -146,7 +156,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Override
     public void delete(Predicate predicate) {
         final Iterable<Datasource> datasources = datasourceRepository.findAll(
-                isNotDeleted().and(hasUserPermissions()).and(predicate));
+                isNotDeleted().and(hasUserPermissions()).and(predicate).and(hasUserRealmAccess()));
         for (Datasource datasource : datasources) {
             datasource.setStatus(DatasourceStatus.DELETED);
         }
@@ -158,24 +168,40 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Page<Datasource> search(Pageable pageable, Predicate predicate) {
         log.debug("Request to get Searched Datasource");
         return datasourceRepository.findAll(
-                isNotDeleted().and(predicate).and(hasUserPermissions()), pageable);
+                isNotDeleted().and(predicate).and(hasUserPermissions()).and(hasUserRealmAccess()), pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Datasource> findAllByConnectionAndName(String connectionName, String datasourceName) {
         return findAll(hasUserPermissions().and(QDatasource.datasource.connectionName.eq(connectionName)
-                .and(QDatasource.datasource.name.eq(datasourceName))));
+                .and(QDatasource.datasource.name.eq(datasourceName))
+                .and(hasUserRealmAccess())));
     }
 
     @Override
     public void deleteByConnectionAndName(String connectionName, String datasourceName) {
         delete(hasUserPermissions().and(QDatasource.datasource.connectionName.eq(connectionName)
-                .and(QDatasource.datasource.name.eq(datasourceName))));
+                .and(QDatasource.datasource.name.eq(datasourceName))
+                .and(hasUserRealmAccess())));
+    }
+
+    @Override
+    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
+    public void deleteAllByRealmId(Long realmId) {
+        datasourceRepository.deleteAllByRealmId(realmId);
+    }
+
+    @Override
+    public void verifyConnectionLinkBelongsToRealm(String connectionLinkId) {
+        List<Datasource> connections = findAll(hasUserRealmAccess().and(QDatasource.datasource.connectionName.eq(connectionLinkId)));
+        if (connections.isEmpty()) {
+            throw new IllegalStateException("No connection link " + connectionLinkId + " found for current realm");
+        }
     }
 
     private BooleanExpression hasUserPermissions() {
-        final Optional<User> loggedInUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        final Optional<User> loggedInUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
         final User user = loggedInUser.orElseThrow(() -> new RuntimeException("User not found"));
         final Set<Permission> permissions = user
                 .getPermissionsByActionAndPermissionType(Collections.singletonList(Action.READ), "DATASOURCE");
@@ -183,6 +209,11 @@ public class DatasourceServiceImpl implements DatasourceService {
                 .in(permissions.stream()
                         .map(x -> Long.parseLong(x.getResource()))
                         .collect(Collectors.toSet()));
+    }
+
+    private BooleanExpression hasUserRealmAccess() {
+        User user = userService.getUserWithAuthoritiesByLoginOrError();
+        return QDatasource.datasource.realm.id.eq(user.getRealm().getId());
     }
 
     private BooleanBuilder isNotDeleted() {

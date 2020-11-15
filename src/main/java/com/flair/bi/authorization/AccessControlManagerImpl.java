@@ -1,20 +1,7 @@
 package com.flair.bi.authorization;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.QUser;
+import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
@@ -24,25 +11,38 @@ import com.flair.bi.domain.security.QPermission;
 import com.flair.bi.domain.security.QPermissionEdge;
 import com.flair.bi.domain.security.QUserGroup;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.repository.UserRepository;
 import com.flair.bi.repository.security.PermissionEdgeRepository;
 import com.flair.bi.repository.security.PermissionRepository;
-import com.flair.bi.repository.security.UserGroupRepository;
 import com.flair.bi.security.PermissionGrantedAuthority;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.security.UserGroupService;
 import com.querydsl.core.types.dsl.BooleanExpression;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
 class AccessControlManagerImpl implements AccessControlManager {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
 
-	private final UserGroupRepository userGroupRepository;
+	private final UserGroupService userGroupService;
 
 	private final PermissionRepository permissionRepository;
 
@@ -74,7 +74,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	@Override
 	public boolean hasAccess(String login, Permission permission) {
 		log.debug("Checking access for {}", permission);
-		Optional<User> user = userRepository.findOneByLogin(login);
+		Optional<User> user = userService.getUserByLogin(login);
 
 		return user.map(User::retrieveAllUserPermissions).map(x -> x.stream().anyMatch(y -> y.equals(permission)))
 				.orElse(false);
@@ -141,13 +141,18 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void grantAccess(String login, Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+					if (isRestrictedPermission(permission)) {
+						throw new IllegalStateException("Permission " + permission + " cannot be assigned");
+					}
+				});
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
-		userRepository.findOneByLogin(login).ifPresent(x -> {
+		userService.getUserByLogin(login).ifPresent(x -> {
 			x.addPermissions(perms);
-			userRepository.save(x);
+			userService.saveUser(x);
 		});
 
 		// if we're granting access to authenticated user we must add permissions to him
@@ -179,6 +184,14 @@ class AccessControlManagerImpl implements AccessControlManager {
 		assignPermissions(role, Collections.singletonList(permission));
 	}
 
+	private boolean isRestrictedRole(String role) {
+		return RestrictedResources.RESTRICTED_ROLES.contains(role);
+	}
+
+	private boolean isRestrictedPermission(Permission permission) {
+		return RestrictedResources.RESTRICTED_RESOURCES.contains(permission.getResource());
+	}
+
 	/**
 	 * Assign list of permissions to a given role
 	 *
@@ -187,14 +200,24 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void assignPermissions(String role, Collection<Permission> permissions) {
-		Optional<UserGroup> userGroup = userGroupRepository.findById(role);
+		if (isRestrictedRole(role)) {
+			throw new IllegalStateException("User role " + role + " cannot be assigned");
+		}
+
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be assigned");
+			}
+		});
+
+		Optional<UserGroup> userGroup = Optional.ofNullable(userGroupService.findOne(role));
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
 		userGroup.ifPresent(x -> {
 			x.addPermissions(perms);
-			userGroupRepository.save(x);
+			userGroupService.save(x);
 		});
 	}
 
@@ -211,14 +234,24 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void dissociatePermissions(String role, Collection<Permission> permissions) {
-		Optional<UserGroup> userGroup = userGroupRepository.findById(role);
+		if (isRestrictedRole(role)) {
+			throw new IllegalStateException("User role " + role + " cannot be unassigned");
+		}
+
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be unassigned");
+			}
+		});
+
+		Optional<UserGroup> userGroup = Optional.ofNullable(userGroupService.findOne(role));
 
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
 		userGroup.ifPresent(x -> {
 			x.removePermissions(perms);
-			userGroupRepository.save(x);
+			userGroupService.save(x);
 		});
 	}
 
@@ -254,24 +287,19 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void revokeAccess(String login, Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be unassigned");
+			}
+		});
+
 		Set<Permission> perms = permissions.stream().flatMap(x -> getPermissionChain(x).stream())
 				.collect(Collectors.toSet());
 
-		userRepository.findOneByLogin(login).ifPresent(x -> {
+		userService.getUserByLogin(login).ifPresent(x -> {
 			x.removePermissions(perms);
-			userRepository.save(x);
+			userService.saveUser(x);
 		});
-	}
-
-	/**
-	 * Adds a new permission to the context
-	 *
-	 * @param permission permission to be added
-	 * @return newly added permission
-	 */
-	@Override
-	public Permission addPermission(Permission permission) {
-		return permissionRepository.save(permission);
 	}
 
 	/**
@@ -282,6 +310,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public Collection<Permission> addPermissions(Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be assigned");
+			}
+		});
 		return permissionRepository.saveAll(permissions);
 	}
 
@@ -316,13 +349,17 @@ class AccessControlManagerImpl implements AccessControlManager {
 	}
 
 	private Permission deleteEdges(Permission permission) {
-
 		Iterable<PermissionEdge> permissionEdges = permissionEdgeRepository
-				.findAll(QPermissionEdge.permissionEdge.from.key.eq(permission.getKey())
-						.or(QPermissionEdge.permissionEdge.to.key.eq(permission.getKey())));
+				.findAll(hasUserRealmAccess().and(QPermissionEdge.permissionEdge.from.key.eq(permission.getKey())
+						.or(QPermissionEdge.permissionEdge.to.key.eq(permission.getKey()))));
 
 		permissionEdgeRepository.deleteAll(permissionEdges);
 		return permission;
+	}
+
+	private BooleanExpression hasUserRealmAccess() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QPermissionEdge.permissionEdge.realm.id.eq(user.getRealm().getId());
 	}
 
 	/**
@@ -332,6 +369,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 */
 	@Override
 	public void removePermissions(Collection<Permission> permissions) {
+		permissions.forEach(permission -> {
+			if (isRestrictedPermission(permission)) {
+				throw new IllegalStateException("Permission " + permission + " cannot be unassigned");
+			}
+		});
 		((List<Permission>) permissionRepository.findAll(QPermission.permission.key
 				.in(permissions.stream().map(Permission::getKey).collect(Collectors.toSet())))).stream()
 						.map(this::removeForeignConstraints).map(this::deleteEdges)
@@ -368,13 +410,14 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 *                      WARNING: It is advised to use this method only after
 	 *                      creating new permissions to make initial connections
 	 *                      between permissions
+	 * @param realm
 	 * @return created connection
 	 */
 	@Override
 	public PermissionEdge connectPermissions(Permission from, Permission to, boolean bidirectional,
-			boolean transitive) {
+											 boolean transitive, Realm realm) {
 		final PermissionEdge edge = permissionEdgeRepository
-				.save(new PermissionEdge(from, to, bidirectional, transitive));
+				.save(new PermissionEdge(from, to, bidirectional, transitive, realm));
 
 		updatePermissionState(to, from, true);
 
@@ -395,9 +438,8 @@ class AccessControlManagerImpl implements AccessControlManager {
 	 *                   user groups
 	 */
 	private void updatePermissionState(final Permission criteria, final Permission permission, boolean add) {
-
-		Iterable<User> it = userRepository.findAll(QUser.user.permissions.contains(criteria));
-		Iterable<UserGroup> userGroups = userGroupRepository
+		Iterable<User> it = userService.findAllWithAuthorities(QUser.user.permissions.contains(criteria));
+		Iterable<UserGroup> userGroups = userGroupService
 				.findAll(QUserGroup.userGroup.permissions.contains(criteria));
 		if (add) {
 			it.forEach(x -> x.getPermissions().add(permission));
@@ -406,8 +448,8 @@ class AccessControlManagerImpl implements AccessControlManager {
 			it.forEach(x -> x.getPermissions().remove(permission));
 			userGroups.forEach(x -> x.getPermissions().remove(permission));
 		}
-		userRepository.saveAll(it);
-		userGroupRepository.saveAll(userGroups);
+		userService.saveAllUsers(it);
+		userGroupService.saveAll(userGroups);
 	}
 
 	/**
@@ -422,7 +464,8 @@ class AccessControlManagerImpl implements AccessControlManager {
 		permissionEdgeKey.setFromKey(from.getKey());
 		permissionEdgeKey.setToKey(to.getKey());
 
-		PermissionEdge edge = permissionEdgeRepository.getOne(permissionEdgeKey);
+		PermissionEdge edge = permissionEdgeRepository.findOne(
+				hasUserRealmAccess().and(QPermissionEdge.permissionEdge.key.eq(permissionEdgeKey))).orElseThrow();
 
 		updatePermissionState(to, from, false);
 
@@ -465,10 +508,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 				.and(QPermissionEdge.permissionEdge.biDirectional.eq(true)
 						.and(QPermissionEdge.permissionEdge.notIn(visited)));
 
-		List<PermissionEdge> permissions = (List<PermissionEdge>) permissionEdgeRepository.findAll(givesPerm);
+		List<PermissionEdge> permissions = (List<PermissionEdge>) permissionEdgeRepository
+				.findAll(hasUserRealmAccess().and(givesPerm));
 
 		List<PermissionEdge> permissionEdges = (List<PermissionEdge>) permissionEdgeRepository
-				.findAll(givesBiDirectPerm);
+				.findAll(hasUserRealmAccess().and(givesBiDirectPerm));
 
 		// add those edges to visited
 		visited.addAll(permissions);

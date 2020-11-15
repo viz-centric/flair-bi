@@ -1,12 +1,19 @@
 package com.flair.bi.service.security;
 
+import com.flair.bi.domain.User;
 import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
+import com.flair.bi.domain.security.QUserGroup;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.security.PermissionRepository;
 import com.flair.bi.repository.security.UserGroupRepository;
+import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.service.UserService;
+import com.google.common.collect.ImmutableList;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,9 +39,25 @@ public class UserGroupService {
 
 	private final PermissionRepository permissionRepository;
 
+	private final UserService userService;
+
+	@Transactional(readOnly = true)
 	public List<UserGroup> findAll() {
-		log.debug("Request to get all UserGroups");
-		return userGroupRepository.findAll();
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		log.debug("Request to get all UserGroups for realm {}", user.getRealm().getId());
+		return ImmutableList.copyOf(
+				userGroupRepository.findAll(QUserGroup.userGroup.realm.id.eq(user.getRealm().getId()))
+		);
+	}
+
+	@Transactional(readOnly = true)
+	public List<UserGroup> findAllByNameInAndRealmId(Set<String> groupNames, Long realmId) {
+		return userGroupRepository.findAllByNameInAndRealmId(groupNames, realmId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<UserGroup> findAllByRealmId(Long realmId) {
+		return userGroupRepository.findAllByRealmId(realmId);
 	}
 
 	/**
@@ -48,14 +71,28 @@ public class UserGroupService {
 		// Default permissions required in order to create user_group(DASHBOARDS,
 		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: Start
 
-		final Set<Permission> permissions = permissionRepository
-				.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
-						new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
-						new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
-				.stream().collect(Collectors.toSet());
+		boolean isCreate = userGroup.getId() == null;
 
-		userGroup.getPermissions().clear();
-		userGroup.addPermissions(permissions);
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		if (userGroup.getId() != null) {
+			if (!user.getRealm().getId().equals(userGroup.getRealm().getId())) {
+				throw new IllegalStateException("User group " + userGroup.getId() + " does not belong to realm " + user.getRealm().getId());
+			}
+		}
+
+		if (isCreate) {
+			userGroup.setRealm(user.getRealm());
+
+			final Set<Permission> permissions = permissionRepository
+					.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
+							new PermissionKey("VISUAL-METADATA", Action.READ, "APPLICATION"),
+							new PermissionKey("VISUALIZATIONS", Action.READ, "APPLICATION")))
+					.stream().collect(Collectors.toSet());
+
+			userGroup.getPermissions().clear();
+			userGroup.addPermissions(permissions);
+		}
+
 		// Default permissions required in order to create user_group(DASHBOARDS,
 		// VISUAL-METADATA, VISUALIZATIONS) - Issue Fixed: End
 
@@ -71,19 +108,48 @@ public class UserGroupService {
 	@Transactional(readOnly = true)
 	public Page<UserGroup> findAll(Pageable pageable) {
 		log.debug("Request to get all UserGroups");
-		return userGroupRepository.findAll(pageable);
+		return userGroupRepository.findAll(hasRoleRestrictions(), pageable);
+	}
+
+	private BooleanExpression hasRoleRestrictions() {
+		User userWithAuthoritiesByLoginOrError = userService.getUserWithAuthoritiesByLoginOrError();
+
+		boolean hasRestrictedRole = userWithAuthoritiesByLoginOrError.getUserGroups()
+				.stream()
+				.anyMatch(ug -> isRestrictedRole(ug.getName()));
+
+		BooleanExpression expression;
+		if (!hasRestrictedRole) {
+			expression = hasUserGroupPermission().and(QUserGroup.userGroup.name.notIn(RestrictedResources.RESTRICTED_ROLES));
+		} else {
+			expression = hasUserGroupPermission();
+		}
+		return expression;
+	}
+
+	private boolean isRestrictedRole(String role) {
+		return RestrictedResources.RESTRICTED_ROLES.contains(role);
+	}
+
+	@Transactional(readOnly = true)
+	public List<UserGroup> findAll(Predicate predicate) {
+		log.debug("Request to get all UserGroups");
+		return ImmutableList.copyOf(
+				userGroupRepository.findAll(hasRoleRestrictions().and(predicate))
+		);
 	}
 
 	/**
 	 * Get the "name" userGroup.
 	 *
-	 * @param name the id of the entity
+	 * @param name the name of the entity
 	 * @return the entity
 	 */
 	@Transactional(readOnly = true)
 	public UserGroup findOne(String name) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		log.debug("Request to get UserGroup: {}", name);
-		return userGroupRepository.getOne(name);
+		return userGroupRepository.findByNameAndRealmId(name, user.getRealm().getId());
 	}
 
 	@Transactional(readOnly = true)
@@ -98,8 +164,9 @@ public class UserGroupService {
 	 * @param name the id of the entity
 	 */
 	public void delete(String name) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		log.debug("Request to delete UserGroup: {}", name);
-		userGroupRepository.deleteById(name);
+		userGroupRepository.deleteAllByNameAndRealmId(name, user.getRealm().getId());
 	}
 
 	/**
@@ -120,5 +187,24 @@ public class UserGroupService {
 	 */
 	public boolean isNotPredefinedGroup(String name) {
 		return !isPredefinedGroup(name);
+	}
+
+	@Transactional(readOnly = true)
+	public boolean exists(UserGroup userGroup) {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return userGroupRepository.findByNameAndRealmId(userGroup.getName(), user.getRealm().getId()) != null;
+	}
+
+	public void saveAll(Iterable<UserGroup> userGroups) {
+		userGroupRepository.saveAll(userGroups);
+	}
+
+	public void deleteAllByRealmId(Long realmId){
+		userGroupRepository.deleteAllByRealmId(realmId);
+	}
+
+	private BooleanExpression hasUserGroupPermission() {
+		User user = userService.getUserWithAuthoritiesByLoginOrError();
+		return QUserGroup.userGroup.realm.id.eq(user.getRealm().getId());
 	}
 }

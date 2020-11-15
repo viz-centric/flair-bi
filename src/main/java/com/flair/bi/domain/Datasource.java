@@ -23,6 +23,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
@@ -96,6 +97,9 @@ public class Datasource implements Serializable, SecuredEntity {
 
     @Column(name = "sql")
     private String sql;
+
+    @ManyToOne(optional = false)
+    private Realm realm;
 
     @PreRemove
     public void preRemove() {

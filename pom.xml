@@ -32,7 +32,7 @@
 		<aws-maven.version>5.0.0.RELEASE</aws-maven.version>
         <bucket.name>vizcentric-mvn-repo</bucket.name>
     
-		<flair-messages.version>0.3.20</flair-messages.version>
+		<flair-messages.version>0.3.22</flair-messages.version>
 		<project-bi-common.version>1.4.17</project-bi-common.version>
 
 		<!-- GRPC::begin -->
@@ -85,14 +85,14 @@
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 
 		<!-- Dependency versions -->
-		<jhipster-dependencies.version>3.7.1</jhipster-dependencies.version>
+		<jhipster-dependencies.version>3.9.0</jhipster-dependencies.version>
 		<!-- The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-		<spring-boot.version>2.2.7.RELEASE</spring-boot.version>
+		<spring-boot.version>2.2.9.RELEASE</spring-boot.version>
 		<!-- The spring framework version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-		<spring.version>5.2.5.RELEASE</spring.version>
+		<spring.version>5.2.9.RELEASE</spring.version>
 		<spring-cloud.version>Hoxton.M2</spring-cloud.version>
 		<!-- The hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-		<hibernate.version>5.4.12.Final</hibernate.version>
+		<hibernate.version>5.4.21.Final</hibernate.version>
 		<!-- The javassist version should match the one managed by https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
 		<javassist.version>3.23.2-GA</javassist.version>
 		<!-- The liquibase version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -103,7 +103,7 @@
 
 		<!-- The hibernate version to be used to override default version of liquibase 
 			maven plugin -->
-		<hibernate-core.version>5.4.12.Final</hibernate-core.version>
+		<hibernate-core.version>5.4.21.Final</hibernate-core.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 		<archunit-junit5.version>0.12.0</archunit-junit5.version>

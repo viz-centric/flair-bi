@@ -1,18 +1,21 @@
 package com.flair.bi.web.rest.dto;
 
-import java.time.ZonedDateTime;
-import java.util.Set;
-
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.DatasourceStatus;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.hierarchy.Hierarchy;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+import java.time.ZonedDateTime;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class DatasourceDTO {
 
@@ -29,5 +32,6 @@ public class DatasourceDTO {
     private Set<DatasourceConstraint> datasourceConstraints;
     private DatasourceStatus status;
     private String sql;
+    private RealmDTO realm;
 
 }

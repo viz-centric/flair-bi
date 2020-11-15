@@ -1,23 +1,22 @@
 package com.flair.bi.release;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.DashboardRelease;
 import com.flair.bi.domain.ReleaseRequest;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.ViewRelease;
-import com.flair.bi.repository.ReleaseRequestRepository;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component(value = "dashboardReleaseProcessor")
 @Transactional
@@ -28,7 +27,9 @@ class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<Dashbo
 
 	private final DashboardService dashboardService;
 
-	private final ReleaseRequestRepository requestRepository;
+	@Autowired
+	@Lazy // TODO: remove this dependency to avoid cycling dependency issue
+	private ReleaseRequestService releaseRequestService;
 
 	@Override
 	public ReleaseRequest requestRelease(DashboardRelease entity) {
@@ -57,7 +58,7 @@ class DashboardReleaseRequestProcessor implements ReleaseRequestProcessor<Dashbo
 				.filter(x -> x.getCurrentRelease() != null).map(View::getCurrentRelease).forEach(entity::add);
 
 		request.setRelease(entity);
-		ReleaseRequest r = requestRepository.save(request);
+		ReleaseRequest r = releaseRequestService.save(request);
 		dashboardService.save(dashboard);
 		return r;
 

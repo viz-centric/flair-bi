@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for managing {@link View}
@@ -165,4 +166,7 @@ public interface ViewService {
      */
     ViewExportDTO exportView(Long id);
 
+	Optional<View> findViewCurrentEditingStateId(String viewStateId);
+
+	void deleteAllByRealmId(Long realmId);
 }

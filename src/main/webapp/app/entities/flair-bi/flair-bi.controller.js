@@ -312,7 +312,8 @@
                 $rootScope.$broadcast(
                     "flairbiApp:filters-meta-Data",
                     metaData.data,
-                    favouriteFilterService.getFavouriteFilter()
+                    favouriteFilterService.getFavouriteFilter(),
+                    favouriteFilterService.getPinFilter()
                 );
             } else {
                 var contentId = "content-" + data.headers.queryId;

@@ -39,7 +39,7 @@
         AuthServerProvider,
         QueryValidationService,
         $stateParams,
-        $state,
+        $state
     ) {
         var vm = this;
 

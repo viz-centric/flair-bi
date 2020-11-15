@@ -35,7 +35,9 @@
                             </a>
                         </div>
                         <div class="item" role="menuitem">
-                            <a uib-tooltip="Export" class="pull-right" href="api/views/{{ vm.view.id }}/export" download="{{vm.view.viewName}}-{{vm.view.id}}.json">
+                            <a uib-tooltip="Export"
+                               ng-click="vm.onExportClick()"
+                               class="pull-right">
                                 <svg class="flaticons-export">
                                     <use xlink:href="#export" />
                                 </svg>

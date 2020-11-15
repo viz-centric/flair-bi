@@ -25,6 +25,7 @@
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.list = {};
         vm.dateRangeReload = false;
+        vm.groupFilter = null;
         vm.onGroupFilterClick = onGroupFilterClick;
         vm.canDisplayGroupFilter = canDisplayGroupFilter;
         vm.selectedFilter = {};
@@ -57,7 +58,11 @@
         }
 
         function onGroupFilterClick(group) {
-            vm.groupFilter = group;
+            if (group === vm.groupFilter) {
+                vm.groupFilter = null;
+            } else {
+                vm.groupFilter = group;
+            }
         }
 
         function canDisplayGroupFilter(dimension) {
@@ -153,6 +158,15 @@
                         value: q
                     }
                 }];
+            }
+            if (vm.groupFilter) {
+                q.transformations = [
+                    {
+                        '@type': 'grouping',
+                        groupType: vm.groupFilter,
+                        groupingField: query.fields[0]
+                    }
+                ];
             }
             query.distinct = true;
             query.limit = 100;

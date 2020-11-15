@@ -208,7 +208,7 @@ public class GrpcQueryService {
         GroupingTransformationDTO groupingTransformationDTO = new GroupingTransformationDTO();
         groupingTransformationDTO.setGroupingField(queryDTO.getFields().get(0));
         groupingTransformationDTO.setGroupType(GroupType.MONTH);
-        queryDTO.setTransformations(asList(groupingTransformationDTO));
+//        queryDTO.setTransformations(asList(groupingTransformationDTO));
         String userId = sendGetDataDTO.getUserId();
         Long dashboardId = Optional.ofNullable(sendGetDataDTO.getViewId())
                 .map(viewId -> viewService.findOne(viewId))

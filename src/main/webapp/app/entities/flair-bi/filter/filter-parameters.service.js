@@ -464,14 +464,13 @@
         }
 
         function saveGroupFilter(filterType) {
-            console.log('filterType', filterType);
             if (!filterType) {
                 groupFilters.length = 0;
             } else {
-                groupFilters.push({
+                groupFilters[0] = {
                     type: 'grouping',
                     groupType: filterType,
-                });
+                };
             }
         }
 

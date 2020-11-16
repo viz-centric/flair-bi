@@ -64,6 +64,8 @@
                 vm.groupFilter = group;
             }
             filterParametersService.saveGroupFilter(vm.groupFilter);
+            $rootScope.$broadcast('flairbiApp:filter');
+            $rootScope.$broadcast('flairbiApp:filter-add');
         }
 
         function canDisplayGroupFilter(dimension) {

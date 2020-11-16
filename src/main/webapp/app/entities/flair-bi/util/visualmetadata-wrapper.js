@@ -364,16 +364,15 @@
 
         if (groupFilters.length) {
             const dateFilterDimension = dimensions
-                .find(function (item) {
-                    console.log('iterating', item);
-                    return item.feature.dateFilter === 'ENABLED';
+                .find(function (d) {
+                    return d.feature.dateFilter === 'ENABLED';
                 });
             if (dateFilterDimension) {
                 query.transformations = groupFilters
                     .map(function (gf) {
                         return {
-                            '@type': gf.type,
-                            groupType: gf.groupFilter,
+                            '@type': 'grouping',
+                            groupType: gf.groupType,
                             groupingField: dimensionFields
                                 .find(function (df) {
                                     return df.name === dateFilterDimension.feature.name;

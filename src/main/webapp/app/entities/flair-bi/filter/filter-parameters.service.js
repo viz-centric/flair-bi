@@ -73,6 +73,7 @@
 
         function clear() {
             paramObject = {};
+            groupFilters = [];
             $rootScope.$broadcast('filterParametersService:filter-changed', paramObject);
             $rootScope.filterSelection = {
                 id: null,

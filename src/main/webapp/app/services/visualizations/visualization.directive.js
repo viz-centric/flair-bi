@@ -166,14 +166,16 @@
         function build(forceQuery) {
             if (forceQuery) {
                 proxyService.forwardCall(vm.datasource.id, {
-                    queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                    queryDTO: vm.data.getQueryParameters(filterParametersService,
+                        filterParametersService.getConditionExpression()),
                     visualMetadata: vm.data
                 })
                     .then(onForwardCallSuccess, onForwardCallError);
             } else {
                 if (!vm.data.data) {
                     proxyService.forwardCall(vm.data.views.viewDashboard.dashboardDatasources.id, {
-                        queryDTO: vm.data.getQueryParameters(filterParametersService.get(), filterParametersService.getConditionExpression()),
+                        queryDTO: vm.data.getQueryParameters(filterParametersService,
+                            filterParametersService.getConditionExpression()),
                         visualmetadata: vm.data
                     })
                         .then(onForwardCallSuccess, onForwardCallError);

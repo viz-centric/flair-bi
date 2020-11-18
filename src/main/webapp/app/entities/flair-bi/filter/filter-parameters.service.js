@@ -11,6 +11,7 @@
 
         var paramObject = {};
         var selectedFilters={};
+        var groupFilters = [];
         var dynamicDateRangeToolTip={};
         var dynamicDateRangeMetaData={};
 
@@ -40,8 +41,9 @@
             setFilterInIframeURL: setFilterInIframeURL,
             removeURLParameter : removeURLParameter,
             getParameterByName : getParameterByName,
-            getFilterURL : getFilterURL
-
+            getFilterURL : getFilterURL,
+            saveGroupFilter,
+            getGroupFilters,
         };
 
 
@@ -71,6 +73,7 @@
 
         function clear() {
             paramObject = {};
+            groupFilters = [];
             $rootScope.$broadcast('filterParametersService:filter-changed', paramObject);
             $rootScope.filterSelection = {
                 id: null,
@@ -454,6 +457,21 @@
                         validateFilter(id, filtersList, filterDimensions, filters, element);
                     });
                 }
+            }
+        }
+
+        function getGroupFilters() {
+            return groupFilters;
+        }
+
+        function saveGroupFilter(filterType) {
+            if (!filterType) {
+                groupFilters.length = 0;
+            } else {
+                groupFilters[0] = {
+                    type: 'grouping',
+                    groupType: filterType,
+                };
             }
         }
 

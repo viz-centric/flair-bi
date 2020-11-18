@@ -398,13 +398,8 @@
 
                         v.fields = v.fields
                             .filter(function (item) {
-                                if (item.feature && item.feature != null && item.feature.featureType === 'DIMENSION') {
-                                    item.feature.id = dimension[0].id;
-                                    item.feature.name = dimension[0].name;
-                                    item.feature.type = dimension[0].type;
-                                    item.feature.functionId = dimension[0].functionId;
-                                    item.feature.definition = dimension[0].definition;
-                                    item.feature.featureType = dimension[0].featureType;
+                                if (item.feature && item.feature.featureType === 'DIMENSION') {
+                                    angular.copy(dimension[0], item.feature);
                                     return item;
                                 }
                                 else {

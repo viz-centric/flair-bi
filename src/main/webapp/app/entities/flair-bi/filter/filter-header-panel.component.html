@@ -36,6 +36,39 @@
                         <filter-date-range dimension="dimension" reload="vm.dateRangeReload"
                             on-date-change="vm.onDateChange(startDate, endDate, metadata,dimension)">
                         </filter-date-range>
+                        <div class="date-range-component"
+                             ng-if="vm.canDisplayGroupFilter(dimension)">
+                            <div type="tab"
+                                 class="date-range-btn"
+                                 ng-class="{'date-range-btn-active':vm.groupFilter == 'DAY'}"
+                                 ng-click="vm.onGroupFilterClick('DAY')">
+                                <p class="flex-text">Day</p>
+                            </div>
+                            <div type="tab"
+                                 class="date-range-btn"
+                                 ng-class="{'date-range-btn-active':vm.groupFilter == 'WEEK'}"
+                                 ng-click="vm.onGroupFilterClick('WEEK')">
+                                <p class="flex-text">Week</p>
+                            </div>
+                            <div type="tab"
+                                 class="date-range-btn"
+                                 ng-class="{'date-range-btn-active':vm.groupFilter == 'MONTH'}"
+                                 ng-click="vm.onGroupFilterClick('MONTH')">
+                                <p class="flex-text">Month</p>
+                            </div>
+                            <div type="tab"
+                                 class="date-range-btn"
+                                 ng-class="{'date-range-btn-active':vm.groupFilter == 'QUARTER'}"
+                                 ng-click="vm.onGroupFilterClick('QUARTER')">
+                                <p class="flex-text">Quarter</p>
+                            </div>
+                            <div type="tab"
+                                 class="date-range-btn"
+                                 ng-class="{'date-range-btn-active':vm.groupFilter == 'YEAR'}"
+                                 ng-click="vm.onGroupFilterClick('YEAR')">
+                                <p class="flex-text">Year</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class QueryTransformerService {
 
-    public static final long MAX_LIMIT = 1000L;
+    public static final long MAX_LIMIT = 5_000L;
     private final FeatureService featureService;
     private final QueryValidationService queryValidationService;
     private final DatasourceGroupConstraintService datasourceGroupConstraintService;
@@ -91,7 +91,8 @@ public class QueryTransformerService {
         builder
                 .setDistinct(queryDTO.isDistinct())
                 .addAllFields(toProtoFields(fields))
-                .addAllGroupBy(toProtoFields(groupBy));
+                .addAllGroupBy(toProtoFields(groupBy))
+                .addAllTransformations(toTransformations(queryDTO));
 
         if (params.getDatasourceId() != null) {
             builder.putMeta("datasourceId", String.valueOf(params.getDatasourceId()));
@@ -114,7 +115,9 @@ public class QueryTransformerService {
         }
 
         if (queryDTO.getLimit() != null) {
-            builder.setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT));
+            if (queryDTO.getTransformations().isEmpty()) {
+                builder.setLimit(Math.min(queryDTO.getLimit(), MAX_LIMIT));
+            }
         }
 
         if (vId != null) {
@@ -153,6 +156,13 @@ public class QueryTransformerService {
             );
         });
         return builder.build();
+    }
+
+    private Iterable<String> toTransformations(QueryDTO queryDTO) {
+        return queryDTO.getTransformations()
+                .stream()
+                .map(t -> JacksonUtil.toString(t))
+                .collect(toList());
     }
 
     private Query.QuerySource toQuerySource(QuerySource querySource) {

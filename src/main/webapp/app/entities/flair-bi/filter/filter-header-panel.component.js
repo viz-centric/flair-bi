@@ -25,6 +25,9 @@
         vm.canDisplayDateRangeControls = canDisplayDateRangeControls;
         vm.list = {};
         vm.dateRangeReload = false;
+        vm.groupFilter = null;
+        vm.onGroupFilterClick = onGroupFilterClick;
+        vm.canDisplayGroupFilter = canDisplayGroupFilter;
         vm.selectedFilter = {};
         vm.onItemSelect = onItemSelect;
         vm.dimension;
@@ -52,6 +55,21 @@
             vm.dimensions.forEach(element => {
                 vm.load("", element);
             });
+        }
+
+        function onGroupFilterClick(group) {
+            if (group === vm.groupFilter) {
+                vm.groupFilter = null;
+            } else {
+                vm.groupFilter = group;
+            }
+            filterParametersService.saveGroupFilter(vm.groupFilter);
+            $rootScope.$broadcast('flairbiApp:filter');
+            $rootScope.$broadcast('flairbiApp:filter-add');
+        }
+
+        function canDisplayGroupFilter(dimension) {
+            return dimension.dateFilter === 'ENABLED';
         }
 
         function onItemSelect() {

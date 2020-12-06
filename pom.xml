@@ -32,7 +32,7 @@
 		<aws-maven.version>5.0.0.RELEASE</aws-maven.version>
         <bucket.name>vizcentric-mvn-repo</bucket.name>
     
-		<flair-messages.version>0.3.23</flair-messages.version>
+		<flair-messages.version>0.3.24.1-SNAPSHOT</flair-messages.version>
 		<project-bi-common.version>1.4.19</project-bi-common.version>
 
 		<!-- GRPC::begin -->

@@ -43,6 +43,7 @@ public class GrpcConnectionService {
     private ConnectionTypeDTO toDto(ConnectionType conn) {
         return new ConnectionTypeDTO().setId(conn.getId()).setName(conn.getName()).setBundleClass(conn.getBundleClass())
                 .setConnectionPropertiesSchema(new ConnectionPropertiesSchemaDTO()
+                        .setConfig(conn.getConnectionPropertiesSchema().getConfigMap())
                         .setConnectionDetailsClass(conn.getConnectionPropertiesSchema().getConnectionDetailsClass())
                         .setConnectionDetailsType(conn.getConnectionPropertiesSchema().getConnectionDetailsType())
                         .setImagePath(conn.getConnectionPropertiesSchema().getImagePath()).setConnectionProperties(

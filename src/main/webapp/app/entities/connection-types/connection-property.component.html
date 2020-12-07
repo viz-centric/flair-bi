@@ -2,6 +2,8 @@
     <label class="control-label">
         {{vm.cProperty.displayName}}
     </label>
+    <textarea ng-disabled="vm.disabled" name="{{vm.cProperty.fieldName}}-text-input" ng-model="vm.connection.details[vm.fieldName]"
+        ng-if="vm.cProperty.fieldType === 'Text'" class="form-control" ng-required="!vm.disabled && vm.cProperty.required && vm.cProperty.fieldType === 'Text'"></textarea>
     <input ng-disabled="vm.disabled" name="{{vm.cProperty.fieldName}}-text-input" ng-model="vm.connection.details[vm.fieldName]"
         ng-if="vm.cProperty.fieldType === 'String'" class="form-control" type="text" ng-required="!vm.disabled && vm.cProperty.required && vm.cProperty.fieldType === 'String'">
     <input ng-disabled="vm.disabled" name="{{vm.cProperty.fieldName}}-number-input" ng-model="vm.connection.details[vm.fieldName]"

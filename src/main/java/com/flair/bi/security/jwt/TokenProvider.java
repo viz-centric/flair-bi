@@ -1,12 +1,20 @@
 package com.flair.bi.security.jwt;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
-
+import com.flair.bi.config.firebase.FirebaseProperties;
+import com.flair.bi.security.PermissionGrantedAuthority;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+import io.github.jhipster.config.JHipsterProperties;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,19 +23,17 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.flair.bi.security.PermissionGrantedAuthority;
-
-import io.github.jhipster.config.JHipsterProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
 	private static final String AUTHORITIES_KEY = "auth";
@@ -40,9 +46,7 @@ public class TokenProvider implements InitializingBean {
 
 	private final JHipsterProperties jHipsterProperties;
 
-	public TokenProvider(JHipsterProperties jHipsterProperties) {
-		this.jHipsterProperties = jHipsterProperties;
-	}
+	private final FirebaseProperties firebaseProperties;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -64,9 +68,15 @@ public class TokenProvider implements InitializingBean {
 				.getJwt().getTokenValidityInSecondsForRememberMe();
 	}
 
+	@SneakyThrows
 	public String createToken(Authentication authentication, boolean rememberMe) {
 		String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
+		if (firebaseProperties.isEnabled()) {
+			String customToken = FirebaseAuth.getInstance()
+					.createCustomToken(authentication.getName(), Map.of(AUTHORITIES_KEY, authorities));
+			return customToken;
+		}
 
 		long now = (new Date()).getTime();
 		Date validity;
@@ -80,26 +90,43 @@ public class TokenProvider implements InitializingBean {
 				.signWith(key, SignatureAlgorithm.HS512).setExpiration(validity).compact();
 	}
 
+	@SneakyThrows
 	public Authentication getAuthentication(String token) {
 
-		Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+		Collection<? extends GrantedAuthority> authorities;
+		String subject;
 
-		Collection<? extends GrantedAuthority> authorities = Arrays
-				.stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(PermissionGrantedAuthority::new)
-				.collect(Collectors.toList());
+		if (firebaseProperties.isEnabled()) {
+			FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+			Map<String, Object> claims = decodedToken.getClaims();
+			authorities = Arrays
+					.stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(PermissionGrantedAuthority::new)
+					.collect(Collectors.toList());
+			subject = decodedToken.getUid();
+		} else {
+			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+			authorities = Arrays
+					.stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(PermissionGrantedAuthority::new)
+					.collect(Collectors.toList());
+			subject = claims.getSubject();
+		}
 
-		User principal = new User(claims.getSubject(), "", authorities);
+		User principal = new User(subject, "", authorities);
 
 		return new UsernamePasswordAuthenticationToken(principal, token, authorities);
 	}
 
 	public boolean validateToken(String authToken) {
 		try {
+			if (firebaseProperties.isEnabled()) {
+				FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(authToken);
+				String uid = decodedToken.getUid();
+				return !org.apache.commons.lang3.StringUtils.isEmpty(uid);
+			}
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
 			return true;
-		} catch (JwtException | IllegalArgumentException e) {
-			log.info("Invalid JWT token.");
-			log.trace("Invalid JWT token trace.", e);
+		} catch (JwtException | IllegalArgumentException | FirebaseAuthException e) {
+			log.info("Invalid JWT token.", e);
 		}
 		return false;
 	}

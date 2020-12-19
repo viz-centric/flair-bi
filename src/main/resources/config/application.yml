@@ -28,6 +28,9 @@ spring:
                 enable_lazy_load_no_trans: true
 
 app:
+    firebase:
+        enabled: ${FIREBASE_ENABLED:false}
+        google-app-cred-file: ${GOOGLE_APPLICATION_CREDENTIALS:/key/file.json}
     auth:
         jwt-key: ${GRPC_JWT_KEY:secretKey1secretKey1secretKey1secretKey1secretKey1secretKey1secretKey1}
     jobs:

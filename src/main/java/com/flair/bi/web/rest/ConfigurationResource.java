@@ -22,7 +22,7 @@ public class ConfigurationResource {
 
     @GetMapping("/config")
     @Timed
-    public Config getAllClientLogos() {
+    public Config getConfig() {
         return Config.builder()
                 .mode(firebaseProperties.isEnabled() ? Config.Mode.CLOUD : Config.Mode.SELF_MANAGED)
                 .build();

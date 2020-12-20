@@ -73,9 +73,8 @@ public class TokenProvider implements InitializingBean {
 		String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
 		if (firebaseProperties.isEnabled()) {
-			String customToken = FirebaseAuth.getInstance()
+			return FirebaseAuth.getInstance()
 					.createCustomToken(authentication.getName(), Map.of(AUTHORITIES_KEY, authorities));
-			return customToken;
 		}
 
 		long now = (new Date()).getTime();

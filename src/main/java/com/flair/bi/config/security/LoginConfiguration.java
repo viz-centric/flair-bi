@@ -138,7 +138,7 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.access("@accessControlManager.hasAccess('APPLICATION-METRICS', 'READ', 'APPLICATION')")
 
 				.antMatchers("/api/config").permitAll()
-				.antMatchers("/api/register").permitAll()
+				.antMatchers("/api/register", "/api/registerWithProvider").permitAll()
 				.antMatchers("/api/activate").permitAll()
 				.antMatchers("/api/authenticate").permitAll()
 				.antMatchers("/api/account/reset_password/init").permitAll()

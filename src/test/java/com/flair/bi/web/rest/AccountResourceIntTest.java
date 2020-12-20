@@ -66,8 +66,8 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 		MockitoAnnotations.initMocks(this);
 		doNothing().when(mockMailService).sendActivationEmail((User) anyObject());
 
-		AccountResource accountResource = new AccountResource(userService, null, mockMailService);
-		AccountResource accountUserMockResource = new AccountResource(mockUserService, null,
+		AccountResource accountResource = new AccountResource(userService, null, null, mockMailService);
+		AccountResource accountUserMockResource = new AccountResource(mockUserService, null, null,
 				mockMailService);
 
 		this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).build();

@@ -29,6 +29,8 @@ public interface UserRepository
 
 	Optional<User> findOneByEmailAndRealmId(String email, Long realmId);
 
+	Optional<User> findOneByEmail(String email);
+
 	Optional<User> findOneByLogin(String login);
 
 	Optional<User> findOneByLoginAndRealmId(String login, Long realmId);

@@ -372,6 +372,11 @@ public class UserService {
 		return userRepository.findOneByEmailAndRealmId(email, user.getRealm().getId());
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<User> getUserByEmailAnyRealm(String email) {
+		return userRepository.findOneByEmail(email);
+	}
+
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE','APPLICATION')")
 	public void deleteAllByRealmId(Long realmId) {
 		userRepository.deleteAllByRealmId(realmId);

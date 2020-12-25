@@ -5,21 +5,27 @@ import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
 import com.flair.bi.domain.Dashboard;
 import com.flair.bi.domain.Datasource;
+import com.flair.bi.domain.User;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
+import com.flair.bi.service.UserService;
+import com.flair.bi.service.security.UserGroupInfo;
+import com.flair.bi.service.security.UserGroupPageInfo;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.flair.bi.web.rest.util.ResponseUtil;
 import com.flair.bi.web.rest.vm.ChangePermissionVM;
+import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.querydsl.core.types.Predicate;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -362,5 +368,22 @@ public class UserGroupResource {
                 });
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/userGroups/search")
+    @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
+    public ResponseEntity<SearchUserGroupResponse> search(@ApiParam Pageable pageable,
+                                                          @QuerydslPredicate(root = UserGroup.class) Predicate predicate)
+            throws URISyntaxException {
+        UserGroupPageInfo info = userGroupService.findAll(predicate, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(info.getPage(), "/api/userGroups");
+        return new ResponseEntity<>(new SearchUserGroupResponse(info.getResults()), headers, HttpStatus.OK);
+    }
+
+    @RequiredArgsConstructor
+    @Data
+    private static class SearchUserGroupResponse {
+        final List<UserGroupInfo> results;
     }
 }

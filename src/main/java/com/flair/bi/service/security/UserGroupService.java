@@ -132,6 +132,16 @@ public class UserGroupService {
 	}
 
 	@Transactional(readOnly = true)
+	public UserGroupPageInfo findAll(Predicate predicate, Pageable pageable) {
+		Page<UserGroup> page = userGroupRepository.findAll(hasRoleRestrictions().and(predicate), pageable);
+		List<UserGroupInfo> results = page
+				.stream()
+				.map(ug -> new UserGroupInfo(ug.getId(), ug.getName(), ug.getUsers().size()))
+				.collect(Collectors.toUnmodifiableList());
+		return new UserGroupPageInfo(results, page);
+	}
+
+	@Transactional(readOnly = true)
 	public List<UserGroup> findAll(Predicate predicate) {
 		log.debug("Request to get all UserGroups");
 		return ImmutableList.copyOf(

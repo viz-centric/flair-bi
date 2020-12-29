@@ -1,10 +1,15 @@
 package com.flair.bi.web.rest;
 
-import java.util.Collections;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.flair.bi.domain.DraftUser;
+import com.flair.bi.security.jwt.JWTConfigurer;
+import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.service.DraftUserService;
+import com.flair.bi.web.rest.vm.LoginVM;
+import io.micrometer.core.annotation.Timed;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,14 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.security.jwt.JWTConfigurer;
-import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.web.rest.vm.LoginVM;
-
-import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api")
@@ -35,6 +36,8 @@ public class UserJWTController {
 	private final TokenProvider tokenProvider;
 
 	private final AuthenticationManager authenticationManager;
+
+	private final DraftUserService draftUserService;
 
 	@PostMapping("/authenticate")
 	@Timed
@@ -54,6 +57,30 @@ public class UserJWTController {
 			return new ResponseEntity<>(Collections.singletonMap("AuthenticationException", ae.getLocalizedMessage()),
 					HttpStatus.UNAUTHORIZED);
 		}
+	}
+
+	@PostMapping("/signup")
+	@Timed
+	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request, HttpServletResponse response) {
+		DraftUser user = draftUserService.createUser(request.getUsername(), request.getPassword(), request.getFirstname(),
+				request.getLastname(), request.getEmail(), request.getProvider());
+		return ResponseEntity.ok().build();
+	}
+
+	@Data
+	private static class SignupRequest {
+		@NotEmpty
+		final String username;
+		@NotEmpty
+		final String firstname;
+		@NotEmpty
+		final String lastname;
+		@NotEmpty
+		final String password;
+		@NotEmpty
+		final String email;
+
+		final String provider;
 	}
 
 	/**

@@ -137,12 +137,18 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/management/metrics")
 				.access("@accessControlManager.hasAccess('APPLICATION-METRICS', 'READ', 'APPLICATION')")
 
-				.antMatchers("/api/register").permitAll().antMatchers("/api/activate").permitAll()
-				.antMatchers("/api/authenticate").permitAll().antMatchers("/api/account/reset_password/init")
-				.permitAll().antMatchers("/api/account/reset_password/finish").permitAll()
-				.antMatchers("/api/profile-info").permitAll().antMatchers("/api/external/**").permitAll()
+				.antMatchers("/api/config").permitAll()
+				.antMatchers("/api/register", "/api/registerWithProvider").permitAll()
+				.antMatchers("/api/activate").permitAll()
+				.antMatchers("/api/authenticate").permitAll()
+				.antMatchers("/api/account/reset_password/init").permitAll()
+				.antMatchers("/api/account/reset_password/finish").permitAll()
+				.antMatchers("/api/profile-info").permitAll()
+				.antMatchers("/api/external/**").permitAll()
 				// THIS ALWAYS GOES AT THE END SO THEY DONT OVERWRITE SEPARATE "/api" rules.
-				.antMatchers("/api/**").authenticated().and().apply(securityConfigurerAdapter())
+				.antMatchers("/api/**").authenticated()
+				.and()
+				.apply(securityConfigurerAdapter())
 
 		// oauth
 //				.and().oauth2Client().and().oauth2Login().successHandler(handler())

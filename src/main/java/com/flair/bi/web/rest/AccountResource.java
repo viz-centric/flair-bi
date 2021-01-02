@@ -6,6 +6,8 @@ import com.flair.bi.domain.User;
 import com.flair.bi.repository.PersistentTokenRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
+import com.flair.bi.security.jwt.JWTConfigurer;
+import com.flair.bi.service.ExternalRegistrationService;
 import com.flair.bi.service.MailService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.UserDTO;
@@ -13,6 +15,7 @@ import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.vm.KeyAndPasswordVM;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 import io.micrometer.core.annotation.Timed;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +34,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
@@ -47,6 +52,8 @@ import java.util.Optional;
 public class AccountResource {
 
 	private final UserService userService;
+
+	private final ExternalRegistrationService externalRegistrationService;
 
 	private final PersistentTokenRepository persistentTokenRepository;
 
@@ -80,6 +87,21 @@ public class AccountResource {
 							mailService.sendActivationEmail(user);
 							return new ResponseEntity<>(HttpStatus.CREATED);
 						}));
+	}
+
+	@PostMapping(path = "/registerWithProvider")
+	@Timed
+	public ResponseEntity<?> registerWithProvider(@Valid @RequestBody RegisterWithProviderRequest request,
+												  HttpServletResponse response) {
+		ExternalRegistrationService.RegisterResult result = externalRegistrationService.register(request.getIdToken());
+		response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwt());
+		return ResponseEntity.ok().build();
+	}
+
+	@Data
+	private static class RegisterWithProviderRequest {
+		@NotEmpty
+		private String idToken;
 	}
 
 	/**

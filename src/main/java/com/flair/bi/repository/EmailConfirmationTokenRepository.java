@@ -7,9 +7,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
-/**
- * Spring Data JPA repository for the User entity.
- */
 public interface EmailConfirmationTokenRepository
 		extends JpaRepository<EmailConfirmationToken, Long>, QuerydslPredicateExecutor<EmailConfirmationToken>, QuerydslBinderCustomizer<QEmailConfirmationToken> {
 

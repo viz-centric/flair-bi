@@ -34,10 +34,13 @@ public class DraftUserService {
 		user.setEmail(email);
 		user.setUserType(StringUtils.isNoneBlank(userType) ? userType : Constants.INTERNAL_USER);
 		user.setDateCreated(Instant.now());
+
 		log.debug("Creating draft user {}", user);
+
 		user = draftUserRepository.save(user);
 
-		emailVerificationService.sendConfirmYourEmailEmail(email);
+		emailVerificationService.sendConfirmYourEmailEmail(user);
+
 		return user;
 	}
 

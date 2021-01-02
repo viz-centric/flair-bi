@@ -22,7 +22,7 @@ import java.time.Instant;
 @Table(name = "draft_user")
 @EqualsAndHashCode(of = "username", callSuper = false)
 @Data
-public class DraftUser extends AbstractAuditingEntity implements Serializable {
+public class DraftUser extends BaseEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

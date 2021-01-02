@@ -61,7 +61,7 @@ public class UserJWTController {
 
 	@PostMapping("/signup")
 	@Timed
-	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
 		DraftUser user = draftUserService.createUser(request.getUsername(), request.getPassword(), request.getFirstname(),
 				request.getLastname(), request.getEmail(), request.getProvider());
 		return ResponseEntity.ok().build();

@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -30,6 +28,7 @@ public class SendGridService {
         personalization.addTo(from);
 
         Mail mail = new Mail();
+        mail.setFrom(new Email("support@vizcentric.com", "Viz Centric Mail Bot"));
         mail.setTemplateId(CONFIRM_EMAIL_TEMPLATE_ID);
         mail.addPersonalization(personalization);
         Request request = new Request();
@@ -39,8 +38,11 @@ public class SendGridService {
             request.setBody(mail.build());
             Response response = sendGridAPI.api(request);
             log.debug("Confirm your email email to email {} has been send with the response {}", email, response.getBody());
-        } catch (IOException ex) {
-            throw new RuntimeException("Error sending confirm your email email " + email);
+            if (response.getStatusCode() >= 400) {
+                throw new RuntimeException("Error sending email with status code " + response.getBody());
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Error sending confirm your email for email " + email, ex);
         }
     }
 

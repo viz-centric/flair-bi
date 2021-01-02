@@ -68,19 +68,19 @@ public class UserJWTController {
 	}
 
 	@Data
-	private static class SignupRequest {
+	public static class SignupRequest {
 		@NotEmpty
-		final String username;
+		String username;
 		@NotEmpty
-		final String firstname;
+		String firstname;
 		@NotEmpty
-		final String lastname;
+		String lastname;
 		@NotEmpty
-		final String password;
+		String password;
 		@NotEmpty
-		final String email;
+		String email;
 
-		final String provider;
+		String provider;
 	}
 
 	/**

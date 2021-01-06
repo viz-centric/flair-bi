@@ -1,10 +1,9 @@
 package com.flair.bi.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.domain.DraftUser;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.service.DraftUserService;
+import com.flair.bi.service.signup.SignupService;
 import com.flair.bi.web.rest.vm.LoginVM;
 import io.micrometer.core.annotation.Timed;
 import lombok.Data;
@@ -37,7 +36,7 @@ public class UserJWTController {
 
 	private final AuthenticationManager authenticationManager;
 
-	private final DraftUserService draftUserService;
+	private final SignupService signupService;
 
 	@PostMapping("/authenticate")
 	@Timed
@@ -62,7 +61,7 @@ public class UserJWTController {
 	@PostMapping("/signup")
 	@Timed
 	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
-		DraftUser user = draftUserService.createUser(request.getUsername(), request.getPassword(), request.getFirstname(),
+		signupService.signup(request.getUsername(), request.getPassword(), request.getFirstname(),
 				request.getLastname(), request.getEmail(), request.getProvider());
 		return ResponseEntity.ok().build();
 	}

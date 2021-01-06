@@ -5,9 +5,12 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -31,8 +34,13 @@ public class EmailConfirmationToken extends BaseEntity implements Serializable {
 	@Column(name = "date_created")
 	private Instant dateCreated;
 
+	@ManyToOne
 	@NotNull
-	@Column(nullable = false, name = "draft_user_id")
-	private Long draftUserId;
+	private DraftUser draftUser;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private EmailConfirmationTokenStatus status;
 
 }

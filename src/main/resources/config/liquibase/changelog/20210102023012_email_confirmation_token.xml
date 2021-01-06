@@ -15,7 +15,15 @@
             <column name="draft_user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <createIndex tableName="email_confirmation_token"
+                     indexName="idx_email_confirmation_token_token" unique="true">
+            <column name="token" />
+        </createIndex>
 
     </changeSet>
 </databaseChangeLog>

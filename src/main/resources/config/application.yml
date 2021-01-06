@@ -30,6 +30,10 @@ spring:
         api-key: ${SENDGRID_API_KEY:api-key}
 
 app:
+    sendgrid:
+        sender:
+            email: "support@vizcentric.com"
+            name: "Viz Centric Mail Bot"
     firebase:
         enabled: ${FIREBASE_ENABLED:false}
         google-app-cred-file: ${GOOGLE_APPLICATION_CREDENTIALS:/key/file.json}

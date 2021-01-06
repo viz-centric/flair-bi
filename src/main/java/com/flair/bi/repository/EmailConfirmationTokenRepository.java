@@ -10,6 +10,8 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 public interface EmailConfirmationTokenRepository
 		extends JpaRepository<EmailConfirmationToken, Long>, QuerydslPredicateExecutor<EmailConfirmationToken>, QuerydslBinderCustomizer<QEmailConfirmationToken> {
 
+	EmailConfirmationToken findByToken(String token);
+
 	default void customize(QuerydslBindings querydslBindings, QEmailConfirmationToken qUser) {
 
 	}

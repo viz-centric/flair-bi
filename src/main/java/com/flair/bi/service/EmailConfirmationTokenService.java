@@ -1,6 +1,8 @@
 package com.flair.bi.service;
 
+import com.flair.bi.domain.DraftUser;
 import com.flair.bi.domain.EmailConfirmationToken;
+import com.flair.bi.domain.EmailConfirmationTokenStatus;
 import com.flair.bi.repository.EmailConfirmationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +18,21 @@ public class EmailConfirmationTokenService {
 
     private final EmailConfirmationTokenRepository emailConfirmationTokenRepository;
 
-    public String createToken(Long draftUserId) {
+    public EmailConfirmationToken createToken(DraftUser draftUser) {
         EmailConfirmationToken token = new EmailConfirmationToken();
         token.setToken(UUID.randomUUID().toString());
         token.setDateCreated(Instant.now());
-        token.setDraftUserId(draftUserId);
-        EmailConfirmationToken emailConfirmationToken = emailConfirmationTokenRepository.save(token);
-        return emailConfirmationToken.getToken();
+        token.setDraftUser(draftUser);
+        token.setStatus(EmailConfirmationTokenStatus.NEW);
+        return emailConfirmationTokenRepository.save(token);
+    }
+
+    public EmailConfirmationToken findByToken(String token) {
+        return emailConfirmationTokenRepository.findByToken(token);
+    }
+
+    public void updateStatus(EmailConfirmationToken confirmationToken, EmailConfirmationTokenStatus status) {
+        confirmationToken.setStatus(status);
+        emailConfirmationTokenRepository.save(confirmationToken);
     }
 }

@@ -37,11 +37,7 @@ public class DraftUserService {
 
 		log.debug("Creating draft user {}", user);
 
-		user = draftUserRepository.save(user);
-
-		emailVerificationService.sendConfirmYourEmailEmail(user);
-
-		return user;
+		return draftUserRepository.save(user);
 	}
 
 }

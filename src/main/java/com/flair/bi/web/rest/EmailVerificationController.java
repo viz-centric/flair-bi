@@ -1,4 +1,4 @@
-package com.flair.bi.web.rest.email;
+package com.flair.bi.web.rest;
 
 
 import com.flair.bi.service.email.EmailVerificationService;
@@ -18,6 +18,6 @@ public class EmailVerificationController {
     @GetMapping("/confirm")
     public void confirm(@RequestParam("token") String token) {
         log.info("Confirming email for token {}", token);
-
+        emailVerificationService.confirmEmail(token);
     }
 }

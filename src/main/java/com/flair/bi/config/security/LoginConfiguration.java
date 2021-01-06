@@ -142,6 +142,7 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/activate").permitAll()
 				.antMatchers("/api/authenticate").permitAll()
 				.antMatchers("/api/signup").permitAll()
+				.antMatchers("/api/verify_email/**").permitAll()
 				.antMatchers("/api/account/reset_password/init").permitAll()
 				.antMatchers("/api/account/reset_password/finish").permitAll()
 				.antMatchers("/api/profile-info").permitAll()

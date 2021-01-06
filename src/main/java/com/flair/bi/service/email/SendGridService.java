@@ -19,6 +19,7 @@ public class SendGridService {
     private static final String CONFIRM_EMAIL_TEMPLATE_ID = "d-c3ef7b417cac406ab50b40dd19f688aa";
 
     private final SendGridAPI sendGridAPI;
+    private final SendGridProps sendGridProps;
 
     public void sendConfirmYourEmailEmail(String email, String customerName, String confirmationToken) {
         Email from = new Email(email, customerName);
@@ -27,9 +28,13 @@ public class SendGridService {
         personalization.addDynamicTemplateData("confirmation_token", confirmationToken);
         personalization.addTo(from);
 
+        sendEmailTemplate(email, personalization, CONFIRM_EMAIL_TEMPLATE_ID);
+    }
+
+    private void sendEmailTemplate(String email, Personalization personalization, String templateId) {
         Mail mail = new Mail();
-        mail.setFrom(new Email("support@vizcentric.com", "Viz Centric Mail Bot"));
-        mail.setTemplateId(CONFIRM_EMAIL_TEMPLATE_ID);
+        mail.setFrom(new Email(sendGridProps.getSender().getEmail(), sendGridProps.getSender().getName()));
+        mail.setTemplateId(templateId);
         mail.addPersonalization(personalization);
         Request request = new Request();
         try {
@@ -37,12 +42,12 @@ public class SendGridService {
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
             Response response = sendGridAPI.api(request);
-            log.debug("Confirm your email email to email {} has been send with the response {}", email, response.getBody());
+            log.debug("Email {} has been send with the response {}", email, response.getBody());
             if (response.getStatusCode() >= 400) {
                 throw new RuntimeException("Error sending email with status code " + response.getBody());
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Error sending confirm your email for email " + email, ex);
+            throw new RuntimeException("Error sending email " + email, ex);
         }
     }
 

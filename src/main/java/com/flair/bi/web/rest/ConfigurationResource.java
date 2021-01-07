@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/config")
 @RequiredArgsConstructor
 public class ConfigurationResource {
 
-    private static final String ENTITY_NAME = "configuration";
-
     private final FirebaseProperties firebaseProperties;
 
-    @GetMapping("/config")
+    @GetMapping
     @Timed
     public Config getConfig() {
         return Config.builder()

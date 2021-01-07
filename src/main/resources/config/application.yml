@@ -30,6 +30,7 @@ spring:
         api-key: ${SENDGRID_API_KEY:api-key}
 
 app:
+    hostname: "http://localhost:9000"
     sendgrid:
         sender:
             email: "support@vizcentric.com"

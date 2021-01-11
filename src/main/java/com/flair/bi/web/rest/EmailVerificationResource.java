@@ -20,7 +20,7 @@ public class EmailVerificationResource {
 
     private final EmailVerificationService emailVerificationService;
 
-    @Value("${app.hostname")
+    @Value("${app.hostname}")
     private String hostname;
 
     @GetMapping("/confirm")

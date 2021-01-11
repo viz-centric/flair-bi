@@ -1,4 +1,5 @@
 package com.flair.bi.web.rest;
+
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.View;
 import com.flair.bi.service.impl.RealmService;
@@ -6,24 +7,30 @@ import com.flair.bi.web.rest.dto.RealmDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.util.PaginationUtil;
 import com.querydsl.core.types.Predicate;
+import io.github.jhipster.web.util.ResponseUtil;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiParam;
-import io.github.jhipster.web.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +56,7 @@ public class RealmResource {
      */
     @PostMapping("/realms")
     @Timed
+//    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
     public ResponseEntity<RealmDTO> createRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
         log.debug("REST request to save Realm : {}", realmDTO);
         if (realmDTO.getId() != null) {
@@ -71,6 +79,7 @@ public class RealmResource {
      */
     @PutMapping("/realms")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'UPDATE', 'APPLICATION')")
     public ResponseEntity<RealmDTO> updateRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
         log.debug("REST request to update Realm : {}", realmDTO);
         if (realmDTO.getId() == null) {
@@ -90,6 +99,7 @@ public class RealmResource {
      */
     @GetMapping("/realms")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
     public ResponseEntity<List<Realm>> getAllRealms(@QuerydslPredicate(root = View.class) Predicate predicate,
                                                     @ApiParam Pageable pageable,
                                                     @RequestParam(name = "paginate", defaultValue = "false", required = false) boolean shouldPaginate)
@@ -108,6 +118,7 @@ public class RealmResource {
      */
     @GetMapping("/realms/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
     public ResponseEntity<RealmDTO> getRealm(@PathVariable Long id) {
         log.debug("REST request to get Realm : {}", id);
         RealmDTO realm = realmService.findOne(id);
@@ -122,6 +133,7 @@ public class RealmResource {
      */
     @DeleteMapping("/realms/{id}")
     @Timed
+    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'DELETE', 'APPLICATION')")
     public ResponseEntity<Void> deleteRealm(@PathVariable Long id) {
         log.debug("REST request to delete Realm : {}", id);
         realmService.delete(id);

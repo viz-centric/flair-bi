@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 
 @RestController
@@ -80,6 +81,24 @@ public class UserJWTController {
 		String email;
 
 		String provider;
+	}
+
+	@PostMapping("/confirm_user")
+	@Timed
+	public ResponseEntity<?> confirmUser(@Valid @RequestBody ConfirmUserRequest request) {
+		log.info("confirm user {}", request);
+		signupService.confirmUser(request.getRealmId(), request.getEmailVerificationToken(), request.getRealmCreationToken());
+		return ResponseEntity.ok().build();
+	}
+
+	@Data
+	public static class ConfirmUserRequest {
+		@NotNull
+		Long realmId;
+		@NotEmpty
+		String emailVerificationToken;
+		@NotEmpty
+		String realmCreationToken;
 	}
 
 	/**

@@ -1,24 +1,18 @@
 package com.flair.bi.web.rest;
 
-import com.flair.bi.FlairbiApp;
-
 import com.flair.bi.domain.Realm;
 import com.flair.bi.repository.RealmRepository;
 import com.flair.bi.service.impl.RealmService;
 import com.flair.bi.web.rest.dto.RealmDTO;
 import com.flair.bi.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +22,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for the RealmResource REST controller.
@@ -176,7 +175,7 @@ public class RealmResourceIntTest {
     @Transactional
     public void updateRealm() throws Exception {
         // Initialize the database
-        realmService.save(realmDTO);
+        realmService.createLoggedIn(realmDTO);
 
         int databaseSizeBeforeUpdate = realmRepository.findAll().size();
 
@@ -216,7 +215,7 @@ public class RealmResourceIntTest {
     @Transactional
     public void deleteRealm() throws Exception {
         // Initialize the database
-        realmService.save(realmDTO);
+        realmService.createLoggedIn(realmDTO);
 
         int databaseSizeBeforeDelete = realmRepository.findAll().size();
 

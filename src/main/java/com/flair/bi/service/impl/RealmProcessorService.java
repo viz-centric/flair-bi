@@ -1,6 +1,7 @@
 package com.flair.bi.service.impl;
 
 import com.flair.bi.config.Constants;
+import com.flair.bi.domain.DraftUser;
 import com.flair.bi.domain.Functions;
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +48,7 @@ public class RealmProcessorService {
     private final DashboardService dashboardService;
     private final DatasourceService datasourceService;
 
+    @Transactional
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         createUserGroups(realm, vizcentricId);
         UserGroup adminGroup = getAdminGroup(realm);
@@ -195,4 +198,28 @@ public class RealmProcessorService {
         return userGroups;
     }
 
+    public void replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
+        createUserGroups(realm, vizcentricId);
+        UserGroup adminGroup = getAdminGroup(realm);
+
+        createUserFromDraftUser(realm, draftUser, adminGroup);
+//        createFunctions(realm, vizcentricId);
+//        createVisualizationColors(realm, vizcentricId);
+//        createFieldTypes(realm, vizcentricId);
+    }
+
+    private void createUserFromDraftUser(Realm realm, DraftUser draftUser, UserGroup adminGroup) {
+        User newUser = new User();
+        newUser.setLogin(draftUser.getUsername());
+        newUser.setPassword(draftUser.getPassword());
+        newUser.setFirstName(draftUser.getFirstName());
+        newUser.setLastName(draftUser.getLastName());
+        newUser.setEmail(draftUser.getEmail());
+        newUser.setLangKey(Constants.LanguageKeys.ENGLISH);
+        newUser.setActivated(true);
+        newUser.setUserType(null);
+        newUser.setRealm(realm);
+        newUser.setUserGroups(assignGroupToUser(adminGroup));
+        userService.saveUser(newUser);
+    }
 }

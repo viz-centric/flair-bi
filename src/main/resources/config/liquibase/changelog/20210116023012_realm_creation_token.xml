@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="flairdev" id="20210102023012">
+
+        <createTable tableName="realm_creation_token">
+            <column type="bigint" name="id" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="date_created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column type="bigint" name="realm_id">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="realm_creation_token"
+                     indexName="idx_realm_creation_token_token" unique="true">
+            <column name="token" />
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>

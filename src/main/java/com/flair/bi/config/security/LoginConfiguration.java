@@ -126,6 +126,8 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/management/metrics")
 				.access("@accessControlManager.hasAccess('APPLICATION-METRICS', 'READ', 'APPLICATION')")
 
+				.antMatchers(HttpMethod.POST, "/api/realms-anonym").permitAll()
+
 				.antMatchers("/verify_email/**").permitAll()
 
 				.antMatchers("/api/config").permitAll()
@@ -133,6 +135,7 @@ public class LoginConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/activate").permitAll()
 				.antMatchers("/api/authenticate").permitAll()
 				.antMatchers("/api/signup").permitAll()
+				.antMatchers("/api/confirm_user").permitAll()
 				.antMatchers("/api/account/reset_password/init").permitAll()
 				.antMatchers("/api/account/reset_password/finish").permitAll()
 				.antMatchers("/api/profile-info").permitAll()

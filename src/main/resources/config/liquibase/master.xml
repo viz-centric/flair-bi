@@ -107,5 +107,6 @@
     <include file="config/liquibase/changelog/20200830023012_realm-permissions.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20201229023012_draft_users.xml" relativeToChangelogFile="false" />
     <include file="config/liquibase/changelog/20210102023012_email_confirmation_token.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase/changelog/20210116023012_realm_creation_token.xml" relativeToChangelogFile="false" />
 </databaseChangeLog>
 <!--@formatter:on-->

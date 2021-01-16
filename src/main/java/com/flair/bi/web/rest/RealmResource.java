@@ -2,6 +2,7 @@ package com.flair.bi.web.rest;
 
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.View;
+import com.flair.bi.service.impl.CreateRealmData;
 import com.flair.bi.service.impl.RealmService;
 import com.flair.bi.web.rest.dto.RealmDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,39 +56,29 @@ public class RealmResource {
      */
     @PostMapping("/realms")
     @Timed
-//    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
-    public ResponseEntity<RealmDTO> createRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
+    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")
+    public ResponseEntity<CreateRealmData> createRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
         log.debug("REST request to save Realm : {}", realmDTO);
         if (realmDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new realm cannot already have an ID")).body(null);
         }
-        RealmDTO result = realmService.save(realmDTO);
+        CreateRealmData result = realmService.createLoggedIn(realmDTO);
         return ResponseEntity.created(new URI("/api/realms/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
-    /**
-     * PUT  /realms : Updates an existing realm.
-     *
-     * @param realmDTO the realm to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated realm,
-     * or with status 400 (Bad Request) if the realm is not valid,
-     * or with status 500 (Internal Server Error) if the realm couldnt be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
-    @PutMapping("/realms")
+    @PostMapping("/realms-anonym")
     @Timed
-    @PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'UPDATE', 'APPLICATION')")
-    public ResponseEntity<RealmDTO> updateRealm(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
-        log.debug("REST request to update Realm : {}", realmDTO);
-        if (realmDTO.getId() == null) {
-            return createRealm(realmDTO);
+    public ResponseEntity<CreateRealmData> createRealmAnonym(@RequestBody RealmDTO realmDTO) throws URISyntaxException {
+        log.debug("REST anonym request to save Realm : {}", realmDTO);
+        if (realmDTO.getId() != null) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new realm cannot already have an ID")).body(null);
         }
-        RealmDTO result = realmService.save(realmDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, realmDTO.getId().toString()))
-            .body(result);
+        CreateRealmData result = realmService.createAnonym(realmDTO);
+        return ResponseEntity.created(new URI("/api/realms/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**

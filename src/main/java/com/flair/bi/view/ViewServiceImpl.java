@@ -273,10 +273,10 @@ class ViewServiceImpl implements ViewService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<View> findByDashboardId(Long dashboardId,Pageable pageable) {
+	public Page<View> findByDashboardId(Long dashboardId,Pageable pageable) {
 		final Sort sort = Sort.by(Sort.Direction.ASC, "viewName");
 		final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-		return viewRepository.findAll(hasUserRealmAccess().and(QView.view.viewDashboard.id.eq(dashboardId)), pageRequest).getContent();
+		return viewRepository.findAll(hasUserRealmAccess().and(QView.view.viewDashboard.id.eq(dashboardId)), pageRequest);
 	}
 
 	@Override

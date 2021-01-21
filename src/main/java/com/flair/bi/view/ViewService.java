@@ -98,7 +98,7 @@ public interface ViewService {
 	 * @param pageable  pagination
 	 * @return collection of views
 	 */
-	List<View> findByDashboardId(Long dashboardId,Pageable pageable);
+	Page<View> findByDashboardId(Long dashboardId,Pageable pageable);
 
 	/**
 	 * Retrieve current editing state of {@link View}

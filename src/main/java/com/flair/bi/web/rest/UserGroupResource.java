@@ -272,19 +272,17 @@ public class UserGroupResource {
     @GetMapping("/userGroups/{name}/dashboardPermissions/{id}/viewPermissions")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getViewPermissionMetadataUserGroup(@PathVariable String name, @PathVariable Long id,@ApiParam Pageable pageable) {
+    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getViewPermissionMetadataUserGroup(@PathVariable String name, @PathVariable Long id,@ApiParam Pageable pageable) throws URISyntaxException {
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
             .orElseThrow(() ->
                 new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
-
-        List<GranteePermissionReport<UserGroup>> body = viewService
-            .findByDashboardId(id,pageable)
+        final Page<View> viewPage = viewService.findByDashboardId(id,pageable);
+        List<GranteePermissionReport<UserGroup>> body = viewPage.getContent()
             .stream()
             .map(x -> x.getGranteePermissionReport(userGroup))
             .collect(Collectors.toList());
-
-        return ResponseEntity.ok(body);
-
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(viewPage, "/api/users/{login}/datasourcePermissions/{id}/viewPermissions");
+        return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
 
 

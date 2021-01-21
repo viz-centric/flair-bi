@@ -326,12 +326,12 @@ public class UserResource {
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions/{id}/viewPermissions")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<GranteePermissionReport<User>>> getViewPermissionMetadataUser(@PathVariable String login, @PathVariable Long id) {
+    public ResponseEntity<List<GranteePermissionReport<User>>> getViewPermissionMetadataUser(@PathVariable String login, @PathVariable Long id,@ApiParam Pageable pageable) {
         final User user = userService.getUserWithAuthoritiesByLogin(login)
             .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
 
         List<GranteePermissionReport<User>> body = viewService
-            .findByDashboardId(id)
+            .findByDashboardId(id,pageable)
             .stream()
             .map(x -> x.getGranteePermissionReport(user))
             .collect(Collectors.toList());

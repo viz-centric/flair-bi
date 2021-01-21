@@ -272,13 +272,13 @@ public class UserGroupResource {
     @GetMapping("/userGroups/{name}/dashboardPermissions/{id}/viewPermissions")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER-GROUP', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getViewPermissionMetadataUserGroup(@PathVariable String name, @PathVariable Long id) {
+    public ResponseEntity<List<GranteePermissionReport<UserGroup>>> getViewPermissionMetadataUserGroup(@PathVariable String name, @PathVariable Long id,@ApiParam Pageable pageable) {
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
             .orElseThrow(() ->
                 new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
 
         List<GranteePermissionReport<UserGroup>> body = viewService
-            .findByDashboardId(id)
+            .findByDashboardId(id,pageable)
             .stream()
             .map(x -> x.getGranteePermissionReport(userGroup))
             .collect(Collectors.toList());

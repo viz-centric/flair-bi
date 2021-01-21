@@ -122,6 +122,12 @@ public class FunctionsServiceImpl implements FunctionsService {
 		return functionsRepository.findByRealmId(realmId);
 	}
 
+//	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
+//	@Transactional(readOnly = true)
+//	public List<Functions> findByRealmIdNoSecurityCheck(Long realmId) {
+//		return functionsRepository.findByRealmId(realmId);
+//	}
+
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return QFunctions.functions.realm.id.eq(user.getRealm().getId());

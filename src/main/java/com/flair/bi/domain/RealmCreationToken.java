@@ -1,6 +1,7 @@
 package com.flair.bi.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -37,6 +38,7 @@ public class RealmCreationToken {
     private Instant dateCreated;
 
     @OneToOne
+    @JsonIgnore
     private Realm realm;
 
 }

@@ -86,7 +86,7 @@ public class RealmProcessorService {
     }
 
     private void createFunctions(Realm realm, Long vizcentricId) {
-        List<Functions> functions = functionsService.findByRealmIdNoSecurityCheck(vizcentricId)
+        List<Functions> functions = functionsService.findByRealmIdAsRealmManager(vizcentricId)
                 .stream()
                 .map(f -> {
                     Functions function = new Functions();
@@ -202,39 +202,24 @@ public class RealmProcessorService {
         datasourceService.deleteAllByRealmId(id);
     }
 
-    public User replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
+    public void replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
         createUserGroups(realm, vizcentricId);
         createSuperAdminGroup(realm);
-
-        List<UserGroup> adminGroups = userGroupService.findAllByNameInAndRealmId(
-                Set.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.SUPERADMIN),
-                realm.getId());
-
-        User user = createUserFromDraftUser(realm, draftUser, new HashSet<>(adminGroups));
-
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-//                user.getLogin(), user.getPassword());
-//
-//        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        createUserFromDraftUser(realm, draftUser);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                user.getLogin(), user.getPassword());
+                draftUser.getUsername(), draftUser.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication, true);
 
-        createFunctions(realm, vizcentricId);
-
-//        createVisualizationColors(realm, vizcentricId);
-//        createFieldTypes(realm, vizcentricId);
-
-//        singIn(user);
-//        createFunctions(realm, vizcentricId);
-//        createVisualizationColors(realm, vizcentricId);
-//        createFieldTypes(realm, vizcentricId);
-
-        return user;
+        try {
+            createFunctions(realm, vizcentricId);
+            createVisualizationColors(realm, vizcentricId);
+            createFieldTypes(realm, vizcentricId);
+        } finally {
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
     }
 
     private void createSuperAdminGroup(Realm realm) {
@@ -260,7 +245,11 @@ public class RealmProcessorService {
         return permission;
     }
 
-    private User createUserFromDraftUser(Realm realm, DraftUser draftUser, Set<UserGroup> adminGroup) {
+    private User createUserFromDraftUser(Realm realm, DraftUser draftUser) {
+        List<UserGroup> adminGroups = userGroupService.findAllByNameInAndRealmId(
+                Set.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.SUPERADMIN),
+                realm.getId());
+
         User newUser = new User();
         newUser.setLogin(draftUser.getUsername());
         newUser.setPassword(draftUser.getPassword());
@@ -271,7 +260,7 @@ public class RealmProcessorService {
         newUser.setActivated(true);
         newUser.setUserType(null);
         newUser.setRealm(realm);
-        newUser.setUserGroups(adminGroup);
+        newUser.setUserGroups(new HashSet<>(adminGroups));
         userService.saveUser(newUser);
         return newUser;
     }

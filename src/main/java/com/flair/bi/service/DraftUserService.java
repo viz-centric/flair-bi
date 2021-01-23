@@ -3,7 +3,6 @@ package com.flair.bi.service;
 import com.flair.bi.config.Constants;
 import com.flair.bi.domain.DraftUser;
 import com.flair.bi.repository.DraftUserRepository;
-import com.flair.bi.service.email.EmailVerificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +19,6 @@ public class DraftUserService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final DraftUserRepository draftUserRepository;
-	private final EmailVerificationService emailVerificationService;
 
 	@Transactional
 	public DraftUser createUser(String login, String password, String firstName, String lastName, String email,

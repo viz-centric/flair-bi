@@ -46,5 +46,5 @@ public interface FunctionsService {
 
 	List<Functions> findByRealmId(Long realmId);
 
-//	List<Functions> findByRealmIdNoSecurityCheck(Long realmId);
+	List<Functions> findByRealmIdAsRealmManager(Long realmId);
 }

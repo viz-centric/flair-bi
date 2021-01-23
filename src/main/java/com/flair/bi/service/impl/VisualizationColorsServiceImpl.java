@@ -120,6 +120,7 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 		visualizationColorsRepository.deleteAllByRealmId(realmId);
 	}
 
+	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'READ', 'APPLICATION')")
 	@Transactional(readOnly = true)
 	@Override
 	public List<VisualizationColors> findByRealmId(Long realmId) {

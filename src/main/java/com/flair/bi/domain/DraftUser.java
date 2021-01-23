@@ -40,7 +40,7 @@ public class DraftUser extends BaseEntity implements Serializable {
 
 	@JsonIgnore
 	@NotNull
-	@Size(min = 60, max = 60)
+	@Size(min = 1, max = 60)
 	@Column(name = "password_hash", length = 60)
 	private String password;
 

@@ -13,7 +13,6 @@ import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.security.jwt.TokenProvider;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.FieldTypeService;
@@ -26,10 +25,11 @@ import com.flair.bi.view.ViewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,8 +55,7 @@ public class RealmProcessorService {
     private final ViewService viewService;
     private final DashboardService dashboardService;
     private final DatasourceService datasourceService;
-    private final AuthenticationManager authenticationManager;
-    private final TokenProvider tokenProvider;
+    private final UserDetailsService userDetailsService;
 
     @Transactional
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
@@ -205,13 +204,9 @@ public class RealmProcessorService {
     public void replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
         createUserGroups(realm, vizcentricId);
         createSuperAdminGroup(realm);
-        createUserFromDraftUser(realm, draftUser);
+        User user = createUserFromDraftUser(realm, draftUser);
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                draftUser.getUsername(), draftUser.getPassword());
-
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        signIn(user);
 
         try {
             createFunctions(realm, vizcentricId);
@@ -220,6 +215,12 @@ public class RealmProcessorService {
         } finally {
             SecurityContextHolder.getContext().setAuthentication(null);
         }
+    }
+
+    private void signIn(User user) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private void createSuperAdminGroup(Realm realm) {

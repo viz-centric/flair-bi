@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.service.signup.ConfirmUserResult;
 import com.flair.bi.service.signup.SignupService;
 import com.flair.bi.web.rest.vm.LoginVM;
 import io.micrometer.core.annotation.Timed;
@@ -85,10 +86,18 @@ public class UserJWTController {
 
 	@PostMapping("/confirm_user")
 	@Timed
-	public ResponseEntity<?> confirmUser(@Valid @RequestBody ConfirmUserRequest request) {
-		log.info("confirm user {}", request);
-		signupService.confirmUser(request.getRealmId(), request.getEmailVerificationToken(), request.getRealmCreationToken());
-		return ResponseEntity.ok().build();
+	public ResponseEntity<?> confirmUser(@Valid @RequestBody ConfirmUserRequest request,
+														   HttpServletResponse response) {
+		log.info("Confirm user {}", request);
+		try {
+			ConfirmUserResult result = signupService.confirmUser(request.getRealmId(), request.getEmailVerificationToken(), request.getRealmCreationToken());
+			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwtToken());
+			return ResponseEntity.ok(new JWTToken(result.getJwtToken()));
+		} catch (AuthenticationException ae) {
+			log.trace("Authentication exception trace: ", ae);
+			return new ResponseEntity<>(Collections.singletonMap("AuthenticationException", ae.getLocalizedMessage()),
+					HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 	@Data

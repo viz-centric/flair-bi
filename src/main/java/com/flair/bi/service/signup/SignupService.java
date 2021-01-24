@@ -6,6 +6,7 @@ import com.flair.bi.service.DraftUserService;
 import com.flair.bi.service.EmailConfirmationTokenService;
 import com.flair.bi.service.email.EmailVerificationService;
 import com.flair.bi.service.impl.RealmService;
+import com.flair.bi.service.impl.ReplicateRealmResult;
 import com.flair.bi.web.rest.dto.RealmDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class SignupService {
     }
 
     @Transactional
-    public void confirmUser(Long realmId, String emailVerificationToken, String realmCreationToken) {
+    public ConfirmUserResult confirmUser(Long realmId, String emailVerificationToken, String realmCreationToken) {
         RealmDTO realm = realmService.findOne(realmId);
         if (!Objects.equals(realm.getToken(), realmCreationToken)) {
             throw new IllegalStateException("Realm does not belong to that user " + realm + " token " + realmCreationToken);
@@ -40,6 +41,9 @@ public class SignupService {
         EmailConfirmationToken emailConfirmationToken = emailConfirmationTokenService.findByToken(emailVerificationToken);
         DraftUser draftUser = emailConfirmationToken.getDraftUser();
 
-        realmService.replicateRealm(realm.getId(), draftUser);
+        ReplicateRealmResult result = realmService.replicateRealm(realm.getId(), draftUser);
+        return ConfirmUserResult.builder()
+                .jwtToken(result.getJwtToken())
+                .build();
     }
 }

@@ -13,6 +13,7 @@ import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.jwt.TokenProvider;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.FieldTypeService;
@@ -56,6 +57,7 @@ public class RealmProcessorService {
     private final DashboardService dashboardService;
     private final DatasourceService datasourceService;
     private final UserDetailsService userDetailsService;
+    private final TokenProvider tokenProvider;
 
     @Transactional
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
@@ -201,26 +203,34 @@ public class RealmProcessorService {
         datasourceService.deleteAllByRealmId(id);
     }
 
-    public void replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
+    public ReplicateRealmResult replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
         createUserGroups(realm, vizcentricId);
         createSuperAdminGroup(realm);
         User user = createUserFromDraftUser(realm, draftUser);
 
-        signIn(user);
-
+        String jwtToken;
         try {
+            Authentication authentication = signIn(user);
+            jwtToken = createJwt(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             createFunctions(realm, vizcentricId);
             createVisualizationColors(realm, vizcentricId);
             createFieldTypes(realm, vizcentricId);
         } finally {
             SecurityContextHolder.getContext().setAuthentication(null);
         }
+        return ReplicateRealmResult.builder()
+                .jwtToken(jwtToken)
+                .build();
     }
 
-    private void signIn(User user) {
+    private String createJwt(Authentication authentication) {
+        return tokenProvider.createToken(authentication, false);
+    }
+
+    private Authentication signIn(User user) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
     private void createSuperAdminGroup(Realm realm) {

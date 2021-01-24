@@ -84,8 +84,8 @@ public class RealmService {
     }
 
     @Transactional
-    public void replicateRealm(Long realmId, DraftUser draftUser) {
+    public ReplicateRealmResult replicateRealm(Long realmId, DraftUser draftUser) {
         Realm realm = realmRepository.getOne(realmId);
-        realmProcessorService.replicateRealm(realm, draftUser, VIZ_CENTRIC_REALM);
+        return realmProcessorService.replicateRealm(realm, draftUser, VIZ_CENTRIC_REALM);
     }
 }

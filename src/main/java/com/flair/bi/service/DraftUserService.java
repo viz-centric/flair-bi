@@ -30,9 +30,13 @@ public class DraftUserService {
 		user.setEmail(email);
 		user.setUserType(StringUtils.isNoneBlank(userType) ? userType : Constants.INTERNAL_USER);
 		user.setDateCreated(Instant.now());
-		draftUserRepository.save(user);
+
 		log.debug("Creating draft user {}", user);
-		return user;
+
+		return draftUserRepository.save(user);
 	}
 
+	public void deleteUser(Long draftUserId) {
+		draftUserRepository.deleteById(draftUserId);
+	}
 }

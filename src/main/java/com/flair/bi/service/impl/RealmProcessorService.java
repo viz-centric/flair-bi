@@ -1,15 +1,19 @@
 package com.flair.bi.service.impl;
 
 import com.flair.bi.config.Constants;
+import com.flair.bi.domain.DraftUser;
 import com.flair.bi.domain.Functions;
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
+import com.flair.bi.domain.enumeration.Action;
 import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.propertytype.PropertyType;
 import com.flair.bi.domain.security.Permission;
+import com.flair.bi.domain.security.PermissionKey;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.AuthoritiesConstants;
+import com.flair.bi.security.jwt.TokenProvider;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.FieldTypeService;
@@ -22,9 +26,16 @@ import com.flair.bi.view.ViewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +56,10 @@ public class RealmProcessorService {
     private final ViewService viewService;
     private final DashboardService dashboardService;
     private final DatasourceService datasourceService;
+    private final UserDetailsService userDetailsService;
+    private final TokenProvider tokenProvider;
 
+    @Transactional
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
         createUserGroups(realm, vizcentricId);
         UserGroup adminGroup = getAdminGroup(realm);
@@ -68,12 +82,12 @@ public class RealmProcessorService {
         newUser.setCreatedBy("system");
         newUser.setLastModifiedBy("system");
         newUser.setRealm(realm);
-        newUser.setUserGroups(assignGroupToUser(adminGroup));
+        newUser.setUserGroups(new HashSet<>(Arrays.asList(adminGroup)));
         userService.saveUser(newUser);
     }
 
     private void createFunctions(Realm realm, Long vizcentricId) {
-        List<Functions> functions = functionsService.findByRealmId(vizcentricId)
+        List<Functions> functions = functionsService.findByRealmIdAsRealmManager(vizcentricId)
                 .stream()
                 .map(f -> {
                     Functions function = new Functions();
@@ -189,10 +203,76 @@ public class RealmProcessorService {
         datasourceService.deleteAllByRealmId(id);
     }
 
-    private Set<UserGroup> assignGroupToUser(UserGroup userGroup){
-        Set<UserGroup> userGroups = new HashSet<>();
-        userGroups.add(userGroup);
-        return userGroups;
+    public ReplicateRealmResult replicateRealm(Realm realm, DraftUser draftUser, Long vizcentricId) {
+        createUserGroups(realm, vizcentricId);
+        createSuperAdminGroup(realm);
+        User user = createUserFromDraftUser(realm, draftUser);
+
+        String jwtToken;
+        try {
+            Authentication authentication = signIn(user);
+            jwtToken = createJwt(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            createFunctions(realm, vizcentricId);
+            createVisualizationColors(realm, vizcentricId);
+            createFieldTypes(realm, vizcentricId);
+        } finally {
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return ReplicateRealmResult.builder()
+                .jwtToken(jwtToken)
+                .build();
     }
 
+    private String createJwt(Authentication authentication) {
+        return tokenProvider.createToken(authentication, false);
+    }
+
+    private Authentication signIn(User user) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+    }
+
+    private void createSuperAdminGroup(Realm realm) {
+        UserGroup group = new UserGroup();
+        group.setName(AuthoritiesConstants.SUPERADMIN);
+        group.setPermissions(new HashSet<>(Arrays.asList(
+                createPermission(new PermissionKey("REALM-MANAGEMENT", Action.READ, "APPLICATION")),
+                createPermission(new PermissionKey("REALM-MANAGEMENT", Action.WRITE, "APPLICATION")),
+                createPermission(new PermissionKey("REALM-MANAGEMENT", Action.DELETE, "APPLICATION")),
+                createPermission(new PermissionKey("REALM-MANAGEMENT", Action.UPDATE, "APPLICATION"))
+        )));
+        group.setRealm(realm);
+        group.setUsers(new HashSet<>());
+        userGroupService.saveAll(Arrays.asList(group));
+    }
+
+    private Permission createPermission(PermissionKey permissionKey) {
+        Permission permission = new Permission();
+        permission.setAction(permissionKey.getAction());
+        permission.setKey(permissionKey);
+        permission.setScope(permissionKey.getScope());
+        permission.setResource(permissionKey.getResource());
+        return permission;
+    }
+
+    private User createUserFromDraftUser(Realm realm, DraftUser draftUser) {
+        List<UserGroup> adminGroups = userGroupService.findAllByNameInAndRealmId(
+                Set.of(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN, AuthoritiesConstants.SUPERADMIN),
+                realm.getId());
+
+        User newUser = new User();
+        newUser.setLogin(draftUser.getUsername());
+        newUser.setPassword(draftUser.getPassword());
+        newUser.setFirstName(draftUser.getFirstName());
+        newUser.setLastName(draftUser.getLastName());
+        newUser.setEmail(draftUser.getEmail());
+        newUser.setLangKey(Constants.LanguageKeys.ENGLISH);
+        newUser.setActivated(true);
+        newUser.setUserType(null);
+        newUser.setRealm(realm);
+        newUser.setUserGroups(new HashSet<>(adminGroups));
+        userService.saveUser(newUser);
+        return newUser;
+    }
 }

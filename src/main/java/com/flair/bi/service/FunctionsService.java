@@ -45,4 +45,6 @@ public interface FunctionsService {
 	void deleteAllByRealmId(Long realmId);
 
 	List<Functions> findByRealmId(Long realmId);
+
+	List<Functions> findByRealmIdAsRealmManager(Long realmId);
 }

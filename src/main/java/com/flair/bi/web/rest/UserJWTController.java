@@ -1,10 +1,10 @@
 package com.flair.bi.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.domain.DraftUser;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.service.DraftUserService;
+import com.flair.bi.service.signup.ConfirmUserResult;
+import com.flair.bi.service.signup.SignupService;
 import com.flair.bi.web.rest.vm.LoginVM;
 import io.micrometer.core.annotation.Timed;
 import lombok.Data;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 
 @RestController
@@ -37,7 +38,7 @@ public class UserJWTController {
 
 	private final AuthenticationManager authenticationManager;
 
-	private final DraftUserService draftUserService;
+	private final SignupService signupService;
 
 	@PostMapping("/authenticate")
 	@Timed
@@ -62,7 +63,7 @@ public class UserJWTController {
 	@PostMapping("/signup")
 	@Timed
 	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
-		DraftUser user = draftUserService.createUser(request.getUsername(), request.getPassword(), request.getFirstname(),
+		signupService.signup(request.getUsername(), request.getPassword(), request.getFirstname(),
 				request.getLastname(), request.getEmail(), request.getProvider());
 		return ResponseEntity.ok().build();
 	}
@@ -81,6 +82,32 @@ public class UserJWTController {
 		String email;
 
 		String provider;
+	}
+
+	@PostMapping("/confirm_user")
+	@Timed
+	public ResponseEntity<?> confirmUser(@Valid @RequestBody ConfirmUserRequest request,
+														   HttpServletResponse response) {
+		log.info("Confirm user {}", request);
+		try {
+			ConfirmUserResult result = signupService.confirmUser(request.getRealmId(), request.getEmailVerificationToken(), request.getRealmCreationToken());
+			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwtToken());
+			return ResponseEntity.ok(new JWTToken(result.getJwtToken()));
+		} catch (AuthenticationException ae) {
+			log.trace("Authentication exception trace: ", ae);
+			return new ResponseEntity<>(Collections.singletonMap("AuthenticationException", ae.getLocalizedMessage()),
+					HttpStatus.UNAUTHORIZED);
+		}
+	}
+
+	@Data
+	public static class ConfirmUserRequest {
+		@NotNull
+		Long realmId;
+		@NotEmpty
+		String emailVerificationToken;
+		@NotEmpty
+		String realmCreationToken;
 	}
 
 	/**

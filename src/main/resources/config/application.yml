@@ -26,8 +26,15 @@ spring:
         properties:
             hibernate:
                 enable_lazy_load_no_trans: true
+    sendgrid:
+        api-key: ${SENDGRID_API_KEY:api-key}
 
 app:
+    hostname: "http://localhost:9000"
+    sendgrid:
+        sender:
+            email: "support@vizcentric.com"
+            name: "Viz Centric Mail Bot"
     firebase:
         enabled: ${FIREBASE_ENABLED:false}
         google-app-cred-file: ${GOOGLE_APPLICATION_CREDENTIALS:/key/file.json}

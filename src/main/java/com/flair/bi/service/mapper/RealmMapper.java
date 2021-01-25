@@ -9,7 +9,15 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RealmMapper {
 
-    RealmDTO toDTO(Realm realm);
+    default RealmDTO toDTO(Realm realm) {
+        RealmDTO realmDTO = new RealmDTO();
+        realmDTO.setName(realm.getName());
+        realmDTO.setId(realm.getId());
+        if (realm.getRealmCreationToken() != null) {
+            realmDTO.setToken(realm.getRealmCreationToken().getToken());
+        }
+        return realmDTO;
+    }
 
     Realm fromDTO(RealmDTO realmDTO);
 

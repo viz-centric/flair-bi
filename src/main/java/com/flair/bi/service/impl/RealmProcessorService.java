@@ -258,7 +258,7 @@ public class RealmProcessorService {
 
     private User createUserFromDraftUser(Realm realm, DraftUser draftUser) {
         List<UserGroup> adminGroups = userGroupService.findAllByNameInAndRealmId(
-                Set.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.SUPERADMIN),
+                Set.of(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN, AuthoritiesConstants.SUPERADMIN),
                 realm.getId());
 
         User newUser = new User();

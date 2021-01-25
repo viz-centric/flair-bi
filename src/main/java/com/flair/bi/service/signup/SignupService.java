@@ -42,6 +42,7 @@ public class SignupService {
         DraftUser draftUser = emailConfirmationToken.getDraftUser();
 
         ReplicateRealmResult result = realmService.replicateRealm(realm.getId(), draftUser);
+        draftUserService.deleteUser(draftUser.getId());
         return ConfirmUserResult.builder()
                 .jwtToken(result.getJwtToken())
                 .build();

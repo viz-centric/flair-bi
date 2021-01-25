@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.Instant;
 
 @Service
@@ -20,7 +19,6 @@ public class DraftUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final DraftUserRepository draftUserRepository;
 
-	@Transactional
 	public DraftUser createUser(String login, String password, String firstName, String lastName, String email,
 								String userType) {
 		DraftUser user = new DraftUser();
@@ -38,4 +36,7 @@ public class DraftUserService {
 		return draftUserRepository.save(user);
 	}
 
+	public void deleteUser(Long draftUserId) {
+		draftUserRepository.deleteById(draftUserId);
+	}
 }

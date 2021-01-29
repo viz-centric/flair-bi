@@ -326,17 +326,18 @@ public class UserResource {
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/dashboardPermissions/{id}/viewPermissions")
     @Timed
     @PreAuthorize("@accessControlManager.hasAccess('USER', 'READ', 'APPLICATION')")
-    public ResponseEntity<List<GranteePermissionReport<User>>> getViewPermissionMetadataUser(@PathVariable String login, @PathVariable Long id) {
+    public ResponseEntity<List<GranteePermissionReport<User>>> getViewPermissionMetadataUser(@PathVariable String login, @PathVariable Long id,@ApiParam Pageable pageable) throws URISyntaxException {
+
+        final Page<View> viewPage = viewService.findByDashboardId(id,pageable);
         final User user = userService.getUserWithAuthoritiesByLogin(login)
             .orElseThrow(() -> new EntityNotFoundException(String.format("User with login: %s was not found", login)));
 
-        List<GranteePermissionReport<User>> body = viewService
-            .findByDashboardId(id)
+        List<GranteePermissionReport<User>> body = viewPage.getContent()
             .stream()
             .map(x -> x.getGranteePermissionReport(user))
             .collect(Collectors.toList());
-
-        return ResponseEntity.ok(body);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(viewPage, "/api/users/{login}/datasourcePermissions/{id}/viewPermissions");
+        return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
 
     @PutMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/changePermissions")

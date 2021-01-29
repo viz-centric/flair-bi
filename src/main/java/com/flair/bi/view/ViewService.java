@@ -92,6 +92,15 @@ public interface ViewService {
 	List<View> findByDashboardId(Long dashboardId);
 
 	/**
+	 * Find list of views by dashboard identifier
+	 *
+	 * @param dashboardId parameter representing dashboard id
+	 * @param pageable  pagination
+	 * @return collection of views
+	 */
+	Page<View> findByDashboardId(Long dashboardId,Pageable pageable);
+
+	/**
 	 * Retrieve current editing state of {@link View}
 	 *
 	 * @param viewId id of a view

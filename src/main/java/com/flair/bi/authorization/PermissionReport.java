@@ -1,7 +1,6 @@
 package com.flair.bi.authorization;
 
 import com.flair.bi.domain.security.Permission;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +20,5 @@ public class PermissionReport {
 	private Permission permission;
 
 	private boolean hasIt;
+
 }

@@ -9,6 +9,7 @@ import com.flair.bi.authorization.PermissionGrantee;
 import com.flair.bi.authorization.PermissionReport;
 import com.flair.bi.authorization.SecuredEntity;
 import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.viewwatch.ViewWatch;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -216,13 +217,16 @@ public class View extends AbstractAuditingEntity implements Serializable, Secure
 
     @Override
     public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
+        Set<Permission> availablePermissions = grantee.getAvailablePermissions();
+        Set<Permission> permissions = this.getPermissions();
+
         GranteePermissionReport<T> granteePermissionReport = new GranteePermissionReport<>();
         granteePermissionReport.setGrantee(grantee);
         granteePermissionReport.getInfo().put("viewName", this.viewName);
         granteePermissionReport.getInfo().put("id", this.id);
-        granteePermissionReport.getInfo().put("permissionMetadata", this.getPermissions()
+        granteePermissionReport.getInfo().put("permissionMetadata", permissions
             .stream()
-            .map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
+            .map(y -> new PermissionReport(y, availablePermissions.contains(y)))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
         return granteePermissionReport;

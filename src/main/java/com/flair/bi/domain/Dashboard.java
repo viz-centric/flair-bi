@@ -6,8 +6,10 @@ import com.flair.bi.authorization.DashboardGranteePermissionReport;
 import com.flair.bi.authorization.GranteePermissionReport;
 import com.flair.bi.authorization.PermissionGrantee;
 import com.flair.bi.authorization.PermissionReport;
+import com.flair.bi.authorization.PermissionStatus;
 import com.flair.bi.authorization.SecuredEntity;
 import com.flair.bi.domain.enumeration.Action;
+import com.flair.bi.domain.security.Permission;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,7 +74,7 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     @Transient
     @JsonProperty
     private byte[] image;
-    
+
     @Transient
 	public byte[] getImage() {
 		return image;
@@ -216,15 +218,21 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     public <T extends PermissionGrantee> GranteePermissionReport<T> getGranteePermissionReport(T grantee) {
         GranteePermissionReport<T> granteePermissionReport = new GranteePermissionReport<>();
 
-        Set<PermissionReport> reports = this.getPermissions()
+        Set<Permission> availablePermissions = grantee.getAvailablePermissions();
+        Set<Permission> permissions = this.getPermissions();
+
+        Set<PermissionReport> reports = permissions
             .stream()
-            .map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
+            .map(permission -> new PermissionReport(permission, availablePermissions.contains(permission)))
             .collect(Collectors.toCollection(LinkedHashSet::new));
 
         granteePermissionReport.setGrantee(grantee);
         granteePermissionReport.getInfo().put("id", this.id);
         granteePermissionReport.getInfo().put("dashboardName", this.dashboardName);
         granteePermissionReport.getInfo().put("permissionMetadata", reports);
+
+        PermissionStatus permStatus = getPermissionStatus(reports);
+        granteePermissionReport.getInfo().put("status", permStatus);
 
         return granteePermissionReport;
     }
@@ -233,9 +241,12 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
     public <T extends PermissionGrantee> DashboardGranteePermissionReport<T> getDashboardGranteePermissionReport(T grantee,List<GranteePermissionReport<T>> viewPermissions) {
         DashboardGranteePermissionReport<T> granteePermissionReport = new DashboardGranteePermissionReport<>();
 
-        Set<PermissionReport> reports = this.getPermissions()
+        Set<Permission> availablePermissions = grantee.getAvailablePermissions();
+        Set<Permission> permissions = this.getPermissions();
+
+        Set<PermissionReport> reports = permissions
                 .stream()
-                .map(y -> new PermissionReport(y, grantee.getAvailablePermissions().contains(y)))
+                .map(y -> new PermissionReport(y, availablePermissions.contains(y)))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         granteePermissionReport.setGrantee(grantee);
@@ -243,7 +254,23 @@ public class Dashboard extends AbstractAuditingEntity implements Serializable, S
         granteePermissionReport.getInfo().put("id", this.id);
         granteePermissionReport.getInfo().put("dashboardName", this.dashboardName);
         granteePermissionReport.getInfo().put("permissionMetadata", reports);
+
+        PermissionStatus permStatus = getPermissionStatus(reports);
+        granteePermissionReport.getInfo().put("status", permStatus);
+
         return granteePermissionReport;
+    }
+
+    private PermissionStatus getPermissionStatus(Set<PermissionReport> reports) {
+        PermissionStatus permStatus;
+        if (reports.stream().allMatch(report -> report.isHasIt())) {
+            permStatus = PermissionStatus.ALLOW;
+        } else if (reports.stream().anyMatch(report -> report.isHasIt())) {
+            permStatus = PermissionStatus.PARTIAL;
+        } else {
+            permStatus = PermissionStatus.DENY;
+        }
+        return permStatus;
     }
 
 

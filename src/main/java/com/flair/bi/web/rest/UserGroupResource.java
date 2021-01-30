@@ -294,12 +294,7 @@ public class UserGroupResource {
         UserGroup userGroup = Optional.ofNullable(userGroupService.findOne(name))
                 .orElseThrow(() ->
                         new EntityNotFoundException(String.format("User group with name: %s was not found", name)));
-        List<GranteePermissionReport<UserGroup>> body = dashboardPage
-                .getContent()
-                .stream()
-                .map(x -> x.getGranteePermissionReport(userGroup))
-                .collect(Collectors.toList());
-        List<DashboardGranteePermissionReport<UserGroup>> dashboardPermissions = new ArrayList<DashboardGranteePermissionReport<UserGroup>>();
+        List<DashboardGranteePermissionReport<UserGroup>> dashboardPermissions = new ArrayList<>();
         for(Dashboard dashboard : dashboardPage.getContent()){
             List<GranteePermissionReport<UserGroup>> viewPermissions = viewService
                     .findByDashboardId(dashboard.getId())

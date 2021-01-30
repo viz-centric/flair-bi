@@ -23,7 +23,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -139,8 +138,11 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<DatasourceConstraint> datasourceConstraints = new HashSet<>();
 
-	@ManyToOne(optional = false)
-	private Realm realm;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "user_realm",
+			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "realm_id", referencedColumnName = "id"))
+	private Set<Realm> realm;
 
 	@PreDestroy
 	public void preDestroy() {

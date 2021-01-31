@@ -30,7 +30,7 @@
 	<properties>
 		<project.scm.url>https://github.com/viz-centric/flair-bi.git</project.scm.url>
 		<aws-maven.version>5.0.0.RELEASE</aws-maven.version>
-        <bucket.name>vizcentric-mvn-repo</bucket.name>
+        	<bucket.name>dx26-mvn-repo</bucket.name>
     
 		<flair-messages.version>0.3.24</flair-messages.version>
 		<project-bi-common.version>1.4.20</project-bi-common.version>

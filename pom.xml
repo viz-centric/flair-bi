@@ -31,6 +31,7 @@
 		<project.scm.url>https://github.com/viz-centric/flair-bi.git</project.scm.url>
 		<aws-maven.version>5.0.0.RELEASE</aws-maven.version>
         	<bucket.name>dx26-mvn-repo</bucket.name>
+		<docker.org>dx26io</docker.org>
     
 		<flair-messages.version>0.3.24</flair-messages.version>
 		<project-bi-common.version>1.4.20</project-bi-common.version>
@@ -1234,7 +1235,7 @@
 						<configuration>
 							<images>
 								<image>
-									<name>flairbi/${project.artifactId}</name>
+									<name>${docker.org}/${project.artifactId}</name>
 									<build>
 										<tags>
 											<tag>v${project.version}-SNAPSHOT</tag>
@@ -1380,7 +1381,7 @@
 						<configuration>
 							<images>
 								<image>
-									<name>flairbi/${project.artifactId}</name>
+									<name>${docker.org}/${project.artifactId}</name>
 									<build>
 										<tags>
 											<tag>v${project.version}</tag>
@@ -1389,7 +1390,7 @@
 									</build>
 								</image>
 								<image>
-									<name>flairbi/flair-couchdb</name>
+									<name>${docker.org}/flair-couchdb</name>
 									<build>
 										<tags>
 											<tag>v${project.version}</tag>
@@ -1398,7 +1399,7 @@
 									</build>
 								</image>
 								<image>
-									<name>flairbi/flair-pgsql</name>
+									<name>${docker.org}/flair-pgsql</name>
 									<build>
 										<tags>
 											<tag>v${project.version}</tag>
@@ -1450,7 +1451,7 @@
 						<configuration>
 							<images>
 								<image>
-									<name>flairbi/${project.artifactId}</name>
+									<name>${docker.org}/${project.artifactId}</name>
 									<build>
 										<tags>
 											<tag>v${project.version}.${revision}</tag>
@@ -1459,7 +1460,7 @@
 									</build>
 								</image>
 								<image>
-									<name>flairbi/flair-couchdb</name>
+									<name>${docker.org}/flair-couchdb</name>
 									<build>
 										<tags>
 											<tag>v${project.version}.${revision}</tag>
@@ -1468,7 +1469,7 @@
 									</build>
 								</image>
 								<image>
-									<name>flairbi/flair-pgsql</name>
+									<name>${docker.org}/flair-pgsql</name>
 									<build>
 										<tags>
 											<tag>v${project.version}.${revision}</tag>

@@ -28,7 +28,7 @@
         </snapshotRepository>
     </distributionManagement>
 	<properties>
-		<project.scm.url>https://github.com/viz-centric/flair-bi.git</project.scm.url>
+		<project.scm.url>https://github.com/DX26-io/data-studio-gateway.git</project.scm.url>
 		<aws-maven.version>5.0.0.RELEASE</aws-maven.version>
         	<bucket.name>dx26-mvn-repo</bucket.name>
 		<docker.org>dx26io</docker.org>

@@ -4,6 +4,7 @@ import com.flair.bi.config.Constants;
 import com.flair.bi.config.firebase.FirebaseProperties;
 import com.flair.bi.domain.User;
 import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.service.signup.SignupService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.Data;
@@ -24,9 +25,10 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ExternalRegistrationService {
+public class ProviderRegistrationService {
 
     private final UserService userService;
+    private final SignupService signupService;
     private final FirebaseProperties firebaseProperties;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -44,6 +46,13 @@ public class ExternalRegistrationService {
         if (names.size() == 1) {
             names.add(names.get(0));
         }
+
+        signupService.signupWithProvider(email,
+                passwordEncoder.encode(RandomStringUtils.random(10)),
+                names.get(0),
+                names.get(1),
+                email,
+                decodedToken.getIssuer());
 
         User user = userService.getUserByEmailAnyRealm(email)
                 .orElseGet(() -> userService.createUser(email,

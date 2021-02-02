@@ -32,6 +32,11 @@ public class SignupService {
         emailVerificationService.sendConfirmYourEmailEmail(user);
     }
 
+    public void signupWithProvider(String username, String password, String firstname, String lastname, String email, String provider) {
+        DraftUser user = draftUserService.createUser(username, password, firstname,
+                lastname, email, provider);
+    }
+
     @Transactional
     public ConfirmUserResult confirmUser(Long realmId, String emailVerificationToken, String realmCreationToken) {
         RealmDTO realm = realmService.findOne(realmId);

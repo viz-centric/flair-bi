@@ -105,16 +105,6 @@ public class TokenProvider implements InitializingBean {
 			String email = decodedToken.getEmail();
 			UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 			return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
-//			Map<String, Object> claims = decodedToken.getClaims();
-//			Object a = claims.get(AUTHORITIES_KEY);
-//			if (a != null) {
-//				authorities = Arrays
-//						.stream(a.toString().split(",")).map(PermissionGrantedAuthority::new)
-//						.collect(Collectors.toList());
-//			} else {
-//				authorities = new ArrayList<>();
-//			}
-//			subject = email;
 		}
 
 		Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();

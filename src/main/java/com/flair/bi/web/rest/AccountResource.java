@@ -91,17 +91,25 @@ public class AccountResource {
 
 	@PostMapping(path = "/registerWithProvider")
 	@Timed
-	public ResponseEntity<?> registerWithProvider(@Valid @RequestBody RegisterWithProviderRequest request,
+	public ResponseEntity<RegisterWithProviderResponse> registerWithProvider(@Valid @RequestBody RegisterWithProviderRequest request,
 												  HttpServletResponse response) {
 		ProviderRegistrationService.RegisterResult result = providerRegistrationService.register(request.getIdToken());
-		response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwt());
-		return ResponseEntity.ok().build();
+		if (result.getJwt() != null) {
+			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwt());
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.ok(new RegisterWithProviderResponse(result.getEmailConfirmationToken()));
 	}
 
 	@Data
 	private static class RegisterWithProviderRequest {
 		@NotEmpty
 		private String idToken;
+	}
+
+	@Data
+	private static class RegisterWithProviderResponse {
+		private final String token;
 	}
 
 	/**

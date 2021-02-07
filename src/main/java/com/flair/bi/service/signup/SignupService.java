@@ -32,9 +32,16 @@ public class SignupService {
         emailVerificationService.sendConfirmYourEmailEmail(user);
     }
 
-    public void signupWithProvider(String username, String password, String firstname, String lastname, String email, String provider) {
+    @Transactional
+    public SignUpWithProviderResult signupWithProvider(String username, String password, String firstname, String lastname, String email, String provider) {
         DraftUser user = draftUserService.createUser(username, password, firstname,
                 lastname, email, provider);
+        EmailConfirmationToken confirmationToken = emailConfirmationTokenService.createToken(user);
+        emailVerificationService.confirmEmail(confirmationToken.getToken());
+        return SignUpWithProviderResult.builder()
+                .emailToken(confirmationToken.getToken())
+                .draftUser(user)
+                .build();
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package com.flair.bi.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flair.bi.security.jwt.JWTConfigurer;
 import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.service.auth.AuthService;
 import com.flair.bi.service.signup.ConfirmUserResult;
 import com.flair.bi.service.signup.SignupService;
 import com.flair.bi.web.rest.vm.LoginVM;
@@ -13,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,19 +36,16 @@ public class UserJWTController {
 
 	private final AuthenticationManager authenticationManager;
 
+	private final AuthService authService;
+
 	private final SignupService signupService;
 
 	@PostMapping("/authenticate")
 	@Timed
 	public ResponseEntity<?> authorize(@Valid @RequestBody LoginVM loginVM, HttpServletResponse response) {
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-				loginVM.getUsername(), loginVM.getPassword());
-
 		try {
-			Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			String jwt = tokenProvider.createToken(authentication, loginVM.isRememberMe());
+			String jwt = authService.auth(loginVM.getUsername(), loginVM.getPassword(), loginVM.isRememberMe());
 			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
 			return ResponseEntity.ok(new JWTToken(jwt));
 		} catch (AuthenticationException ae) {

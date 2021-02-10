@@ -13,24 +13,20 @@ import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.PermissionKey;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.security.AuthoritiesConstants;
-import com.flair.bi.security.jwt.TokenProvider;
 import com.flair.bi.service.DashboardService;
 import com.flair.bi.service.DatasourceService;
 import com.flair.bi.service.FieldTypeService;
 import com.flair.bi.service.FunctionsService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.VisualizationColorsService;
+import com.flair.bi.service.auth.AuthService;
 import com.flair.bi.service.properttype.PropertyTypeService;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.view.ViewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,8 +52,7 @@ public class RealmProcessorService {
     private final ViewService viewService;
     private final DashboardService dashboardService;
     private final DatasourceService datasourceService;
-    private final UserDetailsService userDetailsService;
-    private final TokenProvider tokenProvider;
+    private final AuthService authService;
 
     @Transactional
     public void saveRealmDependentRecords(Realm realm,Long vizcentricId){
@@ -210,9 +205,7 @@ public class RealmProcessorService {
 
         String jwtToken;
         try {
-            Authentication authentication = signIn(user);
-            jwtToken = createJwt(authentication);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            jwtToken = authService.auth(user);
             createFunctions(realm, vizcentricId);
             createVisualizationColors(realm, vizcentricId);
             createFieldTypes(realm, vizcentricId);
@@ -222,15 +215,6 @@ public class RealmProcessorService {
         return ReplicateRealmResult.builder()
                 .jwtToken(jwtToken)
                 .build();
-    }
-
-    private String createJwt(Authentication authentication) {
-        return tokenProvider.createToken(authentication, false);
-    }
-
-    private Authentication signIn(User user) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
-        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
     private void createSuperAdminGroup(Realm realm) {

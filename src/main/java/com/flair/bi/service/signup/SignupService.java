@@ -33,6 +33,18 @@ public class SignupService {
     }
 
     @Transactional
+    public SignUpWithProviderResult signupWithProvider(String username, String password, String firstname, String lastname, String email, String provider) {
+        DraftUser user = draftUserService.createUser(username, password, firstname,
+                lastname, email, provider);
+        EmailConfirmationToken confirmationToken = emailConfirmationTokenService.createToken(user);
+        emailVerificationService.confirmEmail(confirmationToken.getToken());
+        return SignUpWithProviderResult.builder()
+                .emailToken(confirmationToken.getToken())
+                .draftUser(user)
+                .build();
+    }
+
+    @Transactional
     public ConfirmUserResult confirmUser(Long realmId, String emailVerificationToken, String realmCreationToken) {
         RealmDTO realm = realmService.findOne(realmId);
         if (!Objects.equals(realm.getToken(), realmCreationToken)) {

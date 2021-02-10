@@ -7,8 +7,8 @@ import com.flair.bi.repository.PersistentTokenRepository;
 import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.security.jwt.JWTConfigurer;
-import com.flair.bi.service.ExternalRegistrationService;
 import com.flair.bi.service.MailService;
+import com.flair.bi.service.ProviderRegistrationService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.UserDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
@@ -53,7 +53,7 @@ public class AccountResource {
 
 	private final UserService userService;
 
-	private final ExternalRegistrationService externalRegistrationService;
+	private final ProviderRegistrationService providerRegistrationService;
 
 	private final PersistentTokenRepository persistentTokenRepository;
 
@@ -91,17 +91,25 @@ public class AccountResource {
 
 	@PostMapping(path = "/registerWithProvider")
 	@Timed
-	public ResponseEntity<?> registerWithProvider(@Valid @RequestBody RegisterWithProviderRequest request,
+	public ResponseEntity<RegisterWithProviderResponse> registerWithProvider(@Valid @RequestBody RegisterWithProviderRequest request,
 												  HttpServletResponse response) {
-		ExternalRegistrationService.RegisterResult result = externalRegistrationService.register(request.getIdToken());
-		response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwt());
-		return ResponseEntity.ok().build();
+		ProviderRegistrationService.RegisterResult result = providerRegistrationService.register(request.getIdToken());
+		if (result.getJwt() != null) {
+			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwt());
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.ok(new RegisterWithProviderResponse(result.getEmailConfirmationToken()));
 	}
 
 	@Data
 	private static class RegisterWithProviderRequest {
 		@NotEmpty
 		private String idToken;
+	}
+
+	@Data
+	private static class RegisterWithProviderResponse {
+		private final String token;
 	}
 
 	/**

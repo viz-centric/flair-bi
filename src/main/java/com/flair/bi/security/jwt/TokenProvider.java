@@ -2,6 +2,7 @@ package com.flair.bi.security.jwt;
 
 import com.flair.bi.config.firebase.FirebaseProperties;
 import com.flair.bi.security.PermissionGrantedAuthority;
+import com.google.firebase.auth.AuthErrorCode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -30,6 +31,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,7 @@ public class TokenProvider implements InitializingBean {
 
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String EMAIL_KEY = "email";
+	private static final List<AuthErrorCode> TOKEN_ERROR_CODES = Arrays.asList(AuthErrorCode.EXPIRED_ID_TOKEN, AuthErrorCode.INVALID_ID_TOKEN);
 
 	private Key key;
 
@@ -127,8 +130,10 @@ public class TokenProvider implements InitializingBean {
 			}
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
 			return true;
-		} catch (JwtException | IllegalArgumentException | FirebaseAuthException e) {
+		} catch (JwtException | IllegalArgumentException e) {
 			log.info("Invalid JWT token.", e);
+		} catch (FirebaseAuthException e) {
+			log.info("Firebase invalid JWT token.", e);
 		}
 		return false;
 	}

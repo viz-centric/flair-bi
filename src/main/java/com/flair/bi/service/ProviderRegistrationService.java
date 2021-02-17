@@ -68,7 +68,11 @@ public class ProviderRegistrationService {
     }
 
     private List<String> getNames(FirebaseToken decodedToken) {
-        List<String> names = Arrays.asList(decodedToken.getName().split(" ", 2));
+        if (decodedToken.getName() == null) {
+            return Arrays.asList("Github", "User");
+        }
+        String name = decodedToken.getName();
+        List<String> names = Arrays.asList(name.split(" ", 2));
         if (names.size() == 1) {
             names.add(names.get(0));
         }

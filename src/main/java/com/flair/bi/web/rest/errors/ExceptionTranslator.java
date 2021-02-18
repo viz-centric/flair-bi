@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -100,6 +103,19 @@ public class ExceptionTranslator {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorVM processNotSupportedTypeExcception(HttpMediaTypeNotSupportedException ex) {
 		return new ErrorVM("Media type not supported", ex.getMessage());
+	}
+
+	@ExceptionHandler(InsufficientAuthenticationException.class)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ResponseEntity<ErrorVM> processInsufficientAuthenticationException(InsufficientAuthenticationException ex) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			ErrorVM vm = new ErrorVM(ErrorConstants.ERR_UNAUTHORIZED, ex.getMessage());
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(vm);
+		}
+		ErrorVM vm = new ErrorVM(ErrorConstants.ERR_ACCESS_DENIED, ex.getMessage());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(vm);
 	}
 
 	@ExceptionHandler(Exception.class)

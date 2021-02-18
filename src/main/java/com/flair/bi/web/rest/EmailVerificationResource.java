@@ -30,6 +30,6 @@ public class EmailVerificationResource {
         emailVerificationService.confirmEmail(token);
 
         attributes.addAttribute("token", token);
-        return new RedirectView(hostname + "/signup/realm");
+        return new RedirectView(hostname + "/realm");
     }
 }

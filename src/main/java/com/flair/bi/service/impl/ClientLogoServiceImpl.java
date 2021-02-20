@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Service Implementation for managing ClientLogo.
@@ -43,7 +42,7 @@ public class ClientLogoServiceImpl implements ClientLogoService{
         if (clientLogo.getRealm() == null) {
             clientLogo.setRealm(user.getFirstRealm());
         } else {
-            if (!Objects.equals(clientLogo.getRealm().getId(), user.getFirstRealm().getId())) {
+            if (!user.getRealmIds().contains(clientLogo.getRealm().getId())) {
                 throw new IllegalStateException("Cannot update client logo for realm " + clientLogo.getRealm().getId());
             }
         }
@@ -67,7 +66,7 @@ public class ClientLogoServiceImpl implements ClientLogoService{
 
     private BooleanExpression hasRealmPermissions() {
         User user = userService.getUserWithAuthoritiesByLoginOrError();
-        return QClientLogo.clientLogo.realm.id.eq(user.getFirstRealm().getId());
+        return QClientLogo.clientLogo.realm.id.in(user.getRealmIds());
     }
 
     /**

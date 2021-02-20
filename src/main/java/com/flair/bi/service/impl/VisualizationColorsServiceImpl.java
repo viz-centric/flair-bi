@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +50,7 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 		if (visualizationColors.getId() == null) {
 			visualizationColors.setRealm(user.getFirstRealm());
 		} else {
-			if (!Objects.equals(visualizationColors.getRealm().getId(), user.getFirstRealm().getId())) {
+			if (!user.getRealmIds().contains(visualizationColors.getRealm().getId())) {
 				throw new IllegalStateException("Cannot save visualization colors for realm " + visualizationColors.getRealm().getId());
 			}
 		}
@@ -129,6 +128,6 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QVisualizationColors.visualizationColors.realm.id.eq(user.getFirstRealm().getId());
+		return QVisualizationColors.visualizationColors.realm.id.in(user.getRealmIds());
 	}
 }

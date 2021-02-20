@@ -24,7 +24,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -55,7 +54,7 @@ public class BookMarkWatchService {
 		}
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 
-		if (!Objects.equals(user.getFirstRealm().getId(), view.getRealm().getId())) {
+		if (!user.getRealmIds().contains(view.getRealm().getId())) {
 			throw new IllegalStateException("User " + user.getId() + " does not belong to realm " + view.getRealm().getId());
 		}
 

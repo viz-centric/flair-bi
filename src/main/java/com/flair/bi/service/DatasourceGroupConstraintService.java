@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,8 +34,8 @@ public class DatasourceGroupConstraintService {
 		log.debug("Request to save DatasourceGroupConstraint : {}", datasourceGroupConstraint);
 		UserGroup userGroup = datasourceGroupConstraint.getUserGroup();
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!Objects.equals(user.getFirstRealm().getId(), userGroup.getRealm().getId())) {
-			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realm " + user.getFirstRealm().getId());
+		if (!user.getRealmIds().contains(userGroup.getRealm().getId())) {
+			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realms " + user.getRealmIds());
 		}
 		return datasourceGroupConstraintRepository.save(datasourceGroupConstraint);
 	}
@@ -50,7 +49,7 @@ public class DatasourceGroupConstraintService {
 
 	private BooleanExpression hasRealmPermissions() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.eq(user.getFirstRealm().getId());
+		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.in(user.getRealmIds());
 	}
 
 	@Transactional(readOnly = true)

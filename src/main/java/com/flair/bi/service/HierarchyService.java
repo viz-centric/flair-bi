@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -37,7 +36,7 @@ public class HierarchyService {
 	public Hierarchy save(Hierarchy hierarchy) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Long realmId = hierarchy.getDatasource().getRealm().getId();
-		if (!Objects.equals(realmId, user.getFirstRealm().getId())) {
+		if (!user.getRealmIds().contains(realmId)) {
 			throw new IllegalStateException("Cannot update hierarchy for realm " + realmId);
 		}
 		return hierarchyRepository.save(hierarchy);
@@ -50,6 +49,6 @@ public class HierarchyService {
 
 	private BooleanExpression hasRealmPermission() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QHierarchy.hierarchy.datasource.realm.id.eq(user.getFirstRealm().getId());
+		return QHierarchy.hierarchy.datasource.realm.id.in(user.getRealmIds());
 	}
 }

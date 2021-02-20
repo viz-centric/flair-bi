@@ -1,6 +1,5 @@
 package com.flair.bi.service;
 
-import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.Visualization;
 import com.flair.bi.domain.fieldtype.FieldType;
@@ -18,8 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,7 @@ public class VisualizationService {
 		List<Visualization> all = visualizationRepository.findAll();
 		return visualizationMapper.visualizationToVisualizationDTOs(all)
 				.stream()
-				.peek(x -> filterFieldTypesByRealm(x, user.getFirstRealm()))
+				.peek(x -> filterFieldTypesByRealm(x, user.getRealmIds()))
 				.collect(Collectors.toList());
 	}
 
@@ -89,16 +88,16 @@ public class VisualizationService {
 				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
 				.orElse(null);
 		if (visualizationDTO != null) {
-			filterFieldTypesByRealm(visualizationDTO, user.getFirstRealm());
+			filterFieldTypesByRealm(visualizationDTO, user.getRealmIds());
 		}
 		return visualizationDTO;
     }
 
-	private void filterFieldTypesByRealm(VisualizationDTO visualizationDTO, Realm realm) {
+	private void filterFieldTypesByRealm(VisualizationDTO visualizationDTO, Collection<Long> realmIds) {
 		visualizationDTO.setFieldTypes(
 				visualizationDTO.getFieldTypes()
 				.stream()
-				.filter(x -> Objects.equals(x.getRealm().getId(), realm.getId()))
+				.filter(x -> realmIds.contains(x.getRealm().getId()))
 				.collect(Collectors.toSet())
 		);
 	}

@@ -44,9 +44,9 @@ public class UserGroupService {
 	@Transactional(readOnly = true)
 	public List<UserGroup> findAll() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		log.debug("Request to get all UserGroups for realm {}", user.getFirstRealm().getId());
+		log.debug("Request to get all UserGroups for realm {}", user.getRealmIds());
 		return ImmutableList.copyOf(
-				userGroupRepository.findAll(QUserGroup.userGroup.realm.id.eq(user.getFirstRealm().getId()))
+				userGroupRepository.findAll(QUserGroup.userGroup.realm.id.in(user.getRealmIds()))
 		);
 	}
 
@@ -75,8 +75,8 @@ public class UserGroupService {
 
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (userGroup.getId() != null) {
-			if (!user.getFirstRealm().getId().equals(userGroup.getRealm().getId())) {
-				throw new IllegalStateException("User group " + userGroup.getId() + " does not belong to realm " + user.getFirstRealm().getId());
+			if (!user.getRealmIds().contains(userGroup.getRealm().getId())) {
+				throw new IllegalStateException("User group " + userGroup.getId() + " does not belong to realm " + user.getRealmIds());
 			}
 		}
 
@@ -215,6 +215,6 @@ public class UserGroupService {
 
 	private BooleanExpression hasUserGroupPermission() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QUserGroup.userGroup.realm.id.eq(user.getFirstRealm().getId());
+		return QUserGroup.userGroup.realm.id.in(user.getRealmIds());
 	}
 }

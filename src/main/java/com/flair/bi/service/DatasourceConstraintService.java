@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Service Implementation for managing DatasourceConstraint.
@@ -38,7 +37,7 @@ public class DatasourceConstraintService {
 		log.debug("Request to save DatasourceConstraint : {}", datasourceConstraint);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (datasourceConstraint.getUser() != null) {
-			if (!Objects.equals(user.getFirstRealm().getId(), datasourceConstraint.getUser().getFirstRealm().getId())) {
+			if (user.getRealmIds().stream().noneMatch(id -> datasourceConstraint.getUser().getRealmIds().contains(id))) {
 				throw new IllegalStateException("Data constraint for user " + datasourceConstraint.getUser().getId() + " is not allowed");
 			}
 		}

@@ -213,7 +213,7 @@ public class DatasourceServiceImpl implements DatasourceService {
 
     private BooleanExpression hasUserRealmAccess() {
         User user = userService.getUserWithAuthoritiesByLoginOrError();
-        return QDatasource.datasource.realm.id.eq(user.getFirstRealm().getId());
+        return QDatasource.datasource.realm.id.in(user.getRealmIds());
     }
 
     private BooleanBuilder isNotDeleted() {

@@ -36,7 +36,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -244,8 +243,8 @@ public class UserService {
 	private User checkLoginBelongsToCurrentRealm(String login, Optional<User> usr) {
 		User user = usr.get();
 		User currentUser = getUserWithAuthorities();
-		if (currentUser != null && !Objects.equals(user.getFirstRealm().getId(), currentUser.getFirstRealm().getId())) {
-			throw new IllegalStateException("User " + login + " cannot access another realm " + user.getFirstRealm().getName());
+		if (currentUser != null && user.getRealmIds().stream().noneMatch(id -> currentUser.getRealmIds().contains(id))) {
+			throw new IllegalStateException("User " + login + " cannot access another realm " + user.getRealmIds());
 		}
 		return user;
 	}

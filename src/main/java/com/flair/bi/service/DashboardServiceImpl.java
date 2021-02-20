@@ -178,7 +178,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDashboard.dashboard.realm.id.eq(user.getFirstRealm().getId());
+		return QDashboard.dashboard.realm.id.in(user.getRealmIds());
 	}
 
 	/**

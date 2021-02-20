@@ -507,6 +507,6 @@ class ViewServiceImpl implements ViewService {
 
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QView.view.realm.id.eq(user.getFirstRealm().getId());
+		return QView.view.realm.id.in(user.getRealmIds());
 	}
 }

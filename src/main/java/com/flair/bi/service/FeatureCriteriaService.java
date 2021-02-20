@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -60,11 +59,11 @@ public class FeatureCriteriaService {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Feature feature = featureService.getOne(featureCriteria.getFeature().getId());
 		FeatureBookmark featureBookmark = featureBookmarkService.findOne(featureCriteria.getFeatureBookmark().getId());
-		if (!Objects.equals(feature.getDatasource().getRealm().getId(), user.getFirstRealm().getId())) {
+		if (!user.getRealmIds().contains(feature.getDatasource().getRealm().getId())) {
 			throw new IllegalStateException("Cannot save feature criteria because datasource does not belong to this realm " + feature.getDatasource().getRealm().getId());
 		}
-		if (!Objects.equals(featureBookmark.getUser().getFirstRealm().getId(), user.getFirstRealm().getId())) {
-			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + featureBookmark.getUser().getFirstRealm().getId());
+		if (featureBookmark.getUser().getRealmIds().stream().noneMatch(id -> user.getRealmIds().contains(id))) {
+			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + featureBookmark.getUser().getRealmIds());
 		}
 	}
 
@@ -84,7 +83,7 @@ public class FeatureCriteriaService {
 	private List<FeatureCriteria> filterByRealm(List<FeatureCriteria> all) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return all.stream()
-				.filter(fc -> Objects.equals(fc.getFeature().getDatasource().getRealm().getId(), user.getFirstRealm().getId()))
+				.filter(fc -> user.getRealmIds().contains(fc.getFeature().getDatasource().getRealm().getId()))
 				.collect(Collectors.toList());
 	}
 
@@ -100,7 +99,7 @@ public class FeatureCriteriaService {
 		FeatureCriteria result = featureCriteriaRepository.getOne(id);
 
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!Objects.equals(result.getFeature().getDatasource().getRealm().getId(), user.getFirstRealm().getId())) {
+		if (!user.getRealmIds().contains(result.getFeature().getDatasource().getRealm().getId())) {
 			throw new IllegalStateException("Cannot access feature criteria for realm " + result.getFeature().getDatasource().getRealm().getId());
 		}
 		return result;

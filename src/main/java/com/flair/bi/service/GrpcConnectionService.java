@@ -58,7 +58,7 @@ public class GrpcConnectionService {
     public List<ConnectionDTO> getAllConnections(ConnectionFilterParamsDTO filterParams) {
         User user = userService.getUserWithAuthoritiesByLoginOrError();
         log.info("getAllConnections for realm {} link {} conn type {}",
-                user.getFirstRealm().getId(), filterParams.getLinkId(), filterParams.getConnectionType());
+                user.getRealmIds(), filterParams.getLinkId(), filterParams.getConnectionType());
         GetAllConnectionsResponse connections = grpcService.getAllConnections(
                 user.getFirstRealm().getId(), filterParams.getLinkId(), filterParams.getConnectionType());
         return connections.getConnectionList()

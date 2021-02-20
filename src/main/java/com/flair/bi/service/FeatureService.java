@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,8 +50,7 @@ public class FeatureService {
 
 	private void validatePermissions(Feature feature) {
 		Long datasourceRealmId = feature.getDatasource().getRealm().getId();
-		Long realmId = userService.getUserWithAuthoritiesByLoginOrError().getFirstRealm().getId();
-		if (!Objects.equals(datasourceRealmId, realmId)) {
+		if (!userService.getUserWithAuthoritiesByLoginOrError().getRealmIds().contains(datasourceRealmId)) {
 			throw new IllegalStateException("Cannot save feature for with realm " + datasourceRealmId);
 		}
 	}
@@ -107,7 +105,7 @@ public class FeatureService {
 	}
 
 	public void pinFilter(Boolean pin, Long id) {
-		log.debug("FeatureService pinFilter ", pin, id);
+		log.debug("FeatureService pinFilter {} {}", pin, id);
 		featureRepository.pinFilter(pin, id);
 	}
 
@@ -124,6 +122,6 @@ public class FeatureService {
 
 	private BooleanExpression hasRealmPermissions() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFeature.feature.datasource.realm.id.eq(user.getFirstRealm().getId());
+		return QFeature.feature.datasource.realm.id.in(user.getRealmIds());
 	}
 }

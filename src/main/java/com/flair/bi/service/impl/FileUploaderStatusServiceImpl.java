@@ -45,9 +45,9 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 		FileUploaderStatus fileUploaderStatus = fileUploaderStatusMapper
 				.fileUploaderStatusDTOToFileUploaderStatus(fileUploaderStatusDTO);
 		if (fileUploaderStatus.getRealm() == null) {
-			fileUploaderStatus.setRealm(user.getRealm());
+			fileUploaderStatus.setRealm(user.getFirstRealm());
 		} else {
-			if (!Objects.equals(fileUploaderStatus.getRealm().getId(), user.getRealm().getId())) {
+			if (!Objects.equals(fileUploaderStatus.getRealm().getId(), user.getFirstRealm().getId())) {
 				throw new IllegalStateException("Cannot save file uploader status with realm " + fileUploaderStatus.getRealm().getId());
 			}
 		}
@@ -98,6 +98,6 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 
 	private BooleanExpression hasRealmPermissions() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFileUploaderStatus.fileUploaderStatus.realm.id.eq(user.getRealm().getId());
+		return QFileUploaderStatus.fileUploaderStatus.realm.id.eq(user.getFirstRealm().getId());
 	}
 }

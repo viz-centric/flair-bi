@@ -47,9 +47,9 @@ public class FunctionsServiceImpl implements FunctionsService {
 		Functions functions = functionsMapper.functionsDTOToFunctions(functionsDTO);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (functions.getId() == null) {
-			functions.setRealm(user.getRealm());
+			functions.setRealm(user.getFirstRealm());
 		} else {
-			if (!Objects.equals(functions.getRealm().getId(), user.getRealm().getId())) {
+			if (!Objects.equals(functions.getRealm().getId(), user.getFirstRealm().getId())) {
 				throw new IllegalStateException("Cannot save function for realm " + functions.getRealm().getId());
 			}
 		}
@@ -116,8 +116,8 @@ public class FunctionsServiceImpl implements FunctionsService {
 	@Override
 	public List<Functions> findByRealmId(Long realmId) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!Objects.equals(user.getRealm().getId(), realmId)) {
-			throw new IllegalStateException("Cannot access realm " + realmId + " from realm " + user.getRealm().getId());
+		if (!Objects.equals(user.getFirstRealm().getId(), realmId)) {
+			throw new IllegalStateException("Cannot access realm " + realmId + " from realm " + user.getFirstRealm().getId());
 		}
 		return functionsRepository.findByRealmId(realmId);
 	}
@@ -130,6 +130,6 @@ public class FunctionsServiceImpl implements FunctionsService {
 
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFunctions.functions.realm.id.eq(user.getRealm().getId());
+		return QFunctions.functions.realm.id.eq(user.getFirstRealm().getId());
 	}
 }

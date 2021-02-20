@@ -41,9 +41,9 @@ public class ClientLogoServiceImpl implements ClientLogoService{
         log.debug("Request to save ClientLogo : {}", clientLogo);
         User user = userService.getUserWithAuthoritiesByLoginOrError();
         if (clientLogo.getRealm() == null) {
-            clientLogo.setRealm(user.getRealm());
+            clientLogo.setRealm(user.getFirstRealm());
         } else {
-            if (!Objects.equals(clientLogo.getRealm().getId(), user.getRealm().getId())) {
+            if (!Objects.equals(clientLogo.getRealm().getId(), user.getFirstRealm().getId())) {
                 throw new IllegalStateException("Cannot update client logo for realm " + clientLogo.getRealm().getId());
             }
         }
@@ -67,7 +67,7 @@ public class ClientLogoServiceImpl implements ClientLogoService{
 
     private BooleanExpression hasRealmPermissions() {
         User user = userService.getUserWithAuthoritiesByLoginOrError();
-        return QClientLogo.clientLogo.realm.id.eq(user.getRealm().getId());
+        return QClientLogo.clientLogo.realm.id.eq(user.getFirstRealm().getId());
     }
 
     /**
@@ -105,6 +105,6 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     public void updateImageLocation(String url, Long id) {
         log.debug("Request to update ClientLogo url : {} id {}", url, id);
         User user = userService.getUserWithAuthoritiesByLoginOrError();
-        clientLogoRepository.updateImageLocation(url, id, user.getRealm().getId());
+        clientLogoRepository.updateImageLocation(url, id, user.getFirstRealm().getId());
     }
 }

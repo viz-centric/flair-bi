@@ -21,22 +21,22 @@ public interface UserRepository
 
 	Optional<User> findOneByActivationKey(String activationKey);
 
-	Optional<User> findOneByIdAndRealmId(Long id, Long realmId);
+	Optional<User> findOneByIdAndRealmsId(Long id, Long realmId);
 
 	List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
 
 	Optional<User> findOneByResetKey(String resetKey);
 
-	Optional<User> findOneByEmailAndRealmId(String email, Long realmId);
+	Optional<User> findOneByEmailAndRealmsId(String email, Long realmId);
 
 	Optional<User> findOneByEmail(String email);
 
 	Optional<User> findOneByLogin(String login);
 
-	Optional<User> findOneByLoginAndRealmId(String login, Long realmId);
+	Optional<User> findOneByLoginAndRealmsId(String login, Long realmId);
 
 	@Modifying
-	void deleteAllByRealmId(Long realmId);
+	void deleteAllByRealmsId(Long realmId);
 
 	default void customize(QuerydslBindings querydslBindings, QUser qUser) {
 		querydslBindings.bind(qUser.login).first(StringExpression::containsIgnoreCase);

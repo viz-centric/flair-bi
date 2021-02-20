@@ -60,11 +60,11 @@ public class FeatureCriteriaService {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Feature feature = featureService.getOne(featureCriteria.getFeature().getId());
 		FeatureBookmark featureBookmark = featureBookmarkService.findOne(featureCriteria.getFeatureBookmark().getId());
-		if (!Objects.equals(feature.getDatasource().getRealm().getId(), user.getRealm().getId())) {
+		if (!Objects.equals(feature.getDatasource().getRealm().getId(), user.getFirstRealm().getId())) {
 			throw new IllegalStateException("Cannot save feature criteria because datasource does not belong to this realm " + feature.getDatasource().getRealm().getId());
 		}
-		if (!Objects.equals(featureBookmark.getUser().getRealm().getId(), user.getRealm().getId())) {
-			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + featureBookmark.getUser().getRealm().getId());
+		if (!Objects.equals(featureBookmark.getUser().getFirstRealm().getId(), user.getFirstRealm().getId())) {
+			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + featureBookmark.getUser().getFirstRealm().getId());
 		}
 	}
 
@@ -84,7 +84,7 @@ public class FeatureCriteriaService {
 	private List<FeatureCriteria> filterByRealm(List<FeatureCriteria> all) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return all.stream()
-				.filter(fc -> Objects.equals(fc.getFeature().getDatasource().getRealm().getId(), user.getRealm().getId()))
+				.filter(fc -> Objects.equals(fc.getFeature().getDatasource().getRealm().getId(), user.getFirstRealm().getId()))
 				.collect(Collectors.toList());
 	}
 
@@ -100,7 +100,7 @@ public class FeatureCriteriaService {
 		FeatureCriteria result = featureCriteriaRepository.getOne(id);
 
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!Objects.equals(result.getFeature().getDatasource().getRealm().getId(), user.getRealm().getId())) {
+		if (!Objects.equals(result.getFeature().getDatasource().getRealm().getId(), user.getFirstRealm().getId())) {
 			throw new IllegalStateException("Cannot access feature criteria for realm " + result.getFeature().getDatasource().getRealm().getId());
 		}
 		return result;

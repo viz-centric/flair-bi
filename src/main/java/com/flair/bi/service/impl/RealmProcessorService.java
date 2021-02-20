@@ -76,7 +76,7 @@ public class RealmProcessorService {
         newUser.setActivated(true);
         newUser.setCreatedBy("system");
         newUser.setLastModifiedBy("system");
-        newUser.setRealm(realm);
+        newUser.addRealm(realm);
         newUser.setUserGroups(new HashSet<>(Arrays.asList(adminGroup)));
         userService.saveUser(newUser);
     }
@@ -254,7 +254,7 @@ public class RealmProcessorService {
         newUser.setLangKey(Constants.LanguageKeys.ENGLISH);
         newUser.setActivated(true);
         newUser.setUserType(null);
-        newUser.setRealm(realm);
+        newUser.addRealm(realm);
         newUser.setUserGroups(new HashSet<>(adminGroups));
         userService.saveUser(newUser);
         return newUser;

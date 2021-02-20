@@ -38,7 +38,7 @@ public class DatasourceConstraintService {
 		log.debug("Request to save DatasourceConstraint : {}", datasourceConstraint);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (datasourceConstraint.getUser() != null) {
-			if (!Objects.equals(user.getRealm().getId(), datasourceConstraint.getUser().getRealm().getId())) {
+			if (!Objects.equals(user.getFirstRealm().getId(), datasourceConstraint.getUser().getFirstRealm().getId())) {
 				throw new IllegalStateException("Data constraint for user " + datasourceConstraint.getUser().getId() + " is not allowed");
 			}
 		}
@@ -61,7 +61,7 @@ public class DatasourceConstraintService {
 
 	private BooleanExpression hasRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceConstraint.datasourceConstraint.user.realm.id.eq(user.getRealm().getId());
+		return QDatasourceConstraint.datasourceConstraint.user.realms.contains(user.getFirstRealm());
 	}
 
 	/**

@@ -129,7 +129,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -154,13 +154,13 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(invalidUser))).andExpect(status().isBadRequest());
 
-		Optional<User> user = userRepository.findOneByEmailAndRealmId("funky@example.com", 1L);
+		Optional<User> user = userRepository.findOneByEmailAndRealmsId("funky@example.com", 1L);
 		assertThat(user.isPresent()).isFalse();
 	}
 
@@ -179,7 +179,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,7 +204,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		restUserMockMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -230,14 +230,14 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		// Duplicate login, different e-mail
 		ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(),
 				validUser.getPassword(), validUser.getLogin(), validUser.getLastName(), "alicejr@example.com", true,
 				validUser.getLangKey(), validUser.getPermissions(), validUser.getUserGroups(), validUser.getCreatedBy(),
-				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(),validUser.getRealm());
+				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), validUser.getRealms());
 
 		// Good user
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -247,7 +247,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(duplicatedUser))).andExpect(status().is4xxClientError());
 
-		Optional<User> userDup = userRepository.findOneByEmailAndRealmId("alicejr@example.com", 1L);
+		Optional<User> userDup = userRepository.findOneByEmailAndRealmsId("alicejr@example.com", 1L);
 		assertThat(userDup.isPresent()).isFalse();
 	}
 
@@ -267,14 +267,14 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		// Duplicate e-mail, different login
 		ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(),
 				validUser.getLogin(), validUser.getLastName(), validUser.getEmail(), true, validUser.getLangKey(),
 				validUser.getPermissions(), validUser.getUserGroups(), validUser.getCreatedBy(),
-				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(),validUser.getRealm());
+				validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(),validUser.getRealms());
 
 		// Good user
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -303,7 +303,7 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				null, // createdDate
 				null, // lastModifiedBy
 				null, // lastModifiedDate
-				new RealmDTO(1L,"test")
+				new HashSet<>(Arrays.asList(new RealmDTO(1L,"test")))
 		);
 
 		restMvc.perform(post("/api/register").contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -323,12 +323,12 @@ public class AccountResourceIntTest extends AbstractIntegrationTest {
 				true, // activated
 				"en", // langKey
 				null, // userType
-				new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)), null,new RealmDTO(1L,"test"));
+				new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)), null, new RealmDTO(1L,"test"));
 
 		restUserMockMvc.perform(post("/api/account").contentType(TestUtil.APPLICATION_JSON_UTF8)
 				.content(TestUtil.convertObjectToJsonBytes(invalidUser))).andExpect(status().isBadRequest());
 
-		Optional<User> user = userRepository.findOneByEmailAndRealmId("funky@example.com", 1L);
+		Optional<User> user = userRepository.findOneByEmailAndRealmsId("funky@example.com", 1L);
 		assertThat(user.isPresent()).isFalse();
 	}
 }

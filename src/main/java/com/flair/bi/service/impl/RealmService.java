@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,8 +39,8 @@ public class RealmService {
         Realm realm = realmMapper.fromDTO(realmDTO);
         realm = realmRepository.save(realm);
         User user = userService.getUserWithAuthoritiesByLoginOrError();
-        realmProcessorService.saveRealmDependentRecords(realm, user.getRealm().getId());
-        return new CreateRealmData(realm.getId(), realm.getName(), realm.getRealmCreationToken().getToken());
+        realmProcessorService.saveRealmDependentRecords(realm, user.getFirstRealm().getId());
+        return new CreateRealmData(realm.getId(), realm.getName(), Optional.ofNullable(realm.getRealmCreationToken()).map(t -> t.getToken()).orElse(null));
     }
 
     @Transactional

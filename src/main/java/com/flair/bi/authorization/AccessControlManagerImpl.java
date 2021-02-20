@@ -359,7 +359,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QPermissionEdge.permissionEdge.realm.id.eq(user.getRealm().getId());
+		return QPermissionEdge.permissionEdge.realm.id.in(user.getRealmIds());
 	}
 
 	/**

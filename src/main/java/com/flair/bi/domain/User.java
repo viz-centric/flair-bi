@@ -23,8 +23,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -140,9 +142,12 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_realm",
-			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "realm_id", referencedColumnName = "id"))
-	private Set<Realm> realm;
+			joinColumns = @JoinColumn(name = "jhi_user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "realms_id", referencedColumnName = "id"))
+	private Set<Realm> realms = new HashSet<>();
+
+	@ManyToOne
+	private Realm realm;
 
 	@PreDestroy
 	public void preDestroy() {
@@ -227,5 +232,20 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 
 	public void removePermissions(Collection<Permission> permissions) {
 		permissions.forEach(this::removePermission);
+	}
+
+	public void addRealm(Realm realm) {
+		this.realms.add(realm);
+		this.realm = realm;
+	}
+
+	@Transient
+	public Realm getFirstRealm() {
+		return realms.stream().findFirst().orElse(null);
+	}
+
+	@Transient
+	public Collection<Long> getRealmIds() {
+		return realms.stream().map(r -> r.getId()).collect(Collectors.toList());
 	}
 }

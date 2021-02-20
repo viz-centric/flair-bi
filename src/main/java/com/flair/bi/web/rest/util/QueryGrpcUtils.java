@@ -42,7 +42,7 @@ public final class QueryGrpcUtils {
                             .setConnectionUsername(c.getConnectionUsername())
                             .setConnectionType(c.getConnectionTypeId())
                             .setName(c.getName())
-                            .setRealmId(userService.getUserWithAuthoritiesByLoginOrError().getRealm().getId())
+                            .setRealmId(userService.getUserWithAuthoritiesByLoginOrError().getFirstRealm().getId())
                             .putAllDetails(c.getDetails());
                     if (c.getConnectionParameters() != null) {
                         builder.putAllConnectionParameters(c.getConnectionParameters());

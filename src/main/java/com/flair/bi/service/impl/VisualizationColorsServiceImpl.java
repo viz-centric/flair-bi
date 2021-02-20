@@ -49,9 +49,9 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 				.visualizationColorsDTOToVisualizationColors(visualizationColorsDTO);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (visualizationColors.getId() == null) {
-			visualizationColors.setRealm(user.getRealm());
+			visualizationColors.setRealm(user.getFirstRealm());
 		} else {
-			if (!Objects.equals(visualizationColors.getRealm().getId(), user.getRealm().getId())) {
+			if (!Objects.equals(visualizationColors.getRealm().getId(), user.getFirstRealm().getId())) {
 				throw new IllegalStateException("Cannot save visualization colors for realm " + visualizationColors.getRealm().getId());
 			}
 		}
@@ -129,6 +129,6 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 
 	private BooleanExpression hasUserRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QVisualizationColors.visualizationColors.realm.id.eq(user.getRealm().getId());
+		return QVisualizationColors.visualizationColors.realm.id.eq(user.getFirstRealm().getId());
 	}
 }

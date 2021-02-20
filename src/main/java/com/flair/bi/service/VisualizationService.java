@@ -65,7 +65,7 @@ public class VisualizationService {
 		List<Visualization> all = visualizationRepository.findAll();
 		return visualizationMapper.visualizationToVisualizationDTOs(all)
 				.stream()
-				.peek(x -> filterFieldTypesByRealm(x, user.getRealm()))
+				.peek(x -> filterFieldTypesByRealm(x, user.getFirstRealm()))
 				.collect(Collectors.toList());
 	}
 
@@ -89,7 +89,7 @@ public class VisualizationService {
 				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
 				.orElse(null);
 		if (visualizationDTO != null) {
-			filterFieldTypesByRealm(visualizationDTO, user.getRealm());
+			filterFieldTypesByRealm(visualizationDTO, user.getFirstRealm());
 		}
 		return visualizationDTO;
     }

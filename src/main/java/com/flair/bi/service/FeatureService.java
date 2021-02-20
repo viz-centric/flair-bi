@@ -51,7 +51,7 @@ public class FeatureService {
 
 	private void validatePermissions(Feature feature) {
 		Long datasourceRealmId = feature.getDatasource().getRealm().getId();
-		Long realmId = userService.getUserWithAuthoritiesByLoginOrError().getRealm().getId();
+		Long realmId = userService.getUserWithAuthoritiesByLoginOrError().getFirstRealm().getId();
 		if (!Objects.equals(datasourceRealmId, realmId)) {
 			throw new IllegalStateException("Cannot save feature for with realm " + datasourceRealmId);
 		}
@@ -103,7 +103,7 @@ public class FeatureService {
 	public void markFavouriteFilter(Boolean favouriteFilter, Long id) {
 		log.debug("FeatureService markFavouriteFilter {} {}", favouriteFilter, id);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		featureRepository.markFavouriteFilter(favouriteFilter, id, user.getRealm().getId());
+		featureRepository.markFavouriteFilter(favouriteFilter, id, user.getFirstRealm().getId());
 	}
 
 	public void pinFilter(Boolean pin, Long id) {
@@ -124,6 +124,6 @@ public class FeatureService {
 
 	private BooleanExpression hasRealmPermissions() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFeature.feature.datasource.realm.id.eq(user.getRealm().getId());
+		return QFeature.feature.datasource.realm.id.eq(user.getFirstRealm().getId());
 	}
 }

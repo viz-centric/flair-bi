@@ -37,7 +37,7 @@ public class HierarchyService {
 	public Hierarchy save(Hierarchy hierarchy) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Long realmId = hierarchy.getDatasource().getRealm().getId();
-		if (!Objects.equals(realmId, user.getRealm().getId())) {
+		if (!Objects.equals(realmId, user.getFirstRealm().getId())) {
 			throw new IllegalStateException("Cannot update hierarchy for realm " + realmId);
 		}
 		return hierarchyRepository.save(hierarchy);
@@ -50,6 +50,6 @@ public class HierarchyService {
 
 	private BooleanExpression hasRealmPermission() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QHierarchy.hierarchy.datasource.realm.id.eq(user.getRealm().getId());
+		return QHierarchy.hierarchy.datasource.realm.id.eq(user.getFirstRealm().getId());
 	}
 }

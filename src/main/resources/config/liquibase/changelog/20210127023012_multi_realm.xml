@@ -3,23 +3,24 @@
     <changeSet author="flairdev" id="20210127023012">
 
         <createTable tableName="user_realm">
-            <column type="bigint" name="id" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="date_created" type="timestamp">
+            <column type="bigint" name="realms_id">
                 <constraints nullable="false"/>
             </column>
-            <column name="token" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column type="bigint" name="realm_id">
+            <column type="bigint" name="jhi_user_id">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <createIndex tableName="realm_creation_token"
-                     indexName="idx_realm_creation_token_token" unique="true">
-            <column name="token" />
+        <createIndex tableName="user_realm"
+                     indexName="idx_user_realm_user_id_realm_id"
+                     unique="true">
+            <column name="jhi_user_id" />
+            <column name="realms_id" />
+        </createIndex>
+
+        <createIndex tableName="user_realm"
+                     indexName="idx_user_realm_realm_id">
+            <column name="realms_id" />
         </createIndex>
 
     </changeSet>

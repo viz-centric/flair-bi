@@ -72,7 +72,7 @@ public class FieldTypeService {
 
 	private BooleanExpression hasRealmPermission() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFieldType.fieldType.realm.id.eq(user.getRealm().getId());
+		return QFieldType.fieldType.realm.id.eq(user.getFirstRealm().getId());
 	}
 
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")

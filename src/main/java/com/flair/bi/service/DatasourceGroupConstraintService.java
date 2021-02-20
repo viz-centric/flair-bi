@@ -35,8 +35,8 @@ public class DatasourceGroupConstraintService {
 		log.debug("Request to save DatasourceGroupConstraint : {}", datasourceGroupConstraint);
 		UserGroup userGroup = datasourceGroupConstraint.getUserGroup();
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!Objects.equals(user.getRealm().getId(), userGroup.getRealm().getId())) {
-			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realm " + user.getRealm().getId());
+		if (!Objects.equals(user.getFirstRealm().getId(), userGroup.getRealm().getId())) {
+			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realm " + user.getFirstRealm().getId());
 		}
 		return datasourceGroupConstraintRepository.save(datasourceGroupConstraint);
 	}
@@ -50,7 +50,7 @@ public class DatasourceGroupConstraintService {
 
 	private BooleanExpression hasRealmPermissions() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.eq(user.getRealm().getId());
+		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.eq(user.getFirstRealm().getId());
 	}
 
 	@Transactional(readOnly = true)

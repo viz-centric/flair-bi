@@ -44,9 +44,9 @@ public class UserGroupService {
 	@Transactional(readOnly = true)
 	public List<UserGroup> findAll() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		log.debug("Request to get all UserGroups for realm {}", user.getRealm().getId());
+		log.debug("Request to get all UserGroups for realm {}", user.getFirstRealm().getId());
 		return ImmutableList.copyOf(
-				userGroupRepository.findAll(QUserGroup.userGroup.realm.id.eq(user.getRealm().getId()))
+				userGroupRepository.findAll(QUserGroup.userGroup.realm.id.eq(user.getFirstRealm().getId()))
 		);
 	}
 
@@ -75,13 +75,13 @@ public class UserGroupService {
 
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (userGroup.getId() != null) {
-			if (!user.getRealm().getId().equals(userGroup.getRealm().getId())) {
-				throw new IllegalStateException("User group " + userGroup.getId() + " does not belong to realm " + user.getRealm().getId());
+			if (!user.getFirstRealm().getId().equals(userGroup.getRealm().getId())) {
+				throw new IllegalStateException("User group " + userGroup.getId() + " does not belong to realm " + user.getFirstRealm().getId());
 			}
 		}
 
 		if (isCreate) {
-			userGroup.setRealm(user.getRealm());
+			userGroup.setRealm(user.getFirstRealm());
 
 			final Set<Permission> permissions = permissionRepository
 					.findAllById(Arrays.asList(new PermissionKey("DASHBOARDS", Action.READ, "APPLICATION"),
@@ -159,7 +159,7 @@ public class UserGroupService {
 	public UserGroup findOne(String name) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		log.debug("Request to get UserGroup: {}", name);
-		return userGroupRepository.findByNameAndRealmId(name, user.getRealm().getId());
+		return userGroupRepository.findByNameAndRealmId(name, user.getFirstRealm().getId());
 	}
 
 	@Transactional(readOnly = true)
@@ -176,7 +176,7 @@ public class UserGroupService {
 	public void delete(String name) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		log.debug("Request to delete UserGroup: {}", name);
-		userGroupRepository.deleteAllByNameAndRealmId(name, user.getRealm().getId());
+		userGroupRepository.deleteAllByNameAndRealmId(name, user.getFirstRealm().getId());
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class UserGroupService {
 	@Transactional(readOnly = true)
 	public boolean exists(UserGroup userGroup) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return userGroupRepository.findByNameAndRealmId(userGroup.getName(), user.getRealm().getId()) != null;
+		return userGroupRepository.findByNameAndRealmId(userGroup.getName(), user.getFirstRealm().getId()) != null;
 	}
 
 	public void saveAll(Iterable<UserGroup> userGroups) {
@@ -215,6 +215,6 @@ public class UserGroupService {
 
 	private BooleanExpression hasUserGroupPermission() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QUserGroup.userGroup.realm.id.eq(user.getRealm().getId());
+		return QUserGroup.userGroup.realm.id.eq(user.getFirstRealm().getId());
 	}
 }

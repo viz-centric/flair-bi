@@ -1,12 +1,9 @@
 package com.flair.bi.web.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.util.Map;
-
+import com.flair.bi.AbstractIntegrationTest;
+import com.flair.bi.domain.User;
+import com.flair.bi.security.jwt.TokenProvider;
+import com.flair.bi.web.rest.vm.AuthorizeRequest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,10 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import com.flair.bi.AbstractIntegrationTest;
-import com.flair.bi.domain.User;
-import com.flair.bi.security.jwt.TokenProvider;
-import com.flair.bi.web.rest.vm.LoginVM;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @Ignore
 public class UserJWTControllerTest extends AbstractIntegrationTest {
@@ -33,10 +32,10 @@ public class UserJWTControllerTest extends AbstractIntegrationTest {
 
 	@Test
 	public void authorize() {
-		LoginVM loginVM = new LoginVM();
-		loginVM.setPassword("passwd");
-		loginVM.setRememberMe(true);
-		loginVM.setUsername("usr");
+		AuthorizeRequest authorizeRequest = new AuthorizeRequest();
+		authorizeRequest.setPassword("passwd");
+		authorizeRequest.setRememberMe(true);
+		authorizeRequest.setUsername("usr");
 
 		User principal = new User();
 		User credentials = new User();
@@ -47,7 +46,7 @@ public class UserJWTControllerTest extends AbstractIntegrationTest {
 		when(tokenProvider.createToken(eq(authenticationToken), eq(true))).thenReturn("token");
 
 		ResponseEntity<Map> response = restTemplate.withBasicAuth("flairuser", "flairpass")
-				.exchange(getUrl() + "/api/authenticate", HttpMethod.POST, new HttpEntity<>(loginVM), Map.class);
+				.exchange(getUrl() + "/api/authenticate", HttpMethod.POST, new HttpEntity<>(authorizeRequest), Map.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("token", response.getBody().get("id_token"));

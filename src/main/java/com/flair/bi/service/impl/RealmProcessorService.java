@@ -205,7 +205,7 @@ public class RealmProcessorService {
 
         String jwtToken;
         try {
-            jwtToken = authService.auth(user);
+            jwtToken = authService.auth(user, realm);
             createFunctions(realm, vizcentricId);
             createVisualizationColors(realm, vizcentricId);
             createFieldTypes(realm, vizcentricId);

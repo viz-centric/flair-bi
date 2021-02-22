@@ -165,9 +165,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 						.collect(Collectors.toList());
 				newAuthorities.addAll(oldAuthorities);
 
-				SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 						SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
-						SecurityContextHolder.getContext().getAuthentication().getCredentials(), newAuthorities));
+						SecurityContextHolder.getContext().getAuthentication().getCredentials(), newAuthorities);
+				token.setDetails(SecurityUtils.getUserAuth());
+				SecurityContextHolder.getContext().setAuthentication(token);
 			}
 
 		}

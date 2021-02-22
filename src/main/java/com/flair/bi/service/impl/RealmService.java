@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -88,5 +90,9 @@ public class RealmService {
     public ReplicateRealmResult replicateRealm(Long realmId, DraftUser draftUser) {
         Realm realm = realmRepository.getOne(realmId);
         return realmProcessorService.replicateRealm(realm, draftUser, VIZ_CENTRIC_REALM);
+    }
+
+    public Set<Realm> findAllByUsername(String username) {
+        return userService.getUserByLogin(username).map(u -> u.getRealms()).orElseGet(() -> new HashSet<>());
     }
 }

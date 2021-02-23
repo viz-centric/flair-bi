@@ -1,11 +1,11 @@
 package com.flair.bi.service;
 
-import com.flair.bi.domain.User;
 import com.flair.bi.domain.Visualization;
 import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.propertytype.PropertyType;
 import com.flair.bi.repository.PropertyTypeRepository;
 import com.flair.bi.repository.VisualizationRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.dto.VisualizationDTO;
 import com.flair.bi.service.mapper.VisualizationMapper;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
@@ -17,8 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,11 +60,10 @@ public class VisualizationService {
 	@Transactional(readOnly = true)
 	public List<VisualizationDTO> findAll() {
 		log.debug("Request to get all Visualization");
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		List<Visualization> all = visualizationRepository.findAll();
 		return visualizationMapper.visualizationToVisualizationDTOs(all)
 				.stream()
-				.peek(x -> filterFieldTypesByRealm(x, user.getRealmIds()))
+				.peek(x -> filterFieldTypesByRealm(x))
 				.collect(Collectors.toList());
 	}
 
@@ -77,7 +76,6 @@ public class VisualizationService {
 	@Transactional(readOnly = true)
 	public VisualizationDTO findOne(Long id) {
 		log.debug("Request to get Visualization : {}", id);
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Optional<Visualization> visualization = visualizationRepository.findById(id);
 		VisualizationDTO visualizationDTO = visualization
 				.map(x -> {
@@ -88,16 +86,16 @@ public class VisualizationService {
 				.map(x -> visualizationMapper.visualizationToVisualizationDTO(x))
 				.orElse(null);
 		if (visualizationDTO != null) {
-			filterFieldTypesByRealm(visualizationDTO, user.getRealmIds());
+			filterFieldTypesByRealm(visualizationDTO);
 		}
 		return visualizationDTO;
     }
 
-	private void filterFieldTypesByRealm(VisualizationDTO visualizationDTO, Collection<Long> realmIds) {
+	private void filterFieldTypesByRealm(VisualizationDTO visualizationDTO) {
 		visualizationDTO.setFieldTypes(
 				visualizationDTO.getFieldTypes()
 				.stream()
-				.filter(x -> realmIds.contains(x.getRealm().getId()))
+				.filter(x -> Objects.equals(SecurityUtils.getUserAuth().getRealmId(), x.getRealm().getId()))
 				.collect(Collectors.toSet())
 		);
 	}

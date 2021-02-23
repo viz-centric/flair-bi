@@ -6,6 +6,7 @@ import com.flair.bi.domain.User;
 import com.flair.bi.domain.constraintdefinition.FeatureConstraintGroupExpression;
 import com.flair.bi.domain.security.UserGroup;
 import com.flair.bi.repository.DatasourceGroupConstraintRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.security.UserGroupService;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.querydsl.core.types.Predicate;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,8 +36,8 @@ public class DatasourceGroupConstraintService {
 		log.debug("Request to save DatasourceGroupConstraint : {}", datasourceGroupConstraint);
 		UserGroup userGroup = datasourceGroupConstraint.getUserGroup();
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!user.getRealmIds().contains(userGroup.getRealm().getId())) {
-			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realms " + user.getRealmIds());
+		if (!Objects.equals(userGroup.getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
+			throw new IllegalStateException("Realm of user group " + userGroup.getRealm().getId() + " does not match current user realms " + SecurityUtils.getUserAuth().getRealmId());
 		}
 		return datasourceGroupConstraintRepository.save(datasourceGroupConstraint);
 	}
@@ -48,8 +50,7 @@ public class DatasourceGroupConstraintService {
 	}
 
 	private BooleanExpression hasRealmPermissions() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.in(user.getRealmIds());
+		return QDatasourceGroupConstraint.datasourceGroupConstraint.userGroup.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 
 	@Transactional(readOnly = true)

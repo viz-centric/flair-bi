@@ -4,6 +4,7 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.QDatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.DatasourceConstraintRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
@@ -37,7 +38,7 @@ public class DatasourceConstraintService {
 		log.debug("Request to save DatasourceConstraint : {}", datasourceConstraint);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (datasourceConstraint.getUser() != null) {
-			if (user.getRealmIds().stream().noneMatch(id -> datasourceConstraint.getUser().getRealmIds().contains(id))) {
+			if (datasourceConstraint.getUser().getRealmById(SecurityUtils.getUserAuth().getRealmId()) == null) {
 				throw new IllegalStateException("Data constraint for user " + datasourceConstraint.getUser().getId() + " is not allowed");
 			}
 		}
@@ -60,7 +61,7 @@ public class DatasourceConstraintService {
 
 	private BooleanExpression hasRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceConstraint.datasourceConstraint.user.realms.contains(user.getFirstRealm());
+		return QDatasourceConstraint.datasourceConstraint.user.realms.contains(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 	}
 
 	/**

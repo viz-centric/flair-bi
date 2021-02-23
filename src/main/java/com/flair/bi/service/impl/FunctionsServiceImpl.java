@@ -4,6 +4,7 @@ import com.flair.bi.domain.Functions;
 import com.flair.bi.domain.QFunctions;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.FunctionsRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.FunctionsService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.FunctionsDTO;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -46,9 +48,9 @@ public class FunctionsServiceImpl implements FunctionsService {
 		Functions functions = functionsMapper.functionsDTOToFunctions(functionsDTO);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (functions.getId() == null) {
-			functions.setRealm(user.getFirstRealm());
+			functions.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 		} else {
-			if (!user.getRealmIds().contains(functions.getRealm().getId())) {
+			if (!Objects.equals(functions.getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
 				throw new IllegalStateException("Cannot save function for realm " + functions.getRealm().getId());
 			}
 		}
@@ -114,9 +116,8 @@ public class FunctionsServiceImpl implements FunctionsService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<Functions> findByRealmId(Long realmId) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!user.getRealmIds().contains(realmId)) {
-			throw new IllegalStateException("Cannot access realm " + realmId + " from realm " + user.getRealmIds());
+		if (!Objects.equals(realmId, SecurityUtils.getUserAuth().getRealmId())) {
+			throw new IllegalStateException("Cannot access realm " + realmId + " from realm " + SecurityUtils.getUserAuth().getRealmId());
 		}
 		return functionsRepository.findByRealmId(realmId);
 	}
@@ -128,7 +129,6 @@ public class FunctionsServiceImpl implements FunctionsService {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFunctions.functions.realm.id.in(user.getRealmIds());
+		return QFunctions.functions.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

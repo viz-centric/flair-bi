@@ -3,8 +3,8 @@ package com.flair.bi.service.impl;
 import com.flair.bi.domain.DraftUser;
 import com.flair.bi.domain.Realm;
 import com.flair.bi.domain.RealmCreationToken;
-import com.flair.bi.domain.User;
 import com.flair.bi.repository.RealmRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.mapper.RealmMapper;
 import com.flair.bi.web.rest.dto.RealmDTO;
@@ -40,8 +40,7 @@ public class RealmService {
         log.debug("Saving realm : {}", realmDTO);
         Realm realm = realmMapper.fromDTO(realmDTO);
         realm = realmRepository.save(realm);
-        User user = userService.getUserWithAuthoritiesByLoginOrError();
-        realmProcessorService.saveRealmDependentRecords(realm, user.getFirstRealm().getId());
+        realmProcessorService.saveRealmDependentRecords(realm, SecurityUtils.getUserAuth().getRealmId());
         return new CreateRealmData(realm.getId(), realm.getName(), Optional.ofNullable(realm.getRealmCreationToken()).map(t -> t.getToken()).orElse(null));
     }
 
@@ -79,6 +78,12 @@ public class RealmService {
         return realmMapper.toDTO(entity);
     }
 
+    @Transactional(readOnly = true)
+    public Realm findOneAsRealm(Long id) {
+        log.debug("Request to get Functions : {}", id);
+        return realmRepository.getOne(id);
+    }
+
     @Transactional
     public void delete(Long id) {
         log.debug("Request to delete Functions : {}", id);
@@ -93,6 +98,6 @@ public class RealmService {
     }
 
     public Set<Realm> findAllByUsername(String username) {
-        return userService.getUserByLogin(username).map(u -> u.getRealms()).orElseGet(() -> new HashSet<>());
+        return userService.getUserByLoginNoRealmCheck(username).map(u -> u.getRealms()).orElseGet(() -> new HashSet<>());
     }
 }

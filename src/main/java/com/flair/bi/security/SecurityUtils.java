@@ -28,15 +28,13 @@ public final class SecurityUtils {
 	public static UserAuthInfo getUserAuth() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
-		if (authentication != null) {
-			if (authentication instanceof UsernamePasswordAuthenticationToken) {
-				UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;
-				if (authenticationToken.getDetails() instanceof UserAuthInfo) {
-					return  (UserAuthInfo) authenticationToken.getDetails();
-				}
+		if (authentication instanceof UsernamePasswordAuthenticationToken) {
+			UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;
+			if (authenticationToken.getDetails() instanceof UserAuthInfo) {
+				return (UserAuthInfo) authenticationToken.getDetails();
 			}
 		}
-		return null;
+		throw new IllegalStateException("Realm not found in security context");
 	}
 
 	/**

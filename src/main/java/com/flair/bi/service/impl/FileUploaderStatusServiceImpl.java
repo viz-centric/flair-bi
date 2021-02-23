@@ -4,6 +4,7 @@ import com.flair.bi.domain.FileUploaderStatus;
 import com.flair.bi.domain.QFileUploaderStatus;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.FileUploaderStatusRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.FileUploaderStatusService;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.dto.FileUploaderStatusDTO;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 /**
  * Service Implementation for managing FileUploaderStatus.
@@ -43,9 +46,9 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 		FileUploaderStatus fileUploaderStatus = fileUploaderStatusMapper
 				.fileUploaderStatusDTOToFileUploaderStatus(fileUploaderStatusDTO);
 		if (fileUploaderStatus.getRealm() == null) {
-			fileUploaderStatus.setRealm(user.getFirstRealm());
+			fileUploaderStatus.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 		} else {
-			if (!user.getRealmIds().contains(fileUploaderStatus.getRealm().getId())) {
+			if (!Objects.equals(fileUploaderStatus.getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
 				throw new IllegalStateException("Cannot save file uploader status with realm " + fileUploaderStatus.getRealm().getId());
 			}
 		}
@@ -95,7 +98,6 @@ public class FileUploaderStatusServiceImpl implements FileUploaderStatusService 
 	}
 
 	private BooleanExpression hasRealmPermissions() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFileUploaderStatus.fileUploaderStatus.realm.id.in(user.getRealmIds());
+		return QFileUploaderStatus.fileUploaderStatus.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

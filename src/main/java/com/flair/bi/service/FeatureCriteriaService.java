@@ -5,6 +5,7 @@ import com.flair.bi.domain.FeatureBookmark;
 import com.flair.bi.domain.FeatureCriteria;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.FeatureCriteriaRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -59,11 +61,11 @@ public class FeatureCriteriaService {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Feature feature = featureService.getOne(featureCriteria.getFeature().getId());
 		FeatureBookmark featureBookmark = featureBookmarkService.findOne(featureCriteria.getFeatureBookmark().getId());
-		if (!user.getRealmIds().contains(feature.getDatasource().getRealm().getId())) {
+		if (!Objects.equals(feature.getDatasource().getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
 			throw new IllegalStateException("Cannot save feature criteria because datasource does not belong to this realm " + feature.getDatasource().getRealm().getId());
 		}
-		if (featureBookmark.getUser().getRealmIds().stream().noneMatch(id -> user.getRealmIds().contains(id))) {
-			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + featureBookmark.getUser().getRealmIds());
+		if (user.getRealmById(SecurityUtils.getUserAuth().getRealmId()) == null) {
+			throw new IllegalStateException("Cannot save feature criteria because bookmark user does not belong to this realm " + SecurityUtils.getUserAuth().getRealmId());
 		}
 	}
 
@@ -81,9 +83,8 @@ public class FeatureCriteriaService {
 	}
 
 	private List<FeatureCriteria> filterByRealm(List<FeatureCriteria> all) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		return all.stream()
-				.filter(fc -> user.getRealmIds().contains(fc.getFeature().getDatasource().getRealm().getId()))
+				.filter(fc -> Objects.equals(fc.getFeature().getDatasource().getRealm().getId(), SecurityUtils.getUserAuth().getRealmId()))
 				.collect(Collectors.toList());
 	}
 
@@ -98,8 +99,7 @@ public class FeatureCriteriaService {
 		log.debug("Request to get FeatureCriteria : {}", id);
 		FeatureCriteria result = featureCriteriaRepository.getOne(id);
 
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		if (!user.getRealmIds().contains(result.getFeature().getDatasource().getRealm().getId())) {
+		if (!Objects.equals(result.getFeature().getDatasource().getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
 			throw new IllegalStateException("Cannot access feature criteria for realm " + result.getFeature().getDatasource().getRealm().getId());
 		}
 		return result;

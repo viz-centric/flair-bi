@@ -5,8 +5,8 @@
         <dropNotNullConstraint  columnDataType="bigint"
                                 columnName="realm_id"
                                 tableName="jhi_user"/>
-<!--        <dropColumn tableName="jhi_user"-->
-<!--                    columnName="realm_id"/>-->
+        <dropColumn tableName="jhi_user"
+                    columnName="realm_id"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -23,9 +23,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -146,9 +146,6 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 			inverseJoinColumns = @JoinColumn(name = "realms_id", referencedColumnName = "id"))
 	private Set<Realm> realms = new HashSet<>();
 
-	@ManyToOne
-	private Realm realm;
-
 	@PreDestroy
 	public void preDestroy() {
 		bookmarkWatches.forEach(x -> x.setUser(null));
@@ -234,11 +231,12 @@ public class User extends AbstractAuditingEntity implements Serializable, Permis
 		permissions.forEach(this::removePermission);
 	}
 
+	@Transient
 	public void addRealm(Realm realm) {
 		this.realms.add(realm);
-		this.realm = realm;
 	}
 
+	@Transient
 	public Realm getRealmById(Long realmId) {
 		return realms.stream().filter(r -> Objects.equals(r.getId(), realmId)).findFirst().orElse(null);
 	}

@@ -43,7 +43,7 @@ public class ProviderRegistrationService {
         try {
             userDetails = userDetailsService.loadUserByUsername(email);
         } catch (UsernameNotFoundException e) {
-            log.info("User {} not found so registering a new user", email, e);
+            log.info("User {} not found so registering a new user - {}", email, e.getMessage());
         }
 
         if (userDetails != null) {

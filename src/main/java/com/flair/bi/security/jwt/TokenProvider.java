@@ -123,7 +123,7 @@ public class TokenProvider implements InitializingBean {
 
 			Long realmId = null;
 			if (decodedToken.getClaims() != null) {
-				realmId = (Long) decodedToken.getClaims().get(REAML_KEY);
+				realmId = Long.valueOf(decodedToken.getClaims().get(REAML_KEY).toString());
 			}
 
 			return getUsernamePasswordAuthenticationToken(email, token, realmId);

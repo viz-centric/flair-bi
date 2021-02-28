@@ -14,7 +14,9 @@ import com.flair.bi.service.dto.UserDTO;
 import com.flair.bi.web.rest.util.HeaderUtil;
 import com.flair.bi.web.rest.vm.KeyAndPasswordVM;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
+import com.flair.bi.web.rest.vm.RealmInfo;
 import io.micrometer.core.annotation.Timed;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -41,6 +44,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
@@ -93,23 +97,35 @@ public class AccountResource {
 	@Timed
 	public ResponseEntity<RegisterWithProviderResponse> registerWithProvider(@Valid @RequestBody RegisterWithProviderRequest request,
 												  HttpServletResponse response) {
-		ProviderRegistrationService.RegisterResult result = providerRegistrationService.register(request.getIdToken());
+		ProviderRegistrationService.RegisterResult result = providerRegistrationService.register(request.getIdToken(), request.getRealmId());
 		if (result.getJwt() != null) {
 			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwt());
-			return ResponseEntity.ok().build();
 		}
-		return ResponseEntity.ok(new RegisterWithProviderResponse(result.getEmailConfirmationToken()));
+		return ResponseEntity.ok(RegisterWithProviderResponse.builder()
+				.token(
+						result.getEmailConfirmationToken()
+				)
+				.realms(
+						Optional.ofNullable(result.getRealms())
+								.map(realms -> realms.stream().map(r -> new RealmInfo(r.getName(), r.getId())).collect(Collectors.toList()))
+								.orElse(null)
+				)
+				.build());
 	}
 
 	@Data
 	private static class RegisterWithProviderRequest {
 		@NotEmpty
 		private String idToken;
+		@Nullable
+		private Long realmId;
 	}
 
 	@Data
+	@Builder
 	private static class RegisterWithProviderResponse {
 		private final String token;
+		private final List<RealmInfo> realms;
 	}
 
 	/**

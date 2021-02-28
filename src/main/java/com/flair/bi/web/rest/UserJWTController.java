@@ -8,6 +8,7 @@ import com.flair.bi.service.impl.RealmService;
 import com.flair.bi.service.signup.ConfirmUserResult;
 import com.flair.bi.service.signup.SignupService;
 import com.flair.bi.web.rest.vm.AuthorizeRequest;
+import com.flair.bi.web.rest.vm.RealmInfo;
 import io.micrometer.core.annotation.Timed;
 import lombok.Builder;
 import lombok.Data;
@@ -53,9 +54,8 @@ public class UserJWTController {
 					return ResponseEntity.ok(
 							AuthorizeResponse.builder()
 									.realms(realms.stream()
-											.map(r -> new AuthorizeResponse.RealmInfo(r.getName(), r.getId()))
+											.map(r -> new RealmInfo(r.getName(), r.getId()))
 											.collect(Collectors.toList()))
-									.stage(AuthorizeResponse.Stage.CHOOSE_REALM)
 									.build()
 					);
 				} else if (realms.size() == 1) {
@@ -72,7 +72,6 @@ public class UserJWTController {
 			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
 			return ResponseEntity.ok(
 					AuthorizeResponse.builder()
-							.stage(AuthorizeResponse.Stage.SUCCESS)
 							.idToken(jwt)
 							.build()
 			);
@@ -116,7 +115,6 @@ public class UserJWTController {
 			ConfirmUserResult result = signupService.confirmUser(request.getRealmId(), request.getEmailVerificationToken(), request.getRealmCreationToken());
 			response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + result.getJwtToken());
 			return ResponseEntity.ok(AuthorizeResponse.builder()
-					.stage(AuthorizeResponse.Stage.SUCCESS)
 					.idToken(result.getJwtToken())
 					.build());
 		} catch (AuthenticationException ae) {
@@ -142,16 +140,6 @@ public class UserJWTController {
 	private static class AuthorizeResponse {
 		@JsonProperty("id_token")
 		private final String idToken;
-		private final Stage stage;
 		private final List<RealmInfo> realms;
-		public enum Stage {
-			SUCCESS, CHOOSE_REALM
-		}
-		@Data
-		@RequiredArgsConstructor
-		private static class RealmInfo {
-			private final String name;
-			private final Long id;
-		}
 	}
 }

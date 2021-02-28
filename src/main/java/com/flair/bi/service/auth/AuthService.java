@@ -24,6 +24,10 @@ public class AuthService {
     public String auth(User user, Realm realm) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getLogin());
 
+        return auth(userDetails, realm);
+    }
+
+    public String auth(UserDetails userDetails, Realm realm) {
         UserAuthInfo userAuthInfo = new UserAuthInfo();
         userAuthInfo.setRealmId(realm.getId());
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="flairdev" id="20210127023012">
+
+        <createTable tableName="user_realm">
+            <column type="bigint" name="realms_id">
+                <constraints nullable="false"/>
+            </column>
+            <column type="bigint" name="jhi_user_id">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="user_realm"
+                     indexName="idx_user_realm_user_id_realm_id"
+                     unique="true">
+            <column name="jhi_user_id" />
+            <column name="realms_id" />
+        </createIndex>
+
+        <createIndex tableName="user_realm"
+                     indexName="idx_user_realm_realm_id">
+            <column name="realms_id" />
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>

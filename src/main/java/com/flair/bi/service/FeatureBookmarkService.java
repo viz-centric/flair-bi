@@ -99,7 +99,7 @@ public class FeatureBookmarkService {
 
 	private BooleanExpression hasRealmPermissions() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFeatureBookmark.featureBookmark.user.realm.id.eq(user.getRealm().getId());
+		return QFeatureBookmark.featureBookmark.user.realms.contains(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 	}
 
 }

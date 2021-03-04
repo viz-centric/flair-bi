@@ -176,11 +176,10 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and date_part('day',age(current_date, vr.last_modified_date::date))=0 "
 							+ "UNION ALL select 'DASHBOARD' as type,dr.release_comment as comment,d.dashboard_name as name,dr.last_modified_date as lastModifiedDate from dashboards d inner join dashboard_releases dr on d.id=dr.dashboard_id where dr.release_status='APPROVED' and d.realm_id = ? and date_part('day',age(current_date, dr.last_modified_date::date))=0 ) alert order by lastModifiedDate desc LIMIT 5 OFFSET ?",
-					new Object[] { realmId, realmId, offset }, new RowMapper<ReleasesAlertsDTO>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId(), offset }, new RowMapper<ReleasesAlertsDTO>() {
 						public ReleasesAlertsDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
 							ReleasesAlertsDTO releasesAlertsDTO = new ReleasesAlertsDTO(srs.getString("type"),
 									srs.getString("comment"), srs.getString("name"),
@@ -199,11 +198,10 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from (select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and date_part('day',age(current_date, vr.last_modified_date::date))=1 "
 							+ "UNION ALL select 'DASHBOARD' as type,dr.release_comment as comment,d.dashboard_name as name,dr.last_modified_date as lastModifiedDate from dashboards d inner join dashboard_releases dr on d.id=dr.dashboard_id where dr.release_status='APPROVED' and d.realm_id = ? and date_part('day',age(current_date, dr.last_modified_date::date))=1 ) alert order by lastModifiedDate desc LIMIT 5 OFFSET ?",
-					new Object[] { realmId, realmId, offset }, new RowMapper<ReleasesAlertsDTO>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId(), offset }, new RowMapper<ReleasesAlertsDTO>() {
 						public ReleasesAlertsDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
 							ReleasesAlertsDTO releasesAlertsDTO = new ReleasesAlertsDTO(srs.getString("type"),
 									srs.getString("comment"), srs.getString("name"),
@@ -222,11 +220,10 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and vr.last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER+1 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+7 "
 							+ "UNION ALL select 'DASHBOARD' as type,dr.release_comment as comment,d.dashboard_name as name,dr.last_modified_date as lastModifiedDate from dashboards d inner join dashboard_releases dr on d.id=dr.dashboard_id where dr.release_status='APPROVED' and d.realm_id = ? and dr.last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER+1 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+7 ) alert order by lastModifiedDate desc LIMIT 5 OFFSET ?",
-					new Object[] { realmId, realmId, offset }, new RowMapper<ReleasesAlertsDTO>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId(), offset }, new RowMapper<ReleasesAlertsDTO>() {
 						public ReleasesAlertsDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
 							ReleasesAlertsDTO releasesAlertsDTO = new ReleasesAlertsDTO(srs.getString("type"),
 									srs.getString("comment"), srs.getString("name"),
@@ -245,11 +242,10 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and vr.last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-6 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER "
 							+ "UNION ALL select 'DASHBOARD' as type,dr.release_comment as comment,d.dashboard_name as name,dr.last_modified_date as lastModifiedDate from dashboards d inner join dashboard_releases dr on d.id=dr.dashboard_id where dr.release_status='APPROVED' and d.realm_id = ? and dr.last_modified_date::date BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-6 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER ) alert order by lastModifiedDate desc LIMIT 5 OFFSET ?",
-					new Object[] { realmId, realmId, offset }, new RowMapper<ReleasesAlertsDTO>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId(), offset }, new RowMapper<ReleasesAlertsDTO>() {
 						public ReleasesAlertsDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
 							ReleasesAlertsDTO releasesAlertsDTO = new ReleasesAlertsDTO(srs.getString("type"),
 									srs.getString("comment"), srs.getString("name"),
@@ -268,11 +264,10 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		List<ReleasesAlertsDTO> releasesAlerts = new ArrayList<ReleasesAlertsDTO>();
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			releasesAlerts = jdbcTemplate.query(
 					"select type,comment,name,lastModifiedDate from ( select 'VIEW' as type,vr.release_comment as comment,v.view_name as name,vr.last_modified_date as lastModifiedDate from views v inner join view_releases vr on v.id=vr.view_id where vr.release_status='APPROVED' and v.realm_id = ? and vr.last_modified_date::date < NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER-6 "
 							+ "UNION ALL select 'DASHBOARD' as type,dr.release_comment as comment,d.dashboard_name as name,dr.last_modified_date as lastModifiedDate from dashboards d inner join dashboard_releases dr on d.id=dr.dashboard_id where dr.release_status='APPROVED' and d.realm_id = ? and dr.last_modified_date::date < NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER-6 ) alert order by lastModifiedDate desc LIMIT 5 OFFSET ?",
-					new Object[] { realmId, realmId, offset }, new RowMapper<ReleasesAlertsDTO>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId(), offset }, new RowMapper<ReleasesAlertsDTO>() {
 						public ReleasesAlertsDTO mapRow(ResultSet srs, int rowNum) throws SQLException {
 							ReleasesAlertsDTO releasesAlertsDTO = new ReleasesAlertsDTO(srs.getString("type"),
 									srs.getString("comment"), srs.getString("name"),
@@ -293,7 +288,6 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		int totalAlerts = 0;
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
 					"select count(*) as count\n" +
 							"from (select 1\n" +
@@ -307,7 +301,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
 							"      where dr.release_status = 'APPROVED'\n" +
 							"        and date_part('day', age(current_date, dr.last_modified_date::date)) = 0) alert",
-					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId() }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -328,7 +322,6 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		int totalAlerts = 0;
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
 					"select count(*) as count\n" +
 							"from (select 1\n" +
@@ -342,7 +335,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
 							"      where dr.release_status = 'APPROVED'\n" +
 							"        and date_part('day', age(current_date, dr.last_modified_date::date)) = 1) alert",
-					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId() }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -363,7 +356,6 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		int totalAlerts = 0;
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
 					"select count(*) as count\n" +
 							"from (select 1\n" +
@@ -377,7 +369,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
 							"      where dr.release_status = 'APPROVED'\n" +
 							"        and dr.last_modified_date::date BETWEEN NOW()::DATE - EXTRACT(DOW FROM NOW())::INTEGER + 1 AND NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER + 7) alert",
-					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId() }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -398,7 +390,6 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		int totalAlerts = 0;
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
 					"select count(*) as count\n" +
 							"from (select 1\n" +
@@ -412,7 +403,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
 							"      where dr.release_status = 'APPROVED'\n" +
 							"        and dr.last_modified_date::date BETWEEN NOW()::DATE - EXTRACT(DOW FROM NOW())::INTEGER - 6 AND NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER) alert",
-					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId() }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -433,7 +424,6 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 		int totalAlerts = 0;
 		try {
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			Long realmId = user.getRealm().getId();
 			counts = jdbcTemplate.query(
 					"select count(*) as count\n" +
 							"from (select 1\n" +
@@ -447,7 +437,7 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 							"               join dashboards d on d.id = dr.dashboard_id and d.realm_id = ?\n" +
 							"      where dr.release_status = 'APPROVED'\n" +
 							"        and dr.last_modified_date::date < NOW()::DATE - EXTRACT(DOW from NOW())::INTEGER - 6) alert",
-					new Object[] { realmId, realmId }, new RowMapper<Integer>() {
+					new Object[] { SecurityUtils.getUserAuth().getRealmId(), SecurityUtils.getUserAuth().getRealmId() }, new RowMapper<Integer>() {
 						public Integer mapRow(ResultSet srs, int rowNum) throws SQLException {
 							return srs.getInt("count");
 						}
@@ -465,9 +455,9 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	public ReleaseRequest save(ReleaseRequest request) {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (request.getRealm() == null) {
-			request.setRealm(user.getRealm());
+			request.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 		} else {
-			if (!Objects.equals(request.getRealm().getId(), user.getRealm().getId())) {
+			if (!Objects.equals(request.getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
 				throw new IllegalStateException("Cannot save release request for realm " + request.getRealm().getId());
 			}
 		}
@@ -475,7 +465,6 @@ class ReleaseRequestServiceImpl implements ReleaseRequestService {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QReleaseRequest.releaseRequest.realm.id.eq(user.getRealm().getId());
+		return QReleaseRequest.releaseRequest.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

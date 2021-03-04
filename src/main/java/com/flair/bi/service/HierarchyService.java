@@ -1,9 +1,9 @@
 package com.flair.bi.service;
 
-import com.flair.bi.domain.User;
 import com.flair.bi.domain.hierarchy.Hierarchy;
 import com.flair.bi.domain.hierarchy.QHierarchy;
 import com.flair.bi.repository.HierarchyRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -35,9 +35,8 @@ public class HierarchyService {
 	}
 
 	public Hierarchy save(Hierarchy hierarchy) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		Long realmId = hierarchy.getDatasource().getRealm().getId();
-		if (!Objects.equals(realmId, user.getRealm().getId())) {
+		if (!Objects.equals(realmId, SecurityUtils.getUserAuth().getRealmId())) {
 			throw new IllegalStateException("Cannot update hierarchy for realm " + realmId);
 		}
 		return hierarchyRepository.save(hierarchy);
@@ -49,7 +48,6 @@ public class HierarchyService {
 	}
 
 	private BooleanExpression hasRealmPermission() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QHierarchy.hierarchy.datasource.realm.id.eq(user.getRealm().getId());
+		return QHierarchy.hierarchy.datasource.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

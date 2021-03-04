@@ -4,6 +4,7 @@ import com.flair.bi.domain.ClientLogo;
 import com.flair.bi.domain.QClientLogo;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.ClientLogoRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.ClientLogoService;
 import com.flair.bi.service.UserService;
 import com.google.common.collect.ImmutableList;
@@ -41,14 +42,13 @@ public class ClientLogoServiceImpl implements ClientLogoService{
         log.debug("Request to save ClientLogo : {}", clientLogo);
         User user = userService.getUserWithAuthoritiesByLoginOrError();
         if (clientLogo.getRealm() == null) {
-            clientLogo.setRealm(user.getRealm());
+            clientLogo.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
         } else {
-            if (!Objects.equals(clientLogo.getRealm().getId(), user.getRealm().getId())) {
+            if (!Objects.equals(SecurityUtils.getUserAuth().getRealmId(), clientLogo.getRealm().getId())) {
                 throw new IllegalStateException("Cannot update client logo for realm " + clientLogo.getRealm().getId());
             }
         }
-        ClientLogo result = clientLogoRepository.save(clientLogo);
-        return result;
+        return clientLogoRepository.save(clientLogo);
     }
 
     /**
@@ -66,8 +66,7 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     }
 
     private BooleanExpression hasRealmPermissions() {
-        User user = userService.getUserWithAuthoritiesByLoginOrError();
-        return QClientLogo.clientLogo.realm.id.eq(user.getRealm().getId());
+        return QClientLogo.clientLogo.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
     }
 
     /**
@@ -104,7 +103,6 @@ public class ClientLogoServiceImpl implements ClientLogoService{
     @Override
     public void updateImageLocation(String url, Long id) {
         log.debug("Request to update ClientLogo url : {} id {}", url, id);
-        User user = userService.getUserWithAuthoritiesByLoginOrError();
-        clientLogoRepository.updateImageLocation(url, id, user.getRealm().getId());
+        clientLogoRepository.updateImageLocation(url, id, SecurityUtils.getUserAuth().getRealmId());
     }
 }

@@ -4,6 +4,7 @@ import com.flair.bi.domain.QVisualizationColors;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.VisualizationColors;
 import com.flair.bi.repository.VisualizationColorsRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.flair.bi.service.VisualizationColorsService;
 import com.flair.bi.service.dto.VisualizationColorsDTO;
@@ -49,9 +50,9 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 				.visualizationColorsDTOToVisualizationColors(visualizationColorsDTO);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (visualizationColors.getId() == null) {
-			visualizationColors.setRealm(user.getRealm());
+			visualizationColors.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 		} else {
-			if (!Objects.equals(visualizationColors.getRealm().getId(), user.getRealm().getId())) {
+			if (!Objects.equals(visualizationColors.getRealm().getId(), SecurityUtils.getUserAuth().getRealmId())) {
 				throw new IllegalStateException("Cannot save visualization colors for realm " + visualizationColors.getRealm().getId());
 			}
 		}
@@ -128,7 +129,6 @@ public class VisualizationColorsServiceImpl implements VisualizationColorsServic
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QVisualizationColors.visualizationColors.realm.id.eq(user.getRealm().getId());
+		return QVisualizationColors.visualizationColors.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

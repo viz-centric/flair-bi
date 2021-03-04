@@ -4,15 +4,15 @@ import com.flair.bi.config.Constants;
 import com.flair.bi.domain.User;
 import com.flair.bi.domain.security.Permission;
 import com.flair.bi.domain.security.UserGroup;
-import com.flair.bi.service.mapper.RealmMapper;
-import com.flair.bi.service.mapper.RealmMapperImpl;
 import com.flair.bi.web.rest.dto.RealmDTO;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -44,7 +44,7 @@ public class UserDTO {
 
 	private String userType;
 
-    private RealmDTO realm;
+    private Set<RealmDTO> realms = new HashSet<>();
 
     public UserDTO() {
     }
@@ -54,12 +54,12 @@ public class UserDTO {
 				user.getLangKey(), user.getUserType(),
 				user.retrieveAllUserPermissions(false).stream().map(Permission::getStringValue)
 						.collect(Collectors.toSet()),
-				user.getUserGroups().stream().map(UserGroup::getName).collect(Collectors.toSet()), new RealmDTO(user.getRealm().getId(), user.getRealm().getName()));
+				user.getUserGroups().stream().map(UserGroup::getName).collect(Collectors.toSet()),
+				user.getRealms().stream().map(r -> new RealmDTO(r.getId(), r.getName())).collect(Collectors.toSet()));
 	}
 
 	public UserDTO(String login, String firstName, String lastName, String email, boolean activated, String langKey,
-			String userType, Set<String> permissions, Set<String> userGroups,RealmDTO realm) {
-
+				   String userType, Set<String> permissions, Set<String> userGroups, Set<RealmDTO> realms) {
 		this.login = login;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -69,7 +69,13 @@ public class UserDTO {
 		this.userType = userType;
 		this.permissions = permissions;
 		this.userGroups = userGroups;
-		this.realm = realm;
+		this.realms = realms;
+	}
+
+	public UserDTO(String login, String firstName, String lastName, String email, boolean activated, String langKey,
+				   String userType, Set<String> permissions, Set<String> userGroups, RealmDTO realm) {
+		this(login, firstName, lastName, email, activated, langKey, userType, permissions, userGroups,
+				Stream.of(realm).collect(Collectors.toSet()));
 	}
 
 	public String getLogin() {
@@ -108,12 +114,11 @@ public class UserDTO {
 		return permissions;
 	}
 
-
-    public RealmDTO getRealm() {
-        return realm;
+    public Set<RealmDTO> getRealms() {
+        return realms;
     }
 
-    public void setRealm(RealmDTO realm) {
-        this.realm = realm;
+    public void setRealms(Set<RealmDTO> realms) {
+        this.realms = realms;
     }
 }

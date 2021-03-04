@@ -3,8 +3,8 @@ package com.flair.bi.service;
 import com.flair.bi.domain.Feature;
 import com.flair.bi.domain.FeatureCacheType;
 import com.flair.bi.domain.QFeature;
-import com.flair.bi.domain.User;
 import com.flair.bi.repository.FeatureRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.dto.FunctionsDTO;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
@@ -51,8 +51,7 @@ public class FeatureService {
 
 	private void validatePermissions(Feature feature) {
 		Long datasourceRealmId = feature.getDatasource().getRealm().getId();
-		Long realmId = userService.getUserWithAuthoritiesByLoginOrError().getRealm().getId();
-		if (!Objects.equals(datasourceRealmId, realmId)) {
+		if (!Objects.equals(datasourceRealmId, SecurityUtils.getUserAuth().getRealmId())) {
 			throw new IllegalStateException("Cannot save feature for with realm " + datasourceRealmId);
 		}
 	}
@@ -102,12 +101,11 @@ public class FeatureService {
 
 	public void markFavouriteFilter(Boolean favouriteFilter, Long id) {
 		log.debug("FeatureService markFavouriteFilter {} {}", favouriteFilter, id);
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		featureRepository.markFavouriteFilter(favouriteFilter, id, user.getRealm().getId());
+		featureRepository.markFavouriteFilter(favouriteFilter, id, SecurityUtils.getUserAuth().getRealmId());
 	}
 
 	public void pinFilter(Boolean pin, Long id) {
-		log.debug("FeatureService pinFilter ", pin, id);
+		log.debug("FeatureService pinFilter {} {}", pin, id);
 		featureRepository.pinFilter(pin, id);
 	}
 
@@ -123,7 +121,6 @@ public class FeatureService {
 	}
 
 	private BooleanExpression hasRealmPermissions() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFeature.feature.datasource.realm.id.eq(user.getRealm().getId());
+		return QFeature.feature.datasource.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

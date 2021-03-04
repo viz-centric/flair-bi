@@ -1,8 +1,12 @@
 package com.flair.bi.service;
 
 import com.flair.bi.config.firebase.FirebaseProperties;
+import com.flair.bi.domain.Realm;
+import com.flair.bi.service.auth.AuthService;
+import com.flair.bi.service.impl.RealmService;
 import com.flair.bi.service.signup.SignUpWithProviderResult;
 import com.flair.bi.service.signup.SignupService;
+import com.flair.bi.web.rest.vm.RealmInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.Builder;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,9 +36,11 @@ public class ProviderRegistrationService {
     private final FirebaseProperties firebaseProperties;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
+    private final RealmService realmService;
+    private final AuthService authService;
 
     @SneakyThrows
-    public RegisterResult register(String idToken) {
+    public RegisterResult register(String idToken, Long realmId) {
         if (!firebaseProperties.isEnabled()) {
             throw new IllegalStateException("Cannot register external user if firebase is not enabled");
         }
@@ -43,12 +51,25 @@ public class ProviderRegistrationService {
         try {
             userDetails = userDetailsService.loadUserByUsername(email);
         } catch (UsernameNotFoundException e) {
-            log.info("User {} not found so registering a new user", email, e);
+            log.info("User {} not found so registering a new user - {}", email, e.getMessage());
         }
 
         if (userDetails != null) {
+            if (realmId == null) {
+                Set<Realm> realms = realmService.findAllByUsername(userDetails.getUsername());
+                if (realms.size() > 1) {
+                    return RegisterResult.builder()
+                            .realms(realms.stream()
+                                    .map(r -> new RealmInfo(r.getName(), r.getId()))
+                                    .collect(Collectors.toList()))
+                            .build();
+                } else if (realms.size() == 1) {
+                    realmId = realms.stream().findFirst().orElseThrow().getId();
+                }
+            }
+            String token = authService.auth(userDetails, realmService.findOneAsRealm(realmId));
             return RegisterResult.builder()
-                    .jwt(idToken)
+                    .jwt(token)
                     .build();
         }
 
@@ -89,5 +110,6 @@ public class ProviderRegistrationService {
     public static class RegisterResult {
         private final String emailConfirmationToken;
         private final String jwt;
+        private final List<RealmInfo> realms;
     }
 }

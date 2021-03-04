@@ -165,9 +165,11 @@ class AccessControlManagerImpl implements AccessControlManager {
 						.collect(Collectors.toList());
 				newAuthorities.addAll(oldAuthorities);
 
-				SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 						SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
-						SecurityContextHolder.getContext().getAuthentication().getCredentials(), newAuthorities));
+						SecurityContextHolder.getContext().getAuthentication().getCredentials(), newAuthorities);
+				token.setDetails(SecurityUtils.getUserAuth());
+				SecurityContextHolder.getContext().setAuthentication(token);
 			}
 
 		}
@@ -358,8 +360,7 @@ class AccessControlManagerImpl implements AccessControlManager {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QPermissionEdge.permissionEdge.realm.id.eq(user.getRealm().getId());
+		return QPermissionEdge.permissionEdge.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 
 	/**

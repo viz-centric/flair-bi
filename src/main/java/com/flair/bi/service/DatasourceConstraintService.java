@@ -4,6 +4,7 @@ import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.QDatasourceConstraint;
 import com.flair.bi.domain.User;
 import com.flair.bi.repository.DatasourceConstraintRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.web.rest.errors.EntityNotFoundException;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Predicate;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Service Implementation for managing DatasourceConstraint.
@@ -38,7 +38,7 @@ public class DatasourceConstraintService {
 		log.debug("Request to save DatasourceConstraint : {}", datasourceConstraint);
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 		if (datasourceConstraint.getUser() != null) {
-			if (!Objects.equals(user.getRealm().getId(), datasourceConstraint.getUser().getRealm().getId())) {
+			if (datasourceConstraint.getUser().getRealmById(SecurityUtils.getUserAuth().getRealmId()) == null) {
 				throw new IllegalStateException("Data constraint for user " + datasourceConstraint.getUser().getId() + " is not allowed");
 			}
 		}
@@ -61,7 +61,7 @@ public class DatasourceConstraintService {
 
 	private BooleanExpression hasRealmAccess() {
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QDatasourceConstraint.datasourceConstraint.user.realm.id.eq(user.getRealm().getId());
+		return QDatasourceConstraint.datasourceConstraint.user.realms.contains(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 	}
 
 	/**

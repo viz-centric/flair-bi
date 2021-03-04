@@ -101,7 +101,7 @@ class ViewServiceImpl implements ViewService {
 		} else {
 
 			User user = userService.getUserWithAuthoritiesByLoginOrError();
-			view.setRealm(user.getRealm());
+			view.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
 
 			// we temporary set the invalid id, because first we want to make sure that
 			// saving into couchdb was successfull
@@ -481,8 +481,7 @@ class ViewServiceImpl implements ViewService {
 
 	@Override
 	public View findByDashboardIdAndViewName(Long id, String viewName) {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return viewRepository.findByDashboardIdAndViewNameAndRealmId(id, viewName, user.getRealm().getId());
+		return viewRepository.findByDashboardIdAndViewNameAndRealmId(id, viewName, SecurityUtils.getUserAuth().getRealmId());
 	}
 
 	@Override
@@ -506,7 +505,6 @@ class ViewServiceImpl implements ViewService {
 	}
 
 	private BooleanExpression hasUserRealmAccess() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QView.view.realm.id.eq(user.getRealm().getId());
+		return QView.view.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 }

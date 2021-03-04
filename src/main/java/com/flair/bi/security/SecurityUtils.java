@@ -1,6 +1,7 @@
 package com.flair.bi.security;
 
 import com.flair.bi.security.okta.OktaUser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,23 @@ public final class SecurityUtils {
 
 	public enum roles {
 		ROLE_SUPERADMIN, ROLE_ADMIN, ROLE_USER, ROLE_DEVELOPMENT
+	}
+
+	/**
+	 * Get the login of the current user.
+	 *
+	 * @return the login of the current user
+	 */
+	public static UserAuthInfo getUserAuth() {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		if (authentication instanceof UsernamePasswordAuthenticationToken) {
+			UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;
+			if (authenticationToken.getDetails() instanceof UserAuthInfo) {
+				return (UserAuthInfo) authenticationToken.getDetails();
+			}
+		}
+		throw new IllegalStateException("Realm not found in security context");
 	}
 
 	/**

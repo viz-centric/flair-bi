@@ -1,11 +1,11 @@
 package com.flair.bi.service;
 
-import com.flair.bi.domain.User;
 import com.flair.bi.domain.fieldtype.FieldType;
 import com.flair.bi.domain.fieldtype.QFieldType;
 import com.flair.bi.domain.propertytype.PropertyType;
 import com.flair.bi.repository.FieldTypeRepository;
 import com.flair.bi.repository.PropertyTypeRepository;
+import com.flair.bi.security.SecurityUtils;
 import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +71,7 @@ public class FieldTypeService {
 	}
 
 	private BooleanExpression hasRealmPermission() {
-		User user = userService.getUserWithAuthoritiesByLoginOrError();
-		return QFieldType.fieldType.realm.id.eq(user.getRealm().getId());
+		return QFieldType.fieldType.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
 	}
 
 	@PreAuthorize("@accessControlManager.hasAccess('REALM-MANAGEMENT', 'WRITE', 'APPLICATION')")

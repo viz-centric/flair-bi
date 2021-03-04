@@ -45,3 +45,13 @@ app:
             cron: ${REFRESH_CACHE_JOB_WEEKDAYS:0 0/15 9-18 * * 1-5}
         refresh-feature-cache-job-weekends:
             cron: ${REFRESH_CACHE_JOB_WEEKENDS:0 0/30 * * * 6,0}
+
+server:
+    max-http-header-size: 48000
+
+jhipster:
+    security:
+        authentication:
+            jwt:
+                token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000

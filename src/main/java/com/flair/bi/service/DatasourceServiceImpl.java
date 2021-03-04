@@ -57,7 +57,7 @@ public class DatasourceServiceImpl implements DatasourceService {
 
         if (datasource.getRealm() == null) {
             User user = userService.getUserWithAuthoritiesByLoginOrError();
-            datasource.setRealm(user.getRealm());
+            datasource.setRealm(user.getRealmById(SecurityUtils.getUserAuth().getRealmId()));
         }
 
         Datasource ds = datasourceRepository.save(datasource);
@@ -212,8 +212,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     }
 
     private BooleanExpression hasUserRealmAccess() {
-        User user = userService.getUserWithAuthoritiesByLoginOrError();
-        return QDatasource.datasource.realm.id.eq(user.getRealm().getId());
+        return QDatasource.datasource.realm.id.eq(SecurityUtils.getUserAuth().getRealmId());
     }
 
     private BooleanBuilder isNotDeleted() {

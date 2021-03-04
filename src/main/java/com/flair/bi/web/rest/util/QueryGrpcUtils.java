@@ -3,6 +3,7 @@ package com.flair.bi.web.rest.util;
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.messages.Connection;
 import com.flair.bi.messages.Query;
+import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.UserService;
 import com.flair.bi.web.rest.dto.ConnectionDTO;
 import com.google.gson.JsonElement;
@@ -42,7 +43,7 @@ public final class QueryGrpcUtils {
                             .setConnectionUsername(c.getConnectionUsername())
                             .setConnectionType(c.getConnectionTypeId())
                             .setName(c.getName())
-                            .setRealmId(userService.getUserWithAuthoritiesByLoginOrError().getRealm().getId())
+                            .setRealmId(SecurityUtils.getUserAuth().getRealmId())
                             .putAllDetails(c.getDetails());
                     if (c.getConnectionParameters() != null) {
                         builder.putAllConnectionParameters(c.getConnectionParameters());

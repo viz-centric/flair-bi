@@ -55,7 +55,7 @@ public class BookMarkWatchService {
 		}
 		User user = userService.getUserWithAuthoritiesByLoginOrError();
 
-		if (!Objects.equals(user.getRealm().getId(), view.getRealm().getId())) {
+		if (!Objects.equals(SecurityUtils.getUserAuth().getRealmId(), view.getRealm().getId())) {
 			throw new IllegalStateException("User " + user.getId() + " does not belong to realm " + view.getRealm().getId());
 		}
 

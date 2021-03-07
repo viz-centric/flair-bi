@@ -18,9 +18,9 @@
             }
         });
 
-    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams', 'Views', 'IFRAME', 'Features','$translate'];
+    filterElementGrpcController.$inject = ['$scope', 'proxyGrpcService', 'filterParametersService', '$timeout', 'FilterStateManagerService', '$rootScope', '$filter', 'VisualDispatchService', 'stompClientService', 'favouriteFilterService', 'COMPARABLE_DATA_TYPES', '$stateParams', 'Views', 'IFRAME', 'Features','$translate','Principal'];
 
-    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams, Views, IFRAME, Features,$translate) {
+    function filterElementGrpcController($scope, proxyGrpcService, filterParametersService, $timeout, FilterStateManagerService, $rootScope, $filter, VisualDispatchService, stompClientService, favouriteFilterService, COMPARABLE_DATA_TYPES, $stateParams, Views, IFRAME, Features,$translate, Principal) {
         var vm = this;
         vm.$onInit = activate;
         vm.load = load;
@@ -43,6 +43,7 @@
         vm.pinFilter = [];
         vm.commaSeparatedToolTip = VisualDispatchService.setcommaSeparatedToolTip(vm.isCommaSeparatedInput);
         vm.lastQuery = {};
+        vm.canEdit = false;
         ////////////////
 
         function activate() {
@@ -55,6 +56,19 @@
             });
 
             $scope.$on('$destroy', unsub);
+
+            Principal.identity().then(function (account) {
+                vm.account = account;
+    
+                //Enabled/Disable toogle based on permission - Issue Fix: Start
+                Principal.hasAuthority("WRITE_" + vm.view.id + "_VIEW").then(function (
+                    obj
+                ) {
+                    vm.canEdit = obj;
+                });
+                //Enabled/Disable toogle based on permission - Issue Fix: End
+            });
+
             registerRemoveTag();
             receivedMetaData();
             if (isFavouriteFilter())

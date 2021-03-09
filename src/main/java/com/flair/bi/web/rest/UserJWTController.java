@@ -86,7 +86,7 @@ public class UserJWTController {
 	@Timed
 	public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
 		signupService.signup(request.getUsername(), request.getPassword(), request.getFirstname(),
-				request.getLastname(), request.getEmail(), request.getProvider());
+				request.getLastname(), request.getEmail());
 		return ResponseEntity.ok().build();
 	}
 
@@ -102,8 +102,6 @@ public class UserJWTController {
 		String password;
 		@NotEmpty
 		String email;
-
-		String provider;
 	}
 
 	@PostMapping("/confirm_user")

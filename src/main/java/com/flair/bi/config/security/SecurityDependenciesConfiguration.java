@@ -4,6 +4,7 @@ import com.flair.bi.config.Constants;
 import com.flair.bi.domain.User;
 import com.flair.bi.security.okta.OktaUser;
 import com.flair.bi.service.UserService;
+import com.flair.bi.service.impl.RealmService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Configuration
 @Slf4j
@@ -36,17 +36,16 @@ public class SecurityDependenciesConfiguration {
 	 * @return principal extractor
 	 */
 	@Bean
-	public PrincipalExtractor principalExtractor(UserService userService) {
+	public PrincipalExtractor principalExtractor(UserService userService, RealmService realmService) {
 		return map -> {
 			final OktaUser oktaUser = OktaUser.from(map);
 			log.debug("Okta user: {}", oktaUser);
-			Optional<User> user = userService.getUserByLogin(oktaUser.getUsername());
-			if (!user.isPresent()) {
-				userService.createUser(oktaUser.getUsername(), passwordEncoder().encode(RandomStringUtils.random(10)),
-						oktaUser.getFirstName(), oktaUser.getLastName(), oktaUser.getEmail(),
-						Constants.LanguageKeys.ENGLISH, Constants.EXTERNAL_USER);
-			}
-			return oktaUser.getUsername();
+			User user = userService.getUserByLoginNoRealmCheck(oktaUser.getUsername())
+					.orElseGet(() -> userService.createUser(oktaUser.getUsername(),
+							passwordEncoder().encode(RandomStringUtils.random(10)),
+							oktaUser.getFirstName(), oktaUser.getLastName(), oktaUser.getEmail(),
+							Constants.LanguageKeys.ENGLISH, "okta", RealmService.VIZ_CENTRIC_REALM));
+			return user.getLogin();
 		};
 	}
 

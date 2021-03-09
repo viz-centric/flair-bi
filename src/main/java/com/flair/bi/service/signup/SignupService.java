@@ -26,9 +26,9 @@ public class SignupService {
     private final EmailConfirmationTokenService emailConfirmationTokenService;
 
     @Transactional
-    public void signup(String username, String password, String firstname, String lastname, String email, String provider) {
+    public void signup(String username, String password, String firstname, String lastname, String email) {
         DraftUser user = draftUserService.createUser(username, password, firstname,
-                lastname, email, provider);
+                lastname, email);
         emailVerificationService.sendConfirmYourEmailEmail(user);
     }
 

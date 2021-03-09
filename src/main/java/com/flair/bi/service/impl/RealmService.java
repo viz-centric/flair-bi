@@ -28,7 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RealmService {
 
-    private static final long VIZ_CENTRIC_REALM = 1L;
+    public static final long VIZ_CENTRIC_REALM = 1L;
 
     private final RealmRepository realmRepository;
     private final RealmMapper realmMapper;

@@ -2,6 +2,7 @@ package com.flair.bi.web.rest.errors;
 
 import com.flair.bi.exception.UniqueConstraintsException;
 import com.flair.bi.service.ViewExportImportException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -30,6 +31,7 @@ import java.util.List;
  */
 @ControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class ExceptionTranslator {
 
 	@ExceptionHandler(ViewExportImportException.class)

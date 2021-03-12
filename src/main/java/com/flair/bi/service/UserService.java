@@ -12,6 +12,7 @@ import com.flair.bi.security.AuthoritiesConstants;
 import com.flair.bi.security.RestrictedResources;
 import com.flair.bi.security.SecurityUtils;
 import com.flair.bi.service.dto.UserBasicDTO;
+import com.flair.bi.service.impl.RealmService;
 import com.flair.bi.service.util.RandomUtil;
 import com.flair.bi.web.rest.vm.ManagedUserVM;
 import com.google.common.collect.ImmutableList;
@@ -21,6 +22,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,6 +62,10 @@ public class UserService {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	@Lazy
+	private RealmService realmService;
+
 	public Optional<User> activateRegistration(String key) {
 		log.debug("Activating user for activation key {}", key);
 		return userRepository.findOneByActivationKey(key).map(user -> {
@@ -96,24 +103,17 @@ public class UserService {
 		});
 	}
 
+	@Transactional
 	public User createUser(String login, String password, String firstName, String lastName, String email,
 			String langKey, String userType) {
-		return createUser(login, password, firstName, lastName, email, langKey, userType, null);
+		return createUser(login, password, firstName, lastName, email, langKey, userType, SecurityUtils.getUserAuth().getRealmId());
 	}
 
-	public User createUser(String login, String password, String firstName, String lastName, String email,
-			String langKey, String userType, Set<String> authorities) {
-		User user = getUserWithAuthoritiesByLoginOrError();
-		Realm realm = user.getRealmById(SecurityUtils.getUserAuth().getRealmId());
-		Set<String> foundAuthorityNames = ImmutableSet.of();
-		if (authorities != null) {
-			foundAuthorityNames = AuthoritiesConstants.ALL.stream().filter(authority -> authorities.contains(authority))
-					.collect(Collectors.toSet());
-		}
-		if (foundAuthorityNames.isEmpty()) {
-			foundAuthorityNames = ImmutableSet.of(AuthoritiesConstants.USER);
-		}
-		List<UserGroup> userGroups = userGroupRepository.findAllByNameInAndRealmId(foundAuthorityNames, realm.getId());
+	@Transactional
+	public User createUser(String login, String password, String firstName, String lastName, String email, String langKey, String userType, Long realmId) {
+		Realm realm = realmService.findOneAsRealm(realmId);
+		Set<String> foundAuthorityNames = ImmutableSet.of(AuthoritiesConstants.USER);
+		List<UserGroup> userGroups = userGroupRepository.findAllByNameInAndRealmId(foundAuthorityNames, realmId);
 		User newUser = new User();
 		String encryptedPassword = passwordEncoder.encode(password);
 		newUser.setLogin(login);

@@ -19,6 +19,10 @@ public class DraftUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final DraftUserRepository draftUserRepository;
 
+	public DraftUser createUser(String login, String password, String firstName, String lastName, String email) {
+		return createUser(login, password, firstName, lastName, email, null);
+	}
+
 	public DraftUser createUser(String login, String password, String firstName, String lastName, String email,
 								String userType) {
 		DraftUser user = new DraftUser();

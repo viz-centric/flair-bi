@@ -2,6 +2,7 @@ package com.flair.bi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flair.bi.config.Constants;
+import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.Datasource;
 import com.flair.bi.domain.DatasourceConstraint;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
@@ -48,7 +49,7 @@ public class GrpcQueryService {
     private final FbEngineWebSocketService fbEngineWebSocketService;
     private final IEngineGrpcService grpcService;
     private final QueryTransformerService queryTransformerService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = JacksonUtil.OBJECT_MAPPER;
     private final ViewService viewService;
     private final UserService userService;
 

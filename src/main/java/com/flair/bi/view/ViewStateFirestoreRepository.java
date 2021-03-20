@@ -2,21 +2,31 @@ package com.flair.bi.view;
 
 import com.flair.bi.config.jackson.JacksonUtil;
 import com.flair.bi.domain.ViewState;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.firebase.database.GenericTypeIndicator;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Future;
 
+@Slf4j
 public class ViewStateFirestoreRepository implements IViewStateRepository {
 
     private static final String COLLECTION = "view-state";
+    private static final int CHUNK_SIZE = 10000;
     private final Firestore db;
 
     public ViewStateFirestoreRepository() {
@@ -26,31 +36,80 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
     @SneakyThrows
     @Override
     public void add(ViewState viewState) {
+        log.info("Create view state {}", viewState.getId());
         if (viewState.getId() == null) {
             viewState.setId(UUID.randomUUID().toString());
         }
+
+        remove(viewState);
+
         String strData = JacksonUtil.toString(viewState);
-        Map<String, Object> map = JacksonUtil.fromString(strData, Map.class);
+        List<String> tokens = Lists.newArrayList(Splitter.fixedLength(CHUNK_SIZE).split(strData));
 
-        List<Map> visualMetadataSet = (List<Map>) map.get("visualMetadataSet");
-        visualMetadataSet.forEach(vm -> {
-            List<?> properties = (List<?>) vm.get("properties");
-            List<?> fields = (List<?>) vm.get("fields");
-            Map<String, ?> metadataVisual = (Map<String, ?>) vm.get("metadataVisual");
-            List<?> metadataVisualFieldTypes = (List<?>) metadataVisual.get("fieldTypes");
-            List<?> metadataVisualPropertyTypes = (List<?>) metadataVisual.get("propertyTypes");
+        List<Future<?>> futures = new ArrayList<>();
 
-            vm.put("properties", null);
-            vm.put("fields", null);
-            vm.put("metadataVisual", null);
-            metadataVisual.put("fieldTypes", null);
-            metadataVisual.put("propertyTypes", null);
-        });
+        futures.add(saveDocumentList(viewState, "tokensCount", Arrays.asList(tokens.size())));
 
+        for (int i = 0; i < tokens.size(); i++) {
+            String t = tokens.get(i);
+            futures.add(saveDocumentList(viewState, "token." + i, Arrays.asList(t)));
+        }
 
-        DocumentReference docRef = db.collection(COLLECTION).document(viewState.getId());
-        docRef.set(map).get();
+        waitAllFutures(futures);
     }
+
+//    @SneakyThrows
+//    private void saveDocumentMap(ViewState viewState, String subkey, Map<String, ?> map) throws RuntimeException {
+//        DocumentReference docRef = db.collection(COLLECTION).document(viewState.getId() + "." + subkey);
+//        docRef.set(map).get();
+//    }
+
+    @SneakyThrows
+    private ApiFuture<WriteResult> saveDocumentList(ViewState viewState, String subkey, List<?> list) throws RuntimeException {
+        log.info("saving document {} key {}", viewState.getId(), subkey);
+        DocumentReference docRef = db.collection(COLLECTION).document(viewState.getId() + "." + subkey);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("list", list);
+        return docRef.set(map);
+    }
+
+    @SneakyThrows
+    private List<?> getDocumentList(String documentId, String subkey) throws RuntimeException {
+        DocumentReference docRef = db.collection(COLLECTION).document(documentId + "." + subkey);
+        DocumentSnapshot snapshot = docRef.get().get();
+        Map<String, Object> map = snapshot.getData();
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+        String str = JacksonUtil.toString(map.get("list"));
+//        log.info("reading document {} key {} = {}", documentId, subkey, shrinkValue(str));
+        return JacksonUtil.fromString(str, List.class);
+    }
+
+    @SneakyThrows
+    private <T> T getDocumentValue(String documentId, String subkey) throws RuntimeException {
+        List<?> list = getDocumentList(documentId, subkey);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        T value = (T) list.get(0);
+        log.info("reading document {} key {} = {}", documentId, subkey, shrinkValue(String.valueOf(value)));
+        return value;
+    }
+
+    private String shrinkValue(String str) {
+        int printSize = 50;
+        return str.substring(0, Math.min(printSize, str.length())) + "...[" + str.length() + "]..." + str.substring(Math.max(0, str.length() - printSize));
+    }
+
+//    @SneakyThrows
+//    private Map<String, ?> getDocumentMap(String documentId, String subkey) throws RuntimeException {
+//        DocumentReference docRef = db.collection(COLLECTION).document(documentId + "." + subkey);
+//        DocumentSnapshot snapshot = docRef.get().get();
+//        Map<String, Object> viewStateTypeIndicator = snapshot.getData();
+//        String str = JacksonUtil.toString(viewStateTypeIndicator);
+//        return JacksonUtil.fromString(str, Map.class);
+//    }
 
     @Override
     public void update(ViewState viewState) {
@@ -60,18 +119,81 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
     @SneakyThrows
     @Override
     public void remove(ViewState viewState) {
-        DocumentReference docRef = db.collection(COLLECTION).document(viewState.getId());
-        docRef.delete().get();
+        String vId = viewState.getId();
+
+        Integer tokensCount = getDocumentValue(vId, "tokensCount");
+        if (tokensCount == null) {
+            return;
+        }
+
+        List<Future<?>> futures = new ArrayList<>();
+        for (long i = 0; i < tokensCount; i++) {
+            futures.add(deleteDocument(vId + ".token." + i));
+        }
+
+        futures.add(deleteDocument(vId + ".tokensCount"));
+
+        waitAllFutures(futures);
+    }
+
+    private void waitAllFutures(List<Future<?>> futures) {
+        futures.forEach(f -> {
+            try {
+                f.get();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @SneakyThrows
+    private ApiFuture<WriteResult> deleteDocument(String documentName) {
+        log.info("Deleting document {}", documentName);
+        DocumentReference docRef = db.collection(COLLECTION).document(documentName);
+        return docRef.delete();
     }
 
     @SneakyThrows
     @Override
     public ViewState get(String s) {
-        DocumentReference docRef = db.collection(COLLECTION).document(s);
-        DocumentSnapshot snapshot = docRef.get().get();
-        GenericTypeIndicator<Map<String, Object>> t = new GenericTypeIndicator<Map<String, Object>>() {};
-        ViewStateTypeIndicator map = snapshot.toObject(ViewStateTypeIndicator.class);
-        String str = JacksonUtil.toString(map);
+        log.info("Get view state {}", s);
+        Integer tokensCount = getDocumentValue(s, "tokensCount");
+        if (tokensCount == null) {
+            return null;
+        }
+
+        List<String> tokens = new ArrayList<>();
+//        List<Future<?>> futures = new ArrayList<>();
+        //                    Future<String> future = executor.submit(() ->
+        //                            (String) getDocumentList(s, "token." + i).get(0)
+        //                    );
+        //                    futures.add(future);
+        for (long i = 0; i < tokensCount; i++) {
+            tokens.add(getDocumentValue(s, "token." + i));
+//            futures.add(getDocumentValue(s, "token." + i));
+        }
+
+//        waitAllFutures(futures);
+
+//        futures.forEach(f -> {
+//            try {
+//                tokens.add(f.get());
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+
+        String str = String.join("", tokens);
+//        String str = futures.stream()
+//                .map(f -> {
+//                    try {
+//                        return f.get();
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                })
+//                .collect(Collectors.joining());
+
         return JacksonUtil.fromString(str, ViewState.class);
     }
 

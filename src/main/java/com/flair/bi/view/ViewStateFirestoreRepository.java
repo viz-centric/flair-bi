@@ -20,14 +20,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ViewStateFirestoreRepository implements IViewStateRepository {
 
     private static final String COLLECTION = "view-state";
-    private static final int CHUNK_SIZE = 10000;
+    private static final int CHUNK_SIZE = 100_000;
+
     private final Firestore db;
+    private final ExecutorService executorService = Executors.newWorkStealingPool();
 
     public ViewStateFirestoreRepository() {
         db = FirestoreClient.getFirestore();
@@ -48,11 +54,11 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
 
         List<Future<?>> futures = new ArrayList<>();
 
-        futures.add(saveDocumentList(viewState, "tokensCount", Arrays.asList(tokens.size())));
+        futures.add(saveDocumentValue(viewState, "tokensCount", tokens.size()));
 
         for (int i = 0; i < tokens.size(); i++) {
             String t = tokens.get(i);
-            futures.add(saveDocumentList(viewState, "token." + i, Arrays.asList(t)));
+            futures.add(saveDocumentValue(viewState, "token." + i, t));
         }
 
         waitAllFutures(futures);
@@ -66,11 +72,16 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
 
     @SneakyThrows
     private ApiFuture<WriteResult> saveDocumentList(ViewState viewState, String subkey, List<?> list) throws RuntimeException {
-        log.info("saving document {} key {}", viewState.getId(), subkey);
+        log.debug("saving document {} key {}", viewState.getId(), subkey);
         DocumentReference docRef = db.collection(COLLECTION).document(viewState.getId() + "." + subkey);
         HashMap<String, Object> map = new HashMap<>();
         map.put("list", list);
         return docRef.set(map);
+    }
+
+    @SneakyThrows
+    private ApiFuture<WriteResult> saveDocumentValue(ViewState viewState, String subkey, Object value) throws RuntimeException {
+        return saveDocumentList(viewState, subkey, Arrays.asList(value));
     }
 
     @SneakyThrows
@@ -82,7 +93,6 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
             return null;
         }
         String str = JacksonUtil.toString(map.get("list"));
-//        log.info("reading document {} key {} = {}", documentId, subkey, shrinkValue(str));
         return JacksonUtil.fromString(str, List.class);
     }
 
@@ -93,7 +103,7 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
             return null;
         }
         T value = (T) list.get(0);
-        log.info("reading document {} key {} = {}", documentId, subkey, shrinkValue(String.valueOf(value)));
+        log.debug("reading document {} key {} = {}", documentId, subkey, shrinkValue(String.valueOf(value)));
         return value;
     }
 
@@ -121,6 +131,8 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
     public void remove(ViewState viewState) {
         String vId = viewState.getId();
 
+        log.info("Remove view state {}", vId);
+
         Integer tokensCount = getDocumentValue(vId, "tokensCount");
         if (tokensCount == null) {
             return;
@@ -137,18 +149,12 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
     }
 
     private void waitAllFutures(List<Future<?>> futures) {
-        futures.forEach(f -> {
-            try {
-                f.get();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        futures.forEach(f -> doUnchecked(() -> f.get()));
     }
 
     @SneakyThrows
     private ApiFuture<WriteResult> deleteDocument(String documentName) {
-        log.info("Deleting document {}", documentName);
+        log.debug("Deleting document {}", documentName);
         DocumentReference docRef = db.collection(COLLECTION).document(documentName);
         return docRef.delete();
     }
@@ -162,39 +168,26 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
             return null;
         }
 
-        List<String> tokens = new ArrayList<>();
-//        List<Future<?>> futures = new ArrayList<>();
-        //                    Future<String> future = executor.submit(() ->
-        //                            (String) getDocumentList(s, "token." + i).get(0)
-        //                    );
-        //                    futures.add(future);
-        for (long i = 0; i < tokensCount; i++) {
-            tokens.add(getDocumentValue(s, "token." + i));
-//            futures.add(getDocumentValue(s, "token." + i));
+        List<Future<String>> futures = new ArrayList<>();
+        for (int i = 0; i < tokensCount; i++) {
+            int finalI = i;
+            futures.add(
+                    executorService.submit(() -> getDocumentValue(s, "token." + finalI))
+            );
         }
-
-//        waitAllFutures(futures);
-
-//        futures.forEach(f -> {
-//            try {
-//                tokens.add(f.get());
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-
-        String str = String.join("", tokens);
-//        String str = futures.stream()
-//                .map(f -> {
-//                    try {
-//                        return f.get();
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                })
-//                .collect(Collectors.joining());
+        String str = futures.stream()
+                .map(f -> doUnchecked(() -> f.get()))
+                .collect(Collectors.joining());
 
         return JacksonUtil.fromString(str, ViewState.class);
+    }
+
+    private static <T> T doUnchecked(Callable<T> callable) {
+        try {
+            return callable.call();
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
     }
 
 

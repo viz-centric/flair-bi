@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,6 +36,7 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
 
     private final Firestore db;
     private final ExecutorService executorService = Executors.newWorkStealingPool();
+    private final ConcurrentHashMap<String, ReentrantLock> locks = new ConcurrentHashMap<>();
 
     public ViewStateFirestoreRepository() {
         db = FirestoreClient.getFirestore();
@@ -47,21 +50,23 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
             viewState.setId(UUID.randomUUID().toString());
         }
 
-        remove(viewState);
+        lock(viewState.getId(), () -> {
+            remove(viewState);
 
-        String strData = JacksonUtil.toString(viewState);
-        List<String> tokens = Lists.newArrayList(Splitter.fixedLength(CHUNK_SIZE).split(strData));
+            String strData = JacksonUtil.toString(viewState);
+            List<String> tokens = Lists.newArrayList(Splitter.fixedLength(CHUNK_SIZE).split(strData));
 
-        List<Future<?>> futures = new ArrayList<>();
+            List<Future<?>> futures = new ArrayList<>();
 
-        futures.add(saveDocumentValue(viewState, "tokensCount", tokens.size()));
+            futures.add(saveDocumentValue(viewState, "tokensCount", tokens.size()));
 
-        for (int i = 0; i < tokens.size(); i++) {
-            String t = tokens.get(i);
-            futures.add(saveDocumentValue(viewState, "token." + i, t));
-        }
+            for (int i = 0; i < tokens.size(); i++) {
+                String t = tokens.get(i);
+                futures.add(saveDocumentValue(viewState, "token." + i, t));
+            }
 
-        waitAllFutures(futures);
+            waitAllFutures(futures);
+        });
     }
 
 //    @SneakyThrows
@@ -133,23 +138,21 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
 
         log.info("Remove view state {}", vId);
 
-        Integer tokensCount = getDocumentValue(vId, "tokensCount");
-        if (tokensCount == null) {
-            return;
-        }
+        lock(vId, () -> {
+            Integer tokensCount = getDocumentValue(vId, "tokensCount");
+            if (tokensCount == null) {
+                return;
+            }
 
-        List<Future<?>> futures = new ArrayList<>();
-        for (long i = 0; i < tokensCount; i++) {
-            futures.add(deleteDocument(vId + ".token." + i));
-        }
+            List<Future<?>> futures = new ArrayList<>();
+            for (long i = 0; i < tokensCount; i++) {
+                futures.add(deleteDocument(vId + ".token." + i));
+            }
 
-        futures.add(deleteDocument(vId + ".tokensCount"));
+            futures.add(deleteDocument(vId + ".tokensCount"));
 
-        waitAllFutures(futures);
-    }
-
-    private void waitAllFutures(List<Future<?>> futures) {
-        futures.forEach(f -> doUnchecked(() -> f.get()));
+            waitAllFutures(futures);
+        });
     }
 
     @SneakyThrows
@@ -163,33 +166,27 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
     @Override
     public ViewState get(String s) {
         log.info("Get view state {}", s);
-        Integer tokensCount = getDocumentValue(s, "tokensCount");
-        if (tokensCount == null) {
-            return null;
-        }
 
-        List<Future<String>> futures = new ArrayList<>();
-        for (int i = 0; i < tokensCount; i++) {
-            int finalI = i;
-            futures.add(
-                    executorService.submit(() -> getDocumentValue(s, "token." + finalI))
-            );
-        }
-        String str = futures.stream()
-                .map(f -> doUnchecked(() -> f.get()))
-                .collect(Collectors.joining());
+        return lock(s, () -> {
+            Integer tokensCount = getDocumentValue(s, "tokensCount");
+            if (tokensCount == null) {
+                return null;
+            }
 
-        return JacksonUtil.fromString(str, ViewState.class);
+            List<Future<String>> futures = new ArrayList<>();
+            for (int i = 0; i < tokensCount; i++) {
+                int finalI = i;
+                futures.add(
+                        executorService.submit(() -> getDocumentValue(s, "token." + finalI))
+                );
+            }
+            String str = futures.stream()
+                    .map(f -> doUnchecked(() -> f.get()))
+                    .collect(Collectors.joining());
+
+            return JacksonUtil.fromString(str, ViewState.class);
+        });
     }
-
-    private static <T> T doUnchecked(Callable<T> callable) {
-        try {
-            return callable.call();
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
-        }
-    }
-
 
     @Override
     public ViewState get(String s, String s1) {
@@ -206,4 +203,43 @@ public class ViewStateFirestoreRepository implements IViewStateRepository {
         throw new NotImplementedException("contains not implemented");
     }
 
+    private static <T> T doUnchecked(Callable<T> callable) {
+        try {
+            return callable.call();
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    private <T> T lock(String lockId, Callable<T> runnable) {
+        ReentrantLock lock = getLock(lockId);
+        lock.lock();
+        try {
+            return runnable.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void lock(String lockId, Runnable runnable) {
+        ReentrantLock lock = getLock(lockId);
+        lock.lock();
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private ReentrantLock getLock(String vId) {
+        return locks.computeIfAbsent(vId, (name) -> new ReentrantLock());
+    }
+
+    private void waitAllFutures(List<Future<?>> futures) {
+        futures.forEach(f -> doUnchecked(() -> f.get()));
+    }
 }

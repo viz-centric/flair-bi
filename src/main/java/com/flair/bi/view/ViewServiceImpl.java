@@ -57,7 +57,7 @@ class ViewServiceImpl implements ViewService {
 
 	private final UserService userService;
 
-	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
+	private final IViewStateRepository viewStateCouchDbRepository;
 
 	private final AccessControlManager accessControlManager;
 

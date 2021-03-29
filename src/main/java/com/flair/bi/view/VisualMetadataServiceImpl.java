@@ -29,7 +29,7 @@ class VisualMetadataServiceImpl implements VisualMetadataService {
 
 	private final ViewService viewService;
 
-	private final ViewStateCouchDbRepository viewStateCouchDbRepository;
+	private final IViewStateRepository viewStateCouchDbRepository;
 
 	/**
 	 * Save a visualMetadata.

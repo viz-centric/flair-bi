@@ -1,5 +1,7 @@
 package com.flair.bi.config.firebase;
 
+import com.flair.bi.view.IViewStateRepository;
+import com.flair.bi.view.ViewStateFirestoreRepository;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.OAuth2Credentials;
 import com.google.firebase.FirebaseApp;
@@ -39,6 +41,12 @@ public class FirebaseConfiguration {
                 .setCredentials(googleCredentials)
                 .build();
         FirebaseApp.initializeApp(options);
+    }
+
+    @ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "true")
+    @Bean
+    public IViewStateRepository viewStateRepository(OAuth2Credentials googleCredentials) {
+        return new ViewStateFirestoreRepository();
     }
 
 }

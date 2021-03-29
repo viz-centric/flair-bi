@@ -1,20 +1,18 @@
 package com.flair.bi.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.flair.bi.domain.visualmetadata.VisualMetadata;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flair.bi.domain.visualmetadata.VisualMetadata;
-
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Setter
 @EqualsAndHashCode(of = "id")

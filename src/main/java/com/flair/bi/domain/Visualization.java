@@ -1,9 +1,7 @@
 package com.flair.bi.domain;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import com.flair.bi.domain.fieldtype.FieldType;
+import com.flair.bi.domain.propertytype.PropertyType;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,9 +14,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.flair.bi.domain.fieldtype.FieldType;
-import com.flair.bi.domain.propertytype.PropertyType;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Visualization.

@@ -1,21 +1,5 @@
 package com.flair.bi.config.couchdb;
 
-import static org.apache.http.conn.ssl.SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
-
-import javax.net.ssl.SSLSocketFactory;
-
-import org.ektorp.http.HttpClient;
-import org.ektorp.impl.StdCouchDbConnector;
-import org.ektorp.impl.StdCouchDbInstance;
-import org.ektorp.spring.HttpClientFactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.flair.bi.config.jackson.mixin.AbstractAuditingEntityMixin;
@@ -24,9 +8,25 @@ import com.flair.bi.config.jackson.mixin.VisualMetadataMixin;
 import com.flair.bi.domain.AbstractAuditingEntity;
 import com.flair.bi.domain.View;
 import com.flair.bi.domain.visualmetadata.VisualMetadata;
-
+import com.flair.bi.view.IViewStateRepository;
+import com.flair.bi.view.ViewStateCouchDbRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ektorp.http.HttpClient;
+import org.ektorp.impl.StdCouchDbConnector;
+import org.ektorp.impl.StdCouchDbInstance;
+import org.ektorp.spring.HttpClientFactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.net.ssl.SSLSocketFactory;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+
+import static org.apache.http.conn.ssl.SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
 
 /**
  * Couch Db configuration
@@ -38,6 +38,7 @@ public class CouchDbConfiguration {
 
 	private final CouchDbProperties couchDbProperties;
 
+	@ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "false")
 	@Bean
 	public HttpClientFactoryBean httpClientFactoryBean() {
 
@@ -86,11 +87,13 @@ public class CouchDbConfiguration {
 
 	}
 
+	@ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "false")
 	@Bean
 	public StdCouchDbInstance dbInstance(@Autowired HttpClient client) {
 		return new StdCouchDbInstance(client);
 	}
 
+	@ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "false")
 	@Bean
 	public StdCouchDbConnector couchDbConnector(@Autowired StdCouchDbInstance instance) {
 		CouchDbObjectMapperFactory factory = new CouchDbObjectMapperFactory();
@@ -113,6 +116,12 @@ public class CouchDbConfiguration {
 		globalChanges.createDatabaseIfNotExists();
 
 		return connector;
+	}
+
+	@ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "false")
+	@Bean
+	public IViewStateRepository viewStateRepository(StdCouchDbConnector couchDbConnector) {
+		return new ViewStateCouchDbRepository(couchDbConnector);
 	}
 
 }

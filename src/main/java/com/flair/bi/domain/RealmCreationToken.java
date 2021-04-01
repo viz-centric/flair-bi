@@ -26,7 +26,7 @@ public class RealmCreationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "realm_creation_token_id_seq")
-    @SequenceGenerator(name = "realm_creation_token_id_seq")
+    @SequenceGenerator(name = "realm_creation_token_id_seq", allocationSize = 1)
     private Long id;
 
     @NotNull

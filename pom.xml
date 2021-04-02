@@ -126,6 +126,13 @@
 				<artifactId>guava</artifactId>
 				<version>26.0-jre</version>
 			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>1.15.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -587,8 +594,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>1.9.1</version>
+			<artifactId>testcontainers</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -925,6 +931,10 @@
 					<!-- Force alphabetical order to have a reproducible build -->
 					<runOrder>alphabetical</runOrder>
 					<argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*IT.java</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<plugin>

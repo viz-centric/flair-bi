@@ -12,20 +12,22 @@
 
 spring:
     profiles:
-        active: dev, test
+        active: test
+    liquibase:
+        contexts: test
+        drop-first: true
     application:
         name: flairbi
     jackson:
         serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:9998/flairbi?ssl=false
+        url: jdbc:postgresql://localhost:5454/flairbi?ssl=false
         username: postgres
         password: admin
         hikari:
             maximum-pool-size: 2
     jpa:
-        database-platform: com.flair.bi.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL
         show-sql: true
         properties:
@@ -34,19 +36,8 @@ spring:
             hibernate.generate_statistics: true
     mail:
         host: localhost
-    mvc:
-        favicon:
-            enabled: false
     thymeleaf:
         mode: XHTML
-
-liquibase:
-    contexts: test
-    drop-first: true
-
-security:
-    basic:
-        enabled: false
 
 server:
     port: 10344
@@ -55,7 +46,7 @@ server:
 couchdb:
     password: password
     username: admin
-    url: http://localhost:9999
+    url: http://localhost:5985
     test-connection-at-startup: false
     database-name: flairbi-view
     #    ssl-factory: com.flair.bi.ssl.FlairBIPgSqlSSLSocketFactory
@@ -88,8 +79,6 @@ jhipster:
         exposed-headers:
         allow-credentials: true
         max-age: 1800
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
     swagger:
         title: flairbi API
         description: flairbi API documentation
@@ -112,26 +101,28 @@ MAX_TEXT_MESSAGE_SIZE : 2048000
 
 # ===================================================================
 # Application scheduler configuration
-# ===================================================================    
+# ===================================================================
 
 flair-notifications:
-  host: http://localhost
-  port: 8090
-  username: admin
-  password: admin
-  auth-url : /api-token-auth/
-  scheduled-report-url : /api/jobSchedule/
-  mail_body : This is a test email to check api functionality
-  slack_API_Token : xoxp-338558815156-339648235094-401148640099-d844d7552f5b0081546729d997e92f52
-  channel_id : C9ZK2705U
-  stride_API_Token : uEkHqU5s2tsF6H13zK3p
-  stride_cloud_id : 13f8bfc9-8748-4008-8b11-71f22aa84126
-  stride_conversation_id : ff15d817-3ab3-417d-8ba6-2490b330a35f
-  scheduled-reports-url: /api/user/{user}/reports?pageSize={pageSize}&page={page}
-  scheduled-reports-count-url : /api/user/{user}/reportCount/
-  scheduled-report-param-url: /api/jobSchedule/?visualizationid={visualizationid}
-  execute-immediate-param-url: /api/executeImmediate/?visualizationid={visualizationid}
-  
+    host: http://localhost
+    port: 8090
+    username: admin
+    password: admin
+    auth-url : /api-token-auth/
+    mail_body : This is a test email to check api functionality
+    slack_API_Token : xoxp-338558815156-339648235094-401148640099-d844d7552f5b0081546729d997e92f52
+    channel_id : C9ZK2705U
+    stride_API_Token : uEkHqU5s2tsF6H13zK3p
+    stride_cloud_id : 13f8bfc9-8748-4008-8b11-71f22aa84126
+    stride_conversation_id : ff15d817-3ab3-417d-8ba6-2490b330a35f
+    scheduled-report-url: /api/jobSchedule/
+    scheduled-reports-url: /api/user/{user}/reports?pageSize={pageSize}&page={page}
+    scheduled-reports-count-url: /api/user/{user}/reportCount/
+    scheduled-report-param-url: /api/jobSchedule/?visualizationid={visualizationid}
+    scheduled-execute-now-report-param-url: /api/executeImmediate/?visualizationid={visualizationid}
+    scheduled-report-logs-param-url: /api/jobLogs/?visualizationid={visualizationid}&pageSize={pageSize}&page={page}
+    scheduled-search-reports-param-url: /api/jobFilter/?userName={userName}&reportName={reportName}&startDate={startDate}&endDate={endDate}&pageSize={pageSize}&page={page}
+
 # ===================================================================
 # files location
 # note : please append the slash('/') at the end of folder as below
@@ -141,3 +132,7 @@ flair-notifications:
 storage-data-files: storage/data/files/
 
 data-file-max-size-mb: 10
+
+eureka:
+    client:
+        enabled: false

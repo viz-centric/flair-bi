@@ -1,10 +1,5 @@
 package com.flair.bi.service;
 
-import java.util.List;
-
-import org.junit.Ignore;
-import org.springframework.stereotype.Service;
-
 import com.flair.bi.service.dto.scheduler.EmailConfigParametersDTO;
 import com.flair.bi.service.dto.scheduler.GetChannelConnectionDTO;
 import com.flair.bi.service.dto.scheduler.GetJiraTicketResponseDTO;
@@ -18,8 +13,10 @@ import com.flair.bi.service.dto.scheduler.OpenJiraTicketDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerNotificationDTO;
 import com.flair.bi.service.dto.scheduler.SchedulerReportsDTO;
 import com.flair.bi.service.dto.scheduler.TeamConfigParametersDTO;
+import org.springframework.stereotype.Service;
 
-@Ignore
+import java.util.List;
+
 @Service
 public class TestNotificationsGrpcService implements INotificationsGrpcService {
 	@Override

@@ -1,20 +1,8 @@
 package com.flair.bi.websocket.grpc.config;
 
-import java.io.File;
-import java.util.Map;
-import java.util.function.Supplier;
-
-import javax.net.ssl.SSLException;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.google.common.collect.ImmutableMap;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
-
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.shaded.io.grpc.netty.NegotiationType;
@@ -22,9 +10,20 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContext;
 import io.grpc.netty.shaded.io.netty.handler.ssl.SslContextBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+import javax.net.ssl.SSLException;
+import java.io.File;
+import java.util.Map;
+import java.util.function.Supplier;
 
 @Configuration
 @Slf4j
+@Profile("!test")
 public class ClientGrpcConfig {
 
 	private final GrpcProperties properties;

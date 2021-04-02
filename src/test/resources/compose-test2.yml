@@ -1,0 +1,17 @@
+version: '3'
+services:
+  test-flair-pgsql:
+    image: flairbi/postgres:11.8-dev
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - 5454:5432
+
+  test-flair-couchdb:
+    image: flairbi/couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - 5985:5984

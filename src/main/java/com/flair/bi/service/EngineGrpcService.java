@@ -39,7 +39,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Profile("!test")
+@Profile({"!test"})
 public class EngineGrpcService implements IEngineGrpcService {
 
 	private final ManagedChannelFactory engineChannelFactory;

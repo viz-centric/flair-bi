@@ -29,7 +29,7 @@ public class FirebaseConfiguration {
         }
     }
 
-    @ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "false")
+    @ConditionalOnProperty(value = "app.firebase.enabled", havingValue = "false", matchIfMissing = true)
     @Bean
     @Qualifier("firebaseCredentials")
     public OAuth2Credentials googleCredentialsNoFirebase() throws Exception {

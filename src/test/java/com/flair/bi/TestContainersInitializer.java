@@ -20,6 +20,7 @@ public class TestContainersInitializer implements ApplicationContextInitializer<
     private void startComposeTestContainer() {
         log.info("TestContainerInitializer: Container starting");
         DockerComposeContainer container = new DockerComposeContainer(new File("src/test/resources/compose-test2.yml"))
+                .withPull(true)
 //                .withTailChildContainers(true)
                 .waitingFor("test-flair-pgsql_1",
                         Wait.forLogMessage(".+database system is ready to accept connections.*\\n", 1)

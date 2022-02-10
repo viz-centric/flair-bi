@@ -104,7 +104,7 @@
 
 		<!-- The hibernate version to be used to override default version of liquibase 
 			maven plugin -->
-		<hibernate-core.version>5.4.21.Final</hibernate-core.version>
+		<hibernate-core.version>5.4.24.Final</hibernate-core.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 		<archunit-junit5.version>0.12.0</archunit-junit5.version>

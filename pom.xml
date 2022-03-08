@@ -99,7 +99,7 @@
 		<!-- The liquibase version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
 		<!-- <liquibase.version>3.24.0-GA</liquibase.version> <liquibase-hibernate5.version>3.8</liquibase-hibernate5.version> -->
 
-		<liquibase.version>3.5.3</liquibase.version>
+		<liquibase.version>4.8.0</liquibase.version>
 		<liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
 
 		<!-- The hibernate version to be used to override default version of liquibase 

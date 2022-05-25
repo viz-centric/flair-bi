@@ -90,7 +90,7 @@
 		<!-- The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
 		<spring-boot.version>2.2.9.RELEASE</spring-boot.version>
 		<!-- The spring framework version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-		<spring.version>5.2.9.RELEASE</spring.version>
+		<spring.version>5.2.22.RELEASE</spring.version>
 		<spring-cloud.version>Hoxton.M2</spring-cloud.version>
 		<!-- The hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
 		<hibernate.version>5.4.21.Final</hibernate.version>
